@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ItemDetailPanel : MonoBehaviour
@@ -18,7 +19,7 @@ public class ItemDetailPanel : MonoBehaviour
 
     private ItemBoxView ownerView;
     private ItemData currentItem;
-    private int currentSlotInstanceId;
+    private int currentSlotIndex = -1;
 
     private void Awake()
     {
@@ -35,7 +36,7 @@ public class ItemDetailPanel : MonoBehaviour
     {
         ownerView = view;
         currentItem = item;
-        currentSlotInstanceId = slotInstanceId;
+        currentSlotIndex = slotInstanceId;
 
         if (item == null) { HideImmediate(); return; }
 
@@ -57,7 +58,7 @@ public class ItemDetailPanel : MonoBehaviour
     {
         currentItem = null;
         ownerView = null;
-        currentSlotInstanceId = -1;
+        currentSlotIndex = -1;
 
         if (windowRoot != null) windowRoot.SetActive(false);
         else gameObject.SetActive(false);
@@ -78,8 +79,8 @@ public class ItemDetailPanel : MonoBehaviour
                 UseConsumable(currentItem);
                 break;
             case ItemCategory.Weapon:
-                bool isEquipped = GameState.I != null
-                    && GameState.I.equippedWeaponInstanceId == currentSlotInstanceId;
+                string myKey = currentItem != null ? $"{currentItem.itemId}:{currentSlotIndex}" : "";
+                bool isEquipped = GameState.I != null && GameState.I.equippedSlotKey == myKey;
                 if (isEquipped) UnequipWeapon();
                 else EquipWeapon(currentItem);
                 break;
@@ -103,21 +104,21 @@ public class ItemDetailPanel : MonoBehaviour
 
     private void EquipWeapon(ItemData item)
     {
-        ItemBoxManager.Instance?.EquipItem(item, currentSlotInstanceId);
+        ItemBoxManager.Instance?.EquipItem(item, currentSlotIndex);
         HideImmediate();
         ownerView?.RefreshView();
     }
 
     private void UnequipWeapon()
     {
-        ItemBoxManager.Instance?.UnequipItem(currentSlotInstanceId);
+        ItemBoxManager.Instance?.UnequipItem(currentItem, currentSlotIndex);
         HideImmediate();
         ownerView?.RefreshView();
     }
 
     private void DiscardItem(ItemData item)
     {
-        ItemBoxManager.Instance?.DiscardItem(item, currentSlotInstanceId);
+        ItemBoxManager.Instance?.DiscardItem(item);
         HideImmediate();
         ownerView?.RefreshView();
     }
@@ -137,8 +138,8 @@ public class ItemDetailPanel : MonoBehaviour
                 break;
 
             case ItemCategory.Weapon:
-                bool isEquipped = GameState.I != null
-                    && GameState.I.equippedWeaponInstanceId == slotInstanceId;
+                string myKey = currentItem != null ? $"{currentItem.itemId}:{currentSlotIndex}" : "";
+                bool isEquipped = GameState.I != null && GameState.I.equippedSlotKey == myKey;
                 if (button1Text != null) button1Text.text = isEquipped ? "ŠO‚·" : "‘•”õ";
                 if (button2Text != null) button2Text.text = "ŽÌ‚Ä‚é";
                 break;

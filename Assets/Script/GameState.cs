@@ -16,8 +16,8 @@ public class GameState : MonoBehaviour
     // 装備中武器スロットの GetInstanceID() を保持。
     // ScriptableObject 参照ではなくインスタンスIDで管理することで
     // 同名武器を複数持っていても1スロットだけ光る。
-    // -1 = 未装備。
-    public int equippedWeaponInstanceId = -1;
+    // "itemId:index" 形式。空文字 = 未装備。シーン再ロードでも消えない。
+    public string equippedSlotKey = "";
 
     private HashSet<string> played = new HashSet<string>();
 

@@ -29,7 +29,7 @@ public class ItemBoxView : MonoBehaviour
             if (slots[i] == null) continue;
             slots[i].Setup(this);
             ItemData item = (items != null && i < items.Count) ? items[i] : null;
-            slots[i].SetItem(item); // SetItem 内で RefreshEquipColor も呼ばれる
+            slots[i].SetItem(item, i); // SetItem 内で RefreshEquipColor も呼ばれる
         }
 
         if (detailPanel != null) detailPanel.HideImmediate();
@@ -46,6 +46,6 @@ public class ItemBoxView : MonoBehaviour
         }
 
         // スロットのインスタンスIDを一緒に渡す
-        detailPanel.Show(item, slot.SlotInstanceId, this);
+        detailPanel.Show(item, slot.SlotIndex, this);
     }
 }

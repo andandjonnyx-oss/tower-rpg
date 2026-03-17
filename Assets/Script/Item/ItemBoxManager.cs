@@ -39,6 +39,14 @@ public class ItemBoxManager : MonoBehaviour
     public bool RemoveItem(ItemData item)
     {
         if (item == null) return false;
+        // 削除前にインデックスを確認し、装備中なら解除する
+        int index = items.IndexOf(item);
+        if (index >= 0 && GameState.I != null)
+        {
+            string key = $"{item.itemId}:{index}";
+            if (GameState.I.equippedSlotKey == key)
+                GameState.I.equippedSlotKey = "";
+        }
         bool removed = items.Remove(item);
         if (removed) SortItems();
         return removed;
@@ -53,34 +61,25 @@ public class ItemBoxManager : MonoBehaviour
     /// 同名武器を複数持っていても1つだけ光らせるために
     /// item参照ではなくインスタンスIDを使う。
     /// </summary>
-    public void EquipItem(ItemData item, int instanceId)
+    public void EquipItem(ItemData item, int index)
     {
         if (item == null || item.category != ItemCategory.Weapon) return;
         if (GameState.I != null)
-            GameState.I.equippedWeaponInstanceId = instanceId;
-        Debug.Log($"[ItemBoxManager] Equip: {item.itemName} (instanceId={instanceId})");
+            GameState.I.equippedSlotKey = $"{item.itemId}:{index}";
+        Debug.Log($"[ItemBoxManager] Equip: {item.itemName} key={GameState.I?.equippedSlotKey}");
     }
 
-    /// <summary>
-    /// 指定インスタンスIDが装備中なら解除する。
-    /// </summary>
-    public void UnequipItem(int instanceId)
+    public void UnequipItem(ItemData item, int index)
     {
         if (GameState.I == null) return;
-        if (GameState.I.equippedWeaponInstanceId == instanceId)
-        {
-            GameState.I.equippedWeaponInstanceId = -1;
-            Debug.Log($"[ItemBoxManager] Unequip: instanceId={instanceId}");
-        }
+        string key = $"{item.itemId}:{index}";
+        if (GameState.I.equippedSlotKey == key)
+            GameState.I.equippedSlotKey = "";
     }
 
-    /// <summary>
-    /// アイテムを捨てる。装備中なら自動解除してから削除する。
-    /// </summary>
-    public bool DiscardItem(ItemData item, int instanceId)
+    // DiscardItem: RemoveItem の中で装備解除も行う。引数を item のみに変更。
+    public bool DiscardItem(ItemData item)
     {
-        if (item == null) return false;
-        UnequipItem(instanceId);
         return RemoveItem(item);
     }
 

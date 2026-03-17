@@ -11,22 +11,18 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color equippedColor = new Color(0.4f, 0.8f, 1f, 1f);
 
     private ItemData currentItem;
-    // このスロット GameObject 自体の InstanceID を装備の識別キーにする
-    private int slotInstanceId;
+    private int slotIndex = -1;  
+    public int SlotIndex => slotIndex;
     private ItemBoxView owner;
 
-    private void Awake()
-    {
-        slotInstanceId = gameObject.GetInstanceID();
-    }
 
     public void Setup(ItemBoxView ownerView) => owner = ownerView;
 
-    public int SlotInstanceId => slotInstanceId;
 
-    public void SetItem(ItemData item)
+    public void SetItem(ItemData item, int index)
     {
         currentItem = item;
+        slotIndex = index;
 
         if (frameImage != null)
             frameImage.enabled = (item != null);
@@ -54,16 +50,14 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
     public void RefreshEquipColor()
     {
         if (iconImage == null) return;
-
-        if (currentItem == null)
+        if (currentItem == null || slotIndex < 0)
         {
             iconImage.color = Color.white;
             return;
         }
-
+        string myKey = $"{currentItem.itemId}:{slotIndex}";
         bool isEquipped = GameState.I != null
-            && GameState.I.equippedWeaponInstanceId == slotInstanceId;
-
+            && GameState.I.equippedSlotKey == myKey;
         iconImage.color = isEquipped ? equippedColor : Color.white;
     }
 
