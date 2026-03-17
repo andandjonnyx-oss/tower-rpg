@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: Bokutou
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: 2
+  itemName: "\u6728\u5200"
+  description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002"
+  icon: {fileID: -8450684057588575366, guid: 62c2ee3665fe99f49bfe5e9309265fed, type: 3}
+  Minfloor: 1
+  Minstep: 1
+  Maxfloor: 1
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  weaponType: sword
+  attackPower: 1
+  magicId: 
+  sortOrder: 10

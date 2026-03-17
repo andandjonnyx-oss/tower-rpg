@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: "\u30B9\u30E9\u30A4\u30E0"
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 1
+  Mname: "\u30B9\u30E9\u30A4\u30E0"
+  Image: {fileID: -599943022877168616, guid: 01defd185b982b84a84e997c01272118, type: 3}
+  Minfloor: 1
+  Minstep: 1
+  Maxfloor: 1
+  Maxstep: 10
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 0
+  Attack: 0
+  Defense: 0
+  Speed: 0
+  Exp: 0
+  Gold: 0
+  Help: "\u96D1\u9B5A\u306E\u4EE3\u8868\u3001\u30B9\u30E9\u30A4\u30E0\u3060\uFF01\n\u3067\u3082\u67D0RPG\u304C\u51FA\u308B\u307E\u3067\u306F\u3001\u9178\u3068\u304B\u6301\u3063\u3066\u305F\u308A\u7D50\u69CB\u5F37\u3044\u8A2D\u5B9A\u3060\u3063\u305F\u3093\u3060\u3051\u3069\u306A\uFF01"

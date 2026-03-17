@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F01_S02_HeroineHello
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F01_S02_HeroineHello
+  floor: 1
+  step: 2
+  lines:
+  - speaker: "\u30D2\u30ED\u30A4\u30F3"
+    text: "\u3053\u3093\u306B\u3061\u306F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+  - speaker: "\u30D2\u30ED\u30A4\u30F3"
+    text: Hello World
+    portrait: {fileID: -6922821552594260532, guid: 141cfae8b6673e24dbf751aad5e13ead, type: 3}
