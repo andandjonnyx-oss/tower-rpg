@@ -20,7 +20,7 @@ public class ItemBoxView : MonoBehaviour
     {
         if (slots == null || slots.Length == 0) return;
 
-        IReadOnlyList<ItemData> items = ItemBoxManager.Instance != null
+        IReadOnlyList<InventoryItem> items = ItemBoxManager.Instance != null
             ? ItemBoxManager.Instance.GetItems()
             : null;
 
@@ -28,24 +28,22 @@ public class ItemBoxView : MonoBehaviour
         {
             if (slots[i] == null) continue;
             slots[i].Setup(this);
-            ItemData item = (items != null && i < items.Count) ? items[i] : null;
-            slots[i].SetItem(item, i); // SetItem 内で RefreshEquipColor も呼ばれる
+            InventoryItem invItem = (items != null && i < items.Count) ? items[i] : null;
+            slots[i].SetItem(invItem);
         }
-
-        if (detailPanel != null) detailPanel.HideImmediate();
+        // RefreshView はスロット再描画のみ。パネルの開閉はここで行わない。
     }
 
-    public void OnClickSlot(ItemSlotView slot, ItemData item)
+    public void OnClickSlot(ItemSlotView slot, InventoryItem invItem)
     {
         if (detailPanel == null) return;
 
-        if (item == null)
+        if (invItem == null)
         {
             detailPanel.HideImmediate();
             return;
         }
 
-        // スロットのインスタンスIDを一緒に渡す
-        detailPanel.Show(item, slot.SlotIndex, this);
+        detailPanel.Show(invItem, this);
     }
 }

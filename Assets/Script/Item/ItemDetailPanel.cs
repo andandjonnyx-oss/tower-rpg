@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ItemDetailPanel : MonoBehaviour
@@ -18,135 +17,111 @@ public class ItemDetailPanel : MonoBehaviour
     [SerializeField] private TMP_Text button2Text;
 
     private ItemBoxView ownerView;
-    private ItemData currentItem;
-    private int currentSlotIndex = -1;
+    private InventoryItem currentInvItem;
 
     private void Awake()
     {
-        HideImmediate();
-        // onClick はここで一度だけ登録する
+        // ウィンドウは非表示から開始（windowRoot だけを閉じる）
+        if (windowRoot != null) windowRoot.SetActive(false);
+
+        // ボタンリスナーはここで一度だけ登録する
         if (button1 != null) button1.onClick.AddListener(OnButton1Clicked);
         if (button2 != null) button2.onClick.AddListener(OnButton2Clicked);
     }
 
-    /// <summary>
-    /// ItemBoxView から呼ぶ。スロットのインスタンスIDも一緒に受け取る。
-    /// </summary>
-    public void Show(ItemData item, int slotInstanceId, ItemBoxView view)
+    public void Show(InventoryItem invItem, ItemBoxView view)
     {
         ownerView = view;
-        currentItem = item;
-        currentSlotIndex = slotInstanceId;
+        currentInvItem = invItem;
 
-        if (item == null) { HideImmediate(); return; }
+        if (invItem?.data == null) { HideImmediate(); return; }
 
-        if (itemNameText != null) itemNameText.text = item.itemName;
-        if (descriptionText != null) descriptionText.text = item.description;
+        var data = invItem.data;
+        if (itemNameText != null) itemNameText.text = data.itemName;
+        if (descriptionText != null) descriptionText.text = data.description;
         if (itemImage != null)
         {
-            itemImage.sprite = item.icon;
-            itemImage.enabled = item.icon != null;
+            itemImage.sprite = data.icon;
+            itemImage.enabled = data.icon != null;
         }
 
-        ApplyButtonLabels(item, slotInstanceId);
+        ApplyButtonLabels(invItem);
 
         if (windowRoot != null) windowRoot.SetActive(true);
         else gameObject.SetActive(true);
     }
 
+    // UI を閉じるだけ。ownerView や currentInvItem はクリアしない。
     public void HideImmediate()
     {
-        currentItem = null;
-        ownerView = null;
-        currentSlotIndex = -1;
-
         if (windowRoot != null) windowRoot.SetActive(false);
         else gameObject.SetActive(false);
     }
 
-    public ItemData GetCurrentItem() => currentItem;
-
-    // -----------------------------------------------------------------
-    // ボタン処理
     // -----------------------------------------------------------------
 
     private void OnButton1Clicked()
     {
-        if (currentItem == null) return;
-        switch (currentItem.category)
+        if (currentInvItem?.data == null) return;
+
+        switch (currentInvItem.data.category)
         {
             case ItemCategory.Consumable:
-                UseConsumable(currentItem);
+                UseConsumable();
                 break;
             case ItemCategory.Weapon:
-                bool isEquipped = false;
-                if (GameState.I != null && GameState.I.equippedWeapon == currentItem)
-                {
-                    var mgr = ItemBoxManager.Instance;
-                    if (mgr != null)
-                    {
-                        var allItems = mgr.GetItems();
-                        int equippedIndex = -1;
-                        for (int i = 0; i < allItems.Count; i++)
-                        {
-                            if (allItems[i] == GameState.I.equippedWeapon) { equippedIndex = i; break; }
-                        }
-                        isEquipped = (equippedIndex == currentSlotIndex);
-                    }
-                }
-                else EquipWeapon(currentItem);
+                bool isEquipped = GameState.I != null
+                    && GameState.I.equippedWeaponUid == currentInvItem.uid;
+                if (isEquipped) UnequipWeapon();
+                else EquipWeapon();
                 break;
         }
     }
 
     private void OnButton2Clicked()
     {
-        if (currentItem != null) DiscardItem(currentItem);
+        if (currentInvItem != null) DiscardItem();
     }
 
     // -----------------------------------------------------------------
 
-    private void UseConsumable(ItemData item)
+    private void UseConsumable()
     {
         // TODO: 回復などの効果はここに実装する
-        ItemBoxManager.Instance?.RemoveItem(item);
-        var view = ownerView;   // ← 退避
+        ItemBoxManager.Instance?.RemoveItem(currentInvItem);
         HideImmediate();
-        view?.RefreshView();    // ← 退避した参照で呼ぶ
+        ownerView?.RefreshView();
     }
 
-    private void EquipWeapon(ItemData item)
+    private void EquipWeapon()
     {
-        ItemBoxManager.Instance?.EquipItem(item);
-        var view = ownerView;
+        ItemBoxManager.Instance?.EquipItem(currentInvItem);
         HideImmediate();
-        view?.RefreshView();
+        ownerView?.RefreshView();
     }
 
     private void UnequipWeapon()
     {
-        ItemBoxManager.Instance?.UnequipItem(currentItem);
-        var view = ownerView;
+        ItemBoxManager.Instance?.UnequipItem(currentInvItem);
         HideImmediate();
-        view?.RefreshView();
+        ownerView?.RefreshView();
     }
 
-    private void DiscardItem(ItemData item)
+    private void DiscardItem()
     {
-        ItemBoxManager.Instance?.DiscardItem(item);
-        var view = ownerView;
+        ItemBoxManager.Instance?.DiscardItem(currentInvItem);
         HideImmediate();
-        view?.RefreshView();
+        ownerView?.RefreshView();
     }
 
     // -----------------------------------------------------------------
 
-    private void ApplyButtonLabels(ItemData item, int slotInstanceId)
+    private void ApplyButtonLabels(InventoryItem invItem)
     {
         if (button1 != null) button1.gameObject.SetActive(true);
         if (button2 != null) button2.gameObject.SetActive(true);
 
-        switch (item.category)
+        switch (invItem.data.category)
         {
             case ItemCategory.Consumable:
                 if (button1Text != null) button1Text.text = "使う";
@@ -154,22 +129,8 @@ public class ItemDetailPanel : MonoBehaviour
                 break;
 
             case ItemCategory.Weapon:
-                bool isEquipped = false;
-                if (GameState.I != null && GameState.I.equippedWeapon == currentItem)
-                {
-                    // 同名武器が複数ある場合、装備中スロットのインデックスと一致する場合のみ
-                    var mgr = ItemBoxManager.Instance;
-                    if (mgr != null)
-                    {
-                        var allItems = mgr.GetItems();
-                        int equippedIndex = -1;
-                        for (int i = 0; i < allItems.Count; i++)
-                        {
-                            if (allItems[i] == GameState.I.equippedWeapon) { equippedIndex = i; break; }
-                        }
-                        isEquipped = (equippedIndex == currentSlotIndex);
-                    }
-                }
+                bool isEquipped = GameState.I != null
+                    && GameState.I.equippedWeaponUid == invItem.uid;
                 if (button1Text != null) button1Text.text = isEquipped ? "外す" : "装備";
                 if (button2Text != null) button2Text.text = "捨てる";
                 break;

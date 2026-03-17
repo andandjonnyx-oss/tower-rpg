@@ -9,8 +9,8 @@ public class ItemBoxManager : MonoBehaviour
     [Header("Capacity")]
     [SerializeField] private int capacity = 10;
 
-    [Header("Debug")]
-    [SerializeField] private List<ItemData> items = new();
+    // 所持品リスト。ItemData ではなく InventoryItem で管理する。
+    [SerializeField] private List<InventoryItem> items = new();
 
     public int Capacity => capacity;
     public int Count => items.Count;
@@ -23,80 +23,68 @@ public class ItemBoxManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public IReadOnlyList<ItemData> GetItems() => items;
+    public IReadOnlyList<InventoryItem> GetItems() => items;
 
-    public bool CanAddItem(ItemData item) => item != null && items.Count < capacity;
+    public bool CanAddItem(ItemData data) => data != null && items.Count < capacity;
 
-    public bool AddItem(ItemData item)
+    public bool AddItem(ItemData data)
     {
-        if (!CanAddItem(item)) return false;
-        items.Add(item);
+        if (!CanAddItem(data)) return false;
+        items.Add(new InventoryItem(data));
         SortItems();
-        Debug.Log($"[ItemBoxManager] AddItem: {item.itemName} (Count={items.Count})");
+        Debug.Log($"[ItemBoxManager] AddItem: {data.itemName} (Count={items.Count})");
         return true;
     }
 
-    public bool RemoveItem(ItemData item)
+    public bool RemoveItem(InventoryItem invItem)
     {
-        if (item == null) return false;
-        // 削除前にインデックスを確認し、装備中なら解除する
-        int index = items.IndexOf(item);
-        if (index >= 0 && GameState.I != null)
-        {
-            if (GameState.I != null && GameState.I.equippedWeapon == item)
-                GameState.I.equippedWeapon = null;
-        }
-        bool removed = items.Remove(item);
+        if (invItem == null) return false;
+
+        // 装備中なら解除
+        if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
+            GameState.I.equippedWeaponUid = "";
+
+        bool removed = items.Remove(invItem);
         if (removed) SortItems();
         return removed;
     }
 
-    // -----------------------------------------------------------------
-    // 装備 / 解除 / 廃棄
-    // -----------------------------------------------------------------
-
-    /// <summary>
-    /// スロット単位のインスタンスIDで装備を記録する。
-    /// 同名武器を複数持っていても1つだけ光らせるために
-    /// item参照ではなくインスタンスIDを使う。
-    /// </summary>
-    public void EquipItem(ItemData item)
+    public void EquipItem(InventoryItem invItem)
     {
-        if (item == null || item.category != ItemCategory.Weapon) return;
+        if (invItem == null || invItem.data == null) return;
+        if (invItem.data.category != ItemCategory.Weapon) return;
         if (GameState.I != null)
-            GameState.I.equippedWeapon = item;
+            GameState.I.equippedWeaponUid = invItem.uid;
+        Debug.Log($"[ItemBoxManager] Equip: {invItem.data.itemName} uid={invItem.uid}");
     }
 
-    public void UnequipItem(ItemData item)
+    public void UnequipItem(InventoryItem invItem)
     {
-        if (GameState.I == null) return;
-
-
-        if (GameState.I.equippedWeapon == item)
-            GameState.I.equippedWeapon = null;
+        if (invItem == null || GameState.I == null) return;
+        if (GameState.I.equippedWeaponUid == invItem.uid)
+            GameState.I.equippedWeaponUid = "";
     }
 
-    // DiscardItem: RemoveItem の中で装備解除も行う。引数を item のみに変更。
-    public bool DiscardItem(ItemData item)
+    public bool DiscardItem(InventoryItem invItem) => RemoveItem(invItem);
+
+    public void ClearAll()
     {
-        return RemoveItem(item);
+        if (GameState.I != null) GameState.I.equippedWeaponUid = "";
+        items.Clear();
     }
 
-    public void ClearAll() => items.Clear();
-
-    // -----------------------------------------------------------------
     private void SortItems() => items.Sort(CompareItems);
 
-    private int CompareItems(ItemData a, ItemData b)
+    private int CompareItems(InventoryItem a, InventoryItem b)
     {
-        if (a == null && b == null) return 0;
-        if (a == null) return 1;
-        if (b == null) return -1;
-        int c = GetCategoryPriority(a.category).CompareTo(GetCategoryPriority(b.category));
+        if (a?.data == null && b?.data == null) return 0;
+        if (a?.data == null) return 1;
+        if (b?.data == null) return -1;
+        int c = GetCategoryPriority(a.data.category).CompareTo(GetCategoryPriority(b.data.category));
         if (c != 0) return c;
-        int s = a.sortOrder.CompareTo(b.sortOrder);
+        int s = a.data.sortOrder.CompareTo(b.data.sortOrder);
         if (s != 0) return s;
-        return string.Compare(a.itemId, b.itemId, StringComparison.Ordinal);
+        return string.Compare(a.data.itemId, b.data.itemId, StringComparison.Ordinal);
     }
 
     private int GetCategoryPriority(ItemCategory cat)

@@ -13,9 +13,9 @@ public class GameState : MonoBehaviour
     public string pendingEventId;
 
     [Header("Equipment")]
-    // ScriptableObject 参照で保持。SortItems 後も参照は変わらないのでズレない。
-    // 同名武器の識別は IndexOf で行う（下記 ItemSlotView 参照）。
-    public ItemData equippedWeapon = null;
+    // 装備中所持品の uid。空文字 = 未装備。
+    // uid は所持品1個ごとに固有なので、同名武器が複数あっても正しく区別できる。
+    public string equippedWeaponUid = "";
 
     private HashSet<string> played = new HashSet<string>();
 
