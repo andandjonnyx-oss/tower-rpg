@@ -79,8 +79,21 @@ public class ItemDetailPanel : MonoBehaviour
                 UseConsumable(currentItem);
                 break;
             case ItemCategory.Weapon:
-                bool isEquipped = GameState.I != null && GameState.I.equippedWeapon == currentItem;
-                if (isEquipped) UnequipWeapon();
+                bool isEquipped = false;
+                if (GameState.I != null && GameState.I.equippedWeapon == currentItem)
+                {
+                    var mgr = ItemBoxManager.Instance;
+                    if (mgr != null)
+                    {
+                        var allItems = mgr.GetItems();
+                        int equippedIndex = -1;
+                        for (int i = 0; i < allItems.Count; i++)
+                        {
+                            if (allItems[i] == GameState.I.equippedWeapon) { equippedIndex = i; break; }
+                        }
+                        isEquipped = (equippedIndex == currentSlotIndex);
+                    }
+                }
                 else EquipWeapon(currentItem);
                 break;
         }
@@ -141,8 +154,22 @@ public class ItemDetailPanel : MonoBehaviour
                 break;
 
             case ItemCategory.Weapon:
-                bool isEquipped = GameState.I != null && GameState.I.equippedWeapon == currentItem;
-
+                bool isEquipped = false;
+                if (GameState.I != null && GameState.I.equippedWeapon == currentItem)
+                {
+                    // 同名武器が複数ある場合、装備中スロットのインデックスと一致する場合のみ
+                    var mgr = ItemBoxManager.Instance;
+                    if (mgr != null)
+                    {
+                        var allItems = mgr.GetItems();
+                        int equippedIndex = -1;
+                        for (int i = 0; i < allItems.Count; i++)
+                        {
+                            if (allItems[i] == GameState.I.equippedWeapon) { equippedIndex = i; break; }
+                        }
+                        isEquipped = (equippedIndex == currentSlotIndex);
+                    }
+                }
                 if (button1Text != null) button1Text.text = isEquipped ? "外す" : "装備";
                 if (button2Text != null) button2Text.text = "捨てる";
                 break;
