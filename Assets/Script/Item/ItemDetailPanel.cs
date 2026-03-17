@@ -54,9 +54,18 @@ public class ItemDetailPanel : MonoBehaviour
         else gameObject.SetActive(true);
     }
 
+
+    private void OnDisable()
+    {
+        Debug.LogWarning("[ItemDetailPanel] OnDisable called!", this);
+        Debug.LogWarningFormat("[ItemDetailPanel] Stack trace:\n{0}", System.Environment.StackTrace);
+    }
+
     // UI を閉じるだけ。ownerView や currentInvItem はクリアしない。
     public void HideImmediate()
     {
+        Debug.Log($"[ItemDetailPanel] HideImmediate windowRoot={(windowRoot != null ? windowRoot.name : "null")}");
+
         if (windowRoot != null) windowRoot.SetActive(false);
         // else は書かない。windowRoot が未設定でも gameObject 自体は常にアクティブを保つ。
     }
