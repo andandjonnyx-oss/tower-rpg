@@ -97,29 +97,33 @@ public class ItemDetailPanel : MonoBehaviour
     {
         // TODO: âÒïúÇ»Ç«ÇÃå¯â ÇÕÇ±Ç±Ç…é¿ëïÇ∑ÇÈ
         ItemBoxManager.Instance?.RemoveItem(item);
+        var view = ownerView;   // Å© ëﬁî
         HideImmediate();
-        ownerView?.RefreshView();
+        view?.RefreshView();    // Å© ëﬁîÇµÇΩéQè∆Ç≈åƒÇ‘
     }
 
     private void EquipWeapon(ItemData item)
     {
         ItemBoxManager.Instance?.EquipItem(item);
+        var view = ownerView;
         HideImmediate();
-        ownerView?.RefreshView();
+        view?.RefreshView();
     }
 
     private void UnequipWeapon()
     {
         ItemBoxManager.Instance?.UnequipItem(currentItem);
+        var view = ownerView;
         HideImmediate();
-        ownerView?.RefreshView();
+        view?.RefreshView();
     }
 
     private void DiscardItem(ItemData item)
     {
         ItemBoxManager.Instance?.DiscardItem(item);
+        var view = ownerView;
         HideImmediate();
-        ownerView?.RefreshView();
+        view?.RefreshView();
     }
 
     // -----------------------------------------------------------------
