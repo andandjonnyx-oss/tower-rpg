@@ -3,12 +3,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//enum 列挙型　入手もしくは無視を選択
+//enum 列挙型　
 public enum ItemPickupResult
 {
     Get,
-    Ignore
+    Ignore,
+    Exchange
 }
+
 
 public class ItemPickupWindow : MonoBehaviour
 {
@@ -22,6 +24,7 @@ public class ItemPickupWindow : MonoBehaviour
     [SerializeField] private Button getButton;
     [SerializeField] private Button ignoreButton;
 
+    private bool currentIsFull;
 
     //ItemPickupResult を受け取る関数を保存する変数
     //ポップアップを表示して後で結果（入手or廃棄）を返すUIに向いている
@@ -41,13 +44,15 @@ public class ItemPickupWindow : MonoBehaviour
     }
 
     public void Show(
-      string itemName,
-      string description,
-      Sprite sprite,
-      bool canGet,
-      Action<ItemPickupResult> resultCallback)
+    string itemName,
+    string description,
+    Sprite sprite,
+    bool canGet,
+    bool isFull,          // ← 新パラメータ追加
+    Action<ItemPickupResult> resultCallback)
     {
         onResult = resultCallback;
+        this.currentIsFull = isFull;
 
         if (itemNameText != null)
             itemNameText.text = itemName;
@@ -56,6 +61,8 @@ public class ItemPickupWindow : MonoBehaviour
         {
             if (canGet)
                 descriptionText.text = description;
+            else if (isFull)
+                descriptionText.text = $"{description}\n\nアイテムが一杯です。手持ちと交換できます。";
             else
                 descriptionText.text = $"{description}\n\nこれ以上持てないため入手できません。";
         }
@@ -66,8 +73,23 @@ public class ItemPickupWindow : MonoBehaviour
             itemImage.enabled = sprite != null;
         }
 
+        // ボタン設定
         if (getButton != null)
-            getButton.interactable = canGet;
+        {
+            if (isFull)
+            {
+                // 満杯 → 「交換する」ボタンとして有効化
+                getButton.interactable = true;
+                var txt = getButton.GetComponentInChildren<TMP_Text>();
+                if (txt != null) txt.text = "交換する";
+            }
+            else
+            {
+                getButton.interactable = canGet;
+                var txt = getButton.GetComponentInChildren<TMP_Text>();
+                if (txt != null) txt.text = "入手する";
+            }
+        }
 
         if (windowRoot != null)
             windowRoot.SetActive(true);
@@ -84,9 +106,14 @@ public class ItemPickupWindow : MonoBehaviour
             gameObject.SetActive(false);
     }
 
+
+
     private void OnClickGet()
     {
-        Close(ItemPickupResult.Get);
+        if (currentIsFull)
+            Close(ItemPickupResult.Exchange);
+        else
+            Close(ItemPickupResult.Get);
     }
 
     private void OnClickIgnore()

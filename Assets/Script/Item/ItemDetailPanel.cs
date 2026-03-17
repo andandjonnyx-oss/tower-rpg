@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ItemDetailPanel : MonoBehaviour
@@ -99,10 +100,12 @@ public class ItemDetailPanel : MonoBehaviour
 
     private void UseConsumable()
     {
-        // TODO: 回復などの効果はここに実装する
         ItemBoxManager.Instance?.RemoveItem(currentInvItem);
         HideImmediate();
         ownerView?.RefreshView();
+
+        // ★ 交換フロー中なら自動でTowerに戻る
+        ReturnToTowerIfExchangeMode();
     }
 
     private void EquipWeapon()
@@ -124,6 +127,18 @@ public class ItemDetailPanel : MonoBehaviour
         ItemBoxManager.Instance?.DiscardItem(currentInvItem);
         HideImmediate();
         ownerView?.RefreshView();
+
+        // ★ 交換フロー中なら自動でTowerに戻る
+        ReturnToTowerIfExchangeMode();
+    }
+    /// 交換フロー中（pendingItemData != null）かつ枠が空いたらTowerに戻す
+    private void ReturnToTowerIfExchangeMode()
+    {
+        if (GameState.I == null || GameState.I.pendingItemData == null) return;
+        if (ItemBoxManager.Instance != null && !ItemBoxManager.Instance.IsFull)
+        {
+            SceneManager.LoadScene("Tower");
+        }
     }
 
     // -----------------------------------------------------------------

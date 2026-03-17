@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,11 @@ public class GameState : MonoBehaviour
 
     [Header("Talk")]
     public string pendingEventId;
+
+    // 既存フィールドに追加
+    [Header("Item Exchange")]
+    // 交換フロー中に保持する拾ったアイテム。null = 交換中でない。
+    [NonSerialized] public ItemData pendingItemData = null;
 
     [Header("Equipment")]
     // 装備中所持品の uid。空文字 = 未装備。

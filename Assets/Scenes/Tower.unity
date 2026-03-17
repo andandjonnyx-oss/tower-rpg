@@ -2104,6 +2104,7 @@ MonoBehaviour:
   floor: 1
   step: 1
   pendingEventId: 
+  equippedWeaponUid: 
 --- !u!4 &1347644777
 Transform:
   m_ObjectHideFlags: 0
@@ -2178,8 +2179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70ea8158d0919db468b723e579dea44c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerItemTrigger
-  itemDatabase: {fileID: 11400000, guid: febb30d2c9d70224eb0da0dd82a15426, type: 2}
   itemPickupRate: 1
+  itemDatabase: {fileID: 11400000, guid: febb30d2c9d70224eb0da0dd82a15426, type: 2}
   itemPickupWindow: {fileID: 1250762254}
 --- !u!1 &1431938329
 GameObject:

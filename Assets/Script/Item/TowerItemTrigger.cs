@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TowerItemTrigger : MonoBehaviour
 {
@@ -25,8 +26,47 @@ public class TowerItemTrigger : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
+    }
+
+    // ★ Tower シーンに戻ってきた時に呼ばれる
+    private void Start()
+    {
+        CheckPendingExchange();
+    }
+
+    /// Tower に戻った時、交換待ちアイテムがあれば処理する
+    private void CheckPendingExchange()
+    {
+        var gs = GameState.I;
+        if (gs == null || gs.pendingItemData == null) return;
+
+        ItemData pending = gs.pendingItemData;
+
+        if (!ItemBoxManager.Instance.IsFull)
+        {
+            // 枠が空いた → 自動入手
+            bool added = ItemBoxManager.Instance.AddItem(pending);
+            if (added)
+                Debug.Log($"[TowerItemTrigger] 交換成功: {pending.itemName}");
+
+            gs.pendingItemData = null;
+            currentItem = null;
+            IsBusy = false;
+        }
+        else
+        {
+            // まだ満杯 → ポップアップを再表示（交換やり直し可能）
+            currentItem = pending;
+            gs.pendingItemData = null;
+            IsBusy = true;
+
+            bool canGet = false;
+            bool isFull = true;
+            itemPickupWindow.Show(
+                pending.itemName, pending.description, pending.icon,
+                canGet, isFull, OnItemResult);
+        }
     }
 
     public bool TryTriggerItemEvent(int floor, int step)
@@ -70,58 +110,45 @@ public class TowerItemTrigger : MonoBehaviour
 
         currentItem = item;
 
+        bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
         bool canGet = ItemBoxManager.Instance != null && ItemBoxManager.Instance.CanAddItem(item);
 
-        string itemName = item.itemName;
-        string description = item.description;
-        Sprite sprite = item.icon;
-
-        itemPickupWindow.Show(itemName, description, sprite, canGet, OnItemResult);
+        itemPickupWindow.Show(item.itemName, item.description, item.icon,
+                              canGet, isFull, OnItemResult);
     }
 
     private void OnItemResult(ItemPickupResult result)
     {
         Debug.Log($"[TowerItemTrigger] OnItemResult: {result}");
-        Debug.Log($"[TowerItemTrigger] currentItem: {(currentItem != null ? currentItem.itemName : "NULL")}");
 
         switch (result)
         {
             case ItemPickupResult.Get:
-                if (currentItem == null)
+                if (currentItem != null && ItemBoxManager.Instance != null)
                 {
-                    Debug.LogWarning("[TowerItemTrigger] currentItem is null.");
-                    break;
+                    bool added = ItemBoxManager.Instance.AddItem(currentItem);
+                    Debug.Log(added
+                        ? $"アイテムを入手した: {currentItem.itemName}"
+                        : "アイテムBOXが満杯のため入手できなかった");
                 }
+                currentItem = null;
+                IsBusy = false;
+                break;
 
-                if (ItemBoxManager.Instance == null)
-                {
-                    Debug.LogError("[TowerItemTrigger] ItemBoxManager not found.");
-                    break;
-                }
+            case ItemPickupResult.Exchange:
+                // 交換フロー開始: pendingItemData に記録して Itembox へ遷移
+                if (GameState.I != null)
+                    GameState.I.pendingItemData = currentItem;
 
-                Debug.Log($"[TowerItemTrigger] Before AddItem Count = {ItemBoxManager.Instance.Count}");
-
-                bool added = ItemBoxManager.Instance.AddItem(currentItem);
-
-                Debug.Log($"[TowerItemTrigger] AddItem Result = {added}");
-                Debug.Log($"[TowerItemTrigger] After AddItem Count = {ItemBoxManager.Instance.Count}");
-
-                if (added)
-                {
-                    Debug.Log($"アイテムを入手した: {currentItem.itemName}");
-                }
-                else
-                {
-                    Debug.Log("アイテムBOXが満杯のため入手できなかった");
-                }
+                // IsBusy は true のまま（Towerに戻った時に解除される）
+                SceneManager.LoadScene("Itembox");
                 break;
 
             case ItemPickupResult.Ignore:
                 Debug.Log("アイテムを諦めた");
+                currentItem = null;
+                IsBusy = false;
                 break;
         }
-
-        currentItem = null;
-        IsBusy = false;
     }
 }
