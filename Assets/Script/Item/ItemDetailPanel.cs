@@ -21,12 +21,15 @@ public class ItemDetailPanel : MonoBehaviour
 
     private void Awake()
     {
-        // ウィンドウは非表示から開始（windowRoot だけを閉じる）
-        if (windowRoot != null) windowRoot.SetActive(false);
-
-        // ボタンリスナーはここで一度だけ登録する
+        // windowRoot の初期非表示は Start() で行う（Inspector 設定が確実に読まれた後）
         if (button1 != null) button1.onClick.AddListener(OnButton1Clicked);
         if (button2 != null) button2.onClick.AddListener(OnButton2Clicked);
+    }
+
+    private void Start()
+    {
+        if (windowRoot != null) windowRoot.SetActive(false);
+        // windowRoot が null でも gameObject は消さない
     }
 
     public void Show(InventoryItem invItem, ItemBoxView view)
@@ -55,7 +58,7 @@ public class ItemDetailPanel : MonoBehaviour
     public void HideImmediate()
     {
         if (windowRoot != null) windowRoot.SetActive(false);
-        else gameObject.SetActive(false);
+        // else は書かない。windowRoot が未設定でも gameObject 自体は常にアクティブを保つ。
     }
 
     // -----------------------------------------------------------------

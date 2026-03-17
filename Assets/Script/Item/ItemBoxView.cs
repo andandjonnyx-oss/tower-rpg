@@ -11,7 +11,6 @@ public class ItemBoxView : MonoBehaviour
 
     private void Start()
     {
-        if (detailPanel != null) detailPanel.HideImmediate();
         RefreshView();
     }
 
