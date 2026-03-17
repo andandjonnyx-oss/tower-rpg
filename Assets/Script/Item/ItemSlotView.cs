@@ -55,9 +55,22 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
             iconImage.color = Color.white;
             return;
         }
-        string myKey = $"{currentItem.itemId}:{slotIndex}";
-        bool isEquipped = GameState.I != null
-            && GameState.I.equippedSlotKey == myKey;
+        bool isEquipped = false;
+        if (GameState.I != null && GameState.I.equippedWeapon == currentItem)
+        {
+            // 同名武器が複数ある場合、最初に見つかったインデックスのスロットだけ光る
+            var mgr = ItemBoxManager.Instance;
+            if (mgr != null)
+            {
+                var allItems = mgr.GetItems();
+                int equippedIndex = -1;
+                for (int i = 0; i < allItems.Count; i++)
+                {
+                    if (allItems[i] == GameState.I.equippedWeapon) { equippedIndex = i; break; }
+                }
+                isEquipped = (equippedIndex == slotIndex);
+            }
+        }
         iconImage.color = isEquipped ? equippedColor : Color.white;
     }
 

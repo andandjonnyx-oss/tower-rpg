@@ -43,9 +43,8 @@ public class ItemBoxManager : MonoBehaviour
         int index = items.IndexOf(item);
         if (index >= 0 && GameState.I != null)
         {
-            string key = $"{item.itemId}:{index}";
-            if (GameState.I.equippedSlotKey == key)
-                GameState.I.equippedSlotKey = "";
+            if (GameState.I != null && GameState.I.equippedWeapon == item)
+                GameState.I.equippedWeapon = null;
         }
         bool removed = items.Remove(item);
         if (removed) SortItems();
@@ -61,20 +60,20 @@ public class ItemBoxManager : MonoBehaviour
     /// 同名武器を複数持っていても1つだけ光らせるために
     /// item参照ではなくインスタンスIDを使う。
     /// </summary>
-    public void EquipItem(ItemData item, int index)
+    public void EquipItem(ItemData item)
     {
         if (item == null || item.category != ItemCategory.Weapon) return;
         if (GameState.I != null)
-            GameState.I.equippedSlotKey = $"{item.itemId}:{index}";
-        Debug.Log($"[ItemBoxManager] Equip: {item.itemName} key={GameState.I?.equippedSlotKey}");
+            GameState.I.equippedWeapon = item;
     }
 
-    public void UnequipItem(ItemData item, int index)
+    public void UnequipItem(ItemData item)
     {
         if (GameState.I == null) return;
-        string key = $"{item.itemId}:{index}";
-        if (GameState.I.equippedSlotKey == key)
-            GameState.I.equippedSlotKey = "";
+
+
+        if (GameState.I.equippedWeapon == item)
+            GameState.I.equippedWeapon = null;
     }
 
     // DiscardItem: RemoveItem の中で装備解除も行う。引数を item のみに変更。

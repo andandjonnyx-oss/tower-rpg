@@ -13,11 +13,9 @@ public class GameState : MonoBehaviour
     public string pendingEventId;
 
     [Header("Equipment")]
-    // 装備中武器スロットの GetInstanceID() を保持。
-    // ScriptableObject 参照ではなくインスタンスIDで管理することで
-    // 同名武器を複数持っていても1スロットだけ光る。
-    // "itemId:index" 形式。空文字 = 未装備。シーン再ロードでも消えない。
-    public string equippedSlotKey = "";
+    // ScriptableObject 参照で保持。SortItems 後も参照は変わらないのでズレない。
+    // 同名武器の識別は IndexOf で行う（下記 ItemSlotView 参照）。
+    public ItemData equippedWeapon = null;
 
     private HashSet<string> played = new HashSet<string>();
 

@@ -2344,7 +2344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42596ab84994be244b598ed79214bfae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemDetailPanel
-  windowRoot: {fileID: 1706802391}
+  windowRoot: {fileID: 1081578648}
   itemNameText: {fileID: 1574704770}
   descriptionText: {fileID: 1502383183}
   itemImage: {fileID: 801844954}

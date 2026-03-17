@@ -79,8 +79,7 @@ public class ItemDetailPanel : MonoBehaviour
                 UseConsumable(currentItem);
                 break;
             case ItemCategory.Weapon:
-                string myKey = currentItem != null ? $"{currentItem.itemId}:{currentSlotIndex}" : "";
-                bool isEquipped = GameState.I != null && GameState.I.equippedSlotKey == myKey;
+                bool isEquipped = GameState.I != null && GameState.I.equippedWeapon == currentItem;
                 if (isEquipped) UnequipWeapon();
                 else EquipWeapon(currentItem);
                 break;
@@ -104,14 +103,14 @@ public class ItemDetailPanel : MonoBehaviour
 
     private void EquipWeapon(ItemData item)
     {
-        ItemBoxManager.Instance?.EquipItem(item, currentSlotIndex);
+        ItemBoxManager.Instance?.EquipItem(item);
         HideImmediate();
         ownerView?.RefreshView();
     }
 
     private void UnequipWeapon()
     {
-        ItemBoxManager.Instance?.UnequipItem(currentItem, currentSlotIndex);
+        ItemBoxManager.Instance?.UnequipItem(currentItem);
         HideImmediate();
         ownerView?.RefreshView();
     }
@@ -138,8 +137,8 @@ public class ItemDetailPanel : MonoBehaviour
                 break;
 
             case ItemCategory.Weapon:
-                string myKey = currentItem != null ? $"{currentItem.itemId}:{currentSlotIndex}" : "";
-                bool isEquipped = GameState.I != null && GameState.I.equippedSlotKey == myKey;
+                bool isEquipped = GameState.I != null && GameState.I.equippedWeapon == currentItem;
+
                 if (button1Text != null) button1Text.text = isEquipped ? "ŠO‚·" : "‘•”õ";
                 if (button2Text != null) button2Text.text = "ŽÌ‚Ä‚é";
                 break;
