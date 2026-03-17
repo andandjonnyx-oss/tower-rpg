@@ -12,7 +12,13 @@ public class GameState : MonoBehaviour
     [Header("Talk")]
     public string pendingEventId;
 
-    // 再生済み（大量でも高速）
+    [Header("Equipment")]
+    // 装備中武器スロットの GetInstanceID() を保持。
+    // ScriptableObject 参照ではなくインスタンスIDで管理することで
+    // 同名武器を複数持っていても1スロットだけ光る。
+    // -1 = 未装備。
+    public int equippedWeaponInstanceId = -1;
+
     private HashSet<string> played = new HashSet<string>();
 
     public bool IsPlayed(string eventId)
@@ -26,11 +32,7 @@ public class GameState : MonoBehaviour
 
     private void Awake()
     {
-        if (I != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (I != null) { Destroy(gameObject); return; }
         I = this;
         DontDestroyOnLoad(gameObject);
     }

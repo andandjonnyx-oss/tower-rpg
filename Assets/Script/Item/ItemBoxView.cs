@@ -9,22 +9,16 @@ public class ItemBoxView : MonoBehaviour
     [Header("Detail Panel")]
     [SerializeField] private ItemDetailPanel detailPanel;
 
-    private ItemSlotView selectedSlot;
-    private ItemData selectedItem;
-
     private void Start()
     {
-        if (detailPanel != null)
-            detailPanel.HideImmediate();
-
+        if (detailPanel != null) detailPanel.HideImmediate();
         RefreshView();
     }
 
     [ContextMenu("Refresh View")]
     public void RefreshView()
     {
-        if (slots == null || slots.Length == 0)
-            return;
+        if (slots == null || slots.Length == 0) return;
 
         IReadOnlyList<ItemData> items = ItemBoxManager.Instance != null
             ? ItemBoxManager.Instance.GetItems()
@@ -33,31 +27,17 @@ public class ItemBoxView : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i] == null) continue;
-
             slots[i].Setup(this);
-
-            ItemData item = null;
-            if (items != null && i < items.Count)
-                item = items[i];
-
-            slots[i].SetItem(item);
+            ItemData item = (items != null && i < items.Count) ? items[i] : null;
+            slots[i].SetItem(item); // SetItem 内で RefreshEquipColor も呼ばれる
         }
 
-        // 一覧更新時は選択解除
-        selectedSlot = null;
-        selectedItem = null;
-
-        if (detailPanel != null)
-            detailPanel.HideImmediate();
+        if (detailPanel != null) detailPanel.HideImmediate();
     }
 
     public void OnClickSlot(ItemSlotView slot, ItemData item)
     {
-        selectedSlot = slot;
-        selectedItem = item;
-
-        if (detailPanel == null)
-            return;
+        if (detailPanel == null) return;
 
         if (item == null)
         {
@@ -65,6 +45,7 @@ public class ItemBoxView : MonoBehaviour
             return;
         }
 
-        detailPanel.Show(item);
+        // スロットのインスタンスIDを一緒に渡す
+        detailPanel.Show(item, slot.SlotInstanceId, this);
     }
 }
