@@ -65,6 +65,8 @@ public class ItemBoxManager : MonoBehaviour
             GameState.I.equippedWeaponUid = "";
     }
 
+    //removeは内部的にインベントリから削除する操作
+    //discardはプレイヤーがUIから削除する操作　そのため今後を考慮して設計上分けている
     public bool DiscardItem(InventoryItem invItem) => RemoveItem(invItem);
 
     public void ClearAll()

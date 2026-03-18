@@ -29,7 +29,7 @@ public class TowerItemTrigger : MonoBehaviour
         Instance = this;
     }
 
-    // ★ Tower シーンに戻ってきた時に呼ばれる
+    // Tower シーンに戻ってきた時に呼ばれる
     private void Start()
     {
         CheckPendingExchange();
@@ -42,30 +42,32 @@ public class TowerItemTrigger : MonoBehaviour
         if (gs == null || gs.pendingItemData == null) return;
 
         ItemData pending = gs.pendingItemData;
+        currentItem = pending;
+        gs.pendingItemData = null;
+        IsBusy = true;
 
-        if (!ItemBoxManager.Instance.IsFull)
+        bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
+
+        if (!isFull)
         {
-            // 枠が空いた → 自動入手
-            bool added = ItemBoxManager.Instance.AddItem(pending);
-            if (added)
-                Debug.Log($"[TowerItemTrigger] 交換成功: {pending.itemName}");
-
-            gs.pendingItemData = null;
-            currentItem = null;
-            IsBusy = false;
+            // 枠が空いた → 「入手する」ボタン付きでポップアップ再表示
+            // 自動入手はしない（SE やエフェクトを挟む余地を残す）
+            itemPickupWindow.Show(
+                pending.itemName,
+                pending.description + "\n\n整理が完了しました。入手できます。",
+                pending.icon,
+                canGet: true,
+                isFull: false,
+                OnItemResult);
         }
         else
         {
-            // まだ満杯 → ポップアップを再表示（交換やり直し可能）
-            currentItem = pending;
-            gs.pendingItemData = null;
-            IsBusy = true;
-
-            bool canGet = false;
-            bool isFull = true;
+            // まだ満杯 → 「交換する」ボタンでポップアップ再表示
             itemPickupWindow.Show(
                 pending.itemName, pending.description, pending.icon,
-                canGet, isFull, OnItemResult);
+                canGet: false,
+                isFull: true,
+                OnItemResult);
         }
     }
 

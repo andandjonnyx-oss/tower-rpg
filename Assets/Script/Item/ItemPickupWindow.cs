@@ -62,7 +62,7 @@ public class ItemPickupWindow : MonoBehaviour
             if (canGet)
                 descriptionText.text = description;
             else if (isFull)
-                descriptionText.text = $"{description}\n\nアイテムが一杯です。手持ちと交換できます。";
+                descriptionText.text = $"{description}\n\nアイテムが一杯です。整理してください。";
             else
                 descriptionText.text = $"{description}\n\nこれ以上持てないため入手できません。";
         }
@@ -81,7 +81,7 @@ public class ItemPickupWindow : MonoBehaviour
                 // 満杯 → 「交換する」ボタンとして有効化
                 getButton.interactable = true;
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
-                if (txt != null) txt.text = "交換する";
+                if (txt != null) txt.text = "整理する";
             }
             else
             {

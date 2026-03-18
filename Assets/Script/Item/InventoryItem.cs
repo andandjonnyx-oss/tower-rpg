@@ -10,6 +10,7 @@ public class InventoryItem
 
     public InventoryItem(ItemData data)
     {
+        //GUID ƒ‰ƒ“ƒ_ƒ€‚È•¶š—ñ@—áF"7c9ec9ed-c93a-4d4c-83f3-4a93cc8c767d"
         this.uid = Guid.NewGuid().ToString();
         this.data = data;
     }
