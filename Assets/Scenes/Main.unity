@@ -119,6 +119,51 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &304735838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 304735840}
+  - component: {fileID: 304735839}
+  m_Layer: 0
+  m_Name: Openstatusbutton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &304735839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304735838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4caf9cd3df865bc4abd02cca3671bafd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OpenStatusButton
+  statusSceneName: Status
+--- !u!4 &304735840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304735838}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 615.37415, y: 850.7631, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &603969723
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +472,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 304735839}
+    - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: OpenStatusButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Status
@@ -438,13 +499,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1388268136931869623, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1300089650}
   m_SourcePrefab: {fileID: 100100000, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+--- !u!1 &901851440 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1388268136931869623, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+  m_PrefabInstance: {fileID: 901851439}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1300089649 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1844478735119512597, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
   m_PrefabInstance: {fileID: 901851439}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1300089650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901851440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4caf9cd3df865bc4abd02cca3671bafd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::OpenStatusButton
+  statusSceneName: Status
 --- !u!1 &1334576437
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,3 +743,4 @@ SceneRoots:
   - {fileID: 603969726}
   - {fileID: 1334576441}
   - {fileID: 854870259}
+  - {fileID: 304735840}
