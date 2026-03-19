@@ -2,10 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/// <summary>
-/// Towerin シーンの各階ボタンにアタッチ。
-/// インスペクターで「何階到達すれば表示するか」「何階からスタートするか」を設定する。
-/// </summary>
 [RequireComponent(typeof(Button))]
 public class FloorButton : MonoBehaviour
 {
@@ -27,10 +23,14 @@ public class FloorButton : MonoBehaviour
         button.onClick.AddListener(OnClick);
     }
 
-    /// TowerEntranceView から呼ばれる。到達階に応じて表示/非表示を切り替え。
     public void Refresh(int reachedFloor)
     {
-        gameObject.SetActive(reachedFloor >= requiredFloor);
+        bool show = reachedFloor >= requiredFloor;
+
+        // ★ デバッグ: 各ボタンの判定を確認
+        Debug.Log($"[FloorButton] {gameObject.name}: requiredFloor={requiredFloor}, reachedFloor={reachedFloor}, show={show}");
+
+        gameObject.SetActive(show);
     }
 
     private void OnClick()

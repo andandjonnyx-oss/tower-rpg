@@ -2,10 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/// <summary>
-/// Towerin シーンの Canvas にアタッチ。
-/// 子階層にある FloorButton を自動で検索し、到達階に応じて表示/非表示を一括制御する。
-/// </summary>
 public class TowerEntranceView : MonoBehaviour
 {
     [Header("Back to Main")]
@@ -16,7 +12,6 @@ public class TowerEntranceView : MonoBehaviour
 
     private void Awake()
     {
-        // 子階層から FloorButton を全て取得
         floorButtons = GetComponentsInChildren<FloorButton>(includeInactive: true);
 
         if (backButton != null)
@@ -32,6 +27,11 @@ public class TowerEntranceView : MonoBehaviour
     {
         var gs = GameState.I;
         int reached = (gs != null) ? gs.reachedFloor : 1;
+
+        // ★ デバッグ: GameState の状態を確認
+        Debug.Log($"[TowerEntranceView] GameState.I is {(gs != null ? "存在する" : "NULL")}");
+        Debug.Log($"[TowerEntranceView] reachedFloor = {reached}");
+        Debug.Log($"[TowerEntranceView] FloorButton 数 = {floorButtons.Length}");
 
         foreach (var fb in floorButtons)
         {

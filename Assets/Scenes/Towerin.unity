@@ -1013,52 +1013,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235798698}
   m_CullTransparentMesh: 1
---- !u!1 &1537998920
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1537998921}
-  - component: {fileID: 1537998922}
-  m_Layer: 0
-  m_Name: TowerEntranceView
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1537998921
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537998920}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 168.13708, y: -423.19666, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1809481720}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1537998922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1537998920}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c789dc610aac344f9ec29bafe36034d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TowerEntranceView
-  backButton: {fileID: 17249582}
-  mainSceneName: Main
 --- !u!1 &1809481716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,6 +1025,7 @@ GameObject:
   - component: {fileID: 1809481719}
   - component: {fileID: 1809481718}
   - component: {fileID: 1809481717}
+  - component: {fileID: 1809481721}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1157,7 +1112,6 @@ RectTransform:
   - {fileID: 1907698101}
   - {fileID: 2041999756}
   - {fileID: 1006660767}
-  - {fileID: 1537998921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1165,6 +1119,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1809481721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1809481716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c789dc610aac344f9ec29bafe36034d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerEntranceView
+  backButton: {fileID: 17249582}
+  mainSceneName: Main
 --- !u!1 &1907698100
 GameObject:
   m_ObjectHideFlags: 0
