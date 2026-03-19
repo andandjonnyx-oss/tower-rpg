@@ -23,17 +23,6 @@ public class AdManager : MonoBehaviour
 {
     public static AdManager Instance { get; private set; }
 
-    // AdManager も自動生成したい場合（GameStateAutoCreate と同じパターン）
-public static class AdManagerAutoCreate
-{
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void CreateIfNeeded()
-    {
-        if (AdManager.Instance != null) return;
-        var go = new GameObject("AdManager");
-        go.AddComponent<AdManager>();
-    }
-}
 
     private void Awake()
     {

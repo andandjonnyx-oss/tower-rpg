@@ -33,6 +33,14 @@ public class GameState : MonoBehaviour
     public int currentHp = 50;
     public int currentMp = 20;
 
+    [Header("Base Stats Initial (初期値・リセット先)")]
+    // 初期値。レベルアップ等で底上げされた場合はここも更新する。
+    public int initialSTR = 1;
+    public int initialVIT = 1;
+    public int initialINT = 1;
+    public int initialDEX = 1;
+    public int initialLUC = 1;
+
     [Header("Base Stats (振り分け対象)")]
     public int baseSTR = 1;
     public int baseVIT = 1;
@@ -59,32 +67,30 @@ public class GameState : MonoBehaviour
     // ポイント振り分け / リセット
     // =========================================================
 
-    // 振り分け前の値を記録（リセット用）
-    [NonSerialized] private int savedSTR, savedVIT, savedINT, savedDEX, savedLUC, savedPoint;
-    [NonSerialized] private bool snapshotTaken = false;
-
-    /// Status 画面を開いた直後に呼ぶ。現在値をスナップショットとして保存する。
+    /// StatusView の Start() から呼ばれる。
+    /// 現在は何もしないが、将来の拡張用にメソッドは残しておく。
     public void TakeStatSnapshot()
     {
-        savedSTR = baseSTR;
-        savedVIT = baseVIT;
-        savedINT = baseINT;
-        savedDEX = baseDEX;
-        savedLUC = baseLUC;
-        savedPoint = statusPoint;
-        snapshotTaken = true;
+        // 全リセット方式のため、スナップショットは不要
     }
 
-    /// リセットボタン: スナップショットに戻す
+    /// リセット: 全ステータスを初期値に戻し、振り分けたポイントを全て返却する。
     public void ResetStatAllocation()
     {
-        if (!snapshotTaken) return;
-        baseSTR = savedSTR;
-        baseVIT = savedVIT;
-        baseINT = savedINT;
-        baseDEX = savedDEX;
-        baseLUC = savedLUC;
-        statusPoint = savedPoint;
+        // 現在の振り分け量を計算して返却
+        int usedPoints = (baseSTR - initialSTR)
+                       + (baseVIT - initialVIT)
+                       + (baseINT - initialINT)
+                       + (baseDEX - initialDEX)
+                       + (baseLUC - initialLUC);
+
+        baseSTR = initialSTR;
+        baseVIT = initialVIT;
+        baseINT = initialINT;
+        baseDEX = initialDEX;
+        baseLUC = initialLUC;
+
+        statusPoint += usedPoints;
     }
 
     /// ポイントを 1 消費してステータスを +1 する。成功したら true。
