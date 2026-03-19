@@ -40,19 +40,24 @@ public class TowerState : MonoBehaviour
         {
             Floor++;
             Step = 1;
+
+            // ★ 新しい階に到達したら到達フラグを更新
+            var gs = GameState.I;
+            if (gs != null)
+                gs.UpdateReachedFloor(Floor);
         }
 
 
-        var gs = GameState.I;
-        if (gs == null)
+        var gs2 = GameState.I;
+        if (gs2 == null)
         {
             Debug.LogError("GameState not found. Cannot trigger events.");
             RefreshUI();
             return;
         }
 
-        gs.floor = Floor;
-        gs.step = Step;
+        gs2.floor = Floor;
+        gs2.step = Step;
 
         RefreshUI();
 

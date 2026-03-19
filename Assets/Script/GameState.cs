@@ -20,12 +20,30 @@ public class GameState : MonoBehaviour
     public string equippedWeaponUid = "";
 
     // =========================================================
+    // 塔の到達階（中間ポイント解放用）
+    // =========================================================
+    [Header("Tower Checkpoint")]
+    // これまでに到達した最高階。初期は1階のみ解放。
+    public int reachedFloor = 1;
+
+    /// 現在の階が過去最高を超えていたら更新する。
+    /// TowerState.Advance() で階が変わった時に呼ぶ。
+    public void UpdateReachedFloor(int currentFloor)
+    {
+        if (currentFloor > reachedFloor)
+        {
+            reachedFloor = currentFloor;
+            Debug.Log($"[GameState] 到達階を更新: {reachedFloor}階");
+        }
+    }
+
+    // =========================================================
     // ステータス
     // =========================================================
     [Header("Level / EXP")]
     public int level = 1;
     public int currentExp = 0;
-    public int expToNext = 100;       // 次レベルまでの必要経験値
+    public int expToNext = 100;
 
     [Header("HP / MP")]
     public int maxHp = 50;
@@ -34,7 +52,6 @@ public class GameState : MonoBehaviour
     public int currentMp = 20;
 
     [Header("Base Stats Initial (初期値・リセット先)")]
-    // 初期値。レベルアップ等で底上げされた場合はここも更新する。
     public int initialSTR = 1;
     public int initialVIT = 1;
     public int initialINT = 1;
@@ -51,12 +68,6 @@ public class GameState : MonoBehaviour
     [Header("Status Point")]
     public int statusPoint = 10;
 
-    // --- 派生ステータス（読み取り専用プロパティ） ---
-    // 力     = STR × 1
-    // 体力   = VIT × 2
-    // 器用   = DEX × 3
-    // 魔力   = INT × 4
-    // 運の良さ = LUC × 5
     public int Power => baseSTR * 1;
     public int Stamina => baseVIT * 2;
     public int Dexterity => baseDEX * 3;
@@ -66,18 +77,12 @@ public class GameState : MonoBehaviour
     // =========================================================
     // ポイント振り分け / リセット
     // =========================================================
-
-    /// StatusView の Start() から呼ばれる。
-    /// 現在は何もしないが、将来の拡張用にメソッドは残しておく。
     public void TakeStatSnapshot()
     {
-        // 全リセット方式のため、スナップショットは不要
     }
 
-    /// リセット: 全ステータスを初期値に戻し、振り分けたポイントを全て返却する。
     public void ResetStatAllocation()
     {
-        // 現在の振り分け量を計算して返却
         int usedPoints = (baseSTR - initialSTR)
                        + (baseVIT - initialVIT)
                        + (baseINT - initialINT)
@@ -93,7 +98,6 @@ public class GameState : MonoBehaviour
         statusPoint += usedPoints;
     }
 
-    /// ポイントを 1 消費してステータスを +1 する。成功したら true。
     public bool AllocatePoint(StatType stat)
     {
         if (statusPoint <= 0) return false;
@@ -140,7 +144,6 @@ public class GameState : MonoBehaviour
     }
 }
 
-/// ステータス種別
 public enum StatType
 {
     STR,

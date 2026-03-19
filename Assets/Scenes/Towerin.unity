@@ -211,6 +211,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Main
@@ -219,7 +227,8 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u30E1\u30A4\u30F3\u3078"
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -229,6 +238,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1844478735119512597, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
   m_PrefabInstance: {fileID: 17249580}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &17249582 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+  m_PrefabInstance: {fileID: 17249580}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &349522563
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,6 +997,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235798698}
   m_CullTransparentMesh: 1
+--- !u!1 &1537998920
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1537998921}
+  - component: {fileID: 1537998922}
+  m_Layer: 0
+  m_Name: TowerEntranceView
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1537998921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537998920}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 168.13708, y: -423.19666, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1809481720}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1537998922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537998920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c789dc610aac344f9ec29bafe36034d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerEntranceView
+  floorButtons:
+  - {fileID: 1907698102}
+  - {fileID: 2041999757}
+  - {fileID: 1006660768}
+  backButton: {fileID: 17249582}
+  mainSceneName: Main
+  towerSceneName: Tower
 --- !u!1 &1809481716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1075,6 +1146,7 @@ RectTransform:
   - {fileID: 1907698101}
   - {fileID: 2041999756}
   - {fileID: 1006660767}
+  - {fileID: 1537998921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
