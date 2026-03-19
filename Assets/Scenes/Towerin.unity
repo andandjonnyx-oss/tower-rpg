@@ -535,6 +535,7 @@ GameObject:
   - component: {fileID: 1006660770}
   - component: {fileID: 1006660769}
   - component: {fileID: 1006660768}
+  - component: {fileID: 1006660771}
   m_Layer: 5
   m_Name: Button3
   m_TagString: Untagged
@@ -644,6 +645,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006660766}
   m_CullTransparentMesh: 1
+--- !u!114 &1006660771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1006660766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ecdd08b1f560bf4db5206151d58a808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloorButton
+  requiredFloor: 3
+  startFloor: 3
+  towerSceneName: Tower
 --- !u!1 &1128165901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1041,13 +1057,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c789dc610aac344f9ec29bafe36034d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerEntranceView
-  floorButtons:
-  - {fileID: 1907698102}
-  - {fileID: 2041999757}
-  - {fileID: 1006660768}
   backButton: {fileID: 17249582}
   mainSceneName: Main
-  towerSceneName: Tower
 --- !u!1 &1809481716
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,6 +1177,7 @@ GameObject:
   - component: {fileID: 1907698104}
   - component: {fileID: 1907698103}
   - component: {fileID: 1907698102}
+  - component: {fileID: 1907698105}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1275,6 +1287,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907698100}
   m_CullTransparentMesh: 1
+--- !u!114 &1907698105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907698100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ecdd08b1f560bf4db5206151d58a808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloorButton
+  requiredFloor: 1
+  startFloor: 1
+  towerSceneName: Tower
 --- !u!1 &2041999755
 GameObject:
   m_ObjectHideFlags: 0
@@ -1287,6 +1314,7 @@ GameObject:
   - component: {fileID: 2041999759}
   - component: {fileID: 2041999758}
   - component: {fileID: 2041999757}
+  - component: {fileID: 2041999760}
   m_Layer: 5
   m_Name: Button2
   m_TagString: Untagged
@@ -1396,6 +1424,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041999755}
   m_CullTransparentMesh: 1
+--- !u!114 &2041999760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041999755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ecdd08b1f560bf4db5206151d58a808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloorButton
+  requiredFloor: 2
+  startFloor: 2
+  towerSceneName: Tower
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
