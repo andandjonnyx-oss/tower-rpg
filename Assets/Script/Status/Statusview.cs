@@ -54,6 +54,11 @@ public class StatusView : MonoBehaviour
     [SerializeField] private Button toggleButton;       // 詳細/基礎 切替ボタン
     [SerializeField] private TMP_Text toggleButtonText; // ボタンのラベル
 
+    [Header("Reset Confirm Popup")]
+    [SerializeField] private GameObject resetConfirmPopup;  // 確認ポップアップのルート
+    [SerializeField] private Button resetConfirmYes;        // 「はい（広告を見る）」ボタン
+    [SerializeField] private Button resetConfirmNo;         // 「いいえ」ボタン
+
     // =========================================================
     // 内部状態
     // =========================================================
@@ -71,7 +76,7 @@ public class StatusView : MonoBehaviour
         if (dexPlusButton != null) dexPlusButton.onClick.AddListener(() => OnPlusClicked(StatType.DEX));
         if (lucPlusButton != null) lucPlusButton.onClick.AddListener(() => OnPlusClicked(StatType.LUC));
 
-        // リセットボタン
+        // リセットボタン → 確認ポップアップを開く
         if (resetButton != null) resetButton.onClick.AddListener(OnResetClicked);
 
         // ×ボタン
@@ -79,6 +84,10 @@ public class StatusView : MonoBehaviour
 
         // 詳細/基礎 切替
         if (toggleButton != null) toggleButton.onClick.AddListener(OnToggleClicked);
+
+        // リセット確認ポップアップのボタン
+        if (resetConfirmYes != null) resetConfirmYes.onClick.AddListener(OnResetConfirmYes);
+        if (resetConfirmNo != null) resetConfirmNo.onClick.AddListener(OnResetConfirmNo);
     }
 
     private void Start()
@@ -87,9 +96,10 @@ public class StatusView : MonoBehaviour
         if (GameState.I != null)
             GameState.I.TakeStatSnapshot();
 
-        // 初期表示は Status1
+        // 初期表示は Status1、ポップアップは閉じておく
         showingStatus1 = true;
         ApplyPanelVisibility();
+        if (resetConfirmPopup != null) resetConfirmPopup.SetActive(false);
         RefreshAll();
     }
 
@@ -151,7 +161,59 @@ public class StatusView : MonoBehaviour
             RefreshAll();
     }
 
+    /// リセットボタン → 確認ポップアップを表示
     private void OnResetClicked()
+    {
+        if (resetConfirmPopup != null)
+        {
+            resetConfirmPopup.SetActive(true);
+        }
+        else
+        {
+            // ポップアップ未設定の場合はそのままリセット（従来動作）
+            ExecuteReset();
+        }
+    }
+
+    /// 確認ポップアップ「はい（広告を見る）」
+    private void OnResetConfirmYes()
+    {
+        if (resetConfirmPopup != null)
+            resetConfirmPopup.SetActive(false);
+
+        // 広告を表示し、完了後にリセットを実行
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.ShowRewardedAd(success =>
+            {
+                if (success)
+                {
+                    Debug.Log("[StatusView] 広告視聴完了 → ステータスリセット実行");
+                    ExecuteReset();
+                }
+                else
+                {
+                    Debug.Log("[StatusView] 広告視聴失敗/キャンセル → リセットしない");
+                }
+            });
+        }
+        else
+        {
+            // AdManager 未設定の場合はそのままリセット
+            Debug.LogWarning("[StatusView] AdManager が見つかりません。直接リセットします。");
+            ExecuteReset();
+        }
+    }
+
+    /// 確認ポップアップ「いいえ」
+    private void OnResetConfirmNo()
+    {
+        if (resetConfirmPopup != null)
+            resetConfirmPopup.SetActive(false);
+    }
+
+    /// 実際のリセット処理
+    private void ExecuteReset()
     {
         if (GameState.I == null) return;
         GameState.I.ResetStatAllocation();
@@ -162,7 +224,7 @@ public class StatusView : MonoBehaviour
     {
         showingStatus1 = !showingStatus1;
         ApplyPanelVisibility();
-        RefreshAll();   // 詳細に切り替えた際に最新値を反映
+        RefreshAll();
     }
 
     private void OnCloseClicked()
@@ -176,7 +238,6 @@ public class StatusView : MonoBehaviour
         }
         else
         {
-            // フォールバック: 戻り先不明なら Tower へ
             SceneManager.LoadScene("Tower");
         }
     }
