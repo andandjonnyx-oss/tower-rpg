@@ -23,6 +23,10 @@ public class ItemDetailPanel : MonoBehaviour
 
     private void Start()
     {
+    }
+
+    private void Awake()
+    {
         Hide();
     }
 
