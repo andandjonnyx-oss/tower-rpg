@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// アイテムスロットUI（全シーン共通）。
+/// クリック時に登録されたコールバックを呼ぶだけ。
+/// </summary>
 public class ItemSlotView : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Image frameImage;
@@ -11,9 +15,11 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Color equippedColor = new Color(0.4f, 0.8f, 1f, 1f);
 
     private InventoryItem currentInvItem;
-    private ItemBoxView owner;
 
-    public void Setup(ItemBoxView ownerView) => owner = ownerView;
+    /// <summary>
+    /// クリック時に呼ばれるコールバック。各シーンのコンテキストが設定する。
+    /// </summary>
+    public System.Action<ItemSlotView, InventoryItem> onClicked;
 
     public void SetItem(InventoryItem invItem)
     {
@@ -48,7 +54,6 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        // uid で判定するので、同名武器が複数あっても装備中の1個だけ光る
         bool isEquipped = GameState.I != null
             && GameState.I.equippedWeaponUid == currentInvItem.uid;
 
@@ -57,7 +62,6 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (owner == null) return;
-        owner.OnClickSlot(this, currentInvItem);
+        onClicked?.Invoke(this, currentInvItem);
     }
 }

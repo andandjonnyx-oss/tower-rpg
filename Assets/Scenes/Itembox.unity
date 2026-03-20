@@ -1424,6 +1424,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1844478735119512597, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
   m_PrefabInstance: {fileID: 963209910}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &963209912 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+  m_PrefabInstance: {fileID: 963209910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &966677544 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1822173344823240315, guid: f42315508e1e5a74a9dac1b9cd6bcacf, type: 3}
@@ -1440,7 +1451,6 @@ GameObject:
   - component: {fileID: 1081578649}
   - component: {fileID: 1081578652}
   - component: {fileID: 1081578651}
-  - component: {fileID: 1081578650}
   m_Layer: 5
   m_Name: ItemDetailWindow
   m_TagString: Untagged
@@ -1471,24 +1481,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -359}
   m_SizeDelta: {x: 880, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1081578650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1081578648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a088dba68f53cab4986897c6ab86a101, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemPickupWindow
-  windowRoot: {fileID: 1081578648}
-  itemNameText: {fileID: 1574704770}
-  descriptionText: {fileID: 1502383183}
-  itemImage: {fileID: 801844954}
-  getButton: {fileID: 801815120}
-  ignoreButton: {fileID: 909948891}
 --- !u!114 &1081578651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2075,6 +2067,7 @@ GameObject:
   - component: {fileID: 1592778153}
   - component: {fileID: 1592778152}
   - component: {fileID: 1592778151}
+  - component: {fileID: 1592778155}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2167,6 +2160,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1592778155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592778150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0459067f65ff814e914de177e548343, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemboxContext
+  slots:
+  - {fileID: 5726612185537817145}
+  - {fileID: 1654499413}
+  - {fileID: 1600557930}
+  - {fileID: 1467444307}
+  - {fileID: 958707978}
+  - {fileID: 573828787}
+  - {fileID: 1832694973}
+  - {fileID: 1707179924}
+  - {fileID: 301031330}
+  - {fileID: 561891260}
+  detailPanel: {fileID: 1706802392}
+  backButton: {fileID: 963209912}
+  mainSceneName: Main
 --- !u!1001 &1600557928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2445,17 +2464,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1706802391}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42596ab84994be244b598ed79214bfae, type: 3}
+  m_Script: {fileID: 11500000, guid: ec4d4cc5b07515b40b5d187f5162f6cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemDetailPanel
-  windowRoot: {fileID: 1081578648}
+  detailRoot: {fileID: 1706802391}
   itemNameText: {fileID: 1574704770}
   descriptionText: {fileID: 1502383183}
   itemImage: {fileID: 801844954}
-  button1: {fileID: 801815120}
-  button2: {fileID: 909948891}
-  button1Text: {fileID: 311966097}
-  button2Text: {fileID: 1118571316}
+  buttons:
+  - {fileID: 801815120}
+  - {fileID: 909948891}
+  buttonTexts:
+  - {fileID: 311966097}
+  - {fileID: 1118571316}
 --- !u!224 &1706802393
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2764,62 +2785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbefa308be6aeca4db7adc3361dcf0d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemSlotView
---- !u!1 &1955003993
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1955003995}
-  - component: {fileID: 1955003994}
-  m_Layer: 0
-  m_Name: ItemBoxview
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1955003994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955003993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb866ffd594b1b34cb7a46539f3c9e40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemBoxView
-  slots:
-  - {fileID: 5726612185537817145}
-  - {fileID: 1654499413}
-  - {fileID: 1600557930}
-  - {fileID: 1467444307}
-  - {fileID: 958707978}
-  - {fileID: 573828787}
-  - {fileID: 1832694973}
-  - {fileID: 1707179924}
-  - {fileID: 301031330}
-  - {fileID: 561891260}
-  detailPanel: {fileID: 1706802392}
---- !u!4 &1955003995
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955003993}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 540, y: 960, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2114294804
 GameObject:
   m_ObjectHideFlags: 0
@@ -3084,4 +3049,3 @@ SceneRoots:
   - {fileID: 2114294807}
   - {fileID: 1592778154}
   - {fileID: 545112078}
-  - {fileID: 1955003995}
