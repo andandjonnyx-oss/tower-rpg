@@ -23,7 +23,10 @@ public class StorageContext : MonoBehaviour, IItemContext
     [SerializeField] private string mainSceneName = "Main";
 
     private InventoryItem selectedItem;
+    
+    #pragma warning disable CS0414
     private bool selectedFromInventory;
+    #pragma warning restore CS0414
 
     private void Start()
     {

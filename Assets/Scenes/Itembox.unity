@@ -2185,7 +2185,7 @@ MonoBehaviour:
   - {fileID: 561891260}
   detailPanel: {fileID: 1706802392}
   backButton: {fileID: 963209912}
-  mainSceneName: Main
+  mainSceneName: Tower
 --- !u!1001 &1600557928
 PrefabInstance:
   m_ObjectHideFlags: 0
