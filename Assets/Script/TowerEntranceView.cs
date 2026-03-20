@@ -28,11 +28,6 @@ public class TowerEntranceView : MonoBehaviour
         var gs = GameState.I;
         int reached = (gs != null) ? gs.reachedFloor : 1;
 
-        // ★ デバッグ: GameState の状態を確認
-        Debug.Log($"[TowerEntranceView] GameState.I is {(gs != null ? "存在する" : "NULL")}");
-        Debug.Log($"[TowerEntranceView] reachedFloor = {reached}");
-        Debug.Log($"[TowerEntranceView] FloorButton 数 = {floorButtons.Length}");
-
         foreach (var fb in floorButtons)
         {
             if (fb != null)
