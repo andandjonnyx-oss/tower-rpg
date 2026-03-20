@@ -17,6 +17,10 @@ using UnityEngine.UI;
 ///   消費品: 使う / 捨てる / 引き出す
 ///   武器:   ―(装備不可) / 捨てる / 引き出す
 ///   魔法:   ― / 捨てる / 引き出す
+/// 
+/// 詳細パネルに「閉じる」ボタンは無し。
+/// アイテム操作（使う/捨てる/預ける/引き出す）後に自動で非表示。
+/// 別のアイテムをクリックすれば上書き表示される。
 /// </summary>
 public class StorageView : MonoBehaviour
 {
@@ -45,7 +49,6 @@ public class StorageView : MonoBehaviour
     [SerializeField] private TMP_Text button2Text;
     [SerializeField] private Button button3;            // 預ける / 引き出す
     [SerializeField] private TMP_Text button3Text;
-    [SerializeField] private Button closeDetailButton;  // 閉じる
 
     // =========================================================
     // ナビゲーション
@@ -68,7 +71,6 @@ public class StorageView : MonoBehaviour
         if (button1 != null) button1.onClick.AddListener(OnButton1Clicked);
         if (button2 != null) button2.onClick.AddListener(OnButton2Clicked);
         if (button3 != null) button3.onClick.AddListener(OnButton3Clicked);
-        if (closeDetailButton != null) closeDetailButton.onClick.AddListener(HideDetail);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
     }
 
@@ -222,7 +224,6 @@ public class StorageView : MonoBehaviour
                     if (button1Text != null) button1Text.text = "使う";
                     break;
                 case ItemCategory.Weapon:
-                    // 倉庫内の武器は装備不可
                     button1.gameObject.SetActive(false);
                     break;
                 case ItemCategory.Magic:
@@ -265,7 +266,6 @@ public class StorageView : MonoBehaviour
 
         if (selectedFromInventory)
         {
-            // 所持品側: 使う / 装備 / 外す
             switch (selectedItem.data.category)
             {
                 case ItemCategory.Consumable:
@@ -281,7 +281,6 @@ public class StorageView : MonoBehaviour
         }
         else
         {
-            // 倉庫側: 消費品の「使う」のみ
             if (selectedItem.data.category == ItemCategory.Consumable)
                 UseConsumableFromStorage();
         }
@@ -327,15 +326,16 @@ public class StorageView : MonoBehaviour
     private void EquipWeapon()
     {
         ItemBoxManager.Instance?.EquipItem(selectedItem);
-        HideDetail();
+        // 装備/外すはアイテムが消えないので詳細を更新して表示し直す
         RefreshAll();
+        ShowDetail();
     }
 
     private void UnequipWeapon()
     {
         ItemBoxManager.Instance?.UnequipItem(selectedItem);
-        HideDetail();
         RefreshAll();
+        ShowDetail();
     }
 
     private void DiscardFromInventory()
