@@ -125,7 +125,7 @@ public class ItemDetailWindow : EditorWindow
                 break;
 
             case ItemCategory.Weapon:
-                EditorGUILayout.LabelField("Weapon Type", string.IsNullOrWhiteSpace(item.weaponType) ? "‚È‚µ" : item.weaponType);
+                EditorGUILayout.LabelField("Weapon Attribute", item.weaponAttribute.ToJapanese());
                 EditorGUILayout.LabelField("Attack Power", item.attackPower.ToString());
                 break;
 

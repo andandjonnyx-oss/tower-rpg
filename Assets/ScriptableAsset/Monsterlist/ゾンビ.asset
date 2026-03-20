@@ -17,13 +17,13 @@ MonoBehaviour:
   Image: {fileID: -688642859534287020, guid: 9bd54ecd20c945045ac4f2d2aa882346, type: 3}
   Minfloor: 1
   Minstep: 11
-  Maxfloor: 1
+  Maxfloor: 100
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
   MaxHp: 10
-  Attack: 0
+  Attack: 4
   Defense: 0
   Speed: 0
   Exp: 0
