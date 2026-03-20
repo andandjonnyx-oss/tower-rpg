@@ -6,14 +6,25 @@ using UnityEngine.UI;
 /// <summary>
 /// Itemsouko（倉庫）シーン用コントローラー。
 /// 所持品と倉庫の2列を表示し、使う/装備/捨てる/預ける/引き出すの操作を提供する。
+/// 倉庫側スロットは Prefab から自動生成される。
 /// </summary>
 public class StorageContext : MonoBehaviour, IItemContext
 {
-    [Header("Inventory Slots (Left)")]
+    [Header("Inventory Slots (Left) - Inspector でアサイン")]
     [SerializeField] private ItemSlotView[] inventorySlots;
 
-    [Header("Storage Slots (Right)")]
-    [SerializeField] private ItemSlotView[] storageSlots;
+    [Header("Storage Slots - 自動生成")]
+    [Tooltip("スロットの Prefab（ItemSlotView がアタッチ済み）")]
+    [SerializeField] private ItemSlotView slotPrefab;
+
+    [Tooltip("スロットを生成する親 Transform（GridLayoutGroup + ContentSizeFitter をアタッチ）")]
+    [SerializeField] private Transform storageContent;
+
+    [Tooltip("1行あたりの列数")]
+    [SerializeField] private int columns = 4;
+
+    [Tooltip("行数")]
+    [SerializeField] private int rows = 25;
 
     [Header("Detail Panel")]
     [SerializeField] private ItemDetailPanel detailPanel;
@@ -22,11 +33,19 @@ public class StorageContext : MonoBehaviour, IItemContext
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
 
+    // 自動生成されたスロット
+    private ItemSlotView[] storageSlots;
+
     private InventoryItem selectedItem;
-    
-    #pragma warning disable CS0414
+
+#pragma warning disable CS0414
     private bool selectedFromInventory;
-    #pragma warning restore CS0414
+#pragma warning restore CS0414
+
+    private void Awake()
+    {
+        GenerateStorageSlots();
+    }
 
     private void Start()
     {
@@ -35,7 +54,7 @@ public class StorageContext : MonoBehaviour, IItemContext
             foreach (var s in inventorySlots)
                 if (s != null) s.onClicked = OnInventorySlotClicked;
 
-        // 倉庫スロットにコールバック登録
+        // 倉庫スロットにコールバック登録（自動生成済み）
         if (storageSlots != null)
             foreach (var s in storageSlots)
                 if (s != null) s.onClicked = OnStorageSlotClicked;
@@ -45,6 +64,34 @@ public class StorageContext : MonoBehaviour, IItemContext
 
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
+    }
+
+    /// <summary>
+    /// 倉庫側のスロットを Prefab から自動生成する。
+    /// storageContent には GridLayoutGroup と ContentSizeFitter がついている前提。
+    /// </summary>
+    private void GenerateStorageSlots()
+    {
+        if (slotPrefab == null || storageContent == null)
+        {
+            Debug.LogWarning("[StorageContext] slotPrefab or storageContent is null. Cannot generate slots.");
+            return;
+        }
+
+        int totalSlots = columns * rows;
+
+        // StorageManager の容量も合わせる
+        if (StorageManager.Instance != null)
+            StorageManager.Instance.SetCapacity(totalSlots);
+
+        storageSlots = new ItemSlotView[totalSlots];
+
+        for (int i = 0; i < totalSlots; i++)
+        {
+            ItemSlotView slot = Instantiate(slotPrefab, storageContent);
+            slot.gameObject.name = $"StorageSlot_{i}";
+            storageSlots[i] = slot;
+        }
     }
 
     private void OnInventorySlotClicked(ItemSlotView slot, InventoryItem invItem)

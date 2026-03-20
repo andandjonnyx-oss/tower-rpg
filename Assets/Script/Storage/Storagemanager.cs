@@ -26,6 +26,14 @@ public class StorageManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    /// <summary>
+    /// 容量を外部から設定する。StorageContext のスロット自動生成時に呼ばれる。
+    /// </summary>
+    public void SetCapacity(int newCapacity)
+    {
+        capacity = Mathf.Max(newCapacity, items.Count);
+    }
+
     public IReadOnlyList<InventoryItem> GetItems() => items;
 
     public bool CanAddItem(ItemData data) => data != null && items.Count < capacity;
