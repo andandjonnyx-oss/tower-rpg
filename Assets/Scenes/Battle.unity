@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 324370142}
   - component: {fileID: 324370141}
   - component: {fileID: 324370140}
+  - component: {fileID: 324370144}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -353,8 +354,8 @@ RectTransform:
   - {fileID: 345024986}
   - {fileID: 632274810}
   - {fileID: 1030513531}
-  - {fileID: 1475971357}
   - {fileID: 714724125}
+  - {fileID: 1475971357}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -362,6 +363,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &324370144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324370139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8490c8c57261f1f4e90ee3571f31cc7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HpMpDisplay
+  hpText: {fileID: 1513089105}
+  mpText: {fileID: 221880162}
 --- !u!1 &345024985
 GameObject:
   m_ObjectHideFlags: 0
