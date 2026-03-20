@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 戦闘シーンのメインコントローラー。
-/// 敵の表示、攻撃処理、戦闘ログ、勝利判定を管理する。
+/// ターン制（味方→敵→味方…）で戦闘を進行する。
 /// </summary>
 public class BattleSceneController : MonoBehaviour
 {
@@ -22,6 +22,7 @@ public class BattleSceneController : MonoBehaviour
 
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
+    [SerializeField] private string mainSceneName = "Main";
 
     // 戦闘中の敵HP
     private int enemyCurrentHp;
@@ -60,12 +61,19 @@ public class BattleSceneController : MonoBehaviour
         AddLog($"{enemyMonster.Mname} が現れた！");
     }
 
+    // =========================================================
+    // プレイヤーターン
+    // =========================================================
+
     /// <summary>
-    /// 攻撃ボタンが押された時の処理。
+    /// 攻撃ボタンが押された時の処理（プレイヤーターン）。
     /// </summary>
     private void OnAttackClicked()
     {
         if (battleEnded) return;
+
+        // ボタン連打防止
+        SetButtonsInteractable(false);
 
         // 装備中の武器を取得
         string weaponName;
@@ -76,30 +84,122 @@ public class BattleSceneController : MonoBehaviour
         // ダメージ計算: STR + 武器攻撃力
         int str = (GameState.I != null) ? GameState.I.baseSTR : 1;
         int damage = str + weaponPower;
-
-        // ダメージを最低1保証
         if (damage < 1) damage = 1;
 
         // ダメージ適用
         enemyCurrentHp -= damage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        // ログ出力（属性は日本語表示）
         AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {damage}ダメージ！");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
         {
-            OnEnemyDefeated();
+            OnVictory();
+            return;
         }
+
+        // 敵ターンへ（少し待ってから）
+        Invoke(nameof(EnemyTurn), 0.5f);
     }
+
+    // =========================================================
+    // 敵ターン
+    // =========================================================
+
+    /// <summary>
+    /// 敵の攻撃処理。
+    /// </summary>
+    private void EnemyTurn()
+    {
+        if (battleEnded) return;
+
+        // 敵の攻撃力（Monster.Attack をそのまま使用）
+        int enemyDamage = enemyMonster.Attack;
+        if (enemyDamage < 1) enemyDamage = 1;
+
+        // プレイヤーにダメージ
+        if (GameState.I != null)
+        {
+            GameState.I.currentHp -= enemyDamage;
+            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
+        }
+
+        AddLog($"{enemyMonster.Mname} の攻撃！ {enemyDamage}ダメージ！");
+
+        // プレイヤー敗北判定
+        if (GameState.I != null && GameState.I.currentHp <= 0)
+        {
+            OnDefeat();
+            return;
+        }
+
+        // プレイヤーターンに戻す
+        SetButtonsInteractable(true);
+    }
+
+    // =========================================================
+    // 勝利 / 敗北
+    // =========================================================
+
+    /// <summary>
+    /// 勝利処理。Towerシーンに戻る。
+    /// </summary>
+    private void OnVictory()
+    {
+        battleEnded = true;
+        AddLog($"{enemyMonster.Mname} を倒した！");
+        SetButtonsInteractable(false);
+
+        Invoke(nameof(ReturnToTower), 1.5f);
+    }
+
+    /// <summary>
+    /// 敗北処理。HP全回復してMainシーンに戻る。
+    /// </summary>
+    private void OnDefeat()
+    {
+        battleEnded = true;
+        AddLog("You は倒れた…");
+        SetButtonsInteractable(false);
+
+        Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
+    }
+
+    private void ReturnToTower()
+    {
+        // 勝利帰還: HP/MP全回復
+        FullRecover();
+        SceneManager.LoadScene(towerSceneName);
+    }
+
+    private void ReturnToMainWithFullRecover()
+    {
+        // 敗北帰還: HP/MP全回復
+        FullRecover();
+        SceneManager.LoadScene(mainSceneName);
+    }
+
+    /// <summary>
+    /// HP/MPを全回復する。
+    /// </summary>
+    private void FullRecover()
+    {
+        if (GameState.I == null) return;
+        GameState.I.currentHp = GameState.I.maxHp;
+        GameState.I.currentMp = GameState.I.maxMp;
+        Debug.Log($"[Battle] 全回復: HP={GameState.I.currentHp}/{GameState.I.maxHp}");
+    }
+
+    // =========================================================
+    // ユーティリティ
+    // =========================================================
 
     /// <summary>
     /// 装備中の武器情報を取得する。未装備なら素手。
     /// </summary>
     private void GetEquippedWeaponInfo(out string weaponName, out WeaponAttribute attribute, out int power)
     {
-        // デフォルト: 素手
         weaponName = "素手";
         attribute = WeaponAttribute.Strike;
         power = 0;
@@ -110,7 +210,6 @@ public class BattleSceneController : MonoBehaviour
         if (ItemBoxManager.Instance == null)
             return;
 
-        // 装備中の uid からアイテムを検索
         var items = ItemBoxManager.Instance.GetItems();
         if (items == null) return;
 
@@ -129,30 +228,16 @@ public class BattleSceneController : MonoBehaviour
             }
         }
 
-        // uid が見つからなかった場合（アイテムが消えた等）、素手扱い
         GameState.I.equippedWeaponUid = "";
     }
 
     /// <summary>
-    /// 敵HP0時の処理。
+    /// 攻撃ボタン等の操作可否を切り替える。
     /// </summary>
-    private void OnEnemyDefeated()
+    private void SetButtonsInteractable(bool interactable)
     {
-        battleEnded = true;
-
-        AddLog($"{enemyMonster.Mname} を倒した！");
-
-        // 攻撃ボタンを無効化
         if (attackButton != null)
-            attackButton.interactable = false;
-
-        // 少し待ってからTowerに戻る
-        Invoke(nameof(ReturnToTower), 1.5f);
-    }
-
-    private void ReturnToTower()
-    {
-        SceneManager.LoadScene(towerSceneName);
+            attackButton.interactable = interactable;
     }
 
     /// <summary>
@@ -162,13 +247,11 @@ public class BattleSceneController : MonoBehaviour
     {
         logLines.Add(message);
 
-        // 最大行数を超えたら古い行を削除
         while (logLines.Count > MaxLogLines)
         {
             logLines.RemoveAt(0);
         }
 
-        // テキスト更新
         if (battleLogText != null)
         {
             battleLogText.text = string.Join("\n", logLines);
