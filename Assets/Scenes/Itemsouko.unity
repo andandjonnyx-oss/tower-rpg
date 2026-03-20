@@ -1818,7 +1818,6 @@ GameObject:
   - component: {fileID: 1554863722}
   - component: {fileID: 1554863725}
   - component: {fileID: 1554863724}
-  - component: {fileID: 1554863723}
   m_Layer: 5
   m_Name: ItemDetailWindow
   m_TagString: Untagged
@@ -1850,24 +1849,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -359}
   m_SizeDelta: {x: 880, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1554863723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1554863721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a088dba68f53cab4986897c6ab86a101, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemPickupWindow
-  windowRoot: {fileID: 1554863721}
-  itemNameText: {fileID: 781612910}
-  descriptionText: {fileID: 1791730118}
-  itemImage: {fileID: 1062813069}
-  getButton: {fileID: 706883523}
-  ignoreButton: {fileID: 919930119}
 --- !u!114 &1554863724
 MonoBehaviour:
   m_ObjectHideFlags: 0
