@@ -24,7 +24,7 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
-  weaponType: sword
+  weaponType: "\u65AC"
   attackPower: 3
   magicId: 
   sortOrder: 10
