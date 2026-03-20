@@ -69,7 +69,7 @@ public class BattleSceneController : MonoBehaviour
 
         // 装備中の武器を取得
         string weaponName;
-        string weaponAttribute;
+        WeaponAttribute weaponAttribute;
         int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
 
@@ -84,8 +84,8 @@ public class BattleSceneController : MonoBehaviour
         enemyCurrentHp -= damage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        // ログ出力
-        AddLog($"You は {weaponName} で攻撃！（{weaponAttribute}属性） {damage}ダメージ！");
+        // ログ出力（属性は日本語表示）
+        AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {damage}ダメージ！");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -97,11 +97,11 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 装備中の武器情報を取得する。未装備なら素手。
     /// </summary>
-    private void GetEquippedWeaponInfo(out string weaponName, out string attribute, out int power)
+    private void GetEquippedWeaponInfo(out string weaponName, out WeaponAttribute attribute, out int power)
     {
         // デフォルト: 素手
         weaponName = "素手";
-        attribute = "殴";
+        attribute = WeaponAttribute.Strike;
         power = 0;
 
         if (GameState.I == null || string.IsNullOrEmpty(GameState.I.equippedWeaponUid))
@@ -122,7 +122,7 @@ public class BattleSceneController : MonoBehaviour
                 if (data != null && data.category == ItemCategory.Weapon)
                 {
                     weaponName = data.itemName;
-                    attribute = string.IsNullOrEmpty(data.weaponType) ? "殴" : data.weaponType;
+                    attribute = data.weaponAttribute;
                     power = data.attackPower;
                 }
                 return;

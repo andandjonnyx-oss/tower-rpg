@@ -26,7 +26,7 @@ public class ItemData : ScriptableObject
     public int healAmount;
 
     [Header("Weapon")]
-    public string weaponType;
+    public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;
     public int attackPower;
 
     [Header("Magic")]
