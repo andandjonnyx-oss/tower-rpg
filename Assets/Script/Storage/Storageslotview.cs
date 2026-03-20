@@ -4,8 +4,7 @@ using UnityEngine.EventSystems;
 
 /// <summary>
 /// 倉庫画面（Itemsouko）専用のスロットView。
-/// 既存の ItemSlotView と同じ見た目だが、クリック時に StorageView へ通知する。
-/// isStorageSide で所持品側/倉庫側を区別する。
+/// isStorageSide で所持品側/倉庫側を区別し、クリック時に StorageView へ通知する。
 /// </summary>
 public class StorageSlotView : MonoBehaviour, IPointerClickHandler
 {
@@ -25,6 +24,7 @@ public class StorageSlotView : MonoBehaviour, IPointerClickHandler
     public void Setup(StorageView view)
     {
         storageView = view;
+        Debug.Log($"[StorageSlotView] Setup: {gameObject.name}, storageView={(view != null ? "セット済み" : "NULL")}, isStorageSide={isStorageSide}");
     }
 
     public void SetItem(InventoryItem invItem)
@@ -75,7 +75,14 @@ public class StorageSlotView : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (storageView == null) return;
+        // ★ デバッグ: クリックが届いているか確認
+        Debug.Log($"[StorageSlotView] OnPointerClick: {gameObject.name}, storageView={(storageView != null ? "あり" : "NULL")}, isStorageSide={isStorageSide}, hasItem={(currentInvItem != null)}");
+
+        if (storageView == null)
+        {
+            Debug.LogWarning($"[StorageSlotView] storageView が NULL のためクリック無視: {gameObject.name}");
+            return;
+        }
 
         if (isStorageSide)
             storageView.OnStorageSlotClicked(currentInvItem);

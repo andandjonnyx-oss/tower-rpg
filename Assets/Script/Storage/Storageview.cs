@@ -4,38 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/// <summary>
-/// Itemsouko シーンの Canvas にアタッチ。
-/// 左パネル（所持品）と右パネル（倉庫）の両方を管理する。
-/// 
-/// 【所持品側を選択】
-///   消費品: 使う / 捨てる / 預ける
-///   武器:   装備(外す) / 捨てる / 預ける
-///   魔法:   ― / 捨てる / 預ける
-/// 
-/// 【倉庫側を選択】
-///   消費品: 使う / 捨てる / 引き出す
-///   武器:   ―(装備不可) / 捨てる / 引き出す
-///   魔法:   ― / 捨てる / 引き出す
-/// 
-/// 詳細パネルに「閉じる」ボタンは無し。
-/// アイテム操作（使う/捨てる/預ける/引き出す）後に自動で非表示。
-/// 別のアイテムをクリックすれば上書き表示される。
-/// </summary>
 public class StorageView : MonoBehaviour
 {
-    // =========================================================
-    // スロット
-    // =========================================================
     [Header("Inventory Side (Left)")]
     [SerializeField] private StorageSlotView[] inventorySlots;
 
     [Header("Storage Side (Right)")]
     [SerializeField] private StorageSlotView[] storageSlots;
 
-    // =========================================================
-    // 詳細パネル
-    // =========================================================
     [Header("Detail Panel")]
     [SerializeField] private GameObject detailRoot;
     [SerializeField] private TMP_Text detailItemName;
@@ -43,29 +19,20 @@ public class StorageView : MonoBehaviour
     [SerializeField] private Image detailItemImage;
 
     [Header("Detail Buttons")]
-    [SerializeField] private Button button1;            // 使う / 装備 / 外す
+    [SerializeField] private Button button1;
     [SerializeField] private TMP_Text button1Text;
-    [SerializeField] private Button button2;            // 捨てる
+    [SerializeField] private Button button2;
     [SerializeField] private TMP_Text button2Text;
-    [SerializeField] private Button button3;            // 預ける / 引き出す
+    [SerializeField] private Button button3;
     [SerializeField] private TMP_Text button3Text;
 
-    // =========================================================
-    // ナビゲーション
-    // =========================================================
     [Header("Navigation")]
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
 
-    // =========================================================
-    // 内部状態
-    // =========================================================
     private InventoryItem selectedItem;
     private bool selectedFromInventory;
 
-    // =========================================================
-    // 初期化
-    // =========================================================
     private void Awake()
     {
         if (button1 != null) button1.onClick.AddListener(OnButton1Clicked);
@@ -88,9 +55,6 @@ public class StorageView : MonoBehaviour
         RefreshAll();
     }
 
-    // =========================================================
-    // 表示更新
-    // =========================================================
     public void RefreshAll()
     {
         RefreshInventorySide();
@@ -126,10 +90,12 @@ public class StorageView : MonoBehaviour
     }
 
     // =========================================================
-    // スロットクリック（StorageSlotView から呼ばれる）
+    // スロットクリック
     // =========================================================
     public void OnInventorySlotClicked(InventoryItem invItem)
     {
+        Debug.Log($"[StorageView] OnInventorySlotClicked: {(invItem != null ? invItem.data?.itemName : "NULL")}");
+
         if (invItem == null) { HideDetail(); return; }
         selectedItem = invItem;
         selectedFromInventory = true;
@@ -138,6 +104,8 @@ public class StorageView : MonoBehaviour
 
     public void OnStorageSlotClicked(InventoryItem invItem)
     {
+        Debug.Log($"[StorageView] OnStorageSlotClicked: {(invItem != null ? invItem.data?.itemName : "NULL")}");
+
         if (invItem == null) { HideDetail(); return; }
         selectedItem = invItem;
         selectedFromInventory = false;
@@ -150,7 +118,14 @@ public class StorageView : MonoBehaviour
     private void ShowDetail()
     {
         var invItem = selectedItem;
-        if (invItem?.data == null) { HideDetail(); return; }
+        if (invItem?.data == null)
+        {
+            Debug.LogWarning("[StorageView] ShowDetail: invItem or data is null → HideDetail");
+            HideDetail();
+            return;
+        }
+
+        Debug.Log($"[StorageView] ShowDetail: {invItem.data.itemName}, detailRoot={(detailRoot != null ? detailRoot.name : "NULL")}");
 
         var data = invItem.data;
 
@@ -167,13 +142,19 @@ public class StorageView : MonoBehaviour
         else
             ApplyStorageButtons(invItem);
 
-        if (detailRoot != null) detailRoot.SetActive(true);
+        if (detailRoot != null)
+        {
+            detailRoot.SetActive(true);
+            Debug.Log($"[StorageView] detailRoot.SetActive(true) 完了。activeSelf={detailRoot.activeSelf}, activeInHierarchy={detailRoot.activeInHierarchy}");
+        }
+        else
+        {
+            Debug.LogError("[StorageView] detailRoot is NULL!");
+        }
     }
 
-    /// 所持品側: 使う/装備/外す + 捨てる + 預ける
     private void ApplyInventoryButtons(InventoryItem invItem)
     {
-        // Button1: 使う / 装備 / 外す
         if (button1 != null)
         {
             switch (invItem.data.category)
@@ -194,14 +175,12 @@ public class StorageView : MonoBehaviour
             }
         }
 
-        // Button2: 捨てる
         if (button2 != null)
         {
             button2.gameObject.SetActive(true);
             if (button2Text != null) button2Text.text = "捨てる";
         }
 
-        // Button3: 預ける
         if (button3 != null)
         {
             button3.gameObject.SetActive(true);
@@ -211,10 +190,8 @@ public class StorageView : MonoBehaviour
         }
     }
 
-    /// 倉庫側: 使う(消費品のみ) / 捨てる / 引き出す。武器の装備は不可
     private void ApplyStorageButtons(InventoryItem invItem)
     {
-        // Button1: 消費品なら「使う」、それ以外は非表示
         if (button1 != null)
         {
             switch (invItem.data.category)
@@ -232,14 +209,12 @@ public class StorageView : MonoBehaviour
             }
         }
 
-        // Button2: 捨てる
         if (button2 != null)
         {
             button2.gameObject.SetActive(true);
             if (button2Text != null) button2Text.text = "捨てる";
         }
 
-        // Button3: 引き出す
         if (button3 != null)
         {
             button3.gameObject.SetActive(true);
@@ -251,6 +226,7 @@ public class StorageView : MonoBehaviour
 
     private void HideDetail()
     {
+        Debug.Log("[StorageView] HideDetail 呼び出し");
         selectedItem = null;
         if (detailRoot != null) detailRoot.SetActive(false);
     }
@@ -258,8 +234,6 @@ public class StorageView : MonoBehaviour
     // =========================================================
     // ボタンハンドラ
     // =========================================================
-
-    /// Button1: 使う / 装備 / 外す
     private void OnButton1Clicked()
     {
         if (selectedItem?.data == null) return;
@@ -286,7 +260,6 @@ public class StorageView : MonoBehaviour
         }
     }
 
-    /// Button2: 捨てる（所持品側 / 倉庫側 両方対応）
     private void OnButton2Clicked()
     {
         if (selectedItem == null) return;
@@ -297,7 +270,6 @@ public class StorageView : MonoBehaviour
             DiscardFromStorage();
     }
 
-    /// Button3: 預ける / 引き出す
     private void OnButton3Clicked()
     {
         if (selectedItem == null) return;
@@ -311,12 +283,8 @@ public class StorageView : MonoBehaviour
     // =========================================================
     // アイテム操作
     // =========================================================
-
-    // --- 所持品側 ---
-
     private void UseConsumableFromInventory()
     {
-        // TODO: 回復などの効果はここに実装する
         ItemBoxManager.Instance?.RemoveItem(selectedItem);
         Debug.Log($"[StorageView] 所持品から使用: {selectedItem.data.itemName}");
         HideDetail();
@@ -326,7 +294,6 @@ public class StorageView : MonoBehaviour
     private void EquipWeapon()
     {
         ItemBoxManager.Instance?.EquipItem(selectedItem);
-        // 装備/外すはアイテムが消えないので詳細を更新して表示し直す
         RefreshAll();
         ShowDetail();
     }
@@ -346,11 +313,8 @@ public class StorageView : MonoBehaviour
         RefreshAll();
     }
 
-    // --- 倉庫側 ---
-
     private void UseConsumableFromStorage()
     {
-        // TODO: 回復などの効果はここに実装する
         StorageManager.Instance?.RemoveItem(selectedItem);
         Debug.Log($"[StorageView] 倉庫から使用: {selectedItem.data.itemName}");
         HideDetail();
@@ -365,15 +329,11 @@ public class StorageView : MonoBehaviour
         RefreshAll();
     }
 
-    // --- 預ける / 引き出す ---
-
-    /// 所持品 → 倉庫に預ける
     private void DepositItem(InventoryItem invItem)
     {
         if (StorageManager.Instance == null || ItemBoxManager.Instance == null) return;
         if (StorageManager.Instance.IsFull) return;
 
-        // 装備中なら解除
         if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
             GameState.I.equippedWeaponUid = "";
 
@@ -385,7 +345,6 @@ public class StorageView : MonoBehaviour
         RefreshAll();
     }
 
-    /// 倉庫 → 所持品に引き出す
     private void WithdrawItem(InventoryItem invItem)
     {
         if (StorageManager.Instance == null || ItemBoxManager.Instance == null) return;
@@ -399,9 +358,6 @@ public class StorageView : MonoBehaviour
         RefreshAll();
     }
 
-    // =========================================================
-    // 戻るボタン
-    // =========================================================
     private void OnBackClicked()
     {
         SceneManager.LoadScene(mainSceneName);
