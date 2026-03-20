@@ -303,24 +303,15 @@ public class StorageView : MonoBehaviour
     private void EquipWeapon()
     {
         ItemBoxManager.Instance?.EquipItem(selectedItem);
-        // スロット再描画後に uid で再取得して詳細パネルを更新
+        HideDetail();
         RefreshAll();
-        selectedItem = FindItemByUid(selectedItemUid, selectedFromInventory);
-        if (selectedItem != null)
-            ShowDetail();
-        else
-            HideDetail();
     }
 
     private void UnequipWeapon()
     {
         ItemBoxManager.Instance?.UnequipItem(selectedItem);
+        HideDetail();
         RefreshAll();
-        selectedItem = FindItemByUid(selectedItemUid, selectedFromInventory);
-        if (selectedItem != null)
-            ShowDetail();
-        else
-            HideDetail();
     }
 
     private void DiscardFromInventory()
