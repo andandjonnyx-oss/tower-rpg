@@ -32,6 +32,8 @@ public class StorageView : MonoBehaviour
 
     private InventoryItem selectedItem;
     private bool selectedFromInventory;
+    // 装備操作後に selectedItem を再取得するために uid を記憶
+    private string selectedItemUid;
 
     private void Awake()
     {
@@ -94,20 +96,18 @@ public class StorageView : MonoBehaviour
     // =========================================================
     public void OnInventorySlotClicked(InventoryItem invItem)
     {
-        Debug.Log($"[StorageView] OnInventorySlotClicked: {(invItem != null ? invItem.data?.itemName : "NULL")}");
-
         if (invItem == null) { HideDetail(); return; }
         selectedItem = invItem;
+        selectedItemUid = invItem.uid;
         selectedFromInventory = true;
         ShowDetail();
     }
 
     public void OnStorageSlotClicked(InventoryItem invItem)
     {
-        Debug.Log($"[StorageView] OnStorageSlotClicked: {(invItem != null ? invItem.data?.itemName : "NULL")}");
-
         if (invItem == null) { HideDetail(); return; }
         selectedItem = invItem;
+        selectedItemUid = invItem.uid;
         selectedFromInventory = false;
         ShowDetail();
     }
@@ -118,14 +118,7 @@ public class StorageView : MonoBehaviour
     private void ShowDetail()
     {
         var invItem = selectedItem;
-        if (invItem?.data == null)
-        {
-            Debug.LogWarning("[StorageView] ShowDetail: invItem or data is null → HideDetail");
-            HideDetail();
-            return;
-        }
-
-        Debug.Log($"[StorageView] ShowDetail: {invItem.data.itemName}, detailRoot={(detailRoot != null ? detailRoot.name : "NULL")}");
+        if (invItem?.data == null) { HideDetail(); return; }
 
         var data = invItem.data;
 
@@ -143,14 +136,7 @@ public class StorageView : MonoBehaviour
             ApplyStorageButtons(invItem);
 
         if (detailRoot != null)
-        {
             detailRoot.SetActive(true);
-            Debug.Log($"[StorageView] detailRoot.SetActive(true) 完了。activeSelf={detailRoot.activeSelf}, activeInHierarchy={detailRoot.activeInHierarchy}");
-        }
-        else
-        {
-            Debug.LogError("[StorageView] detailRoot is NULL!");
-        }
     }
 
     private void ApplyInventoryButtons(InventoryItem invItem)
@@ -226,9 +212,32 @@ public class StorageView : MonoBehaviour
 
     private void HideDetail()
     {
-        Debug.Log("[StorageView] HideDetail 呼び出し");
         selectedItem = null;
+        selectedItemUid = null;
         if (detailRoot != null) detailRoot.SetActive(false);
+    }
+
+    // =========================================================
+    // uid から InventoryItem を再取得するヘルパー
+    // =========================================================
+    private InventoryItem FindItemByUid(string uid, bool fromInventory)
+    {
+        if (string.IsNullOrEmpty(uid)) return null;
+
+        IReadOnlyList<InventoryItem> items;
+        if (fromInventory)
+            items = ItemBoxManager.Instance != null ? ItemBoxManager.Instance.GetItems() : null;
+        else
+            items = StorageManager.Instance != null ? StorageManager.Instance.GetItems() : null;
+
+        if (items == null) return null;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] != null && items[i].uid == uid)
+                return items[i];
+        }
+        return null;
     }
 
     // =========================================================
@@ -285,8 +294,8 @@ public class StorageView : MonoBehaviour
     // =========================================================
     private void UseConsumableFromInventory()
     {
+        // TODO: 回復などの効果はここに実装する
         ItemBoxManager.Instance?.RemoveItem(selectedItem);
-        Debug.Log($"[StorageView] 所持品から使用: {selectedItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
@@ -294,29 +303,37 @@ public class StorageView : MonoBehaviour
     private void EquipWeapon()
     {
         ItemBoxManager.Instance?.EquipItem(selectedItem);
+        // スロット再描画後に uid で再取得して詳細パネルを更新
         RefreshAll();
-        ShowDetail();
+        selectedItem = FindItemByUid(selectedItemUid, selectedFromInventory);
+        if (selectedItem != null)
+            ShowDetail();
+        else
+            HideDetail();
     }
 
     private void UnequipWeapon()
     {
         ItemBoxManager.Instance?.UnequipItem(selectedItem);
         RefreshAll();
-        ShowDetail();
+        selectedItem = FindItemByUid(selectedItemUid, selectedFromInventory);
+        if (selectedItem != null)
+            ShowDetail();
+        else
+            HideDetail();
     }
 
     private void DiscardFromInventory()
     {
         ItemBoxManager.Instance?.DiscardItem(selectedItem);
-        Debug.Log($"[StorageView] 所持品から捨てた: {selectedItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
 
     private void UseConsumableFromStorage()
     {
+        // TODO: 回復などの効果はここに実装する
         StorageManager.Instance?.RemoveItem(selectedItem);
-        Debug.Log($"[StorageView] 倉庫から使用: {selectedItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
@@ -324,7 +341,6 @@ public class StorageView : MonoBehaviour
     private void DiscardFromStorage()
     {
         StorageManager.Instance?.RemoveItem(selectedItem);
-        Debug.Log($"[StorageView] 倉庫から捨てた: {selectedItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
@@ -340,7 +356,6 @@ public class StorageView : MonoBehaviour
         ItemBoxManager.Instance.RemoveItem(invItem);
         StorageManager.Instance.AddInventoryItem(invItem);
 
-        Debug.Log($"[StorageView] 預けた: {invItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
@@ -353,7 +368,6 @@ public class StorageView : MonoBehaviour
         StorageManager.Instance.RemoveItem(invItem);
         ItemBoxManager.Instance.AddItem(invItem.data);
 
-        Debug.Log($"[StorageView] 引き出した: {invItem.data.itemName}");
         HideDetail();
         RefreshAll();
     }
