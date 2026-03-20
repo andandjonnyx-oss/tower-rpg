@@ -6,14 +6,14 @@ using UnityEngine.UI;
 /// <summary>
 /// Itemsouko（倉庫）シーン用コントローラー。
 /// 所持品と倉庫の2列を表示し、使う/装備/捨てる/預ける/引き出すの操作を提供する。
-/// 倉庫側スロットは Prefab から自動生成される。
+/// 倉庫側スロットはアイテム数に応じて Prefab から動的に生成される。
 /// </summary>
 public class StorageContext : MonoBehaviour, IItemContext
 {
     [Header("Inventory Slots (Left) - Inspector でアサイン")]
     [SerializeField] private ItemSlotView[] inventorySlots;
 
-    [Header("Storage Slots - 自動生成")]
+    [Header("Storage Slots - 動的生成")]
     [Tooltip("スロットの Prefab（ItemSlotView がアタッチ済み）")]
     [SerializeField] private ItemSlotView slotPrefab;
 
@@ -23,7 +23,7 @@ public class StorageContext : MonoBehaviour, IItemContext
     [Tooltip("1行あたりの列数")]
     [SerializeField] private int columns = 4;
 
-    [Tooltip("行数")]
+    [Tooltip("行数（最大容量 = columns × rows）")]
     [SerializeField] private int rows = 25;
 
     [Header("Detail Panel")]
@@ -33,8 +33,8 @@ public class StorageContext : MonoBehaviour, IItemContext
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
 
-    // 自動生成されたスロット
-    private ItemSlotView[] storageSlots;
+    // 現在生成されているスロット
+    private List<ItemSlotView> storageSlotList = new List<ItemSlotView>();
 
     private InventoryItem selectedItem;
 
@@ -44,7 +44,10 @@ public class StorageContext : MonoBehaviour, IItemContext
 
     private void Awake()
     {
-        GenerateStorageSlots();
+        // StorageManager の容量を設定
+        int totalCapacity = columns * rows;
+        if (StorageManager.Instance != null)
+            StorageManager.Instance.SetCapacity(totalCapacity);
     }
 
     private void Start()
@@ -54,44 +57,11 @@ public class StorageContext : MonoBehaviour, IItemContext
             foreach (var s in inventorySlots)
                 if (s != null) s.onClicked = OnInventorySlotClicked;
 
-        // 倉庫スロットにコールバック登録（自動生成済み）
-        if (storageSlots != null)
-            foreach (var s in storageSlots)
-                if (s != null) s.onClicked = OnStorageSlotClicked;
-
         if (backButton != null)
             backButton.onClick.AddListener(() => SceneManager.LoadScene(mainSceneName));
 
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
-    }
-
-    /// <summary>
-    /// 倉庫側のスロットを Prefab から自動生成する。
-    /// storageContent には GridLayoutGroup と ContentSizeFitter がついている前提。
-    /// </summary>
-    private void GenerateStorageSlots()
-    {
-        if (slotPrefab == null || storageContent == null)
-        {
-            Debug.LogWarning("[StorageContext] slotPrefab or storageContent is null. Cannot generate slots.");
-            return;
-        }
-
-        int totalSlots = columns * rows;
-
-        // StorageManager の容量も合わせる
-        if (StorageManager.Instance != null)
-            StorageManager.Instance.SetCapacity(totalSlots);
-
-        storageSlots = new ItemSlotView[totalSlots];
-
-        for (int i = 0; i < totalSlots; i++)
-        {
-            ItemSlotView slot = Instantiate(slotPrefab, storageContent);
-            slot.gameObject.name = $"StorageSlot_{i}";
-            storageSlots[i] = slot;
-        }
     }
 
     private void OnInventorySlotClicked(ItemSlotView slot, InventoryItem invItem)
@@ -180,15 +150,38 @@ public class StorageContext : MonoBehaviour, IItemContext
         }
     }
 
+    /// <summary>
+    /// 倉庫側スロットをアイテム数に合わせて動的に生成/削除する。
+    /// アイテムがある分だけスロットを表示し、空スロットは作らない。
+    /// </summary>
     private void RefreshStorageSide()
     {
-        if (storageSlots == null) return;
+        if (slotPrefab == null || storageContent == null) return;
+
         IReadOnlyList<InventoryItem> items = StorageManager.Instance?.GetItems();
-        for (int i = 0; i < storageSlots.Length; i++)
+        int itemCount = (items != null) ? items.Count : 0;
+
+        // 足りないスロットを追加
+        while (storageSlotList.Count < itemCount)
         {
-            if (storageSlots[i] == null) continue;
-            InventoryItem invItem = (items != null && i < items.Count) ? items[i] : null;
-            storageSlots[i].SetItem(invItem);
+            ItemSlotView slot = Instantiate(slotPrefab, storageContent);
+            slot.gameObject.name = $"StorageSlot_{storageSlotList.Count}";
+            slot.onClicked = OnStorageSlotClicked;
+            storageSlotList.Add(slot);
+        }
+
+        // 余分なスロットを削除
+        while (storageSlotList.Count > itemCount)
+        {
+            int last = storageSlotList.Count - 1;
+            Destroy(storageSlotList[last].gameObject);
+            storageSlotList.RemoveAt(last);
+        }
+
+        // アイテムをスロットにセット
+        for (int i = 0; i < itemCount; i++)
+        {
+            storageSlotList[i].SetItem(items[i]);
         }
     }
 
