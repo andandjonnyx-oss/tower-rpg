@@ -168,8 +168,7 @@ public class BattleSceneController : MonoBehaviour
 
     private void ReturnToTower()
     {
-        // Ÿ—˜‹AŠÒ: HP/MP‘S‰ñ•œ
-        FullRecover();
+        // Ÿ—˜
         SceneManager.LoadScene(towerSceneName);
     }
 
