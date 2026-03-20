@@ -25,6 +25,6 @@ MonoBehaviour:
   maxStack: 99
   healAmount: 0
   weaponType: sword
-  attackPower: 1
+  attackPower: 3
   magicId: 
   sortOrder: 10
