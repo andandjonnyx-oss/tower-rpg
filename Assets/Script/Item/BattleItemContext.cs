@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 戦闘中アイテム使用シーン用コントローラー。
-/// 消耗品のみ「使う」が可能。装備変更・捨てるは不可。
+/// 戦闘中アイテム使用パネル用コントローラー。
+/// 消耗品 → 「使う」（1ターン消費）
+/// 武器   → 「装備」or「外す」（1ターン消費）
+/// 戻るボタン → ターン消費なし
 /// </summary>
 public class BattleItemContext : MonoBehaviour, IItemContext
 {
@@ -14,13 +16,13 @@ public class BattleItemContext : MonoBehaviour, IItemContext
     [SerializeField] private ItemDetailPanel detailPanel;
 
     /// <summary>
-    /// 戦闘シーンから呼ばれるコールバック。使用したアイテムを返す。
-    /// null = キャンセル。
+    /// アイテム使用 or 装備変更で1ターン消費するときのコールバック。
+    /// 引数の InventoryItem は使用/装備変更したアイテム。
     /// </summary>
-    public System.Action<InventoryItem> onItemUsed;
+    public System.Action<InventoryItem> onTurnConsumed;
 
     /// <summary>
-    /// キャンセル時のコールバック。
+    /// 戻る（キャンセル）時のコールバック。ターン消費なし。
     /// </summary>
     public System.Action onCancelled;
 
@@ -48,10 +50,24 @@ public class BattleItemContext : MonoBehaviour, IItemContext
         var list = new List<DetailButtonDef>();
         if (invItem?.data == null) return list;
 
-        // 戦闘中は消耗品のみ使用可能
-        if (invItem.data.category == ItemCategory.Consumable)
+        switch (invItem.data.category)
         {
-            list.Add(new DetailButtonDef("使う", () => UseInBattle(invItem)));
+            case ItemCategory.Consumable:
+                list.Add(new DetailButtonDef("使う", () => UseInBattle(invItem)));
+                break;
+
+            case ItemCategory.Weapon:
+                bool equipped = GameState.I != null
+                    && GameState.I.equippedWeaponUid == invItem.uid;
+                if (equipped)
+                    list.Add(new DetailButtonDef("外す", () => UnequipInBattle(invItem)));
+                else
+                    list.Add(new DetailButtonDef("装備", () => EquipInBattle(invItem)));
+                break;
+
+            case ItemCategory.Magic:
+                // 戦闘中のMagicカテゴリは操作なし
+                break;
         }
 
         list.Add(new DetailButtonDef("やめる", () => Cancel()));
@@ -72,15 +88,43 @@ public class BattleItemContext : MonoBehaviour, IItemContext
     }
 
     // =========================================================
-    // Operations
+    // Operations（すべて1ターン消費）
     // =========================================================
+
     private void UseInBattle(InventoryItem invItem)
     {
-        // TODO: 回復効果はここまたは呼び出し元で処理
+        if (invItem?.data == null) return;
+
+        // 回復効果の適用
+        if (invItem.data.healAmount > 0 && GameState.I != null)
+        {
+            GameState.I.currentHp += invItem.data.healAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+        }
+
         ItemBoxManager.Instance?.RemoveItem(invItem);
         detailPanel?.Hide();
         RefreshSlots();
-        onItemUsed?.Invoke(invItem);
+        onTurnConsumed?.Invoke(invItem);
+    }
+
+    private void EquipInBattle(InventoryItem invItem)
+    {
+        if (invItem?.data == null) return;
+        ItemBoxManager.Instance?.EquipItem(invItem);
+        detailPanel?.Hide();
+        RefreshSlots();
+        onTurnConsumed?.Invoke(invItem);
+    }
+
+    private void UnequipInBattle(InventoryItem invItem)
+    {
+        if (invItem?.data == null) return;
+        ItemBoxManager.Instance?.UnequipItem(invItem);
+        detailPanel?.Hide();
+        RefreshSlots();
+        onTurnConsumed?.Invoke(invItem);
     }
 
     private void Cancel()

@@ -20,6 +20,12 @@ public class BattleSceneController : MonoBehaviour
     [Header("UI - Buttons")]
     [SerializeField] private Button attackButton;
     [SerializeField] private Button skillButton;
+    [SerializeField] private Button itemButton;
+
+    [Header("UI - Item Panel")]
+    [Tooltip("戦闘中アイテムパネルのルート GameObject")]
+    [SerializeField] private GameObject itemPanelRoot;
+    [SerializeField] private BattleItemContext battleItemContext;
 
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
@@ -67,6 +73,21 @@ public class BattleSceneController : MonoBehaviour
         // スキルボタン設定
         if (skillButton != null)
             skillButton.onClick.AddListener(OnSkillClicked);
+
+        // アイテムボタン設定
+        if (itemButton != null)
+            itemButton.onClick.AddListener(OnItemClicked);
+
+        // BattleItemContext のコールバック設定
+        if (battleItemContext != null)
+        {
+            battleItemContext.onTurnConsumed = OnItemActionConsumesTurn;
+            battleItemContext.onCancelled = OnItemCancelled;
+        }
+
+        // アイテムパネルは初期非表示
+        if (itemPanelRoot != null)
+            itemPanelRoot.SetActive(false);
 
         // ログ初期化
         AddLog($"{enemyMonster.Mname} が現れた！");
@@ -198,6 +219,85 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
+    // アイテム使用（戦闘中インベントリ）
+    // =========================================================
+
+    /// <summary>
+    /// アイテムボタンが押された時の処理。
+    /// インベントリパネルを開く（ターン消費なし）。
+    /// </summary>
+    private void OnItemClicked()
+    {
+        if (battleEnded) return;
+
+        // 戦闘ボタンを無効化してパネルを開く
+        SetButtonsInteractable(false);
+
+        if (itemPanelRoot != null)
+            itemPanelRoot.SetActive(true);
+
+        if (battleItemContext != null)
+            battleItemContext.RefreshSlots();
+    }
+
+    /// <summary>
+    /// アイテム使用 or 装備変更で1ターン消費するときのコールバック。
+    /// BattleItemContext.onTurnConsumed から呼ばれる。
+    /// </summary>
+    private void OnItemActionConsumesTurn(InventoryItem usedItem)
+    {
+        // パネルを閉じる
+        if (itemPanelRoot != null)
+            itemPanelRoot.SetActive(false);
+
+        // 装備が変わった可能性があるのでキャッシュを更新
+        equippedWeaponItem = GetEquippedWeaponItem();
+
+        // ターン開始処理（クールダウンを進める）
+        OnPlayerTurnStart();
+
+        // ログ表示
+        if (usedItem?.data != null)
+        {
+            switch (usedItem.data.category)
+            {
+                case ItemCategory.Consumable:
+                    AddLog($"You は {usedItem.data.itemName} を使った！");
+                    break;
+                case ItemCategory.Weapon:
+                    bool nowEquipped = GameState.I != null
+                        && GameState.I.equippedWeaponUid == usedItem.uid;
+                    if (nowEquipped)
+                        AddLog($"You は {usedItem.data.itemName} を装備した！");
+                    else
+                        AddLog($"You は {usedItem.data.itemName} を外した！");
+                    break;
+                default:
+                    AddLog("アイテムを使った！");
+                    break;
+            }
+        }
+
+        // 敵ターンへ（1ターン消費）
+        Invoke(nameof(EnemyTurn), 0.5f);
+    }
+
+    /// <summary>
+    /// アイテムパネルで「やめる」が押された時のコールバック。
+    /// ターン消費なしで戦闘に戻る。
+    /// </summary>
+    private void OnItemCancelled()
+    {
+        // パネルを閉じる
+        if (itemPanelRoot != null)
+            itemPanelRoot.SetActive(false);
+
+        // ボタンを有効に戻す（ターン消費なし）
+        SetButtonsInteractable(true);
+        RefreshSkillButton();
+    }
+
+    // =========================================================
     // 敵ターン
     // =========================================================
 
@@ -269,13 +369,11 @@ public class BattleSceneController : MonoBehaviour
 
     private void ReturnToTower()
     {
-        // 勝利
         SceneManager.LoadScene(towerSceneName);
     }
 
     private void ReturnToMainWithFullRecover()
     {
-        // 敗北帰還: HP/MP全回復
         FullRecover();
         SceneManager.LoadScene(mainSceneName);
     }
@@ -295,9 +393,6 @@ public class BattleSceneController : MonoBehaviour
     // スキル関連ユーティリティ
     // =========================================================
 
-    /// <summary>
-    /// 装備中武器の InventoryItem を取得する。
-    /// </summary>
     private InventoryItem GetEquippedWeaponItem()
     {
         if (GameState.I == null || string.IsNullOrEmpty(GameState.I.equippedWeaponUid))
@@ -322,9 +417,6 @@ public class BattleSceneController : MonoBehaviour
         return null;
     }
 
-    /// <summary>
-    /// 装備中武器の最初のスキルを取得する。なければ null。
-    /// </summary>
     private SkillData GetFirstSkill()
     {
         if (equippedWeaponItem == null) return null;
@@ -334,17 +426,12 @@ public class BattleSceneController : MonoBehaviour
         return equippedWeaponItem.data.skills[0];
     }
 
-    /// <summary>
-    /// スキルボタンの表示を更新する。
-    /// スキルがなければ非表示、クールダウン中なら残りターン表示。
-    /// </summary>
     private void RefreshSkillButton()
     {
         if (skillButton == null) return;
 
         SkillData skill = GetFirstSkill();
 
-        // スキルがない場合は非表示
         if (skill == null)
         {
             skillButton.gameObject.SetActive(false);
@@ -353,7 +440,6 @@ public class BattleSceneController : MonoBehaviour
 
         skillButton.gameObject.SetActive(true);
 
-        // ボタンのテキストを更新
         var label = skillButton.GetComponentInChildren<TMP_Text>();
         if (label == null) return;
 
@@ -375,9 +461,6 @@ public class BattleSceneController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 全武器のクールダウンをリセットする（戦闘終了時）。
-    /// </summary>
     private void ResetAllWeaponCooldowns()
     {
         if (ItemBoxManager.Instance == null) return;
@@ -399,9 +482,6 @@ public class BattleSceneController : MonoBehaviour
     // ユーティリティ
     // =========================================================
 
-    /// <summary>
-    /// 装備中の武器情報を取得する。未装備なら素手。
-    /// </summary>
     private void GetEquippedWeaponInfo(out string weaponName, out WeaponAttribute attribute, out int power)
     {
         weaponName = "素手";
@@ -416,28 +496,22 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
-        // キャッシュが無い場合はフォールバック（素手のまま）
         if (GameState.I != null)
             GameState.I.equippedWeaponUid = "";
     }
 
-    /// <summary>
-    /// 攻撃ボタン・スキルボタン等の操作可否を切り替える。
-    /// </summary>
     private void SetButtonsInteractable(bool interactable)
     {
         if (attackButton != null)
             attackButton.interactable = interactable;
 
-        // スキルボタンは RefreshSkillButton で個別制御するため、
-        // ここでは無効化のみ行う（有効化は RefreshSkillButton に任せる）
+        if (itemButton != null)
+            itemButton.interactable = interactable;
+
         if (!interactable && skillButton != null)
             skillButton.interactable = false;
     }
 
-    /// <summary>
-    /// 戦闘ログに1行追加する。最大3行を超えたら古いものを破棄。
-    /// </summary>
     private void AddLog(string message)
     {
         logLines.Add(message);
