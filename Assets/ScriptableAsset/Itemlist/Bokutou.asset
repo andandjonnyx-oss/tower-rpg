@@ -28,3 +28,5 @@ MonoBehaviour:
   attackPower: 3
   magicId: 
   sortOrder: 10
+  skills:
+  - {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}

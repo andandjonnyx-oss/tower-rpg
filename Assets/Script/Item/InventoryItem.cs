@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class InventoryItem
@@ -14,4 +15,7 @@ public class InventoryItem
         this.uid = Guid.NewGuid().ToString();
         this.data = data;
     }
+
+    // key = skillId, value = 残りクールタイムターン数
+    public Dictionary<string, int> skillCooldowns = new();
 }

@@ -34,6 +34,9 @@ public class ItemData : ScriptableObject
 
     [Header("Sort")]
     public int sortOrder = 0;
+
+    [Header("Skills")]
+    public SkillData[] skills;  // ‚±‚Ì•Ší‚ª‚ÂƒXƒLƒ‹ˆê——
 }
 
 public enum ItemCategory
