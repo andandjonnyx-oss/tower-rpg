@@ -789,6 +789,7 @@ MonoBehaviour:
   enemyImage: {fileID: 345024987}
   battleLogText: {fileID: 517385836}
   attackButton: {fileID: 632274811}
+  skillButton: {fileID: 1744725403}
   towerSceneName: Tower
   mainSceneName: Main
 --- !u!4 &637226924

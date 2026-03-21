@@ -19,6 +19,7 @@ public class BattleSceneController : MonoBehaviour
 
     [Header("UI - Buttons")]
     [SerializeField] private Button attackButton;
+    [SerializeField] private Button skillButton;
 
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
@@ -33,6 +34,9 @@ public class BattleSceneController : MonoBehaviour
     private const int MaxLogLines = 3;
 
     private bool battleEnded = false;
+
+    // 装備中武器の InventoryItem キャッシュ（スキルクールダウン管理用）
+    private InventoryItem equippedWeaponItem;
 
     private void Start()
     {
@@ -53,12 +57,22 @@ public class BattleSceneController : MonoBehaviour
         // 敵HPを初期化
         enemyCurrentHp = enemyMonster.MaxHp;
 
+        // 装備中武器の InventoryItem を取得してキャッシュ
+        equippedWeaponItem = GetEquippedWeaponItem();
+
         // 攻撃ボタン設定
         if (attackButton != null)
             attackButton.onClick.AddListener(OnAttackClicked);
 
+        // スキルボタン設定
+        if (skillButton != null)
+            skillButton.onClick.AddListener(OnSkillClicked);
+
         // ログ初期化
         AddLog($"{enemyMonster.Mname} が現れた！");
+
+        // スキルボタンの表示を更新
+        RefreshSkillButton();
     }
 
     // =========================================================
@@ -66,7 +80,7 @@ public class BattleSceneController : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// 攻撃ボタンが押された時の処理（プレイヤーターン）。
+    /// 攻撃ボタンが押された時の処理（プレイヤーターン・通常攻撃）。
     /// </summary>
     private void OnAttackClicked()
     {
@@ -91,6 +105,67 @@ public class BattleSceneController : MonoBehaviour
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {damage}ダメージ！");
+
+        // 敵撃破判定
+        if (enemyCurrentHp <= 0)
+        {
+            OnVictory();
+            return;
+        }
+
+        // 敵ターンへ（少し待ってから）
+        Invoke(nameof(EnemyTurn), 0.5f);
+    }
+
+    /// <summary>
+    /// スキルボタンが押された時の処理（プレイヤーターン・スキル攻撃）。
+    /// 装備中武器の最初のスキルを使用する。
+    /// </summary>
+    private void OnSkillClicked()
+    {
+        if (battleEnded) return;
+
+        // 装備武器とスキルの存在チェック
+        SkillData skill = GetFirstSkill();
+        if (skill == null)
+        {
+            AddLog("使えるスキルがない！");
+            return;
+        }
+
+        // クールダウンチェック
+        if (equippedWeaponItem == null || !equippedWeaponItem.CanUseSkill(skill.skillId))
+        {
+            AddLog($"{skill.skillName} はまだ使えない！");
+            return;
+        }
+
+        // ボタン連打防止
+        SetButtonsInteractable(false);
+
+        // 武器の基本情報を取得
+        string weaponName;
+        WeaponAttribute weaponAttribute;
+        int weaponPower;
+        GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
+
+        // スキルのダメージ計算: (STR + 武器攻撃力) × スキル倍率
+        int str = (GameState.I != null) ? GameState.I.baseSTR : 1;
+        int baseDamage = str + weaponPower;
+        int damage = Mathf.RoundToInt(baseDamage * skill.damageMultiplier);
+        if (damage < 1) damage = 1;
+
+        // スキルの属性で上書き（スキル固有の属性を使用）
+        WeaponAttribute skillAttr = skill.skillAttribute;
+
+        // ダメージ適用
+        enemyCurrentHp -= damage;
+        if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+        // クールダウンをセット
+        equippedWeaponItem.UseSkill(skill);
+
+        AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {damage}ダメージ！");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -134,8 +209,13 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
+        // ターン終了: 装備中武器のクールダウンを進める
+        if (equippedWeaponItem != null)
+            equippedWeaponItem.TickCooldowns();
+
         // プレイヤーターンに戻す
         SetButtonsInteractable(true);
+        RefreshSkillButton();
     }
 
     // =========================================================
@@ -151,6 +231,9 @@ public class BattleSceneController : MonoBehaviour
         AddLog($"{enemyMonster.Mname} を倒した！");
         SetButtonsInteractable(false);
 
+        // 全武器のクールダウンをリセット
+        ResetAllWeaponCooldowns();
+
         Invoke(nameof(ReturnToTower), 1.5f);
     }
 
@@ -162,6 +245,9 @@ public class BattleSceneController : MonoBehaviour
         battleEnded = true;
         AddLog("You は倒れた…");
         SetButtonsInteractable(false);
+
+        // 全武器のクールダウンをリセット
+        ResetAllWeaponCooldowns();
 
         Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
     }
@@ -191,6 +277,110 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
+    // スキル関連ユーティリティ
+    // =========================================================
+
+    /// <summary>
+    /// 装備中武器の InventoryItem を取得する。
+    /// </summary>
+    private InventoryItem GetEquippedWeaponItem()
+    {
+        if (GameState.I == null || string.IsNullOrEmpty(GameState.I.equippedWeaponUid))
+            return null;
+
+        if (ItemBoxManager.Instance == null)
+            return null;
+
+        var items = ItemBoxManager.Instance.GetItems();
+        if (items == null) return null;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] != null && items[i].uid == GameState.I.equippedWeaponUid)
+            {
+                if (items[i].data != null && items[i].data.category == ItemCategory.Weapon)
+                    return items[i];
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 装備中武器の最初のスキルを取得する。なければ null。
+    /// </summary>
+    private SkillData GetFirstSkill()
+    {
+        if (equippedWeaponItem == null) return null;
+        if (equippedWeaponItem.data == null) return null;
+        if (equippedWeaponItem.data.skills == null) return null;
+        if (equippedWeaponItem.data.skills.Length == 0) return null;
+        return equippedWeaponItem.data.skills[0];
+    }
+
+    /// <summary>
+    /// スキルボタンの表示を更新する。
+    /// スキルがなければ非表示、クールダウン中なら残りターン表示。
+    /// </summary>
+    private void RefreshSkillButton()
+    {
+        if (skillButton == null) return;
+
+        SkillData skill = GetFirstSkill();
+
+        // スキルがない場合は非表示
+        if (skill == null)
+        {
+            skillButton.gameObject.SetActive(false);
+            return;
+        }
+
+        skillButton.gameObject.SetActive(true);
+
+        // ボタンのテキストを更新
+        var label = skillButton.GetComponentInChildren<TMP_Text>();
+        if (label == null) return;
+
+        if (equippedWeaponItem != null && equippedWeaponItem.CanUseSkill(skill.skillId))
+        {
+            label.text = skill.skillName;
+            skillButton.interactable = !battleEnded;
+        }
+        else
+        {
+            int remaining = 0;
+            if (equippedWeaponItem != null &&
+                equippedWeaponItem.skillCooldowns.ContainsKey(skill.skillId))
+            {
+                remaining = equippedWeaponItem.skillCooldowns[skill.skillId];
+            }
+            label.text = $"{skill.skillName} (CT:{remaining})";
+            skillButton.interactable = false;
+        }
+    }
+
+    /// <summary>
+    /// 全武器のクールダウンをリセットする（戦闘終了時）。
+    /// </summary>
+    private void ResetAllWeaponCooldowns()
+    {
+        if (ItemBoxManager.Instance == null) return;
+
+        var items = ItemBoxManager.Instance.GetItems();
+        if (items == null) return;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] != null && items[i].data != null &&
+                items[i].data.category == ItemCategory.Weapon)
+            {
+                items[i].ResetAllCooldowns();
+            }
+        }
+    }
+
+    // =========================================================
     // ユーティリティ
     // =========================================================
 
@@ -203,40 +393,31 @@ public class BattleSceneController : MonoBehaviour
         attribute = WeaponAttribute.Strike;
         power = 0;
 
-        if (GameState.I == null || string.IsNullOrEmpty(GameState.I.equippedWeaponUid))
-            return;
-
-        if (ItemBoxManager.Instance == null)
-            return;
-
-        var items = ItemBoxManager.Instance.GetItems();
-        if (items == null) return;
-
-        for (int i = 0; i < items.Count; i++)
+        if (equippedWeaponItem != null && equippedWeaponItem.data != null)
         {
-            if (items[i] != null && items[i].uid == GameState.I.equippedWeaponUid)
-            {
-                var data = items[i].data;
-                if (data != null && data.category == ItemCategory.Weapon)
-                {
-                    weaponName = data.itemName;
-                    attribute = data.weaponAttribute;
-                    power = data.attackPower;
-                }
-                return;
-            }
+            weaponName = equippedWeaponItem.data.itemName;
+            attribute = equippedWeaponItem.data.weaponAttribute;
+            power = equippedWeaponItem.data.attackPower;
+            return;
         }
 
-        GameState.I.equippedWeaponUid = "";
+        // キャッシュが無い場合はフォールバック（素手のまま）
+        if (GameState.I != null)
+            GameState.I.equippedWeaponUid = "";
     }
 
     /// <summary>
-    /// 攻撃ボタン等の操作可否を切り替える。
+    /// 攻撃ボタン・スキルボタン等の操作可否を切り替える。
     /// </summary>
     private void SetButtonsInteractable(bool interactable)
     {
         if (attackButton != null)
             attackButton.interactable = interactable;
+
+        // スキルボタンは RefreshSkillButton で個別制御するため、
+        // ここでは無効化のみ行う（有効化は RefreshSkillButton に任せる）
+        if (!interactable && skillButton != null)
+            skillButton.interactable = false;
     }
 
     /// <summary>
