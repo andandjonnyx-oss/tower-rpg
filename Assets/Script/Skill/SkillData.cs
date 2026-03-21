@@ -12,5 +12,6 @@ public class SkillData : ScriptableObject
     public WeaponAttribute skillAttribute = WeaponAttribute.Strike;
     public float damageMultiplier;
 
-
+    [Header("Cooldown")]
+    public int cooldownTurns;
 }

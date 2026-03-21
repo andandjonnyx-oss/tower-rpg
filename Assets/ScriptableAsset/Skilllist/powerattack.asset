@@ -17,3 +17,4 @@ MonoBehaviour:
   description: "\u3071\u308F\u30FC\u3042\u305F\u3063\u304F"
   skillAttribute: 0
   damageMultiplier: 2
+  cooldownTurns: 3
