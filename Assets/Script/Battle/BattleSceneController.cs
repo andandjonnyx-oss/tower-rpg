@@ -80,6 +80,16 @@ public class BattleSceneController : MonoBehaviour
     // =========================================================
 
     /// <summary>
+    /// プレイヤーが行動する直前に呼ぶ共通処理。
+    /// クールダウンを 1 進める（初回ターンはまだ何もセットされていないので空振り）。
+    /// </summary>
+    private void OnPlayerTurnStart()
+    {
+        if (equippedWeaponItem != null)
+            equippedWeaponItem.TickCooldowns();
+    }
+
+    /// <summary>
     /// 攻撃ボタンが押された時の処理（プレイヤーターン・通常攻撃）。
     /// </summary>
     private void OnAttackClicked()
@@ -88,6 +98,9 @@ public class BattleSceneController : MonoBehaviour
 
         // ボタン連打防止
         SetButtonsInteractable(false);
+
+        // ターン開始: クールダウンを進める
+        OnPlayerTurnStart();
 
         // 装備中の武器を取得
         string weaponName;
@@ -133,10 +146,16 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
-        // クールダウンチェック
+        // ターン開始: クールダウンを進める（Tick後に判定する）
+        OnPlayerTurnStart();
+
+        // クールダウンチェック（Tick 後の値で判定）
         if (equippedWeaponItem == null || !equippedWeaponItem.CanUseSkill(skill.skillId))
         {
             AddLog($"{skill.skillName} はまだ使えない！");
+            // Tick は済んでいるので表示を更新してボタンを戻す
+            SetButtonsInteractable(true);
+            RefreshSkillButton();
             return;
         }
 
@@ -209,11 +228,7 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
-        // ターン終了: 装備中武器のクールダウンを進める
-        if (equippedWeaponItem != null)
-            equippedWeaponItem.TickCooldowns();
-
-        // プレイヤーターンに戻す
+        // プレイヤーターンに戻す（Tick はプレイヤー行動時に行う）
         SetButtonsInteractable(true);
         RefreshSkillButton();
     }
