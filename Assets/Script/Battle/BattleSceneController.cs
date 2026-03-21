@@ -22,17 +22,16 @@ public class BattleSceneController : MonoBehaviour
     [SerializeField] private Button skillButton;
     [SerializeField] private Button itemButton;
 
-    [Header("UI - Item Panel")]
-    [Tooltip("戦闘中アイテムパネルのルート GameObject")]
-    [SerializeField] private GameObject itemPanelRoot;
-    [SerializeField] private BattleItemContext battleItemContext;
-
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
     [SerializeField] private string mainSceneName = "Main";
+    [SerializeField] private string itemboxSceneName = "Itembox";
 
-    // 戦闘中の敵HP
-    private int enemyCurrentHp;
+    // 戦闘中の敵HP（シーン再読込でも維持するため static）
+    private static int enemyCurrentHp;
+    private static bool battleInitialized = false;
+    private static List<string> persistentLogLines = new List<string>();
+
     private Monster enemyMonster;
 
     // 戦闘ログ（最大3行）
@@ -60,9 +59,6 @@ public class BattleSceneController : MonoBehaviour
             enemyImage.preserveAspect = true;
         }
 
-        // 敵HPを初期化
-        enemyCurrentHp = enemyMonster.MaxHp;
-
         // 装備中武器の InventoryItem を取得してキャッシュ
         equippedWeaponItem = GetEquippedWeaponItem();
 
@@ -78,19 +74,48 @@ public class BattleSceneController : MonoBehaviour
         if (itemButton != null)
             itemButton.onClick.AddListener(OnItemClicked);
 
-        // BattleItemContext のコールバック設定
-        if (battleItemContext != null)
+        // 初回 or Itemboxから戻り
+        if (!battleInitialized)
         {
-            battleItemContext.onTurnConsumed = OnItemActionConsumesTurn;
-            battleItemContext.onCancelled = OnItemCancelled;
+            // 初回: 敵HPを初期化
+            enemyCurrentHp = enemyMonster.MaxHp;
+            battleInitialized = true;
+            persistentLogLines.Clear();
+            AddLog($"{enemyMonster.Mname} が現れた！");
         }
+        else
+        {
+            // Itembox から戻ってきた場合: ログを復元
+            logLines = new List<string>(persistentLogLines);
+            UpdateLogDisplay();
 
-        // アイテムパネルは初期非表示
-        if (itemPanelRoot != null)
-            itemPanelRoot.SetActive(false);
+            // ターン消費チェック
+            if (GameState.I != null && GameState.I.battleTurnConsumed)
+            {
+                GameState.I.battleTurnConsumed = false;
 
-        // ログ初期化
-        AddLog($"{enemyMonster.Mname} が現れた！");
+                // ログ表示
+                if (!string.IsNullOrEmpty(GameState.I.battleItemActionLog))
+                {
+                    AddLog(GameState.I.battleItemActionLog);
+                    GameState.I.battleItemActionLog = "";
+                }
+
+                // 装備が変わった可能性があるのでキャッシュ更新
+                equippedWeaponItem = GetEquippedWeaponItem();
+
+                // クールダウンを進める（1ターン消費）
+                OnPlayerTurnStart();
+
+                // ボタン無効化して敵ターンへ
+                SetButtonsInteractable(false);
+                Invoke(nameof(EnemyTurn), 0.5f);
+
+                // スキルボタン更新
+                RefreshSkillButton();
+                return;
+            }
+        }
 
         // スキルボタンの表示を更新
         RefreshSkillButton();
@@ -174,7 +199,6 @@ public class BattleSceneController : MonoBehaviour
         if (equippedWeaponItem == null || !equippedWeaponItem.CanUseSkill(skill.skillId))
         {
             AddLog($"{skill.skillName} はまだ使えない！");
-            // Tick は済んでいるので表示を更新してボタンを戻す
             SetButtonsInteractable(true);
             RefreshSkillButton();
             return;
@@ -219,82 +243,29 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
-    // アイテム使用（戦闘中インベントリ）
+    // アイテム使用（Itembox シーンへ遷移）
     // =========================================================
 
     /// <summary>
     /// アイテムボタンが押された時の処理。
-    /// インベントリパネルを開く（ターン消費なし）。
+    /// Itembox シーンへ遷移する（ターン消費なし）。
     /// </summary>
     private void OnItemClicked()
     {
         if (battleEnded) return;
 
-        // 戦闘ボタンを無効化してパネルを開く
-        SetButtonsInteractable(false);
-
-        if (itemPanelRoot != null)
-            itemPanelRoot.SetActive(true);
-
-        if (battleItemContext != null)
-            battleItemContext.RefreshSlots();
-    }
-
-    /// <summary>
-    /// アイテム使用 or 装備変更で1ターン消費するときのコールバック。
-    /// BattleItemContext.onTurnConsumed から呼ばれる。
-    /// </summary>
-    private void OnItemActionConsumesTurn(InventoryItem usedItem)
-    {
-        // パネルを閉じる
-        if (itemPanelRoot != null)
-            itemPanelRoot.SetActive(false);
-
-        // 装備が変わった可能性があるのでキャッシュを更新
-        equippedWeaponItem = GetEquippedWeaponItem();
-
-        // ターン開始処理（クールダウンを進める）
-        OnPlayerTurnStart();
-
-        // ログ表示
-        if (usedItem?.data != null)
+        if (GameState.I != null)
         {
-            switch (usedItem.data.category)
-            {
-                case ItemCategory.Consumable:
-                    AddLog($"You は {usedItem.data.itemName} を使った！");
-                    break;
-                case ItemCategory.Weapon:
-                    bool nowEquipped = GameState.I != null
-                        && GameState.I.equippedWeaponUid == usedItem.uid;
-                    if (nowEquipped)
-                        AddLog($"You は {usedItem.data.itemName} を装備した！");
-                    else
-                        AddLog($"You は {usedItem.data.itemName} を外した！");
-                    break;
-                default:
-                    AddLog("アイテムを使った！");
-                    break;
-            }
+            GameState.I.isInBattle = true;
+            GameState.I.battleTurnConsumed = false;
+            GameState.I.battleItemActionLog = "";
+            GameState.I.previousSceneName = SceneManager.GetActiveScene().name;
         }
 
-        // 敵ターンへ（1ターン消費）
-        Invoke(nameof(EnemyTurn), 0.5f);
-    }
+        // ログを保存（戻ってきた時に復元するため）
+        persistentLogLines = new List<string>(logLines);
 
-    /// <summary>
-    /// アイテムパネルで「やめる」が押された時のコールバック。
-    /// ターン消費なしで戦闘に戻る。
-    /// </summary>
-    private void OnItemCancelled()
-    {
-        // パネルを閉じる
-        if (itemPanelRoot != null)
-            itemPanelRoot.SetActive(false);
-
-        // ボタンを有効に戻す（ターン消費なし）
-        SetButtonsInteractable(true);
-        RefreshSkillButton();
+        SceneManager.LoadScene(itemboxSceneName);
     }
 
     // =========================================================
@@ -337,32 +308,26 @@ public class BattleSceneController : MonoBehaviour
     // 勝利 / 敗北
     // =========================================================
 
-    /// <summary>
-    /// 勝利処理。Towerシーンに戻る。
-    /// </summary>
     private void OnVictory()
     {
         battleEnded = true;
         AddLog($"{enemyMonster.Mname} を倒した！");
         SetButtonsInteractable(false);
 
-        // 全武器のクールダウンをリセット
         ResetAllWeaponCooldowns();
+        ResetBattleStatics();
 
         Invoke(nameof(ReturnToTower), 1.5f);
     }
 
-    /// <summary>
-    /// 敗北処理。HP全回復してMainシーンに戻る。
-    /// </summary>
     private void OnDefeat()
     {
         battleEnded = true;
         AddLog("You は倒れた…");
         SetButtonsInteractable(false);
 
-        // 全武器のクールダウンをリセット
         ResetAllWeaponCooldowns();
+        ResetBattleStatics();
 
         Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
     }
@@ -378,15 +343,22 @@ public class BattleSceneController : MonoBehaviour
         SceneManager.LoadScene(mainSceneName);
     }
 
-    /// <summary>
-    /// HP/MPを全回復する。
-    /// </summary>
     private void FullRecover()
     {
         if (GameState.I == null) return;
         GameState.I.currentHp = GameState.I.maxHp;
         GameState.I.currentMp = GameState.I.maxMp;
         Debug.Log($"[Battle] 全回復: HP={GameState.I.currentHp}/{GameState.I.maxHp}");
+    }
+
+    /// <summary>
+    /// 戦闘終了時に static 変数をクリアする。
+    /// 次の戦闘が前回の状態を引き継がないようにする。
+    /// </summary>
+    private void ResetBattleStatics()
+    {
+        battleInitialized = false;
+        persistentLogLines.Clear();
     }
 
     // =========================================================
@@ -521,6 +493,14 @@ public class BattleSceneController : MonoBehaviour
             logLines.RemoveAt(0);
         }
 
+        // static にも保存（シーン遷移で失われないように）
+        persistentLogLines = new List<string>(logLines);
+
+        UpdateLogDisplay();
+    }
+
+    private void UpdateLogDisplay()
+    {
         if (battleLogText != null)
         {
             battleLogText.text = string.Join("\n", logLines);

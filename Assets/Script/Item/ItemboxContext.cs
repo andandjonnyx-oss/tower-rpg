@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Itembox シーン用コントローラー。
-/// 所持品の一覧を表示し、使う/装備/捨てるの操作を提供する。
+/// 通常時: 使う/装備/捨てる。戻るでMainへ。
+/// バトル中 (GameState.isInBattle): 使う/装備変更のみ。捨てる不可。
+///   アイテム操作後は自動でバトルシーンへ戻り1ターン消費。
+///   戻るボタンはターン消費なしでバトルシーンへ。
 /// </summary>
 public class ItemboxContext : MonoBehaviour, IItemContext
 {
@@ -19,8 +22,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
 
+    /// <summary>バトル中かどうかのキャッシュ。</summary>
+    private bool inBattle;
+
     private void Start()
     {
+        inBattle = GameState.I != null && GameState.I.isInBattle;
+
         // スロットにコールバック登録
         if (slots != null)
         {
@@ -31,11 +39,30 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             }
         }
 
+        // 戻るボタン
         if (backButton != null)
-            backButton.onClick.AddListener(() => SceneManager.LoadScene(mainSceneName));
+            backButton.onClick.AddListener(OnBackClicked);
 
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
+    }
+
+    private void OnBackClicked()
+    {
+        if (inBattle)
+        {
+            // ターン消費なしでバトルへ戻る
+            if (GameState.I != null)
+            {
+                GameState.I.battleTurnConsumed = false;
+                GameState.I.isInBattle = false;
+            }
+            SceneManager.LoadScene(GameState.I?.previousSceneName ?? "Battle");
+        }
+        else
+        {
+            SceneManager.LoadScene(mainSceneName);
+        }
     }
 
     private void OnSlotClicked(ItemSlotView slot, InventoryItem invItem)
@@ -75,11 +102,15 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                 break;
 
             case ItemCategory.Magic:
-                // Magic にはボタン1なし
+                // Magic にはボタンなし
                 break;
         }
 
-        list.Add(new DetailButtonDef("捨てる", () => DiscardItem(invItem)));
+        // バトル中は捨てる不可
+        if (!inBattle)
+        {
+            list.Add(new DetailButtonDef("捨てる", () => DiscardItem(invItem)));
+        }
 
         return list;
     }
@@ -103,32 +134,51 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     // =========================================================
     private void UseConsumable(InventoryItem invItem)
     {
-        // TODO: 回復効果など
+        if (invItem?.data == null) return;
+
+        // 回復効果の適用
+        if (invItem.data.healAmount > 0 && GameState.I != null)
+        {
+            GameState.I.currentHp += invItem.data.healAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+        }
+
+        string itemName = invItem.data.itemName;
         ItemBoxManager.Instance?.RemoveItem(invItem);
-        AfterAction();
+        AfterAction($"You は {itemName} を使った！");
     }
 
     private void EquipWeapon(InventoryItem invItem)
     {
         ItemBoxManager.Instance?.EquipItem(invItem);
-        AfterAction();
+        AfterAction($"You は {invItem.data.itemName} を装備した！");
     }
 
     private void UnequipWeapon(InventoryItem invItem)
     {
         ItemBoxManager.Instance?.UnequipItem(invItem);
-        AfterAction();
+        AfterAction($"You は {invItem.data.itemName} を外した！");
     }
 
     private void DiscardItem(InventoryItem invItem)
     {
         ItemBoxManager.Instance?.DiscardItem(invItem);
-        AfterAction();
+        AfterAction("");
     }
 
-    private void AfterAction()
+    private void AfterAction(string logMessage)
     {
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
+
+        // バトル中なら即座にバトルシーンへ戻る（1ターン消費）
+        if (inBattle && GameState.I != null)
+        {
+            GameState.I.battleTurnConsumed = true;
+            GameState.I.battleItemActionLog = logMessage;
+            GameState.I.isInBattle = false;
+            SceneManager.LoadScene(GameState.I.previousSceneName ?? "Battle");
+        }
     }
 }

@@ -123,6 +123,18 @@ public class GameState : MonoBehaviour
     [NonSerialized] public string previousSceneName = "";
 
     // =========================================================
+    // バトル中アイテム使用
+    // =========================================================
+    /// <summary>バトル中にItemboxを開いているかどうか。</summary>
+    [NonSerialized] public bool isInBattle = false;
+
+    /// <summary>Itembox でアイテム使用/装備変更を行い、ターンを消費すべきかどうか。</summary>
+    [NonSerialized] public bool battleTurnConsumed = false;
+
+    /// <summary>Itembox で操作対象となったアイテム名（ログ表示用）。</summary>
+    [NonSerialized] public string battleItemActionLog = "";
+
+    // =========================================================
     // イベント既読管理
     // =========================================================
     private HashSet<string> played = new HashSet<string>();
