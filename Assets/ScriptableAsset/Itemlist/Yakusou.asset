@@ -23,8 +23,9 @@ MonoBehaviour:
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 100
-  weaponType: 
+  healAmount: 10
+  weaponAttribute: 0
   attackPower: 0
   magicId: 
   sortOrder: 100
+  skills: []
