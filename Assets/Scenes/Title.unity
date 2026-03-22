@@ -870,6 +870,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790793794}
   - component: {fileID: 1790793793}
+  - component: {fileID: 1790793795}
   m_Layer: 0
   m_Name: ItemManager
   m_TagString: Untagged
@@ -927,6 +928,221 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1790793795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790793792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff25e24236dca5645b90e0770ac9e8fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StorageManager
+  capacity: 100
+  itemDatabase: {fileID: 11400000, guid: febb30d2c9d70224eb0da0dd82a15426, type: 2}
+  items:
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
 --- !u!1 &1828523662
 GameObject:
   m_ObjectHideFlags: 0
