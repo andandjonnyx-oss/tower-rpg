@@ -148,6 +148,30 @@ public class GameState : MonoBehaviour
             played.Add(eventId);
     }
 
+    /// <summary>
+    /// セーブ用: 既読イベントID一覧を List で返す。
+    /// </summary>
+    public List<string> GetAllPlayedIds()
+    {
+        return new List<string>(played);
+    }
+
+    /// <summary>
+    /// ロード用: 既読イベントID一覧を復元する。
+    /// </summary>
+    public void RestorePlayedIds(List<string> ids)
+    {
+        played.Clear();
+        if (ids != null)
+        {
+            foreach (var id in ids)
+            {
+                if (!string.IsNullOrEmpty(id))
+                    played.Add(id);
+            }
+        }
+    }
+
     private void Awake()
     {
         if (I != null) { Destroy(gameObject); return; }

@@ -9,6 +9,10 @@ public class ItemBoxManager : MonoBehaviour
     [Header("Capacity")]
     [SerializeField] private int capacity = 10;
 
+    [Header("Item Database (セーブ復元用)")]
+    [Tooltip("セーブデータから itemId でアイテムを復元するために必要")]
+    [SerializeField] private ItemDatabase itemDatabase;
+
     // 所持品リスト。ItemData ではなく InventoryItem で管理する。
     [SerializeField] private List<InventoryItem> items = new();
 
@@ -74,6 +78,66 @@ public class ItemBoxManager : MonoBehaviour
         if (GameState.I != null) GameState.I.equippedWeaponUid = "";
         items.Clear();
     }
+
+    // =========================================================
+    // セーブデータからの復元
+    // =========================================================
+
+    /// <summary>
+    /// セーブデータから所持品リストを復元する。
+    /// itemId を使って ItemDatabase からマスターデータを検索し、
+    /// uid を引き継いで InventoryItem を再構築する。
+    /// </summary>
+    public void RestoreFromSave(List<SavedItem> savedItems)
+    {
+        items.Clear();
+
+        if (savedItems == null || itemDatabase == null)
+        {
+            Debug.LogWarning("[ItemBoxManager] 復元データまたは ItemDatabase が null");
+            return;
+        }
+
+        foreach (var saved in savedItems)
+        {
+            if (string.IsNullOrEmpty(saved.itemId)) continue;
+
+            // ItemDatabase からマスターデータを検索
+            ItemData data = FindItemDataById(saved.itemId);
+            if (data == null)
+            {
+                Debug.LogWarning($"[ItemBoxManager] 復元失敗: itemId={saved.itemId} が ItemDatabase に見つかりません");
+                continue;
+            }
+
+            // InventoryItem を再構築（uid を引き継ぐ）
+            var invItem = new InventoryItem(data);
+            invItem.uid = saved.uid; // セーブ時の uid を上書きで復元
+            items.Add(invItem);
+        }
+
+        SortItems();
+        Debug.Log($"[ItemBoxManager] 復元完了: {items.Count} 個のアイテム");
+    }
+
+    /// <summary>
+    /// ItemDatabase.items から itemId で検索してマスターデータを返す。
+    /// </summary>
+    private ItemData FindItemDataById(string itemId)
+    {
+        if (itemDatabase == null) return null;
+
+        foreach (var item in itemDatabase.items)
+        {
+            if (item != null && item.itemId == itemId)
+                return item;
+        }
+        return null;
+    }
+
+    // =========================================================
+    // ソート
+    // =========================================================
 
     private void SortItems() => items.Sort(CompareItems);
 
