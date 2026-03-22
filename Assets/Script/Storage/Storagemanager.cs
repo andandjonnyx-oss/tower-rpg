@@ -13,6 +13,10 @@ public class StorageManager : MonoBehaviour
     [Header("Capacity")]
     [SerializeField] private int capacity = 100;
 
+    [Header("Item Database (セーブ復元用)")]
+    [Tooltip("セーブデータから itemId でアイテムを復元するために必要")]
+    [SerializeField] private ItemDatabase itemDatabase;
+
     [SerializeField] private List<InventoryItem> items = new();
 
     public int Capacity => capacity;
@@ -45,6 +49,7 @@ public class StorageManager : MonoBehaviour
         items.Add(new InventoryItem(data));
         SortItems();
         Debug.Log($"[StorageManager] AddItem: {data.itemName} (Count={items.Count})");
+        SaveManager.Save(); // 即時セーブ
         return true;
     }
 
@@ -56,6 +61,7 @@ public class StorageManager : MonoBehaviour
         items.Add(invItem);
         SortItems();
         Debug.Log($"[StorageManager] AddInventoryItem: {invItem.data.itemName} (Count={items.Count})");
+        SaveManager.Save(); // 即時セーブ
         return true;
     }
 
@@ -64,7 +70,11 @@ public class StorageManager : MonoBehaviour
     {
         if (invItem == null) return false;
         bool removed = items.Remove(invItem);
-        if (removed) SortItems();
+        if (removed)
+        {
+            SortItems();
+            SaveManager.Save(); // 即時セーブ
+        }
         return removed;
     }
 
@@ -72,6 +82,60 @@ public class StorageManager : MonoBehaviour
     {
         items.Clear();
     }
+
+    // =========================================================
+    // セーブデータからの復元
+    // =========================================================
+
+    /// <summary>
+    /// セーブデータから倉庫アイテムリストを復元する。
+    /// ItemBoxManager.RestoreFromSave と同じパターン。
+    /// </summary>
+    public void RestoreFromSave(List<SavedItem> savedItems)
+    {
+        items.Clear();
+
+        if (savedItems == null || itemDatabase == null)
+        {
+            Debug.LogWarning("[StorageManager] 復元データまたは ItemDatabase が null");
+            return;
+        }
+
+        foreach (var saved in savedItems)
+        {
+            if (string.IsNullOrEmpty(saved.itemId)) continue;
+
+            ItemData data = FindItemDataById(saved.itemId);
+            if (data == null)
+            {
+                Debug.LogWarning($"[StorageManager] 復元失敗: itemId={saved.itemId} が ItemDatabase に見つかりません");
+                continue;
+            }
+
+            var invItem = new InventoryItem(data);
+            invItem.uid = saved.uid;
+            items.Add(invItem);
+        }
+
+        SortItems();
+        Debug.Log($"[StorageManager] 復元完了: {items.Count} 個のアイテム");
+    }
+
+    private ItemData FindItemDataById(string itemId)
+    {
+        if (itemDatabase == null) return null;
+
+        foreach (var item in itemDatabase.items)
+        {
+            if (item != null && item.itemId == itemId)
+                return item;
+        }
+        return null;
+    }
+
+    // =========================================================
+    // ソート
+    // =========================================================
 
     private void SortItems() => items.Sort(CompareItems);
 

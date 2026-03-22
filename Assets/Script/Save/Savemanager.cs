@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// ゲームデータのセーブ/ロード/削除を担当する。
 /// JSON 形式で Application.persistentDataPath に保存する。
-/// オートセーブ方式: Main シーン到着時に自動保存される。
+/// 状態が変わるたびに Save() が呼ばれる即時セーブ方式。
 /// </summary>
 public static class SaveManager
 {
@@ -28,8 +28,8 @@ public static class SaveManager
     // =========================================================
 
     /// <summary>
-    /// 現在の GameState と ItemBoxManager の内容をファイルに保存する。
-    /// Main シーン到着時（全回復後）に呼ばれる想定。
+    /// 現在の GameState・ItemBoxManager・StorageManager の内容をファイルに保存する。
+    /// 状態が変わるたび（アイテム取得、装備変更、階層進行など）に呼ばれる。
     /// </summary>
     public static void Save()
     {
@@ -46,10 +46,10 @@ public static class SaveManager
             data.currentExp = GameState.I.currentExp;
             data.expToNext = GameState.I.expToNext;
 
-            // HP/MP はセーブ時に全回復値を保存する
-            // （Main シーン到着 = 安全地帯 = 全回復状態）
             data.maxHp = GameState.I.maxHp;
             data.maxMp = GameState.I.maxMp;
+            data.currentHp = GameState.I.currentHp;
+            data.currentMp = GameState.I.currentMp;
 
             data.baseSTR = GameState.I.baseSTR;
             data.baseVIT = GameState.I.baseVIT;
@@ -71,7 +71,7 @@ public static class SaveManager
             data.playedEventIds = GameState.I.GetAllPlayedIds();
         }
 
-        // --- ItemBoxManager から収集 ---
+        // --- ItemBoxManager（所持品）から収集 ---
         if (ItemBoxManager.Instance != null)
         {
             var items = ItemBoxManager.Instance.GetItems();
@@ -89,6 +89,24 @@ public static class SaveManager
             }
         }
 
+        // --- StorageManager（倉庫）から収集 ---
+        if (StorageManager.Instance != null)
+        {
+            var storageItems = StorageManager.Instance.GetItems();
+            data.storageItems = new List<SavedItem>();
+            for (int i = 0; i < storageItems.Count; i++)
+            {
+                if (storageItems[i] != null && storageItems[i].data != null)
+                {
+                    data.storageItems.Add(new SavedItem
+                    {
+                        itemId = storageItems[i].data.itemId,
+                        uid = storageItems[i].uid
+                    });
+                }
+            }
+        }
+
         // --- JSON に変換して書き出し ---
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(SaveFilePath, json);
@@ -100,8 +118,8 @@ public static class SaveManager
     // =========================================================
 
     /// <summary>
-    /// セーブファイルから GameState と ItemBoxManager にデータを復元する。
-    /// タイトルの「つづきから」で呼ばれる想定。
+    /// セーブファイルから GameState・ItemBoxManager・StorageManager にデータを復元する。
+    /// タイトルのスタートボタン（セーブデータあり時）で呼ばれる。
     /// ロード後は Main シーンに遷移し、HP/MP は全回復状態になる。
     /// </summary>
     public static bool Load()
@@ -133,7 +151,7 @@ public static class SaveManager
 
             GameState.I.maxHp = data.maxHp;
             GameState.I.maxMp = data.maxMp;
-            // ロード時は全回復状態で開始
+            // ロード時は全回復状態で開始（どのシーンで中断しても安全に復帰）
             GameState.I.currentHp = data.maxHp;
             GameState.I.currentMp = data.maxMp;
 
@@ -164,10 +182,16 @@ public static class SaveManager
             GameState.I.pendingEventId = "";
         }
 
-        // --- ItemBoxManager に反映 ---
+        // --- ItemBoxManager（所持品）に反映 ---
         if (ItemBoxManager.Instance != null)
         {
             ItemBoxManager.Instance.RestoreFromSave(data.inventoryItems);
+        }
+
+        // --- StorageManager（倉庫）に反映 ---
+        if (StorageManager.Instance != null)
+        {
+            StorageManager.Instance.RestoreFromSave(data.storageItems);
         }
 
         Debug.Log($"[SaveManager] ロード完了: Floor={data.floor} Step={data.step}");
@@ -179,7 +203,7 @@ public static class SaveManager
     // =========================================================
 
     /// <summary>
-    /// セーブデータを削除する。タイトルの「はじめから」で呼ばれる想定。
+    /// セーブデータを削除する。タイトルの「初期化」ボタンで呼ばれる。
     /// </summary>
     public static void DeleteSave()
     {
@@ -197,7 +221,7 @@ public static class SaveManager
 
 /// <summary>
 /// JSON シリアライズ用のセーブデータ構造。
-/// GameState と ItemBoxManager の永続化が必要なフィールドをまとめる。
+/// GameState・ItemBoxManager・StorageManager の永続化が必要なフィールドをまとめる。
 /// </summary>
 [Serializable]
 public class SaveData
@@ -212,9 +236,11 @@ public class SaveData
     public int currentExp = 0;
     public int expToNext = 100;
 
-    // --- HP/MP（最大値のみ保存。ロード時は全回復） ---
+    // --- HP/MP ---
     public int maxHp = 50;
     public int maxMp = 20;
+    public int currentHp = 50;
+    public int currentMp = 20;
 
     // --- ステータス ---
     public int baseSTR = 1;
@@ -239,11 +265,15 @@ public class SaveData
 
     // --- 所持アイテム一覧 ---
     public List<SavedItem> inventoryItems = new List<SavedItem>();
+
+    // --- 倉庫アイテム一覧 ---
+    public List<SavedItem> storageItems = new List<SavedItem>();
 }
 
 /// <summary>
-/// 所持アイテム1個分のセーブ用データ。
+/// アイテム1個分のセーブ用データ。
 /// itemId でマスターデータ（ItemData）を特定し、uid で個体を復元する。
+/// 所持品と倉庫で共通の構造体。
 /// </summary>
 [Serializable]
 public class SavedItem

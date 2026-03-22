@@ -34,6 +34,7 @@ public class GameState : MonoBehaviour
         {
             reachedFloor = currentFloor;
             Debug.Log($"[GameState] 到達階を更新: {reachedFloor}階");
+            SaveManager.Save(); // 即時セーブ
         }
     }
 
@@ -96,6 +97,7 @@ public class GameState : MonoBehaviour
         baseLUC = initialLUC;
 
         statusPoint += usedPoints;
+        SaveManager.Save(); // 即時セーブ
     }
 
     public bool AllocatePoint(StatType stat)
@@ -113,6 +115,7 @@ public class GameState : MonoBehaviour
         }
 
         statusPoint--;
+        SaveManager.Save(); // 即時セーブ
         return true;
     }
 
@@ -145,7 +148,10 @@ public class GameState : MonoBehaviour
     public void MarkPlayed(string eventId)
     {
         if (!string.IsNullOrEmpty(eventId))
+        {
             played.Add(eventId);
+            SaveManager.Save(); // 即時セーブ
+        }
     }
 
     /// <summary>

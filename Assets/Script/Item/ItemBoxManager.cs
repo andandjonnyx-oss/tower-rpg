@@ -37,6 +37,7 @@ public class ItemBoxManager : MonoBehaviour
         items.Add(new InventoryItem(data));
         SortItems();
         Debug.Log($"[ItemBoxManager] AddItem: {data.itemName} (Count={items.Count})");
+        SaveManager.Save(); // 即時セーブ
         return true;
     }
 
@@ -49,7 +50,11 @@ public class ItemBoxManager : MonoBehaviour
             GameState.I.equippedWeaponUid = "";
 
         bool removed = items.Remove(invItem);
-        if (removed) SortItems();
+        if (removed)
+        {
+            SortItems();
+            SaveManager.Save(); // 即時セーブ
+        }
         return removed;
     }
 
@@ -60,13 +65,17 @@ public class ItemBoxManager : MonoBehaviour
         if (GameState.I != null)
             GameState.I.equippedWeaponUid = invItem.uid;
         Debug.Log($"[ItemBoxManager] Equip: {invItem.data.itemName} uid={invItem.uid}");
+        SaveManager.Save(); // 即時セーブ
     }
 
     public void UnequipItem(InventoryItem invItem)
     {
         if (invItem == null || GameState.I == null) return;
         if (GameState.I.equippedWeaponUid == invItem.uid)
+        {
             GameState.I.equippedWeaponUid = "";
+            SaveManager.Save(); // 即時セーブ
+        }
     }
 
     //removeは内部的にインベントリから削除する操作

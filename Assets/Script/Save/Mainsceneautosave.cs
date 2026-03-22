@@ -3,7 +3,8 @@ using UnityEngine;
 /// <summary>
 /// Main シーンに配置するコンポーネント。
 /// シーン開始時に HP/MP を全回復し、オートセーブを実行する。
-/// どのシーンで中断しても、次回起動時は Main シーンから全回復状態で再開される。
+/// 即時セーブと併用: 通常の操作は各マネージャーが即時セーブするが、
+/// Main 到着時は全回復を反映してセーブし直す役割を担う。
 /// </summary>
 public class MainSceneAutoSave : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class MainSceneAutoSave : MonoBehaviour
             GameState.I.battleItemActionLog = "";
         }
 
-        // オートセーブ実行
+        // オートセーブ実行（全回復状態を保存）
         SaveManager.Save();
-        Debug.Log("[MainSceneAutoSave] オートセーブ完了");
+        Debug.Log("[MainSceneAutoSave] Main到着: 全回復 + オートセーブ完了");
     }
 }

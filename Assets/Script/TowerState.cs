@@ -61,6 +61,9 @@ public class TowerState : MonoBehaviour
 
         RefreshUI();
 
+        // 階層進行を即時セーブ
+        SaveManager.Save();
+
         // ①会話優先（会話が始まったら以降を止める）
         bool talkStarted = TowerEventTrigger.Instance.TryTriggerTalkEvent();
         if (talkStarted) return;

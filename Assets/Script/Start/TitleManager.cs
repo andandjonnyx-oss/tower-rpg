@@ -4,44 +4,53 @@ using UnityEngine.UI;
 
 /// <summary>
 /// タイトル画面のUIコントローラー。
-/// 「つづきから」でセーブデータをロードして Main へ遷移。
-/// 「はじめから」でセーブデータを削除し、初期状態で Main へ遷移。
+/// 「スタート」ボタン: セーブデータがあれば続きから、なければ初期状態で Main へ遷移。
+/// 「初期化」ボタン: セーブデータを削除して GameState・所持品・倉庫を初期化する。
 /// </summary>
 public class TitleUIManager : MonoBehaviour
 {
     [Header("Buttons")]
-    [SerializeField] private Button continueButton;
-    [SerializeField] private Button newGameButton;
+    [Tooltip("セーブデータがあれば続きから、なければ新規でスタート")]
+    [SerializeField] private Button startButton;
+    [Tooltip("セーブデータを削除して初期状態に戻す")]
+    [SerializeField] private Button resetButton;
 
     private void Start()
     {
-        // セーブデータがなければ「つづきから」ボタンを無効化
-        if (continueButton != null)
-        {
-            continueButton.interactable = SaveManager.HasSaveData();
-            continueButton.onClick.AddListener(OnContinue);
-        }
+        if (startButton != null)
+            startButton.onClick.AddListener(OnStart);
 
-        if (newGameButton != null)
-            newGameButton.onClick.AddListener(OnNewGame);
+        if (resetButton != null)
+            resetButton.onClick.AddListener(OnReset);
     }
 
     /// <summary>
-    /// つづきから: セーブデータをロードして Main シーンへ遷移する。
+    /// スタートボタン: セーブデータがあればロードして続きから、なければ初期状態で Main へ。
     /// </summary>
-    private void OnContinue()
+    private void OnStart()
     {
-        SaveManager.Load();
+        if (SaveManager.HasSaveData())
+        {
+            // セーブデータあり → ロードして続きから
+            SaveManager.Load();
+            Debug.Log("[Title] セーブデータをロードして続きから開始");
+        }
+        else
+        {
+            // セーブデータなし → 初期状態のまま
+            Debug.Log("[Title] セーブデータなし。新規で開始");
+        }
+
         SceneManager.LoadScene("Main");
     }
 
     /// <summary>
-    /// はじめから: セーブデータを削除し、初期状態で Main シーンへ遷移する。
-    /// GameState と ItemBoxManager を初期化する。
+    /// 初期化ボタン: セーブデータを削除し、GameState・所持品・倉庫をリセットする。
+    /// Main には遷移しない（タイトルに留まる）。
     /// </summary>
-    private void OnNewGame()
+    private void OnReset()
     {
-        // セーブデータを削除
+        // セーブファイルを削除
         SaveManager.DeleteSave();
 
         // GameState を初期値に戻す
@@ -89,6 +98,10 @@ public class TitleUIManager : MonoBehaviour
         if (ItemBoxManager.Instance != null)
             ItemBoxManager.Instance.ClearAll();
 
-        SceneManager.LoadScene("Main");
+        // 倉庫をクリア
+        if (StorageManager.Instance != null)
+            StorageManager.Instance.ClearAll();
+
+        Debug.Log("[Title] セーブデータを初期化しました");
     }
 }
