@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// アイテム詳細パネル（全シーン共通）。
 /// アイテム情報を表示し、IItemContext から受け取ったボタン定義に従ってボタンを動的に構成する。
+/// バトル中に武器を選択した場合、スキルのクールタイム情報を表示する。
 /// </summary>
 public class ItemDetailPanel : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class ItemDetailPanel : MonoBehaviour
     [SerializeField] private TMP_Text itemNameText;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private Image itemImage;
+
+    [Header("Skill Cooldown (バトル中のみ表示)")]
+    [SerializeField] private TMP_Text skillCooldownText;
 
     [Header("Buttons (Inspector でアサイン、最大数分用意)")]
     [SerializeField] private Button[] buttons;
@@ -48,6 +52,9 @@ public class ItemDetailPanel : MonoBehaviour
             itemImage.enabled = data.icon != null;
         }
 
+        // スキルクールタイム表示（バトル中 + 武器のみ）
+        UpdateSkillCooldownDisplay(invItem);
+
         // ボタン構成
         var buttonDefs = context.GetButtons(invItem, fromInventory);
         SetupButtons(buttonDefs);
@@ -61,6 +68,57 @@ public class ItemDetailPanel : MonoBehaviour
     public void Hide()
     {
         if (detailRoot != null) detailRoot.SetActive(false);
+    }
+
+    /// <summary>
+    /// バトル中かつ武器の場合、スキルのクールタイム情報を表示する。
+    /// それ以外では非表示。
+    /// </summary>
+    private void UpdateSkillCooldownDisplay(InventoryItem invItem)
+    {
+        if (skillCooldownText == null) return;
+
+        // バトル中でなければ非表示
+        bool inBattle = GameState.I != null && GameState.I.isInBattle;
+        if (!inBattle || invItem?.data == null || invItem.data.category != ItemCategory.Weapon)
+        {
+            skillCooldownText.gameObject.SetActive(false);
+            return;
+        }
+
+        // 武器にスキルがなければ非表示
+        if (invItem.data.skills == null || invItem.data.skills.Length == 0)
+        {
+            skillCooldownText.gameObject.SetActive(false);
+            return;
+        }
+
+        // スキルごとのCT情報を組み立てる
+        var lines = new List<string>();
+        for (int i = 0; i < invItem.data.skills.Length; i++)
+        {
+            var skill = invItem.data.skills[i];
+            if (skill == null) continue;
+
+            int remaining = 0;
+            if (invItem.skillCooldowns.ContainsKey(skill.skillId))
+                remaining = invItem.skillCooldowns[skill.skillId];
+
+            if (remaining > 0)
+                lines.Add($"{skill.skillName}：CT{remaining}");
+            else
+                lines.Add($"{skill.skillName}：使用可能");
+        }
+
+        if (lines.Count > 0)
+        {
+            skillCooldownText.text = string.Join("\n", lines);
+            skillCooldownText.gameObject.SetActive(true);
+        }
+        else
+        {
+            skillCooldownText.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -86,7 +144,6 @@ public class ItemDetailPanel : MonoBehaviour
 
                 // リスナーをクリアして再登録
                 buttons[i].onClick.RemoveAllListeners();
-                // ローカル変数にキャプチャしないとクロージャで最後の値が使われる
                 var action = def.onClick;
                 buttons[i].onClick.AddListener(() => action?.Invoke());
             }

@@ -2617,6 +2617,7 @@ MonoBehaviour:
   itemNameText: {fileID: 1574704770}
   descriptionText: {fileID: 1502383183}
   itemImage: {fileID: 801844954}
+  skillCooldownText: {fileID: 59966095}
   buttons:
   - {fileID: 801815120}
   - {fileID: 909948891}
