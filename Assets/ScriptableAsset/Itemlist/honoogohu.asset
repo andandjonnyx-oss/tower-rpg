@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: Fire
+  m_Name: honoogohu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 3
-  itemName: "\u30D5\u30A1\u30A4\u30A2"
-  description: "\u706B\u306E\u7389"
-  icon: {fileID: 8885571523614577088, guid: e51cf823cc9baf54b9117e1e4e2f4810, type: 3}
+  itemId: 5
+  itemName: "\u708E\u306E\u8B77\u7B26"
+  description: "\u708E\u8010\u6027\u304C\u3042\u304C\u308B"
+  icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 1
@@ -27,6 +27,10 @@ MonoBehaviour:
   weaponAttribute: 0
   attackPower: 0
   skills: []
-  magicSkill: {fileID: 11400000, guid: b39831f1b96422b4c94a665e9602a412, type: 2}
-  passiveEffects: []
-  sortOrder: 1
+  magicSkill: {fileID: 0}
+  passiveEffects:
+  - effectType: 0
+    targetAttribute: 3
+    targetStat: 0
+    value: 50
+  sortOrder: 0
