@@ -23,7 +23,7 @@ public enum StatusEffect
     Poison,    // “Å
     Paralyze,  // –ƒáƒ
     Sleep,     // ‡–°
-    Blind,     // ˆÃ“¬
+    Blind,     // ˆÃˆÅ
     Silence,   // ’¾–Ù
     Burn,      // ‰Î
     Freeze,    // “€Œ‹
