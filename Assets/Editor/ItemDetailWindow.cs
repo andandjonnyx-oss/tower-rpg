@@ -127,10 +127,54 @@ public class ItemDetailWindow : EditorWindow
             case ItemCategory.Weapon:
                 EditorGUILayout.LabelField("Weapon Attribute", item.weaponAttribute.ToJapanese());
                 EditorGUILayout.LabelField("Attack Power", item.attackPower.ToString());
+
+                // 武器スキル一覧
+                if (item.skills != null && item.skills.Length > 0)
+                {
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("武器スキル", EditorStyles.boldLabel);
+                    for (int i = 0; i < item.skills.Length; i++)
+                    {
+                        var skill = item.skills[i];
+                        if (skill != null)
+                            EditorGUILayout.LabelField($"  [{i}]", $"{skill.skillName} ({skill.skillAttribute.ToJapanese()}, x{skill.damageMultiplier}, CT{skill.cooldownTurns})");
+                        else
+                            EditorGUILayout.LabelField($"  [{i}]", "null");
+                    }
+                }
                 break;
 
             case ItemCategory.Magic:
-                EditorGUILayout.LabelField("Magic ID", string.IsNullOrWhiteSpace(item.magicId) ? "なし" : item.magicId);
+                // 魔法スキル
+                if (item.magicSkill != null)
+                {
+                    var ms = item.magicSkill;
+                    EditorGUILayout.LabelField("魔法スキル", $"{ms.skillName} ({ms.skillAttribute.ToJapanese()}, 固定{ms.fixedDamage}dmg, MP{ms.mpCost})");
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("魔法スキル", "なし（パッシブ専用）");
+                }
+
+                // パッシブ効果一覧
+                if (item.passiveEffects != null && item.passiveEffects.Length > 0)
+                {
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("パッシブ効果", EditorStyles.boldLabel);
+                    for (int i = 0; i < item.passiveEffects.Length; i++)
+                    {
+                        var pe = item.passiveEffects[i];
+                        if (pe == null) continue;
+                        string target = pe.effectType == PassiveType.StatBonus
+                            ? pe.targetStat.ToString()
+                            : pe.targetAttribute.ToJapanese();
+                        EditorGUILayout.LabelField($"  [{i}]", $"{pe.effectType.ToJapanese()} ({target}) +{pe.value}");
+                    }
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("パッシブ効果", "なし");
+                }
                 break;
         }
 

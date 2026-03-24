@@ -23,7 +23,7 @@ public enum StatusEffect
     Poison,    // 毒
     Paralyze,  // 麻痺
     Sleep,     // 睡眠
-    Blind,     // 暗闇
+    Blind,     // 暗闘
     Silence,   // 沈黙
     Burn,      // 火傷
     Freeze,    // 凍結
@@ -65,6 +65,30 @@ public static class AttributeExtensions
             case StatusEffect.Freeze: return "凍結";
             case StatusEffect.Stun: return "気絶";
             default: return effect.ToString();
+        }
+    }
+
+    public static string ToJapanese(this PassiveType type)
+    {
+        switch (type)
+        {
+            case PassiveType.AttributeResistance: return "属性耐性";
+            case PassiveType.StatBonus: return "ステータスアップ";
+            case PassiveType.AttributeAttackBonus: return "属性攻撃力";
+            case PassiveType.MaxHpBonus: return "最大HP";
+            case PassiveType.MaxMpBonus: return "最大MP";
+            case PassiveType.StatusEffectResistance: return "状態異常耐性";
+            default: return type.ToString();
+        }
+    }
+
+    public static string ToJapanese(this SkillSource source)
+    {
+        switch (source)
+        {
+            case SkillSource.Weapon: return "武器スキル";
+            case SkillSource.Magic: return "魔法スキル";
+            default: return source.ToString();
         }
     }
 }
