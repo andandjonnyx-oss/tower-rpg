@@ -21,6 +21,11 @@ public class BattleSceneController : MonoBehaviour
     [SerializeField] private Button attackButton;
     [SerializeField] private Button skillButton;
     [SerializeField] private Button itemButton;
+    [SerializeField] private Button magicButton;
+
+    [Header("UI - Magic Dropdown")]
+    [Tooltip("所持中の魔法スキルを選択するドロップダウン")]
+    [SerializeField] private TMP_Dropdown magicDropdown;
 
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
@@ -42,6 +47,9 @@ public class BattleSceneController : MonoBehaviour
 
     // 装備中武器の InventoryItem キャッシュ（スキルクールダウン管理用）
     private InventoryItem equippedWeaponItem;
+
+    // 魔法ドロップダウンに表示中のスキル一覧キャッシュ
+    private List<SkillData> magicSkillList = new List<SkillData>();
 
     private void Start()
     {
@@ -73,6 +81,10 @@ public class BattleSceneController : MonoBehaviour
         // アイテムボタン設定
         if (itemButton != null)
             itemButton.onClick.AddListener(OnItemClicked);
+
+        // 魔法ボタン設定
+        if (magicButton != null)
+            magicButton.onClick.AddListener(OnMagicClicked);
 
         // 初回 or Itemboxから戻り
         if (!battleInitialized)
@@ -111,14 +123,16 @@ public class BattleSceneController : MonoBehaviour
                 SetButtonsInteractable(false);
                 Invoke(nameof(EnemyTurn), 0.5f);
 
-                // スキルボタン更新
+                // スキルボタン・魔法ドロップダウン更新
                 RefreshSkillButton();
+                RefreshMagicDropdown();
                 return;
             }
         }
 
-        // スキルボタンの表示を更新
+        // スキルボタン・魔法ドロップダウンの表示を更新
         RefreshSkillButton();
+        RefreshMagicDropdown();
     }
 
     // =========================================================
@@ -189,7 +203,7 @@ public class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// スキルボタンが押された時の処理（プレイヤーターン・スキル攻撃）。
+    /// スキルボタンが押された時の処理（プレイヤーターン・武器スキル攻撃）。
     /// 装備中武器の最初のスキルを使用する。
     /// </summary>
     private void OnSkillClicked()
@@ -242,6 +256,80 @@ public class BattleSceneController : MonoBehaviour
         equippedWeaponItem.UseSkill(skill);
 
         AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {damage}ダメージ！");
+
+        // 敵撃破判定
+        if (enemyCurrentHp <= 0)
+        {
+            OnVictory();
+            return;
+        }
+
+        // 敵ターンへ（少し待ってから）
+        Invoke(nameof(EnemyTurn), 0.5f);
+    }
+
+    // =========================================================
+    // 魔法スキル発動（ドロップダウン選択 → 魔法ボタン押下）
+    // =========================================================
+
+    /// <summary>
+    /// 魔法ボタンが押された時の処理（プレイヤーターン・魔法スキル発動）。
+    /// ドロップダウンで選択中の魔法スキルを MP 消費して発動する。
+    /// </summary>
+    private void OnMagicClicked()
+    {
+        if (battleEnded) return;
+
+        // ドロップダウンから選択中のスキルを取得
+        SkillData magic = GetSelectedMagicSkill();
+        if (magic == null)
+        {
+            AddLog("魔法が選択されていない！");
+            return;
+        }
+
+        // MP チェック
+        int currentMp = (GameState.I != null) ? GameState.I.currentMp : 0;
+        if (currentMp < magic.mpCost)
+        {
+            AddLog($"MPが足りない！（必要:{magic.mpCost} 現在:{currentMp}）");
+            return;
+        }
+
+        // ボタン連打防止
+        SetButtonsInteractable(false);
+
+        // ターン開始: 全武器のクールダウンを進める（魔法使用もターン消費）
+        TickAllWeaponCooldowns();
+
+        // MP 消費
+        if (GameState.I != null)
+            GameState.I.currentMp -= magic.mpCost;
+
+        // ダメージ計算
+        int damage;
+        if (magic.fixedDamage > 0)
+        {
+            // 固定ダメージ（ファイアボール等）
+            damage = magic.fixedDamage;
+        }
+        else if (magic.damageMultiplier > 0)
+        {
+            // 倍率ベース（将来的な魔法スキル用）
+            int intStat = (GameState.I != null) ? GameState.I.baseINT : 1;
+            damage = Mathf.RoundToInt(intStat * magic.damageMultiplier);
+        }
+        else
+        {
+            damage = 1;
+        }
+        if (damage < 1) damage = 1;
+
+        // ダメージ適用
+        enemyCurrentHp -= damage;
+        if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+        AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {damage}ダメージ！ MP-{magic.mpCost}");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -314,6 +402,7 @@ public class BattleSceneController : MonoBehaviour
         // プレイヤーターンに戻す
         SetButtonsInteractable(true);
         RefreshSkillButton();
+        RefreshMagicDropdown();
     }
 
     // =========================================================
@@ -370,7 +459,7 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
-    // スキル関連ユーティリティ
+    // 武器スキル関連ユーティリティ
     // =========================================================
 
     private InventoryItem GetEquippedWeaponItem()
@@ -459,6 +548,72 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
+    // 魔法ドロップダウン関連ユーティリティ
+    // =========================================================
+
+    /// <summary>
+    /// 魔法ドロップダウンの選択肢を更新する。
+    /// PassiveCalculator.CollectMagicSkills() でインベントリ内の
+    /// 魔法スキル一覧を取得し、ドロップダウンに反映する。
+    /// 魔法スキルが1つもなければドロップダウンと魔法ボタンを非表示にする。
+    /// </summary>
+    private void RefreshMagicDropdown()
+    {
+        // 魔法スキル一覧を収集（重複なし）
+        magicSkillList = PassiveCalculator.CollectMagicSkills();
+
+        // 魔法スキルがなければ非表示
+        if (magicSkillList.Count == 0)
+        {
+            if (magicDropdown != null) magicDropdown.gameObject.SetActive(false);
+            if (magicButton != null) magicButton.gameObject.SetActive(false);
+            return;
+        }
+
+        // ドロップダウンに選択肢を設定
+        if (magicDropdown != null)
+        {
+            magicDropdown.gameObject.SetActive(true);
+            magicDropdown.ClearOptions();
+
+            var options = new List<string>();
+            for (int i = 0; i < magicSkillList.Count; i++)
+            {
+                var skill = magicSkillList[i];
+                // 「スキル名 (MP:消費量)」の形式で表示
+                options.Add($"{skill.skillName} (MP:{skill.mpCost})");
+            }
+            magicDropdown.AddOptions(options);
+
+            // 選択をリセット
+            magicDropdown.value = 0;
+            magicDropdown.RefreshShownValue();
+        }
+
+        // 魔法ボタンを表示
+        if (magicButton != null)
+        {
+            magicButton.gameObject.SetActive(true);
+            magicButton.interactable = !battleEnded;
+        }
+    }
+
+    /// <summary>
+    /// ドロップダウンで現在選択中の魔法スキルを返す。
+    /// 選択が無効な場合は null を返す。
+    /// </summary>
+    private SkillData GetSelectedMagicSkill()
+    {
+        if (magicDropdown == null) return null;
+        if (magicSkillList == null || magicSkillList.Count == 0) return null;
+
+        int index = magicDropdown.value;
+        if (index < 0 || index >= magicSkillList.Count) return null;
+
+        return magicSkillList[index];
+    }
+
+    // =========================================================
     // ユーティリティ
     // =========================================================
 
@@ -490,6 +645,17 @@ public class BattleSceneController : MonoBehaviour
 
         if (!interactable && skillButton != null)
             skillButton.interactable = false;
+
+        // 魔法ボタンも連動して無効化/有効化する
+        if (magicButton != null)
+        {
+            // 有効化時は RefreshMagicDropdown で個別制御するが、
+            // 無効化時は確実に無効にする
+            if (!interactable)
+                magicButton.interactable = false;
+            else if (magicSkillList != null && magicSkillList.Count > 0)
+                magicButton.interactable = true;
+        }
     }
 
     private void AddLog(string message)
