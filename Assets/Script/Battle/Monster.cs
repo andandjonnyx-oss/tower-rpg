@@ -31,6 +31,7 @@ public class Monster : ScriptableObject
     public int Attack;
     public int Defense;
     public int Speed;
+    public int Luck;
 
     [Header("Reward")]
     public int Exp;
@@ -39,5 +40,19 @@ public class Monster : ScriptableObject
     [Header("説明")]
     [TextArea(3, 6)]
     public string Help;
+
+    // =========================================================
+    // 敵の行動パターン
+    // =========================================================
+
+    [Header("Action Pattern")]
+    [Tooltip("敵の行動テーブル。threshold の昇順に並べる。\n"
+           + "最後の threshold を baseActionRange に合わせること。\n"
+           + "空の場合は従来通り Attack 依存の通常攻撃のみ行う。")]
+    public EnemyActionEntry[] actions;
+
+    [Tooltip("行動判定の乱数上限の基準値（通常は100）。\n"
+           + "LUC 差によってこの値が増減する。")]
+    public int baseActionRange = 100;
 
 }

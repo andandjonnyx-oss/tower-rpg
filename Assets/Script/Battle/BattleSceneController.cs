@@ -373,12 +373,34 @@ public class BattleSceneController : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// 敵の攻撃処理。
+    /// 敵の行動処理。
+    /// Monster に actions 配列が設定されている場合は行動テーブルに従い、
+    /// 未設定の場合は従来通り Attack 依存の通常攻撃を行う。
     /// </summary>
     private void EnemyTurn()
     {
         if (battleEnded) return;
 
+        // actions 配列が未設定 or 空 → 従来の単純攻撃
+        if (enemyMonster.actions == null || enemyMonster.actions.Length == 0)
+        {
+            ExecuteLegacyAttack();
+            return;
+        }
+
+        // 行動テーブルから行動を決定
+        EnemyActionEntry selectedAction = SelectEnemyAction();
+
+        // 選択された行動を実行
+        ExecuteEnemyAction(selectedAction);
+    }
+
+    /// <summary>
+    /// 従来の敵攻撃処理（actions 未設定時のフォールバック）。
+    /// Monster.Attack をそのままダメージとして使用する。
+    /// </summary>
+    private void ExecuteLegacyAttack()
+    {
         // 敵の攻撃力（Monster.Attack をそのまま使用）
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
@@ -392,6 +414,186 @@ public class BattleSceneController : MonoBehaviour
 
         AddLog($"{enemyMonster.Mname} の攻撃！ {enemyDamage}ダメージ！");
 
+        // プレイヤー敗北判定
+        if (GameState.I != null && GameState.I.currentHp <= 0)
+        {
+            OnDefeat();
+            return;
+        }
+
+        // プレイヤーターンに戻す
+        SetButtonsInteractable(true);
+        RefreshSkillButton();
+        RefreshMagicDropdown();
+    }
+
+    /// <summary>
+    /// LUC 差に応じた乱数の上限値（actionRange）を計算し、
+    /// 行動テーブルから行動を選択する。
+    ///
+    /// 計算式:
+    ///   lucDiff = プレイヤーLUC - 敵Speed（※敵に LUC がないため Speed で代用）
+    ///   actionRange = baseActionRange - lucDiff
+    ///   actionRange は最小20に制限（あまりに小さいと行動が破綻するため）
+    ///
+    /// 乱数 0 ～ actionRange-1 を振り、
+    /// actions[i].threshold を昇順に走査して、乱数値 < threshold の最初の行動を返す。
+    /// </summary>
+    private EnemyActionEntry SelectEnemyAction()
+    {
+        // プレイヤーの LUC（Luck プロパティは baseLUC * 5）
+        int playerLuc = (GameState.I != null) ? GameState.I.Luck : 0;
+
+        // 敵側の運の指標
+        int enemyLuc = enemyMonster.Luck;
+
+        // LUC 差を算出（プレイヤーが高いほど正の値）
+        int lucDiff = playerLuc - enemyLuc;
+
+        // actionRange を計算（LUC 差が大きいほど乱数範囲が狭まり、敵が弱体化）
+        int actionRange = enemyMonster.baseActionRange - lucDiff;
+
+        // 下限制限（最小20: これ以下だと行動テーブルが機能しなくなる）
+        if (actionRange < 20) actionRange = 20;
+
+        // 乱数を振る
+        int roll = Random.Range(0, actionRange);
+
+        Debug.Log($"[Battle] EnemyAction: playerLuc={playerLuc} enemyLuc={enemyLuc} lucDiff={lucDiff} " +
+                  $"baseRange={enemyMonster.baseActionRange} actionRange={actionRange} roll={roll}");
+
+        // 行動テーブルを走査（threshold 昇順前提）
+        for (int i = 0; i < enemyMonster.actions.Length; i++)
+        {
+            if (roll < enemyMonster.actions[i].threshold)
+            {
+                return enemyMonster.actions[i];
+            }
+        }
+
+        // テーブル外（actionRange が baseActionRange より大きくなった場合など）
+        // → 最後の行動を返す（通常は「何もしない」を末尾に置く想定）
+        return enemyMonster.actions[enemyMonster.actions.Length - 1];
+    }
+
+    /// <summary>
+    /// 選択された敵行動を実行する。
+    /// </summary>
+    private void ExecuteEnemyAction(EnemyActionEntry action)
+    {
+        switch (action.actionType)
+        {
+            case EnemyActionType.Attack:
+                ExecuteEnemyNormalAttack(action);
+                break;
+
+            case EnemyActionType.SpecialAttack:
+                ExecuteEnemySpecialAttack(action);
+                break;
+
+            case EnemyActionType.Idle:
+                ExecuteEnemyIdle(action);
+                break;
+
+            default:
+                ExecuteEnemyIdle(action);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
+    /// </summary>
+    private void ExecuteEnemyNormalAttack(EnemyActionEntry action)
+    {
+        int enemyDamage = enemyMonster.Attack;
+        if (enemyDamage < 1) enemyDamage = 1;
+
+        // プレイヤーにダメージ
+        if (GameState.I != null)
+        {
+            GameState.I.currentHp -= enemyDamage;
+            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
+        }
+
+        // ログ表示（カスタム行動名があればそれを使用）
+        string actionName = !string.IsNullOrEmpty(action.actionName) ? action.actionName : "攻撃";
+        AddLog($"{enemyMonster.Mname} の{actionName}！ {enemyDamage}ダメージ！");
+
+        // 敗北判定 → プレイヤーターンへ
+        AfterEnemyAction();
+    }
+
+    /// <summary>
+    /// 敵の特殊攻撃。固定ダメージ + 属性耐性による軽減。
+    ///
+    /// ダメージ計算:
+    ///   baseDamage = action.fixedDamage（0 なら Monster.Attack を使用）
+    ///   resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute)
+    ///   finalDamage = baseDamage × (1 - resistance / 100)
+    ///   小数点以下を四捨五入（Mathf.RoundToInt）
+    /// </summary>
+    private void ExecuteEnemySpecialAttack(EnemyActionEntry action)
+    {
+        // 基礎ダメージ
+        int baseDamage = action.fixedDamage > 0 ? action.fixedDamage : enemyMonster.Attack;
+        if (baseDamage < 1) baseDamage = 1;
+
+        // 属性耐性を取得
+        int resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute);
+
+        // 耐性によるダメージ軽減（耐性50 → 50%減少）
+        float reductionRate = resistance / 100f;
+        int finalDamage = Mathf.RoundToInt(baseDamage * (1f - reductionRate));
+        if (finalDamage < 0) finalDamage = 0;
+
+        // プレイヤーにダメージ
+        if (GameState.I != null)
+        {
+            GameState.I.currentHp -= finalDamage;
+            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
+        }
+
+        // ログ表示
+        string actionName = !string.IsNullOrEmpty(action.actionName)
+            ? action.actionName
+            : $"{action.attackAttribute.ToJapanese()}攻撃";
+
+        if (resistance > 0)
+        {
+            AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
+                   $"{finalDamage}ダメージ！（耐性で軽減）");
+        }
+        else
+        {
+            AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
+                   $"{finalDamage}ダメージ！");
+        }
+
+        Debug.Log($"[Battle] SpecialAttack: base={baseDamage} resistance={resistance} final={finalDamage}");
+
+        // 敗北判定 → プレイヤーターンへ
+        AfterEnemyAction();
+    }
+
+    /// <summary>
+    /// 敵が何もしない。
+    /// </summary>
+    private void ExecuteEnemyIdle(EnemyActionEntry action)
+    {
+        string actionName = !string.IsNullOrEmpty(action.actionName) ? action.actionName : "様子を見ている";
+        AddLog($"{enemyMonster.Mname} は{actionName}…");
+
+        // 敗北判定 → プレイヤーターンへ
+        AfterEnemyAction();
+    }
+
+    /// <summary>
+    /// 敵の行動後の共通処理。
+    /// プレイヤー敗北判定を行い、生存していればプレイヤーターンに戻す。
+    /// </summary>
+    private void AfterEnemyAction()
+    {
         // プレイヤー敗北判定
         if (GameState.I != null && GameState.I.currentHp <= 0)
         {
