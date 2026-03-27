@@ -31,18 +31,42 @@ public class PassiveEffect
 
 /// <summary>
 /// パッシブ効果の種類。
-/// 今後の拡張で項目を追加していく。
+///
+/// 【グループ分け】
+///
+/// ▼ターゲット指定あり（targetAttribute を使う）
+///   AttributeResistance    : 属性耐性
+///   AttributeAttackBonus   : 属性攻撃力ボーナス
+///
+/// ▼ターゲット指定あり（targetStat を使う）
+///   StatBonus              : 基礎ステータスアップ（汎用）
+///
+/// ▼ターゲット指定なし（effectType だけで一意に決まる）
+///   MaxHpBonus             : 最大HPアップ
+///   MaxMpBonus             : 最大MPアップ
+///   AttackBonus            : 攻撃力アップ
+///   DefenseBonus           : 防御力アップ
+///   MagicAttackBonus       : 魔法攻撃力アップ
+///   MagicDefenseBonus      : 魔法防御力アップ
+///   LuckBonus              : 運の良さアップ
+///   StatusEffectResistance : 状態異常耐性（将来拡張用）
 /// </summary>
 public enum PassiveType
 {
+    // ---- ターゲット指定あり（属性） ----
+
     /// <summary>属性耐性アップ。targetAttribute で対象属性を指定。</summary>
     AttributeResistance,
 
-    /// <summary>基礎ステータスアップ。targetStat で対象ステータスを指定。</summary>
-    StatBonus,
-
     /// <summary>属性攻撃力アップ。targetAttribute で対象属性を指定。</summary>
     AttributeAttackBonus,
+
+    // ---- ターゲット指定あり（ステータス） ----
+
+    /// <summary>基礎ステータスアップ（汎用）。targetStat で対象ステータスを指定。</summary>
+    StatBonus,
+
+    // ---- ターゲット指定なし ----
 
     /// <summary>最大HPアップ。targetAttribute/targetStat は不要。</summary>
     MaxHpBonus,
@@ -50,12 +74,21 @@ public enum PassiveType
     /// <summary>最大MPアップ。targetAttribute/targetStat は不要。</summary>
     MaxMpBonus,
 
-    /// <summary>状態異常耐性アップ。将来拡張用。</summary>
-    StatusEffectResistance,
+    /// <summary>攻撃力アップ。targetAttribute/targetStat は不要。</summary>
+    AttackBonus,
 
     /// <summary>防御力アップ。targetAttribute/targetStat は不要。</summary>
     DefenseBonus,
 
+    /// <summary>魔法攻撃力アップ。targetAttribute/targetStat は不要。</summary>
+    MagicAttackBonus,
+
     /// <summary>魔法防御力アップ。targetAttribute/targetStat は不要。</summary>
     MagicDefenseBonus,
+
+    /// <summary>運の良さアップ。targetAttribute/targetStat は不要。</summary>
+    LuckBonus,
+
+    /// <summary>状態異常耐性アップ。将来拡張用。</summary>
+    StatusEffectResistance,
 }

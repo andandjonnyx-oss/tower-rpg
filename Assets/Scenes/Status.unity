@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 55970580}
   - component: {fileID: 55970581}
   m_Layer: 5
-  m_Name: tairyoku
+  m_Name: bougyo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,10 +151,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1517305339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -312, y: 468}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 468}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &55970580
 CanvasRenderer:
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u4F53\u529B\uFF1A"
+  m_text: "\u9632\u5FA1\u529B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
   m_sharedMaterial: {fileID: -4704401064743154688, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
@@ -1383,10 +1383,10 @@ MonoBehaviour:
   dexPlusButton: {fileID: 343428635}
   lucPlusButton: {fileID: 915749089}
   resetButton: {fileID: 523603988}
-  powerText: {fileID: 1591497525}
-  staminaText: {fileID: 55970581}
-  dexterityText: {fileID: 1585061446}
-  magicPowerText: {fileID: 1181460440}
+  attackText: {fileID: 1591497525}
+  defenseText: {fileID: 55970581}
+  magicAttackText: {fileID: 1181460440}
+  magicDefenseText: {fileID: 1585061446}
   luckText: {fileID: 820885336}
   closeButton: {fileID: 564901759}
   toggleButton: {fileID: 331277648}
@@ -2718,7 +2718,7 @@ GameObject:
   - component: {fileID: 820885335}
   - component: {fileID: 820885336}
   m_Layer: 5
-  m_Name: unnnoyosa
+  m_Name: unnoyosa
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2738,10 +2738,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1517305339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -317, y: 265}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 265}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &820885335
 CanvasRenderer:
@@ -4013,7 +4013,7 @@ GameObject:
   - component: {fileID: 1181460439}
   - component: {fileID: 1181460440}
   m_Layer: 5
-  m_Name: maryoku
+  m_Name: mahoukougeki
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4033,10 +4033,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1517305339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -312, y: 403}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 403}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1181460439
 CanvasRenderer:
@@ -4066,7 +4066,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u9B54\u529B\uFF1A"
+  m_text: "\u9B54\u6CD5\u653B\u6483\u529B\uFF1A"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
   m_sharedMaterial: {fileID: -4704401064743154688, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
@@ -4476,6 +4476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HpMpDisplay
   hpText: {fileID: 1656557677}
   mpText: {fileID: 109293751}
+  recoverOnStart: 0
 --- !u!1 &1360868445
 GameObject:
   m_ObjectHideFlags: 0
@@ -4919,7 +4920,7 @@ GameObject:
   - component: {fileID: 1585061445}
   - component: {fileID: 1585061446}
   m_Layer: 5
-  m_Name: kiyou
+  m_Name: mahoubougyo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4939,10 +4940,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1517305339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -317, y: 335}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 336}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1585061445
 CanvasRenderer:
@@ -4972,7 +4973,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u5668\u7528\u3055\uFF1A"
+  m_text: "\u9B54\u6CD5\u9632\u5FA1\u529B\uFF1A"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
   m_sharedMaterial: {fileID: -4704401064743154688, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
@@ -5056,7 +5057,7 @@ GameObject:
   - component: {fileID: 1591497524}
   - component: {fileID: 1591497525}
   m_Layer: 5
-  m_Name: tikara
+  m_Name: kougeki
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5076,10 +5077,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1517305339}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -315, y: 528}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 300, y: 528}
+  m_SizeDelta: {x: 500, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1591497524
 CanvasRenderer:
@@ -5109,7 +5110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u529B\uFF1A"
+  m_text: "\u653B\u6483\u529B\uFF1A"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
   m_sharedMaterial: {fileID: -4704401064743154688, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}

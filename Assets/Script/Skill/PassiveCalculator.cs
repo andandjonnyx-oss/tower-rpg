@@ -16,13 +16,13 @@ using UnityEngine;
 ///   （70 を 100% 適用、残りは各 value の 10% を加算）
 ///
 /// 使い方:
-///   int fireRes = PassiveCalculator.CalcAttributeResistance(WeaponAttribute.Fire);
-///   int strBonus = PassiveCalculator.CalcStatBonus(StatType.STR);
+///   int fireRes  = PassiveCalculator.CalcAttributeResistance(WeaponAttribute.Fire);
+///   int atkBonus = PassiveCalculator.CalcAttackBonus();
 /// </summary>
 public static class PassiveCalculator
 {
     // =========================================================
-    // 公開メソッド
+    // 公開メソッド ── ターゲット指定あり（属性）
     // =========================================================
 
     /// <summary>
@@ -37,6 +37,19 @@ public static class PassiveCalculator
     }
 
     /// <summary>
+    /// 指定属性の攻撃力ボーナス合計値を返す。
+    /// </summary>
+    public static int CalcAttributeAttackBonus(WeaponAttribute attr)
+    {
+        var values = CollectValues(PassiveType.AttributeAttackBonus, attr, default);
+        return CalcWithDiminishing(values);
+    }
+
+    // =========================================================
+    // 公開メソッド ── ターゲット指定あり（ステータス）
+    // =========================================================
+
+    /// <summary>
     /// 指定ステータスのパッシブボーナス合計値を返す。
     /// インベントリ内の全 Magic アイテムから
     /// PassiveType.StatBonus かつ対象ステータスが一致するものを収集して計算する。
@@ -47,52 +60,56 @@ public static class PassiveCalculator
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>
-    /// 指定属性の攻撃力ボーナス合計値を返す。
-    /// </summary>
-    public static int CalcAttributeAttackBonus(WeaponAttribute attr)
-    {
-        var values = CollectValues(PassiveType.AttributeAttackBonus, attr, default);
-        return CalcWithDiminishing(values);
-    }
+    // =========================================================
+    // 公開メソッド ── ターゲット指定なし（各ステータス専用）
+    // =========================================================
 
-    /// <summary>
-    /// 最大HPボーナス合計値を返す。
-    /// MaxHpBonus は targetAttribute / targetStat を使わないため、
-    /// effectType のみで一致判定する。
-    /// </summary>
+    /// <summary>最大HPボーナス合計値を返す。</summary>
     public static int CalcMaxHpBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MaxHpBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>
-    /// 最大MPボーナス合計値を返す。
-    /// </summary>
+    /// <summary>最大MPボーナス合計値を返す。</summary>
     public static int CalcMaxMpBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MaxMpBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>
-    /// 防御力ボーナス合計値を返す。
-    /// DefenseBonus は targetAttribute / targetStat を使わない。
-    /// </summary>
+    /// <summary>攻撃力ボーナス合計値を返す。</summary>
+    public static int CalcAttackBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.AttackBonus);
+        return CalcWithDiminishing(values);
+    }
+
+    /// <summary>防御力ボーナス合計値を返す。</summary>
     public static int CalcDefenseBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.DefenseBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>
-    /// 魔法防御力ボーナス合計値を返す。
-    /// MagicDefenseBonus は targetAttribute / targetStat を使わない。
-    /// </summary>
+    /// <summary>魔法攻撃力ボーナス合計値を返す。</summary>
+    public static int CalcMagicAttackBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.MagicAttackBonus);
+        return CalcWithDiminishing(values);
+    }
+
+    /// <summary>魔法防御力ボーナス合計値を返す。</summary>
     public static int CalcMagicDefenseBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MagicDefenseBonus);
+        return CalcWithDiminishing(values);
+    }
+
+    /// <summary>運の良さボーナス合計値を返す。</summary>
+    public static int CalcLuckBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.LuckBonus);
         return CalcWithDiminishing(values);
     }
 
@@ -172,7 +189,7 @@ public static class PassiveCalculator
                         if (pe.targetStat != statFilter) continue;
                         break;
 
-                        // MaxHpBonus, MaxMpBonus, DefenseBonus 等は対象フィルタ不要
+                        // ターゲット指定なし系は対象フィルタ不要
                 }
 
                 if (pe.value > 0)
@@ -184,7 +201,9 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// targetAttribute / targetStat を使わない効果（MaxHpBonus, DefenseBonus 等）の value を収集する。
+    /// targetAttribute / targetStat を使わない効果の value を収集する。
+    /// MaxHpBonus / MaxMpBonus / AttackBonus / DefenseBonus /
+    /// MagicAttackBonus / MagicDefenseBonus / LuckBonus 等が対象。
     /// </summary>
     private static List<int> CollectValuesNoTarget(PassiveType type)
     {

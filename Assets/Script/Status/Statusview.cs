@@ -43,10 +43,10 @@ public class StatusView : MonoBehaviour
     [SerializeField] private Button resetButton;
 
     [Header("Status2 - Derived Stats")]
-    [SerializeField] private TMP_Text powerText;        // 力
-    [SerializeField] private TMP_Text staminaText;      // 体力
-    [SerializeField] private TMP_Text dexterityText;    // 器用
-    [SerializeField] private TMP_Text magicPowerText;   // 魔力
+    [SerializeField] private TMP_Text attackText;       // 攻撃力
+    [SerializeField] private TMP_Text defenseText;      // 防御力
+    [SerializeField] private TMP_Text magicAttackText;  // 魔法攻撃力
+    [SerializeField] private TMP_Text magicDefenseText; // 魔法防御力
     [SerializeField] private TMP_Text luckText;         // 運の良さ
 
     [Header("Buttons")]
@@ -134,10 +134,10 @@ public class StatusView : MonoBehaviour
         if (lucPlusButton != null) lucPlusButton.interactable = canAllocate;
 
         // Status2
-        if (powerText != null) powerText.text = $"力：{gs.Power}";
-        if (staminaText != null) staminaText.text = $"体力：{gs.Stamina}";
-        if (dexterityText != null) dexterityText.text = $"器用：{gs.Dexterity}";
-        if (magicPowerText != null) magicPowerText.text = $"魔力：{gs.MagicPower}";
+        if (attackText != null) attackText.text = $"攻撃力：{gs.Attack}";
+        if (defenseText != null) defenseText.text = $"防御力：{gs.Defense}";
+        if (magicAttackText != null) magicAttackText.text = $"魔法攻撃力：{gs.MagicAttack}";
+        if (magicDefenseText != null) magicDefenseText.text = $"魔法防御力：{gs.MagicDefense}";
         if (luckText != null) luckText.text = $"運の良さ：{gs.Luck}";
     }
 

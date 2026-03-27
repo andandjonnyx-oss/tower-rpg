@@ -47,10 +47,13 @@ public class GameState : MonoBehaviour
     public int expToNext = 100;
 
     [Header("HP / MP")]
-    public int maxHp = 50;
-    public int maxMp = 20;
-    public int currentHp = 50;
-    public int currentMp = 20;
+    // -1 = 未初期化フラグ。Awake() で RecalcMaxHp/Mp を呼んだ際に
+    // 「初回のみ currentHp/currentMp を maxHp/maxMp に揃える」判定に使う。
+    // セーブデータがある場合はロード時に正常な値が上書きされるため影響なし。
+    public int maxHp = -1;
+    public int maxMp = -1;
+    public int currentHp = -1;
+    public int currentMp = -1;
 
     [Header("Base Stats Initial (初期値・リセット先)")]
     public int initialSTR = 1;
@@ -69,11 +72,52 @@ public class GameState : MonoBehaviour
     [Header("Status Point")]
     public int statusPoint = 10;
 
-    public int Power => baseSTR * 1;
-    public int Stamina => baseVIT * 2;
-    public int Dexterity => baseDEX * 3;
-    public int MagicPower => baseINT * 4;
-    public int Luck => baseLUC * 5;
+    // =========================================================
+    // サブステータス（パッシブ込みの実効値）
+    // =========================================================
+
+    /// <summary>
+    /// 攻撃力。計算式: baseSTR × 1 + PassiveCalculator.CalcAttackBonus()
+    /// 将来的に攻撃力+X のパッシブが追加された場合は CalcAttackBonus() に実装する。
+    /// </summary>
+    public int Attack
+    {
+        get
+        {
+            int total = baseSTR * 1 + PassiveCalculator.CalcAttackBonus();
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// 魔法攻撃力。計算式: baseINT × 1
+    /// 将来的にパッシブで変動する場合はここに加算する。
+    /// </summary>
+    public int MagicAttack
+    {
+        get
+        {
+            int total = baseINT * 1 + PassiveCalculator.CalcMagicAttackBonus();
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// 運の良さ。baseLUC をそのまま返す。
+    /// 敵行動のLUC判定では baseLUC を直接参照するが、
+    /// UI表示などはこのプロパティを使う。
+    /// </summary>
+    public int Luck
+    {
+        get
+        {
+            int total = baseLUC + PassiveCalculator.CalcLuckBonus();
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
 
     // =========================================================
     // HP 計算（VIT ベース + パッシブ）
@@ -93,12 +137,12 @@ public class GameState : MonoBehaviour
     /// 現在のステータスとパッシブ効果から最大HPを再計算し、maxHp を更新する。
     /// currentHp が新しい maxHp を超えている場合はクランプする（超過分は消える）。
     /// currentHp が新しい maxHp 以下の場合はそのまま（回復しない）。
+    /// currentHp が -1（未初期化）の場合のみ maxHp に揃える（ゲーム初回起動時）。
     ///
     /// 呼び出しタイミング:
+    ///   - Awake()（初回起動 or セーブロード後）
     ///   - ステータス振り分け後
     ///   - アイテム取得/破棄後
-    ///   - シーン遷移時（Towerシーン開始時など）
-    ///   - セーブデータロード後
     /// </summary>
     public void RecalcMaxHp()
     {
@@ -108,12 +152,18 @@ public class GameState : MonoBehaviour
         {
             Debug.Log($"[GameState] maxHp 再計算: {maxHp} → {newMaxHp}");
             maxHp = newMaxHp;
+        }
 
-            // currentHp が新しい maxHp を超えていたらクランプ
-            if (currentHp > maxHp)
-            {
-                currentHp = maxHp;
-            }
+        if (currentHp < 0)
+        {
+            // 未初期化（初回起動時）: maxHp に揃える
+            currentHp = maxHp;
+            Debug.Log($"[GameState] currentHp 初期化: {currentHp}");
+        }
+        else if (currentHp > maxHp)
+        {
+            // maxHp を下回ったことで超過: クランプ
+            currentHp = maxHp;
         }
     }
 
@@ -143,8 +193,6 @@ public class GameState : MonoBehaviour
     /// プレイヤーの現在の防御力を返す。
     /// 計算式: baseVIT × DefPerVit + PassiveCalculator.CalcDefenseBonus()
     /// 今後装備やスキルで変動する場合もこのプロパティを参照する。
-    /// 四捨五入が必要な計算は現時点では発生しないが、
-    /// 将来の乗算効果に備えて int のまま返す。
     /// </summary>
     public int Defense
     {
@@ -176,6 +224,7 @@ public class GameState : MonoBehaviour
     /// 現在のステータスとパッシブ効果から最大MPを再計算し、maxMp を更新する。
     /// currentMp が新しい maxMp を超えている場合はクランプする。
     /// currentMp が新しい maxMp 以下の場合はそのまま（回復しない）。
+    /// currentMp が -1（未初期化）の場合のみ maxMp に揃える（ゲーム初回起動時）。
     /// </summary>
     public void RecalcMaxMp()
     {
@@ -185,11 +234,18 @@ public class GameState : MonoBehaviour
         {
             Debug.Log($"[GameState] maxMp 再計算: {maxMp} → {newMaxMp}");
             maxMp = newMaxMp;
+        }
 
-            if (currentMp > maxMp)
-            {
-                currentMp = maxMp;
-            }
+        if (currentMp < 0)
+        {
+            // 未初期化（初回起動時）: maxMp に揃える
+            currentMp = maxMp;
+            Debug.Log($"[GameState] currentMp 初期化: {currentMp}");
+        }
+        else if (currentMp > maxMp)
+        {
+            // maxMp を下回ったことで超過: クランプ
+            currentMp = maxMp;
         }
     }
 
@@ -207,23 +263,8 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // 魔法攻撃力・魔法防御力（INT ベース + パッシブ）
+    // 魔法防御力（INT ベース + パッシブ）
     // =========================================================
-
-    /// <summary>
-    /// プレイヤーの魔法攻撃力。
-    /// 計算式: baseINT × 1
-    /// 今後パッシブで変動する場合はここに加算する。
-    /// </summary>
-    public int MagicAttack
-    {
-        get
-        {
-            int total = baseINT * 1;
-            if (total < 0) total = 0;
-            return total;
-        }
-    }
 
     /// <summary>
     /// INT 1ポイントあたりの魔法防御力。
@@ -373,7 +414,10 @@ public class GameState : MonoBehaviour
         I = this;
         DontDestroyOnLoad(gameObject);
 
-        // 初回起動時に VIT/INT とパッシブを反映した maxHp/maxMp を計算する
+        // 初回起動時に VIT/INT とパッシブを反映した maxHp/maxMp を計算する。
+        // currentHp/currentMp が -1（未初期化）の場合のみ maxHp/maxMp に揃える。
+        // セーブロード後はロード処理が currentHp/currentMp を正常値に上書きするため、
+        // -1 のまま Awake が走ることはない。
         RecalcMaxHp();
         RecalcMaxMp();
     }
