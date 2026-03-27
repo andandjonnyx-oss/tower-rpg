@@ -24,7 +24,7 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 10
   Attack: 2
-  Defense: 0
+  Defense: 5
   Speed: 0
   Luck: 0
   Exp: 0

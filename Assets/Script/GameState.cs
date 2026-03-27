@@ -277,6 +277,9 @@ public class GameState : MonoBehaviour
         if (I != null) { Destroy(gameObject); return; }
         I = this;
         DontDestroyOnLoad(gameObject);
+
+        // 初回起動時に VIT とパッシブを反映した maxHp を計算する
+        RecalcMaxHp();
     }
 }
 
