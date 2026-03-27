@@ -242,7 +242,7 @@ public class BattleSceneController : MonoBehaviour
         // スキルのダメージ計算: (STR + 武器攻撃力) × スキル倍率
         int str = (GameState.I != null) ? GameState.I.baseSTR : 1;
         int baseDamage = str + weaponPower;
-        int damage = Mathf.RoundToInt(baseDamage * skill.damageMultiplier);
+        int damage = Mathf.FloorToInt(baseDamage * skill.damageMultiplier + 0.5f);
         if (damage < 1) damage = 1;
 
         // スキルの属性で上書き（スキル固有の属性を使用）
@@ -317,7 +317,7 @@ public class BattleSceneController : MonoBehaviour
         {
             // 倍率ベース（将来的な魔法スキル用）
             int intStat = (GameState.I != null) ? GameState.I.baseINT : 1;
-            damage = Mathf.RoundToInt(intStat * magic.damageMultiplier);
+            damage = Mathf.FloorToInt(intStat * magic.damageMultiplier + 0.5f);
         }
         else
         {
@@ -431,35 +431,47 @@ public class BattleSceneController : MonoBehaviour
     /// LUC 差に応じた乱数の上限値（actionRange）を計算し、
     /// 行動テーブルから行動を選択する。
     ///
-    /// 計算式:
-    ///   lucDiff = プレイヤーLUC - 敵Speed（※敵に LUC がないため Speed で代用）
-    ///   actionRange = baseActionRange - lucDiff
-    ///   actionRange は最小20に制限（あまりに小さいと行動が破綻するため）
+    /// 比較対象:
+    ///   プレイヤー側 = GameState.I.baseLUC（生のステータス値）
+    ///   敵側         = Monster.Luck
+    ///
+    /// actionRange の決定ルール（baseActionRange=100 の場合）:
+    ///   プレイヤー有利:
+    ///     baseLUC が敵Luck より 10以上高い OR baseLUC が敵Luck の 1.5倍以上（四捨五入）
+    ///     → actionRange = 80（敵が弱体化）
+    ///     ※どちらか片方でも満たせば適用。両方満たす場合も 80。
+    ///
+    ///   敵有利:
+    ///     baseLUC が敵Luck より 10以上低い OR baseLUC が敵Luck の半分未満（四捨五入）
+    ///     → actionRange = 120（敵が強化）
+    ///     ※どちらか片方でも満たせば適用。両方満たす場合も 120。
+    ///
+    ///   互角:
+    ///     上記どちらの条件も満たさない場合
+    ///     → actionRange = baseActionRange（通常100）
+    ///
+    ///   優先順位:
+    ///     プレイヤー有利 と 敵有利 の両方が真になることはロジック上ないが、
+    ///     万一の場合はプレイヤー有利（変動が大きい方）を優先する。
     ///
     /// 乱数 0 ～ actionRange-1 を振り、
     /// actions[i].threshold を昇順に走査して、乱数値 < threshold の最初の行動を返す。
     /// </summary>
     private EnemyActionEntry SelectEnemyAction()
     {
-        // プレイヤーの LUC（Luck プロパティは baseLUC * 5）
-        int playerLuc = (GameState.I != null) ? GameState.I.Luck : 0;
+        // プレイヤーの baseLUC を直接参照（Luck プロパティ = baseLUC×5 は使わない）
+        int playerLuc = (GameState.I != null) ? GameState.I.baseLUC : 1;
 
-        // 敵側の運の指標
+        // 敵の Luck を直接参照
         int enemyLuc = enemyMonster.Luck;
 
-        // LUC 差を算出（プレイヤーが高いほど正の値）
-        int lucDiff = playerLuc - enemyLuc;
-
-        // actionRange を計算（LUC 差が大きいほど乱数範囲が狭まり、敵が弱体化）
-        int actionRange = enemyMonster.baseActionRange - lucDiff;
-
-        // 下限制限（最小20: これ以下だと行動テーブルが機能しなくなる）
-        if (actionRange < 20) actionRange = 20;
+        // actionRange の決定
+        int actionRange = CalcActionRange(playerLuc, enemyLuc, enemyMonster.baseActionRange);
 
         // 乱数を振る
         int roll = Random.Range(0, actionRange);
 
-        Debug.Log($"[Battle] EnemyAction: playerLuc={playerLuc} enemyLuc={enemyLuc} lucDiff={lucDiff} " +
+        Debug.Log($"[Battle] EnemyAction: playerLuc={playerLuc} enemyLuc={enemyLuc} " +
                   $"baseRange={enemyMonster.baseActionRange} actionRange={actionRange} roll={roll}");
 
         // 行動テーブルを走査（threshold 昇順前提）
@@ -474,6 +486,70 @@ public class BattleSceneController : MonoBehaviour
         // テーブル外（actionRange が baseActionRange より大きくなった場合など）
         // → 最後の行動を返す（通常は「何もしない」を末尾に置く想定）
         return enemyMonster.actions[enemyMonster.actions.Length - 1];
+    }
+
+    /// <summary>
+    /// プレイヤーと敵の Luck を比較し、行動判定の乱数上限値を返す。
+    ///
+    /// 閾値の決定:
+    ///   「倍率による閾値」と「固定差（±10）による閾値」を両方計算し、
+    ///   大きい方を採用する。
+    ///
+    ///   プレイヤー有利の閾値 = max( enemyLuc×1.5（四捨五入）, enemyLuc+10 )
+    ///     → playerLuc がこの値以上なら、actionRange = baseRange × 0.8
+    ///
+    ///   敵有利の閾値       = max( enemyLuc×0.5（四捨五入）, enemyLuc-10 )
+    ///     → playerLuc がこの値未満なら、actionRange = baseRange × 1.2
+    ///
+    /// 切り替わりの境界:
+    ///   敵LUC  0～19 → +10 / -10 の固定差が優先（序盤安定）
+    ///   敵LUC 20     → 同値
+    ///   敵LUC 21以上  → ×1.5 / ×0.5 の倍率が優先（高LUC帯スケール）
+    ///
+    /// 矛盾（両条件同時成立）は発生しないことを検証済み。
+    /// 万一の場合はプレイヤー有利を優先する。
+    /// </summary>
+    private int CalcActionRange(int playerLuc, int enemyLuc, int baseRange)
+    {
+        // --- プレイヤー有利の閾値 ---
+        // 倍率閾値: 敵Luck の 1.5倍（四捨五入）
+        int advByRatio = Mathf.FloorToInt(enemyLuc * 1.5f + 0.5f);
+        // 固定差閾値: 敵Luck + 10
+        int advByFixed = enemyLuc + 10;
+        // 大きい方を採用
+        int advThreshold = Mathf.Max(advByRatio, advByFixed);
+
+        // --- 敵有利の閾値 ---
+        // 倍率閾値: 敵Luck の半分（四捨五入）
+        int disadvByRatio = Mathf.FloorToInt(enemyLuc * 0.5f + 0.5f);
+        // 固定差閾値: 敵Luck - 10
+        int disadvByFixed = enemyLuc - 10;
+        // 大きい方を採用（-10 が負のケースでは ×0.5 が自動的に優先される）
+        int disadvThreshold = Mathf.Max(disadvByRatio, disadvByFixed);
+
+        // --- 判定（プレイヤー有利を優先） ---
+        if (playerLuc >= advThreshold)
+        {
+            int range = Mathf.FloorToInt(baseRange * 0.8f + 0.5f);
+            Debug.Log($"[Battle] LUC判定: プレイヤー有利 " +
+                      $"playerLuc={playerLuc} >= {advThreshold}(ratio={advByRatio},fixed={advByFixed}) " +
+                      $"actionRange={range}");
+            return range;
+        }
+
+        if (playerLuc < disadvThreshold)
+        {
+            int range = Mathf.FloorToInt(baseRange * 1.2f + 0.5f);
+            Debug.Log($"[Battle] LUC判定: 敵有利 " +
+                      $"playerLuc={playerLuc} < {disadvThreshold}(ratio={disadvByRatio},fixed={disadvByFixed}) " +
+                      $"actionRange={range}");
+            return range;
+        }
+
+        Debug.Log($"[Battle] LUC判定: 互角 playerLuc={playerLuc} " +
+                  $"advThreshold={advThreshold} disadvThreshold={disadvThreshold} " +
+                  $"actionRange={baseRange}");
+        return baseRange;
     }
 
     /// <summary>
@@ -531,7 +607,7 @@ public class BattleSceneController : MonoBehaviour
     ///   baseDamage = action.fixedDamage（0 なら Monster.Attack を使用）
     ///   resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute)
     ///   finalDamage = baseDamage × (1 - resistance / 100)
-    ///   小数点以下を四捨五入（Mathf.RoundToInt）
+    ///   小数点以下を四捨五入（.5 は切り上げ）
     /// </summary>
     private void ExecuteEnemySpecialAttack(EnemyActionEntry action)
     {
@@ -543,8 +619,10 @@ public class BattleSceneController : MonoBehaviour
         int resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute);
 
         // 耐性によるダメージ軽減（耐性50 → 50%減少）
+        // ※ Mathf.RoundToInt は銀行丸め（4.5→4）のため、
+        //    FloorToInt(x + 0.5f) で通常の四捨五入（4.5→5）を行う
         float reductionRate = resistance / 100f;
-        int finalDamage = Mathf.RoundToInt(baseDamage * (1f - reductionRate));
+        int finalDamage = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
         if (finalDamage < 0) finalDamage = 0;
 
         // プレイヤーにダメージ
