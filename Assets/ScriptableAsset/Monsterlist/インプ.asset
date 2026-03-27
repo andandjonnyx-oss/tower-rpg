@@ -32,22 +32,10 @@ MonoBehaviour:
   Gold: 0
   Help: 
   actions:
-  - actionType: 0
-    damageCategory: 0
+  - skill: {fileID: 11400000, guid: 42d9cbf3e7e7d854c93446a1851f54d5, type: 2}
     threshold: 30
-    fixedDamage: 0
-    attackAttribute: 0
-    actionName: "\u653B\u6483"
-  - actionType: 1
-    damageCategory: 1
+  - skill: {fileID: 11400000, guid: d98162908c24a794d8f4da11943df18e, type: 2}
     threshold: 50
-    fixedDamage: 10
-    attackAttribute: 3
-    actionName: "\u708E\u653B\u6483"
-  - actionType: 2
-    damageCategory: 0
+  - skill: {fileID: 11400000, guid: 6536c4b78ac8451468acde2a45e02cca, type: 2}
     threshold: 100
-    fixedDamage: 0
-    attackAttribute: 0
-    actionName: "\u5F85\u6A5F"
   baseActionRange: 100

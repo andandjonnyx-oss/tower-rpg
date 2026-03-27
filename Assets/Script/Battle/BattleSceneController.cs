@@ -214,6 +214,7 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// スキルボタンが押された時の処理（プレイヤーターン・武器スキル攻撃）。
     /// 装備中武器の最初のスキルを使用する。
+    /// skill.damageCategory（Physical/Magical）に応じて敵の防御ダイスを選択する。
     /// </summary>
     private void OnSkillClicked()
     {
@@ -257,8 +258,8 @@ public class BattleSceneController : MonoBehaviour
         // スキルの属性で上書き（スキル固有の属性を使用）
         WeaponAttribute skillAttr = skill.skillAttribute;
 
-        // 敵の防御ダイスによる軽減（武器スキルは物理扱い）
-        int enemyDef = GetEnemyDefense(DamageCategory.Physical);
+        // 敵の防御ダイスによる軽減（skill.damageCategory で物理/魔法を判断）
+        int enemyDef = GetEnemyDefense(skill.damageCategory);
         int enemyBlocked = RollDefenseDice(enemyDef);
         int finalDamage = damage - enemyBlocked;
         if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
@@ -293,6 +294,7 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 魔法ボタンが押された時の処理（プレイヤーターン・魔法スキル発動）。
     /// ドロップダウンで選択中の魔法スキルを MP 消費して発動する。
+    /// skill.damageCategory（通常 Magical）に応じて敵の防御ダイスを選択する。
     /// </summary>
     private void OnMagicClicked()
     {
@@ -333,7 +335,9 @@ public class BattleSceneController : MonoBehaviour
         }
         else if (magic.damageMultiplier > 0)
         {
-            // 倍率ベース（将来的な魔法スキル用）
+            // 倍率ベース（INTが基礎値）
+            // SkillSource が Magic の場合は INT を、Weapon の場合は STR+武器を使う想定だが
+            // 将来拡張のため magic.skillSource で分岐できるようにしておく
             int intStat = (GameState.I != null) ? GameState.I.baseINT : 1;
             damage = Mathf.FloorToInt(intStat * magic.damageMultiplier + 0.5f);
         }
@@ -343,8 +347,9 @@ public class BattleSceneController : MonoBehaviour
         }
         if (damage < 1) damage = 1;
 
-        // 敵の防御ダイスによる軽減（魔法スキルは魔法扱い）
-        int enemyDef = GetEnemyDefense(DamageCategory.Magical);
+        // 敵の防御ダイスによる軽減（magic.damageCategory で物理/魔法を判断）
+        // ファイアボール・ライトニングは通常 Magical を設定するので MagicDefense が適用される
+        int enemyDef = GetEnemyDefense(magic.damageCategory);
         int enemyBlocked = RollDefenseDice(enemyDef);
         int finalDamage = damage - enemyBlocked;
         if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
@@ -587,40 +592,49 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 選択された敵行動を実行する。
+    /// EnemyActionEntry.skill が null の場合は通常攻撃（物理）にフォールバックする。
     /// </summary>
     private void ExecuteEnemyAction(EnemyActionEntry action)
     {
-        switch (action.actionType)
+        // skill が未アサインの場合はフォールバック通常攻撃
+        if (action.skill == null)
         {
-            case EnemyActionType.Attack:
-                ExecuteEnemyNormalAttack(action);
+            Debug.LogWarning("[Battle] EnemyActionEntry.skill が null です。通常攻撃で代替します。");
+            ExecuteLegacyAttack();
+            return;
+        }
+
+        switch (action.skill.actionType)
+        {
+            case MonsterActionType.NormalAttack:
+                ExecuteEnemyNormalAttack(action.skill);
                 break;
 
-            case EnemyActionType.SpecialAttack:
-                ExecuteEnemySpecialAttack(action);
+            case MonsterActionType.SkillAttack:
+                ExecuteEnemySkillAttack(action.skill);
                 break;
 
-            case EnemyActionType.Idle:
-                ExecuteEnemyIdle(action);
+            case MonsterActionType.Idle:
+                ExecuteEnemyIdle(action.skill);
                 break;
 
             default:
-                ExecuteEnemyIdle(action);
+                ExecuteEnemyIdle(action.skill);
                 break;
         }
     }
 
     /// <summary>
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
-    /// damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
+    /// skill.damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
     /// </summary>
-    private void ExecuteEnemyNormalAttack(EnemyActionEntry action)
+    private void ExecuteEnemyNormalAttack(MonsterSkillData skill)
     {
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
         // damageCategory に応じた防御力を取得
-        int defense = GetPlayerDefense(action.damageCategory);
+        int defense = GetPlayerDefense(skill.damageCategory);
         int blocked = RollDefenseDice(defense);
         int finalDamage = enemyDamage - blocked;
         if (finalDamage < 0) finalDamage = 0;
@@ -628,8 +642,8 @@ public class BattleSceneController : MonoBehaviour
         // プレイヤーにダメージ
         ApplyDamageToPlayer(finalDamage);
 
-        // ログ表示（カスタム行動名があればそれを使用）
-        string actionName = !string.IsNullOrEmpty(action.actionName) ? action.actionName : "攻撃";
+        // ログ表示
+        string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
         if (blocked > 0)
             AddLog($"{enemyMonster.Mname} の{actionName}！ {finalDamage}ダメージ！（{blocked}軽減）");
         else
@@ -640,24 +654,38 @@ public class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 敵の特殊攻撃。固定ダメージ + 属性耐性による軽減 + 防御ダイス。
+    /// 敵のスキル攻撃。MonsterSkillData のパラメータでダメージ計算する。
     ///
     /// ダメージ計算:
-    ///   1. baseDamage = action.fixedDamage（0 なら Monster.Attack を使用）
-    ///   2. resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute)
-    ///      → afterResist = baseDamage × (1 - resistance / 100)  ※耐性が負なら増加
+    ///   1. fixedDamage > 0 ならそれを使用
+    ///      damageMultiplier > 0 なら Monster.Attack × damageMultiplier（四捨五入）
+    ///      どちらも 0 なら Monster.Attack をそのまま使用
+    ///   2. resistance = PassiveCalculator.CalcAttributeResistance(attackAttribute)
+    ///      → afterResist = baseDamage × (1 - resistance / 100)
     ///      → 四捨五入（.5 は切り上げ）
     ///   3. 防御ダイスで軽減
     ///      → finalDamage = afterResist - blocked
     /// </summary>
-    private void ExecuteEnemySpecialAttack(EnemyActionEntry action)
+    private void ExecuteEnemySkillAttack(MonsterSkillData skill)
     {
-        // 基礎ダメージ
-        int baseDamage = action.fixedDamage > 0 ? action.fixedDamage : enemyMonster.Attack;
+        // 基礎ダメージを決定
+        int baseDamage;
+        if (skill.fixedDamage > 0)
+        {
+            baseDamage = skill.fixedDamage;
+        }
+        else if (skill.damageMultiplier > 0f)
+        {
+            baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+        }
+        else
+        {
+            baseDamage = enemyMonster.Attack;
+        }
         if (baseDamage < 1) baseDamage = 1;
 
         // 属性耐性を取得
-        int resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute);
+        int resistance = PassiveCalculator.CalcAttributeResistance(skill.attackAttribute);
 
         // 耐性によるダメージ増減（耐性50 → 50%減少、耐性-100 → 100%増加）
         // ※ Mathf.RoundToInt は銀行丸め（4.5→4）のため、
@@ -667,7 +695,7 @@ public class BattleSceneController : MonoBehaviour
         if (afterResist < 0) afterResist = 0;
 
         // damageCategory に応じた防御ダイスによる軽減
-        int defense = GetPlayerDefense(action.damageCategory);
+        int defense = GetPlayerDefense(skill.damageCategory);
         int blocked = RollDefenseDice(defense);
         int finalDamage = afterResist - blocked;
         if (finalDamage < 0) finalDamage = 0;
@@ -676,9 +704,9 @@ public class BattleSceneController : MonoBehaviour
         ApplyDamageToPlayer(finalDamage);
 
         // ログ表示
-        string actionName = !string.IsNullOrEmpty(action.actionName)
-            ? action.actionName
-            : $"{action.attackAttribute.ToJapanese()}攻撃";
+        string actionName = !string.IsNullOrEmpty(skill.skillName)
+            ? skill.skillName
+            : $"{skill.attackAttribute.ToJapanese()}攻撃";
 
         // ログにどの軽減が効いたかを表示
         string logSuffix = "";
@@ -691,10 +719,10 @@ public class BattleSceneController : MonoBehaviour
         else if (blocked > 0)
             logSuffix = $"（防御{blocked}軽減）";
 
-        AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
+        AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.attackAttribute.ToJapanese()}属性） " +
                $"{finalDamage}ダメージ！{logSuffix}");
 
-        Debug.Log($"[Battle] SpecialAttack: base={baseDamage} resistance={resistance} " +
+        Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
                   $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
 
         // 敗北判定 → プレイヤーターンへ
@@ -704,9 +732,9 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 敵が何もしない。
     /// </summary>
-    private void ExecuteEnemyIdle(EnemyActionEntry action)
+    private void ExecuteEnemyIdle(MonsterSkillData skill)
     {
-        string actionName = !string.IsNullOrEmpty(action.actionName) ? action.actionName : "様子を見ている";
+        string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "様子を見ている";
         AddLog($"{enemyMonster.Mname} は{actionName}…");
 
         // 敗北判定 → プレイヤーターンへ
@@ -759,7 +787,7 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 防御ダイスの基準乱数範囲（通常時）。
-    /// 0 ～ この値の乱数を振り、1未満なら防御成功（1カウント）。
+    /// 0 ～ この値の乱数を振り、1未満が出た数の合計がダメージ軽減値。
     /// 通常時: 2.0f → 成功率 50%
     /// 強化時: 1.5f → 成功率 66.7%
     /// 弱体時: 3.0f → 成功率 33.3%

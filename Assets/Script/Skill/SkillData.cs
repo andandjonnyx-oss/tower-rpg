@@ -22,6 +22,19 @@ public class SkillData : ScriptableObject
     public WeaponAttribute skillAttribute = WeaponAttribute.Strike;
 
     /// <summary>
+    /// スキルの物理/魔法区分。
+    /// 敵の防御ダイス計算に使用する（物理→Monster.Defense、魔法→Monster.MagicDefense）。
+    ///
+    /// 設定例:
+    ///   パワーアタック（物理剣攻撃）    → Physical
+    ///   ファイアボール（炎魔法）         → Magical
+    ///   ライトニング（雷魔法）           → Magical
+    ///   火炎斬り（炎属性・物理攻撃）     → Physical（属性は Fire, DamageCategory は Physical）
+    /// </summary>
+    [Tooltip("物理か魔法か。敵の防御ダイスの計算に影響する（物理→Defense、魔法→MagicDefense）")]
+    public DamageCategory damageCategory = DamageCategory.Physical;
+
+    /// <summary>
     /// ダメージ倍率。武器スキルで使用。
     /// 例: 強撃 = 2.0（STR + 武器攻撃力 の2倍ダメージ）
     /// 魔法スキルで倍率ベースにしたい場合にも使える。0 の場合は fixedDamage を使用。

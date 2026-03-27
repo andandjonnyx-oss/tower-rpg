@@ -17,7 +17,8 @@ MonoBehaviour:
   description: "\uFF11\uFF10\u4E07\u30DC\u30EB\u30C8"
   skillSource: 1
   skillAttribute: 5
-  damageMultiplier: 0
-  fixedDamage: 9
+  damageCategory: 1
+  damageMultiplier: 3
+  fixedDamage: 0
   cooldownTurns: 0
   mpCost: 4
