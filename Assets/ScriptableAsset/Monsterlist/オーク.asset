@@ -25,6 +25,7 @@ MonoBehaviour:
   MaxHp: 10
   Attack: 2
   Defense: 5
+  MagicDefense: 5
   Speed: 0
   Luck: 0
   Exp: 0
@@ -32,11 +33,13 @@ MonoBehaviour:
   Help: 
   actions:
   - actionType: 0
+    damageCategory: 0
     threshold: 50
     fixedDamage: 0
     attackAttribute: 1
     actionName: "\u653B\u6483"
   - actionType: 1
+    damageCategory: 1
     threshold: 100
     fixedDamage: 10
     attackAttribute: 3

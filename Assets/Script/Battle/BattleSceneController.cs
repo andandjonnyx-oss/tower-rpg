@@ -185,11 +185,20 @@ public class BattleSceneController : MonoBehaviour
         int damage = str + weaponPower;
         if (damage < 1) damage = 1;
 
+        // 敵の防御ダイスによる軽減（通常攻撃は物理扱い）
+        int enemyDef = GetEnemyDefense(DamageCategory.Physical);
+        int enemyBlocked = RollDefenseDice(enemyDef);
+        int finalDamage = damage - enemyBlocked;
+        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+
         // ダメージ適用
-        enemyCurrentHp -= damage;
+        enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {damage}ダメージ！");
+        if (enemyBlocked > 0)
+            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減）");
+        else
+            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -248,14 +257,23 @@ public class BattleSceneController : MonoBehaviour
         // スキルの属性で上書き（スキル固有の属性を使用）
         WeaponAttribute skillAttr = skill.skillAttribute;
 
+        // 敵の防御ダイスによる軽減（武器スキルは物理扱い）
+        int enemyDef = GetEnemyDefense(DamageCategory.Physical);
+        int enemyBlocked = RollDefenseDice(enemyDef);
+        int finalDamage = damage - enemyBlocked;
+        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+
         // ダメージ適用
-        enemyCurrentHp -= damage;
+        enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         // クールダウンをセット
         equippedWeaponItem.UseSkill(skill);
 
-        AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {damage}ダメージ！");
+        if (enemyBlocked > 0)
+            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減）");
+        else
+            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -325,11 +343,20 @@ public class BattleSceneController : MonoBehaviour
         }
         if (damage < 1) damage = 1;
 
+        // 敵の防御ダイスによる軽減（魔法スキルは魔法扱い）
+        int enemyDef = GetEnemyDefense(DamageCategory.Magical);
+        int enemyBlocked = RollDefenseDice(enemyDef);
+        int finalDamage = damage - enemyBlocked;
+        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+
         // ダメージ適用
-        enemyCurrentHp -= damage;
+        enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {damage}ダメージ！ MP-{magic.mpCost}");
+        if (enemyBlocked > 0)
+            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減） MP-{magic.mpCost}");
+        else
+            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -406,8 +433,8 @@ public class BattleSceneController : MonoBehaviour
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
-        // 防御ダイスによる軽減
-        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        // 防御ダイスによる軽減（レガシー攻撃は物理扱い）
+        int defense = GetPlayerDefense(DamageCategory.Physical);
         int blocked = RollDefenseDice(defense);
         int finalDamage = enemyDamage - blocked;
         if (finalDamage < 0) finalDamage = 0;
@@ -585,15 +612,15 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
-    /// 防御ダイスによる軽減を適用する。
+    /// damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
     /// </summary>
     private void ExecuteEnemyNormalAttack(EnemyActionEntry action)
     {
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
-        // 防御ダイスによる軽減
-        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        // damageCategory に応じた防御力を取得
+        int defense = GetPlayerDefense(action.damageCategory);
         int blocked = RollDefenseDice(defense);
         int finalDamage = enemyDamage - blocked;
         if (finalDamage < 0) finalDamage = 0;
@@ -639,8 +666,8 @@ public class BattleSceneController : MonoBehaviour
         int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
         if (afterResist < 0) afterResist = 0;
 
-        // 防御ダイスによる軽減
-        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        // damageCategory に応じた防御ダイスによる軽減
+        int defense = GetPlayerDefense(action.damageCategory);
         int blocked = RollDefenseDice(defense);
         int finalDamage = afterResist - blocked;
         if (finalDamage < 0) finalDamage = 0;
@@ -689,6 +716,46 @@ public class BattleSceneController : MonoBehaviour
     // =========================================================
     // 防御ダイス
     // =========================================================
+
+    /// <summary>
+    /// DamageCategory に応じたプレイヤーの防御力を返す。
+    /// Physical → GameState.Defense（VIT ベース）
+    /// Magical  → GameState.MagicDefense（INT ベース）
+    /// </summary>
+    private int GetPlayerDefense(DamageCategory category)
+    {
+        if (GameState.I == null) return 0;
+
+        switch (category)
+        {
+            case DamageCategory.Physical:
+                return GameState.I.Defense;
+            case DamageCategory.Magical:
+                return GameState.I.MagicDefense;
+            default:
+                return GameState.I.Defense;
+        }
+    }
+
+    /// <summary>
+    /// DamageCategory に応じた敵の防御力を返す。
+    /// Physical → Monster.Defense
+    /// Magical  → Monster.MagicDefense
+    /// </summary>
+    private int GetEnemyDefense(DamageCategory category)
+    {
+        if (enemyMonster == null) return 0;
+
+        switch (category)
+        {
+            case DamageCategory.Physical:
+                return enemyMonster.Defense;
+            case DamageCategory.Magical:
+                return enemyMonster.MagicDefense;
+            default:
+                return enemyMonster.Defense;
+        }
+    }
 
     /// <summary>
     /// 防御ダイスの基準乱数範囲（通常時）。

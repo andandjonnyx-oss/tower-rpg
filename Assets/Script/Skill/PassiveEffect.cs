@@ -55,4 +55,7 @@ public enum PassiveType
 
     /// <summary>防御力アップ。targetAttribute/targetStat は不要。</summary>
     DefenseBonus,
+
+    /// <summary>魔法防御力アップ。targetAttribute/targetStat は不要。</summary>
+    MagicDefenseBonus,
 }

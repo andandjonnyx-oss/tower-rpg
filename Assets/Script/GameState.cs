@@ -159,6 +159,94 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
+    // MP 計算（INT ベース + パッシブ）
+    // =========================================================
+
+    /// <summary>
+    /// MP の基礎初期値（INT 未振り・パッシブ無しでの MP）。
+    /// </summary>
+    private const int BaseMpInitial = 20;
+
+    /// <summary>
+    /// INT 1ポイントあたりの最大MP上昇量。
+    /// </summary>
+    private const int MpPerInt = 3;
+
+    /// <summary>
+    /// 現在のステータスとパッシブ効果から最大MPを再計算し、maxMp を更新する。
+    /// currentMp が新しい maxMp を超えている場合はクランプする。
+    /// currentMp が新しい maxMp 以下の場合はそのまま（回復しない）。
+    /// </summary>
+    public void RecalcMaxMp()
+    {
+        int newMaxMp = CalcMaxMp();
+
+        if (newMaxMp != maxMp)
+        {
+            Debug.Log($"[GameState] maxMp 再計算: {maxMp} → {newMaxMp}");
+            maxMp = newMaxMp;
+
+            if (currentMp > maxMp)
+            {
+                currentMp = maxMp;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 最大MPを計算する（値を返すだけで、maxMp フィールドは変更しない）。
+    /// 計算式: BaseMpInitial + baseINT × MpPerInt + PassiveCalculator.CalcMaxMpBonus()
+    /// </summary>
+    public int CalcMaxMp()
+    {
+        int intBonus = baseINT * MpPerInt;
+        int passiveBonus = PassiveCalculator.CalcMaxMpBonus();
+        int result = BaseMpInitial + intBonus + passiveBonus;
+        if (result < 1) result = 1;
+        return result;
+    }
+
+    // =========================================================
+    // 魔法攻撃力・魔法防御力（INT ベース + パッシブ）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの魔法攻撃力。
+    /// 計算式: baseINT × 1
+    /// 今後パッシブで変動する場合はここに加算する。
+    /// </summary>
+    public int MagicAttack
+    {
+        get
+        {
+            int total = baseINT * 1;
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// INT 1ポイントあたりの魔法防御力。
+    /// </summary>
+    private const int MagicDefPerInt = 2;
+
+    /// <summary>
+    /// プレイヤーの魔法防御力。
+    /// 計算式: baseINT × MagicDefPerInt + PassiveCalculator.CalcMagicDefenseBonus()
+    /// </summary>
+    public int MagicDefense
+    {
+        get
+        {
+            int baseMDef = baseINT * MagicDefPerInt;
+            int passiveBonus = PassiveCalculator.CalcMagicDefenseBonus();
+            int total = baseMDef + passiveBonus;
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    // =========================================================
     // ポイント振り分け / リセット
     // =========================================================
     public void TakeStatSnapshot()
@@ -181,8 +269,9 @@ public class GameState : MonoBehaviour
 
         statusPoint += usedPoints;
 
-        // VIT が変わるため maxHp を再計算
+        // VIT/INT が変わるため maxHp/maxMp を再計算
         RecalcMaxHp();
+        RecalcMaxMp();
 
         SaveManager.Save(); // 即時セーブ
     }
@@ -207,6 +296,12 @@ public class GameState : MonoBehaviour
         if (stat == StatType.VIT)
         {
             RecalcMaxHp();
+        }
+
+        // INT に振った場合は maxMp を再計算
+        if (stat == StatType.INT)
+        {
+            RecalcMaxMp();
         }
 
         SaveManager.Save(); // 即時セーブ
@@ -278,8 +373,9 @@ public class GameState : MonoBehaviour
         I = this;
         DontDestroyOnLoad(gameObject);
 
-        // 初回起動時に VIT とパッシブを反映した maxHp を計算する
+        // 初回起動時に VIT/INT とパッシブを反映した maxHp/maxMp を計算する
         RecalcMaxHp();
+        RecalcMaxMp();
     }
 }
 

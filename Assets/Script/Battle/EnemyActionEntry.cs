@@ -22,6 +22,14 @@ public class EnemyActionEntry
     public EnemyActionType actionType;
 
     /// <summary>
+    /// この攻撃が物理か魔法か。
+    /// 防御ダイスの計算に使用する（物理→Defense、魔法→MagicDefense）。
+    /// actionType が Idle の場合は無視される。
+    /// </summary>
+    [Tooltip("物理攻撃か魔法攻撃か（防御計算に影響）")]
+    public DamageCategory damageCategory;
+
+    /// <summary>
     /// この行動が選ばれる上限値。
     /// 0 から threshold-1 までの乱数結果がこの行動に該当する
     /// （前の行動の threshold から、この threshold-1 までの範囲）。
@@ -58,4 +66,19 @@ public enum EnemyActionType
 
     /// <summary>何もしない（ターン終了）。</summary>
     Idle,
+}
+
+/// <summary>
+/// 攻撃の物理/魔法区分。
+/// 属性（Fire, Ice 等）とは独立した概念。
+/// 例: 炎攻撃 = 魔法、火炎斬り = 物理（どちらも Fire 属性）。
+/// 防御ダイスの参照先が変わる（物理→Defense、魔法→MagicDefense）。
+/// </summary>
+public enum DamageCategory
+{
+    /// <summary>物理攻撃。Defense で防御。</summary>
+    Physical,
+
+    /// <summary>魔法攻撃。MagicDefense で防御。</summary>
+    Magical,
 }

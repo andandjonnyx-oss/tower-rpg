@@ -30,6 +30,7 @@ public class Monster : ScriptableObject
     public int MaxHp;
     public int Attack;
     public int Defense;
+    public int MagicDefense;
     public int Speed;
     public int Luck;
 

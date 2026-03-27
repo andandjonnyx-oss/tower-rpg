@@ -24,7 +24,8 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 10
   Attack: 4
-  Defense: 0
+  Defense: 5
+  MagicDefense: 5
   Speed: 0
   Luck: 0
   Exp: 0
@@ -32,6 +33,7 @@ MonoBehaviour:
   Help: 
   actions:
   - actionType: 1
+    damageCategory: 1
     threshold: 100
     fixedDamage: 10
     attackAttribute: 3

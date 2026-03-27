@@ -79,6 +79,7 @@ public static class AttributeExtensions
             case PassiveType.MaxMpBonus: return "Å‘åMP";
             case PassiveType.StatusEffectResistance: return "ó‘ÔˆÙí‘Ï«";
             case PassiveType.DefenseBonus: return "–hŒä—Í";
+            case PassiveType.MagicDefenseBonus: return "–‚–@–hŒä—Í";
             default: return type.ToString();
         }
     }

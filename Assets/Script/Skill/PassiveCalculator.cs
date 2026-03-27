@@ -86,6 +86,16 @@ public static class PassiveCalculator
         return CalcWithDiminishing(values);
     }
 
+    /// <summary>
+    /// 魔法防御力ボーナス合計値を返す。
+    /// MagicDefenseBonus は targetAttribute / targetStat を使わない。
+    /// </summary>
+    public static int CalcMagicDefenseBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.MagicDefenseBonus);
+        return CalcWithDiminishing(values);
+    }
+
     // =========================================================
     // 魔法スキル一覧の収集
     // =========================================================
