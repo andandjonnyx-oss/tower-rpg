@@ -76,6 +76,89 @@ public class GameState : MonoBehaviour
     public int Luck => baseLUC * 5;
 
     // =========================================================
+    // HP 計算（VIT ベース + パッシブ）
+    // =========================================================
+
+    /// <summary>
+    /// HP の基礎初期値（VIT 未振り・パッシブ無しでのHP）。
+    /// </summary>
+    private const int BaseHpInitial = 50;
+
+    /// <summary>
+    /// VIT 1ポイントあたりの最大HP上昇量。
+    /// </summary>
+    private const int HpPerVit = 5;
+
+    /// <summary>
+    /// 現在のステータスとパッシブ効果から最大HPを再計算し、maxHp を更新する。
+    /// currentHp が新しい maxHp を超えている場合はクランプする（超過分は消える）。
+    /// currentHp が新しい maxHp 以下の場合はそのまま（回復しない）。
+    ///
+    /// 呼び出しタイミング:
+    ///   - ステータス振り分け後
+    ///   - アイテム取得/破棄後
+    ///   - シーン遷移時（Towerシーン開始時など）
+    ///   - セーブデータロード後
+    /// </summary>
+    public void RecalcMaxHp()
+    {
+        int newMaxHp = CalcMaxHp();
+
+        if (newMaxHp != maxHp)
+        {
+            Debug.Log($"[GameState] maxHp 再計算: {maxHp} → {newMaxHp}");
+            maxHp = newMaxHp;
+
+            // currentHp が新しい maxHp を超えていたらクランプ
+            if (currentHp > maxHp)
+            {
+                currentHp = maxHp;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 最大HPを計算する（値を返すだけで、maxHp フィールドは変更しない）。
+    /// 計算式: BaseHpInitial + baseVIT × HpPerVit + PassiveCalculator.CalcMaxHpBonus()
+    /// </summary>
+    public int CalcMaxHp()
+    {
+        int vitBonus = baseVIT * HpPerVit;
+        int passiveBonus = PassiveCalculator.CalcMaxHpBonus();
+        int result = BaseHpInitial + vitBonus + passiveBonus;
+        if (result < 1) result = 1;
+        return result;
+    }
+
+    // =========================================================
+    // 防御力（VIT ベース + パッシブ）
+    // =========================================================
+
+    /// <summary>
+    /// VIT 1ポイントあたりの防御力。
+    /// </summary>
+    private const int DefPerVit = 2;
+
+    /// <summary>
+    /// プレイヤーの現在の防御力を返す。
+    /// 計算式: baseVIT × DefPerVit + PassiveCalculator.CalcDefenseBonus()
+    /// 今後装備やスキルで変動する場合もこのプロパティを参照する。
+    /// 四捨五入が必要な計算は現時点では発生しないが、
+    /// 将来の乗算効果に備えて int のまま返す。
+    /// </summary>
+    public int Defense
+    {
+        get
+        {
+            int baseDef = baseVIT * DefPerVit;
+            int passiveBonus = PassiveCalculator.CalcDefenseBonus();
+            int total = baseDef + passiveBonus;
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    // =========================================================
     // ポイント振り分け / リセット
     // =========================================================
     public void TakeStatSnapshot()
@@ -97,6 +180,10 @@ public class GameState : MonoBehaviour
         baseLUC = initialLUC;
 
         statusPoint += usedPoints;
+
+        // VIT が変わるため maxHp を再計算
+        RecalcMaxHp();
+
         SaveManager.Save(); // 即時セーブ
     }
 
@@ -115,6 +202,13 @@ public class GameState : MonoBehaviour
         }
 
         statusPoint--;
+
+        // VIT に振った場合は maxHp を再計算
+        if (stat == StatType.VIT)
+        {
+            RecalcMaxHp();
+        }
+
         SaveManager.Save(); // 即時セーブ
         return true;
     }

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: kawayoroi
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 
-  itemName: 
-  description: 
+  itemId: 7
+  itemName: "\u9769\u306E\u93A7"
+  description: "HP\uFF0B20"
   icon: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
-  category: 0
+  Minfloor: 1
+  Minstep: 1
+  Maxfloor: 1
+  Maxstep: 20
+  category: 2
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -28,5 +28,9 @@ MonoBehaviour:
   attackPower: 0
   skills: []
   magicSkill: {fileID: 0}
-  passiveEffects: []
+  passiveEffects:
+  - effectType: 3
+    targetAttribute: 0
+    targetStat: 0
+    value: 20
   sortOrder: 0

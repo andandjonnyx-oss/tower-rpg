@@ -76,6 +76,16 @@ public static class PassiveCalculator
         return CalcWithDiminishing(values);
     }
 
+    /// <summary>
+    /// 防御力ボーナス合計値を返す。
+    /// DefenseBonus は targetAttribute / targetStat を使わない。
+    /// </summary>
+    public static int CalcDefenseBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.DefenseBonus);
+        return CalcWithDiminishing(values);
+    }
+
     // =========================================================
     // 魔法スキル一覧の収集
     // =========================================================
@@ -152,7 +162,7 @@ public static class PassiveCalculator
                         if (pe.targetStat != statFilter) continue;
                         break;
 
-                        // MaxHpBonus, MaxMpBonus 等は対象フィルタ不要
+                        // MaxHpBonus, MaxMpBonus, DefenseBonus 等は対象フィルタ不要
                 }
 
                 if (pe.value > 0)
@@ -164,7 +174,7 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// targetAttribute / targetStat を使わない効果（MaxHpBonus 等）の value を収集する。
+    /// targetAttribute / targetStat を使わない効果（MaxHpBonus, DefenseBonus 等）の value を収集する。
     /// </summary>
     private static List<int> CollectValuesNoTarget(PassiveType type)
     {

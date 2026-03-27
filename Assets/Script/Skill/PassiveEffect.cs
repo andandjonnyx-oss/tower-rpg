@@ -52,4 +52,7 @@ public enum PassiveType
 
     /// <summary>状態異常耐性アップ。将来拡張用。</summary>
     StatusEffectResistance,
+
+    /// <summary>防御力アップ。targetAttribute/targetStat は不要。</summary>
+    DefenseBonus,
 }

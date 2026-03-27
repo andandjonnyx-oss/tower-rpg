@@ -398,6 +398,7 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 従来の敵攻撃処理（actions 未設定時のフォールバック）。
     /// Monster.Attack をそのままダメージとして使用する。
+    /// 防御ダイスによる軽減を適用する。
     /// </summary>
     private void ExecuteLegacyAttack()
     {
@@ -405,14 +406,19 @@ public class BattleSceneController : MonoBehaviour
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
-        // プレイヤーにダメージ
-        if (GameState.I != null)
-        {
-            GameState.I.currentHp -= enemyDamage;
-            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
-        }
+        // 防御ダイスによる軽減
+        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        int blocked = RollDefenseDice(defense);
+        int finalDamage = enemyDamage - blocked;
+        if (finalDamage < 0) finalDamage = 0;
 
-        AddLog($"{enemyMonster.Mname} の攻撃！ {enemyDamage}ダメージ！");
+        // プレイヤーにダメージ
+        ApplyDamageToPlayer(finalDamage);
+
+        if (blocked > 0)
+            AddLog($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！（{blocked}軽減）");
+        else
+            AddLog($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！");
 
         // プレイヤー敗北判定
         if (GameState.I != null && GameState.I.currentHp <= 0)
@@ -579,35 +585,43 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
+    /// 防御ダイスによる軽減を適用する。
     /// </summary>
     private void ExecuteEnemyNormalAttack(EnemyActionEntry action)
     {
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
+        // 防御ダイスによる軽減
+        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        int blocked = RollDefenseDice(defense);
+        int finalDamage = enemyDamage - blocked;
+        if (finalDamage < 0) finalDamage = 0;
+
         // プレイヤーにダメージ
-        if (GameState.I != null)
-        {
-            GameState.I.currentHp -= enemyDamage;
-            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
-        }
+        ApplyDamageToPlayer(finalDamage);
 
         // ログ表示（カスタム行動名があればそれを使用）
         string actionName = !string.IsNullOrEmpty(action.actionName) ? action.actionName : "攻撃";
-        AddLog($"{enemyMonster.Mname} の{actionName}！ {enemyDamage}ダメージ！");
+        if (blocked > 0)
+            AddLog($"{enemyMonster.Mname} の{actionName}！ {finalDamage}ダメージ！（{blocked}軽減）");
+        else
+            AddLog($"{enemyMonster.Mname} の{actionName}！ {finalDamage}ダメージ！");
 
         // 敗北判定 → プレイヤーターンへ
         AfterEnemyAction();
     }
 
     /// <summary>
-    /// 敵の特殊攻撃。固定ダメージ + 属性耐性による軽減。
+    /// 敵の特殊攻撃。固定ダメージ + 属性耐性による軽減 + 防御ダイス。
     ///
     /// ダメージ計算:
-    ///   baseDamage = action.fixedDamage（0 なら Monster.Attack を使用）
-    ///   resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute)
-    ///   finalDamage = baseDamage × (1 - resistance / 100)
-    ///   小数点以下を四捨五入（.5 は切り上げ）
+    ///   1. baseDamage = action.fixedDamage（0 なら Monster.Attack を使用）
+    ///   2. resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute)
+    ///      → afterResist = baseDamage × (1 - resistance / 100)  ※耐性が負なら増加
+    ///      → 四捨五入（.5 は切り上げ）
+    ///   3. 防御ダイスで軽減
+    ///      → finalDamage = afterResist - blocked
     /// </summary>
     private void ExecuteEnemySpecialAttack(EnemyActionEntry action)
     {
@@ -618,37 +632,43 @@ public class BattleSceneController : MonoBehaviour
         // 属性耐性を取得
         int resistance = PassiveCalculator.CalcAttributeResistance(action.attackAttribute);
 
-        // 耐性によるダメージ軽減（耐性50 → 50%減少）
+        // 耐性によるダメージ増減（耐性50 → 50%減少、耐性-100 → 100%増加）
         // ※ Mathf.RoundToInt は銀行丸め（4.5→4）のため、
         //    FloorToInt(x + 0.5f) で通常の四捨五入（4.5→5）を行う
         float reductionRate = resistance / 100f;
-        int finalDamage = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+        int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+        if (afterResist < 0) afterResist = 0;
+
+        // 防御ダイスによる軽減
+        int defense = (GameState.I != null) ? GameState.I.Defense : 0;
+        int blocked = RollDefenseDice(defense);
+        int finalDamage = afterResist - blocked;
         if (finalDamage < 0) finalDamage = 0;
 
         // プレイヤーにダメージ
-        if (GameState.I != null)
-        {
-            GameState.I.currentHp -= finalDamage;
-            if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
-        }
+        ApplyDamageToPlayer(finalDamage);
 
         // ログ表示
         string actionName = !string.IsNullOrEmpty(action.actionName)
             ? action.actionName
             : $"{action.attackAttribute.ToJapanese()}攻撃";
 
-        if (resistance > 0)
-        {
-            AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
-                   $"{finalDamage}ダメージ！（耐性で軽減）");
-        }
-        else
-        {
-            AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
-                   $"{finalDamage}ダメージ！");
-        }
+        // ログにどの軽減が効いたかを表示
+        string logSuffix = "";
+        if (resistance > 0 && blocked > 0)
+            logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
+        else if (resistance > 0)
+            logSuffix = "（耐性で軽減）";
+        else if (resistance < 0)
+            logSuffix = "（弱点で増加）";
+        else if (blocked > 0)
+            logSuffix = $"（防御{blocked}軽減）";
 
-        Debug.Log($"[Battle] SpecialAttack: base={baseDamage} resistance={resistance} final={finalDamage}");
+        AddLog($"{enemyMonster.Mname} の{actionName}！（{action.attackAttribute.ToJapanese()}属性） " +
+               $"{finalDamage}ダメージ！{logSuffix}");
+
+        Debug.Log($"[Battle] SpecialAttack: base={baseDamage} resistance={resistance} " +
+                  $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
 
         // 敗北判定 → プレイヤーターンへ
         AfterEnemyAction();
@@ -664,6 +684,70 @@ public class BattleSceneController : MonoBehaviour
 
         // 敗北判定 → プレイヤーターンへ
         AfterEnemyAction();
+    }
+
+    // =========================================================
+    // 防御ダイス
+    // =========================================================
+
+    /// <summary>
+    /// 防御ダイスの基準乱数範囲（通常時）。
+    /// 0 ～ この値の乱数を振り、1未満なら防御成功（1カウント）。
+    /// 通常時: 2.0f → 成功率 50%
+    /// 強化時: 1.5f → 成功率 66.7%
+    /// 弱体時: 3.0f → 成功率 33.3%
+    /// </summary>
+    private const float DefaultDefenseDiceRange = 2.0f;
+
+    /// <summary>
+    /// 防御ダイスを振り、ダメージ軽減値を返す。
+    ///
+    /// ルール:
+    ///   防御力の数だけ乱数（0 ～ diceRange）を振り、
+    ///   1未満が出た回数の合計がダメージ軽減値。
+    ///
+    /// diceRange パラメータで防御強化/弱体を表現する:
+    ///   通常 = 2.0f（成功率50%）
+    ///   強化 = 1.5f（成功率67%）
+    ///   弱体 = 3.0f（成功率33%）
+    ///
+    /// 将来的にスキルやバフで diceRange を変化させる場合は、
+    /// このメソッドの diceRange 引数を変えるだけで対応可能。
+    /// </summary>
+    /// <param name="defense">プレイヤーの防御力。</param>
+    /// <param name="diceRange">
+    /// 防御ダイスの乱数上限。省略時は DefaultDefenseDiceRange（通常時）。
+    /// 下限は 1.0f にクランプ（1.0f 未満だと常に成功＝全防御になるため）。
+    /// </param>
+    /// <returns>ダメージ軽減値。</returns>
+    private int RollDefenseDice(int defense, float diceRange = DefaultDefenseDiceRange)
+    {
+        if (defense <= 0) return 0;
+
+        // 下限クランプ: diceRange < 1.0f だと 0~diceRange の全域が 1 未満で常に成功
+        if (diceRange < 1.0f) diceRange = 1.0f;
+
+        int blocked = 0;
+        for (int i = 0; i < defense; i++)
+        {
+            if (Random.Range(0f, diceRange) < 1f)
+            {
+                blocked++;
+            }
+        }
+
+        Debug.Log($"[Battle] DefenseDice: defense={defense} diceRange={diceRange} blocked={blocked}");
+        return blocked;
+    }
+
+    /// <summary>
+    /// プレイヤーにダメージを適用する共通処理。
+    /// </summary>
+    private void ApplyDamageToPlayer(int damage)
+    {
+        if (GameState.I == null) return;
+        GameState.I.currentHp -= damage;
+        if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
     }
 
     /// <summary>
