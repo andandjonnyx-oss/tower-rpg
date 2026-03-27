@@ -73,54 +73,78 @@ public class GameState : MonoBehaviour
     public int statusPoint = 10;
 
     // =========================================================
-    // サブステータス（パッシブ込みの実効値）
+    // サブステータス（装備＋パッシブ込みの実効値）
+    // =========================================================
+    //
+    // 計算の構成:
+    //   基礎値（baseXxx × 倍率）
+    //   + EquipmentCalculator.GetXxx()    ← 装備品補正（100%反映）
+    //   + PassiveCalculator.CalcXxxBonus() ← パッシブ補正（重複ルール適用）
+    //
+    // バトルコントローラーは baseSTR/baseINT を直接参照せず、
+    // このプロパティ群を使うことで装備＋パッシブが自動的に反映される。
     // =========================================================
 
     /// <summary>
-    /// 攻撃力。計算式: baseSTR × 1 + PassiveCalculator.CalcAttackBonus()
-    /// 将来的に攻撃力+X のパッシブが追加された場合は CalcAttackBonus() に実装する。
+    /// 攻撃力。
+    /// 計算式: baseSTR × 1 + EquipmentCalculator.GetAttackPower()
+    ///                      + PassiveCalculator.CalcAttackBonus()
+    ///
+    /// 装備品の attackPower は 100% そのまま加算される。
+    /// パッシブの AttackBonus は重複ルール（2個目以降10%減衰）を適用。
     /// </summary>
     public int Attack
     {
         get
         {
-            int total = baseSTR * 1 + PassiveCalculator.CalcAttackBonus();
+            int total = baseSTR * 1
+                      + EquipmentCalculator.GetAttackPower()
+                      + PassiveCalculator.CalcAttackBonus();
             if (total < 0) total = 0;
             return total;
         }
     }
 
     /// <summary>
-    /// 魔法攻撃力。計算式: baseINT × 1
-    /// 将来的にパッシブで変動する場合はここに加算する。
+    /// 魔法攻撃力。
+    /// 計算式: baseINT × 1 + EquipmentCalculator.GetMagicAttack()
+    ///                      + PassiveCalculator.CalcMagicAttackBonus()
     /// </summary>
     public int MagicAttack
     {
         get
         {
-            int total = baseINT * 1 + PassiveCalculator.CalcMagicAttackBonus();
+            int total = baseINT * 1
+                      + EquipmentCalculator.GetMagicAttack()
+                      + PassiveCalculator.CalcMagicAttackBonus();
             if (total < 0) total = 0;
             return total;
         }
     }
 
     /// <summary>
-    /// 運の良さ。baseLUC をそのまま返す。
-    /// 敵行動のLUC判定では baseLUC を直接参照するが、
-    /// UI表示などはこのプロパティを使う。
+    /// 運の良さ。
+    /// 計算式: baseLUC + EquipmentCalculator.GetLuck()
+    ///                 + PassiveCalculator.CalcLuckBonus()
+    ///
+    /// 注意: 敵行動のLUC判定（SelectEnemyAction）では baseLUC を直接参照する。
+    /// これは「LUC判定は振り分けた生値で比較する」という設計意図のため。
+    /// UI表示やその他の用途ではこのプロパティを使う。
     /// </summary>
     public int Luck
     {
         get
         {
-            int total = baseLUC + PassiveCalculator.CalcLuckBonus();
+            int total = baseLUC
+                      + EquipmentCalculator.GetLuck()
+                      + PassiveCalculator.CalcLuckBonus();
             if (total < 0) total = 0;
             return total;
         }
     }
 
     // =========================================================
-    // HP 計算（VIT ベース + パッシブ）
+    // HP 計算（VIT ベース + 装備 + パッシブ）
     // =========================================================
 
     /// <summary>
@@ -143,6 +167,7 @@ public class GameState : MonoBehaviour
     ///   - Awake()（初回起動 or セーブロード後）
     ///   - ステータス振り分け後
     ///   - アイテム取得/破棄後
+    ///   - 装備変更後（装備品の equipMaxHp が変わるため）
     /// </summary>
     public void RecalcMaxHp()
     {
@@ -169,19 +194,22 @@ public class GameState : MonoBehaviour
 
     /// <summary>
     /// 最大HPを計算する（値を返すだけで、maxHp フィールドは変更しない）。
-    /// 計算式: BaseHpInitial + baseVIT × HpPerVit + PassiveCalculator.CalcMaxHpBonus()
+    /// 計算式: BaseHpInitial + baseVIT × HpPerVit
+    ///         + EquipmentCalculator.GetMaxHpBonus()
+    ///         + PassiveCalculator.CalcMaxHpBonus()
     /// </summary>
     public int CalcMaxHp()
     {
         int vitBonus = baseVIT * HpPerVit;
+        int equipBonus = EquipmentCalculator.GetMaxHpBonus();
         int passiveBonus = PassiveCalculator.CalcMaxHpBonus();
-        int result = BaseHpInitial + vitBonus + passiveBonus;
+        int result = BaseHpInitial + vitBonus + equipBonus + passiveBonus;
         if (result < 1) result = 1;
         return result;
     }
 
     // =========================================================
-    // 防御力（VIT ベース + パッシブ）
+    // 防御力（VIT ベース + 装備 + パッシブ）
     // =========================================================
 
     /// <summary>
@@ -191,23 +219,24 @@ public class GameState : MonoBehaviour
 
     /// <summary>
     /// プレイヤーの現在の防御力を返す。
-    /// 計算式: baseVIT × DefPerVit + PassiveCalculator.CalcDefenseBonus()
-    /// 今後装備やスキルで変動する場合もこのプロパティを参照する。
+    /// 計算式: baseVIT × DefPerVit + EquipmentCalculator.GetDefense()
+    ///                              + PassiveCalculator.CalcDefenseBonus()
     /// </summary>
     public int Defense
     {
         get
         {
             int baseDef = baseVIT * DefPerVit;
+            int equipBonus = EquipmentCalculator.GetDefense();
             int passiveBonus = PassiveCalculator.CalcDefenseBonus();
-            int total = baseDef + passiveBonus;
+            int total = baseDef + equipBonus + passiveBonus;
             if (total < 0) total = 0;
             return total;
         }
     }
 
     // =========================================================
-    // MP 計算（INT ベース + パッシブ）
+    // MP 計算（INT ベース + 装備 + パッシブ）
     // =========================================================
 
     /// <summary>
@@ -251,19 +280,22 @@ public class GameState : MonoBehaviour
 
     /// <summary>
     /// 最大MPを計算する（値を返すだけで、maxMp フィールドは変更しない）。
-    /// 計算式: BaseMpInitial + baseINT × MpPerInt + PassiveCalculator.CalcMaxMpBonus()
+    /// 計算式: BaseMpInitial + baseINT × MpPerInt
+    ///         + EquipmentCalculator.GetMaxMpBonus()
+    ///         + PassiveCalculator.CalcMaxMpBonus()
     /// </summary>
     public int CalcMaxMp()
     {
         int intBonus = baseINT * MpPerInt;
+        int equipBonus = EquipmentCalculator.GetMaxMpBonus();
         int passiveBonus = PassiveCalculator.CalcMaxMpBonus();
-        int result = BaseMpInitial + intBonus + passiveBonus;
+        int result = BaseMpInitial + intBonus + equipBonus + passiveBonus;
         if (result < 1) result = 1;
         return result;
     }
 
     // =========================================================
-    // 魔法防御力（INT ベース + パッシブ）
+    // 魔法防御力（INT ベース + 装備 + パッシブ）
     // =========================================================
 
     /// <summary>
@@ -273,15 +305,17 @@ public class GameState : MonoBehaviour
 
     /// <summary>
     /// プレイヤーの魔法防御力。
-    /// 計算式: baseINT × MagicDefPerInt + PassiveCalculator.CalcMagicDefenseBonus()
+    /// 計算式: baseINT × MagicDefPerInt + EquipmentCalculator.GetMagicDefense()
+    ///                                   + PassiveCalculator.CalcMagicDefenseBonus()
     /// </summary>
     public int MagicDefense
     {
         get
         {
             int baseMDef = baseINT * MagicDefPerInt;
+            int equipBonus = EquipmentCalculator.GetMagicDefense();
             int passiveBonus = PassiveCalculator.CalcMagicDefenseBonus();
-            int total = baseMDef + passiveBonus;
+            int total = baseMDef + equipBonus + passiveBonus;
             if (total < 0) total = 0;
             return total;
         }

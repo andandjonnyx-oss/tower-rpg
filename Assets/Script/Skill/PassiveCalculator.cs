@@ -18,6 +18,10 @@ using UnityEngine;
 /// 使い方:
 ///   int fireRes  = PassiveCalculator.CalcAttributeResistance(WeaponAttribute.Fire);
 ///   int atkBonus = PassiveCalculator.CalcAttackBonus();
+///
+/// 属性耐性の合算（装備＋パッシブ）:
+///   int totalRes = PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire);
+///   → EquipmentCalculator.GetAttributeResistance(Fire) + CalcAttributeResistance(Fire)
 /// </summary>
 public static class PassiveCalculator
 {
@@ -26,7 +30,7 @@ public static class PassiveCalculator
     // =========================================================
 
     /// <summary>
-    /// 指定属性の耐性合計値を返す。
+    /// 指定属性の耐性合計値を返す（パッシブのみ）。
     /// インベントリ内の全 Magic アイテムから
     /// PassiveType.AttributeResistance かつ対象属性が一致するものを収集して計算する。
     /// </summary>
@@ -34,6 +38,25 @@ public static class PassiveCalculator
     {
         var values = CollectValues(PassiveType.AttributeResistance, attr, default);
         return CalcWithDiminishing(values);
+    }
+
+    /// <summary>
+    /// 指定属性の耐性合計値を返す（装備＋パッシブの合算）。
+    ///
+    /// 計算式:
+    ///   EquipmentCalculator.GetAttributeResistance(attr)  ← 装備品分（100%反映）
+    ///   + CalcAttributeResistance(attr)                    ← パッシブ分（重複ルール適用）
+    ///
+    /// BattleSceneController の敵スキル攻撃ダメージ計算で使用する。
+    ///
+    /// 例: 炎耐性50の武器 + 炎耐性50のパッシブアイテム1個
+    ///   → 50(装備) + 50(パッシブ) = 100（完全耐性）
+    /// </summary>
+    public static int CalcTotalAttributeResistance(WeaponAttribute attr)
+    {
+        int equipRes = EquipmentCalculator.GetAttributeResistance(attr);
+        int passiveRes = CalcAttributeResistance(attr);
+        return equipRes + passiveRes;
     }
 
     /// <summary>

@@ -163,6 +163,12 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 攻撃ボタンが押された時の処理（プレイヤーターン・通常攻撃）。
+    ///
+    /// ダメージ計算（改修後）:
+    ///   GameState.Attack（= baseSTR + 装備attackPower + パッシブ攻撃ボーナス）
+    ///   をそのままダメージとして使用する。
+    ///   ※ 装備品の attackPower は GameState.Attack に含まれているため、
+    ///     ここでは weaponPower を加算しない（二重加算を防止）。
     /// </summary>
     private void OnAttackClicked()
     {
@@ -174,15 +180,15 @@ public class BattleSceneController : MonoBehaviour
         // ターン開始: 全武器のクールダウンを進める
         TickAllWeaponCooldowns();
 
-        // 装備中の武器を取得
+        // 装備中の武器情報を取得（表示用のみ。ダメージ計算には使わない）
         string weaponName;
         WeaponAttribute weaponAttribute;
         int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
 
-        // ダメージ計算: STR + 武器攻撃力
-        int str = (GameState.I != null) ? GameState.I.baseSTR : 1;
-        int damage = str + weaponPower;
+        // ダメージ計算: GameState.Attack を使用（装備＋パッシブ込み）
+        // ※ weaponPower は Attack プロパティに含まれているため加算しない
+        int damage = (GameState.I != null) ? GameState.I.Attack : 1;
         if (damage < 1) damage = 1;
 
         // 敵の防御ダイスによる軽減（通常攻撃は物理扱い）
@@ -215,6 +221,10 @@ public class BattleSceneController : MonoBehaviour
     /// スキルボタンが押された時の処理（プレイヤーターン・武器スキル攻撃）。
     /// 装備中武器の最初のスキルを使用する。
     /// skill.damageCategory（Physical/Magical）に応じて敵の防御ダイスを選択する。
+    ///
+    /// ダメージ計算（改修後）:
+    ///   GameState.Attack × skill.damageMultiplier
+    ///   ※ Attack に装備攻撃力が含まれているため、weaponPower を別途加算しない。
     /// </summary>
     private void OnSkillClicked()
     {
@@ -243,16 +253,16 @@ public class BattleSceneController : MonoBehaviour
         // ボタン連打防止
         SetButtonsInteractable(false);
 
-        // 武器の基本情報を取得
+        // 武器の基本情報を取得（表示用）
         string weaponName;
         WeaponAttribute weaponAttribute;
         int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
 
-        // スキルのダメージ計算: (STR + 武器攻撃力) × スキル倍率
-        int str = (GameState.I != null) ? GameState.I.baseSTR : 1;
-        int baseDamage = str + weaponPower;
-        int damage = Mathf.FloorToInt(baseDamage * skill.damageMultiplier + 0.5f);
+        // スキルのダメージ計算: GameState.Attack × スキル倍率
+        // ※ Attack に装備 attackPower が含まれているため weaponPower を加算しない
+        int attack = (GameState.I != null) ? GameState.I.Attack : 1;
+        int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
         if (damage < 1) damage = 1;
 
         // スキルの属性で上書き（スキル固有の属性を使用）
@@ -295,6 +305,11 @@ public class BattleSceneController : MonoBehaviour
     /// 魔法ボタンが押された時の処理（プレイヤーターン・魔法スキル発動）。
     /// ドロップダウンで選択中の魔法スキルを MP 消費して発動する。
     /// skill.damageCategory（通常 Magical）に応じて敵の防御ダイスを選択する。
+    ///
+    /// ダメージ計算（改修後）:
+    ///   fixedDamage > 0 → そのまま使用（固定ダメージ）
+    ///   damageMultiplier > 0 → GameState.MagicAttack × 倍率
+    ///   ※ MagicAttack に装備分・パッシブ分が含まれている。
     /// </summary>
     private void OnMagicClicked()
     {
@@ -335,11 +350,10 @@ public class BattleSceneController : MonoBehaviour
         }
         else if (magic.damageMultiplier > 0)
         {
-            // 倍率ベース（INTが基礎値）
-            // SkillSource が Magic の場合は INT を、Weapon の場合は STR+武器を使う想定だが
-            // 将来拡張のため magic.skillSource で分岐できるようにしておく
-            int intStat = (GameState.I != null) ? GameState.I.baseINT : 1;
-            damage = Mathf.FloorToInt(intStat * magic.damageMultiplier + 0.5f);
+            // 倍率ベース: GameState.MagicAttack を使用（装備＋パッシブ込み）
+            // ※ baseINT を直接参照しない — MagicAttack に統一
+            int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
+            damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
         }
         else
         {
@@ -497,7 +511,7 @@ public class BattleSceneController : MonoBehaviour
     /// </summary>
     private EnemyActionEntry SelectEnemyAction()
     {
-        // プレイヤーの baseLUC を直接参照（Luck プロパティ = baseLUC×5 は使わない）
+        // プレイヤーの baseLUC を直接参照（LUC判定は生値で比較する設計意図）
         int playerLuc = (GameState.I != null) ? GameState.I.baseLUC : 1;
 
         // 敵の Luck を直接参照
@@ -660,9 +674,10 @@ public class BattleSceneController : MonoBehaviour
     ///   1. fixedDamage > 0 ならそれを使用
     ///      damageMultiplier > 0 なら Monster.Attack × damageMultiplier（四捨五入）
     ///      どちらも 0 なら Monster.Attack をそのまま使用
-    ///   2. resistance = PassiveCalculator.CalcAttributeResistance(attackAttribute)
+    ///   2. resistance = PassiveCalculator.CalcTotalAttributeResistance(attackAttribute)
     ///      → afterResist = baseDamage × (1 - resistance / 100)
     ///      → 四捨五入（.5 は切り上げ）
+    ///      ※ CalcTotalAttributeResistance は装備品分＋パッシブ分の合算値を返す。
     ///   3. 防御ダイスで軽減
     ///      → finalDamage = afterResist - blocked
     /// </summary>
@@ -684,8 +699,8 @@ public class BattleSceneController : MonoBehaviour
         }
         if (baseDamage < 1) baseDamage = 1;
 
-        // 属性耐性を取得
-        int resistance = PassiveCalculator.CalcAttributeResistance(skill.attackAttribute);
+        // 属性耐性を取得（装備＋パッシブの合算）
+        int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.attackAttribute);
 
         // 耐性によるダメージ増減（耐性50 → 50%減少、耐性-100 → 100%増加）
         // ※ Mathf.RoundToInt は銀行丸め（4.5→4）のため、
@@ -747,8 +762,8 @@ public class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// DamageCategory に応じたプレイヤーの防御力を返す。
-    /// Physical → GameState.Defense（VIT ベース）
-    /// Magical  → GameState.MagicDefense（INT ベース）
+    /// Physical → GameState.Defense（VIT ベース + 装備 + パッシブ）
+    /// Magical  → GameState.MagicDefense（INT ベース + 装備 + パッシブ）
     /// </summary>
     private int GetPlayerDefense(DamageCategory category)
     {
