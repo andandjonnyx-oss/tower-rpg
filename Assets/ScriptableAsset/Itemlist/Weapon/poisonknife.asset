@@ -27,7 +27,8 @@ MonoBehaviour:
   curesPoison: 0
   weaponAttribute: 1
   attackPower: 3
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
   weaponInflictEffect: 1
   weaponInflictChance: 20
   equipDefense: 0

@@ -35,6 +35,6 @@ MonoBehaviour:
   Gold: 0
   Help: 
   actions:
-  - skill: {fileID: 11400000, guid: d98162908c24a794d8f4da11943df18e, type: 2}
+  - skill: {fileID: 11400000, guid: 0f2d8af543336c549aeb9e9303c51fa4, type: 2}
     threshold: 100
   baseActionRange: 100
