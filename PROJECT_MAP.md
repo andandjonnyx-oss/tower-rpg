@@ -1,352 +1,168 @@
 # PROJECT_MAP
 
-This file is for AI assistants and external developers.  
-Its purpose is to explain the structure, responsibility boundaries, and likely file relationships of this Unity project.
+AIアシスタント向け。プロジェクトの構造・各ファイルの役割・依存関係を記述する。
+**セッション開始時にこのファイルを読めば、全ソース読み込み不要で改修対象を特定できる。**
+
+最終更新: 2026-03-28（状態異常ブラッシュアップ完了後）
 
 ---
 
-## 1. Project Summary
+## 1. プロジェクト概要
 
-This project is a **smartphone non-field RPG built with Unity**.
+スマートフォン向けノンフィールドRPG（Unity）。
+塔を1歩ずつ進み、ランダムエンカウント・会話イベント・アイテム取得が発生する。
 
-The core gameplay loop is:
-
-1. The player advances one step in the Tower scene
-2. A game event may occur
-   - random encounter
-   - talk event
-   - item acquisition
-   - nothing
-3. If needed, the game transitions to battle or UI popups
-4. After processing, the game returns to tower progression
-
-This project is currently in the **prototype / skeleton-building phase**.  
-The current priority is to make the entire gameplay loop work first, then expand data and content later.
+コアループ: 街(Main) → 塔入口(TowerEntrance) → 塔(Tower) → 戦闘(Battle) → 塔に戻る
+敗北・帰還・ロード復帰 → 街(Main)に戻り HP/MP/状態異常を全回復。
 
 ---
 
-## 2. Design Philosophy
+## 2. シーン構成
 
-The project is designed with these priorities:
-
-- Build the skeleton first
-- Expand later by adding data
-- Separate responsibilities clearly
-- Prefer maintainable structure over short-term hacks
-- Make the project understandable for AI and external contributors
-- Avoid destructive rewrites when editing existing code
-
----
-
-## 3. Main Gameplay Domains
-
-The project can be understood as four main domains:
-
-### A. Tower Progression
-The main progression system where the player moves step by step inside a tower.
-
-Responsibilities:
-- Manage current floor and step
-- Advance progression
-- Trigger event checks
-- Open related UI
-- Transition to battle when needed
+| シーン名 | 役割 |
+|---------|------|
+| Start | タイトル画面。セーブ有→ロード、無→ニューゲーム |
+| Main | 街。全回復状態。塔入口・アイテムボックス・ステータスへ遷移 |
+| TowerEntrance | 塔入口。到達階に応じた中間ポイント選択 |
+| Tower | 塔内探索。1歩進むごとにイベント判定 |
+| Battle | ターン制戦闘 |
+| Itembox | アイテム管理（街/戦闘中の両方から遷移） |
+| Status | ステータス振り分け |
+| Storage | 倉庫 |
 
 ---
 
-### B. Battle
-Handles turn-based or event-based combat after an encounter occurs.
+## 3. ファイル構成と役割
 
-Responsibilities:
-- Receive selected enemy data
-- Run battle logic
-- Show battle UI
-- Determine win/loss
-- Return to tower scene after battle
+### Assets/Script/ （ルート直下）
 
----
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **GameState.cs** | シングルトン。全ゲーム状態を保持（HP/MP/ステータス/装備/状態異常/進行度）。DontDestroyOnLoad。サブステータス（Attack, Evasion等）はプロパティで装備+パッシブ込み計算 | EquipmentCalculator, PassiveCalculator, SaveManager |
+| **TowerState.cs** | Tower シーンの進行管理。Advance()で1歩進み、イベント判定→エンカウント判定。毒ダメージ処理含む | GameState, StatusEffectSystem, TowerEventTrigger, TowerItemTrigger, EncounterSystem |
+| **TowerEntranceView.cs** | 塔入口UI。到達階に応じたフロア選択ボタン表示 | GameState, FloorButton |
+| **FloorButton.cs** | フロア選択ボタン1個分 | GameState |
+| **HpMpDisplay.cs** | HP/MPバー表示 | GameState |
+| **AttributeTypes.cs** | enum定義集: WeaponAttribute, StatusEffect, DamageCategory, ToJapanese()拡張メソッド | なし |
+| **GameStateautocreate.cs** | GameState オブジェクトの自動生成 | GameState |
 
-### C. Talk Events
-Handles conversation / scenario events that occur at specific points.
+### Assets/Script/Battle/
 
-Responsibilities:
-- Search for events matching floor/step conditions
-- Trigger UI/dialog display
-- Track whether one-time events already happened
-- Allow new events to be added through data
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **BattleSceneController.cs** | 戦闘メインコントローラー（partial class本体）。フィールド宣言、Start、ログ管理、UI制御、勝敗処理、FullRecover | GameState, Monster, BattleContext, StatusEffectSystem |
+| **BattleSceneController_PlayerAction.cs** | partial: プレイヤー行動（通常攻撃/スキル/魔法/アイテム）。effectOnly対応、毒重複チェック含む | SkillData, StatusEffectSystem |
+| **BattleSceneController_EnemyAction.cs** | partial: 敵行動（LUC判定/行動選択/各種攻撃/ターン終了）。effectOnly対応、毒重複チェック含む | MonsterSkillData, EnemyActionEntry, StatusEffectSystem |
+| **BattleSceneController_CombatUtils.cs** | partial: 命中判定/クリティカル/防御ダイス/ダメージ適用 | GameState, Monster |
+| **Monster.cs** | ScriptableObject。敵1体のマスターデータ（HP/ATK/DEF/回避/命中/毒耐性/行動パターン） | EnemyActionEntry |
+| **MonsterSkillData.cs** | ScriptableObject。敵スキル1つのマスターデータ。effectOnlyフラグ対応済み | なし |
+| **MonsterDatabase.cs** | 敵一覧。フロア/ステップに応じた出現候補検索 | Monster |
+| **EnemyActionEntry.cs** | 敵行動テーブル1行分。threshold + MonsterSkillData参照 | MonsterSkillData |
+| **EncounterSystem.cs** | エンカウント判定＋敵選択＋戦闘シーン遷移 | MonsterDatabase, BattleContext |
+| **BattleContext.cs** | static。戦闘シーンへの敵データ受け渡し | Monster |
 
----
+### Assets/Script/Skill/
 
-### D. Items
-Handles item acquisition, inventory display, usage, and equipment.
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **SkillData.cs** | ScriptableObject。スキル1つのマスターデータ（武器スキル/魔法スキル共用）。effectOnly/inflictEffect/inflictChance含む | なし |
+| **StatusEffectSystem.cs** | 状態異常の付与判定・ダメージ計算・耐性取得の静的ユーティリティ。プレイヤーの毒耐性は装備+パッシブ合算 | GameState, PassiveCalculator, EquipmentCalculator |
+| **PassiveCalculator.cs** | パッシブ効果の集計（重複ルール: 最大値100%、2個目以降10%減衰）。魔法スキル一覧収集も担当 | ItemBoxManager, PassiveEffect |
+| **PassiveEffect.cs** | パッシブ効果1件の定義。PassiveType enum含む | なし |
+| **EquipmentCalculator.cs** | 装備中武器のステータス補正取得（100%反映）。状態異常耐性取得対応済み | GameState, ItemBoxManager |
+| **EquipResistance.cs** | 装備品の属性耐性1件分のデータ構造 | なし |
+| **EquipStatusEffectResistance.cs** | 装備品の状態異常耐性1件分のデータ構造（★新規追加） | なし |
 
-Responsibilities:
-- Generate or receive item acquisition events
-- Show pickup popup
-- Add acquired item to inventory
-- Show item details in item box UI
-- Handle use / equip / discard behavior
-- Preserve equipment state across scenes
+### Assets/Script/Item/
 
----
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **Item.cs** (ItemData) | ScriptableObject。アイテムマスターデータ。Consumable/Weapon/Magicの3カテゴリ。武器の状態異常耐性(equipStatusEffectResistances)対応済み | SkillData, PassiveEffect, EquipResistance, EquipStatusEffectResistance |
+| **ItemBoxManager.cs** | シングルトン。インベントリ管理。DontDestroyOnLoad | InventoryItem |
+| **InventoryItem.cs** | インベントリ内のアイテム1個。uid + ItemData参照 + スキルクールダウン管理 | ItemData |
+| **ItemboxContext.cs** | Itemboxシーン用コントローラー。使う/装備/捨てる。毒消し対応済み | StatusEffectSystem, ItemBoxManager |
+| **ItemDetailPanel.cs** | アイテム詳細パネルUI | IItemContext |
+| **ItemSlotView.cs** | アイテムスロット1個分のUI | InventoryItem |
+| **ItemPickupWindow.cs** | アイテム取得ポップアップ | ItemData |
+| **ItemDatabase.cs** | アイテム一覧。フロア/ステップに応じた出現候補検索 | ItemData |
+| **TowerItemTrigger.cs** | 塔内でのアイテム取得判定 | ItemDatabase |
+| **IItemContext.cs** | アイテム操作のインターフェース | なし |
+| **OpenItemBoxButton.cs** | Itemboxシーンへの遷移ボタン | なし |
 
-## 4. Expected Scene Structure
+### Assets/Script/Save/
 
-### Tower Scene
-This is the main scene for progression.
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **Savemanager.cs** | セーブ/ロード/削除。JSON形式。ロード時は全回復+状態異常クリア | GameState, ItemBoxManager, StorageManager |
 
-Likely responsibilities:
-- Step advancement button/input
-- Current tower status display
-- Event checks after each step
-- Item box open button
-- Popup spawning
-- Transition to battle scene
+### Assets/Script/SceneGo/
 
-Likely connected systems:
-- EncounterSystem
-- TalkEvent system
-- Item acquisition system
-- Persistent game state manager
+| ファイル | 役割 |
+|---------|------|
+| **SceneLoader.cs** | シングルトン。シーン遷移のユーティリティ |
+| **SceneLink.cs** | ボタンにアタッチしてシーン遷移 |
+| **SceneLoaderAutoCreate.cs** | SceneLoader自動生成 |
 
----
+### Assets/Script/Start/
 
-### Battle Scene
-This is the combat scene.
+| ファイル | 役割 |
+|---------|------|
+| **TitleManager.cs** | タイトル画面。スタート/ニューゲーム/初期化ボタン管理 |
 
-Likely responsibilities:
-- Show enemy
-- Execute battle flow
-- Return result to persistent state
-- Transition back to Tower Scene
+### Assets/Script/Talk/
 
-Likely connected systems:
-- Current enemy holder
-- Battle manager/controller
-- Player status/equipment state
+会話イベント関連（TalkEventDatabase, TalkEventRunner等）
 
----
+### Assets/Script/Status/
 
-## 5. Important Data Types
+ステータス振り分けUI関連
 
-These are the main data concepts the AI should expect to find.
+### Assets/Script/Storage/
 
-### Monster
-Represents a single monster/enemy.  
-Likely a ScriptableObject.
-
-Expected fields:
-- ID
-- name
-- sprite/image
-- floor/step appearance range
-- encounter weight
-- stats
-
----
-
-### MonsterDatabase
-Stores a list of Monster data and returns valid encounter candidates for the current floor/step.
-
-Used by:
-- EncounterSystem
+倉庫管理（StorageManager等）
 
 ---
 
-### TalkEvent
-Represents a single talk/conversation event.  
-Likely data-driven.
+## 4. 主要システムの設計ルール
 
-Expected fields:
-- ID
-- floor
-- step
-- dialogue/content
-- one-time flag
-- optional conditions
+### ステータス計算
+- `GameState.Attack` = baseSTR × 1 + EquipmentCalculator(100%) + PassiveCalculator(減衰ルール)
+- 他のサブステータスも同構造
 
----
+### パッシブ重複ルール
+- 同種の効果が複数: 最大値100% + 2個目以降は各値の10%加算
+- 例: [70, 50, 50] → 70 + 7 + 5 = 82
 
-### TalkEventDatabase
-Stores and searches TalkEvent data.
+### 耐性計算（属性・状態異常共通）
+- 合計 = 装備品分(100%反映) + パッシブ分(減衰ルール適用)
+- 状態異常の実質付与率 = 基礎付与率 × (1 - 耐性/100)
 
-Used by:
-- talk event trigger / runner systems
-- Tower progression flow
+### 敵スキルとプレイヤースキルの関係
+- プレイヤー: SkillData（CT制 or MP制）
+- 敵: MonsterSkillData（CT/MP無視）
+- 共通フィールド: inflictEffect, inflictChance, effectOnly, baseHitRate, damageMultiplier, fixedDamage, damageCategory
+- 将来的に統一予定だが、既存アセット互換のため現在は別クラス
 
----
-
-### Item Data
-Represents an item / weapon / magic / consumable.
-
-Expected fields:
-- ID
-- name
-- type
-- description
-- icon
-- sort order
-- usable flag
-- equippable flag
+### 街に戻る = 全回復ルール
+- 敗北 → FullRecover() → Main
+- ロード復帰 → ClearAllStatusEffects() + HP/MP全回復 → Main
+- 帰還（TowerEntranceView→Main）は現状回復処理なし（塔から直接街に戻る導線が未実装のため）
 
 ---
 
-## 6. Important Runtime State
+## 5. セーブデータ構造 (SaveData)
 
-These values likely need to persist across scene changes.
-
-- current floor
-- current step
-- currently selected encounter enemy
-- player inventory
-- currently equipped weapon/item
-- flags for one-time talk events
-- possibly last tower position before battle
-
-When editing code, AI should assume that scene transitions must not destroy important progression state.
+floor, step, reachedFloor, level, exp, HP/MP, 5基礎ステータス×2(current/initial),
+statusPoint, equippedWeaponUid, isPoisoned, playedEventIds[], inventoryItems[], storageItems[]
 
 ---
 
-## 7. Likely High-Importance Classes
+## 6. 未実装・今後の予定
 
-These names are based on the current development direction and existing naming patterns.
-
-### EncounterSystem
-Purpose:
-- Checks whether a battle occurs after step progression
-- Queries MonsterDatabase
-- Selects battle target
-- Triggers scene transition to Battle
-
-Likely depends on:
-- MonsterDatabase
-- current floor/step state
-- battle scene transition code
-
----
-
-### Monster
-Purpose:
-- Single enemy data definition
-
----
-
-### MonsterDatabase
-Purpose:
-- Search encounter candidates based on floor/step
-- Weight-based selection support possible
-
----
-
-### TalkEvent
-Purpose:
-- Single talk event definition
-
----
-
-### TalkEventDatabase
-Purpose:
-- Store all talk events
-- Find matching event(s) for current floor/step
-
----
-
-### EventTrigger / Runner classes
-Purpose:
-- Execute or display talk events
-- Bridge data and UI
-
----
-
-### Item-related classes
-Purpose:
-- Store acquired items
-- Open inventory UI
-- Select an item
-- Perform use/equip/discard action
-- Preserve equipment state
-
----
-
-## 8. Likely Flow Map
-
-### Tower Step Flow
-A likely processing flow is:
-
-1. Player presses progress button
-2. Step value increases
-3. The system checks whether any event should occur
-4. Event priority is resolved
-   - talk event
-   - encounter
-   - item
-   - none
-5. The corresponding UI or scene transition occurs
-6. Control returns to the tower flow
-
-AI should confirm actual implementation details from code before changing this logic.
-
----
-
-### Encounter Flow
-Likely flow:
-
-1. Tower progression calls EncounterSystem
-2. EncounterSystem checks encounter chance
-3. EncounterSystem queries MonsterDatabase
-4. A valid Monster is selected
-5. Selected enemy data is stored in shared state
-6. Scene changes to Battle Scene
-
----
-
-### Talk Event Flow
-Likely flow:
-
-1. Tower progression checks current floor/step
-2. TalkEventDatabase is queried
-3. Matching event is found
-4. Event runner displays text/UI
-5. If one-time, event completion is recorded
-
----
-
-### Item Flow
-Likely flow:
-
-1. Item acquisition event occurs
-2. Pickup popup appears
-3. Player chooses pick up / ignore
-4. If picked up, item is added to inventory
-5. Inventory UI can later display details
-6. Item action buttons depend on item type
-   - item: use / discard
-   - weapon: equip / discard
-   - magic: custom handling
-7. Equipped item state is visually reflected in UI
-
----
-
-## 9. Expected Folder Roles
-
-The exact project structure may differ, but AI should expect something like this:
-
-```text
-Assets/
-  Scripts/
-    Battle/
-    Tower/
-    Events/
-    Items/
-    Data/
-    UI/
-    Managers/
-
-  ScriptableObjects/
-    Monsters/
-    TalkEvents/
-    Items/
-
-  Scenes/
-    Tower
-    Battle
+- 毒以外の状態異常（麻痺・睡眠等）のゲームロジック
+- レベルアップシステム
+- 経験値・ゴールド報酬
+- 敵図鑑
+- 毒ログのブラッシュアップ（蓄積表現等）
+- SkillData / MonsterSkillData の完全統一
+- 塔からの帰還ボタン（全回復して街へ）

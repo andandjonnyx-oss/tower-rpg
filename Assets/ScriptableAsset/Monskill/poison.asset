@@ -23,3 +23,4 @@ MonoBehaviour:
   baseHitRate: 100
   inflictEffect: 1
   inflictChance: 80
+  effectOnly: 1
