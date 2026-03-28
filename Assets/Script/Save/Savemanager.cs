@@ -69,6 +69,9 @@ public static class SaveManager
 
             // 既読イベントID一覧
             data.playedEventIds = GameState.I.GetAllPlayedIds();
+
+            // 状態異常（追加）
+            data.isPoisoned = GameState.I.isPoisoned;
         }
 
         // --- ItemBoxManager（所持品）から収集 ---
@@ -180,6 +183,11 @@ public static class SaveManager
             GameState.I.battleItemActionLog = "";
             GameState.I.pendingItemData = null;
             GameState.I.pendingEventId = "";
+
+            // 状態異常の復元（追加）
+            // ロード時は全回復だが、毒状態は維持する設計。
+            // 毒状態で中断→再開しても毒は治らない。
+            GameState.I.isPoisoned = data.isPoisoned;
         }
 
         // --- ItemBoxManager（所持品）に反映 ---
@@ -259,6 +267,9 @@ public class SaveData
 
     // --- 装備 ---
     public string equippedWeaponUid = "";
+
+    // --- 状態異常（追加） ---
+    public bool isPoisoned = false;
 
     // --- 既読イベントID一覧 ---
     public List<string> playedEventIds = new List<string>();

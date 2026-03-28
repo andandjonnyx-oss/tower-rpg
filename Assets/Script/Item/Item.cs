@@ -25,6 +25,15 @@ public class ItemData : ScriptableObject
     [Header("Consumable")]
     public int healAmount;
 
+    // =========================================================
+    // 消費アイテム: 状態異常回復（追加）
+    // =========================================================
+
+    [Header("Consumable - Status Effect Cure")]
+    [Tooltip("true の場合、使用時に毒状態を回復する。\n"
+           + "毒消しアイテムに設定する。healAmount との併用可能。")]
+    public bool curesPoison = false;
+
     [Header("Weapon")]
     public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;
     public int attackPower;
@@ -32,6 +41,21 @@ public class ItemData : ScriptableObject
     [Header("Weapon Skills")]
     /// <summary>この武器が持つスキル一覧（武器スキル）。category=Weapon の場合に使用。</summary>
     public SkillData[] skills;
+
+    // =========================================================
+    // 武器: 通常攻撃時の状態異常付与（追加）
+    // =========================================================
+
+    [Header("Weapon - Status Effect on Hit")]
+    [Tooltip("この武器の通常攻撃が命中した時に付与する状態異常。None なら付与しない。\n"
+           + "例: ポイズンナイフ → Poison")]
+    public StatusEffect weaponInflictEffect = StatusEffect.None;
+
+    [Tooltip("武器通常攻撃の状態異常基礎付与率（%）。\n"
+           + "実質命中率 = weaponInflictChance × (1 - 対象の耐性/100)\n"
+           + "例: ポイズンナイフ = 20")]
+    [Range(0, 100)]
+    public int weaponInflictChance = 0;
 
     // =========================================================
     // 装備時のみ適用されるステータス補正

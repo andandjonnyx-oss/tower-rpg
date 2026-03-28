@@ -144,6 +144,14 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                 GameState.I.currentHp = GameState.I.maxHp;
         }
 
+        // =========================================================
+        // 毒消し効果の適用（追加）
+        // =========================================================
+        if (invItem.data.curesPoison && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayerPoison();
+        }
+
         string itemName = invItem.data.itemName;
         ItemBoxManager.Instance?.RemoveItem(invItem);
         AfterAction($"You は {itemName} を使った！");

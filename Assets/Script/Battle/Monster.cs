@@ -48,6 +48,16 @@ public class Monster : ScriptableObject
            + "ただし最低10%保証。")]
     public int BaseHitRate = 90;
 
+    // =========================================================
+    // 状態異常耐性（追加）
+    // =========================================================
+
+    [Header("Status Effect Resistance")]
+    [Tooltip("敵の毒耐性値（0?100）。\n"
+           + "毒の実質命中率 = 基礎命中率 × (1 - PoisonResistance/100)\n"
+           + "100 = 毒完全耐性。")]
+    public int PoisonResistance = 0;
+
     [Header("Reward")]
     public int Exp;
     public int Gold;

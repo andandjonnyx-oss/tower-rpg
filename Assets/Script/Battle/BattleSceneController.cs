@@ -39,6 +39,13 @@ public class BattleSceneController : MonoBehaviour
 
     private Monster enemyMonster;
 
+    // =========================================================
+    // 敵の状態異常（追加）
+    // =========================================================
+
+    /// <summary>戦闘中の敵の毒状態。戦闘終了でリセット。</summary>
+    private static bool enemyIsPoisoned = false;
+
     // 戦闘ログ（最大3行）
     private List<string> logLines = new List<string>();
     private const int MaxLogLines = 3;
@@ -238,6 +245,26 @@ public class BattleSceneController : MonoBehaviour
         else
             AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
 
+        // =========================================================
+        // 武器の毒付与判定（追加）
+        // 装備中の武器に weaponInflictEffect=Poison が設定されている場合、
+        // 通常攻撃命中時に毒を付与する。
+        // =========================================================
+        if (equippedWeaponItem != null && equippedWeaponItem.data != null
+            && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Poison
+            && equippedWeaponItem.data.weaponInflictChance > 0
+            && !enemyIsPoisoned)
+        {
+            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+            bool poisoned = StatusEffectSystem.TryInflict(
+                equippedWeaponItem.data.weaponInflictChance, enemyPoisonResist);
+            if (poisoned)
+            {
+                enemyIsPoisoned = true;
+                AddLog($"{enemyMonster.Mname} は毒を受けた！");
+            }
+        }
+
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
         {
@@ -340,11 +367,30 @@ public class BattleSceneController : MonoBehaviour
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
+
+
         // ログ生成
         if (isCrit)
             AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！");
         else
             AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
+
+        // =========================================================
+        // スキルの毒付与判定（追加）
+        // skill.inflictEffect=Poison の場合、命中時に毒を付与する。
+        // =========================================================
+        if (skill.inflictEffect == StatusEffect.Poison
+            && skill.inflictChance > 0
+            && !enemyIsPoisoned)
+        {
+            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+            bool poisoned = StatusEffectSystem.TryInflict(skill.inflictChance, enemyPoisonResist);
+            if (poisoned)
+            {
+                enemyIsPoisoned = true;
+                AddLog($"{enemyMonster.Mname} は毒を受けた！");
+            }
+        }
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -416,6 +462,36 @@ public class BattleSceneController : MonoBehaviour
             return;
         }
 
+        // effectOnly の場合はダメージを与えず、状態異常の付与のみ行う（追加）
+        if (magic.effectOnly)
+        {
+            // 状態異常の付与
+            if (magic.inflictEffect == StatusEffect.Poison
+                && magic.inflictChance > 0
+                && !enemyIsPoisoned)
+            {
+                int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+                bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
+                if (poisoned)
+                {
+                    enemyIsPoisoned = true;
+                    AddLog($"You は {magic.skillName}！ {enemyMonster.Mname} は毒を受けた！ MP-{magic.mpCost}");
+                }
+                else
+                {
+                    AddLog($"You は {magic.skillName}！ …しかし効かなかった！ MP-{magic.mpCost}");
+                }
+            }
+            else
+            {
+                AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
+            }
+
+            // 敵ターンへ
+            Invoke(nameof(EnemyTurn), 0.5f);
+            return;
+        }
+
         // ダメージ計算
         int damage;
         if (magic.fixedDamage > 0)
@@ -464,6 +540,25 @@ public class BattleSceneController : MonoBehaviour
             AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！ MP-{magic.mpCost}");
         else
             AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
+
+
+        // =========================================================
+        // 魔法の毒付与判定（追加）
+        // magic.inflictEffect=Poison の場合、命中時に毒を付与する。
+        // =========================================================
+        if (magic.inflictEffect == StatusEffect.Poison
+            && magic.inflictChance > 0
+            && !enemyIsPoisoned)
+        {
+            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+            bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
+            if (poisoned)
+            {
+                enemyIsPoisoned = true;
+                AddLog($"{enemyMonster.Mname} は毒を受けた！");
+            }
+        }
+
 
         // 敵撃破判定
         if (enemyCurrentHp <= 0)
@@ -961,6 +1056,20 @@ public class BattleSceneController : MonoBehaviour
         Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
                   $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
 
+        // =========================================================
+        // 敵スキルの毒付与判定（追加）
+        // skill.inflictEffect=Poison の場合、プレイヤーに毒を付与する。
+        // =========================================================
+        if (skill.inflictEffect == StatusEffect.Poison
+            && skill.inflictChance > 0)
+        {
+            StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
+            if (GameState.I != null && GameState.I.isPoisoned)
+            {
+                AddLog("You は毒を受けた！");
+            }
+        }
+
         // 敗北判定 → プレイヤーターンへ
         AfterEnemyAction();
     }
@@ -1087,6 +1196,34 @@ public class BattleSceneController : MonoBehaviour
     /// </summary>
     private void AfterEnemyAction()
     {
+        // =========================================================
+        // ターン終了時の毒ダメージ（追加）
+        // プレイヤーと敵の両方に毒ダメージを適用する
+        // =========================================================
+
+        // --- プレイヤーの毒ダメージ ---
+        int playerPoisonDmg = StatusEffectSystem.ApplyBattlePoisonToPlayer();
+        if (playerPoisonDmg > 0)
+        {
+            AddLog($"You は毒のダメージで {playerPoisonDmg} 受けた！");
+        }
+
+        // --- 敵の毒ダメージ ---
+        if (enemyIsPoisoned && enemyMonster != null)
+        {
+            int enemyPoisonDmg = StatusEffectSystem.CalcBattlePoisonDamage(enemyMonster.MaxHp);
+            enemyCurrentHp -= enemyPoisonDmg;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+            AddLog($"{enemyMonster.Mname} は毒のダメージで {enemyPoisonDmg} 受けた！");
+
+            if (enemyCurrentHp <= 0)
+            {
+                OnVictory();
+                return;
+            }
+        }
+
+
         // プレイヤー敗北判定
         if (GameState.I != null && GameState.I.currentHp <= 0)
         {
@@ -1112,6 +1249,8 @@ public class BattleSceneController : MonoBehaviour
 
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
+        enemyIsPoisoned = false;
+
 
         Invoke(nameof(ReturnToTower), 1.5f);
     }
@@ -1124,6 +1263,8 @@ public class BattleSceneController : MonoBehaviour
 
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
+        enemyIsPoisoned = false;
+
 
         Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
     }
@@ -1151,6 +1292,8 @@ public class BattleSceneController : MonoBehaviour
     {
         battleInitialized = false;
         persistentLogLines.Clear();
+        enemyIsPoisoned = false;
+
     }
 
     // =========================================================

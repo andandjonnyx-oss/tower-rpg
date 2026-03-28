@@ -38,6 +38,12 @@ public class TitleUIManager : MonoBehaviour
         else
         {
             // セーブデータなし → 初期状態のまま
+            // maxHp/maxMp を VIT/INT から再計算して正しい値にする
+            if (GameState.I != null)
+            {
+                GameState.I.RecalcMaxHp();
+                GameState.I.RecalcMaxMp();
+            }
             Debug.Log("[Title] セーブデータなし。新規で開始");
         }
 
@@ -64,11 +70,6 @@ public class TitleUIManager : MonoBehaviour
             GameState.I.currentExp = 0;
             GameState.I.expToNext = 100;
 
-            GameState.I.maxHp = 50;
-            GameState.I.maxMp = 20;
-            GameState.I.currentHp = 50;
-            GameState.I.currentMp = 20;
-
             GameState.I.baseSTR = 1;
             GameState.I.baseVIT = 1;
             GameState.I.baseINT = 1;
@@ -92,6 +93,17 @@ public class TitleUIManager : MonoBehaviour
 
             // 既読イベントをクリア
             GameState.I.RestorePlayedIds(null);
+
+            // maxHp/maxMp を VIT/INT から再計算（ハードコード 50/20 ではなく正しい値を使う）
+            // RecalcMaxHp/RecalcMaxMp 内で currentHp/currentMp も maxHp/maxMp にクランプされる。
+            // ただし currentHp が maxHp 以下の場合はそのまま維持される設計なので、
+            // まず -1 にリセットして「未初期化」状態にし、Recalc 内で maxHp に揃える。
+            GameState.I.maxHp = -1;
+            GameState.I.currentHp = -1;
+            GameState.I.maxMp = -1;
+            GameState.I.currentMp = -1;
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
         }
 
         // 所持品をクリア

@@ -60,6 +60,21 @@ public class MonsterSkillData : ScriptableObject
            + "ただし最低10%保証。\n"
            + "Idle の場合は使用しない。")]
     public int baseHitRate = 90;
+
+    // =========================================================
+    // 状態異常付与（追加）
+    // =========================================================
+
+    [Header("Status Effect Infliction")]
+    [Tooltip("このスキルが命中時に付与する状態異常。None なら付与しない。\n"
+           + "敵スキル・敵魔法で使用する。")]
+    public StatusEffect inflictEffect = StatusEffect.None;
+
+    [Tooltip("状態異常の基礎付与率（%）。\n"
+           + "実質命中率 = inflictChance × (1 - プレイヤーの耐性/100)\n"
+           + "例: 敵のポイズン = 80")]
+    [Range(0, 100)]
+    public int inflictChance = 0;
 }
 
 /// <summary>

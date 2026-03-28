@@ -36,7 +36,7 @@ public static class PassiveCalculator
     /// </summary>
     public static int CalcAttributeResistance(WeaponAttribute attr)
     {
-        var values = CollectValues(PassiveType.AttributeResistance, attr, default);
+        var values = CollectValues(PassiveType.AttributeResistance, attr, default, default);
         return CalcWithDiminishing(values);
     }
 
@@ -64,7 +64,7 @@ public static class PassiveCalculator
     /// </summary>
     public static int CalcAttributeAttackBonus(WeaponAttribute attr)
     {
-        var values = CollectValues(PassiveType.AttributeAttackBonus, attr, default);
+        var values = CollectValues(PassiveType.AttributeAttackBonus, attr, default, default);
         return CalcWithDiminishing(values);
     }
 
@@ -79,7 +79,26 @@ public static class PassiveCalculator
     /// </summary>
     public static int CalcStatBonus(StatType stat)
     {
-        var values = CollectValues(PassiveType.StatBonus, default, stat);
+        var values = CollectValues(PassiveType.StatBonus, default, stat, default);
+        return CalcWithDiminishing(values);
+    }
+
+    // =========================================================
+    // 公開メソッド ── ターゲット指定あり（状態異常耐性）（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 指定状態異常の耐性合計値を返す（パッシブのみ）。
+    /// インベントリ内の全 Magic アイテムから
+    /// PassiveType.StatusEffectResistance かつ targetStatusEffect が一致するものを収集する。
+    ///
+    /// 重複ルール適用（2個目以降10%減衰）。
+    ///
+    /// 例: 毒耐性50のアイテム2個所持 → 50 + 5 = 55
+    /// </summary>
+    public static int CalcStatusEffectResistance(StatusEffect effect)
+    {
+        var values = CollectValues(PassiveType.StatusEffectResistance, default, default, effect);
         return CalcWithDiminishing(values);
     }
 
@@ -216,9 +235,10 @@ public static class PassiveCalculator
 
     /// <summary>
     /// インベントリ内の全 Magic アイテムから、指定条件に合致するパッシブ効果の value を収集する。
-    /// targetAttribute または targetStat で対象を絞り込む。
+    /// targetAttribute または targetStat または targetStatusEffect で対象を絞り込む。
     /// </summary>
-    private static List<int> CollectValues(PassiveType type, WeaponAttribute attrFilter, StatType statFilter)
+    private static List<int> CollectValues(PassiveType type, WeaponAttribute attrFilter,
+                                            StatType statFilter, StatusEffect effectFilter)
     {
         var values = new List<int>();
 
@@ -248,6 +268,11 @@ public static class PassiveCalculator
 
                     case PassiveType.StatBonus:
                         if (pe.targetStat != statFilter) continue;
+                        break;
+
+                    // 状態異常耐性: targetStatusEffect で絞り込む（追加）
+                    case PassiveType.StatusEffectResistance:
+                        if (pe.targetStatusEffect != effectFilter) continue;
                         break;
 
                         // ターゲット指定なし系は対象フィルタ不要

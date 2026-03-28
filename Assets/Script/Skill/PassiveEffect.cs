@@ -6,6 +6,7 @@ using UnityEngine;
 /// 魔法アイテムの passiveEffects 配列に入れて使う。
 /// 例: 炎の護符 → effectType=AttributeResistance, targetAttribute=Fire, value=50
 /// 例: 力の指輪 → effectType=StatBonus, targetStat=STR, value=5
+/// 例: 毒耐性の指輪 → effectType=StatusEffectResistance, targetStatusEffect=Poison, value=50
 ///
 /// 重複ルール（PassiveCalculator で処理）:
 ///   同じ effectType + 同じ target の効果が複数ある場合、
@@ -23,6 +24,11 @@ public class PassiveEffect
 
     [Tooltip("ステータスボーナスの場合の対象ステータス")]
     public StatType targetStat;
+
+    [Tooltip("状態異常耐性の場合の対象状態異常。\n"
+           + "effectType=StatusEffectResistance の場合に使用する。\n"
+           + "例: Poison を設定すると毒耐性として機能する。")]
+    public StatusEffect targetStatusEffect;
 
     [Header("Value")]
     [Tooltip("効果値。耐性なら耐性値、ステアップなら上昇量")]
@@ -47,6 +53,9 @@ public class PassiveEffect
 /// ▼ターゲット指定あり（targetStat を使う）
 ///   StatBonus              : 基礎ステータスアップ（汎用）
 ///
+/// ▼ターゲット指定あり（targetStatusEffect を使う）
+///   StatusEffectResistance : 状態異常耐性
+///
 /// ▼ターゲット指定なし（effectType だけで一意に決まる）
 ///   MaxHpBonus             : 最大HPアップ
 ///   MaxMpBonus             : 最大MPアップ
@@ -55,7 +64,6 @@ public class PassiveEffect
 ///   MagicAttackBonus       : 魔法攻撃力アップ
 ///   MagicDefenseBonus      : 魔法防御力アップ
 ///   LuckBonus              : 運の良さアップ
-///   StatusEffectResistance : 状態異常耐性（将来拡張用）
 ///   AccuracyBonus          : 命中力アップ（追加）
 ///   EvasionBonus           : 回避率アップ（追加、float 小数点2位）
 ///   CriticalBonus          : クリティカル率アップ（追加、float 小数点2位）
@@ -98,7 +106,7 @@ public enum PassiveType
     /// <summary>運の良さアップ。targetAttribute/targetStat は不要。</summary>
     LuckBonus,
 
-    /// <summary>状態異常耐性アップ。将来拡張用。</summary>
+    /// <summary>状態異常耐性アップ。targetStatusEffect で対象状態異常を指定。</summary>
     StatusEffectResistance,
 
     // ---- 命中・回避・クリティカル（追加） ----

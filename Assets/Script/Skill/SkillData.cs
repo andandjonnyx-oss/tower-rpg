@@ -77,6 +77,26 @@ public class SkillData : ScriptableObject
            + "プレイヤー攻撃の命中率 = baseHitRate × (1 - (敵回避力 - 命中力)/100)\n"
            + "ただし最低25%保証。")]
     public int baseHitRate = 95;
+
+    // =========================================================
+    // 状態異常付与（追加）
+    // =========================================================
+
+    [Header("Status Effect Infliction")]
+    [Tooltip("このスキルが命中時に付与する状態異常。None なら付与しない。\n"
+           + "プレイヤー・敵双方の魔法/スキルで共通に使う。")]
+    public StatusEffect inflictEffect = StatusEffect.None;
+
+    [Tooltip("状態異常の基礎付与率（%）。\n"
+           + "実質命中率 = inflictChance × (1 - 対象の耐性/100)\n"
+           + "例: ポイズン魔法 = 80、毒攻撃スキル = 40")]
+    [Range(0, 100)]
+    public int inflictChance = 0;
+
+    [Tooltip("true の場合、ダメージ0（fixedDamage=0 かつ damageMultiplier=0）でも\n"
+           + "状態異常の付与だけを行うスキルとして機能する。\n"
+           + "false の場合、ダメージ計算後に追加で状態異常を付与する。")]
+    public bool effectOnly = false;
 }
 
 /// <summary>
