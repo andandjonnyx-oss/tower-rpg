@@ -80,6 +80,10 @@ public static class AttributeExtensions
             case PassiveType.StatusEffectResistance: return "状態異常耐性";
             case PassiveType.DefenseBonus: return "防御力";
             case PassiveType.MagicDefenseBonus: return "魔法防御力";
+            // ---- 命中・回避・クリティカル（追加） ----
+            case PassiveType.AccuracyBonus: return "命中力";
+            case PassiveType.EvasionBonus: return "回避率";
+            case PassiveType.CriticalBonus: return "クリティカル率";
             default: return type.ToString();
         }
     }

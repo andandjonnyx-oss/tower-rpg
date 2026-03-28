@@ -137,6 +137,44 @@ public static class PassiveCalculator
     }
 
     // =========================================================
+    // 公開メソッド ── 命中力・回避率・クリティカル率（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 命中力ボーナス合計値（int）を返す。
+    /// PassiveType.AccuracyBonus の value を収集して重複ルール適用。
+    /// </summary>
+    public static int CalcAccuracyBonus()
+    {
+        var values = CollectValuesNoTarget(PassiveType.AccuracyBonus);
+        return CalcWithDiminishing(values);
+    }
+
+    /// <summary>
+    /// 回避率ボーナス合計値（float 小数点2位精度）を返す。
+    /// PassiveType.EvasionBonus の floatValue を収集して重複ルール適用。
+    ///
+    /// 重複ルール（float版）:
+    ///   value を降順ソートし、1個目は100%、2個目以降は10%（小数点3位を四捨五入→2位精度）。
+    ///   例: [3.50, 2.00, 2.00] → 3.50 + 0.20 + 0.20 = 3.90
+    /// </summary>
+    public static float CalcEvasionBonus()
+    {
+        var values = CollectFloatValuesNoTarget(PassiveType.EvasionBonus);
+        return CalcWithDiminishingFloat2(values);
+    }
+
+    /// <summary>
+    /// クリティカル率ボーナス合計値（float 小数点2位精度）を返す。
+    /// PassiveType.CriticalBonus の floatValue を収集して重複ルール適用。
+    /// </summary>
+    public static float CalcCriticalBonus()
+    {
+        var values = CollectFloatValuesNoTarget(PassiveType.CriticalBonus);
+        return CalcWithDiminishingFloat2(values);
+    }
+
+    // =========================================================
     // 魔法スキル一覧の収集
     // =========================================================
 
@@ -226,7 +264,7 @@ public static class PassiveCalculator
     /// <summary>
     /// targetAttribute / targetStat を使わない効果の value を収集する。
     /// MaxHpBonus / MaxMpBonus / AttackBonus / DefenseBonus /
-    /// MagicAttackBonus / MagicDefenseBonus / LuckBonus 等が対象。
+    /// MagicAttackBonus / MagicDefenseBonus / LuckBonus / AccuracyBonus 等が対象。
     /// </summary>
     private static List<int> CollectValuesNoTarget(PassiveType type)
     {
@@ -250,6 +288,41 @@ public static class PassiveCalculator
 
                 if (pe.value > 0)
                     values.Add(pe.value);
+            }
+        }
+
+        return values;
+    }
+
+    /// <summary>
+    /// float 精度が必要なパッシブ効果の floatValue を収集する。
+    /// EvasionBonus / CriticalBonus 等が対象。
+    /// floatValue が 0 で value が設定されている場合は value を float に変換して使う。
+    /// </summary>
+    private static List<float> CollectFloatValuesNoTarget(PassiveType type)
+    {
+        var values = new List<float>();
+
+        var items = GetInventoryItems();
+        if (items == null) return values;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var invItem = items[i];
+            if (invItem?.data == null) continue;
+            if (invItem.data.category != ItemCategory.Magic) continue;
+            if (invItem.data.passiveEffects == null) continue;
+
+            for (int j = 0; j < invItem.data.passiveEffects.Length; j++)
+            {
+                var pe = invItem.data.passiveEffects[j];
+                if (pe == null) continue;
+                if (pe.effectType != type) continue;
+
+                // floatValue を優先、未設定（0）なら value を float に変換
+                float v = (pe.floatValue != 0f) ? pe.floatValue : (float)pe.value;
+                if (v > 0f)
+                    values.Add(v);
             }
         }
 
@@ -281,6 +354,43 @@ public static class PassiveCalculator
         {
             total += values[i] / 10;
         }
+
+        return total;
+    }
+
+    /// <summary>
+    /// float 版の重複ルール計算（小数点2位精度）。
+    /// EvasionBonus / CriticalBonus で使用する。
+    ///
+    /// ルール: value を降順ソートし、1個目は100%、2個目以降は各 value の10%を加算。
+    /// 各ステップの結果を小数点3位で四捨五入して小数点2位精度を維持する。
+    ///
+    /// 例: [3.50, 2.00, 2.00]
+    ///   → 3.50 + Round(0.200, 2) + Round(0.200, 2) = 3.50 + 0.20 + 0.20 = 3.90
+    /// 例: [5.75, 3.25, 1.50]
+    ///   → 5.75 + Round(0.325, 2) + Round(0.150, 2) = 5.75 + 0.33 + 0.15 = 6.23
+    /// </summary>
+    private static float CalcWithDiminishingFloat2(List<float> values)
+    {
+        if (values == null || values.Count == 0) return 0f;
+
+        // 降順ソート（大きい値から適用）
+        values.Sort((a, b) => b.CompareTo(a));
+
+        // 1個目は 100% 適用
+        float total = values[0];
+
+        // 2個目以降は各 value の 10% を加算（小数点3位を四捨五入→2位精度）
+        for (int i = 1; i < values.Count; i++)
+        {
+            float bonus = values[i] * 0.1f;
+            // 小数点3位を四捨五入して小数点2位精度にする
+            bonus = Mathf.Floor(bonus * 100f + 0.5f) / 100f;
+            total += bonus;
+        }
+
+        // 最終結果も小数点2位に丸める
+        total = Mathf.Floor(total * 100f + 0.5f) / 100f;
 
         return total;
     }

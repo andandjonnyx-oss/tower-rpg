@@ -49,6 +49,17 @@ public class MonsterSkillData : ScriptableObject
            + "0 の場合は damageMultiplier を参照する。\n"
            + "どちらも 0 なら Monster.Attack をそのまま使用。")]
     public int fixedDamage = 0;
+
+    // =========================================================
+    // 命中率（追加）
+    // =========================================================
+
+    [Header("Hit Rate")]
+    [Tooltip("この敵スキルの基礎命中率（%）。デフォルト90。\n"
+           + "敵スキル攻撃の命中率 = baseHitRate × (1 - プレイヤー回避率/100)\n"
+           + "ただし最低10%保証。\n"
+           + "Idle の場合は使用しない。")]
+    public int baseHitRate = 90;
 }
 
 /// <summary>

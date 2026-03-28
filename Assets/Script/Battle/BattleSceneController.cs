@@ -169,6 +169,14 @@ public class BattleSceneController : MonoBehaviour
     ///   をそのままダメージとして使用する。
     ///   ※ 装備品の attackPower は GameState.Attack に含まれているため、
     ///     ここでは weaponPower を加算しない（二重加算を防止）。
+    ///
+    /// 命中判定（追加）:
+    ///   基礎命中率（武器の baseHitRate、素手=95）× (1 - (敵回避力 - 命中力)/100)
+    ///   最低25%保証。ミス時はダメージ0でターン終了。
+    ///
+    /// クリティカル判定（追加）:
+    ///   命中後に CriticalRate% の確率でクリティカル。
+    ///   クリティカル時: 防御無視、ダメージ2倍。
     /// </summary>
     private void OnAttackClicked()
     {
@@ -186,23 +194,47 @@ public class BattleSceneController : MonoBehaviour
         int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
 
+        // 基礎命中率を取得（武器の baseHitRate、素手=95）
+        int baseHit = GetEquippedWeaponBaseHitRate();
+
+        // --- 命中判定（追加） ---
+        if (!CheckPlayerHit(baseHit))
+        {
+            AddLog($"You は {weaponName} で攻撃！ …しかし外れた！");
+            Invoke(nameof(EnemyTurn), 0.5f);
+            return;
+        }
+
         // ダメージ計算: GameState.Attack を使用（装備＋パッシブ込み）
         // ※ weaponPower は Attack プロパティに含まれているため加算しない
         int damage = (GameState.I != null) ? GameState.I.Attack : 1;
         if (damage < 1) damage = 1;
 
-        // 敵の防御ダイスによる軽減（通常攻撃は物理扱い）
-        int enemyDef = GetEnemyDefense(DamageCategory.Physical);
-        int enemyBlocked = RollDefenseDice(enemyDef);
-        int finalDamage = damage - enemyBlocked;
-        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        // --- クリティカル判定（追加） ---
+        bool isCrit = CheckPlayerCrit();
+
+        int finalDamage;
+        if (isCrit)
+        {
+            // クリティカル: ダメージ2倍、防御無視
+            finalDamage = damage * 2;
+        }
+        else
+        {
+            // 通常: 敵の防御ダイスによる軽減（通常攻撃は物理扱い）
+            int enemyDef = GetEnemyDefense(DamageCategory.Physical);
+            int enemyBlocked = RollDefenseDice(enemyDef);
+            finalDamage = damage - enemyBlocked;
+            if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        }
 
         // ダメージ適用
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        if (enemyBlocked > 0)
-            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減）");
+        // ログ生成
+        if (isCrit)
+            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！");
         else
             AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
 
@@ -225,6 +257,13 @@ public class BattleSceneController : MonoBehaviour
     /// ダメージ計算（改修後）:
     ///   GameState.Attack × skill.damageMultiplier
     ///   ※ Attack に装備攻撃力が含まれているため、weaponPower を別途加算しない。
+    ///
+    /// 命中判定（追加）:
+    ///   skill.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
+    ///   クールダウンは命中に関わらず消費する。
+    ///
+    /// クリティカル判定（追加）:
+    ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
     /// </summary>
     private void OnSkillClicked()
     {
@@ -259,30 +298,51 @@ public class BattleSceneController : MonoBehaviour
         int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
 
+        // クールダウンをセット（命中に関わらず消費する）
+        equippedWeaponItem.UseSkill(skill);
+
+        // --- 命中判定（追加） ---
+        if (!CheckPlayerHit(skill.baseHitRate))
+        {
+            AddLog($"You は {skill.skillName}！ …しかし外れた！");
+            Invoke(nameof(EnemyTurn), 0.5f);
+            return;
+        }
+
         // スキルのダメージ計算: GameState.Attack × スキル倍率
         // ※ Attack に装備 attackPower が含まれているため weaponPower を加算しない
         int attack = (GameState.I != null) ? GameState.I.Attack : 1;
         int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
         if (damage < 1) damage = 1;
 
+        // --- クリティカル判定（追加） ---
+        bool isCrit = CheckPlayerCrit();
+
         // スキルの属性で上書き（スキル固有の属性を使用）
         WeaponAttribute skillAttr = skill.skillAttribute;
 
-        // 敵の防御ダイスによる軽減（skill.damageCategory で物理/魔法を判断）
-        int enemyDef = GetEnemyDefense(skill.damageCategory);
-        int enemyBlocked = RollDefenseDice(enemyDef);
-        int finalDamage = damage - enemyBlocked;
-        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        int finalDamage;
+        if (isCrit)
+        {
+            // クリティカル: ダメージ2倍、防御無視
+            finalDamage = damage * 2;
+        }
+        else
+        {
+            // 通常: 敵の防御ダイスによる軽減（skill.damageCategory で物理/魔法を判断）
+            int enemyDef = GetEnemyDefense(skill.damageCategory);
+            int enemyBlocked = RollDefenseDice(enemyDef);
+            finalDamage = damage - enemyBlocked;
+            if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        }
 
         // ダメージ適用
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        // クールダウンをセット
-        equippedWeaponItem.UseSkill(skill);
-
-        if (enemyBlocked > 0)
-            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減）");
+        // ログ生成
+        if (isCrit)
+            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！");
         else
             AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
 
@@ -310,6 +370,13 @@ public class BattleSceneController : MonoBehaviour
     ///   fixedDamage > 0 → そのまま使用（固定ダメージ）
     ///   damageMultiplier > 0 → GameState.MagicAttack × 倍率
     ///   ※ MagicAttack に装備分・パッシブ分が含まれている。
+    ///
+    /// 命中判定（追加）:
+    ///   magic.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
+    ///   ミス時も MP は消費する。
+    ///
+    /// クリティカル判定（追加）:
+    ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
     /// </summary>
     private void OnMagicClicked()
     {
@@ -337,9 +404,17 @@ public class BattleSceneController : MonoBehaviour
         // ターン開始: 全武器のクールダウンを進める（魔法使用もターン消費）
         TickAllWeaponCooldowns();
 
-        // MP 消費
+        // MP 消費（命中に関わらず消費する）
         if (GameState.I != null)
             GameState.I.currentMp -= magic.mpCost;
+
+        // --- 命中判定（追加） ---
+        if (!CheckPlayerHit(magic.baseHitRate))
+        {
+            AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+            Invoke(nameof(EnemyTurn), 0.5f);
+            return;
+        }
 
         // ダメージ計算
         int damage;
@@ -361,19 +436,32 @@ public class BattleSceneController : MonoBehaviour
         }
         if (damage < 1) damage = 1;
 
-        // 敵の防御ダイスによる軽減（magic.damageCategory で物理/魔法を判断）
-        // ファイアボール・ライトニングは通常 Magical を設定するので MagicDefense が適用される
-        int enemyDef = GetEnemyDefense(magic.damageCategory);
-        int enemyBlocked = RollDefenseDice(enemyDef);
-        int finalDamage = damage - enemyBlocked;
-        if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        // --- クリティカル判定（追加） ---
+        bool isCrit = CheckPlayerCrit();
+
+        int finalDamage;
+        if (isCrit)
+        {
+            // クリティカル: ダメージ2倍、防御無視
+            finalDamage = damage * 2;
+        }
+        else
+        {
+            // 通常: 敵の防御ダイスによる軽減
+            // ファイアボール・ライトニングは通常 Magical を設定するので MagicDefense が適用される
+            int enemyDef = GetEnemyDefense(magic.damageCategory);
+            int enemyBlocked = RollDefenseDice(enemyDef);
+            finalDamage = damage - enemyBlocked;
+            if (finalDamage < 1) finalDamage = 1; // 最低保証1ダメージ
+        }
 
         // ダメージ適用
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-        if (enemyBlocked > 0)
-            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（{enemyBlocked}軽減） MP-{magic.mpCost}");
+        // ログ生成
+        if (isCrit)
+            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！ MP-{magic.mpCost}");
         else
             AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
 
@@ -415,6 +503,102 @@ public class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
+    // 命中判定・クリティカル判定（プレイヤー攻撃用）（追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの攻撃が命中するかどうかを判定する。
+    ///
+    /// 計算式:
+    ///   最終命中率 = baseHitRate × (1 - (敵回避力 - 命中力) / 100)
+    ///   ただし最低25%保証。
+    ///
+    /// 例: 基礎命中率90%、命中力10、敵回避力20 の場合
+    ///   90 × (1 - (20-10)/100) = 90 × 0.9 = 81%
+    ///
+    /// 例: 基礎命中率95%、命中力30、敵回避力10 の場合
+    ///   95 × (1 - (10-30)/100) = 95 × 1.2 = 114% → 95%にクランプ
+    /// </summary>
+    /// <param name="baseHitRate">スキルまたは武器の基礎命中率（%）</param>
+    /// <returns>true: 命中、false: ミス</returns>
+    private bool CheckPlayerHit(int baseHitRate)
+    {
+        int playerAccuracy = (GameState.I != null) ? GameState.I.Accuracy : 0;
+        int enemyEvasion = (enemyMonster != null) ? enemyMonster.Evasion : 0;
+
+        // 最終命中率を計算
+        float hitChance = baseHitRate * (1f - (enemyEvasion - playerAccuracy) / 100f);
+
+        // 下限25%保証
+        if (hitChance < 25f) hitChance = 25f;
+        // 上限は基礎命中率を超えない（ただし100%は超えない）
+        if (hitChance > 100f) hitChance = 100f;
+
+        // 0～99.99 の乱数で判定
+        float roll = Random.Range(0f, 100f);
+        bool hit = roll < hitChance;
+
+        Debug.Log($"[Battle] PlayerHitCheck: baseHit={baseHitRate} accuracy={playerAccuracy} " +
+                  $"enemyEvasion={enemyEvasion} hitChance={hitChance:F2}% roll={roll:F2} hit={hit}");
+
+        return hit;
+    }
+
+    /// <summary>
+    /// プレイヤーの攻撃がクリティカルになるかどうかを判定する。
+    /// CriticalRate（float、小数点2位精度）% の確率で発動。
+    /// クリティカル時: 防御無視、ダメージ2倍。
+    /// </summary>
+    /// <returns>true: クリティカル、false: 通常</returns>
+    private bool CheckPlayerCrit()
+    {
+        float critChance = (GameState.I != null) ? GameState.I.CriticalRate : 5f;
+        if (critChance < 0f) critChance = 0f;
+
+        float roll = Random.Range(0f, 100f);
+        bool crit = roll < critChance;
+
+        Debug.Log($"[Battle] PlayerCritCheck: critChance={critChance:F2}% roll={roll:F2} crit={crit}");
+
+        return crit;
+    }
+
+    // =========================================================
+    // 命中判定（敵攻撃用）（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 敵の攻撃が命中するかどうかを判定する。
+    ///
+    /// 計算式:
+    ///   最終命中率 = 敵基礎命中率 × (1 - プレイヤー回避率 / 100)
+    ///   ただし最低10%保証。
+    ///
+    /// 敵はクリティカルを行わない。
+    /// </summary>
+    /// <param name="enemyBaseHitRate">敵の基礎命中率（%）</param>
+    /// <returns>true: 命中、false: ミス</returns>
+    private bool CheckEnemyHit(int enemyBaseHitRate)
+    {
+        float playerEvasion = (GameState.I != null) ? GameState.I.Evasion : 0f;
+
+        // 最終命中率を計算
+        float hitChance = enemyBaseHitRate * (1f - playerEvasion / 100f);
+
+        // 下限10%保証
+        if (hitChance < 10f) hitChance = 10f;
+        if (hitChance > 100f) hitChance = 100f;
+
+        float roll = Random.Range(0f, 100f);
+        bool hit = roll < hitChance;
+
+        Debug.Log($"[Battle] EnemyHitCheck: baseHit={enemyBaseHitRate} playerEvasion={playerEvasion:F2} " +
+                  $"hitChance={hitChance:F2}% roll={roll:F2} hit={hit}");
+
+        return hit;
+    }
+
+    // =========================================================
     // 敵ターン
     // =========================================================
 
@@ -445,9 +629,20 @@ public class BattleSceneController : MonoBehaviour
     /// 従来の敵攻撃処理（actions 未設定時のフォールバック）。
     /// Monster.Attack をそのままダメージとして使用する。
     /// 防御ダイスによる軽減を適用する。
+    ///
+    /// 命中判定（追加）:
+    ///   Monster.BaseHitRate × (1 - プレイヤー回避率/100)、最低10%。
     /// </summary>
     private void ExecuteLegacyAttack()
     {
+        // --- 命中判定（追加） ---
+        if (!CheckEnemyHit(enemyMonster.BaseHitRate))
+        {
+            AddLog($"{enemyMonster.Mname} の攻撃！ …しかし外れた！");
+            AfterEnemyAction();
+            return;
+        }
+
         // 敵の攻撃力（Monster.Attack をそのまま使用）
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
@@ -641,9 +836,21 @@ public class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
     /// skill.damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
+    ///
+    /// 命中判定（追加）:
+    ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
     /// </summary>
     private void ExecuteEnemyNormalAttack(MonsterSkillData skill)
     {
+        // --- 命中判定（追加） ---
+        if (!CheckEnemyHit(skill.baseHitRate))
+        {
+            string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
+            AddLog($"{enemyMonster.Mname} の{actionName}！ …しかし外れた！");
+            AfterEnemyAction();
+            return;
+        }
+
         int enemyDamage = enemyMonster.Attack;
         if (enemyDamage < 1) enemyDamage = 1;
 
@@ -657,11 +864,11 @@ public class BattleSceneController : MonoBehaviour
         ApplyDamageToPlayer(finalDamage);
 
         // ログ表示
-        string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
+        string actionName2 = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
         if (blocked > 0)
-            AddLog($"{enemyMonster.Mname} の{actionName}！ {finalDamage}ダメージ！（{blocked}軽減）");
+            AddLog($"{enemyMonster.Mname} の{actionName2}！ {finalDamage}ダメージ！（{blocked}軽減）");
         else
-            AddLog($"{enemyMonster.Mname} の{actionName}！ {finalDamage}ダメージ！");
+            AddLog($"{enemyMonster.Mname} の{actionName2}！ {finalDamage}ダメージ！");
 
         // 敗北判定 → プレイヤーターンへ
         AfterEnemyAction();
@@ -680,9 +887,23 @@ public class BattleSceneController : MonoBehaviour
     ///      ※ CalcTotalAttributeResistance は装備品分＋パッシブ分の合算値を返す。
     ///   3. 防御ダイスで軽減
     ///      → finalDamage = afterResist - blocked
+    ///
+    /// 命中判定（追加）:
+    ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
     /// </summary>
     private void ExecuteEnemySkillAttack(MonsterSkillData skill)
     {
+        // --- 命中判定（追加） ---
+        if (!CheckEnemyHit(skill.baseHitRate))
+        {
+            string missName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName
+                : $"{skill.attackAttribute.ToJapanese()}攻撃";
+            AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+            AfterEnemyAction();
+            return;
+        }
+
         // 基礎ダメージを決定
         int baseDamage;
         if (skill.fixedDamage > 0)
@@ -1019,6 +1240,24 @@ public class BattleSceneController : MonoBehaviour
                 items[i].ResetAllCooldowns();
             }
         }
+    }
+
+    // =========================================================
+    // 武器の基礎命中率取得（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 装備中武器の通常攻撃の基礎命中率を返す。
+    /// 未装備（素手）の場合は 95 を返す。
+    /// </summary>
+    private int GetEquippedWeaponBaseHitRate()
+    {
+        if (equippedWeaponItem != null && equippedWeaponItem.data != null)
+        {
+            return equippedWeaponItem.data.baseHitRate;
+        }
+        // 素手の場合はハードコード95
+        return 95;
     }
 
     // =========================================================

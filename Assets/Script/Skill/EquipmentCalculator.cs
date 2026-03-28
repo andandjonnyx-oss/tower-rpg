@@ -154,4 +154,43 @@ public static class EquipmentCalculator
 
         return 0;
     }
+
+    // =========================================================
+    // 命中力・回避率・クリティカル率の装備補正（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 装備中武器の命中力補正（int）を返す。未装備なら0。
+    /// ItemData.equipAccuracy をそのまま100%返す。
+    /// </summary>
+    public static int GetAccuracy()
+    {
+        var data = GetEquippedWeaponData();
+        if (data == null) return 0;
+        return data.equipAccuracy;
+    }
+
+    /// <summary>
+    /// 装備中武器の回避率補正（%）を返す。未装備なら0。
+    /// ItemData.equipEvasion をそのまま100%返す。
+    /// int → float 変換は GameState.Evasion プロパティ側で行う。
+    /// </summary>
+    public static int GetEvasion()
+    {
+        var data = GetEquippedWeaponData();
+        if (data == null) return 0;
+        return data.equipEvasion;
+    }
+
+    /// <summary>
+    /// 装備中武器のクリティカル率補正（%）を返す。未装備なら0。
+    /// ItemData.equipCritical をそのまま100%返す。
+    /// int → float 変換は GameState.CriticalRate プロパティ側で行う。
+    /// </summary>
+    public static int GetCritical()
+    {
+        var data = GetEquippedWeaponData();
+        if (data == null) return 0;
+        return data.equipCritical;
+    }
 }

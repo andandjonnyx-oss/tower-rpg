@@ -144,6 +144,108 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
+    // 命中力・回避率・クリティカル率（DEX/LUC ベース + 装備 + パッシブ）（追加）
+    // =========================================================
+    //
+    // 命中力（Accuracy）: int
+    //   計算式: DEX×10 + LUC×1 + 装備 + パッシブ
+    //   BattleSceneController でプレイヤー攻撃の命中判定に使用。
+    //
+    // 回避率（Evasion）: float（小数点2位精度）
+    //   計算式: 5 + DEX×0.05 + LUC×0.02 + 装備 + パッシブ
+    //   回避とクリティカルは装備やアイテムで主に増やすため、
+    //   パラメータによる増加はおまけ程度に設定されている。
+    //   BattleSceneController で敵攻撃の命中判定に使用。
+    //
+    // クリティカル率（CriticalRate）: float（小数点2位精度）
+    //   計算式: 5 + DEX×0.05 + LUC×0.02 + 装備 + パッシブ
+    //   命中時に判定し、クリティカルなら防御無視・ダメージ2倍。
+    //   敵はクリティカルを行わない。
+    // =========================================================
+
+    /// <summary>
+    /// 命中力（int）。
+    /// 計算式: baseDEX × 10 + baseLUC × 1
+    ///         + EquipmentCalculator.GetAccuracy()
+    ///         + PassiveCalculator.CalcAccuracyBonus()
+    ///
+    /// BattleSceneController でのプレイヤー攻撃命中判定:
+    ///   最終命中率 = 基礎命中率 × (1 - (敵回避力 - Accuracy) / 100)
+    ///   ただし最低25%保証。
+    /// </summary>
+    public int Accuracy
+    {
+        get
+        {
+            int total = baseDEX * 10
+                      + baseLUC * 1
+                      + EquipmentCalculator.GetAccuracy()
+                      + PassiveCalculator.CalcAccuracyBonus();
+            if (total < 0) total = 0;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// 回避率（float、小数点2位精度）。単位は %。
+    /// 計算式: 5.00 + baseDEX × 0.05 + baseLUC × 0.02
+    ///         + EquipmentCalculator.GetEvasion()（int → floatに変換）
+    ///         + PassiveCalculator.CalcEvasionBonus()（float、小数点2位精度）
+    ///
+    /// BattleSceneController での敵攻撃命中判定:
+    ///   最終命中率 = 敵基礎命中率 × (1 - Evasion / 100)
+    ///   ただし最低10%保証。
+    ///
+    /// 回避率は装備やアイテムで主に増やすため、
+    /// DEX/LUC による増加はおまけ程度（DEX×0.05 + LUC×0.02）。
+    /// </summary>
+    public float Evasion
+    {
+        get
+        {
+            float total = 5.00f
+                        + baseDEX * 0.05f
+                        + baseLUC * 0.02f
+                        + (float)EquipmentCalculator.GetEvasion()
+                        + PassiveCalculator.CalcEvasionBonus();
+            if (total < 0f) total = 0f;
+            // 小数点2位に丸める
+            total = Mathf.Floor(total * 100f + 0.5f) / 100f;
+            return total;
+        }
+    }
+
+    /// <summary>
+    /// クリティカル率（float、小数点2位精度）。単位は %。
+    /// 計算式: 5.00 + baseDEX × 0.05 + baseLUC × 0.02
+    ///         + EquipmentCalculator.GetCritical()（int → floatに変換）
+    ///         + PassiveCalculator.CalcCriticalBonus()（float、小数点2位精度）
+    ///
+    /// BattleSceneController でのプレイヤー攻撃クリティカル判定:
+    ///   命中後に CriticalRate% の確率でクリティカル。
+    ///   クリティカル時: 防御無視、ダメージ2倍。
+    ///   敵はクリティカルを行わない。
+    ///
+    /// クリティカル率は装備やアイテムで主に増やすため、
+    /// DEX/LUC による増加はおまけ程度（DEX×0.05 + LUC×0.02）。
+    /// </summary>
+    public float CriticalRate
+    {
+        get
+        {
+            float total = 5.00f
+                        + baseDEX * 0.05f
+                        + baseLUC * 0.02f
+                        + (float)EquipmentCalculator.GetCritical()
+                        + PassiveCalculator.CalcCriticalBonus();
+            if (total < 0f) total = 0f;
+            // 小数点2位に丸める
+            total = Mathf.Floor(total * 100f + 0.5f) / 100f;
+            return total;
+        }
+    }
+
+    // =========================================================
     // HP 計算（VIT ベース + 装備 + パッシブ）
     // =========================================================
 

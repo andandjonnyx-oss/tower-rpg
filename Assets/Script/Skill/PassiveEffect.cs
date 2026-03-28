@@ -27,6 +27,12 @@ public class PassiveEffect
     [Header("Value")]
     [Tooltip("効果値。耐性なら耐性値、ステアップなら上昇量")]
     public int value;
+
+    [Header("Float Value（小数点精度が必要な効果用）")]
+    [Tooltip("float 版の効果値。EvasionBonus / CriticalBonus で使用する。\n"
+           + "value（int）が 0 でこちらが設定されている場合はこちらを使う。\n"
+           + "両方設定されている場合は floatValue を優先する。")]
+    public float floatValue;
 }
 
 /// <summary>
@@ -50,6 +56,9 @@ public class PassiveEffect
 ///   MagicDefenseBonus      : 魔法防御力アップ
 ///   LuckBonus              : 運の良さアップ
 ///   StatusEffectResistance : 状態異常耐性（将来拡張用）
+///   AccuracyBonus          : 命中力アップ（追加）
+///   EvasionBonus           : 回避率アップ（追加、float 小数点2位）
+///   CriticalBonus          : クリティカル率アップ（追加、float 小数点2位）
 /// </summary>
 public enum PassiveType
 {
@@ -91,4 +100,15 @@ public enum PassiveType
 
     /// <summary>状態異常耐性アップ。将来拡張用。</summary>
     StatusEffectResistance,
+
+    // ---- 命中・回避・クリティカル（追加） ----
+
+    /// <summary>命中力アップ（int）。targetAttribute/targetStat は不要。value を使用。</summary>
+    AccuracyBonus,
+
+    /// <summary>回避率アップ（float 小数点2位）。targetAttribute/targetStat は不要。floatValue を使用。</summary>
+    EvasionBonus,
+
+    /// <summary>クリティカル率アップ（float 小数点2位）。targetAttribute/targetStat は不要。floatValue を使用。</summary>
+    CriticalBonus,
 }

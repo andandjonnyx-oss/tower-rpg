@@ -34,6 +34,20 @@ public class Monster : ScriptableObject
     public int Speed;
     public int Luck;
 
+    // =========================================================
+    // 命中・回避（追加）
+    // =========================================================
+
+    [Header("Hit / Evasion")]
+    [Tooltip("敵の回避力（int）。プレイヤーの命中力との差で命中率が変動する。\n"
+           + "0 = 回避しない。値が高いほどプレイヤーの攻撃が外れやすくなる。")]
+    public int Evasion = 0;
+
+    [Tooltip("敵の通常攻撃の基礎命中率（%）。デフォルト90。\n"
+           + "敵の攻撃命中率 = BaseHitRate × (1 - プレイヤー回避率/100)\n"
+           + "ただし最低10%保証。")]
+    public int BaseHitRate = 90;
+
     [Header("Reward")]
     public int Exp;
     public int Gold;
