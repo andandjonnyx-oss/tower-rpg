@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 660c353b5cefa6b438afc34f097364cd, type: 3}
+  m_Name: poisonattack
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterSkillData
+  skillId: 5
+  skillName: "\u6BD2\u653B\u6483"
+  description: 
+  actionType: 2
+  damageCategory: 0
+  attackAttribute: 0
+  damageMultiplier: 1
+  fixedDamage: 0
+  baseHitRate: 100
+  inflictEffect: 1
+  inflictChance: 40

@@ -21,5 +21,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 60ddd741b098c9746971507201191bf6, type: 2}
   - {fileID: 11400000, guid: b12812612fe4dd84b8a87a9ffe67305e, type: 2}
   - {fileID: 11400000, guid: 458885e7b2e544e49a556b847817ebd6, type: 2}
+  - {fileID: 11400000, guid: 09d78fee1f5cad447bf499cd845c5ff3, type: 2}
+  - {fileID: 11400000, guid: db0c3a6f1a884344f9db1e5718da9e1b, type: 2}
+  - {fileID: 11400000, guid: 60179f5ec72397b4ebced6af31965555, type: 2}
+  - {fileID: 11400000, guid: 73eb4c4f3d79ae14a867401cf6aa5e1c, type: 2}
   maxFloor: 100
   maxStepPerFloor: 20

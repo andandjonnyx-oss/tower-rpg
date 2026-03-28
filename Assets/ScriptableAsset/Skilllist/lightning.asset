@@ -22,3 +22,7 @@ MonoBehaviour:
   fixedDamage: 0
   cooldownTurns: 0
   mpCost: 4
+  baseHitRate: 30
+  inflictEffect: 0
+  inflictChance: 0
+  effectOnly: 0

@@ -28,6 +28,9 @@ MonoBehaviour:
   MagicDefense: 5
   Speed: 0
   Luck: 0
+  Evasion: 40
+  BaseHitRate: 90
+  PoisonResistance: 0
   Exp: 0
   Gold: 0
   Help: 

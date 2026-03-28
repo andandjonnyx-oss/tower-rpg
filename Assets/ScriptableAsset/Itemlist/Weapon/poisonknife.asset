@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: poisonknife
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: 10
+  itemName: "\u30DD\u30A4\u30BA\u30F3\u30CA\u30A4\u30D5"
+  description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B"
+  icon: {fileID: 0}
+  Minfloor: 1
+  Minstep: 1
+  Maxfloor: 3
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  curesPoison: 0
+  weaponAttribute: 1
+  attackPower: 3
+  skills: []
+  weaponInflictEffect: 1
+  weaponInflictChance: 20
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 0
