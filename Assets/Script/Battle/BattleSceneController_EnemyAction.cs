@@ -225,6 +225,10 @@ public partial class BattleSceneController
     /// <summary>
     /// 敵のスキル攻撃。MonsterSkillData のパラメータでダメージ計算する。
     ///
+    /// ★ブラッシュアップ:
+    ///   effectOnly=true の場合はダメージ計算をスキップし、状態異常のみ付与する。
+    ///   既に対象が該当の状態異常だった場合は判定をスキップしログも出さない。
+    ///
     /// ダメージ計算:
     ///   1. fixedDamage > 0 ならそれを使用
     ///      damageMultiplier > 0 なら Monster.Attack × damageMultiplier（四捨五入）
@@ -251,6 +255,43 @@ public partial class BattleSceneController
             return;
         }
 
+        // =========================================================
+        // ★ブラッシュアップ: effectOnly 対応（敵スキルでもダメージ無し+状態異常のみが可能に）
+        // =========================================================
+        if (skill.effectOnly)
+        {
+            string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "スキル";
+
+            if (skill.inflictEffect == StatusEffect.Poison && skill.inflictChance > 0)
+            {
+                // ★ブラッシュアップ: 既に毒なら判定せずログも出さない
+                if (GameState.I != null && GameState.I.isPoisoned)
+                {
+                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし既に毒状態だ！");
+                }
+                else
+                {
+                    bool inflicted = StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
+                    if (inflicted)
+                    {
+                        AddLog($"{enemyMonster.Mname} の{effectSkillName}！ You は毒を受けた！");
+                    }
+                    else
+                    {
+                        AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし効かなかった！");
+                    }
+                }
+            }
+            else
+            {
+                AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
+            }
+
+            AfterEnemyAction();
+            return;
+        }
+
+        // --- 通常のダメージ計算（effectOnly=false）---
         int baseDamage;
         if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
         else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
@@ -285,15 +326,19 @@ public partial class BattleSceneController
         Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
                   $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
 
-        // 敵スキルの毒付与判定（追加）
+        // ★ブラッシュアップ: 敵スキルの毒付与判定 - 既に毒ならスキップ
         if (skill.inflictEffect == StatusEffect.Poison
             && skill.inflictChance > 0)
         {
-            StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
-            if (GameState.I != null && GameState.I.isPoisoned)
+            if (GameState.I != null && !GameState.I.isPoisoned)
             {
-                AddLog("You は毒を受けた！");
+                bool inflicted = StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
+                if (inflicted)
+                {
+                    AddLog("You は毒を受けた！");
+                }
             }
+            // 既に毒の場合はログを出さない
         }
 
         AfterEnemyAction();

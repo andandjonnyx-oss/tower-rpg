@@ -88,7 +88,7 @@ public partial class BattleSceneController
         else
             AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
 
-        // 武器の毒付与判定（追加）
+        // ★ブラッシュアップ: 武器の毒付与判定 - 既に毒ならスキップ（ログも出さない）
         if (equippedWeaponItem != null && equippedWeaponItem.data != null
             && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Poison
             && equippedWeaponItem.data.weaponInflictChance > 0
@@ -151,6 +151,38 @@ public partial class BattleSceneController
             return;
         }
 
+        // ★ブラッシュアップ: effectOnly 対応（プレイヤースキルでもダメージ無し+状態異常のみが可能に）
+        if (skill.effectOnly)
+        {
+            if (skill.inflictEffect == StatusEffect.Poison && skill.inflictChance > 0)
+            {
+                if (enemyIsPoisoned)
+                {
+                    AddLog($"You は {skill.skillName}！ …しかし{enemyMonster.Mname}は既に毒状態だ！");
+                }
+                else
+                {
+                    int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+                    bool poisoned = StatusEffectSystem.TryInflict(skill.inflictChance, enemyPoisonResist);
+                    if (poisoned)
+                    {
+                        enemyIsPoisoned = true;
+                        AddLog($"You は {skill.skillName}！ {enemyMonster.Mname} は毒を受けた！");
+                    }
+                    else
+                    {
+                        AddLog($"You は {skill.skillName}！ …しかし効かなかった！");
+                    }
+                }
+            }
+            else
+            {
+                AddLog($"You は {skill.skillName}！");
+            }
+            Invoke(nameof(EnemyTurn), 0.5f);
+            return;
+        }
+
         int attack = (GameState.I != null) ? GameState.I.Attack : 1;
         int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
         if (damage < 1) damage = 1;
@@ -178,7 +210,7 @@ public partial class BattleSceneController
         else
             AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
 
-        // スキルの毒付与判定（追加）
+        // ★ブラッシュアップ: スキルの毒付与判定 - 既に毒ならスキップ（ログも出さない）
         if (skill.inflictEffect == StatusEffect.Poison
             && skill.inflictChance > 0
             && !enemyIsPoisoned)
@@ -245,19 +277,26 @@ public partial class BattleSceneController
         if (magic.effectOnly)
         {
             if (magic.inflictEffect == StatusEffect.Poison
-                && magic.inflictChance > 0
-                && !enemyIsPoisoned)
+                && magic.inflictChance > 0)
             {
-                int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-                bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
-                if (poisoned)
+                // ★ブラッシュアップ: 既に毒ならスキップ
+                if (enemyIsPoisoned)
                 {
-                    enemyIsPoisoned = true;
-                    AddLog($"You は {magic.skillName}！ {enemyMonster.Mname} は毒を受けた！ MP-{magic.mpCost}");
+                    AddLog($"You は {magic.skillName}！ …しかし{enemyMonster.Mname}は既に毒状態だ！ MP-{magic.mpCost}");
                 }
                 else
                 {
-                    AddLog($"You は {magic.skillName}！ …しかし効かなかった！ MP-{magic.mpCost}");
+                    int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
+                    bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
+                    if (poisoned)
+                    {
+                        enemyIsPoisoned = true;
+                        AddLog($"You は {magic.skillName}！ {enemyMonster.Mname} は毒を受けた！ MP-{magic.mpCost}");
+                    }
+                    else
+                    {
+                        AddLog($"You は {magic.skillName}！ …しかし効かなかった！ MP-{magic.mpCost}");
+                    }
                 }
             }
             else
@@ -297,7 +336,7 @@ public partial class BattleSceneController
         else
             AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
 
-        // 魔法の毒付与判定（追加）
+        // ★ブラッシュアップ: 魔法の毒付与判定 - 既に毒ならスキップ（ログも出さない）
         if (magic.inflictEffect == StatusEffect.Poison
             && magic.inflictChance > 0
             && !enemyIsPoisoned)

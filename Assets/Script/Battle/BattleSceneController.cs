@@ -154,12 +154,18 @@ public partial class BattleSceneController : MonoBehaviour
         SceneManager.LoadScene(mainSceneName);
     }
 
+    /// <summary>
+    /// HP/MP全回復＋全状態異常クリア。
+    /// ★ブラッシュアップ: 街に戻る = 全回復（状態異常含む）で統一。
+    /// 敗北時・帰還時・ロード復帰時にこのメソッドを呼ぶ。
+    /// </summary>
     private void FullRecover()
     {
         if (GameState.I == null) return;
         GameState.I.currentHp = GameState.I.maxHp;
         GameState.I.currentMp = GameState.I.maxMp;
-        Debug.Log($"[Battle] 全回復: HP={GameState.I.currentHp}/{GameState.I.maxHp}");
+        GameState.I.ClearAllStatusEffects(); // ★追加: 状態異常も全クリア
+        Debug.Log($"[Battle] 全回復: HP={GameState.I.currentHp}/{GameState.I.maxHp} 状態異常クリア");
     }
 
     private void ResetBattleStatics()

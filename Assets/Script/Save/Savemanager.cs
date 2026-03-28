@@ -123,7 +123,12 @@ public static class SaveManager
     /// <summary>
     /// セーブファイルから GameState・ItemBoxManager・StorageManager にデータを復元する。
     /// タイトルのスタートボタン（セーブデータあり時）で呼ばれる。
-    /// ロード後は Main シーンに遷移し、HP/MP は全回復状態になる。
+    ///
+    /// ★ブラッシュアップ:
+    ///   ロード後は Main シーンに遷移し、HP/MP は全回復＋状態異常クリア。
+    ///   「街に戻る = 全回復（状態異常含む）」で統一。
+    ///   セーブデータには isPoisoned を保持するが、
+    ///   ロード復帰時は全クリアする。
     /// </summary>
     public static bool Load()
     {
@@ -154,7 +159,7 @@ public static class SaveManager
 
             GameState.I.maxHp = data.maxHp;
             GameState.I.maxMp = data.maxMp;
-            // ロード時は全回復状態で開始（どのシーンで中断しても安全に復帰）
+            // ★ブラッシュアップ: ロード時は全回復状態で開始（どのシーンで中断しても安全に復帰）
             GameState.I.currentHp = data.maxHp;
             GameState.I.currentMp = data.maxMp;
 
@@ -184,10 +189,11 @@ public static class SaveManager
             GameState.I.pendingItemData = null;
             GameState.I.pendingEventId = "";
 
-            // 状態異常の復元（追加）
-            // ロード時は全回復だが、毒状態は維持する設計。
-            // 毒状態で中断→再開しても毒は治らない。
-            GameState.I.isPoisoned = data.isPoisoned;
+            // ★ブラッシュアップ: ロード時は全状態異常をクリア
+            // 「街に戻る = 全回復（状態異常含む）」で統一。
+            // 以前は isPoisoned を復元していたが、
+            // ロードは常に街（Main）スタートなので全クリアが正しい。
+            GameState.I.ClearAllStatusEffects();
         }
 
         // --- ItemBoxManager（所持品）に反映 ---
@@ -202,7 +208,7 @@ public static class SaveManager
             StorageManager.Instance.RestoreFromSave(data.storageItems);
         }
 
-        Debug.Log($"[SaveManager] ロード完了: Floor={data.floor} Step={data.step}");
+        Debug.Log($"[SaveManager] ロード完了: Floor={data.floor} Step={data.step} (全回復+状態異常クリア)");
         return true;
     }
 
@@ -269,6 +275,7 @@ public class SaveData
     public string equippedWeaponUid = "";
 
     // --- 状態異常（追加） ---
+    // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
     public bool isPoisoned = false;
 
     // --- 既読イベントID一覧 ---

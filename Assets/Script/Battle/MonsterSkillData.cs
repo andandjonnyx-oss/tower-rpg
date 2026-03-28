@@ -11,6 +11,13 @@ using UnityEngine;
 ///   Idle        → 何もしない
 ///   NormalAttack → Monster.Attack 依存の通常攻撃
 ///   SkillAttack  → このデータに定義されたスキル攻撃
+///
+/// ★ブラッシュアップ:
+///   effectOnly フラグを追加。SkillData と同様に、
+///   ダメージ無し＋状態異常付与のみのスキルを表現可能にした。
+///   モンスターは CT/MP を無視するルールのため、
+///   プレイヤー側の SkillData と完全統一ではないが、
+///   振る舞いとフィールド構成を揃えている。
 /// </summary>
 [CreateAssetMenu(menuName = "Battle/MonsterSkill")]
 public class MonsterSkillData : ScriptableObject
@@ -75,6 +82,17 @@ public class MonsterSkillData : ScriptableObject
            + "例: 敵のポイズン = 80")]
     [Range(0, 100)]
     public int inflictChance = 0;
+
+    // =========================================================
+    // ★ブラッシュアップ: effectOnly フラグ追加
+    // =========================================================
+
+    [Tooltip("true の場合、ダメージを与えず状態異常の付与のみ行う。\n"
+           + "SkillData の effectOnly と同等の機能。\n"
+           + "例: 敵の「ポイズン」魔法（ダメージ0、毒付与80%）\n"
+           + "actionType=SkillAttack で effectOnly=true にすると、\n"
+           + "ダメージ計算をスキップして状態異常のみ付与する。")]
+    public bool effectOnly = false;
 }
 
 /// <summary>
@@ -98,6 +116,8 @@ public enum MonsterActionType
     /// fixedDamage > 0 ならそれを使用。
     /// そうでなければ damageMultiplier × Monster.Attack を使用。
     /// どちらも 0 なら Monster.Attack をそのまま使用。
+    ///
+    /// ★ブラッシュアップ: effectOnly=true ならダメージスキップ。
     /// </summary>
     SkillAttack,
 }

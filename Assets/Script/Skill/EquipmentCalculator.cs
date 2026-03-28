@@ -20,6 +20,7 @@ using UnityEngine;
 ///   int weaponAtk = EquipmentCalculator.GetAttackPower();
 ///   int weaponDef = EquipmentCalculator.GetDefense();
 ///   int fireRes   = EquipmentCalculator.GetAttributeResistance(WeaponAttribute.Fire);
+///   int poisonRes = EquipmentCalculator.GetStatusEffectResistance(StatusEffect.Poison);
 /// </summary>
 public static class EquipmentCalculator
 {
@@ -192,5 +193,34 @@ public static class EquipmentCalculator
         var data = GetEquippedWeaponData();
         if (data == null) return 0;
         return data.equipCritical;
+    }
+
+    // =========================================================
+    // ★ブラッシュアップ: 状態異常耐性の装備補正（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 装備中武器の指定状態異常の耐性値を返す。未装備 or 該当なしなら0。
+    /// ItemData.equipStatusEffectResistances から対象状態異常の value をそのまま100%返す。
+    ///
+    /// 属性耐性（GetAttributeResistance）と同様の構造。
+    /// PassiveCalculator.CalcStatusEffectResistance() と合算して使う。
+    /// </summary>
+    public static int GetStatusEffectResistance(StatusEffect effect)
+    {
+        var data = GetEquippedWeaponData();
+        if (data == null) return 0;
+        if (data.equipStatusEffectResistances == null) return 0;
+
+        for (int i = 0; i < data.equipStatusEffectResistances.Length; i++)
+        {
+            if (data.equipStatusEffectResistances[i] != null &&
+                data.equipStatusEffectResistances[i].statusEffect == effect)
+            {
+                return data.equipStatusEffectResistances[i].value;
+            }
+        }
+
+        return 0;
     }
 }

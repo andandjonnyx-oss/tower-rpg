@@ -12,6 +12,11 @@ using UnityEngine;
 ///   実質命中率 = 基礎命中率 × (1 - 耐性/100)
 ///   耐性50なら、ポイズン（80%）の実質命中率は 80 × (1 - 50/100) = 40%
 ///
+/// ★ブラッシュアップ:
+///   プレイヤーの毒耐性は装備品＋パッシブの合算で計算する。
+///   EquipmentCalculator.GetStatusEffectResistance(Poison)
+///   + PassiveCalculator.CalcStatusEffectResistance(Poison)
+///
 /// 将来的に他の状態異常を追加する場合もこのクラスに集約する。
 /// </summary>
 public static class StatusEffectSystem
@@ -166,11 +171,22 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// プレイヤーの毒耐性値を返す。
-    /// パッシブ（StatusEffectResistance）+ 装備品の合算。
+    /// ★ブラッシュアップ: 装備品（100%反映）＋パッシブ（重複ルール適用）の合算。
+    ///
+    /// 計算式:
+    ///   EquipmentCalculator.GetStatusEffectResistance(Poison)  ← 装備品分
+    ///   + PassiveCalculator.CalcStatusEffectResistance(Poison) ← パッシブ分
+    ///
+    /// 属性耐性の CalcTotalAttributeResistance() と同じ構造。
+    ///
+    /// 例: 毒耐性30の武器 + 毒耐性50のパッシブアイテム1個
+    ///   → 30(装備) + 50(パッシブ) = 80
     /// </summary>
     public static int GetPlayerPoisonResistance()
     {
-        return PassiveCalculator.CalcStatusEffectResistance(StatusEffect.Poison);
+        int equipRes = EquipmentCalculator.GetStatusEffectResistance(StatusEffect.Poison);
+        int passiveRes = PassiveCalculator.CalcStatusEffectResistance(StatusEffect.Poison);
+        return equipRes + passiveRes;
     }
 
     // =========================================================
@@ -179,6 +195,7 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// プレイヤーに毒を付与する試行。耐性を考慮する。
+    /// ★ブラッシュアップ: 既に毒の場合は判定せず false を返す。
     /// </summary>
     /// <param name="baseChance">基礎付与率（%）</param>
     /// <returns>true: 毒を付与した、false: 付与失敗（耐性 or 確率外れ or 既に毒）</returns>
