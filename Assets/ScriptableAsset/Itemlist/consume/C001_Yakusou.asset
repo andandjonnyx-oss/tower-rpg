@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: C001_Yakusou
   m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemId: 1
+  itemId: C001_Yakusou
   itemName: "\u85AC\u8349"
   description: "HP\u3092\u56DE\u5FA9\u3059\u308B"
   icon: {fileID: -2580401835878434974, guid: aa941e37fc3594e488200af7875fb168, type: 3}
@@ -24,8 +24,24 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 10
+  curesPoison: 0
   weaponAttribute: 0
   attackPower: 0
-  magicId: 
-  sortOrder: 100
   skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 100

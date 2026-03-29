@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: W001_Bokutou
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 2
+  itemId: W001_Bokutou
   itemName: "\u6728\u5200"
   description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002"
   icon: {fileID: -8450684057588575366, guid: 62c2ee3665fe99f49bfe5e9309265fed, type: 3}
@@ -24,9 +24,25 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  curesPoison: 0
   weaponAttribute: 1
   attackPower: 3
-  magicId: 
-  sortOrder: 10
   skills:
   - {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 10

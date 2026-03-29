@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: M005_kawayoroi
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 7
+  itemId: M005_kawayoroi
   itemName: "\u9769\u306E\u93A7"
   description: "HP\uFF0B20"
   icon: {fileID: 0}
@@ -24,13 +24,30 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  curesPoison: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects:
   - effectType: 3
     targetAttribute: 0
     targetStat: 0
+    targetStatusEffect: 0
     value: 20
+    floatValue: 0
   sortOrder: 0

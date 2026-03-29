@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: W003_Pnaihu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 10
+  itemId: W003_Pnaihu
   itemName: "\u30DD\u30A4\u30BA\u30F3\u30CA\u30A4\u30D5"
   description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B"
   icon: {fileID: 0}

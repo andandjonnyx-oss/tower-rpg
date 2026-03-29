@@ -10,31 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: "\u30DC\u30B9\u30E9\u30A4\u30E0"
+  m_Name: 002_inpu
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 6
-  Mname: "\u30DC\u30B9\u30E9\u30A4\u30E0"
-  Image: {fileID: -599943022877168616, guid: 01defd185b982b84a84e997c01272118, type: 3}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  ID: 3
+  Mname: "\u30A4\u30F3\u30D7"
+  Image: {fileID: -2107824646067831486, guid: 0b18cebc50ee19b42af7b09d0e423abf, type: 3}
+  Minfloor: 1
+  Minstep: 11
+  Maxfloor: 1
+  Maxstep: 20
   Weight: 1
-  IsBoss: 1
+  IsBoss: 0
   IsUnique: 0
-  MaxHp: 500
-  Attack: 10
+  MaxHp: 10
+  Attack: 3
   Defense: 5
-  MagicDefense: 0
+  MagicDefense: 5
   Speed: 0
   Luck: 0
-  Evasion: 0
+  Evasion: 60
   BaseHitRate: 90
   PoisonResistance: 0
-  Exp: 500
+  Exp: 50
   Gold: 0
   Help: 
   actions:
   - skill: {fileID: 11400000, guid: 42d9cbf3e7e7d854c93446a1851f54d5, type: 2}
+    threshold: 30
+  - skill: {fileID: 11400000, guid: d98162908c24a794d8f4da11943df18e, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 0f2d8af543336c549aeb9e9303c51fa4, type: 2}
     threshold: 100
   baseActionRange: 100

@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: "\u30B9\u30E9\u30A4\u30E0"
+  m_Name: 004_succubuslime
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 1
-  Mname: "\u30B9\u30E9\u30A4\u30E0"
+  ID: 5
+  Mname: "\u30B5\u30AD\u30E5\u30D0\u30B9\u30E9\u30A4\u30E0"
   Image: {fileID: -599943022877168616, guid: 01defd185b982b84a84e997c01272118, type: 3}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 1
-  Maxstep: 10
+  Maxfloor: 100
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 10
+  MaxHp: 50
   Attack: 1
-  Defense: 10
-  MagicDefense: 5
+  Defense: 1
+  MagicDefense: 1
   Speed: 0
-  Luck: 0
-  Evasion: 20
+  Luck: 1
+  Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
-  Exp: 50
+  Exp: 10
   Gold: 0
-  Help: "\u96D1\u9B5A\u306E\u4EE3\u8868\u3001\u30B9\u30E9\u30A4\u30E0\u3060\uFF01\n\u3067\u3082\u67D0RPG\u304C\u51FA\u308B\u307E\u3067\u306F\u3001\u9178\u3068\u304B\u6301\u3063\u3066\u305F\u308A\u7D50\u69CB\u5F37\u3044\u8A2D\u5B9A\u3060\u3063\u305F\u3093\u3060\u3051\u3069\u306A\uFF01"
+  Help: 
   actions:
-  - skill: {fileID: 11400000, guid: 7e1e9371d8a092947a0a67a801937dff, type: 2}
-    threshold: 100
+  - skill: {fileID: 11400000, guid: 0ce6e9a310a52eb4fa959bae4711d201, type: 2}
+    threshold: 0
   baseActionRange: 100

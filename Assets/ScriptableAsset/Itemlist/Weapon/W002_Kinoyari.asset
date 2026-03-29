@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: W002_Kinoyari
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 4
+  itemId: W002_Kinoyari
   itemName: "\u6728\u306E\u69CD"
   description: "\u30A6\u30C3\u30C9\u30B9\u30D4\u30A2"
   icon: {fileID: 0}
@@ -24,7 +24,24 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  curesPoison: 0
   weaponAttribute: 2
   attackPower: 4
-  magicId: 
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
   sortOrder: 20

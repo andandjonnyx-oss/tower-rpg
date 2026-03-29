@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: M007_dokunogohu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 12
+  itemId: M007_dokunogohu
   itemName: "\u6BD2\u306E\u8B77\u7B26"
   description: "\u6BD2\u3092\u9632\u3050"
   icon: {fileID: 0}
@@ -41,6 +41,7 @@ MonoBehaviour:
   equipCritical: 0
   baseHitRate: 95
   equipResistances: []
+  equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects:
   - effectType: 10

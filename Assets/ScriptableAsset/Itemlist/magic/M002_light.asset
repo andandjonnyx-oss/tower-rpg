@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: M002_light
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 6
+  itemId: M002_light
   itemName: "\u3073\u308A\u3073\u308A"
   description: 
   icon: {fileID: 0}
@@ -24,9 +24,24 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  curesPoison: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
   magicSkill: {fileID: 11400000, guid: c4c0c8402cf2d8743be903e2ae11aa4d, type: 2}
   passiveEffects: []
   sortOrder: 2
