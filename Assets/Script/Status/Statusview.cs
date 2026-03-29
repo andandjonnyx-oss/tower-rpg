@@ -113,7 +113,8 @@ public class StatusView : MonoBehaviour
 
         // 共通
         if (levelText != null) levelText.text = $"レベル：{gs.level}";
-        if (expToNextText != null) expToNextText.text = $"必要経験値：{gs.expToNext}";
+        if (expToNextText != null) expToNextText.text = $"必要経験値：{gs.expToNext - gs.currentExp}";
+
         if (hpText != null) hpText.text = $"HP：{gs.currentHp}/{gs.maxHp}";
         if (mpText != null) mpText.text = $"MP：{gs.currentMp}/{gs.maxMp}";
 
