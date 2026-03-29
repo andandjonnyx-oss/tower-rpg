@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: "\u30DC\u30B9\u30E9\u30A4\u30E0"
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 6
+  Mname: "\u30DC\u30B9\u30E9\u30A4\u30E0"
+  Image: {fileID: -599943022877168616, guid: 01defd185b982b84a84e997c01272118, type: 3}
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  Weight: 1
+  IsBoss: 1
+  IsUnique: 0
+  MaxHp: 500
+  Attack: 10
+  Defense: 5
+  MagicDefense: 0
+  Speed: 0
+  Luck: 0
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  Exp: 500
+  Gold: 0
+  Help: 
+  actions:
+  - skill: {fileID: 11400000, guid: 42d9cbf3e7e7d854c93446a1851f54d5, type: 2}
+    threshold: 100
+  baseActionRange: 100

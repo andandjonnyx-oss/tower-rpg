@@ -99,12 +99,24 @@ public class TowerState : MonoBehaviour
         bool talkStarted = TowerEventTrigger.Instance.TryTriggerTalkEvent();
         if (talkStarted) return;
 
-        // ② アイテム
+        // =========================================================
+        // ②ボスエンカウント判定（追加）
+        // 会話イベントの後、アイテム・通常エンカウントの前に判定する。
+        // 19STEPの会話イベント（①で処理済み）→ 20STEPのボス戦（ここ）
+        // という流れになる。
+        // =========================================================
+        if (BossEncounterSystem.Instance != null)
+        {
+            bool bossStarted = BossEncounterSystem.Instance.TryStartBossBattle(Floor, Step);
+            if (bossStarted) return;
+        }
+
+        // ③ アイテム
         bool itemStarted = TowerItemTrigger.Instance != null &&
                            TowerItemTrigger.Instance.TryTriggerItemEvent(Floor, Step);
         if (itemStarted) return;
 
-        // ③エンカウント
+        // ④エンカウント
         if (EncounterSystem.Instance != null)
             EncounterSystem.Instance.TryStartEncounter(Floor, Step);
         else

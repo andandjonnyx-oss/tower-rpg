@@ -37,6 +37,7 @@ public partial class BattleSceneController : MonoBehaviour
     [SerializeField] private string towerSceneName = "Tower";
     [SerializeField] private string mainSceneName = "Main";
     [SerializeField] private string itemboxSceneName = "Itembox";
+    [SerializeField] private string talkSceneName = "Talk";
 
     // 戦闘中の敵HP（シーン再読込でも維持するため static）
     private static int enemyCurrentHp;
@@ -127,6 +128,7 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 戦闘勝利時の処理。
     /// 経験値を付与し、レベルアップがあればログを表示する。
+    /// ボス戦の場合は撃破フラグを記録し、勝利会話があれば Talk シーンへ遷移する。
     /// </summary>
     private void OnVictory()
     {
@@ -159,9 +161,50 @@ public partial class BattleSceneController : MonoBehaviour
             }
         }
 
+        // =========================================================
+        // ボス戦勝利処理（追加）
+        // =========================================================
+        if (BattleContext.IsBossBattle)
+        {
+            int bossFloor = BattleContext.BossFloor;
+            string defeatedId = BossEncounterSystem.GetBossDefeatedId(bossFloor);
+
+            // 撃破フラグを記録（セーブも自動で行われる）
+            if (GameState.I != null)
+            {
+                GameState.I.MarkPlayed(defeatedId);
+                Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
+            }
+
+            // ボス勝利会話があれば Talk シーンへ遷移
+            // BossEncounterSystem から勝利会話イベントを取得
+            string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
+
+            // 勝利会話が未再生なら Talk シーンへ遷移
+            if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
+            {
+                GameState.I.pendingEventId = victoryTalkId;
+                BattleContext.IsBossBattle = false;
+                BattleContext.BossFloor = 0;
+                Invoke(nameof(ReturnToTalk), 1.5f);
+                return;
+            }
+
+            // 勝利会話が無い or 再生済みなら通常通り Tower へ
+            BattleContext.IsBossBattle = false;
+            BattleContext.BossFloor = 0;
+            Invoke(nameof(ReturnToTower), 1.5f);
+            return;
+        }
+
         Invoke(nameof(ReturnToTower), 1.5f);
     }
 
+    /// <summary>
+    /// 戦闘敗北時の処理。
+    /// ボス戦の場合は STEP を維持して街に戻る（再挑戦可能）。
+    /// 通常戦闘の場合は従来通り。
+    /// </summary>
     private void OnDefeat()
     {
         battleEnded = true;
@@ -170,10 +213,32 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
         enemyIsPoisoned = false;
+
+        // =========================================================
+        // ボス戦敗北処理（追加）
+        // ボス戦の場合は STEP を維持する。
+        // 街に戻って再度塔に入り、同じ STEP に来ればボス戦が再発生する。
+        // =========================================================
+        if (BattleContext.IsBossBattle)
+        {
+            Debug.Log($"[Battle] ボス戦敗北。STEP={GameState.I?.step} を維持して街へ帰還。");
+            BattleContext.IsBossBattle = false;
+            BattleContext.BossFloor = 0;
+        }
+
         Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
     }
 
     private void ReturnToTower() { SceneManager.LoadScene(towerSceneName); }
+
+    /// <summary>
+    /// ボス勝利後に Talk シーンへ遷移する。（追加）
+    /// pendingEventId は OnVictory() で既にセット済み。
+    /// </summary>
+    private void ReturnToTalk()
+    {
+        SceneManager.LoadScene(talkSceneName);
+    }
 
     private void ReturnToMainWithFullRecover()
     {
