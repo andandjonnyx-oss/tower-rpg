@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
   m_Name: BOSS_F03_VICTORY
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
-  id: 
+  id: BOSS_F03_VICTORY
   floor: 0
   step: 0
   lines:

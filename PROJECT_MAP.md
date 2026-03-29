@@ -3,14 +3,14 @@
 AIアシスタント向け。プロジェクトの構造・各ファイルの役割・依存関係を記述する。
 **セッション開始時にこのファイルを読めば、全ソース読み込み不要で改修対象を特定できる。**
 
-最終更新: 2026-03-29（レベルアップシステム＆レベルドレイン実装完了後）
+最終更新: 2026-03-30（ボス戦システム実装完了後）
 
 ---
 
 ## 1. プロジェクト概要
 
 スマートフォン向けノンフィールドRPG（Unity）。
-塔を1歩ずつ進み、ランダムエンカウント・会話イベント・アイテム取得が発生する。
+塔を1歩ずつ進み、ランダムエンカウント・会話イベント・アイテム取得・ボス戦が発生する。
 
 コアループ: 街(Main) → 塔入口(TowerEntrance) → 塔(Tower) → 戦闘(Battle) → 塔に戻る
 敗北・帰還・ロード復帰 → 街(Main)に戻り HP/MP/状態異常を全回復。
@@ -25,7 +25,8 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 | Main | 街。全回復状態。塔入口・アイテムボックス・ステータスへ遷移 |
 | TowerEntrance | 塔入口。到達階に応じた中間ポイント選択 |
 | Tower | 塔内探索。1歩進むごとにイベント判定 |
-| Battle | ターン制戦闘 |
+| Battle | ターン制戦闘（通常戦闘・ボス戦共用） |
+| Talk | 会話イベント再生（戦闘前/戦闘後のボス会話にも使用） |
 | Itembox | アイテム管理（街/戦闘中の両方から遷移） |
 | Status | ステータス振り分け |
 | Storage | 倉庫 |
@@ -38,8 +39,8 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 | ファイル | 役割 | 主な依存先 |
 |---------|------|-----------|
-| **GameState.cs** | シングルトン。全ゲーム状態を保持（HP/MP/ステータス/装備/状態異常/進行度/レベル/EXP）。DontDestroyOnLoad。サブステータス（Attack, Evasion等）はプロパティで装備+パッシブ込み計算。レベルアップ（GainExp/CalcExpToNext/CalcStatusPointGain）とレベルドレイン（ApplyLevelDrain）を管理 | EquipmentCalculator, PassiveCalculator, SaveManager |
-| **TowerState.cs** | Tower シーンの進行管理。Advance()で1歩進み、イベント判定→エンカウント判定。毒ダメージ処理含む | GameState, StatusEffectSystem, TowerEventTrigger, TowerItemTrigger, EncounterSystem |
+| **GameState.cs** | シングルトン。全ゲーム状態を保持（HP/MP/ステータス/装備/状態異常/進行度/レベル/EXP）。DontDestroyOnLoad。サブステータス（Attack, Evasion等）はプロパティで装備+パッシブ込み計算。レベルアップ（GainExp/CalcExpToNext/CalcStatusPointGain）とレベルドレイン（ApplyLevelDrain）を管理。イベント既読管理（IsPlayed/MarkPlayed）はボス撃破フラグにも流用 | EquipmentCalculator, PassiveCalculator, SaveManager |
+| **TowerState.cs** | Tower シーンの進行管理。Advance()で1歩進み、①会話判定→②ボス判定→③アイテム判定→④エンカウント判定。毒ダメージ処理含む | GameState, StatusEffectSystem, TowerEventTrigger, BossEncounterSystem, TowerItemTrigger, EncounterSystem |
 | **TowerEntranceView.cs** | 塔入口UI。到達階に応じたフロア選択ボタン表示 | GameState, FloorButton |
 | **FloorButton.cs** | フロア選択ボタン1個分 | GameState |
 | **HpMpDisplay.cs** | HP/MPバー表示 | GameState |
@@ -50,16 +51,17 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 | ファイル | 役割 | 主な依存先 |
 |---------|------|-----------|
-| **BattleSceneController.cs** | 戦闘メインコントローラー（partial class本体）。フィールド宣言、Start、ログ管理、UI制御、勝敗処理、FullRecover。OnVictory()で経験値付与・レベルアップログ表示 | GameState, Monster, BattleContext, StatusEffectSystem |
+| **BattleSceneController.cs** | 戦闘メインコントローラー（partial class本体）。フィールド宣言、Start、ログ管理、UI制御、勝敗処理、FullRecover。OnVictory()で経験値付与・レベルアップログ表示。ボス戦勝利時は撃破フラグ記録+勝利会話Talk遷移。ボス戦敗北時はSTEP維持 | GameState, Monster, BattleContext, BossEncounterSystem, StatusEffectSystem |
 | **BattleSceneController_PlayerAction.cs** | partial: プレイヤー行動（通常攻撃/スキル/魔法/アイテム）。effectOnly対応、毒重複チェック含む | SkillData, StatusEffectSystem |
 | **BattleSceneController_EnemyAction.cs** | partial: 敵行動（LUC判定/行動選択/各種攻撃/レベルドレイン/ターン終了）。effectOnly対応、毒重複チェック含む。ExecuteEnemyLevelDrain()で必中レベルドレイン処理 | MonsterSkillData, EnemyActionEntry, StatusEffectSystem, GameState |
 | **BattleSceneController_CombatUtils.cs** | partial: 命中判定/クリティカル/防御ダイス/ダメージ適用 | GameState, Monster |
-| **Monster.cs** | ScriptableObject。敵1体のマスターデータ（HP/ATK/DEF/回避/命中/毒耐性/行動パターン/Exp/Gold） | EnemyActionEntry |
+| **BossEncounterSystem.cs** | ボスエンカウント管理。BossEntry（階/STEP/モンスター/勝利会話）のリストを保持。撃破判定はGameState.IsPlayed("BOSS_F{階:D2}")を流用。TryStartBossBattle()でボス戦開始 | GameState, Monster, BattleContext, TalkEvent |
+| **Monster.cs** | ScriptableObject。敵1体のマスターデータ（HP/ATK/DEF/回避/命中/毒耐性/行動パターン/Exp/Gold）。IsBoss/IsUniqueフラグあり | EnemyActionEntry |
 | **MonsterSkillData.cs** | ScriptableObject。敵スキル1つのマスターデータ。effectOnlyフラグ対応済み。MonsterActionType enum定義（Idle/NormalAttack/SkillAttack/LevelDrain） | なし |
-| **MonsterDatabase.cs** | 敵一覧。フロア/ステップに応じた出現候補検索 | Monster |
+| **MonsterDatabase.cs** | 敵一覧。フロア/ステップに応じた出現候補検索。ボスはここに登録しない（BossEncounterSystem経由） | Monster |
 | **EnemyActionEntry.cs** | 敵行動テーブル1行分。threshold + MonsterSkillData参照 | MonsterSkillData |
-| **EncounterSystem.cs** | エンカウント判定＋敵選択＋戦闘シーン遷移 | MonsterDatabase, BattleContext |
-| **BattleContext.cs** | static。戦闘シーンへの敵データ受け渡し | Monster |
+| **EncounterSystem.cs** | 通常エンカウント判定＋敵選択＋戦闘シーン遷移 | MonsterDatabase, BattleContext |
+| **BattleContext.cs** | static。戦闘シーンへの敵データ受け渡し。IsBossBattle/BossFloorフラグでボス戦を識別 | Monster |
 
 ### Assets/Script/Skill/
 
@@ -93,7 +95,7 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 | ファイル | 役割 | 主な依存先 |
 |---------|------|-----------|
-| **Savemanager.cs** | セーブ/ロード/削除。JSON形式。ロード時は全回復+状態異常クリア。level/currentExp/expToNext/statusPoint はセーブ対象 | GameState, ItemBoxManager, StorageManager |
+| **Savemanager.cs** | セーブ/ロード/削除。JSON形式。ロード時は全回復+状態異常クリア。level/currentExp/expToNext/statusPoint はセーブ対象。ボス撃破フラグはplayedEventIdsに含まれるため追加対応不要 | GameState, ItemBoxManager, StorageManager |
 
 ### Assets/Script/SceneGo/
 
@@ -111,7 +113,14 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 ### Assets/Script/Talk/
 
-会話イベント関連（TalkEventDatabase, TalkEventRunner等）
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **TalkEvent.cs** | ScriptableObject。会話イベント1件のマスターデータ（id/floor/step/lines/conditions）。ボス勝利会話もこれで作る（ID命名規則: "BOSS_F{階:D2}_VICTORY"） | EventCondition |
+| **TalkEventDatabase.cs** | 会話イベント一覧。floor/step索引とID索引の2系統 | TalkEvent |
+| **TowerEventTrigger.cs** | 塔内の会話イベント発火判定。IsPlayed()で既読チェック | TalkEventDatabase, GameState |
+| **TalkRunner.cs** | Talk シーンのコントローラー。pendingEventId で会話を再生し、終了後 Tower に戻る。ボス戦の知識は持たない（汎用） | TalkEventDatabase, GameState |
+| **EventConditon.cs** | 会話イベントの追加条件（抽象基底クラス） | GameState |
+| **TimeRangeCondition.cs** | 時間帯条件の実装 | EventCondition |
 
 ### Assets/Script/Status/
 
@@ -126,6 +135,25 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 ---
 
 ## 4. 主要システムの設計ルール
+
+### STEP進行時の処理順序（TowerState.Advance）
+
+```
+① 会話イベント（TowerEventTrigger）→ 発火したら以降スキップ
+② ボスエンカウント（BossEncounterSystem）→ 発火したら以降スキップ
+③ アイテムイベント（TowerItemTrigger）→ 発火したら以降スキップ
+④ 通常エンカウント（EncounterSystem）
+```
+
+### ボス戦システム
+
+- 配置: BossEncounterSystem のインスペクターで BossEntry（階/STEP/モンスター/勝利会話）を設定
+- 撃破判定: GameState.IsPlayed("BOSS_F{階:D2}") を流用（セーブ対応済み）
+- フロー: ボスSTEPに到達 → 未撃破なら即戦闘 → 勝利で MarkPlayed + 勝利会話(Talk) → Tower
+- 敗北: STEP維持で街に全回復帰還。再度来ればボス戦再発生
+- ボスモンスターは MonsterDatabase に登録しない（通常エンカウントに出さないため）
+- 勝利会話の TalkEvent は ID を "BOSS_F{階:D2}_VICTORY" にする（必須命名規則）
+- ボス前の情報会話は通常の TalkEvent として前のSTEPに配置するだけ（コード変更不要）
 
 ### ステータス計算
 - `GameState.Attack` = baseSTR × 1 + EquipmentCalculator(100%) + PassiveCalculator(減衰ルール)
@@ -173,16 +201,25 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 floor, step, reachedFloor, level, currentExp, expToNext, HP/MP, 5基礎ステータス×2(current/initial),
 statusPoint, equippedWeaponUid, isPoisoned, playedEventIds[], inventoryItems[], storageItems[]
 
+※ ボス撃破フラグ（"BOSS_F03" 等）は playedEventIds に含まれるため追加フィールド不要
+
 ---
 
 ## 6. 未実装・今後の予定
 
-- 毒以外の状態異常（麻痺・睡眠等）のゲームロジック
-- ゴールド報酬（Monster.Gold フィールドは既存、OnVictory()に付与処理追加が必要）
-- 敵図鑑
-- 毒ログのブラッシュアップ（蓄積表現等）
-- SkillData / MonsterSkillData の完全統一
+### 次回優先（本人希望）
+- アイテム・モンスター・スキルの ID と名前の命名規則設計
+- ビューアーの更新（データ確認・管理UI）
+- 要素の追加（アイテム、モンスター、スキルの充実）
+
+### その他の残課題
 - 塔からの帰還ボタン（全回復して街へ）
+- 逃げるコマンド（ボス戦では逃走不可にする等）
+- ゴールド報酬（Monster.Gold フィールドは既存、付与処理未実装）
+- 毒以外の状態異常（麻痺・睡眠等）
+- ボス戦専用BGM / 演出
+- 敵図鑑
+- SkillData / MonsterSkillData の完全統一
 - レベルドレイン耐性（装備/パッシブ対応）
 - レベルアップ時のUI演出（SE・エフェクト）
-- 経験値バランス調整（モンスターごとのExp値設計）
+- 経験値バランス調整
