@@ -109,6 +109,124 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
+    // レベルアップシステム（追加）
+    // =========================================================
+    //
+    // 必要経験値: レベル × 100（CalcExpToNext で算出）
+    // ボーナスステータスポイント: レベル帯ごとに増加（CalcStatusPointGain で算出）
+    //   Lv  2～10 → 1pt
+    //   Lv 11～20 → 2pt
+    //   Lv 21～30 → 3pt
+    //   Lv 31～40 → 4pt
+    //   Lv 41～50 → 5pt
+    //   計算式: (lv - 1) / 10 + 1
+    //
+    // レベルドレイン:
+    //   敵のスキルでレベルを1下げる。
+    //   経験値は0にリセット、必要経験値も再計算。
+    //   statusPoint は変更しない（減らない）。
+    //   → 再度レベルを上げれば同じレベルのボーナスポイントをもう一度貰える。
+    //   → 必要経験値が下がる分、ポイント稼ぎの面では得。
+    //   レベル1以下にはならない。
+    // =========================================================
+
+    /// <summary>
+    /// 指定レベルに必要な経験値を返す。
+    /// 計算式: lv × 100
+    /// 例: Lv1→2 = 100, Lv10→11 = 1000
+    /// </summary>
+    public static int CalcExpToNext(int lv)
+    {
+        return lv * 100;
+    }
+
+    /// <summary>
+    /// 指定レベルに到達した時に獲得するステータスポイントを返す。
+    /// 計算式: (lv - 1) / 10 + 1
+    ///   Lv  2～10 → 1pt
+    ///   Lv 11～20 → 2pt
+    ///   Lv 21～30 → 3pt
+    ///   Lv 31～40 → 4pt
+    ///   Lv 41～50 → 5pt
+    /// </summary>
+    public static int CalcStatusPointGain(int lv)
+    {
+        if (lv <= 1) return 0; // Lv1（初期レベル）では獲得なし
+        return (lv - 1) / 10 + 1;
+    }
+
+    /// <summary>
+    /// 経験値を加算し、レベルアップ判定を繰り返す。
+    /// 複数レベルアップにも対応（一度に大量のEXPを得た場合）。
+    /// 戻り値: レベルアップした回数（0 = レベルアップなし）
+    ///
+    /// レベルアップ時:
+    ///   - statusPoint に CalcStatusPointGain(新レベル) を加算
+    ///   - expToNext を CalcExpToNext(新レベル) に更新
+    ///   - currentExp から expToNext を差し引いて繰り越し
+    /// </summary>
+    public int GainExp(int amount)
+    {
+        if (amount <= 0) return 0;
+
+        currentExp += amount;
+        int levelUps = 0;
+
+        while (currentExp >= expToNext)
+        {
+            currentExp -= expToNext;
+            level++;
+            levelUps++;
+
+            int pointGain = CalcStatusPointGain(level);
+            statusPoint += pointGain;
+
+            Debug.Log($"[GameState] レベルアップ！ Lv{level} (+{pointGain}ステータスポイント, 合計{statusPoint})");
+
+            // 次のレベルに必要な経験値を再計算
+            expToNext = CalcExpToNext(level);
+        }
+
+        if (levelUps > 0)
+        {
+            // レベルアップ時は maxHp/maxMp を再計算しない
+            // （レベルアップ自体は HP/MP に影響しない。ステ振りで VIT/INT を上げた時に反映される）
+            SaveManager.Save();
+        }
+
+        return levelUps;
+    }
+
+    /// <summary>
+    /// レベルドレインを適用する。
+    /// - レベルを1下げる（レベル1以下にはならない）
+    /// - 現在の経験値を0にリセット
+    /// - 必要経験値を再計算
+    /// - statusPoint は変更しない（減らない）
+    ///
+    /// 戻り値: true = レベルが下がった, false = レベル1のため効果なし
+    /// </summary>
+    public bool ApplyLevelDrain()
+    {
+        if (level <= 1)
+        {
+            Debug.Log("[GameState] レベルドレイン: レベル1のため効果なし");
+            return false;
+        }
+
+        int oldLevel = level;
+        level--;
+        currentExp = 0;
+        expToNext = CalcExpToNext(level);
+        // statusPoint は変えない（減らない）
+        // maxHp/maxMp も変えない（ステ振りはそのまま）
+
+        Debug.Log($"[GameState] レベルドレイン！ Lv{oldLevel} → Lv{level} (EXP=0, expToNext={expToNext}, statusPoint変更なし)");
+        SaveManager.Save();
+        return true;
+    }
+
+    // =========================================================
     // サブステータス（装備＋パッシブ込みの実効値）
     // =========================================================
     //

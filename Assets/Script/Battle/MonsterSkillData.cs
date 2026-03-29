@@ -11,6 +11,7 @@ using UnityEngine;
 ///   Idle        → 何もしない
 ///   NormalAttack → Monster.Attack 依存の通常攻撃
 ///   SkillAttack  → このデータに定義されたスキル攻撃
+///   LevelDrain   → プレイヤーのレベルを1下げる（必中）
 ///
 /// ★ブラッシュアップ:
 ///   effectOnly フラグを追加。SkillData と同様に、
@@ -18,6 +19,12 @@ using UnityEngine;
 ///   モンスターは CT/MP を無視するルールのため、
 ///   プレイヤー側の SkillData と完全統一ではないが、
 ///   振る舞いとフィールド構成を揃えている。
+///
+/// ★レベルドレイン追加:
+///   MonsterActionType.LevelDrain を追加。
+///   プレイヤーのレベルを1下げる（必中、耐性なし）。
+///   レベル1の場合は効果なし。
+///   スキルポイント（statusPoint）は変更しない。
 /// </summary>
 [CreateAssetMenu(menuName = "Battle/MonsterSkill")]
 public class MonsterSkillData : ScriptableObject
@@ -37,7 +44,8 @@ public class MonsterSkillData : ScriptableObject
     [Tooltip("この行動の種類。\n"
            + "Idle = 何もしない\n"
            + "NormalAttack = Monster.Attack 依存ダメージ（倍率・固定ダメージは無視）\n"
-           + "SkillAttack = 下記のパラメータでダメージ計算")]
+           + "SkillAttack = 下記のパラメータでダメージ計算\n"
+           + "LevelDrain = プレイヤーのレベルを1下げる（必中）")]
     public MonsterActionType actionType = MonsterActionType.NormalAttack;
 
     [Header("ダメージ計算（actionType が SkillAttack の場合に使用）")]
@@ -65,7 +73,7 @@ public class MonsterSkillData : ScriptableObject
     [Tooltip("この敵スキルの基礎命中率（%）。デフォルト90。\n"
            + "敵スキル攻撃の命中率 = baseHitRate × (1 - プレイヤー回避率/100)\n"
            + "ただし最低10%保証。\n"
-           + "Idle の場合は使用しない。")]
+           + "Idle / LevelDrain の場合は使用しない。")]
     public int baseHitRate = 90;
 
     // =========================================================
@@ -120,4 +128,12 @@ public enum MonsterActionType
     /// ★ブラッシュアップ: effectOnly=true ならダメージスキップ。
     /// </summary>
     SkillAttack,
+
+    /// <summary>
+    /// レベルドレイン（プレイヤーのレベルを1下げる）。
+    /// 必中。耐性なし。レベル1以下にはならない。
+    /// ステータスポイント（statusPoint）は変更しない。
+    /// 経験値は0にリセットされ、必要経験値も再計算される。
+    /// </summary>
+    LevelDrain,
 }

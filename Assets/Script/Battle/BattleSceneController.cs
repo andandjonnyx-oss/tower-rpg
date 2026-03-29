@@ -124,6 +124,10 @@ public partial class BattleSceneController : MonoBehaviour
     // 勝利 / 敗北
     // =========================================================
 
+    /// <summary>
+    /// 戦闘勝利時の処理。
+    /// 経験値を付与し、レベルアップがあればログを表示する。
+    /// </summary>
     private void OnVictory()
     {
         battleEnded = true;
@@ -132,6 +136,29 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
         enemyIsPoisoned = false;
+
+        // =========================================================
+        // 経験値付与・レベルアップ処理（追加）
+        // =========================================================
+        if (GameState.I != null && enemyMonster.Exp > 0)
+        {
+            int expGained = enemyMonster.Exp;
+            int levelUps = GameState.I.GainExp(expGained);
+            AddLog($"{expGained} EXP を獲得！");
+
+            if (levelUps > 0)
+            {
+                int pointGainTotal = 0;
+                // レベルアップ分のポイント合計を計算（表示用）
+                for (int i = 0; i < levelUps; i++)
+                {
+                    int lv = GameState.I.level - levelUps + 1 + i;
+                    pointGainTotal += GameState.CalcStatusPointGain(lv);
+                }
+                AddLog($"レベルアップ！ Lv{GameState.I.level}（+{pointGainTotal}ステータスポイント）");
+            }
+        }
+
         Invoke(nameof(ReturnToTower), 1.5f);
     }
 

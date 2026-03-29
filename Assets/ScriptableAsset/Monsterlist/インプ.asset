@@ -31,7 +31,7 @@ MonoBehaviour:
   Evasion: 60
   BaseHitRate: 90
   PoisonResistance: 0
-  Exp: 0
+  Exp: 50
   Gold: 0
   Help: 
   actions:

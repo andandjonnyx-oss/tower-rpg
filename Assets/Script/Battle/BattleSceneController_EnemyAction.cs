@@ -181,6 +181,7 @@ public partial class BattleSceneController
         {
             case MonsterActionType.NormalAttack: ExecuteEnemyNormalAttack(action.skill); break;
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttack(action.skill); break;
+            case MonsterActionType.LevelDrain: ExecuteEnemyLevelDrain(action.skill); break;
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
         }
@@ -339,6 +340,49 @@ public partial class BattleSceneController
                 }
             }
             // 既に毒の場合はログを出さない
+        }
+
+        AfterEnemyAction();
+    }
+
+    // =========================================================
+    // レベルドレイン（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 敵のレベルドレイン攻撃。
+    /// 必中（命中判定なし、耐性なし）。
+    /// プレイヤーのレベルを1下げる。レベル1の場合は効果なし。
+    /// ステータスポイント（statusPoint）は変更しない。
+    /// 経験値は0にリセットされ、必要経験値も再計算される。
+    ///
+    /// ゲームデザイン上の意図:
+    ///   レベルが下がるデメリットの一方で、
+    ///   再度レベルを上げた際にステータスポイントをもう一度獲得できるため、
+    ///   長期的にはプレイヤーが得をする面もある。
+    ///   （必要経験値が下がる分、効率的にポイントを稼げる）
+    /// </summary>
+    private void ExecuteEnemyLevelDrain(MonsterSkillData skill)
+    {
+        string skillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "レベルドレイン";
+
+        if (GameState.I == null)
+        {
+            AddLog($"{enemyMonster.Mname} の{skillName}！ …しかし効果がなかった！");
+            AfterEnemyAction();
+            return;
+        }
+
+        bool success = GameState.I.ApplyLevelDrain();
+
+        if (success)
+        {
+            AddLog($"{enemyMonster.Mname} の{skillName}！ You のレベルが {GameState.I.level} に下がった！");
+        }
+        else
+        {
+            // レベル1の場合は効果なし
+            AddLog($"{enemyMonster.Mname} の{skillName}！ …しかし効果がなかった！");
         }
 
         AfterEnemyAction();
