@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: 003_ork
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 2
+  ID: 003_ork
   Mname: "\u30AA\u30FC\u30AF"
   Image: {fileID: 3757496256580950009, guid: 67f4d5df7e80cee438222eecc298f414, type: 3}
   Minfloor: 1

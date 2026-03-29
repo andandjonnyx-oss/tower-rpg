@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: F03B_Boslime
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 6
+  ID: F03B_Boslime
   Mname: "\u30DC\u30B9\u30E9\u30A4\u30E0"
   Image: {fileID: -599943022877168616, guid: 01defd185b982b84a84e997c01272118, type: 3}
   Minfloor: 0
