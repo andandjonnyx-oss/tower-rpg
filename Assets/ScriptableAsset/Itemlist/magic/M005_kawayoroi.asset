@@ -10,43 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: dokugohu
+  m_Name: M005_kawayoroi
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 12
-  itemName: "\u6BD2\u306E\u8B77\u7B26"
-  description: "\u6BD2\u3092\u9632\u3050"
+  itemId: 7
+  itemName: "\u9769\u306E\u93A7"
+  description: "HP\uFF0B20"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 3
+  Maxfloor: 1
   Maxstep: 20
   category: 2
   stackable: 1
   maxStack: 99
   healAmount: 0
-  curesPoison: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
-  equipDefense: 0
-  equipMagicAttack: 0
-  equipMagicDefense: 0
-  equipLuck: 0
-  equipMaxHp: 0
-  equipMaxMp: 0
-  equipAccuracy: 0
-  equipEvasion: 0
-  equipCritical: 0
-  baseHitRate: 95
-  equipResistances: []
   magicSkill: {fileID: 0}
   passiveEffects:
-  - effectType: 10
+  - effectType: 3
     targetAttribute: 0
     targetStat: 0
-    targetStatusEffect: 1
-    value: 50
-    floatValue: 0
+    value: 20
   sortOrder: 0

@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: MainTalkDatabase
   m_EditorClassIdentifier: Assembly-CSharp::TalkEventDatabase
   events:
+  - {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
   - {fileID: 11400000, guid: e2e193f1804e5964b8d062fdca66dfbe, type: 2}
   - {fileID: 11400000, guid: 13ca9fdbb84a2e14ca955c8570176760, type: 2}
   - {fileID: 11400000, guid: 7575d031f2b03a441af6574324ea9b84, type: 2}
   - {fileID: 11400000, guid: 12ce92f4771d69647a9e394d7cd80f0c, type: 2}
   - {fileID: 11400000, guid: 7a6bc23aaf44f404789943fcac5973c3, type: 2}
-  - {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}

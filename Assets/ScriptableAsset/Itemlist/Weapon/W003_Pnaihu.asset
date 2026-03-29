@@ -10,34 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: kougekiappu
+  m_Name: W003_Pnaihu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 9
-  itemName: "\u653B\u6483\u30A2\u30C3\u30D7"
-  description: 
+  itemId: 10
+  itemName: "\u30DD\u30A4\u30BA\u30F3\u30CA\u30A4\u30D5"
+  description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 1
+  Maxfloor: 3
   Maxstep: 20
-  category: 2
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
+  curesPoison: 0
+  weaponAttribute: 1
+  attackPower: 3
+  skills:
+  - {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
+  weaponInflictEffect: 1
+  weaponInflictChance: 20
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
   equipLuck: 0
   equipMaxHp: 0
   equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
   equipResistances: []
+  equipStatusEffectResistances:
+  - statusEffect: 1
+    value: 50
   magicSkill: {fileID: 0}
-  passiveEffects:
-  - effectType: 5
-    targetAttribute: 0
-    targetStat: 0
-    value: 5
+  passiveEffects: []
   sortOrder: 0

@@ -10,22 +10,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: Yakusou
-  m_EditorClassIdentifier: Assembly-CSharp::Item
-  itemId: 1
-  itemName: "\u85AC\u8349"
-  description: "HP\u3092\u56DE\u5FA9\u3059\u308B"
-  icon: {fileID: -2580401835878434974, guid: aa941e37fc3594e488200af7875fb168, type: 3}
+  m_Name: M006_kougekiup
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: 9
+  itemName: "\u653B\u6483\u30A2\u30C3\u30D7"
+  description: 
+  icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 1
   Maxstep: 20
-  category: 0
+  category: 2
   stackable: 1
   maxStack: 99
-  healAmount: 10
+  healAmount: 0
   weaponAttribute: 0
   attackPower: 0
-  magicId: 
-  sortOrder: 100
   skills: []
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects:
+  - effectType: 5
+    targetAttribute: 0
+    targetStat: 0
+    value: 5
+  sortOrder: 0

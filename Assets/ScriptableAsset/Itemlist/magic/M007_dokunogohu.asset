@@ -10,27 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: poisonknife
+  m_Name: M007_dokunogohu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 10
-  itemName: "\u30DD\u30A4\u30BA\u30F3\u30CA\u30A4\u30D5"
-  description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B"
+  itemId: 12
+  itemName: "\u6BD2\u306E\u8B77\u7B26"
+  description: "\u6BD2\u3092\u9632\u3050"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 3
   Maxstep: 20
-  category: 1
+  category: 2
   stackable: 1
   maxStack: 99
   healAmount: 0
   curesPoison: 0
-  weaponAttribute: 1
-  attackPower: 3
-  skills:
-  - {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
-  weaponInflictEffect: 1
-  weaponInflictChance: 20
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
@@ -42,9 +41,12 @@ MonoBehaviour:
   equipCritical: 0
   baseHitRate: 95
   equipResistances: []
-  equipStatusEffectResistances:
-  - statusEffect: 1
-    value: 50
   magicSkill: {fileID: 0}
-  passiveEffects: []
+  passiveEffects:
+  - effectType: 10
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 1
+    value: 50
+    floatValue: 0
   sortOrder: 0

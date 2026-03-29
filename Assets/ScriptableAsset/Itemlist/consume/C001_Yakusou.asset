@@ -10,27 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: kawanotate
-  m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: 8
-  itemName: "\u9769\u306E\u76FE"
-  description: "\u9632\u5FA1\uFF0B\uFF15"
-  icon: {fileID: 0}
+  m_Name: C001_Yakusou
+  m_EditorClassIdentifier: Assembly-CSharp::Item
+  itemId: 1
+  itemName: "\u85AC\u8349"
+  description: "HP\u3092\u56DE\u5FA9\u3059\u308B"
+  icon: {fileID: -2580401835878434974, guid: aa941e37fc3594e488200af7875fb168, type: 3}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 1
   Maxstep: 20
-  category: 2
+  category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 0
+  healAmount: 10
   weaponAttribute: 0
   attackPower: 0
+  magicId: 
+  sortOrder: 100
   skills: []
-  magicSkill: {fileID: 0}
-  passiveEffects:
-  - effectType: 6
-    targetAttribute: 0
-    targetStat: 0
-    value: 5
-  sortOrder: 0
