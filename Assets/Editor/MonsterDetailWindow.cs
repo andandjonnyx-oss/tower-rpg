@@ -218,20 +218,17 @@ public class MonsterDetailWindow : EditorWindow
 
                         case MonsterActionType.NormalAttack:
                             detail = $"通常攻撃 ({sk.damageCategory})";
-                            // 追加効果があれば表示
                             detail += FormatAdditionalEffects(sk);
                             break;
 
                         case MonsterActionType.SkillAttack:
                             if (sk.IsNonDamage)
                             {
-                                // 非ダメージスキル（追加効果のみ）
                                 detail = $"{sk.skillName} (効果のみ)";
                                 detail += FormatAdditionalEffects(sk);
                             }
                             else
                             {
-                                // ダメージスキル
                                 detail = $"{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
                                 if (sk.fixedDamage > 0)
                                     detail += $", 固定{sk.fixedDamage}";
@@ -247,7 +244,6 @@ public class MonsterDetailWindow : EditorWindow
                 }
                 else
                 {
-                    // skill が null の場合は通常攻撃フォールバック
                     EditorGUILayout.LabelField($"  [{i}] {rangeStr}", "通常攻撃（フォールバック）");
                 }
 
@@ -276,9 +272,16 @@ public class MonsterDetailWindow : EditorWindow
                 ? eff.effectData.effectName
                 : eff.effectData.GetType().Name;
 
-            if (eff.effectData is PoisonEffectData)
+            if (eff.effectData is StatusAilmentEffectData)
             {
-                result += $" +[{effName} {eff.chance}%]";
+                if (eff.ailmentMode == AilmentMode.Inflict)
+                {
+                    result += $" +[{eff.targetStatusEffect}付与 {eff.chance}%]";
+                }
+                else
+                {
+                    result += $" +[{eff.targetStatusEffect}回復]";
+                }
             }
             else if (eff.effectData is LevelDrainEffectData)
             {
@@ -287,9 +290,10 @@ public class MonsterDetailWindow : EditorWindow
                 if (eff.chance < 100) result += $" {eff.chance}%";
                 result += "]";
             }
-            else if (eff.effectData is HealEffectData)
+            else if (eff.effectData is HealEffectData healData)
             {
-                result += $" +[{effName} {eff.intValue}%HP";
+                string formula = healData.formulaType.ToString();
+                result += $" +[{effName} {formula}:{eff.intValue}";
                 if (eff.chance < 100) result += $" {eff.chance}%";
                 result += "]";
             }
