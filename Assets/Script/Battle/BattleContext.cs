@@ -26,4 +26,20 @@ public static class BattleContext
     /// </summary>
     public static int BossFloor;
 
+    // =========================================================
+    // デバッグ戦闘フラグ（追加）
+    // =========================================================
+
+    /// <summary>
+    /// デバッグシーンから開始した戦闘かどうか。
+    /// true の場合、勝利/敗北後に Tower ではなく DebugReturnScene に戻る。
+    /// </summary>
+    public static bool IsDebugBattle;
+
+    /// <summary>
+    /// デバッグ戦闘終了後に戻るシーン名。
+    /// IsDebugBattle == true の時のみ使用。
+    /// </summary>
+    public static string DebugReturnScene = "Debug";
+
 }

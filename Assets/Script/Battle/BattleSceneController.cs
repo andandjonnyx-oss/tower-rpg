@@ -129,6 +129,7 @@ public partial class BattleSceneController : MonoBehaviour
     /// 戦闘勝利時の処理。
     /// 経験値を付与し、レベルアップがあればログを表示する。
     /// ボス戦の場合は撃破フラグを記録し、勝利会話があれば Talk シーンへ遷移する。
+    /// デバッグ戦闘の場合はデバッグシーンへ戻る。
     /// </summary>
     private void OnVictory()
     {
@@ -159,6 +160,19 @@ public partial class BattleSceneController : MonoBehaviour
                 }
                 AddLog($"レベルアップ！ Lv{GameState.I.level}（+{pointGainTotal}ステータスポイント）");
             }
+        }
+
+        // =========================================================
+        // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
+        // ボス戦処理より前に判定する。デバッグではボス扱いしないため。
+        // =========================================================
+        if (BattleContext.IsDebugBattle)
+        {
+            string returnScene = BattleContext.DebugReturnScene;
+            BattleContext.IsDebugBattle = false;
+            BattleContext.DebugReturnScene = "Debug";
+            Invoke(nameof(ReturnToDebug), 1.5f);
+            return;
         }
 
         // =========================================================
@@ -203,6 +217,7 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 戦闘敗北時の処理。
     /// ボス戦の場合は STEP を維持して街に戻る（再挑戦可能）。
+    /// デバッグ戦闘の場合はデバッグシーンへ戻る。
     /// 通常戦闘の場合は従来通り。
     /// </summary>
     private void OnDefeat()
@@ -213,6 +228,17 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
         enemyIsPoisoned = false;
+
+        // =========================================================
+        // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
+        // =========================================================
+        if (BattleContext.IsDebugBattle)
+        {
+            BattleContext.IsDebugBattle = false;
+            BattleContext.DebugReturnScene = "Debug";
+            Invoke(nameof(ReturnToDebug), 1.5f);
+            return;
+        }
 
         // =========================================================
         // ボス戦敗北処理（追加）
@@ -247,9 +273,21 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
+    /// デバッグ戦闘終了後にデバッグシーンへ戻る。（追加）
+    /// 勝利・敗北どちらでもこのメソッドを使う。
+    /// 全回復は行わない（デバッグシーンの全回復ボタンで手動操作する想定）。
+    /// </summary>
+    private void ReturnToDebug()
+    {
+        SceneManager.LoadScene(BattleContext.DebugReturnScene);
+    }
+
+    /// <summary>
     /// HP/MP全回復＋全状態異常クリア。
     /// ★ブラッシュアップ: 街に戻る = 全回復（状態異常含む）で統一。
     /// 敗北時・帰還時・ロード復帰時にこのメソッドを呼ぶ。
+    /// ※ メインシーンの MainSceneRecovery.Start() でも全回復が走るため、
+    ///   ここでの呼び出しは二重保険として残す。
     /// </summary>
     private void FullRecover()
     {
