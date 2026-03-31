@@ -30,6 +30,9 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("ポップアップ内の ScrollView 配下にある TMP_Text（全ログ表示用）")]
     [SerializeField] private TMP_Text fullLogText;
 
+    [Tooltip("ScrollView の Content（RectTransform）。コードから高さを制御する。")]
+    [SerializeField] private RectTransform fullLogContent;
+
     [Tooltip("ポップアップを閉じる×ボタン")]
     [SerializeField] private Button fullLogCloseButton;
 
@@ -533,12 +536,30 @@ public partial class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// ログ詳細ポップアップを開く。全ログを表示する。
+    /// ContentSizeFitter に頼らず、コードから Content の高さを
+    /// fullLogText の preferredHeight に合わせて強制セットする。
+    /// これにより ScrollRect が正しくスクロール可能になる。
     /// </summary>
     private void OpenFullLog()
     {
         if (fullLogPanel == null || fullLogText == null) return;
+
+        // テキストをセット
         fullLogText.text = string.Join("\n", logLines);
         fullLogPanel.SetActive(true);
+
+        // テキストのレイアウトを強制更新して preferredHeight を取得
+        fullLogText.ForceMeshUpdate();
+        float preferredHeight = fullLogText.preferredHeight;
+
+        // Content の高さをテキストの高さ + 余白に合わせる
+        // （余白10ずつ = 上下合計20を加算）
+        if (fullLogContent != null)
+        {
+            Vector2 size = fullLogContent.sizeDelta;
+            size.y = preferredHeight + 20f;
+            fullLogContent.sizeDelta = size;
+        }
     }
 
     /// <summary>
