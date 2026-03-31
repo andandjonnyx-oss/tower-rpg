@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2ff76a34f7539f4da3ae2f03cd42cfc, type: 3}
-  m_Name: HealINT
+  m_Name: 001_HealFIX
   m_EditorClassIdentifier: Assembly-CSharp::HealEffectData
-  effectName: 
+  effectName: "\u30D2\u30FC\u30EB\uFF08\u56FA\u5B9A\u5024\uFF09"
   description: 
   formulaType: 0

@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a018db0eba2ff9a428d0d263e2eaa844, type: 3}
-  m_Name: Leveldrain
-  m_EditorClassIdentifier: Assembly-CSharp::LevelDrainEffectData
-  effectName: 
+  m_Script: {fileID: 11500000, guid: c2ff76a34f7539f4da3ae2f03cd42cfc, type: 3}
+  m_Name: 002_HealINT
+  m_EditorClassIdentifier: Assembly-CSharp::HealEffectData
+  effectName: "\u30D2\u30FC\u30EBINT"
   description: 
+  formulaType: 2

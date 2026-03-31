@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f676a4b65bfc7724eba38442d365f8e5, type: 3}
-  m_Name: Joutaiijou
+  m_Name: 003_Joutaiijou
   m_EditorClassIdentifier: Assembly-CSharp::StatusAilmentEffectData
-  effectName: 
+  effectName: "\u72B6\u614B\u7570\u5E38"
   description: 

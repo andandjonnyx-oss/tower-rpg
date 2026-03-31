@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ff76a34f7539f4da3ae2f03cd42cfc, type: 3}
-  m_Name: HealFIX
-  m_EditorClassIdentifier: Assembly-CSharp::HealEffectData
-  effectName: "\u30D2\u30FC\u30EB\uFF08\u56FA\u5B9A\u5024\uFF09"
+  m_Script: {fileID: 11500000, guid: a018db0eba2ff9a428d0d263e2eaa844, type: 3}
+  m_Name: 004_Leveldrain
+  m_EditorClassIdentifier: Assembly-CSharp::LevelDrainEffectData
+  effectName: "\u30EC\u30D9\u30EB\u30C9\u30EC\u30A4\u30F3"
   description: 
-  formulaType: 0
