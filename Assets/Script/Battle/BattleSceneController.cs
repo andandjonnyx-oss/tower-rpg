@@ -23,6 +23,19 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("戦闘ログ表示用 TMP_Text（3行分）")]
     [SerializeField] private TMP_Text battleLogText;
 
+    [Header("UI - Battle Log Popup")]
+    [Tooltip("戦闘ログ詳細ポップアップのルートパネル。初期状態は非表示。")]
+    [SerializeField] private GameObject fullLogPanel;
+
+    [Tooltip("ポップアップ内の ScrollView 配下にある TMP_Text（全ログ表示用）")]
+    [SerializeField] private TMP_Text fullLogText;
+
+    [Tooltip("ポップアップを閉じる×ボタン")]
+    [SerializeField] private Button fullLogCloseButton;
+
+    [Tooltip("戦闘画面右上に配置するログ詳細ボタン")]
+    [SerializeField] private Button fullLogOpenButton;
+
     [Header("UI - Buttons")]
     [SerializeField] private Button attackButton;
     [SerializeField] private Button skillButton;
@@ -44,6 +57,12 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool battleInitialized = false;
     private static List<string> persistentLogLines = new List<string>();
 
+    // =========================================================
+    // ターンカウンター（追加）
+    // =========================================================
+    /// <summary>現在のターン数。戦闘開始時に 0、プレイヤーターン開始時に +1。</summary>
+    private static int currentTurnNumber = 0;
+
     private Monster enemyMonster;
 
     // =========================================================
@@ -53,9 +72,15 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>戦闘中の敵の毒状態。戦闘終了でリセット。</summary>
     private static bool enemyIsPoisoned = false;
 
-    // 戦闘ログ（最大3行）
+    // =========================================================
+    // 戦闘ログ（改修: 全件保持）
+    // =========================================================
+    // ログは戦闘開始から終了まで全件を保持する。
+    // 通常画面には末尾 DisplayLogLines 行のみ表示し、
+    // ポップアップで全履歴を確認できる。
+    // =========================================================
     private List<string> logLines = new List<string>();
-    private const int MaxLogLines = 3;
+    private const int DisplayLogLines = 3;
 
     private bool battleEnded = false;
 
@@ -87,11 +112,19 @@ public partial class BattleSceneController : MonoBehaviour
         if (itemButton != null) itemButton.onClick.AddListener(OnItemClicked);
         if (magicButton != null) magicButton.onClick.AddListener(OnMagicClicked);
 
+        // =========================================================
+        // ログポップアップ ボタン登録（追加）
+        // =========================================================
+        if (fullLogOpenButton != null) fullLogOpenButton.onClick.AddListener(OpenFullLog);
+        if (fullLogCloseButton != null) fullLogCloseButton.onClick.AddListener(CloseFullLog);
+        if (fullLogPanel != null) fullLogPanel.SetActive(false);
+
         if (!battleInitialized)
         {
             enemyCurrentHp = enemyMonster.MaxHp;
             battleInitialized = true;
             persistentLogLines.Clear();
+            currentTurnNumber = 0; // ターンカウンターリセット
             AddLog($"{enemyMonster.Mname} が現れた！");
         }
         else
@@ -119,6 +152,20 @@ public partial class BattleSceneController : MonoBehaviour
 
         RefreshSkillButton();
         RefreshMagicDropdown();
+    }
+
+    // =========================================================
+    // ターン開始ログ（追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーターンの開始時に呼ぶ。ターンカウンターを +1 し、ログに記録する。
+    /// プレイヤー行動（OnAttackClicked 等）の冒頭から呼び出す。
+    /// </summary>
+    public void BeginPlayerTurn()
+    {
+        currentTurnNumber++;
+        AddLog($"―――（{currentTurnNumber}ターン目）―――");
     }
 
     // =========================================================
@@ -302,6 +349,7 @@ public partial class BattleSceneController : MonoBehaviour
     {
         battleInitialized = false;
         persistentLogLines.Clear();
+        currentTurnNumber = 0; // ターンカウンターもリセット
         enemyIsPoisoned = false;
     }
 
@@ -447,16 +495,58 @@ public partial class BattleSceneController : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // ログ管理（改修: 全件保持 + ポップアップ対応）
+    // =========================================================
+
+    /// <summary>
+    /// 戦闘ログにメッセージを追加する。
+    /// ログは全件保持し、通常画面には末尾 DisplayLogLines 行のみ表示する。
+    /// </summary>
     private void AddLog(string message)
     {
         logLines.Add(message);
-        while (logLines.Count > MaxLogLines) logLines.RemoveAt(0);
+        // 全件を永続ストアに同期（Itemboxシーン遷移時のリロード対応）
         persistentLogLines = new List<string>(logLines);
         UpdateLogDisplay();
     }
 
+    /// <summary>
+    /// 通常画面のログ表示を更新する。末尾 DisplayLogLines 行のみ表示。
+    /// </summary>
     private void UpdateLogDisplay()
     {
-        if (battleLogText != null) battleLogText.text = string.Join("\n", logLines);
+        if (battleLogText == null) return;
+        int startIndex = logLines.Count - DisplayLogLines;
+        if (startIndex < 0) startIndex = 0;
+        var displayLines = new List<string>();
+        for (int i = startIndex; i < logLines.Count; i++)
+        {
+            displayLines.Add(logLines[i]);
+        }
+        battleLogText.text = string.Join("\n", displayLines);
+    }
+
+    // =========================================================
+    // ログポップアップ UI（追加）
+    // =========================================================
+
+    /// <summary>
+    /// ログ詳細ポップアップを開く。全ログを表示する。
+    /// </summary>
+    private void OpenFullLog()
+    {
+        if (fullLogPanel == null || fullLogText == null) return;
+        fullLogText.text = string.Join("\n", logLines);
+        fullLogPanel.SetActive(true);
+    }
+
+    /// <summary>
+    /// ログ詳細ポップアップを閉じる。
+    /// </summary>
+    private void CloseFullLog()
+    {
+        if (fullLogPanel == null) return;
+        fullLogPanel.SetActive(false);
     }
 }

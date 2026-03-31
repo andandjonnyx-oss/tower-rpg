@@ -49,6 +49,7 @@ public partial class BattleSceneController
     private void OnAttackClicked()
     {
         if (battleEnded) return;
+        BeginPlayerTurn(); // ターン開始ログ
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
@@ -142,6 +143,7 @@ public partial class BattleSceneController
             return;
         }
 
+        BeginPlayerTurn(); // ターン開始ログ
         SetButtonsInteractable(false);
         string weaponName; WeaponAttribute weaponAttribute; int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
@@ -236,6 +238,7 @@ public partial class BattleSceneController
             return;
         }
 
+        BeginPlayerTurn(); // ターン開始ログ
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
         if (GameState.I != null) GameState.I.currentMp -= magic.mpCost;
@@ -322,6 +325,11 @@ public partial class BattleSceneController
     /// <summary>
     /// アイテムボタンが押された時の処理。
     /// Itembox シーンへ遷移する（ターン消費なし）。
+    /// ※ アイテム使用はターン消費扱いだが、BeginPlayerTurn は
+    ///   Itembox から戻った後（battleTurnConsumed 処理）に呼ばれない。
+    ///   アイテム使用時のターン開始ログは、Itembox 側でターン消費が
+    ///   確定した時点で battleItemActionLog にまとめて記録される。
+    ///   → ターン区切り線はアイテム使用時には出ない（仕様）。
     /// </summary>
     private void OnItemClicked()
     {
