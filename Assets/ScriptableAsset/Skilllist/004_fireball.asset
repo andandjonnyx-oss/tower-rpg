@@ -12,13 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: 004_fireball
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 2
+  skillId: 004_fireball
   skillName: "\u30D5\u30A1\u30A4\u30A2\u30DC\u30FC\u30EB"
   description: "\u706B\u306E\u7389\u3092\u6295\u3052\u308B"
   skillSource: 1
+  actionType: 2
   skillAttribute: 3
   damageCategory: 1
   damageMultiplier: 0
   fixedDamage: 10
   cooldownTurns: 0
   mpCost: 5
+  baseHitRate: 95
+  additionalEffects:
+  - effectData: {fileID: 0}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 0
+    intValue: 0

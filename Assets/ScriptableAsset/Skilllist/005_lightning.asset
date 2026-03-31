@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: 005_lightning
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 3
+  skillId: 005_lightning
   skillName: "\u30E9\u30A4\u30C8\u30CB\u30F3\u30B0"
   description: "\uFF11\uFF10\u4E07\u30DC\u30EB\u30C8"
   skillSource: 1
+  actionType: 2
   skillAttribute: 5
   damageCategory: 1
   damageMultiplier: 3
@@ -23,6 +24,4 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 4
   baseHitRate: 30
-  inflictEffect: 0
-  inflictChance: 0
-  effectOnly: 0
+  additionalEffects: []

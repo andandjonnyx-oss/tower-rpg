@@ -36,5 +36,5 @@ MonoBehaviour:
   Help: 
   actions:
   - skill: {fileID: 11400000, guid: 76c2dcfc8a6612849a7c447bfef8c507, type: 2}
-    threshold: 0
+    threshold: 100
   baseActionRange: 100

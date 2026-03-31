@@ -19,11 +19,9 @@ MonoBehaviour:
   actionType: 1
   skillAttribute: 0
   damageCategory: 0
-  damageMultiplier: 0
+  damageMultiplier: 1
   fixedDamage: 0
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
-  inflictEffect: 0
-  inflictChance: 0
-  effectOnly: 0
+  additionalEffects: []

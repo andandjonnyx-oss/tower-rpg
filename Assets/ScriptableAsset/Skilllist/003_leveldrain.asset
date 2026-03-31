@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\u30EC\u30D9\u30EB\u30C9\u30EC\u30A4\u30F3"
   description: "\u30EC\u30D9\u30EB\u30C9\u30EC\u30A4\u30F3"
   skillSource: 0
-  actionType: 3
+  actionType: 2
   skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 0
@@ -24,6 +24,9 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
-  inflictEffect: 0
-  inflictChance: 0
-  effectOnly: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 52e394e2317e071449e80c56248b6212, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 100
+    intValue: 1

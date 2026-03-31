@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: 007_poisonattack
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 5
+  skillId: 007_poisonattack
   skillName: "\u6BD2\u653B\u6483"
   description: 
   skillSource: 0
+  actionType: 2
   skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 1
@@ -23,6 +24,9 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
-  inflictEffect: 1
-  inflictChance: 40
-  effectOnly: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 40
+    intValue: 0

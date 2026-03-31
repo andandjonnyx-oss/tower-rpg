@@ -12,16 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: 010_healint
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 
-  skillName: 
+  skillId: 010_healint
+  skillName: "INT\u30D2\u30FC\u30EB"
   description: 
-  skillSource: 0
+  skillSource: 1
   actionType: 2
   skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 0
   fixedDamage: 0
   cooldownTurns: 0
-  mpCost: 0
+  mpCost: 5
   baseHitRate: 95
-  additionalEffects: []
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: e6d50b6503ca6f24297582c978e36d27, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 0
+    chance: 100
+    intValue: 10
