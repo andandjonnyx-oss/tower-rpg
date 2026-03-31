@@ -88,7 +88,7 @@ public partial class BattleSceneController
         else
             AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
 
-        // ★ブラッシュアップ: 武器の毒付与判定 - 既に毒ならスキップ（ログも出さない）
+        // 武器の毒付与判定 - 既に毒ならスキップ（ログも出さない）
         if (equippedWeaponItem != null && equippedWeaponItem.data != null
             && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Poison
             && equippedWeaponItem.data.weaponInflictChance > 0
@@ -116,6 +116,9 @@ public partial class BattleSceneController
     /// ダメージ計算（改修後）:
     ///   GameState.Attack × skill.damageMultiplier
     ///   ※ Attack に装備攻撃力が含まれているため、weaponPower を別途加算しない。
+    ///
+    /// 非ダメージスキル:
+    ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
     ///
     /// 命中判定（追加）:
     ///   skill.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
@@ -151,34 +154,13 @@ public partial class BattleSceneController
             return;
         }
 
-        // ★ブラッシュアップ: effectOnly 対応（プレイヤースキルでもダメージ無し+状態異常のみが可能に）
-        if (skill.effectOnly)
+        // 非ダメージスキル: 追加効果のみ実行
+        if (skill.IsNonDamage)
         {
-            if (skill.inflictEffect == StatusEffect.Poison && skill.inflictChance > 0)
-            {
-                if (enemyIsPoisoned)
-                {
-                    AddLog($"You は {skill.skillName}！ …しかし{enemyMonster.Mname}は既に毒状態だ！");
-                }
-                else
-                {
-                    int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-                    bool poisoned = StatusEffectSystem.TryInflict(skill.inflictChance, enemyPoisonResist);
-                    if (poisoned)
-                    {
-                        enemyIsPoisoned = true;
-                        AddLog($"You は {skill.skillName}！ {enemyMonster.Mname} は毒を受けた！");
-                    }
-                    else
-                    {
-                        AddLog($"You は {skill.skillName}！ …しかし効かなかった！");
-                    }
-                }
-            }
-            else
-            {
-                AddLog($"You は {skill.skillName}！");
-            }
+            AddLog($"You は {skill.skillName}！");
+            ProcessPlayerSkillEffects(skill);
+
+            if (enemyCurrentHp <= 0) { OnVictory(); return; }
             Invoke(nameof(EnemyTurn), 0.5f);
             return;
         }
@@ -210,19 +192,8 @@ public partial class BattleSceneController
         else
             AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
 
-        // ★ブラッシュアップ: スキルの毒付与判定 - 既に毒ならスキップ（ログも出さない）
-        if (skill.inflictEffect == StatusEffect.Poison
-            && skill.inflictChance > 0
-            && !enemyIsPoisoned)
-        {
-            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-            bool poisoned = StatusEffectSystem.TryInflict(skill.inflictChance, enemyPoisonResist);
-            if (poisoned)
-            {
-                enemyIsPoisoned = true;
-                AddLog($"{enemyMonster.Mname} は毒を受けた！");
-            }
-        }
+        // 追加効果の実行
+        ProcessPlayerSkillEffects(skill);
 
         if (enemyCurrentHp <= 0) { OnVictory(); return; }
         Invoke(nameof(EnemyTurn), 0.5f);
@@ -241,6 +212,9 @@ public partial class BattleSceneController
     ///   fixedDamage > 0 → そのまま使用（固定ダメージ）
     ///   damageMultiplier > 0 → GameState.MagicAttack × 倍率
     ///   ※ MagicAttack に装備分・パッシブ分が含まれている。
+    ///
+    /// 非ダメージスキル:
+    ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
     ///
     /// 命中判定（追加）:
     ///   magic.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
@@ -273,36 +247,13 @@ public partial class BattleSceneController
             return;
         }
 
-        // effectOnly の場合はダメージを与えず、状態異常の付与のみ行う（追加）
-        if (magic.effectOnly)
+        // 非ダメージスキル: 追加効果のみ実行
+        if (magic.IsNonDamage)
         {
-            if (magic.inflictEffect == StatusEffect.Poison
-                && magic.inflictChance > 0)
-            {
-                // ★ブラッシュアップ: 既に毒ならスキップ
-                if (enemyIsPoisoned)
-                {
-                    AddLog($"You は {magic.skillName}！ …しかし{enemyMonster.Mname}は既に毒状態だ！ MP-{magic.mpCost}");
-                }
-                else
-                {
-                    int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-                    bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
-                    if (poisoned)
-                    {
-                        enemyIsPoisoned = true;
-                        AddLog($"You は {magic.skillName}！ {enemyMonster.Mname} は毒を受けた！ MP-{magic.mpCost}");
-                    }
-                    else
-                    {
-                        AddLog($"You は {magic.skillName}！ …しかし効かなかった！ MP-{magic.mpCost}");
-                    }
-                }
-            }
-            else
-            {
-                AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
-            }
+            AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
+            ProcessPlayerSkillEffects(magic);
+
+            if (enemyCurrentHp <= 0) { OnVictory(); return; }
             Invoke(nameof(EnemyTurn), 0.5f);
             return;
         }
@@ -336,22 +287,32 @@ public partial class BattleSceneController
         else
             AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
 
-        // ★ブラッシュアップ: 魔法の毒付与判定 - 既に毒ならスキップ（ログも出さない）
-        if (magic.inflictEffect == StatusEffect.Poison
-            && magic.inflictChance > 0
-            && !enemyIsPoisoned)
-        {
-            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-            bool poisoned = StatusEffectSystem.TryInflict(magic.inflictChance, enemyPoisonResist);
-            if (poisoned)
-            {
-                enemyIsPoisoned = true;
-                AddLog($"{enemyMonster.Mname} は毒を受けた！");
-            }
-        }
+        // 追加効果の実行
+        ProcessPlayerSkillEffects(magic);
 
         if (enemyCurrentHp <= 0) { OnVictory(); return; }
         Invoke(nameof(EnemyTurn), 0.5f);
+    }
+
+    /// <summary>
+    /// プレイヤースキルの追加効果を実行する共通メソッド。
+    /// SkillEffectProcessor を呼び出し、結果のログを追加する。
+    /// </summary>
+    private void ProcessPlayerSkillEffects(SkillData skill)
+    {
+        if (!skill.HasAdditionalEffects) return;
+
+        var logs = SkillEffectProcessor.ProcessEffects(
+            skill.additionalEffects,
+            isPlayerAttack: true,
+            enemyMonster,
+            ref enemyIsPoisoned,
+            ref enemyCurrentHp);
+
+        for (int i = 0; i < logs.Count; i++)
+        {
+            AddLog(logs[i]);
+        }
     }
 
     // =========================================================

@@ -208,7 +208,6 @@ public class MonsterDetailWindow : EditorWindow
                 if (entry.skill != null)
                 {
                     var sk = entry.skill;
-                    string actionTypeStr = sk.actionType.ToString();
                     string detail = "";
 
                     switch (sk.actionType)
@@ -218,32 +217,29 @@ public class MonsterDetailWindow : EditorWindow
                             break;
 
                         case MonsterActionType.NormalAttack:
-                            detail = "通常攻撃";
+                            detail = $"通常攻撃 ({sk.damageCategory})";
+                            // 追加効果があれば表示
+                            detail += FormatAdditionalEffects(sk);
                             break;
 
                         case MonsterActionType.SkillAttack:
-                            if (sk.effectOnly)
+                            if (sk.IsNonDamage)
                             {
-                                detail = $"{sk.skillName} (効果のみ";
-                                if (sk.inflictEffect != StatusEffect.None)
-                                    detail += $", {sk.inflictEffect} {sk.inflictChance}%";
-                                detail += ")";
+                                // 非ダメージスキル（追加効果のみ）
+                                detail = $"{sk.skillName} (効果のみ)";
+                                detail += FormatAdditionalEffects(sk);
                             }
                             else
                             {
-                                detail = $"{sk.skillName} ({sk.damageCategory}, {sk.attackAttribute.ToJapanese()}";
+                                // ダメージスキル
+                                detail = $"{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
                                 if (sk.fixedDamage > 0)
                                     detail += $", 固定{sk.fixedDamage}";
                                 else if (sk.damageMultiplier > 0)
                                     detail += $", x{sk.damageMultiplier}";
-                                if (sk.inflictEffect != StatusEffect.None)
-                                    detail += $", {sk.inflictEffect} {sk.inflictChance}%";
                                 detail += ")";
+                                detail += FormatAdditionalEffects(sk);
                             }
-                            break;
-
-                        case MonsterActionType.LevelDrain:
-                            detail = $"{sk.skillName} (レベルドレイン)";
                             break;
                     }
 
@@ -260,6 +256,50 @@ public class MonsterDetailWindow : EditorWindow
         }
 
         EditorGUILayout.EndVertical();
+    }
+
+    /// <summary>
+    /// スキルの追加効果リストを文字列で表示する。
+    /// </summary>
+    private string FormatAdditionalEffects(SkillData skill)
+    {
+        if (skill.additionalEffects == null || skill.additionalEffects.Count == 0)
+            return "";
+
+        string result = "";
+        for (int j = 0; j < skill.additionalEffects.Count; j++)
+        {
+            var eff = skill.additionalEffects[j];
+            if (eff == null || eff.effectData == null) continue;
+
+            string effName = !string.IsNullOrEmpty(eff.effectData.effectName)
+                ? eff.effectData.effectName
+                : eff.effectData.GetType().Name;
+
+            if (eff.effectData is PoisonEffectData)
+            {
+                result += $" +[{effName} {eff.chance}%]";
+            }
+            else if (eff.effectData is LevelDrainEffectData)
+            {
+                int amt = (eff.intValue > 0) ? eff.intValue : 1;
+                result += $" +[{effName} Lv-{amt}";
+                if (eff.chance < 100) result += $" {eff.chance}%";
+                result += "]";
+            }
+            else if (eff.effectData is HealEffectData)
+            {
+                result += $" +[{effName} {eff.intValue}%HP";
+                if (eff.chance < 100) result += $" {eff.chance}%";
+                result += "]";
+            }
+            else
+            {
+                result += $" +[{effName}]";
+            }
+        }
+
+        return result;
     }
 
     // =========================================================

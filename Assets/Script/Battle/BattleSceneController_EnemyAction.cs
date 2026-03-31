@@ -181,7 +181,6 @@ public partial class BattleSceneController
         {
             case MonsterActionType.NormalAttack: ExecuteEnemyNormalAttack(action.skill); break;
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttack(action.skill); break;
-            case MonsterActionType.LevelDrain: ExecuteEnemyLevelDrain(action.skill); break;
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
         }
@@ -191,10 +190,13 @@ public partial class BattleSceneController
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
     /// skill.damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
+    ///
+    /// 追加効果:
+    ///   ダメージ適用後に additionalEffects を実行する。
     /// </summary>
-    private void ExecuteEnemyNormalAttack(MonsterSkillData skill)
+    private void ExecuteEnemyNormalAttack(SkillData skill)
     {
         if (!CheckEnemyHit(skill.baseHitRate))
         {
@@ -220,86 +222,65 @@ public partial class BattleSceneController
         else
             AddLog($"{enemyMonster.Mname} の{actionName2}！ {finalDamage}ダメージ！");
 
+        // 追加効果の実行
+        ProcessEnemySkillEffects(skill);
+
         AfterEnemyAction();
     }
 
     /// <summary>
-    /// 敵のスキル攻撃。MonsterSkillData のパラメータでダメージ計算する。
+    /// 敵のスキル攻撃。SkillData のパラメータでダメージ計算する。
     ///
-    /// ★ブラッシュアップ:
-    ///   effectOnly=true の場合はダメージ計算をスキップし、状態異常のみ付与する。
-    ///   既に対象が該当の状態異常だった場合は判定をスキップしログも出さない。
+    /// 非ダメージスキル判定:
+    ///   IsNonDamage == true の場合はダメージ計算をスキップし、
+    ///   追加効果のみ実行する。
     ///
     /// ダメージ計算:
     ///   1. fixedDamage > 0 ならそれを使用
     ///      damageMultiplier > 0 なら Monster.Attack × damageMultiplier（四捨五入）
-    ///      どちらも 0 なら Monster.Attack をそのまま使用
+    ///      どちらも 0 なら非ダメージスキル（上で処理済み）
     ///   2. resistance = PassiveCalculator.CalcTotalAttributeResistance(attackAttribute)
     ///      → afterResist = baseDamage × (1 - resistance / 100)
-    ///      → 四捨五入（.5 は切り上げ）
-    ///      ※ CalcTotalAttributeResistance は装備品分＋パッシブ分の合算値を返す。
     ///   3. 防御ダイスで軽減
-    ///      → finalDamage = afterResist - blocked
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
     /// </summary>
-    private void ExecuteEnemySkillAttack(MonsterSkillData skill)
+    private void ExecuteEnemySkillAttack(SkillData skill)
     {
         if (!CheckEnemyHit(skill.baseHitRate))
         {
             string missName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName
-                : $"{skill.attackAttribute.ToJapanese()}攻撃";
+                : $"{skill.skillAttribute.ToJapanese()}攻撃";
             AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
             AfterEnemyAction();
             return;
         }
 
         // =========================================================
-        // ★ブラッシュアップ: effectOnly 対応（敵スキルでもダメージ無し+状態異常のみが可能に）
+        // 非ダメージスキル: 追加効果のみ実行
         // =========================================================
-        if (skill.effectOnly)
+        if (skill.IsNonDamage)
         {
             string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "スキル";
+            AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
 
-            if (skill.inflictEffect == StatusEffect.Poison && skill.inflictChance > 0)
-            {
-                // ★ブラッシュアップ: 既に毒なら判定せずログも出さない
-                if (GameState.I != null && GameState.I.isPoisoned)
-                {
-                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし既に毒状態だ！");
-                }
-                else
-                {
-                    bool inflicted = StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
-                    if (inflicted)
-                    {
-                        AddLog($"{enemyMonster.Mname} の{effectSkillName}！ You は毒を受けた！");
-                    }
-                    else
-                    {
-                        AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし効かなかった！");
-                    }
-                }
-            }
-            else
-            {
-                AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
-            }
+            // 追加効果の実行
+            ProcessEnemySkillEffects(skill);
 
             AfterEnemyAction();
             return;
         }
 
-        // --- 通常のダメージ計算（effectOnly=false）---
+        // --- 通常のダメージ計算 ---
         int baseDamage;
         if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
         else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
         else baseDamage = enemyMonster.Attack;
         if (baseDamage < 1) baseDamage = 1;
 
-        int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.attackAttribute);
+        int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
         float reductionRate = resistance / 100f;
         int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
         if (afterResist < 0) afterResist = 0;
@@ -313,7 +294,7 @@ public partial class BattleSceneController
 
         string actionName = !string.IsNullOrEmpty(skill.skillName)
             ? skill.skillName
-            : $"{skill.attackAttribute.ToJapanese()}攻撃";
+            : $"{skill.skillAttribute.ToJapanese()}攻撃";
 
         string logSuffix = "";
         if (resistance > 0 && blocked > 0) logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
@@ -321,69 +302,14 @@ public partial class BattleSceneController
         else if (resistance < 0) logSuffix = "（弱点で増加）";
         else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-        AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.attackAttribute.ToJapanese()}属性） " +
+        AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
                $"{finalDamage}ダメージ！{logSuffix}");
 
         Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
                   $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
 
-        // ★ブラッシュアップ: 敵スキルの毒付与判定 - 既に毒ならスキップ
-        if (skill.inflictEffect == StatusEffect.Poison
-            && skill.inflictChance > 0)
-        {
-            if (GameState.I != null && !GameState.I.isPoisoned)
-            {
-                bool inflicted = StatusEffectSystem.TryPoisonPlayer(skill.inflictChance);
-                if (inflicted)
-                {
-                    AddLog("You は毒を受けた！");
-                }
-            }
-            // 既に毒の場合はログを出さない
-        }
-
-        AfterEnemyAction();
-    }
-
-    // =========================================================
-    // レベルドレイン（追加）
-    // =========================================================
-
-    /// <summary>
-    /// 敵のレベルドレイン攻撃。
-    /// 必中（命中判定なし、耐性なし）。
-    /// プレイヤーのレベルを1下げる。レベル1の場合は効果なし。
-    /// ステータスポイント（statusPoint）は変更しない。
-    /// 経験値は0にリセットされ、必要経験値も再計算される。
-    ///
-    /// ゲームデザイン上の意図:
-    ///   レベルが下がるデメリットの一方で、
-    ///   再度レベルを上げた際にステータスポイントをもう一度獲得できるため、
-    ///   長期的にはプレイヤーが得をする面もある。
-    ///   （必要経験値が下がる分、効率的にポイントを稼げる）
-    /// </summary>
-    private void ExecuteEnemyLevelDrain(MonsterSkillData skill)
-    {
-        string skillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "レベルドレイン";
-
-        if (GameState.I == null)
-        {
-            AddLog($"{enemyMonster.Mname} の{skillName}！ …しかし効果がなかった！");
-            AfterEnemyAction();
-            return;
-        }
-
-        bool success = GameState.I.ApplyLevelDrain();
-
-        if (success)
-        {
-            AddLog($"{enemyMonster.Mname} の{skillName}！ You のレベルが {GameState.I.level} に下がった！");
-        }
-        else
-        {
-            // レベル1の場合は効果なし
-            AddLog($"{enemyMonster.Mname} の{skillName}！ …しかし効果がなかった！");
-        }
+        // 追加効果の実行
+        ProcessEnemySkillEffects(skill);
 
         AfterEnemyAction();
     }
@@ -391,11 +317,32 @@ public partial class BattleSceneController
     /// <summary>
     /// 敵が何もしない。
     /// </summary>
-    private void ExecuteEnemyIdle(MonsterSkillData skill)
+    private void ExecuteEnemyIdle(SkillData skill)
     {
         string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "様子を見ている";
         AddLog($"{enemyMonster.Mname} は{actionName}…");
         AfterEnemyAction();
+    }
+
+    /// <summary>
+    /// 敵スキルの追加効果を実行する共通メソッド。
+    /// SkillEffectProcessor を呼び出し、結果のログを追加する。
+    /// </summary>
+    private void ProcessEnemySkillEffects(SkillData skill)
+    {
+        if (!skill.HasAdditionalEffects) return;
+
+        var logs = SkillEffectProcessor.ProcessEffects(
+            skill.additionalEffects,
+            isPlayerAttack: false,
+            enemyMonster,
+            ref enemyIsPoisoned,
+            ref enemyCurrentHp);
+
+        for (int i = 0; i < logs.Count; i++)
+        {
+            AddLog(logs[i]);
+        }
     }
 
     /// <summary>
@@ -406,7 +353,7 @@ public partial class BattleSceneController
     private void AfterEnemyAction()
     {
         // =========================================================
-        // ターン終了時の毒ダメージ（追加）
+        // ターン終了時の毒ダメージ
         // プレイヤーと敵の両方に毒ダメージを適用する
         // =========================================================
 

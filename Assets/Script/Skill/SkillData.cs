@@ -1,9 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// スキル1つ分のマスターデータ。
-/// 武器スキル（CT制）と魔法スキル（MP制）の両方をこの1つのクラスで表現する。
-/// skillSource で武器スキルか魔法スキルかを区別する。
+/// プレイヤー用（武器スキル/魔法スキル）と敵用の両方をこの1つのクラスで表現する。
+///
+/// 【統合設計】
+///   プレイヤー専用フィールド（skillSource, cooldownTurns, mpCost）はモンスター使用時は参照しない。
+///   モンスター専用フィールド（actionType）はプレイヤー使用時は参照しない。
+///
+/// 【追加効果システム】
+///   additionalEffects リストに SkillEffectEntry を追加することで、
+///   毒付与・レベルドレイン・回復等の効果を任意に組み合わせられる。
+///   各効果のパラメータ（付与率・回復量等）は SkillEffectEntry 側で持つため、
+///   同じ SkillEffectData アセットを異なるパラメータで複数スキルに設定可能。
+///
+/// 【非ダメージスキルの判定】
+///   damageMultiplier == 0 かつ fixedDamage == 0 の場合、
+///   ダメージ計算をスキップし追加効果のみ実行する。
+///   （旧 effectOnly フラグを廃止し、この判定に一本化）
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Skill Data")]
 public class SkillData : ScriptableObject
@@ -14,8 +29,20 @@ public class SkillData : ScriptableObject
     [TextArea] public string description;
 
     [Header("Skill Source")]
-    [Tooltip("Weapon = 武器スキル（CT制、MP消費なし）、Magic = 魔法スキル（MP制、CT なし）")]
+    [Tooltip("Weapon = 武器スキル（CT制、MP消費なし）、Magic = 魔法スキル（MP制、CT なし）\n"
+           + "モンスター使用時は参照しない。")]
     public SkillSource skillSource = SkillSource.Weapon;
+
+    // =========================================================
+    // モンスター行動タイプ（モンスター使用時のみ参照）
+    // =========================================================
+
+    [Header("Monster Action Type")]
+    [Tooltip("モンスターの行動の種類。プレイヤー使用時は無視される。\n"
+           + "Idle = 何もしない\n"
+           + "NormalAttack = Monster.Attack 依存ダメージ\n"
+           + "SkillAttack = 下記のパラメータでダメージ計算")]
+    public MonsterActionType actionType = MonsterActionType.SkillAttack;
 
     [Header("Attribute / Damage")]
     /// <summary>スキルの攻撃属性。武器スキル・魔法スキル共通。</summary>
@@ -37,7 +64,9 @@ public class SkillData : ScriptableObject
     /// <summary>
     /// ダメージ倍率。武器スキルで使用。
     /// 例: 強撃 = 2.0（STR + 武器攻撃力 の2倍ダメージ）
-    /// 魔法スキルで倍率ベースにしたい場合にも使える。0 の場合は fixedDamage を使用。
+    /// 魔法スキルで倍率ベースにしたい場合にも使える。
+    /// 0 の場合は fixedDamage を使用。
+    /// damageMultiplier == 0 かつ fixedDamage == 0 → 非ダメージスキル（追加効果のみ）。
     /// </summary>
     public float damageMultiplier;
 
@@ -63,7 +92,7 @@ public class SkillData : ScriptableObject
     public int mpCost;
 
     // =========================================================
-    // 基礎命中率（追加）
+    // 基礎命中率
     // =========================================================
 
     [Header("Hit Rate")]
@@ -79,24 +108,31 @@ public class SkillData : ScriptableObject
     public int baseHitRate = 95;
 
     // =========================================================
-    // 状態異常付与（追加）
+    // 追加効果リスト
     // =========================================================
 
-    [Header("Status Effect Infliction")]
-    [Tooltip("このスキルが命中時に付与する状態異常。None なら付与しない。\n"
-           + "プレイヤー・敵双方の魔法/スキルで共通に使う。")]
-    public StatusEffect inflictEffect = StatusEffect.None;
+    [Header("Additional Effects")]
+    [Tooltip("スキルの追加効果リスト。\n"
+           + "命中後（またはダメージ計算後）に順番に実行される。\n"
+           + "非ダメージスキル（倍率0 & 固定0）では追加効果のみ実行される。")]
+    public List<SkillEffectEntry> additionalEffects = new List<SkillEffectEntry>();
 
-    [Tooltip("状態異常の基礎付与率（%）。\n"
-           + "実質命中率 = inflictChance × (1 - 対象の耐性/100)\n"
-           + "例: ポイズン魔法 = 80、毒攻撃スキル = 40")]
-    [Range(0, 100)]
-    public int inflictChance = 0;
+    // =========================================================
+    // ヘルパープロパティ
+    // =========================================================
 
-    [Tooltip("true の場合、ダメージ0（fixedDamage=0 かつ damageMultiplier=0）でも\n"
-           + "状態異常の付与だけを行うスキルとして機能する。\n"
-           + "false の場合、ダメージ計算後に追加で状態異常を付与する。")]
-    public bool effectOnly = false;
+    /// <summary>
+    /// ダメージを与えないスキルかどうか。
+    /// damageMultiplier == 0 かつ fixedDamage == 0 の場合 true。
+    /// 旧 effectOnly フラグの代替。
+    /// </summary>
+    public bool IsNonDamage => damageMultiplier <= 0f && fixedDamage <= 0;
+
+    /// <summary>
+    /// 追加効果を持つかどうか。
+    /// </summary>
+    public bool HasAdditionalEffects =>
+        additionalEffects != null && additionalEffects.Count > 0;
 }
 
 /// <summary>
@@ -108,4 +144,30 @@ public enum SkillSource
 {
     Weapon, // 武器スキル（CT制、装備武器に紐づく）
     Magic,  // 魔法スキル（MP制、魔法アイテム所持で使用可能）
+}
+
+/// <summary>
+/// モンスターの行動の種類。
+/// EnemyActionEntry で actionType として使用する。
+/// LevelDrain は追加効果（LevelDrainEffectData）に移行したため削除。
+/// </summary>
+public enum MonsterActionType
+{
+    /// <summary>何もしない（ターン終了）。</summary>
+    Idle,
+
+    /// <summary>
+    /// 通常攻撃（Monster.Attack 依存ダメージ）。
+    /// SkillData のダメージ系パラメータは無視する。
+    /// damageCategory は参照する（物理防御 or 魔法防御ダイス）。
+    /// </summary>
+    NormalAttack,
+
+    /// <summary>
+    /// スキル攻撃（SkillData のパラメータでダメージ計算）。
+    /// fixedDamage > 0 ならそれを使用。
+    /// そうでなければ damageMultiplier × Monster.Attack を使用。
+    /// どちらも 0 なら非ダメージスキル（追加効果のみ）。
+    /// </summary>
+    SkillAttack,
 }

@@ -35,6 +35,6 @@ MonoBehaviour:
   Gold: 0
   Help: "\u96D1\u9B5A\u306E\u4EE3\u8868\u3001\u30B9\u30E9\u30A4\u30E0\u3060\uFF01\n\u3067\u3082\u67D0RPG\u304C\u51FA\u308B\u307E\u3067\u306F\u3001\u9178\u3068\u304B\u6301\u3063\u3066\u305F\u308A\u7D50\u69CB\u5F37\u3044\u8A2D\u5B9A\u3060\u3063\u305F\u3093\u3060\u3051\u3069\u306A\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: 7e1e9371d8a092947a0a67a801937dff, type: 2}
+  - skill: {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
     threshold: 100
   baseActionRange: 100

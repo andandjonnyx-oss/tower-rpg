@@ -7,8 +7,8 @@ using UnityEngine;
 ///
 /// 変更履歴:
 ///   旧仕様: 行動の内容（ダメージ・属性・DamageCategory）を EnemyActionEntry に直書きしていた。
-///   新仕様: 行動の内容は MonsterSkillData（ScriptableObject）に分離した。
-///           EnemyActionEntry は「どのスキルを・どの確率で選ぶか」だけを管理する。
+///   中間仕様: MonsterSkillData（ScriptableObject）に分離。
+///   現仕様: SkillData に統合。MonsterSkillData は廃止。
 ///
 /// 判定ロジック:
 ///   0 ～ actionRange の乱数を振り、
@@ -26,8 +26,8 @@ public class EnemyActionEntry
     /// 使用するスキルのデータ。
     /// null の場合は fallback として通常攻撃（物理、Monster.Attack 依存）を実行する。
     /// </summary>
-    [Tooltip("使用するモンスタースキル。null の場合は通常攻撃フォールバック")]
-    public MonsterSkillData skill;
+    [Tooltip("使用するスキル。null の場合は通常攻撃フォールバック")]
+    public SkillData skill;
 
     /// <summary>
     /// この行動が選ばれる上限値（累積）。

@@ -3,7 +3,7 @@
 AIアシスタント向け。プロジェクトの構造・各ファイルの役割・依存関係を記述する。
 **セッション開始時にこのファイルを読めば、全ソース読み込み不要で改修対象を特定できる。**
 
-最終更新: 2026-03-30（ボス戦システム実装完了後）
+最終更新: 2026-03-31（データアーキテクチャ整備・SkillData統合・ビューアー改修）
 
 ---
 
@@ -44,7 +44,7 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 | **TowerEntranceView.cs** | 塔入口UI。到達階に応じたフロア選択ボタン表示 | GameState, FloorButton |
 | **FloorButton.cs** | フロア選択ボタン1個分 | GameState |
 | **HpMpDisplay.cs** | HP/MPバー表示 | GameState |
-| **AttributeTypes.cs** | enum定義集: WeaponAttribute, StatusEffect, DamageCategory, ToJapanese()拡張メソッド | なし |
+| **AttributeTypes.cs** | enum定義集: WeaponAttribute, StatusEffect, ToJapanese()拡張メソッド | なし |
 | **GameStateautocreate.cs** | GameState オブジェクトの自動生成 | GameState |
 
 ### Assets/Script/Battle/
@@ -53,21 +53,23 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 |---------|------|-----------|
 | **BattleSceneController.cs** | 戦闘メインコントローラー（partial class本体）。フィールド宣言、Start、ログ管理、UI制御、勝敗処理、FullRecover。OnVictory()で経験値付与・レベルアップログ表示。ボス戦勝利時は撃破フラグ記録+勝利会話Talk遷移。ボス戦敗北時はSTEP維持 | GameState, Monster, BattleContext, BossEncounterSystem, StatusEffectSystem |
 | **BattleSceneController_PlayerAction.cs** | partial: プレイヤー行動（通常攻撃/スキル/魔法/アイテム）。effectOnly対応、毒重複チェック含む | SkillData, StatusEffectSystem |
-| **BattleSceneController_EnemyAction.cs** | partial: 敵行動（LUC判定/行動選択/各種攻撃/レベルドレイン/ターン終了）。effectOnly対応、毒重複チェック含む。ExecuteEnemyLevelDrain()で必中レベルドレイン処理 | MonsterSkillData, EnemyActionEntry, StatusEffectSystem, GameState |
+| **BattleSceneController_EnemyAction.cs** | partial: 敵行動（LUC判定/行動選択/各種攻撃/レベルドレイン/ターン終了）。effectOnly対応、毒重複チェック含む。ExecuteEnemyLevelDrain()で必中レベルドレイン処理。**SkillData統合済み（旧MonsterSkillData参照を全てSkillDataに変更）** | SkillData, EnemyActionEntry, StatusEffectSystem, GameState |
 | **BattleSceneController_CombatUtils.cs** | partial: 命中判定/クリティカル/防御ダイス/ダメージ適用 | GameState, Monster |
 | **BossEncounterSystem.cs** | ボスエンカウント管理。BossEntry（階/STEP/モンスター/勝利会話）のリストを保持。撃破判定はGameState.IsPlayed("BOSS_F{階:D2}")を流用。TryStartBossBattle()でボス戦開始 | GameState, Monster, BattleContext, TalkEvent |
 | **Monster.cs** | ScriptableObject。敵1体のマスターデータ（HP/ATK/DEF/回避/命中/毒耐性/行動パターン/Exp/Gold）。IsBoss/IsUniqueフラグあり | EnemyActionEntry |
-| **MonsterSkillData.cs** | ScriptableObject。敵スキル1つのマスターデータ。effectOnlyフラグ対応済み。MonsterActionType enum定義（Idle/NormalAttack/SkillAttack/LevelDrain） | なし |
 | **MonsterDatabase.cs** | 敵一覧。フロア/ステップに応じた出現候補検索。ボスはここに登録しない（BossEncounterSystem経由） | Monster |
-| **EnemyActionEntry.cs** | 敵行動テーブル1行分。threshold + MonsterSkillData参照 | MonsterSkillData |
+| **EnemyActionEntry.cs** | 敵行動テーブル1行分。threshold + SkillData参照。**統合済み（旧MonsterSkillData→SkillData）**。DamageCategory enumもここで定義 | SkillData |
 | **EncounterSystem.cs** | 通常エンカウント判定＋敵選択＋戦闘シーン遷移 | MonsterDatabase, BattleContext |
 | **BattleContext.cs** | static。戦闘シーンへの敵データ受け渡し。IsBossBattle/BossFloorフラグでボス戦を識別 | Monster |
+
+**削除済み:**
+- ~~MonsterSkillData.cs~~ — SkillData に統合。MonsterActionType enum は SkillData.cs 内に移動
 
 ### Assets/Script/Skill/
 
 | ファイル | 役割 | 主な依存先 |
 |---------|------|-----------|
-| **SkillData.cs** | ScriptableObject。スキル1つのマスターデータ（武器スキル/魔法スキル共用）。effectOnly/inflictEffect/inflictChance含む | なし |
+| **SkillData.cs** | ScriptableObject。スキル1つのマスターデータ。**プレイヤースキル（武器/魔法）とモンスタースキルを統合**。プレイヤー用: skillSource/cooldownTurns/mpCost。モンスター用: actionType（MonsterActionType enum）。共通: skillAttribute/damageCategory/damageMultiplier/fixedDamage/baseHitRate/inflictEffect/inflictChance/effectOnly。SkillSource enum, MonsterActionType enum もここで定義 | なし |
 | **StatusEffectSystem.cs** | 状態異常の付与判定・ダメージ計算・耐性取得の静的ユーティリティ。プレイヤーの毒耐性は装備+パッシブ合算 | GameState, PassiveCalculator, EquipmentCalculator |
 | **PassiveCalculator.cs** | パッシブ効果の集計（重複ルール: 最大値100%、2個目以降10%減衰）。魔法スキル一覧収集も担当 | ItemBoxManager, PassiveEffect |
 | **PassiveEffect.cs** | パッシブ効果1件の定義。PassiveType enum含む | なし |
@@ -132,6 +134,16 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 倉庫管理（StorageManager等）
 
+### Assets/Editor/
+
+| ファイル | 役割 | 主な依存先 |
+|---------|------|-----------|
+| **ItemDatabaseViewer.cs** | Item Database Viewer ウィンドウ。自動登録ボタン（Itemlistフォルダ再帰検索）、IDソート（C→M→W順）、検索機能 | ItemDatabase, ItemData |
+| **ItemDetailWindow.cs** | アイテム詳細ウィンドウ。カテゴリ別に全フィールド表示（消費:回復量+毒回復、武器:攻撃性能+装備補正+耐性、魔法:スキル+パッシブ） | ItemData, SkillData |
+| **MonsterDatabaseViewer.cs** | Monster Database Viewer ウィンドウ。通常モンスター（DB登録）+ボスモンスター（Bossフォルダ直接参照）の2セクション構成。自動登録（Normalフォルダのみ）、IDソート、Boss リスト更新、検索機能 | MonsterDatabase, Monster |
+| **MonsterDetailWindow.cs** | モンスター詳細ウィンドウ。全フィールド表示（ステータス+命中回避+状態異常耐性+行動パターン確率範囲付き） | Monster, SkillData |
+| **TalkEventViewerWindow.cs** | 会話イベントビューアー | TalkEventDatabase, TalkEvent |
+
 ---
 
 ## 4. 主要システムの設計ルール
@@ -182,12 +194,15 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 - 合計 = 装備品分(100%反映) + パッシブ分(減衰ルール適用)
 - 状態異常の実質付与率 = 基礎付与率 × (1 - 耐性/100)
 
-### 敵スキルとプレイヤースキルの関係
-- プレイヤー: SkillData（CT制 or MP制）
-- 敵: MonsterSkillData（CT/MP無視）
-- 共通フィールド: inflictEffect, inflictChance, effectOnly, baseHitRate, damageMultiplier, fixedDamage, damageCategory
-- 敵専用: MonsterActionType.LevelDrain
-- 将来的に統一予定だが、既存アセット互換のため現在は別クラス
+### スキルシステム（統合済み）
+- **SkillData 1クラスでプレイヤー・モンスター両方のスキルを表現**
+- プレイヤー用フィールド: skillSource（Weapon/Magic）, cooldownTurns, mpCost
+- モンスター用フィールド: actionType（Idle/NormalAttack/SkillAttack/LevelDrain）
+- 共通フィールド: skillId, skillName, description, skillAttribute, damageCategory, damageMultiplier, fixedDamage, baseHitRate, inflictEffect, inflictChance, effectOnly
+- プレイヤーが使う場合は actionType を参照しない
+- モンスターが使う場合は skillSource/cooldownTurns/mpCost を参照しない
+- 同じパラメータのスキルは複数モンスターで共有可能
+- 属性・倍率が違えば別のスキルアセットとして作成
 
 ### 街に戻る = 全回復ルール
 - 敗北 → FullRecover() → Main
@@ -196,7 +211,35 @@ AIアシスタント向け。プロジェクトの構造・各ファイルの役
 
 ---
 
-## 5. セーブデータ構造 (SaveData)
+## 5. データ管理ルール（命名規則・フォルダ構成）
+
+### アイテム
+- ID/ファイル名: `C001_Yakusou`, `W001_Bokutou`, `M001_Fire`（英語、プレフィックス+番号+名前）
+- 表示名: `itemName` フィールドに日本語（薬草、木刀、ファイア）
+- フォルダ: `Assets/ScriptableAsset/Itemlist/` 以下に consume/Weapon/magic サブフォルダ
+- DB登録: ビューアーの「自動登録」ボタンで Itemlist フォルダを再帰検索して一括登録
+
+### モンスター
+- 通常ID/ファイル名: `001_Slime`（番号+名前）
+- ボスID/ファイル名: `F03B_Boslime`（フロア+B+名前）
+- 表示名: `Mname` フィールドに日本語
+- フォルダ: `Assets/ScriptableAsset/Monsterlist/Normal/`（F1-10等のサブフォルダ）, `Boss/`
+- DB登録: Normal フォルダのみ自動登録。Boss はDB未登録（ビューアーでBossフォルダ直接参照で閲覧可能）
+
+### スキル
+- ID/ファイル名: `001_Strattack`（番号+名前）
+- フォルダ: `Assets/ScriptableAsset/Skilllist/`
+- 属性・倍率が違えば別アセット（例: 殴通常攻撃と斬通常攻撃は別）
+- 同じパラメータのスキルは複数モンスターで共有可能
+
+### ソート順
+- アイテム: C → M → W のカテゴリ順、同カテゴリ内は番号順
+- モンスター: ID文字列比較（001, 002...の番号順）
+- 0始まりIDは文字列型のため問題なし
+
+---
+
+## 6. セーブデータ構造 (SaveData)
 
 floor, step, reachedFloor, level, currentExp, expToNext, HP/MP, 5基礎ステータス×2(current/initial),
 statusPoint, equippedWeaponUid, isPoisoned, playedEventIds[], inventoryItems[], storageItems[]
@@ -205,12 +248,11 @@ statusPoint, equippedWeaponUid, isPoisoned, playedEventIds[], inventoryItems[], 
 
 ---
 
-## 6. 未実装・今後の予定
+## 7. 未実装・今後の予定
 
 ### 次回優先（本人希望）
-- アイテム・モンスター・スキルの ID と名前の命名規則設計
-- ビューアーの更新（データ確認・管理UI）
-- 要素の追加（アイテム、モンスター、スキルの充実）
+- スキルシステムの修正（統合後の SkillData の調整・拡張）
+- スキルビューアー（SkillData をビューアーで閲覧できるように）
 
 ### その他の残課題
 - 塔からの帰還ボタン（全回復して街へ）
@@ -219,7 +261,6 @@ statusPoint, equippedWeaponUid, isPoisoned, playedEventIds[], inventoryItems[], 
 - 毒以外の状態異常（麻痺・睡眠等）
 - ボス戦専用BGM / 演出
 - 敵図鑑
-- SkillData / MonsterSkillData の完全統一
 - レベルドレイン耐性（装備/パッシブ対応）
 - レベルアップ時のUI演出（SE・エフェクト）
 - 経験値バランス調整
