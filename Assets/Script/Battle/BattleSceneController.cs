@@ -49,6 +49,22 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("所持中の魔法スキルを選択するドロップダウン")]
     [SerializeField] private TMP_Dropdown magicDropdown;
 
+    // =========================================================
+    // コンティニューポップアップ UI（追加）
+    // =========================================================
+    [Header("UI - Continue Popup")]
+    [Tooltip("コンティニュー確認ポップアップのルートオブジェクト（ContineConfirmPopup）")]
+    [SerializeField] private GameObject continuePopup;
+
+    [Tooltip("ポップアップのメッセージテキスト")]
+    [SerializeField] private TMP_Text continuePopupText;
+
+    [Tooltip("はいボタン（広告視聴して復活）")]
+    [SerializeField] private Button continueYesButton;
+
+    [Tooltip("いいえボタン（街に帰還）")]
+    [SerializeField] private Button continueNoButton;
+
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
     [SerializeField] private string mainSceneName = "Main";
@@ -122,6 +138,27 @@ public partial class BattleSceneController : MonoBehaviour
         if (fullLogCloseButton != null) fullLogCloseButton.onClick.AddListener(CloseFullLog);
         if (fullLogPanel != null) fullLogPanel.SetActive(false);
 
+        // =========================================================
+        // コンティニューポップアップ ボタン登録（追加）
+        // =========================================================
+        if (continueYesButton != null) continueYesButton.onClick.AddListener(OnContinueYes);
+        if (continueNoButton != null) continueNoButton.onClick.AddListener(OnContinueNo);
+        if (continuePopup != null) continuePopup.SetActive(false);
+
+        // =========================================================
+        // ボス戦アイテムスナップショット（追加）
+        // 戦闘開始時（初回のみ）にアイテムの状態を保存する。
+        // コンティニュー時にこのスナップショットから復元する。
+        // =========================================================
+        if (!battleInitialized && BattleContext.IsBossBattle)
+        {
+            if (ItemBoxManager.Instance != null)
+            {
+                BattleContext.ItemSnapshot = ItemBoxManager.Instance.CreateSnapshot();
+                Debug.Log($"[Battle] ボス戦アイテムスナップショット保存: {BattleContext.ItemSnapshot.Count} 個");
+            }
+        }
+
         if (!battleInitialized)
         {
             enemyCurrentHp = enemyMonster.MaxHp;
@@ -189,6 +226,9 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
         enemyIsPoisoned = false;
+
+        // ボス戦アイテムスナップショットをクリア（勝利したので不要）
+        BattleContext.ItemSnapshot = null;
 
         // =========================================================
         // 経験値付与・レベルアップ処理（追加）
@@ -266,9 +306,8 @@ public partial class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// 戦闘敗北時の処理。
-    /// ボス戦の場合は STEP を維持して街に戻る（再挑戦可能）。
-    /// デバッグ戦闘の場合はデバッグシーンへ戻る。
-    /// 通常戦闘の場合は従来通り。
+    /// コンティニューポップアップを表示する。
+    /// デバッグ戦闘の場合はポップアップを出さずにデバッグシーンへ戻る。
     /// </summary>
     private void OnDefeat()
     {
@@ -276,14 +315,15 @@ public partial class BattleSceneController : MonoBehaviour
         AddLog("You は倒れた…");
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
-        ResetBattleStatics();
         enemyIsPoisoned = false;
 
         // =========================================================
-        // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
+        // デバッグ戦闘の場合はデバッグシーンへ戻る（ポップアップ無し）
         // =========================================================
         if (BattleContext.IsDebugBattle)
         {
+            ResetBattleStatics();
+            BattleContext.ItemSnapshot = null;
             BattleContext.IsDebugBattle = false;
             BattleContext.DebugReturnScene = "Debug";
             Invoke(nameof(ReturnToDebug), 1.5f);
@@ -291,10 +331,128 @@ public partial class BattleSceneController : MonoBehaviour
         }
 
         // =========================================================
-        // ボス戦敗北処理（追加）
-        // ボス戦の場合は STEP を維持する。
-        // 街に戻って再度塔に入り、同じ STEP に来ればボス戦が再発生する。
+        // コンティニューポップアップを表示（追加）
         // =========================================================
+        ShowContinuePopup();
+    }
+
+    // =========================================================
+    // コンティニューポップアップ処理（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 敗北時にコンティニューポップアップを表示する。
+    /// ボス戦と通常戦闘でメッセージを切り替える。
+    /// </summary>
+    private void ShowContinuePopup()
+    {
+        if (continuePopup == null)
+        {
+            // ポップアップUIが未設定の場合は従来通り街へ帰還
+            Debug.LogWarning("[Battle] continuePopup が未設定のため従来の敗北処理を実行");
+            FallbackDefeat();
+            return;
+        }
+
+        // メッセージを設定
+        if (continuePopupText != null)
+        {
+            if (BattleContext.IsBossBattle)
+            {
+                continuePopupText.text = "広告を視聴して戦闘をやり直しますか？\n（全回復、アイテム復活）";
+            }
+            else
+            {
+                continuePopupText.text = "広告を視聴してこのSTEPから続けますか？";
+            }
+        }
+
+        continuePopup.SetActive(true);
+    }
+
+    /// <summary>
+    /// コンティニュー「はい」ボタン押下時の処理。
+    /// AdManager でリワード広告を表示し、成功なら復活する。
+    /// </summary>
+    private void OnContinueYes()
+    {
+        if (continuePopup != null) continuePopup.SetActive(false);
+
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.ShowRewardedAd(OnAdResult);
+        }
+        else
+        {
+            Debug.LogWarning("[Battle] AdManager.Instance が null — 広告なしで復活");
+            OnAdResult(true);
+        }
+    }
+
+    /// <summary>
+    /// 広告視聴結果のコールバック。
+    /// </summary>
+    /// <param name="success">true = 視聴完了, false = 失敗/キャンセル</param>
+    private void OnAdResult(bool success)
+    {
+        if (!success)
+        {
+            // 広告失敗 → 街に帰還（いいえと同じ扱い）
+            Debug.Log("[Battle] 広告視聴失敗/キャンセル → 街に帰還");
+            FallbackDefeat();
+            return;
+        }
+
+        // 広告視聴成功 → 復活処理
+        Debug.Log("[Battle] 広告視聴完了 → コンティニュー");
+
+        if (BattleContext.IsBossBattle)
+        {
+            // ボス戦: 全回復 + アイテム復元 → 戦闘を最初からやり直し
+            FullRecover();
+
+            // アイテムスナップショットから復元
+            if (BattleContext.ItemSnapshot != null && ItemBoxManager.Instance != null)
+            {
+                ItemBoxManager.Instance.RestoreFromSnapshot(BattleContext.ItemSnapshot);
+                Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
+            }
+
+            // 戦闘ステートをリセットして Battle シーンを再読込（再戦）
+            ResetBattleStatics();
+            // IsBossBattle と BossFloor はそのまま維持（再戦なので）
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            // 通常戦闘: 全回復 → 現STEPから Tower シーンに戻る（戦闘回避扱い）
+            FullRecover();
+            ResetBattleStatics();
+            BattleContext.ItemSnapshot = null;
+            SceneManager.LoadScene(towerSceneName);
+        }
+    }
+
+    /// <summary>
+    /// コンティニュー「いいえ」ボタン押下時の処理。
+    /// 従来通り街に帰還する。
+    /// </summary>
+    private void OnContinueNo()
+    {
+        if (continuePopup != null) continuePopup.SetActive(false);
+        FallbackDefeat();
+    }
+
+    /// <summary>
+    /// コンティニューしない場合の従来の敗北処理。
+    /// ボス戦の場合は STEP を維持して街に戻る。
+    /// </summary>
+    private void FallbackDefeat()
+    {
+        ResetBattleStatics();
+        BattleContext.ItemSnapshot = null;
+
+        // ボス戦敗北処理（STEP を維持）
         if (BattleContext.IsBossBattle)
         {
             Debug.Log($"[Battle] ボス戦敗北。STEP={GameState.I?.step} を維持して街へ帰還。");

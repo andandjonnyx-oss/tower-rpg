@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 //受け渡し用の箱
@@ -42,4 +43,32 @@ public static class BattleContext
     /// </summary>
     public static string DebugReturnScene = "Debug";
 
+    // =========================================================
+    // ボス戦コンティニュー用アイテムスナップショット（追加）
+    // =========================================================
+
+    /// <summary>
+    /// ボス戦開始時の ItemBoxManager のスナップショット。
+    /// コンティニュー時にアイテムを戦闘開始時の状態に復元するために使用。
+    /// 各要素は (uid, itemId) のペア。
+    /// 戦闘終了時（勝利/敗北帰還）に null にクリアする。
+    /// </summary>
+    public static List<ItemSnapshotEntry> ItemSnapshot;
+}
+
+/// <summary>
+/// アイテムスナップショットの1エントリ。
+/// uid と itemId のペアを保持する。
+/// </summary>
+[System.Serializable]
+public class ItemSnapshotEntry
+{
+    public string uid;
+    public string itemId;
+
+    public ItemSnapshotEntry(string uid, string itemId)
+    {
+        this.uid = uid;
+        this.itemId = itemId;
+    }
 }

@@ -140,6 +140,65 @@ public class ItemBoxManager : MonoBehaviour
         if (GameState.I != null) GameState.I.RecalcMaxHp();
     }
 
+    // =========================================================
+    // ボス戦コンティニュー用スナップショット（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 現在の所持品リストのスナップショットを作成する。
+    /// 各アイテムの uid と itemId のペアを記録する。
+    /// ボス戦開始時に BattleContext.ItemSnapshot に保存する。
+    /// </summary>
+    public List<ItemSnapshotEntry> CreateSnapshot()
+    {
+        var snapshot = new List<ItemSnapshotEntry>();
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] == null || items[i].data == null) continue;
+            snapshot.Add(new ItemSnapshotEntry(items[i].uid, items[i].data.itemId));
+        }
+        Debug.Log($"[ItemBoxManager] スナップショット作成: {snapshot.Count} 個");
+        return snapshot;
+    }
+
+    /// <summary>
+    /// スナップショットから所持品リストを復元する。
+    /// 戦闘中に消費されたアイテムを元に戻す。
+    /// uid を引き継ぐので装備状態も維持される。
+    /// </summary>
+    public void RestoreFromSnapshot(List<ItemSnapshotEntry> snapshot)
+    {
+        if (snapshot == null || itemDatabase == null)
+        {
+            Debug.LogWarning("[ItemBoxManager] スナップショットまたは ItemDatabase が null");
+            return;
+        }
+
+        items.Clear();
+
+        foreach (var entry in snapshot)
+        {
+            if (string.IsNullOrEmpty(entry.itemId)) continue;
+
+            ItemData data = FindItemDataById(entry.itemId);
+            if (data == null)
+            {
+                Debug.LogWarning($"[ItemBoxManager] スナップショット復元失敗: itemId={entry.itemId} が ItemDatabase に見つかりません");
+                continue;
+            }
+
+            var invItem = new InventoryItem(data);
+            invItem.uid = entry.uid; // 元の uid を復元（装備状態を維持）
+            items.Add(invItem);
+        }
+
+        SortItems();
+        Debug.Log($"[ItemBoxManager] スナップショット復元完了: {items.Count} 個のアイテム");
+
+        // 復元後に maxHp を再計算
+        if (GameState.I != null) GameState.I.RecalcMaxHp();
+    }
+
     /// <summary>
     /// ItemDatabase.items から itemId で検索してマスターデータを返す。
     /// </summary>
