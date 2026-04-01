@@ -54,6 +54,11 @@ public static class BattleContext
     /// 戦闘終了時（勝利/敗北帰還）に null にクリアする。
     /// </summary>
     public static List<ItemSnapshotEntry> ItemSnapshot;
+
+    /// <summary>
+    /// ボス戦開始時の装備武器uid。コンティニュー時に復元する。
+    /// </summary>
+    public static string SnapshotEquippedWeaponUid;
 }
 
 /// <summary>

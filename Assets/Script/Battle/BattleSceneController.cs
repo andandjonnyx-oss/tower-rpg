@@ -77,6 +77,16 @@ public partial class BattleSceneController : MonoBehaviour
     private static List<string> persistentLogLines = new List<string>();
 
     // =========================================================
+    // 敵HP 読み取り用プロパティ（追加）
+    // EnemyHpBar から参照する。
+    // =========================================================
+    /// <summary>戦闘中の敵の現在HP。EnemyHpBar から参照する。</summary>
+    public static int EnemyCurrentHp => enemyCurrentHp;
+    /// <summary>戦闘中の敵の最大HP。EnemyHpBar から参照する。</summary>
+    public static int EnemyMaxHp => battleInitialized && BattleContext.EnemyMonster != null
+        ? BattleContext.EnemyMonster.MaxHp : 0;
+
+    // =========================================================
     // ターンカウンター（追加）
     // =========================================================
     /// <summary>現在のターン数。戦闘開始時に 0、プレイヤーターン開始時に +1。</summary>
