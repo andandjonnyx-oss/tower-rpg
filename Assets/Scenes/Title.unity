@@ -890,9 +890,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c804cc6b31ee89842902ee221a7879db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemBoxManager
-  capacity: 10
+  capacity: 20
   itemDatabase: {fileID: 11400000, guid: febb30d2c9d70224eb0da0dd82a15426, type: 2}
   items:
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
+  - uid: 
+    data: {fileID: 0}
   - uid: 
     data: {fileID: 0}
   - uid: 
