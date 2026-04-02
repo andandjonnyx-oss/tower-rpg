@@ -32,19 +32,18 @@ public partial class BattleSceneController
     /// <summary>
     /// 攻撃ボタンが押された時の処理（プレイヤーターン・通常攻撃）。
     ///
-    /// ダメージ計算（改修後）:
+    /// ダメージ計算:
     ///   GameState.Attack（= baseSTR + 装備attackPower + パッシブ攻撃ボーナス）
-    ///   をそのままダメージとして使用する。
-    ///   ※ 装備品の attackPower は GameState.Attack に含まれているため、
-    ///     ここでは weaponPower を加算しない（二重加算を防止）。
+    ///   → 敵の属性耐性で軽減（武器の weaponAttribute を参照）
+    ///   → 防御ダイスで軽減（クリティカル時は防御無視）
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   基礎命中率（武器の baseHitRate、素手=95）× (1 - (敵回避力 - 命中力)/100)
     ///   最低25%保証。ミス時はダメージ0でターン終了。
     ///
-    /// クリティカル判定（追加）:
+    /// クリティカル判定:
     ///   命中後に CriticalRate% の確率でクリティカル。
-    ///   クリティカル時: 防御無視、ダメージ2倍。
+    ///   クリティカル時: 防御無視、ダメージ2倍（属性耐性は適用済み）。
     /// </summary>
     private void OnAttackClicked()
     {
@@ -66,6 +65,11 @@ public partial class BattleSceneController
 
         int damage = (GameState.I != null) ? GameState.I.Attack : 1;
         if (damage < 1) damage = 1;
+
+        // 属性耐性によるダメージ軽減
+        string resistLog;
+        damage = ApplyEnemyAttributeResistance(damage, weaponAttribute, out resistLog);
+
         bool isCrit = CheckPlayerCrit();
 
         int finalDamage;
@@ -81,13 +85,16 @@ public partial class BattleSceneController
             if (finalDamage < 1) finalDamage = 1;
         }
 
+        // 完全無効（耐性100以上）の場合は0ダメージ
+        if (damage <= 0) finalDamage = 0;
+
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         if (isCrit)
-            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！");
+            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
         else
-            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！");
+            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
 
         // 武器の毒付与判定 - 既に毒ならスキップ（ログも出さない）
         if (equippedWeaponItem != null && equippedWeaponItem.data != null
@@ -114,18 +121,19 @@ public partial class BattleSceneController
     /// 装備中武器の最初のスキルを使用する。
     /// skill.damageCategory（Physical/Magical）に応じて敵の防御ダイスを選択する。
     ///
-    /// ダメージ計算（改修後）:
+    /// ダメージ計算:
     ///   GameState.Attack × skill.damageMultiplier
-    ///   ※ Attack に装備攻撃力が含まれているため、weaponPower を別途加算しない。
+    ///   → 敵の属性耐性で軽減（skill.skillAttribute を参照）
+    ///   → 防御ダイスで軽減
     ///
     /// 非ダメージスキル:
     ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   skill.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
     ///   クールダウンは命中に関わらず消費する。
     ///
-    /// クリティカル判定（追加）:
+    /// クリティカル判定:
     ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
     /// </summary>
     private void OnSkillClicked()
@@ -170,8 +178,13 @@ public partial class BattleSceneController
         int attack = (GameState.I != null) ? GameState.I.Attack : 1;
         int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
         if (damage < 1) damage = 1;
-        bool isCrit = CheckPlayerCrit();
+
+        // 属性耐性によるダメージ軽減
         WeaponAttribute skillAttr = skill.skillAttribute;
+        string resistLog;
+        damage = ApplyEnemyAttributeResistance(damage, skillAttr, out resistLog);
+
+        bool isCrit = CheckPlayerCrit();
 
         int finalDamage;
         if (isCrit)
@@ -186,13 +199,16 @@ public partial class BattleSceneController
             if (finalDamage < 1) finalDamage = 1;
         }
 
+        // 完全無効（耐性100以上）の場合は0ダメージ
+        if (damage <= 0) finalDamage = 0;
+
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         if (isCrit)
-            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！");
+            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
         else
-            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！");
+            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
 
         // 追加効果の実行
         ProcessPlayerSkillEffects(skill);
@@ -210,19 +226,20 @@ public partial class BattleSceneController
     /// ドロップダウンで選択中の魔法スキルを MP 消費して発動する。
     /// skill.damageCategory（通常 Magical）に応じて敵の防御ダイスを選択する。
     ///
-    /// ダメージ計算（改修後）:
+    /// ダメージ計算:
     ///   fixedDamage > 0 → そのまま使用（固定ダメージ）
     ///   damageMultiplier > 0 → GameState.MagicAttack × 倍率
-    ///   ※ MagicAttack に装備分・パッシブ分が含まれている。
+    ///   → 敵の属性耐性で軽減（magic.skillAttribute を参照）
+    ///   → 防御ダイスで軽減
     ///
     /// 非ダメージスキル:
     ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   magic.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
     ///   ミス時も MP は消費する。
     ///
-    /// クリティカル判定（追加）:
+    /// クリティカル判定:
     ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
     /// </summary>
     private void OnMagicClicked()
@@ -271,6 +288,10 @@ public partial class BattleSceneController
         else { damage = 1; }
         if (damage < 1) damage = 1;
 
+        // 属性耐性によるダメージ軽減
+        string resistLog;
+        damage = ApplyEnemyAttributeResistance(damage, magic.skillAttribute, out resistLog);
+
         bool isCrit = CheckPlayerCrit();
         int finalDamage;
         if (isCrit) { finalDamage = damage * 2; }
@@ -282,13 +303,16 @@ public partial class BattleSceneController
             if (finalDamage < 1) finalDamage = 1;
         }
 
+        // 完全無効（耐性100以上）の場合は0ダメージ
+        if (damage <= 0) finalDamage = 0;
+
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         if (isCrit)
-            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！ MP-{magic.mpCost}");
+            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
         else
-            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！ MP-{magic.mpCost}");
+            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
 
         // 追加効果の実行
         ProcessPlayerSkillEffects(magic);

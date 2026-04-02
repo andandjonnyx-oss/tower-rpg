@@ -2,7 +2,8 @@ using UnityEngine;
 
 /// <summary>
 /// BattleSceneController の戦闘計算ユーティリティパート（partial class）。
-/// 命中判定、クリティカル判定、防御ダイス、ダメージ適用、防御力取得を担当する。
+/// 命中判定、クリティカル判定、防御ダイス、ダメージ適用、防御力取得、
+/// 属性耐性によるダメージ軽減を担当する。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -94,6 +95,50 @@ public partial class BattleSceneController
                   $"hitChance={hitChance:F2}% roll={roll:F2} hit={hit}");
 
         return hit;
+    }
+
+    // =========================================================
+    // 属性耐性によるダメージ軽減（追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤー→敵攻撃時に、敵の属性耐性でダメージを軽減する。
+    ///
+    /// 計算式:
+    ///   最終ダメージ = baseDamage × (100 - 耐性値) / 100
+    ///   耐性値が負（弱点）の場合はダメージ増加。
+    ///   結果は最低1を保証する（元ダメージが1以上の場合）。
+    ///
+    /// 例: baseDamage=10, 耐性50 → 10 × 50/100 = 5
+    /// 例: baseDamage=10, 耐性-50 → 10 × 150/100 = 15
+    /// </summary>
+    /// <param name="baseDamage">耐性適用前のダメージ</param>
+    /// <param name="attackAttribute">攻撃の属性</param>
+    /// <param name="resistanceLog">耐性適用のログ文字列（呼び出し側で使用）</param>
+    /// <returns>耐性適用後のダメージ</returns>
+    private int ApplyEnemyAttributeResistance(int baseDamage, WeaponAttribute attackAttribute, out string resistanceLog)
+    {
+        resistanceLog = "";
+        if (enemyMonster == null) return baseDamage;
+
+        int resistance = enemyMonster.GetAttributeResistance(attackAttribute);
+        if (resistance == 0) return baseDamage;
+
+        float reductionRate = resistance / 100f;
+        int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+        if (afterResist < 1 && baseDamage >= 1) afterResist = 1;
+        // 完全無効（耐性100以上）の場合は0ダメージを許容
+        if (resistance >= 100) afterResist = 0;
+
+        if (resistance > 0)
+            resistanceLog = "（耐性で軽減）";
+        else if (resistance < 0)
+            resistanceLog = "（弱点で増加）";
+
+        Debug.Log($"[Battle] EnemyAttrResist: attr={attackAttribute} resistance={resistance} " +
+                  $"baseDmg={baseDamage} afterResist={afterResist}");
+
+        return afterResist;
     }
 
     // =========================================================

@@ -15,6 +15,31 @@ public class TitleUIManager : MonoBehaviour
     [Tooltip("セーブデータを削除して初期状態に戻す")]
     [SerializeField] private Button resetButton;
 
+    // =========================================================
+    // 初期アイテムセット（追加）
+    // =========================================================
+    //
+    // 新規開始時・初期化時にプレイヤーに付与するアイテム。
+    // インスペクターで設定する。
+    //
+    // 設定例:
+    //   startingItems[0] = W001_Bokutou（木刀）    → 自動装備
+    //   startingItems[1] = C001_Yakusou（薬草）
+    //   startingItems[2] = C001_Yakusou（薬草）
+    //   startingItems[3] = C001_Yakusou（薬草）
+    //   startingItems[4] = M001_Fire（ファイアボール）
+    //
+    // 注意:
+    //   同じアイテムを複数個付与する場合は、配列に複数回設定する。
+    //   Weapon カテゴリのアイテムが含まれている場合、
+    //   最初に見つかった Weapon を自動装備する。
+    // =========================================================
+
+    [Header("Starting Items")]
+    [Tooltip("新規開始時にプレイヤーに付与するアイテム。\n"
+           + "Weapon カテゴリのアイテムは最初の1つを自動装備する。")]
+    [SerializeField] private ItemData[] startingItems;
+
     private void Start()
     {
         if (startButton != null)
@@ -44,6 +69,10 @@ public class TitleUIManager : MonoBehaviour
                 GameState.I.RecalcMaxHp();
                 GameState.I.RecalcMaxMp();
             }
+
+            // 初期アイテムを付与
+            GrantStartingItems();
+
             Debug.Log("[Title] セーブデータなし。新規で開始");
         }
 
@@ -114,6 +143,60 @@ public class TitleUIManager : MonoBehaviour
         if (StorageManager.Instance != null)
             StorageManager.Instance.ClearAll();
 
+        // 初期アイテムを付与
+        GrantStartingItems();
+
         Debug.Log("[Title] セーブデータを初期化しました");
+    }
+
+    // =========================================================
+    // 初期アイテム付与（追加）
+    // =========================================================
+
+    /// <summary>
+    /// startingItems 配列に設定されたアイテムを ItemBoxManager に追加する。
+    /// Weapon カテゴリのアイテムが含まれている場合、最初の1つを自動装備する。
+    /// </summary>
+    private void GrantStartingItems()
+    {
+        if (startingItems == null || startingItems.Length == 0) return;
+        if (ItemBoxManager.Instance == null)
+        {
+            Debug.LogWarning("[Title] ItemBoxManager が見つかりません。初期アイテムを付与できません。");
+            return;
+        }
+
+        bool weaponEquipped = false;
+
+        for (int i = 0; i < startingItems.Length; i++)
+        {
+            if (startingItems[i] == null) continue;
+
+            bool added = ItemBoxManager.Instance.AddItem(startingItems[i]);
+            if (!added)
+            {
+                Debug.LogWarning($"[Title] 初期アイテム追加失敗（容量不足?）: {startingItems[i].itemName}");
+                continue;
+            }
+
+            Debug.Log($"[Title] 初期アイテム付与: {startingItems[i].itemName}");
+
+            // 最初の Weapon を自動装備
+            if (!weaponEquipped && startingItems[i].category == ItemCategory.Weapon)
+            {
+                var items = ItemBoxManager.Instance.GetItems();
+                // 追加直後なので、最後に追加されたアイテム or ソート後の位置を検索
+                for (int j = items.Count - 1; j >= 0; j--)
+                {
+                    if (items[j] != null && items[j].data == startingItems[i])
+                    {
+                        ItemBoxManager.Instance.EquipItem(items[j]);
+                        Debug.Log($"[Title] 初期装備: {startingItems[i].itemName}");
+                        weaponEquipped = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

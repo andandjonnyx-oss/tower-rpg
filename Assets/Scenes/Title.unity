@@ -450,6 +450,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleUIManager
   startButton: {fileID: 1828523664}
   resetButton: {fileID: 1068671257}
+  startingItems:
+  - {fileID: 11400000, guid: d3e2505951e84b844a02b787d1586b0f, type: 2}
+  - {fileID: 11400000, guid: 50cbdf1fc8a2948499e6211b24e65c0e, type: 2}
+  - {fileID: 11400000, guid: 50cbdf1fc8a2948499e6211b24e65c0e, type: 2}
+  - {fileID: 11400000, guid: 50cbdf1fc8a2948499e6211b24e65c0e, type: 2}
+  - {fileID: 11400000, guid: 3c365f65a7d9ac4489e1f7a4ce6a97e0, type: 2}
 --- !u!4 &660553703
 Transform:
   m_ObjectHideFlags: 0
