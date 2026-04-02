@@ -22,20 +22,21 @@ Assets/
 │   └── Towerin.unity       … 塔入口
 ├── Script/
 │   ├── Battle/
-│   │   ├── BattleSceneController.cs              … 戦闘メイン（フィールド/Start/ログ/勝敗/ポップアップ）
+│   │   ├── BattleSceneController.cs              … 戦闘メイン（フィールド/Start/ログ/勝敗/コンティニュー/ポップアップ）
 │   │   ├── BattleSceneController_PlayerAction.cs … プレイヤー行動（攻撃/スキル/魔法/アイテム）
 │   │   ├── BattleSceneController_EnemyAction.cs  … 敵行動（LUC判定/各種攻撃/ターン終了）
 │   │   ├── BattleSceneController_CombatUtils.cs  … 命中/クリティカル/防御ダイス/ダメージ適用
-│   │   ├── BattleContext.cs         … 戦闘シーン間データ受け渡し（static）
+│   │   ├── BattleContext.cs         … 戦闘シーン間データ受け渡し（static）+ アイテムスナップショット
 │   │   ├── Bossencountersystem.cs   … ボスエンカウント管理
 │   │   ├── EncounterSystem.cs       … 通常エンカウント管理
 │   │   ├── EnemyActionEntry.cs      … 敵行動テーブルエントリ
+│   │   ├── EnemyHpBar.cs            … 敵HPバー表示（ルーペ所持判定、横幅ボーナス）
 │   │   ├── Monster.cs               … モンスターScriptableObject
 │   │   └── MonsterDatabase.cs       … モンスターDB（SO一覧管理）
 │   ├── Item/
 │   │   ├── Item.cs                  … アイテムScriptableObject（ItemData）
 │   │   ├── InventoryItem.cs         … 所持品インスタンス（uid+スキルCD管理）
-│   │   ├── ItemBoxManager.cs        … 所持品管理（シングルトン）
+│   │   ├── ItemBoxManager.cs        … 所持品管理（シングルトン）+ スナップショット
 │   │   ├── ItemDatabase.cs          … アイテムDB
 │   │   ├── ItemDetailPanel.cs       … アイテム詳細表示
 │   │   ├── ItemPickupWindow.cs      … アイテム取得ウィンドウ
@@ -48,7 +49,7 @@ Assets/
 │   ├── Save/                        … セーブ/ロード（SaveManager等）
 │   ├── SceneGo/                     … シーン遷移（SceneLink等）
 │   ├── Start/                       … タイトル/初期化
-│   ├── Status/                      … ステータス表示
+│   ├── Status/                      … ステータス表示（Admanager含む）
 │   ├── Storage/                     … 倉庫管理
 │   ├── Talk/                        … 会話システム
 │   ├── GameState.cs                 … グローバル状態管理（シングルトン）
@@ -63,7 +64,7 @@ Assets/
 └── ScriptableAsset/
     ├── Itemlist/
     │   ├── consume/                 … 消費アイテムSO
-    │   ├── magic/                   … 魔法アイテムSO
+    │   ├── magic/                   … 魔法アイテムSO（ルーペ含む）
     │   └── Weapon/                  … 武器SO
     └── Monsterlist/                 … モンスターSO
 ```
@@ -73,16 +74,23 @@ Assets/
 ## 主要クラス関係
 
 ### 戦闘システム（partial class 4分割）
-- `BattleSceneController.cs` … フィールド宣言、Start、ログ管理（全件保持+ポップアップ）、ターンカウンター、勝敗処理、武器/魔法ユーティリティ
+- `BattleSceneController.cs` … フィールド宣言、Start、ログ管理（全件保持+ポップアップ）、ターンカウンター、勝敗処理、コンティニューポップアップ（広告視聴→復活/帰還）、武器/魔法ユーティリティ、EnemyCurrentHp/EnemyMaxHpプロパティ
 - `BattleSceneController_PlayerAction.cs` … OnAttackClicked/OnSkillClicked/OnMagicClicked/OnItemClicked + BeginPlayerTurn呼び出し
 - `BattleSceneController_EnemyAction.cs` … EnemyTurn/LUC判定/行動選択/各種攻撃/AfterEnemyAction
 - `BattleSceneController_CombatUtils.cs` … CheckPlayerHit/CheckEnemyHit/CheckPlayerCrit/RollDefenseDice/ApplyDamageToPlayer/GetPlayerDefense/GetEnemyDefense
 
 ### データ受け渡し
-- `BattleContext` (static) … EnemyMonster, Floor, Step, IsBossBattle, BossFloor, IsDebugBattle, DebugReturnScene
+- `BattleContext` (static) … EnemyMonster, Floor, Step, IsBossBattle, BossFloor, IsDebugBattle, DebugReturnScene, ItemSnapshot, SnapshotEquippedWeaponUid
 - `GameState` (singleton) … level, exp, HP/MP, ステータス, 装備, 状態異常, フラグ管理
 
 ### アイテム管理
 - `ItemData` (ScriptableObject) … マスターデータ（装備ステータス、スキル、パッシブ効果）
 - `InventoryItem` … 所持品インスタンス（uid, スキルクールダウン）
-- `ItemBoxManager` (singleton) … 所持品リスト管理、セーブ復元
+- `ItemBoxManager` (singleton) … 所持品リスト管理、セーブ復元、スナップショット（CreateSnapshot/RestoreFromSnapshot）
+- `ItemSnapshotEntry` … スナップショット1エントリ（uid + itemId）
+
+### 敵HPバー
+- `EnemyHpBar` … ルーペ所持時のみ敵画像上にSliderでHPバー表示。複数所持で横幅ボーナス（1+0.1×(n-1)倍）。Fill/Background表示制御で端の色残り解消。
+
+### 広告管理
+- `AdManager` (singleton) … リワード広告の抽象化。現在はダミー（即成功）。将来Unity Ads/AdMob差し替え予定。
