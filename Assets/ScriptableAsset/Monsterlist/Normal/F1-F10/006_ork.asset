@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 006_ork
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 006_ork
+  Mname: "\u30AA\u30FC\u30AF"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 4
+  Minstep: 1
+  Maxfloor: 8
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 40
+  Attack: 10
+  Defense: 10
+  MagicDefense: 0
+  Speed: 0
+  Luck: 1
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  attributeResistances: []
+  Exp: 60
+  Gold: 0
+  Help: "\u30AA\u30FC\u30AF\uFF08\u82F1: oak\u3001\u4ECF: ch\xEAne\u3001\u72EC: Eiche\uFF09\u306F\u3001\u30D6\u30CA\u79D1
+    \u30B3\u30CA\u30E9\u5C5E\uFF08\u5B66\u540D\uFF1AQuercus\uFF09\u306E\u690D\u7269\u306E\u7DCF\u79F0\u3002\n\u4E3B\u306B\u843D\u8449\u6A39\u3067\u3042\u308B\u30CA\u30E9\uFF08\u6962\uFF09\u306E\u7DCF\u79F0\u3002"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 7688af8c2c2ec034ba7404461169248b, type: 2}
+    threshold: 100
+  baseActionRange: 100
