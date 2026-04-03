@@ -37,7 +37,7 @@ MonoBehaviour:
   Help: "\u919C\u304F\u3066\u4E89\u3044\u304C\u597D\u304D\u3067\u6B32\u6DF1\u304F\u305A\u308B\u8CE2\u3044\u751F\u304D\u7269\u3060\u3002\n\u2026\u2026\u3044\u3063\u3051\u306D\u3001\u3053\u308C\u4EBA\u9593\u306E\u8AAC\u660E\u6587\u3060\u3063\u305F\u2606"
   actions:
   - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}
-    threshold: 50
+    threshold: 75
   - skill: {fileID: 11400000, guid: 72df2714a4535274b8bea0aec599d85a, type: 2}
     threshold: 100
   baseActionRange: 100
