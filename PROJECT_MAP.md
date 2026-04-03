@@ -1,96 +1,144 @@
 # PROJECT_MAP
 
-リポジトリ: andandjonnyx-oss/tower-rpg
-最終更新: 2026-04-01
+最終更新: 2026-04-03
 
 ---
 
-## ディレクトリ構成
+## ディレクトリ構成（主要部分）
 
 ```
 Assets/
-├── Scenes/
-│   ├── Battle.unity        … 戦闘シーン
-│   ├── Debug.unity         … デバッグシーン
-│   ├── Itembox.unity       … アイテムボックス
-│   ├── Itemsouko.unity     … アイテム倉庫
-│   ├── Main.unity          … メイン（街）
-│   ├── Status.unity        … ステータス画面
-│   ├── Talk.unity          … 会話シーン
-│   ├── Title.unity         … タイトル
-│   ├── Tower.unity         … 塔探索
-│   └── Towerin.unity       … 塔入口
 ├── Script/
 │   ├── Battle/
-│   │   ├── BattleSceneController.cs              … 戦闘メイン（フィールド/Start/ログ/勝敗/コンティニュー/ポップアップ）
-│   │   ├── BattleSceneController_PlayerAction.cs … プレイヤー行動（攻撃/スキル/魔法/アイテム）
-│   │   ├── BattleSceneController_EnemyAction.cs  … 敵行動（LUC判定/各種攻撃/ターン終了）
-│   │   ├── BattleSceneController_CombatUtils.cs  … 命中/クリティカル/防御ダイス/ダメージ適用
-│   │   ├── BattleContext.cs         … 戦闘シーン間データ受け渡し（static）+ アイテムスナップショット
-│   │   ├── Bossencountersystem.cs   … ボスエンカウント管理
-│   │   ├── EncounterSystem.cs       … 通常エンカウント管理
-│   │   ├── EnemyActionEntry.cs      … 敵行動テーブルエントリ
-│   │   ├── EnemyHpBar.cs            … 敵HPバー表示（ルーペ所持判定、横幅ボーナス）
-│   │   ├── Monster.cs               … モンスターScriptableObject
-│   │   └── MonsterDatabase.cs       … モンスターDB（SO一覧管理）
+│   │   ├── BattleSceneController.cs          ← 戦闘メイン（UI・ログ・勝敗・防御フラグ）
+│   │   ├── BattleSceneController_PlayerAction.cs ← プレイヤー行動（攻撃/スキル/魔法/防御/アイテム）
+│   │   ├── BattleSceneController_EnemyAction.cs  ← 敵行動（LUC判定/各攻撃/防御対応/ターン終了）
+│   │   ├── BattleSceneController_CombatUtils.cs  ← 命中/クリティカル/防御ダイス/属性耐性軽減
+│   │   ├── BattleContext.cs                  ← 戦闘シーン間のデータ受け渡し
+│   │   ├── Bossencountersystem.cs            ← ボスエンカウント制御
+│   │   ├── EncounterSystem.cs                ← 通常エンカウント制御
+│   │   ├── EnemyActionEntry.cs               ← 敵行動テーブル1件のデータ構造
+│   │   ├── Enemyhpbar.cs                     ← 敵HPバー表示
+│   │   ├── Monster.cs                        ← モンスターScriptableObject定義（属性耐性追加済み）
+│   │   └── MonsterDatabase.cs                ← モンスターDB（フォルダスキャン自動登録）
+│   │
 │   ├── Item/
-│   │   ├── Item.cs                  … アイテムScriptableObject（ItemData）
-│   │   ├── InventoryItem.cs         … 所持品インスタンス（uid+スキルCD管理）
-│   │   ├── ItemBoxManager.cs        … 所持品管理（シングルトン）+ スナップショット
-│   │   ├── ItemDatabase.cs          … アイテムDB
-│   │   ├── ItemDetailPanel.cs       … アイテム詳細表示
-│   │   ├── ItemPickupWindow.cs      … アイテム取得ウィンドウ
-│   │   ├── ItemSlotView.cs          … アイテムスロットUI
-│   │   ├── ItemboxContext.cs        … Itemboxシーン間コンテキスト
-│   │   ├── IItemContext.cs          … アイテムコンテキストI/F
-│   │   ├── OpenItemBoxButton.cs     … アイテムボックス開くボタン
-│   │   └── TowerItemTrigger.cs      … 塔内アイテム取得トリガー
-│   ├── Skill/                       … スキル関連（SkillData, SkillEffect系）
-│   ├── Save/                        … セーブ/ロード（SaveManager等）
-│   ├── SceneGo/                     … シーン遷移（SceneLink等）
-│   ├── Start/                       … タイトル/初期化
-│   ├── Status/                      … ステータス表示（Admanager含む）
-│   ├── Storage/                     … 倉庫管理
-│   ├── Talk/                        … 会話システム
-│   ├── GameState.cs                 … グローバル状態管理（シングルトン）
-│   ├── TowerState.cs                … 塔探索状態
-│   ├── DebugSceneManager.cs         … デバッグシーン管理
-│   ├── MainSceneRecovery.cs         … メインシーン全回復
-│   ├── AttributeTypes.cs            … 属性enum定義
-│   ├── HpMpDisplay.cs               … HP/MP表示
-│   ├── FloorButton.cs               … フロア選択ボタン
-│   ├── TowerEntranceView.cs         … 塔入口表示
-│   └── GameStateautocreate.cs       … GameState自動生成
-└── ScriptableAsset/
-    ├── Itemlist/
-    │   ├── consume/                 … 消費アイテムSO
-    │   ├── magic/                   … 魔法アイテムSO（ルーペ含む）
-    │   └── Weapon/                  … 武器SO
-    └── Monsterlist/                 … モンスターSO
+│   │   ├── Item.cs                           ← アイテムScriptableObject定義
+│   │   ├── ItemBoxManager.cs                 ← アイテムボックス管理（capacity=20）
+│   │   ├── ItemDatabase.cs                   ← アイテムDB
+│   │   ├── ItemboxContext.cs                 ← Itemboxシーンのコンテキスト
+│   │   ├── ItemDetailPanel.cs                ← アイテム詳細表示
+│   │   ├── ItemPickupWindow.cs               ← 塔でのアイテム拾得ポップアップ
+│   │   ├── ItemSlotView.cs                   ← アイテムスロットUI
+│   │   ├── InventoryItem.cs                  ← 所持品1個（uid+スキルクールダウン管理）
+│   │   ├── IItemContext.cs                   ← アイテム操作インターフェース
+│   │   ├── OpenItemBoxButton.cs              ← アイテムボックス開くボタン
+│   │   └── TowerItemTrigger.cs               ← 塔でのアイテムイベント発火
+│   │
+│   ├── Skill/
+│   │   ├── SkillData.cs                      ← スキルScriptableObject定義（MonsterActionType含む）
+│   │   ├── SkillEffectData.cs                ← 追加効果の基底クラス
+│   │   ├── SkillEffectEntry.cs               ← 追加効果1件のデータ構造
+│   │   ├── SkillEffectProcessor.cs           ← 追加効果の実行処理
+│   │   ├── HealEffectData.cs                 ← 回復効果
+│   │   ├── LevelDrainEffectData.cs           ← レベルドレイン効果
+│   │   ├── StatusAilmentEffectData.cs        ← 状態異常付与効果
+│   │   ├── EquipResistance.cs                ← 装備の属性耐性データ構造
+│   │   ├── EquipStatusEffectResistance.cs    ← 装備の状態異常耐性データ構造
+│   │   ├── EquipmentCalculator.cs            ← 装備品のステータス計算
+│   │   ├── PassiveCalculator.cs              ← パッシブ効果計算（属性耐性含む）
+│   │   ├── PassiveEffect.cs                  ← パッシブ効果データ構造
+│   │   ├── StatusEffectSystem.cs             ← 状態異常（毒）処理
+│   │   └── MonsterAttributeResistance.cs     ← ★新規: モンスター属性耐性データ構造
+│   │
+│   ├── Start/
+│   │   └── TitleManager.cs                   ← タイトル画面（初期アイテム付与追加済み）
+│   │
+│   ├── Save/                                 ← セーブ/ロード関連
+│   ├── SceneGo/                              ← シーン遷移関連
+│   ├── Status/                               ← ステータス画面関連
+│   ├── Storage/                              ← 倉庫関連
+│   ├── Talk/                                 ← 会話イベント関連
+│   │
+│   ├── GameState.cs                          ← ゲーム状態管理（シングルトン）
+│   ├── TowerState.cs                         ← 塔の進行管理
+│   ├── AttributeTypes.cs                     ← 属性/状態異常/パッシブのenum定義
+│   ├── DebugSceneManager.cs                  ← デバッグシーン管理
+│   ├── HpMpDisplay.cs                        ← HP/MP表示
+│   ├── MainSceneRecovery.cs                  ← メインシーン復帰時の全回復
+│   ├── TowerEntranceView.cs                  ← 塔入口UI
+│   └── FloorButton.cs                        ← 階層選択ボタン
+│
+├── ScriptableAsset/
+│   ├── Monsterlist/
+│   │   ├── Normal/F1-F10/                    ← 1〜10階の通常敵
+│   │   │   ├── 001_Slime.asset
+│   │   │   ├── 002_inpu.asset
+│   │   │   ├── 003_goblin.asset
+│   │   │   ├── 004_zonbie.asset
+│   │   │   └── 005_mitubati.asset
+│   │   └── Boss/                             ← ボス敵
+│   │
+│   ├── Skilllist/                            ← スキルデータ
+│   │   ├── 001_Strattack.asset               ← 通常殴攻撃
+│   │   ├── 001a_Slaattack.asset              ← ★新規: 通常斬攻撃
+│   │   ├── 002_Idle.asset                    ← 待機
+│   │   ├── 003_leveldrain.asset              ← レベルドレイン
+│   │   ├── 004_fireball.asset                ← ファイアボール
+│   │   ├── 005_lightning.asset               ← ライトニング
+│   │   ├── 006_poison.asset                  ← ポイズン
+│   │   ├── 007_poisonattack.asset            ← 毒攻撃
+│   │   ├── 008_powerattackstr.asset          ← 強撃（殴）
+│   │   ├── 008a_powerattacksla.asset         ← ★新規: 強撃（斬）
+│   │   ├── 009_heal.asset                    ← ヒール
+│   │   └── 010_healint.asset                 ← ヒール（INT）
+│   │
+│   ├── Itemlist/                             ← アイテムデータ
+│   ├── Skilleffect/                          ← スキル追加効果アセット
+│   ├── Talklist/                             ← 会話イベントデータ
+│   └── Talkcondition/                        ← 会話条件データ
+│
+├── Editor/                                   ← エディタ拡張
+├── Scenes/                                   ← シーンファイル（全10シーン）
+├── Art/                                      ← 画像素材
+└── Settings/                                 ← Unity設定
 ```
 
----
+## 主要システム関連図
 
-## 主要クラス関係
+### 戦闘フロー
+```
+エンカウント → BattleContext にモンスター設定 → Battle シーン
+  → プレイヤーターン（攻撃/スキル/魔法/防御/アイテム）
+    → 属性耐性軽減（ApplyEnemyAttributeResistance）
+    → 防御ダイス（RollDefenseDice）
+  → 敵ターン（LUC判定で行動選択）
+    → プレイヤー防御中なら防御力2倍+ダイス優遇
+    → 属性耐性軽減（PassiveCalculator）
+    → 防御ダイス
+  → ターン終了（毒ダメージ → 勝敗判定）
+```
 
-### 戦闘システム（partial class 4分割）
-- `BattleSceneController.cs` … フィールド宣言、Start、ログ管理（全件保持+ポップアップ）、ターンカウンター、勝敗処理、コンティニューポップアップ（広告視聴→復活/帰還）、武器/魔法ユーティリティ、EnemyCurrentHp/EnemyMaxHpプロパティ
-- `BattleSceneController_PlayerAction.cs` … OnAttackClicked/OnSkillClicked/OnMagicClicked/OnItemClicked + BeginPlayerTurn呼び出し
-- `BattleSceneController_EnemyAction.cs` … EnemyTurn/LUC判定/行動選択/各種攻撃/AfterEnemyAction
-- `BattleSceneController_CombatUtils.cs` … CheckPlayerHit/CheckEnemyHit/CheckPlayerCrit/RollDefenseDice/ApplyDamageToPlayer/GetPlayerDefense/GetEnemyDefense
+### ダメージ計算フロー（プレイヤー→敵）
+```
+基礎ダメージ（STR+装備 or 固定値 or 倍率計算）
+  → 属性耐性軽減（MonsterAttributeResistance）
+  → クリティカル判定（成功なら防御無視・2倍）
+  → 防御ダイス軽減（RollDefenseDice）
+  → 最終ダメージ（最低1保証、完全無効なら0）
+```
 
-### データ受け渡し
-- `BattleContext` (static) … EnemyMonster, Floor, Step, IsBossBattle, BossFloor, IsDebugBattle, DebugReturnScene, ItemSnapshot, SnapshotEquippedWeaponUid
-- `GameState` (singleton) … level, exp, HP/MP, ステータス, 装備, 状態異常, フラグ管理
+### enum定義（AttributeTypes.cs）
+- WeaponAttribute: Strike/Slash/Pierce/Fire/Ice/Thunder/Holy/Dark
+- StatusEffect: None/Poison/Paralyze/Sleep/Blind/Silence/Burn/Freeze/Stun
+- MonsterActionType: Idle/NormalAttack/SkillAttack （次回 Preemptive 追加予定）
+- SkillSource: Weapon/Magic
+- DamageCategory: Physical/Magical
+- PassiveType: AttributeResistance/StatBonus/AttributeAttackBonus/MaxHpBonus/MaxMpBonus/StatusEffectResistance/DefenseBonus/MagicDefenseBonus/AccuracyBonus/EvasionBonus/CriticalBonus
 
-### アイテム管理
-- `ItemData` (ScriptableObject) … マスターデータ（装備ステータス、スキル、パッシブ効果）
-- `InventoryItem` … 所持品インスタンス（uid, スキルクールダウン）
-- `ItemBoxManager` (singleton) … 所持品リスト管理、セーブ復元、スナップショット（CreateSnapshot/RestoreFromSnapshot）
-- `ItemSnapshotEntry` … スナップショット1エントリ（uid + itemId）
-
-### 敵HPバー
-- `EnemyHpBar` … ルーペ所持時のみ敵画像上にSliderでHPバー表示。複数所持で横幅ボーナス（1+0.1×(n-1)倍）。Fill/Background表示制御で端の色残り解消。
-
-### 広告管理
-- `AdManager` (singleton) … リワード広告の抽象化。現在はダミー（即成功）。将来Unity Ads/AdMob差し替え予定。
+### 初期アイテム付与（TitleManager.cs）
+```
+新規開始 or 初期化 → GrantStartingItems()
+  → startingItems配列のアイテムをItemBoxManagerに追加
+  → 最初のWeaponを自動装備
+```
