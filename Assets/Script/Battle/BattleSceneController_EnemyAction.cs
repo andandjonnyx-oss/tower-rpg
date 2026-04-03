@@ -465,21 +465,26 @@ public partial class BattleSceneController
 
             if (enemyCurrentHp <= 0)
             {
-                OnVictory();
+                // 毒で敵が倒れた → ログを表示してから勝利処理
+                FlushLogsAndThen(() => OnVictory());
                 return;
             }
         }
 
-        // プレイヤー敗北判定
-        if (GameState.I != null && GameState.I.currentHp <= 0)
+        // ログを全部表示してから勝敗判定・ターン移行
+        FlushLogsAndThen(() =>
         {
-            OnDefeat();
-            return;
-        }
+            // プレイヤー敗北判定
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                OnDefeat();
+                return;
+            }
 
-        // プレイヤーターンに戻す
-        SetButtonsInteractable(true);
-        RefreshSkillButton();
-        RefreshMagicDropdown();
+            // プレイヤーターンに戻す
+            SetButtonsInteractable(true);
+            RefreshSkillButton();
+            RefreshMagicDropdown();
+        });
     }
 }

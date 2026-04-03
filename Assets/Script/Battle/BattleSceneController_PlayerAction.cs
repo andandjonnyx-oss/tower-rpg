@@ -72,11 +72,11 @@ public partial class BattleSceneController
             if (enemyCurrentHp <= 0)
             {
                 // 敵も自爆で死んだ → 勝利扱い（先に敵が倒れた扱い）
-                OnVictory();
+                FlushLogsAndThen(() => OnVictory());
             }
             else
             {
-                OnDefeat();
+                FlushLogsAndThen(() => OnDefeat());
             }
             return true; // プレイヤー行動スキップ
         }
@@ -84,7 +84,7 @@ public partial class BattleSceneController
         // 敵が自爆で倒れた場合
         if (enemyCurrentHp <= 0)
         {
-            OnVictory();
+            FlushLogsAndThen(() => OnVictory());
             return true; // プレイヤー行動スキップ
         }
 
@@ -205,7 +205,7 @@ public partial class BattleSceneController
         if (!CheckPlayerHit(baseHit))
         {
             AddLog($"You は {weaponName} で攻撃！ …しかし外れた！");
-            Invoke(nameof(EnemyTurn), 0.5f);
+            FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
@@ -258,8 +258,8 @@ public partial class BattleSceneController
             }
         }
 
-        if (enemyCurrentHp <= 0) { OnVictory(); return; }
-        Invoke(nameof(EnemyTurn), 0.5f);
+        if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+        FlushLogsAndThen(() => EnemyTurn());
     }
 
     /// <summary>
@@ -286,12 +286,12 @@ public partial class BattleSceneController
     {
         if (battleEnded) return;
         SkillData skill = GetFirstSkill();
-        if (skill == null) { AddLog("使えるスキルがない！"); return; }
+        if (skill == null) { AddLogImmediate("使えるスキルがない！"); return; }
 
         TickAllWeaponCooldowns();
         if (equippedWeaponItem == null || !equippedWeaponItem.CanUseSkill(skill.skillId))
         {
-            AddLog($"{skill.skillName} はまだ使えない！");
+            AddLogImmediate($"{skill.skillName} はまだ使えない！");
             SetButtonsInteractable(true);
             RefreshSkillButton();
             return;
@@ -309,7 +309,7 @@ public partial class BattleSceneController
         if (!CheckPlayerHit(skill.baseHitRate))
         {
             AddLog($"You は {skill.skillName}！ …しかし外れた！");
-            Invoke(nameof(EnemyTurn), 0.5f);
+            FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
@@ -319,8 +319,8 @@ public partial class BattleSceneController
             AddLog($"You は {skill.skillName}！");
             ProcessPlayerSkillEffects(skill);
 
-            if (enemyCurrentHp <= 0) { OnVictory(); return; }
-            Invoke(nameof(EnemyTurn), 0.5f);
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
@@ -362,8 +362,8 @@ public partial class BattleSceneController
         // 追加効果の実行
         ProcessPlayerSkillEffects(skill);
 
-        if (enemyCurrentHp <= 0) { OnVictory(); return; }
-        Invoke(nameof(EnemyTurn), 0.5f);
+        if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+        FlushLogsAndThen(() => EnemyTurn());
     }
 
     // =========================================================
@@ -395,12 +395,12 @@ public partial class BattleSceneController
     {
         if (battleEnded) return;
         SkillData magic = GetSelectedMagicSkill();
-        if (magic == null) { AddLog("魔法が選択されていない！"); return; }
+        if (magic == null) { AddLogImmediate("魔法が選択されていない！"); return; }
 
         int currentMp = (GameState.I != null) ? GameState.I.currentMp : 0;
         if (currentMp < magic.mpCost)
         {
-            AddLog($"MPが足りない！（必要:{magic.mpCost} 現在:{currentMp}）");
+            AddLogImmediate($"MPが足りない！（必要:{magic.mpCost} 現在:{currentMp}）");
             return;
         }
 
@@ -415,7 +415,7 @@ public partial class BattleSceneController
         if (!CheckPlayerHit(magic.baseHitRate))
         {
             AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
-            Invoke(nameof(EnemyTurn), 0.5f);
+            FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
@@ -425,8 +425,8 @@ public partial class BattleSceneController
             AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
             ProcessPlayerSkillEffects(magic);
 
-            if (enemyCurrentHp <= 0) { OnVictory(); return; }
-            Invoke(nameof(EnemyTurn), 0.5f);
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
@@ -469,8 +469,8 @@ public partial class BattleSceneController
         // 追加効果の実行
         ProcessPlayerSkillEffects(magic);
 
-        if (enemyCurrentHp <= 0) { OnVictory(); return; }
-        Invoke(nameof(EnemyTurn), 0.5f);
+        if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+        FlushLogsAndThen(() => EnemyTurn());
     }
 
     // =========================================================
@@ -507,7 +507,7 @@ public partial class BattleSceneController
 
         AddLog("You は防御の構えを取った！");
 
-        Invoke(nameof(EnemyTurn), 0.5f);
+        FlushLogsAndThen(() => EnemyTurn());
     }
 
     /// <summary>
