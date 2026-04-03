@@ -41,5 +41,5 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
     threshold: 50
   - skill: {fileID: 11400000, guid: b39831f1b96422b4c94a665e9602a412, type: 2}
-    threshold: 50
+    threshold: 100
   baseActionRange: 100

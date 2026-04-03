@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: 008_powerattack
+  m_Name: 001a_Slaattack
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 008_powerattack
-  skillName: "\u5F37\u6483"
-  description: "\u3071\u308F\u30FC\u3042\u305F\u3063\u304F"
+  skillId: 001a_Slaattack
+  skillName: "\u901A\u5E38\u65AC\u653B\u6483"
+  description: 
   skillSource: 0
-  actionType: 2
+  actionType: 1
   skillAttribute: 1
   damageCategory: 0
-  damageMultiplier: 2
+  damageMultiplier: 1
   fixedDamage: 0
-  cooldownTurns: 3
+  cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
   additionalEffects: []
