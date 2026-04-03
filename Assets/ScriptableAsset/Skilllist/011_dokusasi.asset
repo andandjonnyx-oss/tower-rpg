@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: 011_dokusasi
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: 011_dokusasi
+  skillName: "\u6BD2\u306E\u4E00\u523A\u3057"
+  description: 
+  skillSource: 0
+  actionType: 3
+  skillAttribute: 2
+  damageCategory: 0
+  damageMultiplier: 2
+  fixedDamage: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 95
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 60
+    intValue: 0
+  - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 100
+    intValue: 0

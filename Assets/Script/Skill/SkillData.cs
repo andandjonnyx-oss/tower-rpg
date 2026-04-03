@@ -41,7 +41,8 @@ public class SkillData : ScriptableObject
     [Tooltip("モンスターの行動の種類。プレイヤー使用時は無視される。\n"
            + "Idle = 何もしない\n"
            + "NormalAttack = Monster.Attack 依存ダメージ\n"
-           + "SkillAttack = 下記のパラメータでダメージ計算")]
+           + "SkillAttack = 下記のパラメータでダメージ計算\n"
+           + "Preemptive = 先制攻撃（プレイヤー行動選択後、プレイヤー行動の前に割り込む）")]
     public MonsterActionType actionType = MonsterActionType.SkillAttack;
 
     [Header("Attribute / Damage")]
@@ -170,4 +171,11 @@ public enum MonsterActionType
     /// どちらも 0 なら非ダメージスキル（追加効果のみ）。
     /// </summary>
     SkillAttack,
+
+    /// <summary>
+    /// 先制攻撃。プレイヤーの行動選択後、プレイヤー行動実行の前に割り込む。
+    /// ダメージ計算は SkillAttack と同じ（SkillData のパラメータを使用）。
+    /// ターン開始時の事前抽選で選ばれた場合のみ発動する。
+    /// </summary>
+    Preemptive,
 }

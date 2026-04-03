@@ -56,6 +56,14 @@ public static class SkillEffectProcessor
                 ProcessHeal(entry, healData, isPlayerAttack, enemyMonster,
                             ref enemyCurrentHp, logs);
             }
+            // =========================================================
+            // 自爆エフェクト（追加）
+            // =========================================================
+            else if (entry.effectData is SelfDestructEffectData)
+            {
+                ProcessSelfDestruct(entry, isPlayerAttack, enemyMonster,
+                                    ref enemyCurrentHp, logs);
+            }
             else
             {
                 Debug.LogWarning($"[SkillEffectProcessor] 未対応の効果タイプ: " +
@@ -345,5 +353,53 @@ public static class SkillEffectProcessor
         }
         if (amount < 1) amount = 1;
         return amount;
+    }
+
+    // =========================================================
+    // 自爆（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 自爆効果を処理する。
+    /// スキル使用者自身の HP を 0 にする。
+    ///
+    /// 【処理】
+    ///   isPlayerAttack == false（敵が使用）: enemyCurrentHp を 0 にする。
+    ///   isPlayerAttack == true（プレイヤーが使用）: プレイヤーの currentHp を 0 にする。
+    ///     ※ 通常はプレイヤーが自爆スキルを使うことは想定しないが、
+    ///       将来の拡張のために対応しておく。
+    /// </summary>
+    private static void ProcessSelfDestruct(
+        SkillEffectEntry entry,
+        bool isPlayerAttack,
+        Monster enemyMonster,
+        ref int enemyCurrentHp,
+        List<string> logs)
+    {
+        // 発動率判定
+        if (entry.chance < 100)
+        {
+            int roll = Random.Range(0, 100);
+            if (roll >= entry.chance) return;
+        }
+
+        if (!isPlayerAttack)
+        {
+            // 敵が自爆 → 敵の HP を 0 にする
+            enemyCurrentHp = 0;
+            string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+            logs.Add($"{eName} は力尽きた！");
+            Debug.Log($"[SkillEffectProcessor] 自爆: {eName} の HP を 0 に設定");
+        }
+        else
+        {
+            // プレイヤーが自爆（通常は使わないが念のため）
+            if (GameState.I != null)
+            {
+                GameState.I.currentHp = 0;
+                logs.Add("You は力尽きた！");
+                Debug.Log("[SkillEffectProcessor] 自爆: プレイヤーの HP を 0 に設定");
+            }
+        }
     }
 }

@@ -3,6 +3,12 @@ using UnityEngine;
 /// <summary>
 /// BattleSceneController の敵行動パート（partial class）。
 /// 敵ターン処理、行動選択（LUC判定）、各種攻撃実行、ターン終了処理を担当する。
+///
+/// 【先制攻撃システム】
+///   BeginPlayerTurn() で敵の行動が事前抽選される。
+///   EnemyTurn() では、pendingEnemyAction が残っている場合はそれを使用する。
+///   先制技（Preemptive）の場合は PlayerAction 側で既に実行済みなので、
+///   EnemyTurn では通常のターン終了処理のみ行う。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -28,17 +34,48 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 敵の行動処理。
-    /// Monster に actions 配列が設定されている場合は行動テーブルに従い、
-    /// 未設定の場合は従来通り Attack 依存の通常攻撃を行う。
+    ///
+    /// 【先制攻撃システム対応】
+    ///   pendingEnemyAction が残っている場合:
+    ///     - 先制技だった場合: PlayerAction 側で既に実行済みなので、ここでは
+    ///       ターン終了処理（毒ダメージ等）のみ行う。
+    ///     - 通常技だった場合: 事前抽選済みの行動をそのまま実行する。
+    ///   pendingEnemyAction が null の場合:
+    ///     - actions 配列があれば新規に抽選して実行する。
+    ///     - なければ Legacy 通常攻撃。
     /// </summary>
     private void EnemyTurn()
     {
         if (battleEnded) return;
+
+        // 事前抽選済みの行動がある場合
+        if (pendingEnemyAction != null)
+        {
+            EnemyActionEntry pending = pendingEnemyAction;
+            pendingEnemyAction = null; // 消費
+
+            // 先制技は PlayerAction 側で既に実行済み → ターン終了処理のみ
+            // （isEnemyPreemptive は PlayerAction 側でリセット済み）
+            // 念のため actionType をチェック
+            if (pending.skill != null && pending.skill.actionType == MonsterActionType.Preemptive)
+            {
+                // 先制技は実行済み → ターン終了処理へ
+                AfterEnemyAction();
+                return;
+            }
+
+            // 通常の事前抽選済み行動を実行
+            ExecuteEnemyAction(pending);
+            return;
+        }
+
+        // 事前抽選なし（actions 未設定 or 初回）
         if (enemyMonster.actions == null || enemyMonster.actions.Length == 0)
         {
             ExecuteLegacyAttack();
             return;
         }
+
         EnemyActionEntry selectedAction = SelectEnemyAction();
         ExecuteEnemyAction(selectedAction);
     }
@@ -194,6 +231,7 @@ public partial class BattleSceneController
     /// <summary>
     /// 選択された敵行動を実行する。
     /// EnemyActionEntry.skill が null の場合は通常攻撃（物理）にフォールバックする。
+    /// Preemptive 行動は SkillAttack と同じダメージ計算で実行する。
     /// </summary>
     private void ExecuteEnemyAction(EnemyActionEntry action)
     {
@@ -207,6 +245,7 @@ public partial class BattleSceneController
         {
             case MonsterActionType.NormalAttack: ExecuteEnemyNormalAttack(action.skill); break;
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttack(action.skill); break;
+            case MonsterActionType.Preemptive: ExecuteEnemySkillAttack(action.skill); break; // 先制は SkillAttack と同じ計算
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
         }

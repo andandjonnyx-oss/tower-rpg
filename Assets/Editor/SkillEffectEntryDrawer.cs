@@ -11,6 +11,7 @@ using UnityEngine;
 ///   StatusAilmentEffectData    → ailmentMode, targetStatusEffect, chance（Inflict時のみ）
 ///   HealEffectData             → intValue（ラベル: SO.formulaType に応じて変化）, chance
 ///   LevelDrainEffectData       → intValue（ラベル: ドレイン量）, chance
+///   SelfDestructEffectData     → chance（ラベル: 自爆発動率）
 ///   その他                     → chance, intValue（汎用表示）
 /// </summary>
 [CustomPropertyDrawer(typeof(SkillEffectEntry))]
@@ -44,6 +45,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         else if (effectData is LevelDrainEffectData)
         {
             lineCount += 2; // intValue + chance
+        }
+        else if (effectData is SelfDestructEffectData)
+        {
+            lineCount += 1; // chance のみ
         }
         else
         {
@@ -85,6 +90,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         else if (effectData is LevelDrainEffectData)
         {
             DrawLevelDrainFields(position, property, ref y, lineH, spacing);
+        }
+        else if (effectData is SelfDestructEffectData)
+        {
+            DrawSelfDestructFields(position, property, ref y, lineH, spacing);
         }
         else
         {
@@ -171,6 +180,19 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
         EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("発動率 (%)"));
+        y += lineH + spacing;
+    }
+
+    // =========================================================
+    // 自爆系（追加）
+    // =========================================================
+    private void DrawSelfDestructFields(Rect position, SerializedProperty property,
+        ref float y, float lineH, float spacing)
+    {
+        // chance のみ
+        var chanceProp = property.FindPropertyRelative("chance");
+        var chanceRect = new Rect(position.x, y, position.width, lineH);
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("自爆発動率 (%)"));
         y += lineH + spacing;
     }
 

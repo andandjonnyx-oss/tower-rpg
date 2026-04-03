@@ -122,6 +122,26 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool isDefending = false;
 
     // =========================================================
+    // 先制攻撃システム（追加）
+    // =========================================================
+    //
+    // 毎ターン開始時（BeginPlayerTurn）に敵の行動を事前抽選する。
+    // 先制技が選ばれた場合:
+    //   プレイヤーの行動選択後、プレイヤー行動の前に敵先制技が割り込む。
+    // 通常技の場合:
+    //   従来通りプレイヤー→敵の順。
+    //
+    // pendingEnemyAction: 事前抽選された敵行動。null = 未抽選。
+    // isEnemyPreemptive: 事前抽選の結果が先制技だったかどうか。
+    // =========================================================
+
+    /// <summary>事前抽選された敵行動。BeginPlayerTurn で設定される。</summary>
+    private static EnemyActionEntry pendingEnemyAction = null;
+
+    /// <summary>事前抽選された行動が先制技かどうか。</summary>
+    private static bool isEnemyPreemptive = false;
+
+    // =========================================================
     // 戦闘ログ（改修: 全件保持）
     // =========================================================
     // ログは戦闘開始から終了まで全件を保持する。
@@ -129,7 +149,7 @@ public partial class BattleSceneController : MonoBehaviour
     // ポップアップで全履歴を確認できる。
     // =========================================================
     private List<string> logLines = new List<string>();
-    private const int DisplayLogLines = 3;
+    private const int DisplayLogLines = 5;
 
     private bool battleEnded = false;
 
@@ -197,6 +217,8 @@ public partial class BattleSceneController : MonoBehaviour
             persistentLogLines.Clear();
             currentTurnNumber = 0; // ターンカウンターリセット
             isDefending = false; // 防御フラグリセット
+            pendingEnemyAction = null; // 先制攻撃リセット
+            isEnemyPreemptive = false;
             AddLog($"{enemyMonster.Mname} が現れた！");
         }
         else
@@ -233,6 +255,7 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>
     /// プレイヤーターンの開始時に呼ぶ。ターンカウンターを +1 し、ログに記録する。
     /// 防御フラグをリセットする（前ターンの防御効果を解除）。
+    /// 敵の行動を事前抽選する（先制攻撃システム）。
     /// プレイヤー行動（OnAttackClicked 等）の冒頭から呼び出す。
     /// </summary>
     public void BeginPlayerTurn()
@@ -240,6 +263,39 @@ public partial class BattleSceneController : MonoBehaviour
         currentTurnNumber++;
         isDefending = false; // 前ターンの防御を解除
         AddLog($"―――（{currentTurnNumber}ターン目）―――");
+
+        // =========================================================
+        // 先制攻撃: 敵の行動を事前抽選（追加）
+        // =========================================================
+        PreRollEnemyAction();
+    }
+
+    /// <summary>
+    /// 敵の行動を事前抽選する。
+    /// actions 配列が未設定の場合は先制なし（従来通り）。
+    /// 抽選結果を pendingEnemyAction / isEnemyPreemptive に保持する。
+    /// </summary>
+    private void PreRollEnemyAction()
+    {
+        pendingEnemyAction = null;
+        isEnemyPreemptive = false;
+
+        if (enemyMonster == null) return;
+        if (enemyMonster.actions == null || enemyMonster.actions.Length == 0) return;
+
+        pendingEnemyAction = SelectEnemyAction();
+
+        if (pendingEnemyAction != null && pendingEnemyAction.skill != null
+            && pendingEnemyAction.skill.actionType == MonsterActionType.Preemptive)
+        {
+            isEnemyPreemptive = true;
+            Debug.Log($"[Battle] 先制攻撃抽選: {pendingEnemyAction.skill.skillName}");
+        }
+        else
+        {
+            Debug.Log($"[Battle] 通常行動抽選: " +
+                      (pendingEnemyAction?.skill != null ? pendingEnemyAction.skill.skillName : "Legacy"));
+        }
     }
 
     // =========================================================
@@ -547,6 +603,8 @@ public partial class BattleSceneController : MonoBehaviour
         currentTurnNumber = 0; // ターンカウンターもリセット
         enemyIsPoisoned = false;
         isDefending = false; // 防御フラグもリセット
+        pendingEnemyAction = null; // 先制攻撃もリセット
+        isEnemyPreemptive = false;
     }
 
     // =========================================================
