@@ -7,6 +7,22 @@ using UnityEngine;
 public partial class BattleSceneController
 {
     // =========================================================
+    // 防御コマンド定数（追加）
+    // =========================================================
+    //
+    // 防御中の防御力倍率とダイス成功率。
+    //   DefendDefenseMultiplier: 防御力を何倍にするか（2倍）
+    //   DefendDiceRange: 防御ダイスの乱数上限（1.5f → 成功率67%）
+    //   通常時の diceRange は DefaultDefenseDiceRange = 2.0f（成功率50%）
+    // =========================================================
+
+    /// <summary>防御中の防御力倍率。</summary>
+    private const int DefendDefenseMultiplier = 2;
+
+    /// <summary>防御中の防御ダイス乱数上限（成功率67%）。</summary>
+    private const float DefendDiceRange = 1.5f;
+
+    // =========================================================
     // 敵ターン
     // =========================================================
 
@@ -31,8 +47,9 @@ public partial class BattleSceneController
     /// 従来の敵攻撃処理（actions 未設定時のフォールバック）。
     /// Monster.Attack をそのままダメージとして使用する。
     /// 防御ダイスによる軽減を適用する。
+    /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
     ///
-    /// 命中判定（追加）:
+    /// 命中判定:
     ///   Monster.BaseHitRate × (1 - プレイヤー回避率/100)、最低10%。
     /// </summary>
     private void ExecuteLegacyAttack()
@@ -48,7 +65,16 @@ public partial class BattleSceneController
         if (enemyDamage < 1) enemyDamage = 1;
 
         int defense = GetPlayerDefense(DamageCategory.Physical);
-        int blocked = RollDefenseDice(defense);
+        int blocked;
+        if (isDefending)
+        {
+            defense *= DefendDefenseMultiplier;
+            blocked = RollDefenseDice(defense, DefendDiceRange);
+        }
+        else
+        {
+            blocked = RollDefenseDice(defense);
+        }
         int finalDamage = enemyDamage - blocked;
         if (finalDamage < 0) finalDamage = 0;
 
@@ -189,6 +215,7 @@ public partial class BattleSceneController
     /// <summary>
     /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
     /// skill.damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
+    /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
     ///
     /// 命中判定:
     ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
@@ -210,7 +237,16 @@ public partial class BattleSceneController
         if (enemyDamage < 1) enemyDamage = 1;
 
         int defense = GetPlayerDefense(skill.damageCategory);
-        int blocked = RollDefenseDice(defense);
+        int blocked;
+        if (isDefending)
+        {
+            defense *= DefendDefenseMultiplier;
+            blocked = RollDefenseDice(defense, DefendDiceRange);
+        }
+        else
+        {
+            blocked = RollDefenseDice(defense);
+        }
         int finalDamage = enemyDamage - blocked;
         if (finalDamage < 0) finalDamage = 0;
 
@@ -230,6 +266,7 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 敵のスキル攻撃。SkillData のパラメータでダメージ計算する。
+    /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
     ///
     /// 非ダメージスキル判定:
     ///   IsNonDamage == true の場合はダメージ計算をスキップし、
@@ -241,7 +278,7 @@ public partial class BattleSceneController
     ///      どちらも 0 なら非ダメージスキル（上で処理済み）
     ///   2. resistance = PassiveCalculator.CalcTotalAttributeResistance(attackAttribute)
     ///      → afterResist = baseDamage × (1 - resistance / 100)
-    ///   3. 防御ダイスで軽減
+    ///   3. 防御ダイスで軽減（防御中は2倍・優遇ダイス）
     ///
     /// 命中判定:
     ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
@@ -286,7 +323,16 @@ public partial class BattleSceneController
         if (afterResist < 0) afterResist = 0;
 
         int defense = GetPlayerDefense(skill.damageCategory);
-        int blocked = RollDefenseDice(defense);
+        int blocked;
+        if (isDefending)
+        {
+            defense *= DefendDefenseMultiplier;
+            blocked = RollDefenseDice(defense, DefendDiceRange);
+        }
+        else
+        {
+            blocked = RollDefenseDice(defense);
+        }
         int finalDamage = afterResist - blocked;
         if (finalDamage < 0) finalDamage = 0;
 
@@ -306,7 +352,7 @@ public partial class BattleSceneController
                $"{finalDamage}ダメージ！{logSuffix}");
 
         Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
-                  $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
+                  $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage} defending={isDefending}");
 
         // 追加効果の実行
         ProcessEnemySkillEffects(skill);

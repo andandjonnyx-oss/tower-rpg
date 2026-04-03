@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 /// <summary>
 /// BattleSceneController のプレイヤー行動パート（partial class）。
-/// 通常攻撃、武器スキル、魔法スキル、アイテム使用を担当する。
+/// 通常攻撃、武器スキル、魔法スキル、防御、アイテム使用を担当する。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -48,7 +48,7 @@ public partial class BattleSceneController
     private void OnAttackClicked()
     {
         if (battleEnded) return;
-        BeginPlayerTurn(); // ターン開始ログ
+        BeginPlayerTurn(); // ターン開始ログ（防御フラグもここでリセット）
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
@@ -151,7 +151,7 @@ public partial class BattleSceneController
             return;
         }
 
-        BeginPlayerTurn(); // ターン開始ログ
+        BeginPlayerTurn(); // ターン開始ログ（防御フラグもここでリセット）
         SetButtonsInteractable(false);
         string weaponName; WeaponAttribute weaponAttribute; int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
@@ -255,7 +255,7 @@ public partial class BattleSceneController
             return;
         }
 
-        BeginPlayerTurn(); // ターン開始ログ
+        BeginPlayerTurn(); // ターン開始ログ（防御フラグもここでリセット）
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
         if (GameState.I != null) GameState.I.currentMp -= magic.mpCost;
@@ -318,6 +318,40 @@ public partial class BattleSceneController
         ProcessPlayerSkillEffects(magic);
 
         if (enemyCurrentHp <= 0) { OnVictory(); return; }
+        Invoke(nameof(EnemyTurn), 0.5f);
+    }
+
+    // =========================================================
+    // 防御コマンド（追加）
+    // =========================================================
+    //
+    // 防御を選択すると、そのターンの敵攻撃に対して以下の効果が適用される:
+    //   1. 物理防御力・魔法防御力が 2倍 になる
+    //   2. 防御ダイスの diceRange が 1.5f になる（通常2.0f → 成功率50%→67%）
+    //
+    // 防御フラグ（isDefending）は BeginPlayerTurn() で false にリセットされるため、
+    // 防御の効果は選択したターンの敵攻撃1回分のみ。
+    //
+    // 防御中は行動せずにターン終了するため、クールダウンは進める。
+    // =========================================================
+
+    /// <summary>
+    /// 防御ボタンが押された時の処理（プレイヤーターン・防御）。
+    /// isDefending フラグを true にセットし、敵ターンに移行する。
+    /// 防御フラグは次の BeginPlayerTurn() で false にリセットされる。
+    /// </summary>
+    private void OnDefendClicked()
+    {
+        if (battleEnded) return;
+        BeginPlayerTurn(); // ターン開始ログ（前ターンの防御はここでリセット）
+        SetButtonsInteractable(false);
+        TickAllWeaponCooldowns();
+
+        // 防御フラグをセット（このターンの敵攻撃に対して有効）
+        isDefending = true;
+
+        AddLog("You は防御の構えを取った！");
+
         Invoke(nameof(EnemyTurn), 0.5f);
     }
 

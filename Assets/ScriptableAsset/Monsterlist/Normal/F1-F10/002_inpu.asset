@@ -16,29 +16,30 @@ MonoBehaviour:
   Mname: "\u30A4\u30F3\u30D7"
   Image: {fileID: -2107824646067831486, guid: 0b18cebc50ee19b42af7b09d0e423abf, type: 3}
   Minfloor: 1
-  Minstep: 11
-  Maxfloor: 1
+  Minstep: 1
+  Maxfloor: 5
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 10
-  Attack: 3
-  Defense: 5
-  MagicDefense: 5
+  MaxHp: 15
+  Attack: 5
+  Defense: 2
+  MagicDefense: 10
   Speed: 0
-  Luck: 0
-  Evasion: 60
+  Luck: 1
+  Evasion: 20
   BaseHitRate: 90
   PoisonResistance: 0
-  Exp: 50
+  attributeResistances:
+  - attribute: 3
+    value: 50
+  Exp: 25
   Gold: 0
-  Help: 
+  Help: "\u5C0F\u60AA\u9B54\u3060\uFF01\u3000\u540D\u524D\u3060\u3051\u805E\u304F\u3068\u53EF\u611B\u3044\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
-    threshold: 30
+    threshold: 50
   - skill: {fileID: 11400000, guid: b39831f1b96422b4c94a665e9602a412, type: 2}
     threshold: 50
-  - skill: {fileID: 11400000, guid: 267a186e87604b44daccd971bf49966e, type: 2}
-    threshold: 100
   baseActionRange: 100

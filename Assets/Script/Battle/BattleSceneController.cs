@@ -10,7 +10,7 @@ using UnityEngine.UI;
 ///
 /// partial class により以下のファイルに分割されている:
 ///   BattleSceneController.cs              … フィールド宣言、Start、ログ管理、UI制御、勝敗処理
-///   BattleSceneController_PlayerAction.cs … プレイヤー行動（攻撃/スキル/魔法/アイテム）
+///   BattleSceneController_PlayerAction.cs … プレイヤー行動（攻撃/スキル/魔法/防御/アイテム）
 ///   BattleSceneController_EnemyAction.cs  … 敵行動（行動選択/LUC判定/各種攻撃/ターン終了処理）
 ///   BattleSceneController_CombatUtils.cs  … 命中判定/クリティカル/防御ダイス/ダメージ適用
 /// </summary>
@@ -44,6 +44,12 @@ public partial class BattleSceneController : MonoBehaviour
     [SerializeField] private Button skillButton;
     [SerializeField] private Button itemButton;
     [SerializeField] private Button magicButton;
+
+    // =========================================================
+    // 防御ボタン（追加）
+    // =========================================================
+    [Tooltip("防御コマンドボタン。防御中は物理・魔法防御力2倍、ダイス成功率UP。")]
+    [SerializeField] private Button defendButton;
 
     [Header("UI - Magic Dropdown")]
     [Tooltip("所持中の魔法スキルを選択するドロップダウン")]
@@ -102,6 +108,20 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool enemyIsPoisoned = false;
 
     // =========================================================
+    // 防御フラグ（追加）
+    // =========================================================
+    //
+    // プレイヤーが「防御」コマンドを選択したターンのみ true になる。
+    // 敵ターンの防御ダイス計算で参照し、以下の効果を適用する:
+    //   1. 物理防御力・魔法防御力が 2倍 になる
+    //   2. 防御ダイスの diceRange が 1.5f になる（通常2.0f → 成功率50%→67%）
+    // 次のプレイヤーターン開始時（BeginPlayerTurn）で false にリセットされる。
+    // =========================================================
+
+    /// <summary>プレイヤーが防御中かどうか。敵ターンの防御ダイス計算に影響する。</summary>
+    private static bool isDefending = false;
+
+    // =========================================================
     // 戦闘ログ（改修: 全件保持）
     // =========================================================
     // ログは戦闘開始から終了まで全件を保持する。
@@ -140,6 +160,7 @@ public partial class BattleSceneController : MonoBehaviour
         if (skillButton != null) skillButton.onClick.AddListener(OnSkillClicked);
         if (itemButton != null) itemButton.onClick.AddListener(OnItemClicked);
         if (magicButton != null) magicButton.onClick.AddListener(OnMagicClicked);
+        if (defendButton != null) defendButton.onClick.AddListener(OnDefendClicked);
 
         // =========================================================
         // ログポップアップ ボタン登録（追加）
@@ -175,6 +196,7 @@ public partial class BattleSceneController : MonoBehaviour
             battleInitialized = true;
             persistentLogLines.Clear();
             currentTurnNumber = 0; // ターンカウンターリセット
+            isDefending = false; // 防御フラグリセット
             AddLog($"{enemyMonster.Mname} が現れた！");
         }
         else
@@ -210,11 +232,13 @@ public partial class BattleSceneController : MonoBehaviour
 
     /// <summary>
     /// プレイヤーターンの開始時に呼ぶ。ターンカウンターを +1 し、ログに記録する。
+    /// 防御フラグをリセットする（前ターンの防御効果を解除）。
     /// プレイヤー行動（OnAttackClicked 等）の冒頭から呼び出す。
     /// </summary>
     public void BeginPlayerTurn()
     {
         currentTurnNumber++;
+        isDefending = false; // 前ターンの防御を解除
         AddLog($"―――（{currentTurnNumber}ターン目）―――");
     }
 
@@ -522,6 +546,7 @@ public partial class BattleSceneController : MonoBehaviour
         persistentLogLines.Clear();
         currentTurnNumber = 0; // ターンカウンターもリセット
         enemyIsPoisoned = false;
+        isDefending = false; // 防御フラグもリセット
     }
 
     // =========================================================
@@ -658,6 +683,7 @@ public partial class BattleSceneController : MonoBehaviour
     {
         if (attackButton != null) attackButton.interactable = interactable;
         if (itemButton != null) itemButton.interactable = interactable;
+        if (defendButton != null) defendButton.interactable = interactable;
         if (!interactable && skillButton != null) skillButton.interactable = false;
         if (magicButton != null)
         {
