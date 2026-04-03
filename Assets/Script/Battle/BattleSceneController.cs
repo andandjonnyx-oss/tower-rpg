@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -149,7 +151,14 @@ public partial class BattleSceneController : MonoBehaviour
     // ポップアップで全履歴を確認できる。
     // =========================================================
     private List<string> logLines = new List<string>();
+    private Queue<string> logQueue = new Queue<string>();
     private const int DisplayLogLines = 5;
+
+    /// <summary>ログ1行あたりの表示間隔（秒）</summary>
+    private const float LogDisplayInterval = 0.5f;
+
+    /// <summary>全ログ表示後、次のフェーズに移るまでの待機時間（秒）</summary>
+    private const float LogFlushPostDelay = 0.5f;
 
     private bool battleEnded = false;
 
@@ -219,7 +228,7 @@ public partial class BattleSceneController : MonoBehaviour
             isDefending = false; // 防御フラグリセット
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
-            AddLog($"{enemyMonster.Mname} が現れた！");
+            AddLogImmediate($"{enemyMonster.Mname} が現れた！");
         }
         else
         {
@@ -231,7 +240,7 @@ public partial class BattleSceneController : MonoBehaviour
                 GameState.I.battleTurnConsumed = false;
                 if (!string.IsNullOrEmpty(GameState.I.battleItemActionLog))
                 {
-                    AddLog(GameState.I.battleItemActionLog);
+                    AddLogImmediate(GameState.I.battleItemActionLog);
                     GameState.I.battleItemActionLog = "";
                 }
                 equippedWeaponItem = GetEquippedWeaponItem();
@@ -262,7 +271,7 @@ public partial class BattleSceneController : MonoBehaviour
     {
         currentTurnNumber++;
         isDefending = false; // 前ターンの防御を解除
-        AddLog($"―――（{currentTurnNumber}ターン目）―――");
+        AddLogImmediate($"―――（{currentTurnNumber}ターン目）―――");
 
         // =========================================================
         // 先制攻撃: 敵の行動を事前抽選（追加）
@@ -342,56 +351,60 @@ public partial class BattleSceneController : MonoBehaviour
             }
         }
 
-        // =========================================================
-        // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
-        // ボス戦処理より前に判定する。デバッグではボス扱いしないため。
-        // =========================================================
-        if (BattleContext.IsDebugBattle)
+        // ログを全部表示してからシーン遷移
+        FlushLogsAndThen(() =>
         {
-            string returnScene = BattleContext.DebugReturnScene;
-            BattleContext.IsDebugBattle = false;
-            BattleContext.DebugReturnScene = "Debug";
-            Invoke(nameof(ReturnToDebug), 1.5f);
-            return;
-        }
-
-        // =========================================================
-        // ボス戦勝利処理（追加）
-        // =========================================================
-        if (BattleContext.IsBossBattle)
-        {
-            int bossFloor = BattleContext.BossFloor;
-            string defeatedId = BossEncounterSystem.GetBossDefeatedId(bossFloor);
-
-            // 撃破フラグを記録（セーブも自動で行われる）
-            if (GameState.I != null)
+            // =========================================================
+            // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
+            // ボス戦処理より前に判定する。デバッグではボス扱いしないため。
+            // =========================================================
+            if (BattleContext.IsDebugBattle)
             {
-                GameState.I.MarkPlayed(defeatedId);
-                Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
-            }
-
-            // ボス勝利会話があれば Talk シーンへ遷移
-            // BossEncounterSystem から勝利会話イベントを取得
-            string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
-
-            // 勝利会話が未再生なら Talk シーンへ遷移
-            if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
-            {
-                GameState.I.pendingEventId = victoryTalkId;
-                BattleContext.IsBossBattle = false;
-                BattleContext.BossFloor = 0;
-                Invoke(nameof(ReturnToTalk), 1.5f);
+                string returnScene = BattleContext.DebugReturnScene;
+                BattleContext.IsDebugBattle = false;
+                BattleContext.DebugReturnScene = "Debug";
+                Invoke(nameof(ReturnToDebug), 1.0f);
                 return;
             }
 
-            // 勝利会話が無い or 再生済みなら通常通り Tower へ
-            BattleContext.IsBossBattle = false;
-            BattleContext.BossFloor = 0;
-            Invoke(nameof(ReturnToTower), 1.5f);
-            return;
-        }
+            // =========================================================
+            // ボス戦勝利処理（追加）
+            // =========================================================
+            if (BattleContext.IsBossBattle)
+            {
+                int bossFloor = BattleContext.BossFloor;
+                string defeatedId = BossEncounterSystem.GetBossDefeatedId(bossFloor);
 
-        Invoke(nameof(ReturnToTower), 1.5f);
+                // 撃破フラグを記録（セーブも自動で行われる）
+                if (GameState.I != null)
+                {
+                    GameState.I.MarkPlayed(defeatedId);
+                    Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
+                }
+
+                // ボス勝利会話があれば Talk シーンへ遷移
+                // BossEncounterSystem から勝利会話イベントを取得
+                string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
+
+                // 勝利会話が未再生なら Talk シーンへ遷移
+                if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
+                {
+                    GameState.I.pendingEventId = victoryTalkId;
+                    BattleContext.IsBossBattle = false;
+                    BattleContext.BossFloor = 0;
+                    Invoke(nameof(ReturnToTalk), 1.0f);
+                    return;
+                }
+
+                // 勝利会話が無い or 再生済みなら通常通り Tower へ
+                BattleContext.IsBossBattle = false;
+                BattleContext.BossFloor = 0;
+                Invoke(nameof(ReturnToTower), 1.0f);
+                return;
+            }
+
+            Invoke(nameof(ReturnToTower), 1.0f);
+        });
     }
 
     /// <summary>
@@ -407,23 +420,27 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         enemyIsPoisoned = false;
 
-        // =========================================================
-        // デバッグ戦闘の場合はデバッグシーンへ戻る（ポップアップ無し）
-        // =========================================================
-        if (BattleContext.IsDebugBattle)
+        // ログを全部表示してからポップアップ表示
+        FlushLogsAndThen(() =>
         {
-            ResetBattleStatics();
-            BattleContext.ItemSnapshot = null;
-            BattleContext.IsDebugBattle = false;
-            BattleContext.DebugReturnScene = "Debug";
-            Invoke(nameof(ReturnToDebug), 1.5f);
-            return;
-        }
+            // =========================================================
+            // デバッグ戦闘の場合はデバッグシーンへ戻る（ポップアップ無し）
+            // =========================================================
+            if (BattleContext.IsDebugBattle)
+            {
+                ResetBattleStatics();
+                BattleContext.ItemSnapshot = null;
+                BattleContext.IsDebugBattle = false;
+                BattleContext.DebugReturnScene = "Debug";
+                Invoke(nameof(ReturnToDebug), 1.0f);
+                return;
+            }
 
-        // =========================================================
-        // コンティニューポップアップを表示（追加）
-        // =========================================================
-        ShowContinuePopup();
+            // =========================================================
+            // コンティニューポップアップを表示（追加）
+            // =========================================================
+            ShowContinuePopup();
+        });
     }
 
     // =========================================================
@@ -751,14 +768,38 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
-    // ログ管理（改修: 全件保持 + ポップアップ対応）
+    // ログ管理（改修: ログキューシステム + 全件保持 + ポップアップ対応）
+    // =========================================================
+    //
+    // 【ログキューシステム】
+    //   AddLog() はログをキュー（logQueue）に追加するだけで、画面更新しない。
+    //   FlushLogsAndThen(callback) でキュー内のログを LogDisplayInterval 秒間隔で
+    //   1 行ずつ画面に表示し、全ログ表示完了から LogFlushPostDelay 秒後に
+    //   callback を実行する。
+    //   これにより自爆等の複数行ログもプレイヤーが読める。
+    //
+    //   AddLogImmediate() は従来通り即座に画面更新する。
+    //   ターン区切り線や戦闘開始メッセージなど、待ち不要なものに使う。
     // =========================================================
 
     /// <summary>
-    /// 戦闘ログにメッセージを追加する。
-    /// ログは全件保持し、通常画面には末尾 DisplayLogLines 行のみ表示する。
+    /// ログをキューに追加する（画面更新しない）。
+    /// 実際の表示は FlushLogsAndThen() で行う。
+    /// ログは全件保持し、永続ストアにも同期する。
     /// </summary>
     private void AddLog(string message)
+    {
+        logLines.Add(message);
+        // 全件を永続ストアに同期（Itemboxシーン遷移時のリロード対応）
+        persistentLogLines = new List<string>(logLines);
+        logQueue.Enqueue(message);
+    }
+
+    /// <summary>
+    /// ログを即座に画面に表示する（キューを経由しない）。
+    /// ターン区切り線や戦闘開始メッセージなど、待ち不要なものに使う。
+    /// </summary>
+    private void AddLogImmediate(string message)
     {
         logLines.Add(message);
         // 全件を永続ストアに同期（Itemboxシーン遷移時のリロード対応）
@@ -767,15 +808,48 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 通常画面のログ表示を更新する。末尾 DisplayLogLines 行のみ表示。
+    /// キュー内のログを LogDisplayInterval 秒間隔で 1 行ずつ画面に表示し、
+    /// 全ログ表示完了から LogFlushPostDelay 秒後に callback を実行する。
+    /// キューが空の場合は LogFlushPostDelay 秒後に即 callback 実行。
+    /// </summary>
+    private void FlushLogsAndThen(Action callback)
+    {
+        StartCoroutine(FlushLogsCoroutine(callback));
+    }
+
+    private IEnumerator FlushLogsCoroutine(Action callback)
+    {
+        while (logQueue.Count > 0)
+        {
+            logQueue.Dequeue(); // キューから取り出す（logLines には追加済み）
+            UpdateLogDisplay(); // 画面を更新（logLines の末尾から表示済み分まで）
+            yield return new WaitForSeconds(LogDisplayInterval);
+        }
+
+        // 全ログ表示後の待機
+        yield return new WaitForSeconds(LogFlushPostDelay);
+
+        callback?.Invoke();
+    }
+
+    /// <summary>
+    /// 通常画面のログ表示を更新する。
+    /// キュー内のログはまだ表示しない（表示済み分 = logLines.Count - logQueue.Count）。
+    /// 末尾 DisplayLogLines 行のみ表示する。
     /// </summary>
     private void UpdateLogDisplay()
     {
         if (battleLogText == null) return;
-        int startIndex = logLines.Count - DisplayLogLines;
-        if (startIndex < 0) startIndex = 0;
+
+        // 表示済みログ数（キュー内のログはまだ表示しない）
+        int displayUpTo = logLines.Count - logQueue.Count;
+        if (displayUpTo < 0) displayUpTo = 0;
+
+        int displayStart = displayUpTo - DisplayLogLines;
+        if (displayStart < 0) displayStart = 0;
+
         var displayLines = new List<string>();
-        for (int i = startIndex; i < logLines.Count; i++)
+        for (int i = displayStart; i < displayUpTo; i++)
         {
             displayLines.Add(logLines[i]);
         }

@@ -48,21 +48,27 @@ public partial class BattleSceneController
     {
         if (battleEnded) return;
 
-        // 事前抽選済みの行動がある場合
+        // =========================================================
+        // 先制済みチェック（最優先）
+        // =========================================================
+        // isEnemyPreemptive が true のままの場合、このターンは先制攻撃が
+        // 抽選されたターンである（命中・ミスに関わらず）。
+        // 先制技は PlayerAction 側で既に実行済みなので、
+        // 敵の通常ターン行動はスキップしてターン終了処理のみ行う。
+        // =========================================================
+        if (isEnemyPreemptive)
+        {
+            isEnemyPreemptive = false; // フラグをリセット
+            pendingEnemyAction = null; // 念のためクリア
+            AfterEnemyAction();
+            return;
+        }
+
+        // 事前抽選済みの行動がある場合（通常技）
         if (pendingEnemyAction != null)
         {
             EnemyActionEntry pending = pendingEnemyAction;
             pendingEnemyAction = null; // 消費
-
-            // 先制技は PlayerAction 側で既に実行済み → ターン終了処理のみ
-            // （isEnemyPreemptive は PlayerAction 側でリセット済み）
-            // 念のため actionType をチェック
-            if (pending.skill != null && pending.skill.actionType == MonsterActionType.Preemptive)
-            {
-                // 先制技は実行済み → ターン終了処理へ
-                AfterEnemyAction();
-                return;
-            }
 
             // 通常の事前抽選済み行動を実行
             ExecuteEnemyAction(pending);

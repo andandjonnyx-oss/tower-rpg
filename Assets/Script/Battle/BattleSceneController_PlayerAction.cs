@@ -53,8 +53,10 @@ public partial class BattleSceneController
     {
         if (!isEnemyPreemptive || pendingEnemyAction == null) return false;
 
-        // 先制フラグをリセット（この先制は1回きり）
-        isEnemyPreemptive = false;
+        // 先制技のアクションを取り出す（pendingEnemyAction は消費済みにする）
+        // ★ isEnemyPreemptive は EnemyTurn 側でリセットする。
+        //   こうすることで EnemyTurn が「このターンは先制済み → 通常行動スキップ」
+        //   と判定できる。ミスしても通常攻撃に切り替わらない。
         EnemyActionEntry preemptiveAction = pendingEnemyAction;
         pendingEnemyAction = null; // 消費済み
 
