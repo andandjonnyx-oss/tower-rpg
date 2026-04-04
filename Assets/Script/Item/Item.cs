@@ -44,6 +44,44 @@ public class ItemData : ScriptableObject
            + "例: ステータスアップの薬 = 5（使用で5ポイント獲得）")]
     public int statusPointGain = 0;
 
+    // =========================================================
+    // 消費アイテム: 攻撃アイテム（追加）
+    // =========================================================
+    //
+    // 戦闘中に使用すると敵に固定ダメージを与える消費アイテム。
+    // 例: 爆弾（物理・炎・50ダメージ）
+    //
+    // 処理フロー:
+    //   1. Itembox で使用 → battleDamage 等を GameState に一時保存
+    //   2. BattleSceneController に復帰 → ダメージ計算を実行
+    //      - 敵の属性耐性を適用
+    //      - 防御ダイスを適用（damageCategory に基づく）
+    //      - 最終ダメージを敵HPから差し引く
+    //   3. ターン消費（通常のアイテム使用と同じ）
+    //
+    // healAmount, curesPoison, statusPointGain との併用可能。
+    // （回復しつつダメージも与えるアイテムも表現可能）
+    // =========================================================
+
+    [Header("Consumable - Battle Attack")]
+    [Tooltip("戦闘中に使用した時の固定ダメージ。\n"
+           + "0 の場合は攻撃効果なし。\n"
+           + "例: 爆弾 = 50（敵に50ダメージ）")]
+    public int battleDamage = 0;
+
+    [Tooltip("攻撃アイテムの属性。敵の属性耐性計算に使用する。\n"
+           + "例: 爆弾 = Fire（炎属性）")]
+    public WeaponAttribute battleAttribute = WeaponAttribute.Strike;
+
+    [Tooltip("攻撃アイテムの物理/魔法区分。\n"
+           + "敵の防御ダイス計算に影響する（物理→Defense、魔法→MagicDefense）。\n"
+           + "例: 爆弾 = Physical")]
+    public DamageCategory battleDamageCategory = DamageCategory.Physical;
+
+    [Tooltip("true の場合、戦闘中のみ使用可能。\n"
+           + "非バトル時（Itembox通常画面・倉庫）では「使う」ボタンが表示されない。")]
+    public bool battleOnly = false;
+
     [Header("Weapon")]
     public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;
     public int attackPower;
@@ -147,6 +185,16 @@ public class ItemData : ScriptableObject
 
     [Header("Sort")]
     public int sortOrder = 0;
+
+    // =========================================================
+    // ヘルパープロパティ: 攻撃アイテムかどうか（追加）
+    // =========================================================
+
+    /// <summary>
+    /// このアイテムが戦闘中に敵にダメージを与える攻撃アイテムかどうか。
+    /// battleDamage > 0 の場合 true。
+    /// </summary>
+    public bool IsBattleAttackItem => battleDamage > 0;
 }
 
 public enum ItemCategory

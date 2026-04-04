@@ -10,25 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: W001_Bokutou
+  m_Name: C002_Dokukesi
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: W001_Bokutou
-  itemName: "\u6728\u5200"
-  description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002"
-  icon: {fileID: -8450684057588575366, guid: 62c2ee3665fe99f49bfe5e9309265fed, type: 3}
-  Minfloor: 1
+  itemId: C002_Dokukesi
+  itemName: "\u6BD2\u6D88\u3057\u8349"
+  description: "\u6BD2\u3060\u3051\u6D88\u3059\u306A\u3093\u3066\u9006\u306B\u4E0D\u81EA\u7136\u3060\u304B\u3089\u56DE\u5FA9\u3082\u3055\u305B\u308B\u305E\uFF01\n\u6BD2\u6CBB\u7642\uFF0BHP20\u56DE\u5FA9"
+  icon: {fileID: 0}
+  Minfloor: 4
   Minstep: 1
-  Maxfloor: 1
+  Maxfloor: 10
   Maxstep: 20
-  category: 1
+  category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 0
-  curesPoison: 0
-  weaponAttribute: 1
-  attackPower: 3
-  skills:
-  - {fileID: 11400000, guid: 72df2714a4535274b8bea0aec599d85a, type: 2}
+  healAmount: 20
+  curesPoison: 1
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
   equipDefense: 0
@@ -45,4 +49,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 10
+  sortOrder: 2

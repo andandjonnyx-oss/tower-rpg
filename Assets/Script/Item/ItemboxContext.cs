@@ -89,7 +89,18 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         switch (invItem.data.category)
         {
             case ItemCategory.Consumable:
-                list.Add(new DetailButtonDef("使う", () => UseConsumable(invItem)));
+                // =========================================================
+                // battleOnly チェック（追加）
+                // battleOnly == true のアイテムは非バトル時に「使う」を表示しない
+                // =========================================================
+                if (invItem.data.battleOnly && !inBattle)
+                {
+                    // 戦闘中のみ使用可能 → 非バトル時はボタンなし
+                }
+                else
+                {
+                    list.Add(new DetailButtonDef("使う", () => UseConsumable(invItem)));
+                }
                 break;
 
             case ItemCategory.Weapon:
@@ -143,6 +154,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool curesPoison = invItem.data.curesPoison;
         int spGain = invItem.data.statusPointGain;
 
+        // =========================================================
+        // 攻撃アイテム: ダメージ情報の事前取得（追加）
+        // =========================================================
+        int battleDmg = invItem.data.battleDamage;
+        WeaponAttribute battleAttr = invItem.data.battleAttribute;
+        DamageCategory battleDmgCat = invItem.data.battleDamageCategory;
+
         // 回復効果の適用
         if (healAmount > 0 && GameState.I != null)
         {
@@ -166,6 +184,19 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             GameState.I.statusPoint += spGain;
             Debug.Log($"[Itembox] ステータスポイント +{spGain} (合計: {GameState.I.statusPoint})");
+        }
+
+        // =========================================================
+        // 攻撃アイテム: ダメージ情報を GameState に一時保存（追加）
+        // BattleSceneController 復帰時にダメージ計算を実行する。
+        // =========================================================
+        if (battleDmg > 0 && inBattle && GameState.I != null)
+        {
+            GameState.I.pendingBattleItemDamage = battleDmg;
+            GameState.I.pendingBattleItemAttribute = (int)battleAttr;
+            GameState.I.pendingBattleItemDamageCategory = (int)battleDmgCat;
+            GameState.I.pendingBattleItemName = itemName;
+            Debug.Log($"[Itembox] 攻撃アイテム使用: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
         }
 
         ItemBoxManager.Instance?.RemoveItem(invItem);

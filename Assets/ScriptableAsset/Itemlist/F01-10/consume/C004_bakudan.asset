@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: C003_Steup3
+  m_Name: C004_bakudan
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C003_Steup3
-  itemName: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D7\uFF13"
-  description: "\u8CB4\u91CD\u306A\u85AC\u3002\u30B9\u30C6\u30FC\u30BF\u30B9\u30DD\u30A4\u30F3\u30C8\u30923\u4E0A\u3052\u308B"
+  itemId: C004_bakudan
+  itemName: "\u7206\u5F3E"
+  description: "\u6295\u3052\u308B\u3068\u706B\u5C5E\u6027\u3067\u5A01\u529B50\u306E\u30C0\u30E1\u30FC\u30B8\u3002\n\u4F8B\u3048\u7740\u706B\u3059\u308B\u3082\u306E\u304C\u7121\u304F\u3066\u3082\u6295\u3052\u305F\u3089\u7206\u767A\u3002\u89E3\u305B\u306C\u3002"
   icon: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  Minfloor: 4
+  Minstep: 1
+  Maxfloor: 10
+  Maxstep: 20
   category: 0
   stackable: 1
   maxStack: 99
   healAmount: 0
   curesPoison: 0
-  statusPointGain: 3
+  statusPointGain: 0
+  battleDamage: 50
+  battleAttribute: 3
+  battleDamageCategory: 0
+  battleOnly: 1
   weaponAttribute: 0
   attackPower: 0
   skills: []
@@ -45,4 +49,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 4

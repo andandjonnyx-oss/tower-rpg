@@ -262,6 +262,7 @@ public partial class BattleSceneController : MonoBehaviour
             logLines = new List<string>(persistentLogLines);
             UpdateLogDisplay();
 
+
             if (GameState.I != null && GameState.I.battleTurnConsumed)
             {
                 GameState.I.battleTurnConsumed = false;
@@ -270,9 +271,28 @@ public partial class BattleSceneController : MonoBehaviour
                     AddLogImmediate(GameState.I.battleItemActionLog);
                     GameState.I.battleItemActionLog = "";
                 }
+
+                // =========================================================
+                // 攻撃アイテムのダメージ処理（追加）
+                // =========================================================
+                if (GameState.I.pendingBattleItemDamage > 0)
+                {
+                    ApplyBattleItemDamage();
+                }
+
                 equippedWeaponItem = GetEquippedWeaponItem();
                 TickAllWeaponCooldowns();
                 SetButtonsInteractable(false);
+
+                // 攻撃アイテムで敵を倒した場合
+                if (enemyCurrentHp <= 0)
+                {
+                    FlushLogsAndThen(() => OnVictory());
+                    RefreshSkillButton();
+                    RefreshMagicDropdown();
+                    return;
+                }
+
                 Invoke(nameof(EnemyTurn), 0.5f);
                 RefreshSkillButton();
                 RefreshMagicDropdown();
@@ -1053,5 +1073,59 @@ public partial class BattleSceneController : MonoBehaviour
     {
         if (fullLogPanel == null) return;
         fullLogPanel.SetActive(false);
+    }
+
+
+    /// <summary>
+    /// 攻撃アイテム使用時のダメージ計算を実行する。
+    /// Itembox から復帰した際に、GameState に保存されたダメージ情報を読み取って
+    /// 敵にダメージを与える。
+    ///
+    /// ダメージ計算:
+    ///   1. 固定ダメージ（battleDamage）をベースとする
+    ///   2. 敵の属性耐性で軽減（battleAttribute を参照）
+    ///   3. 防御ダイスで軽減（battleDamageCategory に基づく）
+    ///   4. 最終ダメージを敵HPから差し引く
+    ///
+    /// 処理後、GameState の一時保存フィールドをリセットする。
+    /// </summary>
+    private void ApplyBattleItemDamage()
+    {
+        int baseDamage = GameState.I.pendingBattleItemDamage;
+        WeaponAttribute attr = (WeaponAttribute)GameState.I.pendingBattleItemAttribute;
+        DamageCategory dmgCat = (DamageCategory)GameState.I.pendingBattleItemDamageCategory;
+        string itemName = GameState.I.pendingBattleItemName;
+
+        // 一時保存フィールドをリセット
+        GameState.I.pendingBattleItemDamage = 0;
+        GameState.I.pendingBattleItemAttribute = 0;
+        GameState.I.pendingBattleItemDamageCategory = 0;
+        GameState.I.pendingBattleItemName = "";
+
+        if (baseDamage <= 0) return;
+
+        // 属性耐性によるダメージ軽減
+        string resistLog;
+        int damage = ApplyEnemyAttributeResistance(baseDamage, attr, out resistLog);
+
+        // 防御ダイス
+        int enemyDef = GetEnemyDefense(dmgCat);
+        int enemyBlocked = RollDefenseDice(enemyDef);
+        int finalDamage = damage - enemyBlocked;
+        if (finalDamage < 1) finalDamage = 1;
+
+        // 完全無効（耐性100以上）の場合は0ダメージ
+        if (damage <= 0) finalDamage = 0;
+
+        enemyCurrentHp -= finalDamage;
+        if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+        // ログ出力
+        string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
+        AddLogImmediate($"{itemName} が炸裂！（{attr.ToJapanese()}属性） " +
+                        $"{finalDamage}ダメージ！{resistLog}{blockLog}");
+
+        Debug.Log($"[Battle] BattleItem: base={baseDamage} attr={attr} " +
+                  $"afterResist={damage} def={enemyDef} blocked={enemyBlocked} final={finalDamage}");
     }
 }

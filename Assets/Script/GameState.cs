@@ -658,6 +658,30 @@ public class GameState : MonoBehaviour
     [NonSerialized] public string battleItemActionLog = "";
 
     // =========================================================
+    // バトル中攻撃アイテム: ダメージ情報の一時保存（追加）
+    // =========================================================
+    //
+    // Itembox で攻撃アイテムを使用した際、ダメージ情報を一時保存する。
+    // BattleSceneController がシーン復帰時にこれを読み取ってダメージ計算を実行する。
+    // ダメージ計算後にリセットされる（pendingBattleItemDamage = 0）。
+    //
+    // WeaponAttribute / DamageCategory は enum なので、
+    // NonSerialized + int でシーン遷移を跨ぐ。
+    // =========================================================
+
+    /// <summary>攻撃アイテムの固定ダメージ。0 = 攻撃アイテム未使用。</summary>
+    [NonSerialized] public int pendingBattleItemDamage = 0;
+
+    /// <summary>攻撃アイテムの属性（WeaponAttribute の int 値）。</summary>
+    [NonSerialized] public int pendingBattleItemAttribute = 0;
+
+    /// <summary>攻撃アイテムの物理/魔法区分（DamageCategory の int 値）。</summary>
+    [NonSerialized] public int pendingBattleItemDamageCategory = 0;
+
+    /// <summary>攻撃アイテムの名前（ログ表示用）。</summary>
+    [NonSerialized] public string pendingBattleItemName = "";
+
+    // =========================================================
     // イベント既読管理
     // =========================================================
     private HashSet<string> played = new HashSet<string>();

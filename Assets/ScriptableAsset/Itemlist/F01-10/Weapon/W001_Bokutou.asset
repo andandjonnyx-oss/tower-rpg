@@ -10,24 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: W002_Kinoyari
+  m_Name: W001_Bokutou
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: W002_Kinoyari
-  itemName: "\u6728\u306E\u69CD"
-  description: "\u30A6\u30C3\u30C9\u30B9\u30D4\u30A2"
-  icon: {fileID: 0}
+  itemId: W001_Bokutou
+  itemName: "\u6728\u5200"
+  description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002\u653B\u6483\u529B+3\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u3001\u30C0\u30E1\u30FC\u30B8\u500D\u73872)"
+  icon: {fileID: -8450684057588575366, guid: 62c2ee3665fe99f49bfe5e9309265fed, type: 3}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 1
+  Maxfloor: 3
   Maxstep: 20
   category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
   curesPoison: 0
-  weaponAttribute: 2
-  attackPower: 4
-  skills: []
+  statusPointGain: 0
+  weaponAttribute: 1
+  attackPower: 3
+  skills:
+  - {fileID: 11400000, guid: 72df2714a4535274b8bea0aec599d85a, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   equipDefense: 0
@@ -44,4 +46,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 20
+  sortOrder: 10
