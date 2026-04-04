@@ -101,7 +101,14 @@ public class StorageContext : MonoBehaviour, IItemContext
         switch (invItem.data.category)
         {
             case ItemCategory.Consumable:
-                list.Add(new DetailButtonDef("使う", () => UseConsumableFromInventory(invItem)));
+                // =========================================================
+                // battleOnly チェック（追加）
+                // 倉庫画面は常に非バトルなので、battleOnly アイテムは「使う」を表示しない
+                // =========================================================
+                if (!invItem.data.battleOnly)
+                {
+                    list.Add(new DetailButtonDef("使う", () => UseConsumableFromInventory(invItem)));
+                }
                 break;
             case ItemCategory.Weapon:
                 bool equipped = GameState.I != null
@@ -123,7 +130,11 @@ public class StorageContext : MonoBehaviour, IItemContext
 
     private void BuildStorageButtons(InventoryItem invItem, List<DetailButtonDef> list)
     {
-        if (invItem.data.category == ItemCategory.Consumable)
+        // =========================================================
+        // battleOnly チェック（追加）
+        // 倉庫側でも battleOnly アイテムは「使う」を表示しない
+        // =========================================================
+        if (invItem.data.category == ItemCategory.Consumable && !invItem.data.battleOnly)
             list.Add(new DetailButtonDef("使う", () => UseConsumableFromStorage(invItem)));
 
         list.Add(new DetailButtonDef("捨てる", () => DiscardFromStorage(invItem)));
