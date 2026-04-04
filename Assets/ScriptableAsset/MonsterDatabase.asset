@@ -22,6 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b9604952ce457364b8fedfac9ea998a0, type: 2}
   - {fileID: 11400000, guid: 9261e1710959b4240be9e18b51645f07, type: 2}
   - {fileID: 11400000, guid: 3bc5b4223edf2784dbe3205dcfe3ebf2, type: 2}
+  - {fileID: 11400000, guid: 06a3ddc7e2442ff498fdbaf0ad643733, type: 2}
   - {fileID: 11400000, guid: ea821e1fe0984f44e88c973c188af8b5, type: 2}
   maxFloor: 100
   maxStepPerFloor: 20

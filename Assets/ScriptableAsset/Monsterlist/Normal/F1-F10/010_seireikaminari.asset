@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 010_seireikaminari
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 010_reamon
+  Mname: "\u96F7\u306E\u7CBE\u970A"
+  Image: {fileID: 0}
+  Minfloor: 10
+  Minstep: 1
+  Maxfloor: 10
+  Maxstep: 20
+  Weight: 0.3
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 80
+  Attack: 15
+  Defense: 10
+  MagicDefense: 10
+  Speed: 0
+  Luck: 5
+  Evasion: 10
+  BaseHitRate: 90
+  PoisonResistance: 0
+  attributeResistances: []
+  Exp: 250
+  Gold: 0
+  dropItem: {fileID: 11400000, guid: dc9d6e67673ff264da2a005f0efe6816, type: 2}
+  dropRate: 1
+  Help: "10\u968E\u306B\u3057\u304B\u3044\u306A\u3044\u30EC\u30A2\u30E2\u30F3\u30B9\u30BF\u30FC\u3060\uFF01\n\u4F55\u5EA6\u3082\u5468\u56DE\u3057\u3066\u30A2\u30A4\u30C6\u30E0\u96C6\u3081\u308B\u3088\u308A\u5148\u306E\u968E\u3067\u7A3C\u3054\u3046\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: c4c0c8402cf2d8743be903e2ae11aa4d, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: cbee7ceb0dbadf94f845aa59b0b5a5f3, type: 2}
+    threshold: 100
+  baseActionRange: 50

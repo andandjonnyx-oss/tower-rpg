@@ -24,9 +24,4 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 5
   baseHitRate: 95
-  additionalEffects:
-  - effectData: {fileID: 0}
-    ailmentMode: 0
-    targetStatusEffect: 1
-    chance: 0
-    intValue: 0
+  additionalEffects: []

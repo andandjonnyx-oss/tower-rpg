@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: 009_heal
   skillName: "\u30D2\u30FC\u30EB"
-  description: 
+  description: "HP\u309250\u56DE\u5FA9"
   skillSource: 1
   actionType: 2
   skillAttribute: 0
@@ -29,4 +29,4 @@ MonoBehaviour:
     ailmentMode: 0
     targetStatusEffect: 1
     chance: 100
-    intValue: 100
+    intValue: 50

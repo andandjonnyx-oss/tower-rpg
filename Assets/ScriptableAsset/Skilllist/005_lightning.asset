@@ -19,9 +19,9 @@ MonoBehaviour:
   actionType: 2
   skillAttribute: 5
   damageCategory: 1
-  damageMultiplier: 3
-  fixedDamage: 0
+  damageMultiplier: 0
+  fixedDamage: 20
   cooldownTurns: 0
-  mpCost: 4
-  baseHitRate: 30
+  mpCost: 7
+  baseHitRate: 95
   additionalEffects: []

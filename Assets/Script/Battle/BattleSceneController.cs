@@ -73,6 +73,15 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("いいえボタン（街に帰還）")]
     [SerializeField] private Button continueNoButton;
 
+    // =========================================================
+    // ドロップアイテム UI（追加）
+    // =========================================================
+    [Header("UI - Item Drop")]
+    [Tooltip("勝利時のアイテムドロップ表示用ポップアップ。\n"
+           + "Tower シーンの ItemPickupWindow と同じ Prefab を Battle シーンにも配置する。\n"
+           + "未設定の場合、ドロップアイテムは自動入手（満杯時は拾えない）。")]
+    [SerializeField] private ItemPickupWindow dropItemPickupWindow;
+
     [Header("Scene Names")]
     [SerializeField] private string towerSceneName = "Tower";
     [SerializeField] private string mainSceneName = "Main";
@@ -168,6 +177,19 @@ public partial class BattleSceneController : MonoBehaviour
     // 魔法ドロップダウンに表示中のスキル一覧キャッシュ
     private List<SkillData> magicSkillList = new List<SkillData>();
 
+    // =========================================================
+    // ドロップアイテム: 勝利後のシーン遷移先を保持（追加）
+    // =========================================================
+    // OnVictory の FlushLogsAndThen 内で決定されたシーン遷移処理を
+    // ドロップアイテムポップアップの後に実行するために保持する。
+    // =========================================================
+
+    /// <summary>ドロップアイテム処理後に実行するシーン遷移アクション。</summary>
+    private Action pendingVictoryTransition = null;
+
+    /// <summary>ドロップ判定で選ばれたアイテム。ポップアップ結果のコールバックで使用。</summary>
+    private ItemData droppedItemData = null;
+
     private void Start()
     {
         enemyMonster = BattleContext.EnemyMonster;
@@ -204,6 +226,11 @@ public partial class BattleSceneController : MonoBehaviour
         if (continueYesButton != null) continueYesButton.onClick.AddListener(OnContinueYes);
         if (continueNoButton != null) continueNoButton.onClick.AddListener(OnContinueNo);
         if (continuePopup != null) continuePopup.SetActive(false);
+
+        // =========================================================
+        // ドロップアイテムポップアップ 初期化（追加）
+        // =========================================================
+        if (dropItemPickupWindow != null) dropItemPickupWindow.HideImmediate();
 
         // =========================================================
         // ボス戦アイテムスナップショット（追加）
@@ -314,6 +341,7 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>
     /// 戦闘勝利時の処理。
     /// 経験値を付与し、レベルアップがあればログを表示する。
+    /// ドロップアイテムがあれば ItemPickupWindow を表示する。
     /// ボス戦の場合は撃破フラグを記録し、勝利会話があれば Talk シーンへ遷移する。
     /// デバッグ戦闘の場合はデバッグシーンへ戻る。
     /// </summary>
@@ -351,60 +379,190 @@ public partial class BattleSceneController : MonoBehaviour
             }
         }
 
-        // ログを全部表示してからシーン遷移
+        // =========================================================
+        // ドロップアイテム判定（追加）
+        // =========================================================
+        ItemData dropItem = TryRollDropItem();
+        if (dropItem != null)
+        {
+            AddLog($"★ {dropItem.itemName} を見つけた！");
+        }
+
+        // ログを全部表示してからシーン遷移（またはドロップポップアップ）
         FlushLogsAndThen(() =>
         {
             // =========================================================
-            // デバッグ戦闘の場合はデバッグシーンへ戻る（追加）
-            // ボス戦処理より前に判定する。デバッグではボス扱いしないため。
+            // シーン遷移先の決定（ドロップアイテムがある場合は遷移を遅延する）
             // =========================================================
-            if (BattleContext.IsDebugBattle)
+            Action transitionAction = DetermineVictoryTransition();
+
+            // ドロップアイテムがあればポップアップを表示
+            if (dropItem != null)
             {
-                string returnScene = BattleContext.DebugReturnScene;
-                BattleContext.IsDebugBattle = false;
-                BattleContext.DebugReturnScene = "Debug";
-                Invoke(nameof(ReturnToDebug), 1.0f);
-                return;
+                ShowDropItemPopup(dropItem, transitionAction);
+            }
+            else
+            {
+                // ドロップなし → 即遷移
+                transitionAction?.Invoke();
+            }
+        });
+    }
+
+    /// <summary>
+    /// ドロップアイテムの抽選を行う。
+    /// dropItem が設定されていて、dropRate の確率判定を通過した場合にアイテムを返す。
+    /// </summary>
+    private ItemData TryRollDropItem()
+    {
+        if (enemyMonster == null) return null;
+        if (enemyMonster.dropItem == null) return null;
+        if (enemyMonster.dropRate <= 0f) return null;
+
+        float roll = UnityEngine.Random.value;
+        if (roll < enemyMonster.dropRate)
+        {
+            Debug.Log($"[Battle] ドロップ成功: {enemyMonster.dropItem.itemName} (roll={roll:F3} < rate={enemyMonster.dropRate:F3})");
+            return enemyMonster.dropItem;
+        }
+
+        Debug.Log($"[Battle] ドロップ失敗 (roll={roll:F3} >= rate={enemyMonster.dropRate:F3})");
+        return null;
+    }
+
+    /// <summary>
+    /// 勝利後のシーン遷移先を決定し、Action として返す。
+    /// OnVictory の FlushLogsAndThen 内で呼ばれる。
+    /// ドロップアイテムポップアップがある場合、この Action はポップアップ終了後に実行される。
+    /// </summary>
+    private Action DetermineVictoryTransition()
+    {
+        // デバッグ戦闘
+        if (BattleContext.IsDebugBattle)
+        {
+            BattleContext.IsDebugBattle = false;
+            BattleContext.DebugReturnScene = "Debug";
+            return () => Invoke(nameof(ReturnToDebug), 1.0f);
+        }
+
+        // ボス戦勝利処理
+        if (BattleContext.IsBossBattle)
+        {
+            int bossFloor = BattleContext.BossFloor;
+            string defeatedId = BossEncounterSystem.GetBossDefeatedId(bossFloor);
+
+            if (GameState.I != null)
+            {
+                GameState.I.MarkPlayed(defeatedId);
+                Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
             }
 
-            // =========================================================
-            // ボス戦勝利処理（追加）
-            // =========================================================
-            if (BattleContext.IsBossBattle)
+            string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
+
+            if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
             {
-                int bossFloor = BattleContext.BossFloor;
-                string defeatedId = BossEncounterSystem.GetBossDefeatedId(bossFloor);
-
-                // 撃破フラグを記録（セーブも自動で行われる）
-                if (GameState.I != null)
-                {
-                    GameState.I.MarkPlayed(defeatedId);
-                    Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
-                }
-
-                // ボス勝利会話があれば Talk シーンへ遷移
-                // BossEncounterSystem から勝利会話イベントを取得
-                string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
-
-                // 勝利会話が未再生なら Talk シーンへ遷移
-                if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
+                return () =>
                 {
                     GameState.I.pendingEventId = victoryTalkId;
                     BattleContext.IsBossBattle = false;
                     BattleContext.BossFloor = 0;
                     Invoke(nameof(ReturnToTalk), 1.0f);
-                    return;
-                }
-
-                // 勝利会話が無い or 再生済みなら通常通り Tower へ
-                BattleContext.IsBossBattle = false;
-                BattleContext.BossFloor = 0;
-                Invoke(nameof(ReturnToTower), 1.0f);
-                return;
+                };
             }
 
-            Invoke(nameof(ReturnToTower), 1.0f);
-        });
+            BattleContext.IsBossBattle = false;
+            BattleContext.BossFloor = 0;
+            return () => Invoke(nameof(ReturnToTower), 1.0f);
+        }
+
+        // 通常戦闘
+        return () => Invoke(nameof(ReturnToTower), 1.0f);
+    }
+
+    /// <summary>
+    /// ドロップアイテムの ItemPickupWindow を表示する。
+    /// Tower シーンの TowerItemTrigger と同じ UX（拾う/捨てる/整理する）。
+    ///
+    /// dropItemPickupWindow が未設定の場合は自動入手を試みる（フォールバック）。
+    /// </summary>
+    private void ShowDropItemPopup(ItemData item, Action afterTransition)
+    {
+        droppedItemData = item;
+        pendingVictoryTransition = afterTransition;
+
+        // ポップアップが未設定の場合: 自動入手フォールバック
+        if (dropItemPickupWindow == null)
+        {
+            Debug.LogWarning("[Battle] dropItemPickupWindow が未設定。自動入手を試みます。");
+            if (ItemBoxManager.Instance != null && ItemBoxManager.Instance.CanAddItem(item))
+            {
+                ItemBoxManager.Instance.AddItem(item);
+                Debug.Log($"[Battle] ドロップアイテム自動入手: {item.itemName}");
+            }
+            else
+            {
+                Debug.Log($"[Battle] アイテムBOXが満杯のため {item.itemName} を入手できなかった");
+            }
+            droppedItemData = null;
+            afterTransition?.Invoke();
+            return;
+        }
+
+        // ポップアップ表示
+        bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
+        bool canGet = ItemBoxManager.Instance != null && ItemBoxManager.Instance.CanAddItem(item);
+
+        dropItemPickupWindow.Show(
+            item.itemName, item.description, item.icon,
+            canGet, isFull, OnDropItemResult);
+    }
+
+    /// <summary>
+    /// ドロップアイテムポップアップの結果コールバック。
+    /// TowerItemTrigger.OnItemResult と同じパターン。
+    /// </summary>
+    private void OnDropItemResult(ItemPickupResult result)
+    {
+        Debug.Log($"[Battle] OnDropItemResult: {result}");
+
+        switch (result)
+        {
+            case ItemPickupResult.Get:
+                if (droppedItemData != null && ItemBoxManager.Instance != null)
+                {
+                    bool added = ItemBoxManager.Instance.AddItem(droppedItemData);
+                    Debug.Log(added
+                        ? $"[Battle] ドロップアイテム入手: {droppedItemData.itemName}"
+                        : "[Battle] アイテムBOXが満杯のため入手できなかった");
+                }
+                droppedItemData = null;
+                // シーン遷移を実行
+                pendingVictoryTransition?.Invoke();
+                pendingVictoryTransition = null;
+                break;
+
+            case ItemPickupResult.Exchange:
+                // 整理フロー: pendingItemData に記録して Itembox へ遷移
+                // Itembox から戻る先は Tower（Battle は終了しているため）
+                if (GameState.I != null)
+                {
+                    GameState.I.pendingItemData = droppedItemData;
+                    GameState.I.isInBattle = false; // バトル中フラグ解除
+                    GameState.I.previousSceneName = towerSceneName; // Itembox からの戻り先を Tower に
+                }
+                droppedItemData = null;
+                pendingVictoryTransition = null; // Itembox → Tower の流れになるため不要
+                SceneManager.LoadScene(itemboxSceneName);
+                break;
+
+            case ItemPickupResult.Ignore:
+                Debug.Log("[Battle] ドロップアイテムを諦めた");
+                droppedItemData = null;
+                // シーン遷移を実行
+                pendingVictoryTransition?.Invoke();
+                pendingVictoryTransition = null;
+                break;
+        }
     }
 
     /// <summary>

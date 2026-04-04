@@ -152,9 +152,26 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             StatusEffectSystem.CurePlayerPoison();
         }
 
+        // =========================================================
+        // ステータスポイント付与効果の適用（追加）
+        // =========================================================
+        if (invItem.data.statusPointGain > 0 && GameState.I != null)
+        {
+            GameState.I.statusPoint += invItem.data.statusPointGain;
+            Debug.Log($"[Itembox] ステータスポイント +{invItem.data.statusPointGain} (合計: {GameState.I.statusPoint})");
+        }
+
         string itemName = invItem.data.itemName;
         ItemBoxManager.Instance?.RemoveItem(invItem);
-        AfterAction($"You は {itemName} を使った！");
+
+        // ログメッセージの組み立て
+        string logMsg = $"You は {itemName} を使った！";
+        if (invItem.data.statusPointGain > 0)
+        {
+            logMsg += $" ステータスポイント +{invItem.data.statusPointGain}！";
+        }
+
+        AfterAction(logMsg);
     }
 
     private void EquipWeapon(InventoryItem invItem)
