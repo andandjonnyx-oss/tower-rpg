@@ -22,7 +22,10 @@ public class Monster : ScriptableObject
 
 
     [Header("出現制御")]
-    public int Weight = 1;
+    [Tooltip("出現重み。値が大きいほど出やすい。\n"
+           + "通常モンスター = 1、レアモンスター = 0.1 など。\n"
+           + "同じ地点に複数モンスターがいる場合、Weight / 合計Weight の確率で選ばれる。")]
+    public float Weight = 1f;
     public bool IsBoss;
     public bool IsUnique;
 

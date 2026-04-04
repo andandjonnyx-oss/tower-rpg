@@ -71,12 +71,51 @@ public class MonsterDatabase : ScriptableObject
         return index.TryGetValue((floor, step), out var list) ? list : Array.Empty<Monster>();
     }
 
-    //出現するモンスターが複数いた場合はランダムに1つ返す
+    /// <summary>
+    /// 出現候補から Weight による重み付き抽選で1体を返す。
+    ///
+    /// 抽選方式:
+    ///   全候補の Weight を合算し、0 ～ totalWeight の範囲で乱数を振る。
+    ///   Weight が大きいほど選ばれやすい。
+    ///
+    /// 例: A(Weight=1), B(Weight=1), C(Weight=0.1) の場合
+    ///   totalWeight = 2.1
+    ///   A の確率 = 1/2.1 ≒ 47.6%
+    ///   B の確率 = 1/2.1 ≒ 47.6%
+    ///   C の確率 = 0.1/2.1 ≒ 4.8%
+    ///
+    /// Weight が 0 以下のモンスターは抽選対象外（スキップ）。
+    /// 候補が0件、または全候補の Weight が 0 以下の場合は null を返す。
+    /// </summary>
     public Monster GetRandomCandidate(int floor, int step)
     {
         var list = FindCandidates(floor, step);
         if (list.Count == 0) return null;
-        return list[UnityEngine.Random.Range(0, list.Count)];
+
+        // Weight の合計を計算
+        float totalWeight = 0f;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] != null && list[i].Weight > 0f)
+                totalWeight += list[i].Weight;
+        }
+
+        // 全候補の Weight が 0 以下の場合
+        if (totalWeight <= 0f) return null;
+
+        // 重み付き抽選
+        float roll = UnityEngine.Random.Range(0f, totalWeight);
+        float cumulative = 0f;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == null || list[i].Weight <= 0f) continue;
+            cumulative += list[i].Weight;
+            if (roll < cumulative)
+                return list[i];
+        }
+
+        // 浮動小数点の丸め誤差対策（通常ここには到達しない）
+        return list[list.Count - 1];
     }
 
     //　設定ミスで最小と最大がおかしくなっていた際にそれを修正する

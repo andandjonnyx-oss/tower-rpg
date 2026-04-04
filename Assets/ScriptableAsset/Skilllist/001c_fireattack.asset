@@ -15,8 +15,8 @@ MonoBehaviour:
   skillId: 001c_fireattack
   skillName: "\u901A\u5E38\u708E\u653B\u6483"
   description: 
-  skillSource: 1
-  actionType: 1
+  skillSource: 0
+  actionType: 2
   skillAttribute: 3
   damageCategory: 1
   damageMultiplier: 1
