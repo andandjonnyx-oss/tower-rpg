@@ -136,10 +136,17 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     {
         if (invItem?.data == null) return;
 
+        // RemoveItem 後は invItem.data が参照できなくなる可能性があるため、
+        // 必要な値を事前に取得しておく
+        string itemName = invItem.data.itemName;
+        int healAmount = invItem.data.healAmount;
+        bool curesPoison = invItem.data.curesPoison;
+        int spGain = invItem.data.statusPointGain;
+
         // 回復効果の適用
-        if (invItem.data.healAmount > 0 && GameState.I != null)
+        if (healAmount > 0 && GameState.I != null)
         {
-            GameState.I.currentHp += invItem.data.healAmount;
+            GameState.I.currentHp += healAmount;
             if (GameState.I.currentHp > GameState.I.maxHp)
                 GameState.I.currentHp = GameState.I.maxHp;
         }
@@ -147,7 +154,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // =========================================================
         // 毒消し効果の適用（追加）
         // =========================================================
-        if (invItem.data.curesPoison && GameState.I != null)
+        if (curesPoison && GameState.I != null)
         {
             StatusEffectSystem.CurePlayerPoison();
         }
@@ -155,20 +162,19 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // =========================================================
         // ステータスポイント付与効果の適用（追加）
         // =========================================================
-        if (invItem.data.statusPointGain > 0 && GameState.I != null)
+        if (spGain > 0 && GameState.I != null)
         {
-            GameState.I.statusPoint += invItem.data.statusPointGain;
-            Debug.Log($"[Itembox] ステータスポイント +{invItem.data.statusPointGain} (合計: {GameState.I.statusPoint})");
+            GameState.I.statusPoint += spGain;
+            Debug.Log($"[Itembox] ステータスポイント +{spGain} (合計: {GameState.I.statusPoint})");
         }
 
-        string itemName = invItem.data.itemName;
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
         // ログメッセージの組み立て
         string logMsg = $"You は {itemName} を使った！";
-        if (invItem.data.statusPointGain > 0)
+        if (spGain > 0)
         {
-            logMsg += $" ステータスポイント +{invItem.data.statusPointGain}！";
+            logMsg += $" ステータスポイント +{spGain}！";
         }
 
         AfterAction(logMsg);
@@ -204,6 +210,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             GameState.I.battleItemActionLog = logMessage;
             GameState.I.isInBattle = false;
             SceneManager.LoadScene(GameState.I.previousSceneName ?? "Battle");
+        }
+        else
+        {
+            // 非バトル時: アイテム使用・装備変更の結果を即時セーブ
+            SaveManager.Save();
         }
     }
 }

@@ -188,14 +188,50 @@ public class StorageContext : MonoBehaviour, IItemContext
     // =========================================================
     // Operations
     // =========================================================
+
+    /// <summary>
+    /// 消費アイテムの効果を適用する共通メソッド。
+    /// 所持品・倉庫どちらから使っても同じ効果を適用する。
+    /// RemoveItem の前に呼ぶこと（RemoveItem 後は invItem.data が参照できない可能性があるため）。
+    /// </summary>
+    private void ApplyConsumableEffects(InventoryItem invItem)
+    {
+        if (invItem?.data == null || GameState.I == null) return;
+
+        // HP回復
+        if (invItem.data.healAmount > 0)
+        {
+            GameState.I.currentHp += invItem.data.healAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+            Debug.Log($"[Storage] HP回復 +{invItem.data.healAmount} (HP: {GameState.I.currentHp}/{GameState.I.maxHp})");
+        }
+
+        // 毒消し
+        if (invItem.data.curesPoison)
+        {
+            StatusEffectSystem.CurePlayerPoison();
+            Debug.Log("[Storage] 毒を回復した");
+        }
+
+        // ステータスポイント付与
+        if (invItem.data.statusPointGain > 0)
+        {
+            GameState.I.statusPoint += invItem.data.statusPointGain;
+            Debug.Log($"[Storage] ステータスポイント +{invItem.data.statusPointGain} (合計: {GameState.I.statusPoint})");
+        }
+    }
+
     private void UseConsumableFromInventory(InventoryItem invItem)
     {
+        ApplyConsumableEffects(invItem);
         ItemBoxManager.Instance?.RemoveItem(invItem);
         AfterAction();
     }
 
     private void UseConsumableFromStorage(InventoryItem invItem)
     {
+        ApplyConsumableEffects(invItem);
         StorageManager.Instance?.RemoveItem(invItem);
         AfterAction();
     }
@@ -252,5 +288,6 @@ public class StorageContext : MonoBehaviour, IItemContext
         detailPanel?.Hide();
         selectedItem = null;
         RefreshSlots();
+        SaveManager.Save(); // 操作結果を即時セーブ
     }
 }
