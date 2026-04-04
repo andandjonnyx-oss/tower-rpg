@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 009_1pa-kun
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 009_1pa-kun
+  Mname: "1%\u3067999\u30C0\u30E1\u30FC\u30B8\u304F\u3093"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 6
+  Minstep: 1
+  Maxfloor: 10
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 70
+  Attack: 0
+  Defense: 0
+  MagicDefense: 0
+  Speed: 0
+  Luck: 1
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  attributeResistances: []
+  Exp: 150
+  Gold: 0
+  Help: "\u5E8F\u76E4\u304B\u3089\u904B\u30B2\u30FC\u304B\u3088\uFF01\uFF1F\u3000\u30AF\u30BD\u30B2\u30FC\u3089\u3057\u3044\u306A"
+  actions:
+  - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
+    threshold: 99
+  - skill: {fileID: 11400000, guid: 4024a0c4ec0fc3a43a7a9ba76cf7bbce, type: 2}
+    threshold: 100
+  baseActionRange: 100

@@ -208,38 +208,7 @@ public class MonsterDetailWindow : EditorWindow
                 if (entry.skill != null)
                 {
                     var sk = entry.skill;
-                    string detail = "";
-
-                    switch (sk.actionType)
-                    {
-                        case MonsterActionType.Idle:
-                            detail = "何もしない";
-                            break;
-
-                        case MonsterActionType.NormalAttack:
-                            detail = $"通常攻撃 ({sk.damageCategory})";
-                            detail += FormatAdditionalEffects(sk);
-                            break;
-
-                        case MonsterActionType.SkillAttack:
-                            if (sk.IsNonDamage)
-                            {
-                                detail = $"{sk.skillName} (効果のみ)";
-                                detail += FormatAdditionalEffects(sk);
-                            }
-                            else
-                            {
-                                detail = $"{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
-                                if (sk.fixedDamage > 0)
-                                    detail += $", 固定{sk.fixedDamage}";
-                                else if (sk.damageMultiplier > 0)
-                                    detail += $", x{sk.damageMultiplier}";
-                                detail += ")";
-                                detail += FormatAdditionalEffects(sk);
-                            }
-                            break;
-                    }
-
+                    string detail = FormatSkillDetail(sk);
                     EditorGUILayout.LabelField($"  [{i}] {rangeStr}", detail);
                 }
                 else
@@ -252,6 +221,43 @@ public class MonsterDetailWindow : EditorWindow
         }
 
         EditorGUILayout.EndVertical();
+    }
+
+    /// <summary>
+    /// スキルの詳細情報を文字列化する。
+    /// NormalAttack と SkillAttack は同一処理に統合されたため、
+    /// 表示も統一する。Preemptive は先制マークを付ける。
+    /// </summary>
+    private string FormatSkillDetail(SkillData sk)
+    {
+        // Idle は特別扱い
+        if (sk.actionType == MonsterActionType.Idle)
+        {
+            return "何もしない";
+        }
+
+        // 先制マーク
+        string preemptiveMark = (sk.actionType == MonsterActionType.Preemptive) ? "【先制】" : "";
+
+        // 非ダメージスキル
+        if (sk.IsNonDamage)
+        {
+            string detail = $"{preemptiveMark}{sk.skillName} (効果のみ)";
+            detail += FormatAdditionalEffects(sk);
+            return detail;
+        }
+
+        // ダメージスキル（NormalAttack / SkillAttack / Preemptive 共通）
+        {
+            string detail = $"{preemptiveMark}{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
+            if (sk.fixedDamage > 0)
+                detail += $", 固定{sk.fixedDamage}";
+            else if (sk.damageMultiplier > 0)
+                detail += $", x{sk.damageMultiplier}";
+            detail += $", 命中{sk.baseHitRate}%)";
+            detail += FormatAdditionalEffects(sk);
+            return detail;
+        }
     }
 
     /// <summary>

@@ -9,6 +9,11 @@ using UnityEngine;
 ///   EnemyTurn() では、pendingEnemyAction が残っている場合はそれを使用する。
 ///   先制技（Preemptive）の場合は PlayerAction 側で既に実行済みなので、
 ///   EnemyTurn では通常のターン終了処理のみ行う。
+///
+/// 【NormalAttack 廃止】
+///   旧 NormalAttack は SkillAttack に統一。
+///   全ての敵攻撃は ExecuteEnemySkillAttack() で処理する。
+///   既存アセットの actionType=1（旧NormalAttack）も SkillAttack と同一扱い。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -91,6 +96,9 @@ public partial class BattleSceneController
     /// Monster.Attack をそのままダメージとして使用する。
     /// 防御ダイスによる軽減を適用する。
     /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
+    ///
+    /// ※ actions 配列が未設定のモンスター用の安全ネット。
+    ///   新規モンスターは必ず actions を設定すること。
     ///
     /// 命中判定:
     ///   Monster.BaseHitRate × (1 - プレイヤー回避率/100)、最低10%。
@@ -236,8 +244,12 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 選択された敵行動を実行する。
-    /// EnemyActionEntry.skill が null の場合は通常攻撃（物理）にフォールバックする。
+    /// EnemyActionEntry.skill が null の場合は Legacy 攻撃にフォールバックする。
     /// Preemptive 行動は SkillAttack と同じダメージ計算で実行する。
+    ///
+    /// 【NormalAttack 廃止】
+    ///   旧 NormalAttack（actionType=1）は SkillAttack と同一処理に統合。
+    ///   全ての攻撃行動は ExecuteEnemySkillAttack() で処理する。
     /// </summary>
     private void ExecuteEnemyAction(EnemyActionEntry action)
     {
@@ -249,69 +261,24 @@ public partial class BattleSceneController
         }
         switch (action.skill.actionType)
         {
-            case MonsterActionType.NormalAttack: ExecuteEnemyNormalAttack(action.skill); break;
+#pragma warning disable 0618 // Obsolete 警告を抑制（既存アセット互換のため）
+            case MonsterActionType.NormalAttack: ExecuteEnemySkillAttack(action.skill); break;
+#pragma warning restore 0618
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttack(action.skill); break;
-            case MonsterActionType.Preemptive: ExecuteEnemySkillAttack(action.skill); break; // 先制は SkillAttack と同じ計算
+            case MonsterActionType.Preemptive: ExecuteEnemySkillAttack(action.skill); break;
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
         }
     }
 
     /// <summary>
-    /// 敵の通常攻撃。Monster.Attack 依存ダメージ。
-    /// skill.damageCategory に応じて物理防御 or 魔法防御のダイスを適用する。
-    /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
-    ///
-    /// 命中判定:
-    ///   skill.baseHitRate × (1 - プレイヤー回避率/100)、最低10%。
-    ///
-    /// 追加効果:
-    ///   ダメージ適用後に additionalEffects を実行する。
-    /// </summary>
-    private void ExecuteEnemyNormalAttack(SkillData skill)
-    {
-        if (!CheckEnemyHit(skill.baseHitRate))
-        {
-            string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
-            AddLog($"{enemyMonster.Mname} の{actionName}！ …しかし外れた！");
-            AfterEnemyAction();
-            return;
-        }
-
-        int enemyDamage = enemyMonster.Attack;
-        if (enemyDamage < 1) enemyDamage = 1;
-
-        int defense = GetPlayerDefense(skill.damageCategory);
-        int blocked;
-        if (isDefending)
-        {
-            defense *= DefendDefenseMultiplier;
-            blocked = RollDefenseDice(defense, DefendDiceRange);
-        }
-        else
-        {
-            blocked = RollDefenseDice(defense);
-        }
-        int finalDamage = enemyDamage - blocked;
-        if (finalDamage < 0) finalDamage = 0;
-
-        ApplyDamageToPlayer(finalDamage);
-
-        string actionName2 = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
-        if (blocked > 0)
-            AddLog($"{enemyMonster.Mname} の{actionName2}！ {finalDamage}ダメージ！（{blocked}軽減）");
-        else
-            AddLog($"{enemyMonster.Mname} の{actionName2}！ {finalDamage}ダメージ！");
-
-        // 追加効果の実行
-        ProcessEnemySkillEffects(skill);
-
-        AfterEnemyAction();
-    }
-
-    /// <summary>
     /// 敵のスキル攻撃。SkillData のパラメータでダメージ計算する。
     /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
+    ///
+    /// 【NormalAttack 統合】
+    ///   旧 NormalAttack もこのメソッドで処理する。
+    ///   damageMultiplier=1 のスキルが旧通常攻撃に相当する。
+    ///   属性耐性計算が全ての攻撃に適用される。
     ///
     /// 非ダメージスキル判定:
     ///   IsNonDamage == true の場合はダメージ計算をスキップし、
@@ -355,7 +322,7 @@ public partial class BattleSceneController
             return;
         }
 
-        // --- 通常のダメージ計算 ---
+        // --- ダメージ計算 ---
         int baseDamage;
         if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
         else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);

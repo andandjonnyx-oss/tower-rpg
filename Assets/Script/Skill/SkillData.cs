@@ -40,8 +40,7 @@ public class SkillData : ScriptableObject
     [Header("Monster Action Type")]
     [Tooltip("モンスターの行動の種類。プレイヤー使用時は無視される。\n"
            + "Idle = 何もしない\n"
-           + "NormalAttack = Monster.Attack 依存ダメージ\n"
-           + "SkillAttack = 下記のパラメータでダメージ計算\n"
+           + "SkillAttack = 下記のパラメータでダメージ計算（通常攻撃は倍率1.0で表現）\n"
            + "Preemptive = 先制攻撃（プレイヤー行動選択後、プレイヤー行動の前に割り込む）")]
     public MonsterActionType actionType = MonsterActionType.SkillAttack;
 
@@ -64,7 +63,7 @@ public class SkillData : ScriptableObject
 
     /// <summary>
     /// ダメージ倍率。武器スキルで使用。
-    /// 例: 強撃 = 2.0（STR + 武器攻撃力 の2倍ダメージ）
+    /// 例: 通常攻撃 = 1.0、強撃 = 2.0（STR + 武器攻撃力 の2倍ダメージ）
     /// 魔法スキルで倍率ベースにしたい場合にも使える。
     /// 0 の場合は fixedDamage を使用。
     /// damageMultiplier == 0 かつ fixedDamage == 0 → 非ダメージスキル（追加効果のみ）。
@@ -150,32 +149,38 @@ public enum SkillSource
 /// <summary>
 /// モンスターの行動の種類。
 /// EnemyActionEntry で actionType として使用する。
-/// LevelDrain は追加効果（LevelDrainEffectData）に移行したため削除。
+///
+/// 【NormalAttack 廃止について】
+///   旧 NormalAttack は Monster.Attack をそのまま使い、属性耐性を無視していた。
+///   SkillAttack に統一し、通常攻撃は damageMultiplier=1 で表現する。
+///   enum 値 1 は互換性のため残すが、処理上は SkillAttack と同一扱い。
 /// </summary>
 public enum MonsterActionType
 {
     /// <summary>何もしない（ターン終了）。</summary>
-    Idle,
+    Idle = 0,
 
     /// <summary>
-    /// 通常攻撃（Monster.Attack 依存ダメージ）。
-    /// SkillData のダメージ系パラメータは無視する。
-    /// damageCategory は参照する（物理防御 or 魔法防御ダイス）。
+    /// [廃止] 旧・通常攻撃。処理上は SkillAttack と同一扱い。
+    /// 新規作成時は SkillAttack（damageMultiplier=1）を使用すること。
+    /// enum 値を維持するのは既存アセットの互換性のため。
     /// </summary>
-    NormalAttack,
+    [System.Obsolete("NormalAttack は廃止。SkillAttack（damageMultiplier=1）を使用してください。")]
+    NormalAttack = 1,
 
     /// <summary>
     /// スキル攻撃（SkillData のパラメータでダメージ計算）。
     /// fixedDamage > 0 ならそれを使用。
     /// そうでなければ damageMultiplier × Monster.Attack を使用。
     /// どちらも 0 なら非ダメージスキル（追加効果のみ）。
+    /// 通常攻撃は damageMultiplier=1 で表現する。
     /// </summary>
-    SkillAttack,
+    SkillAttack = 2,
 
     /// <summary>
     /// 先制攻撃。プレイヤーの行動選択後、プレイヤー行動実行の前に割り込む。
     /// ダメージ計算は SkillAttack と同じ（SkillData のパラメータを使用）。
     /// ターン開始時の事前抽選で選ばれた場合のみ発動する。
     /// </summary>
-    Preemptive,
+    Preemptive = 3,
 }
