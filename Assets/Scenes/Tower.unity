@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEncounterSystem
   bossEntries:
-  - floor: 3
+  - floor: 10
     step: 20
     bossMonster: {fileID: 11400000, guid: ea821e1fe0984f44e88c973c188af8b5, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}

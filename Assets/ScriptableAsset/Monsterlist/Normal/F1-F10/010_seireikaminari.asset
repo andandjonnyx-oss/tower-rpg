@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: 010_seireikaminari
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 010_reamon
+  ID: 010_seireikaminari
   Mname: "\u96F7\u306E\u7CBE\u970A"
   Image: {fileID: 0}
   Minfloor: 10
@@ -31,7 +31,9 @@ MonoBehaviour:
   Evasion: 10
   BaseHitRate: 90
   PoisonResistance: 0
-  attributeResistances: []
+  attributeResistances:
+  - attribute: 5
+    value: 100
   Exp: 250
   Gold: 0
   dropItem: {fileID: 11400000, guid: dc9d6e67673ff264da2a005f0efe6816, type: 2}
@@ -44,4 +46,4 @@ MonoBehaviour:
     threshold: 90
   - skill: {fileID: 11400000, guid: cbee7ceb0dbadf94f845aa59b0b5a5f3, type: 2}
     threshold: 100
-  baseActionRange: 50
+  baseActionRange: 100

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
-  m_Name: F03_S19_boss
+  m_Name: F10_S19_boss
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
-  id: F03_S19_boss
-  floor: 3
+  id: F10_S19_boss
+  floor: 10
   step: 19
   lines:
   - speaker: "\u30D2\u30ED\u30A4\u30F3"

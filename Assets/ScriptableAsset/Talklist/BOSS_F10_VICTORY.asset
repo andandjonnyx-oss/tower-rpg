@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
-  m_Name: BOSS_F03_VICTORY
+  m_Name: BOSS_F10_VICTORY
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: BOSS_F03_VICTORY
   floor: 0
