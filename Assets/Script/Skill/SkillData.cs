@@ -19,6 +19,12 @@ using UnityEngine;
 ///   damageMultiplier == 0 かつ fixedDamage == 0 の場合、
 ///   ダメージ計算をスキップし追加効果のみ実行する。
 ///   （旧 effectOnly フラグを廃止し、この判定に一本化）
+///
+/// 【多段攻撃】
+///   hitCount > 1 の場合、命中判定→ダメージ計算を hitCount 回繰り返す。
+///   各ヒットごとに独立して命中判定・防御ダイス・クリティカル判定を行う。
+///   途中で対象のHPが0になったら残りの判定をスキップする。
+///   追加効果は全ヒット完了後に1回だけ実行する。
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Skill Data")]
 public class SkillData : ScriptableObject
@@ -108,6 +114,19 @@ public class SkillData : ScriptableObject
     public int baseHitRate = 95;
 
     // =========================================================
+    // 多段攻撃（追加）
+    // =========================================================
+
+    [Header("Multi-Hit")]
+    [Tooltip("攻撃回数。デフォルト1（単発）。\n"
+           + "2以上にすると、命中判定→ダメージ計算を hitCount 回繰り返す。\n"
+           + "各ヒットは独立して命中・防御ダイス・クリティカルを判定する。\n"
+           + "途中で対象HPが0になったら残りをスキップする。\n"
+           + "追加効果は全ヒット完了後に1回だけ実行する。\n"
+           + "例: 三連突き = hitCount=3, damageMultiplier=0.6")]
+    public int hitCount = 1;
+
+    // =========================================================
     // 追加効果リスト
     // =========================================================
 
@@ -133,6 +152,16 @@ public class SkillData : ScriptableObject
     /// </summary>
     public bool HasAdditionalEffects =>
         additionalEffects != null && additionalEffects.Count > 0;
+
+    /// <summary>
+    /// 多段攻撃かどうか。hitCount > 1 の場合 true。
+    /// </summary>
+    public bool IsMultiHit => hitCount > 1;
+
+    /// <summary>
+    /// 実効ヒット数を返す。最低1。
+    /// </summary>
+    public int EffectiveHitCount => hitCount > 1 ? hitCount : 1;
 }
 
 /// <summary>

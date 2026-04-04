@@ -124,49 +124,93 @@ public partial class BattleSceneController
             return;
         }
 
-        // ダメージ計算（SkillAttack と同じ）
-        int baseDamage;
-        if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
-        else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
-        else baseDamage = enemyMonster.Attack;
-        if (baseDamage < 1) baseDamage = 1;
+        // ダメージ計算（多段攻撃対応）
+        int hits = skill.EffectiveHitCount;
+        int totalDamage = 0;
+        int hitSuccess = 0;
 
-        int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
-        float reductionRate = resistance / 100f;
-        int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
-        if (afterResist < 0) afterResist = 0;
-
-        int defense = GetPlayerDefense(skill.damageCategory);
-        int blocked;
-        if (isDefending)
+        if (hits > 1)
         {
-            defense *= DefendDefenseMultiplier;
-            blocked = RollDefenseDice(defense, DefendDiceRange);
+            string multiName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "先制攻撃";
+            AddLog($"{enemyMonster.Mname} の{multiName}！（{hits}回攻撃）");
         }
-        else
+
+        for (int h = 0; h < hits; h++)
         {
-            blocked = RollDefenseDice(defense);
+            // 多段攻撃の2発目以降は個別に命中判定
+            if (h > 0 && !CheckEnemyHit(skill.baseHitRate))
+            {
+                AddLog($"  {h + 1}撃目 …外れた！");
+                continue;
+            }
+
+            int baseDamage;
+            if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
+            else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+            else baseDamage = enemyMonster.Attack;
+            if (baseDamage < 1) baseDamage = 1;
+
+            int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
+            float reductionRate = resistance / 100f;
+            int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+            if (afterResist < 0) afterResist = 0;
+
+            int defense = GetPlayerDefense(skill.damageCategory);
+            int blocked;
+            if (isDefending)
+            {
+                defense *= DefendDefenseMultiplier;
+                blocked = RollDefenseDice(defense, DefendDiceRange);
+            }
+            else
+            {
+                blocked = RollDefenseDice(defense);
+            }
+            int finalDamage = afterResist - blocked;
+            if (finalDamage < 0) finalDamage = 0;
+
+            ApplyDamageToPlayer(finalDamage);
+            totalDamage += finalDamage;
+            hitSuccess++;
+
+            if (hits > 1)
+            {
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+                AddLog($"  {h + 1}撃目 {finalDamage}ダメージ！{logSuffix}");
+            }
+            else
+            {
+                // 単発攻撃: 従来ログ
+                string actionName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName
+                    : $"{skill.skillAttribute.ToJapanese()}攻撃";
+
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+
+                AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
+                       $"{finalDamage}ダメージ！{logSuffix}");
+
+                Debug.Log($"[Battle] Preemptive: base={baseDamage} resistance={resistance} " +
+                          $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
+            }
+
+            // 途中でプレイヤーが倒れたら残りをスキップ
+            if (GameState.I != null && GameState.I.currentHp <= 0) break;
         }
-        int finalDamage = afterResist - blocked;
-        if (finalDamage < 0) finalDamage = 0;
 
-        ApplyDamageToPlayer(finalDamage);
-
-        string actionName = !string.IsNullOrEmpty(skill.skillName)
-            ? skill.skillName
-            : $"{skill.skillAttribute.ToJapanese()}攻撃";
-
-        string logSuffix = "";
-        if (resistance > 0 && blocked > 0) logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
-        else if (resistance > 0) logSuffix = "（耐性で軽減）";
-        else if (resistance < 0) logSuffix = "（弱点で増加）";
-        else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
-
-        AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
-               $"{finalDamage}ダメージ！{logSuffix}");
-
-        Debug.Log($"[Battle] Preemptive: base={baseDamage} resistance={resistance} " +
-                  $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
+        // 多段攻撃の合計ログ
+        if (hits > 1)
+        {
+            AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
+        }
 
         // 追加効果の実行
         ProcessEnemySkillEffects(skill);
@@ -324,41 +368,91 @@ public partial class BattleSceneController
             return;
         }
 
-        int attack = (GameState.I != null) ? GameState.I.Attack : 1;
-        int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
-        if (damage < 1) damage = 1;
 
-        // 属性耐性によるダメージ軽減
-        WeaponAttribute skillAttr = skill.skillAttribute;
-        string resistLog;
-        damage = ApplyEnemyAttributeResistance(damage, skillAttr, out resistLog);
+        // =========================================================
+        // 多段攻撃対応（追加）
+        // hitCount > 1 の場合、ヒット回数分ループして各ヒットを個別に処理する。
+        // 各ヒットごとに独立して命中判定・ダメージ計算・クリティカル判定を行う。
+        // 途中で敵HPが0になったら残りをスキップする。
+        // =========================================================
+        int hits = skill.EffectiveHitCount;
+        int totalDamage = 0;
+        int hitSuccess = 0;
 
-        bool isCrit = CheckPlayerCrit();
-
-        int finalDamage;
-        if (isCrit)
+        if (hits > 1)
         {
-            finalDamage = damage * 2;
-        }
-        else
-        {
-            int enemyDef = GetEnemyDefense(skill.damageCategory);
-            int enemyBlocked = RollDefenseDice(enemyDef);
-            finalDamage = damage - enemyBlocked;
-            if (finalDamage < 1) finalDamage = 1;
+            AddLog($"You は {skill.skillName}！（{hits}回攻撃）");
         }
 
-        // 完全無効（耐性100以上）の場合は0ダメージ
-        if (damage <= 0) finalDamage = 0;
+        for (int h = 0; h < hits; h++)
+        {
+            // 多段攻撃の2発目以降は個別に命中判定
+            if (h > 0 && !CheckPlayerHit(skill.baseHitRate))
+            {
+                AddLog($"  {h + 1}撃目 …外れた！");
+                continue;
+            }
 
-        enemyCurrentHp -= finalDamage;
-        if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+            int attack = (GameState.I != null) ? GameState.I.Attack : 1;
+            int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
+            if (damage < 1) damage = 1;
 
-        if (isCrit)
-            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
-        else
-            AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
+            WeaponAttribute skillAttr = skill.skillAttribute;
+            string resistLog;
+            damage = ApplyEnemyAttributeResistance(damage, skillAttr, out resistLog);
 
+            bool isCrit = CheckPlayerCrit();
+            int finalDamage;
+            if (isCrit)
+            {
+                finalDamage = damage * 2;
+            }
+            else
+            {
+                int enemyDef = GetEnemyDefense(skill.damageCategory);
+                int enemyBlocked = RollDefenseDice(enemyDef);
+                finalDamage = damage - enemyBlocked;
+                if (finalDamage < 1) finalDamage = 1;
+            }
+
+            // 完全無効（耐性100以上）の場合は0ダメージ
+            if (damage <= 0) finalDamage = 0;
+
+            enemyCurrentHp -= finalDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+            totalDamage += finalDamage;
+            hitSuccess++;
+
+            if (hits > 1)
+            {
+                // 多段攻撃: 各ヒットのログ
+                string hitPrefix = $"  {h + 1}撃目";
+                if (isCrit)
+                    AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                else
+                    AddLog($"{hitPrefix} {finalDamage}ダメージ！{resistLog}");
+            }
+            else
+            {
+                // 単発攻撃: 従来ログ
+                if (isCrit)
+                    AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                else
+                    AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
+            }
+
+            // 途中で敵が倒れたら残りをスキップ
+            if (enemyCurrentHp <= 0) break;
+        }
+
+        // 多段攻撃の合計ログ
+        if (hits > 1)
+        {
+            AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
+        }
+
+        // 追加効果の実行（全ヒット完了後に1回だけ）
+        ProcessPlayerSkillEffects(skill);
         // 追加効果の実行
         ProcessPlayerSkillEffects(skill);
 
@@ -430,43 +524,91 @@ public partial class BattleSceneController
             return;
         }
 
-        int damage;
-        if (magic.fixedDamage > 0) { damage = magic.fixedDamage; }
-        else if (magic.damageMultiplier > 0)
-        {
-            int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
-            damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
-        }
-        else { damage = 1; }
-        if (damage < 1) damage = 1;
 
-        // 属性耐性によるダメージ軽減
-        string resistLog;
-        damage = ApplyEnemyAttributeResistance(damage, magic.skillAttribute, out resistLog);
+        // =========================================================
+        // 多段攻撃対応（追加）
+        // =========================================================
+        int hits = magic.EffectiveHitCount;
+        int totalDamage = 0;
+        int hitSuccess = 0;
 
-        bool isCrit = CheckPlayerCrit();
-        int finalDamage;
-        if (isCrit) { finalDamage = damage * 2; }
-        else
+        if (hits > 1)
         {
-            int enemyDef = GetEnemyDefense(magic.damageCategory);
-            int enemyBlocked = RollDefenseDice(enemyDef);
-            finalDamage = damage - enemyBlocked;
-            if (finalDamage < 1) finalDamage = 1;
+            AddLog($"You は {magic.skillName}！（{hits}回攻撃） MP-{magic.mpCost}");
         }
 
-        // 完全無効（耐性100以上）の場合は0ダメージ
-        if (damage <= 0) finalDamage = 0;
+        for (int h = 0; h < hits; h++)
+        {
+            // 多段攻撃の2発目以降は個別に命中判定
+            if (h > 0 && !CheckPlayerHit(magic.baseHitRate))
+            {
+                AddLog($"  {h + 1}撃目 …外れた！");
+                continue;
+            }
 
-        enemyCurrentHp -= finalDamage;
-        if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+            // ★ OnMagicClicked 固有: fixedDamage 優先、MagicAttack ベース
+            int damage;
+            if (magic.fixedDamage > 0) { damage = magic.fixedDamage; }
+            else if (magic.damageMultiplier > 0)
+            {
+                int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
+                damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
+            }
+            else { damage = 1; }
+            if (damage < 1) damage = 1;
 
-        if (isCrit)
-            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
-        else
-            AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
+            // 属性耐性によるダメージ軽減
+            string resistLog;
+            damage = ApplyEnemyAttributeResistance(damage, magic.skillAttribute, out resistLog);
 
-        // 追加効果の実行
+            bool isCrit = CheckPlayerCrit();
+            int finalDamage;
+            if (isCrit) { finalDamage = damage * 2; }
+            else
+            {
+                int enemyDef = GetEnemyDefense(magic.damageCategory);
+                int enemyBlocked = RollDefenseDice(enemyDef);
+                finalDamage = damage - enemyBlocked;
+                if (finalDamage < 1) finalDamage = 1;
+            }
+
+            // 完全無効（耐性100以上）の場合は0ダメージ
+            if (damage <= 0) finalDamage = 0;
+
+            enemyCurrentHp -= finalDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+            totalDamage += finalDamage;
+            hitSuccess++;
+
+            if (hits > 1)
+            {
+                // 多段攻撃: 各ヒットのログ
+                string hitPrefix = $"  {h + 1}撃目";
+                if (isCrit)
+                    AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                else
+                    AddLog($"{hitPrefix} {finalDamage}ダメージ！{resistLog}");
+            }
+            else
+            {
+                // 単発攻撃: 従来ログ
+                if (isCrit)
+                    AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
+                else
+                    AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
+            }
+
+            // 途中で敵が倒れたら残りをスキップ
+            if (enemyCurrentHp <= 0) break;
+        }
+
+        // 多段攻撃の合計ログ
+        if (hits > 1)
+        {
+            AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
+        }
+
+        // 追加効果の実行（全ヒット完了後に1回だけ）
         ProcessPlayerSkillEffects(magic);
 
         if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }

@@ -26,9 +26,14 @@ MonoBehaviour:
   healAmount: 0
   curesPoison: 0
   statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
   weaponAttribute: 2
   attackPower: 5
-  skills: []
+  skills:
+  - {fileID: 11400000, guid: ce88878beea4042409dfac1c29b908a6, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   equipDefense: 0

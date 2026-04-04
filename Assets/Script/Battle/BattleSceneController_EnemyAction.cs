@@ -322,54 +322,99 @@ public partial class BattleSceneController
             return;
         }
 
-        // --- ダメージ計算 ---
-        int baseDamage;
-        if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
-        else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
-        else baseDamage = enemyMonster.Attack;
-        if (baseDamage < 1) baseDamage = 1;
+        // --- ダメージ計算（多段攻撃対応） ---
+        int hits = skill.EffectiveHitCount;
+        int totalDamage = 0;
+        int hitSuccess = 0;
 
-        int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
-        float reductionRate = resistance / 100f;
-        int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
-        if (afterResist < 0) afterResist = 0;
-
-        int defense = GetPlayerDefense(skill.damageCategory);
-        int blocked;
-        if (isDefending)
+        if (hits > 1)
         {
-            defense *= DefendDefenseMultiplier;
-            blocked = RollDefenseDice(defense, DefendDiceRange);
+            string multiName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "攻撃";
+            AddLog($"{enemyMonster.Mname} の{multiName}！（{hits}回攻撃）");
         }
-        else
+
+        for (int h = 0; h < hits; h++)
         {
-            blocked = RollDefenseDice(defense);
+            // 多段攻撃の2発目以降は個別に命中判定
+            if (h > 0 && !CheckEnemyHit(skill.baseHitRate))
+            {
+                AddLog($"  {h + 1}撃目 …外れた！");
+                continue;
+            }
+
+            int baseDamage;
+            if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
+            else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+            else baseDamage = enemyMonster.Attack;
+            if (baseDamage < 1) baseDamage = 1;
+
+            int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
+            float reductionRate = resistance / 100f;
+            int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+            if (afterResist < 0) afterResist = 0;
+
+            int defense = GetPlayerDefense(skill.damageCategory);
+            int blocked;
+            if (isDefending)
+            {
+                defense *= DefendDefenseMultiplier;
+                blocked = RollDefenseDice(defense, DefendDiceRange);
+            }
+            else
+            {
+                blocked = RollDefenseDice(defense);
+            }
+            int finalDamage = afterResist - blocked;
+            if (finalDamage < 0) finalDamage = 0;
+
+            ApplyDamageToPlayer(finalDamage);
+            totalDamage += finalDamage;
+            hitSuccess++;
+
+            if (hits > 1)
+            {
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+                AddLog($"  {h + 1}撃目 {finalDamage}ダメージ！{logSuffix}");
+            }
+            else
+            {
+                // 単発攻撃: 従来ログ
+                string actionName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName
+                    : $"{skill.skillAttribute.ToJapanese()}攻撃";
+
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+
+                AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
+                       $"{finalDamage}ダメージ！{logSuffix}");
+            }
+
+            Debug.Log($"[Battle] SkillAttack hit {h + 1}/{hits}: base={baseDamage} resistance={resistance} " +
+                      $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage} defending={isDefending}");
+
+            // 途中でプレイヤーが倒れたら残りをスキップ
+            if (GameState.I != null && GameState.I.currentHp <= 0) break;
         }
-        int finalDamage = afterResist - blocked;
-        if (finalDamage < 0) finalDamage = 0;
 
-        ApplyDamageToPlayer(finalDamage);
+        // 多段攻撃の合計ログ
+        if (hits > 1)
+        {
+            AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
+        }
 
-        string actionName = !string.IsNullOrEmpty(skill.skillName)
-            ? skill.skillName
-            : $"{skill.skillAttribute.ToJapanese()}攻撃";
-
-        string logSuffix = "";
-        if (resistance > 0 && blocked > 0) logSuffix = $"（耐性で軽減+防御{blocked}軽減）";
-        else if (resistance > 0) logSuffix = "（耐性で軽減）";
-        else if (resistance < 0) logSuffix = "（弱点で増加）";
-        else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
-
-        AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
-               $"{finalDamage}ダメージ！{logSuffix}");
-
-        Debug.Log($"[Battle] SkillAttack: base={baseDamage} resistance={resistance} " +
-                  $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage} defending={isDefending}");
-
-        // 追加効果の実行
+        // 追加効果の実行（全ヒット完了後に1回だけ）
         ProcessEnemySkillEffects(skill);
 
         AfterEnemyAction();
+
     }
 
     /// <summary>
