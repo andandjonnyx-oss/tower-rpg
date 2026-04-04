@@ -451,8 +451,6 @@ public partial class BattleSceneController
             AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
         }
 
-        // 追加効果の実行（全ヒット完了後に1回だけ）
-        ProcessPlayerSkillEffects(skill);
         // 追加効果の実行
         ProcessPlayerSkillEffects(skill);
 
