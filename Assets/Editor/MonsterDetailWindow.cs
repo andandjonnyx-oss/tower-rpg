@@ -250,10 +250,15 @@ public class MonsterDetailWindow : EditorWindow
         // ダメージスキル（NormalAttack / SkillAttack / Preemptive 共通）
         {
             string detail = $"{preemptiveMark}{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
-            if (sk.fixedDamage > 0)
-                detail += $", 固定{sk.fixedDamage}";
-            else if (sk.damageMultiplier > 0)
+
+            // ダメージ式の表示
+            if (sk.damageMultiplier > 0f && sk.bonusDamage > 0)
+                detail += $", x{sk.damageMultiplier}+{sk.bonusDamage}";
+            else if (sk.damageMultiplier > 0f)
                 detail += $", x{sk.damageMultiplier}";
+            else if (sk.bonusDamage > 0)
+                detail += $", 固定{sk.bonusDamage}";
+
             detail += $", 命中{sk.baseHitRate}%)";
             detail += FormatAdditionalEffects(sk);
             return detail;

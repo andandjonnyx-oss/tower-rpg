@@ -97,8 +97,25 @@ public class SkillDetailWindow : EditorWindow
         EditorGUILayout.LabelField("属性", skill.skillAttribute.ToJapanese());
         EditorGUILayout.LabelField("物理/魔法", skill.damageCategory.ToString());
         EditorGUILayout.LabelField("ダメージ倍率", skill.damageMultiplier.ToString("F2"));
-        EditorGUILayout.LabelField("固定ダメージ", skill.fixedDamage.ToString());
-        EditorGUILayout.LabelField("非ダメージスキル", skill.IsNonDamage ? "○（追加効果のみ）" : "×");
+        EditorGUILayout.LabelField("ボーナスダメージ", skill.bonusDamage.ToString());
+
+        // ダメージ式のプレビュー
+        if (skill.IsNonDamage)
+        {
+            EditorGUILayout.LabelField("計算式", "非ダメージスキル（追加効果のみ）");
+        }
+        else if (skill.damageMultiplier > 0f && skill.bonusDamage > 0)
+        {
+            EditorGUILayout.LabelField("計算式", $"Attack×{skill.damageMultiplier:F1} + {skill.bonusDamage}");
+        }
+        else if (skill.damageMultiplier > 0f)
+        {
+            EditorGUILayout.LabelField("計算式", $"Attack×{skill.damageMultiplier:F1}");
+        }
+        else
+        {
+            EditorGUILayout.LabelField("計算式", $"固定{skill.bonusDamage}");
+        }
 
         EditorGUILayout.EndVertical();
     }

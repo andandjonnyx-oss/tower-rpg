@@ -366,9 +366,11 @@ public partial class BattleSceneController
             }
 
             int baseDamage;
-            if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
-            else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
-            else baseDamage = enemyMonster.Attack;
+            if (skill.damageMultiplier > 0f)
+                baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+            else
+                baseDamage = 0;
+            baseDamage += skill.bonusDamage;
             if (baseDamage < 1) baseDamage = 1;
 
             int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);

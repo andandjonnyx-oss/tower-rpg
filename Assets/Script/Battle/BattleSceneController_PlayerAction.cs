@@ -145,9 +145,11 @@ public partial class BattleSceneController
             }
 
             int baseDamage;
-            if (skill.fixedDamage > 0) baseDamage = skill.fixedDamage;
-            else if (skill.damageMultiplier > 0f) baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
-            else baseDamage = enemyMonster.Attack;
+            if (skill.damageMultiplier > 0f)
+                baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+            else
+                baseDamage = 0;
+            baseDamage += skill.bonusDamage;
             if (baseDamage < 1) baseDamage = 1;
 
             int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
@@ -411,6 +413,8 @@ public partial class BattleSceneController
 
             int attack = (GameState.I != null) ? GameState.I.Attack : 1;
             int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
+            damage += skill.bonusDamage; // ★bonusDamage加算
+
             if (damage < 1) damage = 1;
 
             WeaponAttribute skillAttr = skill.skillAttribute;
@@ -562,13 +566,16 @@ public partial class BattleSceneController
 
             // ★ OnMagicClicked 固有: fixedDamage 優先、MagicAttack ベース
             int damage;
-            if (magic.fixedDamage > 0) { damage = magic.fixedDamage; }
-            else if (magic.damageMultiplier > 0)
+            if (magic.damageMultiplier > 0)
             {
                 int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
                 damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
             }
-            else { damage = 1; }
+            else
+            {
+                damage = 0;
+            }
+            damage += magic.bonusDamage;
             if (damage < 1) damage = 1;
 
             // 属性耐性によるダメージ軽減

@@ -16,9 +16,17 @@ using UnityEngine;
 ///   同じ SkillEffectData アセットを異なるパラメータで複数スキルに設定可能。
 ///
 /// 【非ダメージスキルの判定】
-///   damageMultiplier == 0 かつ fixedDamage == 0 の場合、
+///   damageMultiplier == 0 かつ bonusDamage == 0 の場合、
 ///   ダメージ計算をスキップし追加効果のみ実行する。
-///   （旧 effectOnly フラグを廃止し、この判定に一本化）
+///
+/// 【ダメージ計算式】
+///   baseDamage = (Attack × damageMultiplier) + bonusDamage
+///   ※ 四捨五入後に bonusDamage を加算
+///
+///   表現パターン:
+///     倍率のみ:      damageMultiplier=2, bonusDamage=0   → Attack×2
+///     固定ダメージ:  damageMultiplier=0, bonusDamage=10  → 固定10
+///     倍率+追加:     damageMultiplier=2, bonusDamage=10  → Attack×2 + 10
 ///
 /// 【多段攻撃】
 ///   hitCount > 1 の場合、命中判定→ダメージ計算を hitCount 回繰り返す。
@@ -71,17 +79,28 @@ public class SkillData : ScriptableObject
     /// ダメージ倍率。武器スキルで使用。
     /// 例: 通常攻撃 = 1.0、強撃 = 2.0（STR + 武器攻撃力 の2倍ダメージ）
     /// 魔法スキルで倍率ベースにしたい場合にも使える。
-    /// 0 の場合は fixedDamage を使用。
-    /// damageMultiplier == 0 かつ fixedDamage == 0 → 非ダメージスキル（追加効果のみ）。
+    /// 0 の場合は bonusDamage のみ使用。
+    /// damageMultiplier == 0 かつ bonusDamage == 0 → 非ダメージスキル（追加効果のみ）。
     /// </summary>
     public float damageMultiplier;
 
     /// <summary>
-    /// 固定ダメージ。魔法スキルで使用。
-    /// 例: ファイアボール = 10（INT やステータスに依存しない固定ダメージ）
-    /// 0 の場合は damageMultiplier を使用。
+    /// 追加固定ダメージ。倍率ダメージに加算される。
+    /// 計算式: (Attack × damageMultiplier) + bonusDamage
+    ///
+    /// 表現パターン:
+    ///   固定ダメージのみ: damageMultiplier=0, bonusDamage=10  → 固定10（旧fixedDamage相当）
+    ///   倍率+追加:       damageMultiplier=2, bonusDamage=10  → Attack×2 + 10
+    ///   倍率のみ:        damageMultiplier=2, bonusDamage=0   → Attack×2
+    ///
+    /// 0 の場合は加算なし。
     /// </summary>
-    public int fixedDamage;
+    [Tooltip("追加固定ダメージ。倍率ダメージに加算される。\n"
+           + "計算式: (Attack × damageMultiplier) + bonusDamage\n"
+           + "固定ダメージのみの場合は damageMultiplier=0 にして bonusDamage に値を設定。\n"
+           + "例: ファイアボール = damageMultiplier=0, bonusDamage=10 → 固定10\n"
+           + "例: 雷切 = damageMultiplier=2, bonusDamage=10 → Attack×2 + 10")]
+    public int bonusDamage = 0;
 
     [Header("Cost")]
     /// <summary>
@@ -133,7 +152,7 @@ public class SkillData : ScriptableObject
     [Header("Additional Effects")]
     [Tooltip("スキルの追加効果リスト。\n"
            + "命中後（またはダメージ計算後）に順番に実行される。\n"
-           + "非ダメージスキル（倍率0 & 固定0）では追加効果のみ実行される。")]
+           + "非ダメージスキル（倍率0 & ボーナス0）では追加効果のみ実行される。")]
     public List<SkillEffectEntry> additionalEffects = new List<SkillEffectEntry>();
 
     // =========================================================
@@ -142,10 +161,9 @@ public class SkillData : ScriptableObject
 
     /// <summary>
     /// ダメージを与えないスキルかどうか。
-    /// damageMultiplier == 0 かつ fixedDamage == 0 の場合 true。
-    /// 旧 effectOnly フラグの代替。
+    /// damageMultiplier == 0 かつ bonusDamage == 0 の場合 true。
     /// </summary>
-    public bool IsNonDamage => damageMultiplier <= 0f && fixedDamage <= 0;
+    public bool IsNonDamage => damageMultiplier <= 0f && bonusDamage <= 0;
 
     /// <summary>
     /// 追加効果を持つかどうか。
@@ -199,9 +217,8 @@ public enum MonsterActionType
 
     /// <summary>
     /// スキル攻撃（SkillData のパラメータでダメージ計算）。
-    /// fixedDamage > 0 ならそれを使用。
-    /// そうでなければ damageMultiplier × Monster.Attack を使用。
-    /// どちらも 0 なら非ダメージスキル（追加効果のみ）。
+    /// baseDamage = (Monster.Attack × damageMultiplier) + bonusDamage
+    /// すべて 0 なら非ダメージスキル（追加効果のみ）。
     /// 通常攻撃は damageMultiplier=1 で表現する。
     /// </summary>
     SkillAttack = 2,
