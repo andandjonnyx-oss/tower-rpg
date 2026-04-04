@@ -14,6 +14,11 @@ using UnityEngine;
 ///   旧 NormalAttack は SkillAttack に統一。
 ///   全ての敵攻撃は ExecuteEnemySkillAttack() で処理する。
 ///   既存アセットの actionType=1（旧NormalAttack）も SkillAttack と同一扱い。
+///
+/// 【気絶（スタン）】
+///   EnemyTurn() で先制チェックの直後にスタンチェックを行う。
+///   スタン中は行動スキップ → ターン終了処理（毒ダメージ等）のみ実行。
+///   スタンは1ターン限定で自動解除。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -48,6 +53,9 @@ public partial class BattleSceneController
     ///   pendingEnemyAction が null の場合:
     ///     - actions 配列があれば新規に抽選して実行する。
     ///     - なければ Legacy 通常攻撃。
+    ///
+    /// 【気絶（スタン）チェック】
+    ///   先制チェック後にスタンチェックを行い、スタン中は行動スキップ。
     /// </summary>
     private void EnemyTurn()
     {
@@ -65,6 +73,21 @@ public partial class BattleSceneController
         {
             isEnemyPreemptive = false; // フラグをリセット
             pendingEnemyAction = null; // 念のためクリア
+            AfterEnemyAction();
+            return;
+        }
+
+        // =========================================================
+        // 気絶（スタン）チェック
+        // =========================================================
+        // 敵がスタン状態の場合、そのターンの行動をスキップする。
+        // スタンは1ターン限定のため、ここでフラグを解除する。
+        // ターン終了処理（毒ダメージ等）は通常通り実行する。
+        // =========================================================
+        if (enemyIsStunned)
+        {
+            enemyIsStunned = false; // 1ターンで解除
+            AddLog($"{enemyMonster.Mname} は気絶して動けない！");
             AfterEnemyAction();
             return;
         }
@@ -440,6 +463,7 @@ public partial class BattleSceneController
             isPlayerAttack: false,
             enemyMonster,
             ref enemyIsPoisoned,
+            ref enemyIsStunned,
             ref enemyCurrentHp);
 
         for (int i = 0; i < logs.Count; i++)

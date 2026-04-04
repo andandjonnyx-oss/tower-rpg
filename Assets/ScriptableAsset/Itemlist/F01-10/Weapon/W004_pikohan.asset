@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W004_pikohan
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W004_pikohan
+  itemName: "\u30D4\u30B3\u30CF\u30F3"
+  description: "\u5F53\u305F\u3063\u3066\u3082\u75DB\u304F\u306A\u3055\u305D\u3046\u3068\u3044\u3046\u6CB9\u65AD\u3092\u8A98\u3046\u3000\u653B\u6483+6\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30012\u500D\u300150\uFF05\u6C17\u7D76\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 4
+  Minstep: 1
+  Maxfloor: 7
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  curesPoison: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  weaponAttribute: 0
+  attackPower: 6
+  skills:
+  - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
+  weaponInflictEffect: 8
+  weaponInflictChance: 10
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 0

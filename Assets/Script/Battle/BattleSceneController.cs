@@ -117,6 +117,8 @@ public partial class BattleSceneController : MonoBehaviour
 
     /// <summary>戦闘中の敵の毒状態。戦闘終了でリセット。</summary>
     private static bool enemyIsPoisoned = false;
+    /// <summary>戦闘中の敵の気絶状態。1ターン限定で自動解除。</summary>
+    private static bool enemyIsStunned = false;
 
     // =========================================================
     // 防御フラグ（追加）
@@ -253,6 +255,7 @@ public partial class BattleSceneController : MonoBehaviour
             persistentLogLines.Clear();
             currentTurnNumber = 0; // ターンカウンターリセット
             isDefending = false; // 防御フラグリセット
+            enemyIsStunned = false;
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
@@ -373,6 +376,7 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
         enemyIsPoisoned = false;
+        enemyIsStunned = false;
 
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
@@ -597,6 +601,7 @@ public partial class BattleSceneController : MonoBehaviour
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
         enemyIsPoisoned = false;
+        enemyIsStunned = false;
 
         // ログを全部表示してからポップアップ表示
         FlushLogsAndThen(() =>
@@ -797,6 +802,7 @@ public partial class BattleSceneController : MonoBehaviour
         persistentLogLines.Clear();
         currentTurnNumber = 0; // ターンカウンターもリセット
         enemyIsPoisoned = false;
+        enemyIsStunned = false;
         isDefending = false; // 防御フラグもリセット
         pendingEnemyAction = null; // 先制攻撃もリセット
         isEnemyPreemptive = false;

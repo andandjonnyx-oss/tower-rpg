@@ -302,6 +302,22 @@ public partial class BattleSceneController
             }
         }
 
+        // 武器のスタン付与判定 - 既にスタンならスキップ（ログも出さない）
+        if (equippedWeaponItem != null && equippedWeaponItem.data != null
+            && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Stun
+            && equippedWeaponItem.data.weaponInflictChance > 0
+            && !enemyIsStunned)
+        {
+            int enemyStunResist = StatusEffectSystem.GetEnemyStunResistance(enemyMonster);
+            bool stunned = StatusEffectSystem.TryStunEnemy(
+                equippedWeaponItem.data.weaponInflictChance, enemyStunResist);
+            if (stunned)
+            {
+                enemyIsStunned = true;
+                AddLog($"{enemyMonster.Mname} は気絶した！");
+            }
+        }
+
         if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
         FlushLogsAndThen(() => EnemyTurn());
     }
@@ -663,6 +679,7 @@ public partial class BattleSceneController
             isPlayerAttack: true,
             enemyMonster,
             ref enemyIsPoisoned,
+            ref enemyIsStunned,
             ref enemyCurrentHp);
 
         for (int i = 0; i < logs.Count; i++)

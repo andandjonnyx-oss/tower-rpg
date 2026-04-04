@@ -13,7 +13,7 @@ using UnityEngine;
 ///   var logs = SkillEffectProcessor.ProcessEffects(
 ///       skill.additionalEffects,
 ///       isPlayerAttack: true,
-///       enemyMonster, ref enemyIsPoisoned, ref enemyCurrentHp);
+///       enemyMonster, ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp);
 ///   foreach (var log in logs) AddLog(log);
 /// </summary>
 public static class SkillEffectProcessor
@@ -25,6 +25,7 @@ public static class SkillEffectProcessor
     /// <param name="isPlayerAttack">true=プレイヤーが攻撃側、false=敵が攻撃側</param>
     /// <param name="enemyMonster">敵モンスターデータ（耐性参照用）</param>
     /// <param name="enemyIsPoisoned">敵の毒状態フラグ（ref）</param>
+    /// <param name="enemyIsStunned">敵の気絶状態フラグ（ref）</param>
     /// <param name="enemyCurrentHp">敵の現在HP（ref、回復効果等で変化する場合）</param>
     /// <returns>バトルログメッセージのリスト</returns>
     public static List<string> ProcessEffects(
@@ -32,6 +33,7 @@ public static class SkillEffectProcessor
         bool isPlayerAttack,
         Monster enemyMonster,
         ref bool enemyIsPoisoned,
+        ref bool enemyIsStunned,
         ref int enemyCurrentHp)
     {
         var logs = new List<string>();
@@ -45,7 +47,7 @@ public static class SkillEffectProcessor
             if (entry.effectData is StatusAilmentEffectData)
             {
                 ProcessStatusAilment(entry, isPlayerAttack, enemyMonster,
-                                     ref enemyIsPoisoned, logs);
+                                     ref enemyIsPoisoned, ref enemyIsStunned, logs);
             }
             else if (entry.effectData is LevelDrainEffectData)
             {
@@ -87,12 +89,13 @@ public static class SkillEffectProcessor
         bool isPlayerAttack,
         Monster enemyMonster,
         ref bool enemyIsPoisoned,
+        ref bool enemyIsStunned,
         List<string> logs)
     {
         if (entry.ailmentMode == AilmentMode.Inflict)
         {
             ProcessStatusAilmentInflict(entry, isPlayerAttack, enemyMonster,
-                                        ref enemyIsPoisoned, logs);
+                                        ref enemyIsPoisoned, ref enemyIsStunned, logs);
         }
         else if (entry.ailmentMode == AilmentMode.Cure)
         {
@@ -108,12 +111,14 @@ public static class SkillEffectProcessor
         bool isPlayerAttack,
         Monster enemyMonster,
         ref bool enemyIsPoisoned,
+        ref bool enemyIsStunned,
         List<string> logs)
     {
         if (entry.chance <= 0) return;
 
-        // 現在は Poison のみ対応。将来 Paralyze/Sleep 等を追加する場合は
-        // targetStatusEffect で分岐する。
+        // =========================================================
+        // 毒（Poison）
+        // =========================================================
         if (entry.targetStatusEffect == StatusEffect.Poison)
         {
             if (isPlayerAttack)
@@ -141,6 +146,32 @@ public static class SkillEffectProcessor
                 {
                     logs.Add("You は毒を受けた！");
                 }
+            }
+        }
+        // =========================================================
+        // 気絶（Stun）
+        // =========================================================
+        else if (entry.targetStatusEffect == StatusEffect.Stun)
+        {
+            if (isPlayerAttack)
+            {
+                // プレイヤー → 敵にスタン付与
+                if (enemyIsStunned) return; // 既にスタンならスキップ
+                int enemyStunResist = StatusEffectSystem.GetEnemyStunResistance(enemyMonster);
+                bool stunned = StatusEffectSystem.TryStunEnemy(
+                    entry.chance, enemyStunResist);
+                if (stunned)
+                {
+                    enemyIsStunned = true;
+                    string eName = (enemyMonster != null)
+                        ? enemyMonster.Mname : "敵";
+                    logs.Add($"{eName} は気絶した！");
+                }
+            }
+            else
+            {
+                // 敵 → プレイヤーへのスタン付与は現状未対応
+                Debug.Log("[SkillEffectProcessor] 敵→プレイヤーのスタン付与は未実装");
             }
         }
         else

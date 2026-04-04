@@ -14,17 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W003_Pnaihu
   itemName: "\u30DD\u30A4\u30BA\u30F3\u30CA\u30A4\u30D5"
-  description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B"
+  description: "\u305F\u307E\u306B\u6BD2\u306B\u3059\u308B\u30CA\u30A4\u30D5\u3002\u653B\u6483\u529B+4\u300120%\u6BD2\n\u30B9\u30AD\u30EB\uFF1A\u30DD\u30A4\u30BA\u30F3\u30A2\u30BF\u30C3\u30AF\uFF08CT3\u30011\u500D\u300140\uFF05\u6BD2\uFF09"
   icon: {fileID: 0}
-  Minfloor: 1
+  Minfloor: 4
   Minstep: 1
-  Maxfloor: 3
+  Maxfloor: 10
   Maxstep: 20
   category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
   curesPoison: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
   weaponAttribute: 1
   attackPower: 3
   skills:

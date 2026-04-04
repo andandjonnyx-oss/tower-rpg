@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W001_Bokutou
   itemName: "\u6728\u5200"
-  description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002\u653B\u6483\u529B+3\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u3001\u30C0\u30E1\u30FC\u30B8\u500D\u73872)"
+  description: "\u4FEE\u5B66\u65C5\u884C\u306E\u304A\u571F\u7523\u3002\u653B\u6483\u529B+3\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u30012\u500D)"
   icon: {fileID: -8450684057588575366, guid: 62c2ee3665fe99f49bfe5e9309265fed, type: 3}
   Minfloor: 1
   Minstep: 1
@@ -26,6 +26,10 @@ MonoBehaviour:
   healAmount: 0
   curesPoison: 0
   statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
   weaponAttribute: 1
   attackPower: 3
   skills:

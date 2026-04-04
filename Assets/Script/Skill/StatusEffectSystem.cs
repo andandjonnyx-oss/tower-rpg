@@ -8,6 +8,11 @@ using UnityEngine;
 ///   塔移動中: 1歩ごとに最大HPの3%ダメージ（四捨五入、最低1）、10%で自然治癒
 ///   戦闘終了後もプレイヤーの毒状態は残る
 ///
+/// 気絶（Stun）の仕様:
+///   戦闘中のみ。付与されたターンの敵の行動がスキップされる。
+///   1ターン限定で、ターン終了時に自動解除される。
+///   プレイヤー→敵のみ対応（武器付与またはスキル追加効果で付与）。
+///
 /// 付与判定:
 ///   実質命中率 = 基礎命中率 × (1 - 耐性/100)
 ///   耐性50なら、ポイズン（80%）の実質命中率は 80 × (1 - 50/100) = 40%
@@ -224,5 +229,40 @@ public static class StatusEffectSystem
         if (GameState.I == null) return;
         GameState.I.isPoisoned = false;
         Debug.Log("[StatusEffect] Player poison cured!");
+    }
+
+    // =========================================================
+    // 気絶（スタン）付与判定
+    // =========================================================
+    //
+    // 気絶は戦闘中のみ有効な1ターン限定の行動不能状態。
+    // プレイヤー→敵のみ対応。敵→プレイヤーは現状未対応。
+    //
+    // 付与判定は毒と同じ TryInflict() を使用する。
+    // 敵のスタン耐性は Monster.StunResistance で参照する。
+    //
+    // スタンフラグ（enemyIsStunned）は BattleSceneController 側で管理する。
+    // StatusEffectSystem はあくまで付与判定のユーティリティのみ提供する。
+    // =========================================================
+
+    /// <summary>
+    /// 敵へのスタン付与判定を行う。
+    /// 毒と同じ TryInflict() を使い、耐性を考慮して判定する。
+    /// </summary>
+    /// <param name="baseChance">基礎付与率（%）</param>
+    /// <param name="targetResistance">対象の気絶耐性値</param>
+    /// <returns>true: 付与成功、false: 付与失敗</returns>
+    public static bool TryStunEnemy(float baseChance, int targetResistance)
+    {
+        return TryInflict(baseChance, targetResistance);
+    }
+
+    /// <summary>
+    /// 敵のスタン耐性を取得する。
+    /// </summary>
+    public static int GetEnemyStunResistance(Monster monster)
+    {
+        if (monster == null) return 0;
+        return monster.StunResistance;
     }
 }
