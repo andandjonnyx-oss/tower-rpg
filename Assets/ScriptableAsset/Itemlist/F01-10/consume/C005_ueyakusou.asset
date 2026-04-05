@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: C005_ueyakusou
   itemName: "\u4E0A\u85AC\u8349"
-  description: "\u3046\u308F\u3084\u304F\u305D\u3046\nHP100\u56DE\u5FA9"
+  description: "\u3046\u308F\u3084\u304F\u305D\u3046\nHP75\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 6
   Minstep: 1
@@ -23,7 +23,8 @@ MonoBehaviour:
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 100
+  healAmount: 75
+  mpHealAmount: 0
   curesPoison: 0
   statusPointGain: 0
   battleDamage: 0

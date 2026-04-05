@@ -232,6 +232,13 @@ public class StorageContext : MonoBehaviour, IItemContext
             Debug.Log($"[Storage] HPâÒïú +{invItem.data.healAmount} (HP: {GameState.I.currentHp}/{GameState.I.maxHp})");
         }
 
+        if (invItem.data.mpHealAmount > 0)
+        {
+            GameState.I.currentMp += invItem.data.mpHealAmount;
+            if (GameState.I.currentMp > GameState.I.maxMp)
+                GameState.I.currentMp = GameState.I.maxMp;
+        }
+
         // ì≈è¡Çµ
         if (invItem.data.curesPoison)
         {

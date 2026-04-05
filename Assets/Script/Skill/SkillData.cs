@@ -145,6 +145,12 @@ public class SkillData : ScriptableObject
            + "例: 三連突き = hitCount=3, damageMultiplier=0.6")]
     public int hitCount = 1;
 
+    [Header("Field Usage")]
+    [Tooltip("true の場合、塔シーン（非バトル時）でも使用可能。\n"
+       + "所持魔法のうちこのフラグが true のものだけが塔の魔法ドロップダウンに表示される。\n"
+       + "ヒール・毒消し等の回復系魔法に設定する。")]
+    public bool noBattleOk = false;
+
     // =========================================================
     // 追加効果リスト
     // =========================================================

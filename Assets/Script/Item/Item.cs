@@ -24,6 +24,7 @@ public class ItemData : ScriptableObject
 
     [Header("Consumable")]
     public int healAmount;
+    public int mpHealAmount = 0;
 
     // =========================================================
     // 消費アイテム: 状態異常回復（追加）

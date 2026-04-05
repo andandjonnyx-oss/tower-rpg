@@ -160,6 +160,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // 必要な値を事前に取得しておく
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.healAmount;
+        int mpHeal = invItem.data.mpHealAmount;
         bool curesPoison = invItem.data.curesPoison;
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
@@ -177,6 +178,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             GameState.I.currentHp += healAmount;
             if (GameState.I.currentHp > GameState.I.maxHp)
                 GameState.I.currentHp = GameState.I.maxHp;
+        }
+
+        if (mpHeal > 0 && GameState.I != null)
+        {
+            GameState.I.currentMp += mpHeal;
+            if (GameState.I.currentMp > GameState.I.maxMp)
+                GameState.I.currentMp = GameState.I.maxMp;
         }
 
         // =========================================================

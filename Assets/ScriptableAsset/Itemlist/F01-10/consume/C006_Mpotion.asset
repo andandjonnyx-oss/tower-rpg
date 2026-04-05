@@ -24,6 +24,7 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 30
   curesPoison: 0
   statusPointGain: 0
   battleDamage: 0

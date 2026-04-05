@@ -229,6 +229,43 @@ public static class PassiveCalculator
         return result;
     }
 
+    /// <summary>
+    /// 非バトルで使用可能な魔法スキル一覧を返す。
+    /// CollectMagicSkills() と同じロジックだが、
+    /// noBattleOk == true のスキルのみ収集する。
+    /// 塔シーンの魔法ドロップダウンで使用する。
+    /// </summary>
+    public static List<SkillData> CollectNoBattleMagicSkills()
+    {
+        var result = new List<SkillData>();
+        var seenIds = new HashSet<string>();
+
+        var items = GetInventoryItems();
+        if (items == null) return result;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var invItem = items[i];
+            if (invItem?.data == null) continue;
+            if (invItem.data.category != ItemCategory.Magic) continue;
+            if (invItem.data.magicSkill == null) continue;
+
+            var skill = invItem.data.magicSkill;
+
+            // noBattleOk が false のスキルはスキップ
+            if (!skill.noBattleOk) continue;
+
+            // 同じ skillId のスキルは重複させない
+            if (string.IsNullOrEmpty(skill.skillId)) continue;
+            if (seenIds.Contains(skill.skillId)) continue;
+
+            seenIds.Add(skill.skillId);
+            result.Add(skill);
+        }
+
+        return result;
+    }
+
     // =========================================================
     // 内部: 効果値の収集
     // =========================================================
