@@ -522,7 +522,7 @@ public partial class BattleSceneController
             // プレイヤーターンに戻す
             SetButtonsInteractable(true);
             RefreshSkillButton();
-            RefreshMagicDropdown();
+            RefreshMagicSelector();
         });
     }
 }

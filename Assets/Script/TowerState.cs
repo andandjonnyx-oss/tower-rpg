@@ -22,13 +22,13 @@ public class TowerState : MonoBehaviour
     [SerializeField] private TextMeshProUGUI statusEffectText;
 
     // =========================================================
-    // 非バトル魔法 UI（追加）
+    // 非バトル魔法 UI（MagicSelector 版に変更）
     // =========================================================
     [Header("UI - Field Magic")]
-    [Tooltip("塔シーン用の魔法選択ドロップダウン。\n"
+    [Tooltip("塔シーン用の魔法選択ドロップダウン（自作 MagicSelector）。\n"
            + "noBattleOk == true の魔法スキルのみ表示される。\n"
            + "未設定の場合は魔法UIを表示しない。")]
-    [SerializeField] private TMP_Dropdown magicDropdown;
+    [SerializeField] private MagicSelector magicSelector;
 
     [Tooltip("魔法実行ボタン。")]
     [SerializeField] private Button magicButton;
@@ -183,7 +183,7 @@ public class TowerState : MonoBehaviour
     }
 
     // =========================================================
-    // 非バトル魔法（追加）
+    // 非バトル魔法（MagicSelector 版に変更）
     // =========================================================
     //
     // 塔シーンで noBattleOk == true の魔法を使用できる。
@@ -193,7 +193,7 @@ public class TowerState : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// 非バトル魔法のドロップダウンとボタンを更新する。
+    /// 非バトル魔法の MagicSelector とボタンを更新する。
     /// noBattleOk == true のスキルがなければ UI を非表示にする。
     /// </summary>
     private void RefreshFieldMagicUI()
@@ -202,23 +202,20 @@ public class TowerState : MonoBehaviour
 
         if (fieldMagicList.Count == 0)
         {
-            if (magicDropdown != null) magicDropdown.gameObject.SetActive(false);
+            if (magicSelector != null) magicSelector.SetVisible(false);
             if (magicButton != null) magicButton.gameObject.SetActive(false);
             return;
         }
 
-        if (magicDropdown != null)
+        if (magicSelector != null)
         {
-            magicDropdown.gameObject.SetActive(true);
-            magicDropdown.ClearOptions();
-            var options = new List<string>();
+            magicSelector.SetVisible(true);
+            var optionLabels = new List<string>();
             for (int i = 0; i < fieldMagicList.Count; i++)
             {
-                options.Add($"{fieldMagicList[i].skillName} (MP:{fieldMagicList[i].mpCost})");
+                optionLabels.Add($"{fieldMagicList[i].skillName} (MP:{fieldMagicList[i].mpCost})");
             }
-            magicDropdown.AddOptions(options);
-            magicDropdown.value = 0;
-            magicDropdown.RefreshShownValue();
+            magicSelector.SetOptions(optionLabels);
         }
 
         if (magicButton != null)
@@ -229,14 +226,14 @@ public class TowerState : MonoBehaviour
 
     /// <summary>
     /// 魔法ボタンが押された時の処理。
-    /// ドロップダウンで選択中のスキルを MP 消費して実行する。
+    /// MagicSelector で選択中のスキルを MP 消費して実行する。
     /// </summary>
     private void OnFieldMagicClicked()
     {
-        if (magicDropdown == null) return;
+        if (magicSelector == null) return;
         if (fieldMagicList == null || fieldMagicList.Count == 0) return;
 
-        int index = magicDropdown.value;
+        int index = magicSelector.Value;
         if (index < 0 || index >= fieldMagicList.Count) return;
 
         SkillData magic = fieldMagicList[index];

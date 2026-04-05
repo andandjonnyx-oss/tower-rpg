@@ -24,7 +24,17 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 0
   curesPoison: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
@@ -50,4 +60,4 @@ MonoBehaviour:
     targetStatusEffect: 0
     value: 20
     floatValue: 0
-  sortOrder: 0
+  sortOrder: 5

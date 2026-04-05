@@ -53,9 +53,9 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("防御コマンドボタン。防御中は物理・魔法防御力2倍、ダイス成功率UP。")]
     [SerializeField] private Button defendButton;
 
-    [Header("UI - Magic Dropdown")]
-    [Tooltip("所持中の魔法スキルを選択するドロップダウン")]
-    [SerializeField] private TMP_Dropdown magicDropdown;
+    [Header("UI - Magic Selector")]
+    [Tooltip("所持中の魔法スキルを選択する自作ドロップダウン（MagicSelector）")]
+    [SerializeField] private MagicSelector magicSelector;
 
     // =========================================================
     // コンティニューポップアップ UI（追加）
@@ -176,7 +176,7 @@ public partial class BattleSceneController : MonoBehaviour
     // 装備中武器の InventoryItem キャッシュ（スキルクールダウン管理用）
     private InventoryItem equippedWeaponItem;
 
-    // 魔法ドロップダウンに表示中のスキル一覧キャッシュ
+    // 魔法セレクターに表示中のスキル一覧キャッシュ
     private List<SkillData> magicSkillList = new List<SkillData>();
 
     // =========================================================
@@ -292,19 +292,19 @@ public partial class BattleSceneController : MonoBehaviour
                 {
                     FlushLogsAndThen(() => OnVictory());
                     RefreshSkillButton();
-                    RefreshMagicDropdown();
+                    RefreshMagicSelector();
                     return;
                 }
 
                 Invoke(nameof(EnemyTurn), 0.5f);
                 RefreshSkillButton();
-                RefreshMagicDropdown();
+                RefreshMagicSelector();
                 return;
             }
         }
 
         RefreshSkillButton();
-        RefreshMagicDropdown();
+        RefreshMagicSelector();
     }
 
     // =========================================================
@@ -882,28 +882,25 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
-    // 魔法ドロップダウン関連ユーティリティ
+    // 魔法セレクター関連ユーティリティ（MagicSelector 版に変更）
     // =========================================================
 
-    private void RefreshMagicDropdown()
+    private void RefreshMagicSelector()
     {
         magicSkillList = PassiveCalculator.CollectMagicSkills();
         if (magicSkillList.Count == 0)
         {
-            if (magicDropdown != null) magicDropdown.gameObject.SetActive(false);
+            if (magicSelector != null) magicSelector.SetVisible(false);
             if (magicButton != null) magicButton.gameObject.SetActive(false);
             return;
         }
-        if (magicDropdown != null)
+        if (magicSelector != null)
         {
-            magicDropdown.gameObject.SetActive(true);
-            magicDropdown.ClearOptions();
-            var options = new List<string>();
+            magicSelector.SetVisible(true);
+            var optionLabels = new List<string>();
             for (int i = 0; i < magicSkillList.Count; i++)
-                options.Add($"{magicSkillList[i].skillName} (MP:{magicSkillList[i].mpCost})");
-            magicDropdown.AddOptions(options);
-            magicDropdown.value = 0;
-            magicDropdown.RefreshShownValue();
+                optionLabels.Add($"{magicSkillList[i].skillName} (MP:{magicSkillList[i].mpCost})");
+            magicSelector.SetOptions(optionLabels);
         }
         if (magicButton != null)
         {
@@ -914,9 +911,9 @@ public partial class BattleSceneController : MonoBehaviour
 
     private SkillData GetSelectedMagicSkill()
     {
-        if (magicDropdown == null) return null;
+        if (magicSelector == null) return null;
         if (magicSkillList == null || magicSkillList.Count == 0) return null;
-        int index = magicDropdown.value;
+        int index = magicSelector.Value;
         if (index < 0 || index >= magicSkillList.Count) return null;
         return magicSkillList[index];
     }
