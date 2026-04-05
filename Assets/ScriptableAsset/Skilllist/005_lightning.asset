@@ -20,8 +20,9 @@ MonoBehaviour:
   skillAttribute: 5
   damageCategory: 1
   damageMultiplier: 0
-  fixedDamage: 20
+  bonusDamage: 20
   cooldownTurns: 0
   mpCost: 7
   baseHitRate: 95
+  hitCount: 1
   additionalEffects: []

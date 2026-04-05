@@ -110,6 +110,15 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                     list.Add(new DetailButtonDef("外す", () => UnequipWeapon(invItem)));
                 else
                     list.Add(new DetailButtonDef("装備", () => EquipWeapon(invItem)));
+
+                // =========================================================
+                // 食べられる武器（追加）
+                // isEdible == true の場合、「食べる」ボタンを追加
+                // =========================================================
+                if (invItem.data.isEdible)
+                {
+                    list.Add(new DetailButtonDef("食べる", () => EatWeapon(invItem)));
+                }
                 break;
 
             case ItemCategory.Magic:
@@ -153,6 +162,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         int healAmount = invItem.data.healAmount;
         bool curesPoison = invItem.data.curesPoison;
         int spGain = invItem.data.statusPointGain;
+        ItemData transformInto = invItem.data.transformInto;
 
         // =========================================================
         // 攻撃アイテム: ダメージ情報の事前取得（追加）
@@ -199,7 +209,18 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             Debug.Log($"[Itembox] 攻撃アイテム使用: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
         }
 
+        // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);
+
+        // =========================================================
+        // 使用後にアイテム変化（追加）
+        // 先に元アイテムを消してから追加するので枠は±0
+        // =========================================================
+        if (transformInto != null && ItemBoxManager.Instance != null)
+        {
+            ItemBoxManager.Instance.AddItem(transformInto);
+            Debug.Log($"[Itembox] アイテム変化: {itemName} → {transformInto.itemName}");
+        }
 
         // ログメッセージの組み立て
         string logMsg = $"You は {itemName} を使った！";
@@ -207,6 +228,70 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             logMsg += $" ステータスポイント +{spGain}！";
         }
+        if (transformInto != null)
+        {
+            logMsg += $" {transformInto.itemName} を手に入れた！";
+        }
+
+        AfterAction(logMsg);
+    }
+
+    // =========================================================
+    // 武器を食べる（追加）
+    // =========================================================
+    //
+    // isEdible == true の武器を消費する。
+    // 装備中の場合は自動的に外してから消費する。
+    // 回復効果を適用し、transformInto があれば変化先を追加する。
+    // バトル中は1ターン消費する。
+    // =========================================================
+
+    private void EatWeapon(InventoryItem invItem)
+    {
+        if (invItem?.data == null) return;
+        if (!invItem.data.isEdible) return;
+
+        // 事前取得（RemoveItem 後に参照できなくなるため）
+        string itemName = invItem.data.itemName;
+        int healAmount = invItem.data.eatHealAmount;
+        bool curesPoison = invItem.data.eatCuresPoison;
+        ItemData transformInto = invItem.data.transformInto;
+
+        // 装備中なら外す
+        if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
+        {
+            GameState.I.equippedWeaponUid = "";
+            Debug.Log($"[Itembox] 食べる前に装備を外した: {itemName}");
+        }
+
+        // 回復効果の適用
+        if (healAmount > 0 && GameState.I != null)
+        {
+            GameState.I.currentHp += healAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+        }
+
+        // 毒消し
+        if (curesPoison && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayerPoison();
+        }
+
+        // 元アイテムを消す
+        ItemBoxManager.Instance?.RemoveItem(invItem);
+
+        // 変化先アイテムを追加
+        if (transformInto != null && ItemBoxManager.Instance != null)
+        {
+            ItemBoxManager.Instance.AddItem(transformInto);
+            Debug.Log($"[Itembox] 食べて変化: {itemName} → {transformInto.itemName}");
+        }
+
+        // ログ
+        string logMsg = $"You は {itemName} を食べた！";
+        if (healAmount > 0) logMsg += $" HP が {healAmount} 回復した！";
+        if (transformInto != null) logMsg += $" {transformInto.itemName} を手に入れた！";
 
         AfterAction(logMsg);
     }

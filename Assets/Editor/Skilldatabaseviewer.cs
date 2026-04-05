@@ -202,7 +202,7 @@ public class SkillDatabaseViewer : EditorWindow
         GUILayout.Label("名前", EditorStyles.boldLabel, GUILayout.Width(140));
         GUILayout.Label("ソース", EditorStyles.boldLabel, GUILayout.Width(70));
         GUILayout.Label("属性", EditorStyles.boldLabel, GUILayout.Width(60));
-        GUILayout.Label("倍率/固定", EditorStyles.boldLabel, GUILayout.Width(80));
+        GUILayout.Label("ダメージ", EditorStyles.boldLabel, GUILayout.Width(100));
         GUILayout.Label("追加効果", EditorStyles.boldLabel, GUILayout.Width(60));
         GUILayout.FlexibleSpace();
         GUILayout.Label("詳細", EditorStyles.boldLabel, GUILayout.Width(60));
@@ -218,15 +218,17 @@ public class SkillDatabaseViewer : EditorWindow
         GUILayout.Label(skill.skillSource.ToString(), GUILayout.Width(70));
         GUILayout.Label(skill.skillAttribute.ToJapanese(), GUILayout.Width(60));
 
-        // 倍率/固定ダメージの表示
+        // ダメージ表示（bonusDamage 統合対応）
         string dmgStr;
         if (skill.IsNonDamage)
             dmgStr = "効果のみ";
-        else if (skill.fixedDamage > 0)
-            dmgStr = $"固定{skill.fixedDamage}";
-        else
+        else if (skill.damageMultiplier > 0f && skill.bonusDamage > 0)
+            dmgStr = $"x{skill.damageMultiplier}+{skill.bonusDamage}";
+        else if (skill.damageMultiplier > 0f)
             dmgStr = $"x{skill.damageMultiplier}";
-        GUILayout.Label(dmgStr, GUILayout.Width(80));
+        else
+            dmgStr = $"固定{skill.bonusDamage}";
+        GUILayout.Label(dmgStr, GUILayout.Width(100));
 
         // 追加効果の数
         int effectCount = (skill.additionalEffects != null) ? skill.additionalEffects.Count : 0;

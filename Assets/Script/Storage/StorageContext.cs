@@ -117,6 +117,14 @@ public class StorageContext : MonoBehaviour, IItemContext
                     list.Add(new DetailButtonDef("外す", () => UnequipWeapon(invItem)));
                 else
                     list.Add(new DetailButtonDef("装備", () => EquipWeapon(invItem)));
+
+                // =========================================================
+                // 食べられる武器（追加）
+                // =========================================================
+                if (invItem.data.isEdible)
+                {
+                    list.Add(new DetailButtonDef("食べる", () => EatWeaponFromInventory(invItem)));
+                }
                 break;
             case ItemCategory.Magic:
                 break;
@@ -136,6 +144,12 @@ public class StorageContext : MonoBehaviour, IItemContext
         // =========================================================
         if (invItem.data.category == ItemCategory.Consumable && !invItem.data.battleOnly)
             list.Add(new DetailButtonDef("使う", () => UseConsumableFromStorage(invItem)));
+
+        // =========================================================
+        // 倉庫側でも食べられる武器は「食べる」表示（追加）
+        // =========================================================
+        if (invItem.data.category == ItemCategory.Weapon && invItem.data.isEdible)
+            list.Add(new DetailButtonDef("食べる", () => EatWeaponFromStorage(invItem)));
 
         list.Add(new DetailButtonDef("捨てる", () => DiscardFromStorage(invItem)));
 
@@ -236,14 +250,103 @@ public class StorageContext : MonoBehaviour, IItemContext
     private void UseConsumableFromInventory(InventoryItem invItem)
     {
         ApplyConsumableEffects(invItem);
+        ItemData transformInto = invItem.data?.transformInto;
         ItemBoxManager.Instance?.RemoveItem(invItem);
+
+        // =========================================================
+        // 使用後にアイテム変化（追加）
+        // =========================================================
+        if (transformInto != null && ItemBoxManager.Instance != null)
+        {
+            ItemBoxManager.Instance.AddItem(transformInto);
+            Debug.Log($"[Storage] アイテム変化（所持品）: → {transformInto.itemName}");
+        }
+
         AfterAction();
     }
 
     private void UseConsumableFromStorage(InventoryItem invItem)
     {
         ApplyConsumableEffects(invItem);
+        ItemData transformInto = invItem.data?.transformInto;
         StorageManager.Instance?.RemoveItem(invItem);
+
+        // =========================================================
+        // 使用後にアイテム変化（追加）
+        // 倉庫から使った場合、変化先は倉庫に入る
+        // =========================================================
+        if (transformInto != null && StorageManager.Instance != null)
+        {
+            StorageManager.Instance.AddItem(transformInto);
+            Debug.Log($"[Storage] アイテム変化（倉庫）: → {transformInto.itemName}");
+        }
+
+        AfterAction();
+    }
+
+    // =========================================================
+    // 武器を食べる（追加）
+    // =========================================================
+
+    private void EatWeaponFromInventory(InventoryItem invItem)
+    {
+        if (invItem?.data == null || !invItem.data.isEdible) return;
+
+        // 装備中なら外す
+        if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
+        {
+            GameState.I.equippedWeaponUid = "";
+        }
+
+        // 回復効果
+        if (invItem.data.eatHealAmount > 0 && GameState.I != null)
+        {
+            GameState.I.currentHp += invItem.data.eatHealAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+        }
+        if (invItem.data.eatCuresPoison && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayerPoison();
+        }
+
+        ItemData transformInto = invItem.data.transformInto;
+        ItemBoxManager.Instance?.RemoveItem(invItem);
+
+        // 変化先を所持品に追加
+        if (transformInto != null && ItemBoxManager.Instance != null)
+        {
+            ItemBoxManager.Instance.AddItem(transformInto);
+        }
+
+        AfterAction();
+    }
+
+    private void EatWeaponFromStorage(InventoryItem invItem)
+    {
+        if (invItem?.data == null || !invItem.data.isEdible) return;
+
+        // 回復効果
+        if (invItem.data.eatHealAmount > 0 && GameState.I != null)
+        {
+            GameState.I.currentHp += invItem.data.eatHealAmount;
+            if (GameState.I.currentHp > GameState.I.maxHp)
+                GameState.I.currentHp = GameState.I.maxHp;
+        }
+        if (invItem.data.eatCuresPoison && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayerPoison();
+        }
+
+        ItemData transformInto = invItem.data.transformInto;
+        StorageManager.Instance?.RemoveItem(invItem);
+
+        // 変化先は倉庫に入る
+        if (transformInto != null && StorageManager.Instance != null)
+        {
+            StorageManager.Instance.AddItem(transformInto);
+        }
+
         AfterAction();
     }
 

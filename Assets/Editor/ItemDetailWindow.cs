@@ -288,7 +288,25 @@ public class ItemDetailWindow : EditorWindow
             var ms = item.magicSkill;
             EditorGUILayout.LabelField("スキル名", ms.skillName);
             EditorGUILayout.LabelField("属性", ms.skillAttribute.ToJapanese());
-            EditorGUILayout.LabelField("固定ダメージ", ms.fixedDamage.ToString());
+
+            // ダメージ式プレビュー
+            if (ms.IsNonDamage)
+            {
+                EditorGUILayout.LabelField("ダメージ", "非ダメージ（効果のみ）");
+            }
+            else if (ms.damageMultiplier > 0f && ms.bonusDamage > 0)
+            {
+                EditorGUILayout.LabelField("ダメージ", $"MagicAtk×{ms.damageMultiplier:F1}+{ms.bonusDamage}");
+            }
+            else if (ms.damageMultiplier > 0f)
+            {
+                EditorGUILayout.LabelField("ダメージ", $"MagicAtk×{ms.damageMultiplier:F1}");
+            }
+            else
+            {
+                EditorGUILayout.LabelField("ダメージ", $"固定{ms.bonusDamage}");
+            }
+
             EditorGUILayout.LabelField("MP消費", ms.mpCost.ToString());
         }
         else

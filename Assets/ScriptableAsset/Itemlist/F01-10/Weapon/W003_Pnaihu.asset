@@ -52,4 +52,4 @@ MonoBehaviour:
     value: 50
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 3

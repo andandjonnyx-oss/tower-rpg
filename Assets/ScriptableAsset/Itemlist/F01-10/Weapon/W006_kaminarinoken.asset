@@ -46,8 +46,10 @@ MonoBehaviour:
   equipEvasion: 0
   equipCritical: 0
   baseHitRate: 95
-  equipResistances: []
+  equipResistances:
+  - attribute: 5
+    value: 50
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 6
