@@ -304,8 +304,8 @@ public partial class BattleSceneController
     ///   属性耐性計算が全ての攻撃に適用される。
     ///
     /// 非ダメージスキル判定:
-    ///   IsNonDamage == true の場合はダメージ計算をスキップし、
-    ///   追加効果のみ実行する。
+    ///   IsNonDamage == true の場合はダメージ計算・命中判定をスキップし、
+    ///   追加効果のみ実行する（ヒール等の自己対象スキルは命中判定不要）。
     ///
     /// ダメージ計算:
     ///   1. fixedDamage > 0 ならそれを使用
@@ -320,18 +320,9 @@ public partial class BattleSceneController
     /// </summary>
     private void ExecuteEnemySkillAttack(SkillData skill)
     {
-        if (!CheckEnemyHit(skill.baseHitRate))
-        {
-            string missName = !string.IsNullOrEmpty(skill.skillName)
-                ? skill.skillName
-                : $"{skill.skillAttribute.ToJapanese()}攻撃";
-            AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
-            AfterEnemyAction();
-            return;
-        }
-
         // =========================================================
-        // 非ダメージスキル: 追加効果のみ実行
+        // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
+        // （ヒール等の自己対象スキルは命中判定不要）
         // =========================================================
         if (skill.IsNonDamage)
         {
@@ -341,6 +332,17 @@ public partial class BattleSceneController
             // 追加効果の実行
             ProcessEnemySkillEffects(skill);
 
+            AfterEnemyAction();
+            return;
+        }
+
+        // --- ここから先はダメージスキルのみ ---
+        if (!CheckEnemyHit(skill.baseHitRate))
+        {
+            string missName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName
+                : $"{skill.skillAttribute.ToJapanese()}攻撃";
+            AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
             AfterEnemyAction();
             return;
         }

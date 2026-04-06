@@ -95,6 +95,9 @@ public partial class BattleSceneController
     /// <summary>
     /// 先制技を実行する。SkillAttack と同じダメージ計算を行う。
     /// ターン終了処理（毒ダメージ等）は行わない（プレイヤー行動後に行う）。
+    ///
+    /// 非ダメージスキル:
+    ///   IsNonDamage == true の場合は命中判定をスキップし、追加効果のみ実行する。
     /// </summary>
     private void ExecutePreemptiveAction(EnemyActionEntry action)
     {
@@ -106,21 +109,25 @@ public partial class BattleSceneController
 
         SkillData skill = action.skill;
 
+        // =========================================================
+        // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
+        // （ヒール等の自己対象スキルは命中判定不要）
+        // =========================================================
+        if (skill.IsNonDamage)
+        {
+            string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "先制スキル";
+            AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
+            ProcessEnemySkillEffects(skill);
+            return;
+        }
+
+        // --- ここから先はダメージスキルのみ ---
         // 命中判定
         if (!CheckEnemyHit(skill.baseHitRate))
         {
             string missName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName : "先制攻撃";
             AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
-            return;
-        }
-
-        // 非ダメージスキル: 追加効果のみ
-        if (skill.IsNonDamage)
-        {
-            string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "先制スキル";
-            AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
-            ProcessEnemySkillEffects(skill);
             return;
         }
 
@@ -335,7 +342,7 @@ public partial class BattleSceneController
     ///   → 防御ダイスで軽減
     ///
     /// 非ダメージスキル:
-    ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
+    ///   IsNonDamage == true の場合は命中判定・ダメージ計算をスキップし、追加効果のみ実行。
     ///
     /// 命中判定:
     ///   skill.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
@@ -368,20 +375,24 @@ public partial class BattleSceneController
         // 先制攻撃割り込み
         if (ExecutePreemptiveIfNeeded()) return;
 
-        if (!CheckPlayerHit(skill.baseHitRate))
-        {
-            AddLog($"You は {skill.skillName}！ …しかし外れた！");
-            FlushLogsAndThen(() => EnemyTurn());
-            return;
-        }
-
-        // 非ダメージスキル: 追加効果のみ実行
+        // =========================================================
+        // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
+        // （ヒール等の自己対象スキルは命中判定不要）
+        // =========================================================
         if (skill.IsNonDamage)
         {
             AddLog($"You は {skill.skillName}！");
             ProcessPlayerSkillEffects(skill);
 
             if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
+        // --- ここから先はダメージスキルのみ ---
+        if (!CheckPlayerHit(skill.baseHitRate))
+        {
+            AddLog($"You は {skill.skillName}！ …しかし外れた！");
             FlushLogsAndThen(() => EnemyTurn());
             return;
         }
@@ -494,7 +505,7 @@ public partial class BattleSceneController
     ///   → 防御ダイスで軽減
     ///
     /// 非ダメージスキル:
-    ///   IsNonDamage == true の場合はダメージ計算をスキップし、追加効果のみ実行。
+    ///   IsNonDamage == true の場合は命中判定・ダメージ計算をスキップし、追加効果のみ実行。
     ///
     /// 命中判定:
     ///   magic.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
@@ -524,20 +535,24 @@ public partial class BattleSceneController
         // 先制攻撃割り込み
         if (ExecutePreemptiveIfNeeded()) return;
 
-        if (!CheckPlayerHit(magic.baseHitRate))
-        {
-            AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
-            FlushLogsAndThen(() => EnemyTurn());
-            return;
-        }
-
-        // 非ダメージスキル: 追加効果のみ実行
+        // =========================================================
+        // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
+        // （ヒール等の自己対象スキルは命中判定不要）
+        // =========================================================
         if (magic.IsNonDamage)
         {
             AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
             ProcessPlayerSkillEffects(magic);
 
             if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
+        // --- ここから先はダメージスキルのみ ---
+        if (!CheckPlayerHit(magic.baseHitRate))
+        {
+            AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
             FlushLogsAndThen(() => EnemyTurn());
             return;
         }
