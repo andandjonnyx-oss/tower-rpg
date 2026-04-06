@@ -19,7 +19,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 10
+  Maxfloor: 5
   Maxstep: 20
   category: 2
   stackable: 1

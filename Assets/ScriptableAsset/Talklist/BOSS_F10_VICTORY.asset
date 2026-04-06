@@ -12,23 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
   m_Name: BOSS_F10_VICTORY
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
-  id: BOSS_F03_VICTORY
+  id: BOSS_F10_VICTORY
   floor: 0
   step: 0
+  backgroundImage: {fileID: 0}
   lines:
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: "\u304A"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: "\u3081"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: "\u3067"
     portrait: {fileID: -6922821552594260532, guid: 141cfae8b6673e24dbf751aad5e13ead, type: 3}
+    backgroundOverride: {fileID: 0}
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: "\u3068"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: "\u3046"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
   conditions: []
+  rewardItem: {fileID: 0}

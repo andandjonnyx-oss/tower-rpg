@@ -18,18 +18,23 @@ MonoBehaviour:
   icon: {fileID: 0}
   Minfloor: 4
   Minstep: 1
-  Maxfloor: 10
+  Maxfloor: 7
   Maxstep: 20
   category: 0
   stackable: 1
   maxStack: 99
   healAmount: 20
+  mpHealAmount: 0
   curesPoison: 1
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
