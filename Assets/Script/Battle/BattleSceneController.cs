@@ -41,6 +41,14 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("戦闘画面右上に配置するログ詳細ボタン")]
     [SerializeField] private Button fullLogOpenButton;
 
+    // =========================================================
+    // 状態異常表示 UI（追加）
+    // =========================================================
+    [Header("UI - Status Effect")]
+    [Tooltip("戦闘中の状態異常を表示するテキスト。TowerState と同じ表示仕様。")]
+    [SerializeField] private TMP_Text battleStatusEffectText;
+
+
     [Header("UI - Buttons")]
     [SerializeField] private Button attackButton;
     [SerializeField] private Button skillButton;
@@ -305,6 +313,7 @@ public partial class BattleSceneController : MonoBehaviour
 
         RefreshSkillButton();
         RefreshMagicSelector();
+        RefreshBattleStatusEffectUI();
     }
 
     // =========================================================
@@ -1092,6 +1101,31 @@ public partial class BattleSceneController : MonoBehaviour
     ///
     /// 処理後、GameState の一時保存フィールドをリセットする。
     /// </summary>
+    /// 
+    // =========================================================
+    // 状態異常表示（追加）
+    // TowerState.RefreshStatusEffectUI() と同じ表示ロジック。
+    // =========================================================
+
+    /// <summary>
+    /// 戦闘中の状態異常テキストを更新する。
+    /// TowerState と同じ表示仕様（紫色で【毒】等）。
+    /// battleStatusEffectText が未設定なら何もしない。
+    /// </summary>
+    private void RefreshBattleStatusEffectUI()
+    {
+        if (battleStatusEffectText == null) return;
+
+        if (GameState.I != null && GameState.I.isPoisoned)
+        {
+            battleStatusEffectText.text = "【毒】";
+            battleStatusEffectText.color = new Color(0.5f, 0f, 0.8f);
+        }
+        else
+        {
+            battleStatusEffectText.text = "";
+        }
+    }
     private void ApplyBattleItemDamage()
     {
         int baseDamage = GameState.I.pendingBattleItemDamage;

@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M005_kawayoroi
   itemName: "\u9769\u306E\u93A7"
-  description: "HP\uFF0B20"
+  description: "\u7740\u306A\u304F\u3066\u3082\u6301\u3063\u3066\u304A\u304F\u3060\u3051\u3067\u3088\u3044\nHP+20"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 1
+  Maxfloor: 6
   Maxstep: 20
   category: 2
   stackable: 1

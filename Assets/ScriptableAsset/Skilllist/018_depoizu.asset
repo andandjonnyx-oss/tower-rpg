@@ -36,4 +36,4 @@ MonoBehaviour:
     ailmentMode: 1
     targetStatusEffect: 1
     chance: 100
-    intValue: 10
+    intValue: 20

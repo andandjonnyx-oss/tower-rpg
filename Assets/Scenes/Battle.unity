@@ -1730,6 +1730,7 @@ MonoBehaviour:
   fullLogContent: {fileID: 50260379}
   fullLogCloseButton: {fileID: 708634317}
   fullLogOpenButton: {fileID: 906123916}
+  battleStatusEffectText: {fileID: 1478005396}
   attackButton: {fileID: 1910990496}
   skillButton: {fileID: 1744725403}
   itemButton: {fileID: 1930400625}
@@ -4871,7 +4872,7 @@ GameObject:
   - component: {fileID: 1478005397}
   - component: {fileID: 1478005396}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: joutaiijou
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

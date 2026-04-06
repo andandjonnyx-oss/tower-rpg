@@ -295,4 +295,13 @@ public class TowerState : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 外部から魔法UI（MagicSelector + ボタン）を再描画させるための公開メソッド。
+    /// アイテム入手時など、所持品が変わったタイミングで呼ぶ。
+    /// </summary>
+    public void RefreshFieldMagicFromExternal()
+    {
+        RefreshFieldMagicUI();
+    }
+
 }

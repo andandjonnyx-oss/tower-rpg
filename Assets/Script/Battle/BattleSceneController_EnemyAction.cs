@@ -472,6 +472,8 @@ public partial class BattleSceneController
         {
             AddLog(logs[i]);
         }
+
+        RefreshBattleStatusEffectUI(); // š’Ç‰Á: ó‘ÔˆÙíUI‚ğXV
     }
 
     /// <summary>
@@ -523,6 +525,7 @@ public partial class BattleSceneController
             SetButtonsInteractable(true);
             RefreshSkillButton();
             RefreshMagicSelector();
+            RefreshBattleStatusEffectUI();
         });
     }
 }

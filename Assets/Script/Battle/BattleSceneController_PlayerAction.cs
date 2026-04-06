@@ -693,6 +693,8 @@ public partial class BattleSceneController
         {
             AddLog(logs[i]);
         }
+
+        RefreshBattleStatusEffectUI(); // ★追加: 状態異常UIを更新
     }
 
     // =========================================================

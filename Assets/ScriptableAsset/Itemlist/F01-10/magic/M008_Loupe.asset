@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M008_Loupe
   itemName: "\u30EB\u30FC\u30DA"
-  description: 
+  description: "\u6301\u3063\u3066\u304A\u304F\u3068\u6575\u306EHP\u304C\u30D0\u30FC\u3067\u8868\u793A\u3055\u308C\u308B\u3002\n1\u3064\u306F\u6301\u3063\u3066\u304A\u304D\u305F\u3044"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 3
+  Maxfloor: 10
   Maxstep: 20
   category: 2
   stackable: 1

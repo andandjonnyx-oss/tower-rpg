@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M004_kawanotate
   itemName: "\u9769\u306E\u76FE"
-  description: "\u9632\u5FA1\uFF0B\uFF15"
+  description: "\u4F55\u500B\u3067\u3082\u6301\u3066\u308B\uFF08\u52B9\u679C\u306F\u8584\u304F\u306A\u308B\u3051\u3069\uFF09\n\u9632\u5FA1+\uFF15"
   icon: {fileID: 0}
   Minfloor: 1
   Minstep: 1
-  Maxfloor: 1
+  Maxfloor: 3
   Maxstep: 20
   category: 2
   stackable: 1

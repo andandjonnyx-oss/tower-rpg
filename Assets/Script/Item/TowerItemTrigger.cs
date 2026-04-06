@@ -48,21 +48,49 @@ public class TowerItemTrigger : MonoBehaviour
 
         bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
 
+        // =========================================================
+        // 報酬アイテム判定（追加）
+        // =========================================================
+        //
+        // isRewardItem == true の場合:
+        //   Talk イベント報酬で初めて pendingItemData がセットされたケース。
+        //   「整理が完了しました」ではなく通常の入手ポップアップを表示する。
+        //
+        // isRewardItem == false の場合:
+        //   Itembox での整理後に Tower に戻ってきたケース。
+        //   従来通り「整理が完了しました。入手できます。」を表示する。
+        // =========================================================
+        bool isReward = gs.isRewardItem;
+        gs.isRewardItem = false; // フラグをリセット
+
         if (!isFull)
         {
-            // 枠が空いた → 「入手する」ボタン付きでポップアップ再表示
-            // 自動入手はしない（SE やエフェクトを挟む余地を残す）
-            itemPickupWindow.Show(
-                pending.itemName,
-                pending.description + "\n\n整理が完了しました。入手できます。",
-                pending.icon,
-                canGet: true,
-                isFull: false,
-                OnItemResult);
+            if (isReward)
+            {
+                // 報酬アイテム: 通常の入手ポップアップ
+                itemPickupWindow.Show(
+                    pending.itemName,
+                    pending.description,
+                    pending.icon,
+                    canGet: true,
+                    isFull: false,
+                    OnItemResult);
+            }
+            else
+            {
+                // 整理後の復帰: 従来メッセージ
+                itemPickupWindow.Show(
+                    pending.itemName,
+                    pending.description + "\n\n整理が完了しました。入手できます。",
+                    pending.icon,
+                    canGet: true,
+                    isFull: false,
+                    OnItemResult);
+            }
         }
         else
         {
-            // まだ満杯 → 「交換する」ボタンでポップアップ再表示
+            // 満杯 → 「交換する」ボタンでポップアップ再表示
             itemPickupWindow.Show(
                 pending.itemName, pending.description, pending.icon,
                 canGet: false,
@@ -134,6 +162,11 @@ public class TowerItemTrigger : MonoBehaviour
                         : "アイテムBOXが満杯のため入手できなかった");
                 }
                 currentItem = null;
+
+                // ★ 魔法アイテム入手時にTowerの魔法UIを即時更新
+                var towerState = FindAnyObjectByType<TowerState>();
+                if (towerState != null) towerState.RefreshFieldMagicFromExternal();
+
                 IsBusy = false;
                 break;
 

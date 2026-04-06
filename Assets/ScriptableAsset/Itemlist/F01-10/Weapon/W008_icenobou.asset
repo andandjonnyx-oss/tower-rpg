@@ -24,6 +24,7 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 0
   curesPoison: 0
   statusPointGain: 0
   battleDamage: 0
@@ -54,4 +55,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 8

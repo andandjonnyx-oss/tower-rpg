@@ -22,3 +22,5 @@ MonoBehaviour:
   - speaker: "\u30D2\u30ED\u30A4\u30F3"
     text: Hello World
     portrait: {fileID: -6922821552594260532, guid: 141cfae8b6673e24dbf751aad5e13ead, type: 3}
+  conditions: []
+  rewardItem: {fileID: 11400000, guid: 50cbdf1fc8a2948499e6211b24e65c0e, type: 2}

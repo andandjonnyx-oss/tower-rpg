@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M014M_mthun
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M014M_mthun
+  itemName: "\u30DE\u30B8\u30C3\u30AF\u30B5\u30F3\u30C0\u30FC"
+  description: "\u9B54\u529B\u3092\u96F7\u306B\u3057\u3066\u653E\u3064\nMP20 \u96F7\u9B54\u6CD5
+    \u9B54\u6CD5\u653B\u6483\xD75"
+  icon: {fileID: 0}
+  Minfloor: 8
+  Minstep: 1
+  Maxfloor: 10
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 11400000, guid: 5d3d01d8ff10a6c4a9df66ae170b5ee1, type: 2}
+  passiveEffects: []
+  sortOrder: 0

@@ -85,6 +85,25 @@ public class TalkRunner : MonoBehaviour
         gs.MarkPlayed(current.id);
         gs.pendingEventId = null;
 
+        // =========================================================
+        // 報酬アイテム付与（追加）
+        // =========================================================
+        //
+        // TalkEvent.rewardItem が設定されている場合、
+        // GameState.pendingItemData にセットし、isRewardItem フラグを立てて
+        // Tower シーンへ戻す。
+        //
+        // Tower シーンの TowerItemTrigger.Start() → CheckPendingExchange() が
+        // isRewardItem フラグを見て、通常の入手ポップアップを表示する。
+        // （「整理が完了しました」メッセージは表示されない）
+        // =========================================================
+        if (current.rewardItem != null)
+        {
+            gs.pendingItemData = current.rewardItem;
+            gs.isRewardItem = true;
+            Debug.Log($"[TalkRunner] 報酬アイテムを pendingItemData にセット: {current.rewardItem.itemName}");
+        }
+
         SceneManager.LoadScene(towerSceneName);
     }
 }

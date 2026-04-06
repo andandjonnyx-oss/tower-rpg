@@ -15,6 +15,7 @@ public class GameState : MonoBehaviour
 
     [Header("Item Exchange")]
     [NonSerialized] public ItemData pendingItemData = null;
+    [NonSerialized] public bool isRewardItem = false;
 
     [Header("Equipment")]
     public string equippedWeaponUid = "";

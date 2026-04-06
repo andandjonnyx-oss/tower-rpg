@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M007_dokunogohu
   itemName: "\u6BD2\u306E\u8B77\u7B26"
-  description: "\u6BD2\u3092\u9632\u3050"
+  description: "\u6BD2\u3092\u9632\u3050\n\u6BD2\u8010\u6027+50"
   icon: {fileID: 0}
-  Minfloor: 1
+  Minfloor: 4
   Minstep: 1
-  Maxfloor: 3
+  Maxfloor: 10
   Maxstep: 20
   category: 2
   stackable: 1
