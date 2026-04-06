@@ -31,7 +31,12 @@ MonoBehaviour:
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
-  attributeResistances: []
+  StunResistance: 0
+  attributeResistances:
+  - attribute: 0
+    value: 50
+  - attribute: 2
+    value: 50
   Exp: 500
   Gold: 0
   dropItem: {fileID: 0}

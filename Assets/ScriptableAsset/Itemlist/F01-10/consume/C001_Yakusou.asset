@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Item
   itemId: C001_Yakusou
   itemName: "\u85AC\u8349"
-  description: "\u5373\u52B9\u6027\u306E\u3042\u308B\u56DE\u5FA9\u3063\u3066\u51B7\u9759\u306B\u306A\u308B\u3068\u6016\u3044\u3088\u306A\uFF01\nHP50\u56DE\u5FA9"
+  description: "\u5373\u52B9\u6027\u306E\u3042\u308B\u56DE\u5FA9\u3063\u3066\n\u51B7\u9759\u306B\u306A\u308B\u3068\u6016\u3044\u3088\u306A\uFF01\nHP50\u56DE\u5FA9"
   icon: {fileID: -2580401835878434974, guid: aa941e37fc3594e488200af7875fb168, type: 3}
   Minfloor: 1
   Minstep: 1

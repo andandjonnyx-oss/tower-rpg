@@ -31,6 +31,7 @@ MonoBehaviour:
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 100
+  StunResistance: 0
   attributeResistances:
   - attribute: 3
     value: 100
@@ -38,6 +39,8 @@ MonoBehaviour:
     value: -200
   Exp: 100
   Gold: 0
+  dropItem: {fileID: 11400000, guid: 2f3f9f7120f17dc42a575d336b97b5b8, type: 2}
+  dropRate: 0.1
   Help: "\u5263\u3068\u9B54\u6CD5\u306E\u30D5\u30A1\u30F3\u30BF\u30B8\u30FC\u4E16\u754C\u306B\u6A5F\u68B0\u3092\u51FA\u3059\u306A\u3063\u3066\uFF1F\n\u305D\u308C\u306F\u8A00\u308F\u306A\u3044\u7D04\u675F\u3060\u308D\uFF01\uFF1F"
   actions:
   - skill: {fileID: 11400000, guid: 5f16bb4b365c9cd4d92cefae0b354b1e, type: 2}

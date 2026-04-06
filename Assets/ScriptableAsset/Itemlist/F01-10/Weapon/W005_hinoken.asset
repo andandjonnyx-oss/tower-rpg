@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W005_hinoken
   itemName: "\u706B\u306E\u5263"
-  description: "\u901A\u5E38\u306F\u708E\u3060\u304C\u30B9\u30AD\u30EB\u306F\u65AC\u3002\u8907\u5408\u5C5E\u6027\uFF1F\u306D\u30FC\u3088\n\u653B\u6483\u529B+10\u3000\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u30012\u500D)"
+  description: "\u901A\u5E38\u306F\u708E\u3060\u304C\u30B9\u30AD\u30EB\u306F\u65AC\u3002\u8907\u5408\u5C5E\u6027\uFF1F\u306D\u30FC\u3088\n\u653B\u6483\u529B+10\u3000\u706B\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u30012\u500D)"
   icon: {fileID: 0}
   Minfloor: 6
   Minstep: 1
@@ -24,12 +24,17 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 0
   curesPoison: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
   weaponAttribute: 3
   attackPower: 10
   skills:

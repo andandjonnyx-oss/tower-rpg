@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F07_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F07_S02
+  floor: 7
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30EB\u30FC\u30DA\u306F\u6301\u3063\u3066\u308B\u304B\uFF1F\n\u6575\u306EHP\u304C\u30D0\u30FC\u3067\u8868\u793A\u3055\u308C\u308B\u4FBF\u5229\u30A2\u30A4\u30C6\u30E0\u3060\uFF01\n\u62FE\u3048\u3066\u306A\u304F\u3066\u3082\u3053\u306E\u4F1A\u8A71\u306E\u6700\u5F8C\u306B\u8CB0\u3048\u308B\u304B\u3089\u5B89\u5FC3\u3057\u308D\u3088\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3061\u3087\u3063\u3068\u524D\u306B\u3001\u80FD\u529B\u304C\u5897\u3048\u308B\u7CFB\u306E\u30A2\u30A4\u30C6\u30E0\u306F\n2\u3064\u76EE\u4EE5\u964D\u306F0.1\u500D\u306A\u3093\u3066\u8A71\u3092\u3057\u305F\u3088\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30EB\u30FC\u30DA\u3092\u8907\u6570\u6301\u3064\u3068\u2026\u2026\uFF1F\n\u3053\u306E\u5148\u306F\u3001\u81EA\u5206\u306E\u76EE\u3067\u78BA\u304B\u3081\u3066\u307F\u3088\u3046\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 11400000, guid: bd99e37369113254f9fb4028840cf2ff, type: 2}
