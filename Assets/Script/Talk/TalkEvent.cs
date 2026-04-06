@@ -12,6 +12,12 @@ public class TalkEvent : ScriptableObject
     public int floor;
     public int step;
 
+    [Header("Background")]
+    [Tooltip("このイベント全体のデフォルト背景画像。\n"
+           + "null の場合はシーンのデフォルト背景がそのまま使われる。\n"
+           + "各 TalkLine の backgroundOverride が設定されていればそちらが優先される。")]
+    public Sprite backgroundImage;
+
     [Header("Content")]
     public List<TalkLine> lines = new();
 
@@ -45,6 +51,10 @@ public class TalkEvent : ScriptableObject
         public string text;
 
         public Sprite portrait;    // 任意
+
+        [Tooltip("この台詞で背景を変更する場合に設定。\n"
+               + "null の場合は TalkEvent.backgroundImage が使われる。")]
+        public Sprite backgroundOverride; // 台詞単位の背景オーバーライド
     }
 
 

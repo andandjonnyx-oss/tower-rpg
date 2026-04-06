@@ -12,6 +12,7 @@ public class GameState : MonoBehaviour
 
     [Header("Talk")]
     public string pendingEventId;
+    [NonSerialized] public string talkReturnScene = null; // š’Ç‰Á: TalkI—¹Œã‚Ì–ß‚èæƒV[ƒ“
 
     [Header("Item Exchange")]
     [NonSerialized] public ItemData pendingItemData = null;

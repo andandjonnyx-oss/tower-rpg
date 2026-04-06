@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// タイトル画面のUIコントローラー。
 /// 「スタート」ボタン: セーブデータがあれば続きから、なければ初期状態で Main へ遷移。
 /// 「初期化」ボタン: セーブデータを削除して GameState・所持品・倉庫を初期化する。
+/// 「オープニング」ボタン: オープニングイベントを Talk シーンで再生する。
 /// </summary>
 public class TitleUIManager : MonoBehaviour
 {
@@ -14,6 +15,31 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] private Button startButton;
     [Tooltip("セーブデータを削除して初期状態に戻す")]
     [SerializeField] private Button resetButton;
+
+    // =========================================================
+    // オープニングボタン（追加）
+    // =========================================================
+    //
+    // タイトル画面に「オープニング」ボタンを追加。
+    // 押すと Talk シーンに遷移し、オープニングイベントを再生する。
+    // Talk 終了後はタイトル画面（Title シーン）に戻る。
+    //
+    // オープニングイベントは何度でも繰り返し視聴可能。
+    // MarkPlayed() は通常通り呼ばれるが、
+    // オープニングイベントは塔内のフロア/ステップ条件を持たないため
+    // 既読でも再生に影響しない。
+    // =========================================================
+
+    [Tooltip("オープニングイベントを Talk シーンで再生する")]
+    [SerializeField] private Button openingButton;
+
+    [Header("Opening Event")]
+    [Tooltip("オープニングで再生する TalkEvent の ID（例: \"OP_Opening\"）")]
+    [SerializeField] private string openingEventId = "OP_Opening";
+    [Tooltip("Talk シーンの名前")]
+    [SerializeField] private string talkSceneName = "Talk";
+    [Tooltip("タイトルシーンの名前（Talk 終了後の戻り先）")]
+    [SerializeField] private string titleSceneName = "Title";
 
     // =========================================================
     // 初期アイテムセット（追加）
@@ -47,6 +73,9 @@ public class TitleUIManager : MonoBehaviour
 
         if (resetButton != null)
             resetButton.onClick.AddListener(OnReset);
+
+        if (openingButton != null)
+            openingButton.onClick.AddListener(OnOpening);
     }
 
     /// <summary>
@@ -77,6 +106,32 @@ public class TitleUIManager : MonoBehaviour
         }
 
         SceneManager.LoadScene("Main");
+    }
+
+    // =========================================================
+    // オープニングボタン（追加）
+    // =========================================================
+
+    /// <summary>
+    /// オープニングボタン: Talk シーンに遷移してオープニングイベントを再生する。
+    /// Talk 終了後はタイトル画面に戻る。
+    /// 何度でも繰り返し視聴可能。
+    /// </summary>
+    private void OnOpening()
+    {
+        var gs = GameState.I;
+        if (gs == null)
+        {
+            Debug.LogError("[Title] GameState が存在しません。オープニングを開始できません。");
+            return;
+        }
+
+        // Talk シーンへ渡すパラメータをセット
+        gs.pendingEventId = openingEventId;
+        gs.talkReturnScene = titleSceneName; // Talk 終了後にタイトルへ戻る
+
+        Debug.Log($"[Title] オープニングイベント開始: {openingEventId}");
+        SceneManager.LoadScene(talkSceneName);
     }
 
     /// <summary>
