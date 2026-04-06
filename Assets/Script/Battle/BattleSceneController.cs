@@ -82,6 +82,25 @@ public partial class BattleSceneController : MonoBehaviour
     [SerializeField] private Button continueNoButton;
 
     // =========================================================
+    // ギブアップポップアップ UI（追加）
+    // =========================================================
+    [Header("UI - Give Up")]
+    [Tooltip("ギブアップボタン。戦闘中に押すと敗北扱いになる。")]
+    [SerializeField] private Button giveUpButton;
+
+    [Tooltip("ギブアップ確認ポップアップのルートオブジェクト")]
+    [SerializeField] private GameObject giveUpPopup;
+
+    [Tooltip("ギブアップ確認メッセージテキスト")]
+    [SerializeField] private TMP_Text giveUpPopupText;
+
+    [Tooltip("ギブアップ確認「はい」ボタン")]
+    [SerializeField] private Button giveUpYesButton;
+
+    [Tooltip("ギブアップ確認「いいえ」ボタン")]
+    [SerializeField] private Button giveUpNoButton;
+
+    // =========================================================
     // ドロップアイテム UI（追加）
     // =========================================================
     [Header("UI - Item Drop")]
@@ -238,6 +257,14 @@ public partial class BattleSceneController : MonoBehaviour
         if (continuePopup != null) continuePopup.SetActive(false);
 
         // =========================================================
+        // ギブアップポップアップ ボタン登録・初期化（追加）
+        // =========================================================
+        if (giveUpButton != null) giveUpButton.onClick.AddListener(OnGiveUpClicked);
+        if (giveUpYesButton != null) giveUpYesButton.onClick.AddListener(OnGiveUpYes);
+        if (giveUpNoButton != null) giveUpNoButton.onClick.AddListener(OnGiveUpNo);
+        if (giveUpPopup != null) giveUpPopup.SetActive(false);
+
+        // =========================================================
         // ドロップアイテムポップアップ 初期化（追加）
         // =========================================================
         if (dropItemPickupWindow != null) dropItemPickupWindow.HideImmediate();
@@ -389,6 +416,16 @@ public partial class BattleSceneController : MonoBehaviour
 
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
+
+        // =========================================================
+        // GP（がんばりポイント）加算（追加）
+        // =========================================================
+        if (GameState.I != null)
+        {
+            GameState.I.gp++;
+            Debug.Log($"[Battle] GP+1 → 合計{GameState.I.gp}");
+        }
+
 
         // =========================================================
         // 経験値付与・レベルアップ処理（追加）
@@ -949,6 +986,7 @@ public partial class BattleSceneController : MonoBehaviour
         if (attackButton != null) attackButton.interactable = interactable;
         if (itemButton != null) itemButton.interactable = interactable;
         if (defendButton != null) defendButton.interactable = interactable;
+        if (giveUpButton != null) giveUpButton.interactable = interactable;
         if (!interactable && skillButton != null) skillButton.interactable = false;
         if (magicButton != null)
         {
@@ -1087,6 +1125,71 @@ public partial class BattleSceneController : MonoBehaviour
         fullLogPanel.SetActive(false);
     }
 
+    // =========================================================
+    // ギブアップ処理（追加）
+    // =========================================================
+    //
+    // ギブアップボタンを押すと確認ポップアップを表示する。
+    // 「はい」で OnDefeat() を呼び、通常の敗北と同じフローに入る。
+    // これによりコンティニュー（広告視聴→復活）も使える。
+    //
+    // 中断（アプリ強制終了等）だとコンティニュー機能が使えないが、
+    // ギブアップは正規の敗北処理を経由するためコンティニュー可能。
+    // =========================================================
+
+    /// <summary>
+    /// ギブアップボタン押下時の処理。
+    /// 確認ポップアップを表示する。
+    /// </summary>
+    private void OnGiveUpClicked()
+    {
+        if (battleEnded) return;
+
+        if (giveUpPopup == null)
+        {
+            // ポップアップUIが未設定の場合は直接敗北処理
+            Debug.LogWarning("[Battle] giveUpPopup が未設定のため直接敗北処理を実行");
+            OnDefeat();
+            return;
+        }
+
+        // ボタンを無効化して操作を防ぐ
+        SetButtonsInteractable(false);
+
+        // メッセージを設定
+        if (giveUpPopupText != null)
+        {
+            giveUpPopupText.text = "ギブアップしますか？\n（コンティニュー可能）";
+        }
+
+        giveUpPopup.SetActive(true);
+    }
+
+    /// <summary>
+    /// ギブアップ確認「はい」ボタン押下時の処理。
+    /// 敗北扱いにして OnDefeat() を呼ぶ。
+    /// </summary>
+    private void OnGiveUpYes()
+    {
+        if (giveUpPopup != null) giveUpPopup.SetActive(false);
+
+        AddLog("You はギブアップした…");
+        OnDefeat();
+    }
+
+    /// <summary>
+    /// ギブアップ確認「いいえ」ボタン押下時の処理。
+    /// ポップアップを閉じて戦闘に戻る。
+    /// </summary>
+    private void OnGiveUpNo()
+    {
+        if (giveUpPopup != null) giveUpPopup.SetActive(false);
+
+        // ボタンを再有効化
+        SetButtonsInteractable(true);
+        RefreshSkillButton();
+        RefreshMagicSelector();
+    }
 
     /// <summary>
     /// 攻撃アイテム使用時のダメージ計算を実行する。

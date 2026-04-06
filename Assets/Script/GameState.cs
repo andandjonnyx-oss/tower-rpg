@@ -74,6 +74,10 @@ public class GameState : MonoBehaviour
     [Header("Status Point")]
     public int statusPoint = 10;
 
+    [Header("GP (がんばりポイント)")]
+    [Tooltip("戦闘勝利で+1。拠点でアイテム交換に使用する（交換機能は後日実装）。")]
+    public int gp = 0;
+
     // =========================================================
     // 状態異常（追加）
     // =========================================================

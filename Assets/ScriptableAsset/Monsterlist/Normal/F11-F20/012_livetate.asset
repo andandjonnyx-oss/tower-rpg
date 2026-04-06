@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 012_livetate
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 012_livetate
+  Mname: "\u30EA\u30D3\u30F3\u30B0\u30B7\u30FC\u30EB\u30C9"
+  Image: {fileID: 0}
+  Minfloor: 11
+  Minstep: 1
+  Maxfloor: 15
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 50
+  Attack: 25
+  Defense: 30
+  MagicDefense: 30
+  Speed: 0
+  Luck: 1
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 100
+  StunResistance: 100
+  attributeResistances: []
+  Exp: 200
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  Help: "\u9045\u5EF6\u884C\u70BA\u306E\u9054\u4EBA\u3060\uFF01\nLUC\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u30D2\u30FC\u30EB\u3055\u308C\u306A\u3044\u305E\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: cbee7ceb0dbadf94f845aa59b0b5a5f3, type: 2}
+    threshold: 100
+  baseActionRange: 100

@@ -8,7 +8,8 @@
 ## シーン構成
 ```
 Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦闘）
-                                                    → Talk（会話イベント）
+     ↓                                              → Talk（会話イベント）
+     → Talk（オープニング → Titleに戻る）
                    → Status（ステータス振り分け）
                    → Itembox（アイテム管理）
                    → Itemsouko（アイテム倉庫）
@@ -21,8 +22,8 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 | ファイル | 役割 |
 |---------|------|
 | BattleSceneController.cs | 戦闘メイン。UI・ログキュー・勝敗処理・先制抽選・ドロップアイテム処理・MagicSelector連携・状態異常UI表示 |
-| BattleSceneController_PlayerAction.cs | プレイヤー行動。攻撃/スキル/魔法/防御/先制割り込み |
-| BattleSceneController_EnemyAction.cs | 敵行動。LUC判定/SkillAttack統合処理/先制チェック/ターン終了/RefreshMagicSelector |
+| BattleSceneController_PlayerAction.cs | プレイヤー行動。攻撃/スキル/魔法/防御/先制割り込み。非ダメージスキルは命中判定スキップ |
+| BattleSceneController_EnemyAction.cs | 敵行動。LUC判定/SkillAttack統合処理/先制チェック/ターン終了。非ダメージスキルは命中判定スキップ |
 | BattleSceneController_CombatUtils.cs | 命中/クリティカル/防御ダイス/属性耐性/ダメージ適用 |
 | BattleContext.cs | 戦闘シーン間データ受け渡し（static） |
 | Monster.cs | モンスターSO定義（ステータス/行動パターン/属性耐性/Weight(float)/ドロップ設定/StunResistance） |
@@ -69,12 +70,17 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Script/Talk/
 | ファイル | 役割 |
 |---------|------|
-| TalkEvent.cs | 会話イベントSO定義（rewardItem フィールド追加済み） |
-| TalkRunner.cs | 会話実行（報酬アイテム付与対応） |
+| TalkEvent.cs | 会話イベントSO定義（rewardItem/backgroundImage/TalkLine.backgroundOverride 追加済み） |
+| TalkRunner.cs | 会話実行（報酬アイテム付与/背景画像切替/戻り先シーン制御 対応） |
 | TalkEventDatabase.cs | 会話イベントDB |
 | TowerEventTrigger.cs | Tower中会話イベントトリガー |
 | EventConditon.cs | 会話発生条件基底 |
 | TimeRangeCondition.cs | 時間範囲条件 |
+
+### Assets/Script/Start/
+| ファイル | 役割 |
+|---------|------|
+| TitleManager.cs | タイトル画面制御（スタート/初期化/オープニングボタン） |
 
 ### Assets/Script/Storage/
 | ファイル | 役割 |
@@ -85,7 +91,7 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Script/ (ルート)
 | ファイル | 役割 |
 |---------|------|
-| GameState.cs | ゲーム全体の状態管理（HP/MP/レベル/EXP/ステータスポイント/セーブ/isRewardItem追加済み） |
+| GameState.cs | ゲーム全体の状態管理（HP/MP/レベル/EXP/ステータスポイント/セーブ/isRewardItem/talkReturnScene 追加済み） |
 | GameStateautocreate.cs | GameState自動生成 |
 | AttributeTypes.cs | WeaponAttribute enum + ToJapanese拡張 |
 | TowerState.cs | タワー探索制御（MagicSelector連携/非バトル魔法/RefreshFieldMagicFromExternal追加済み） |
@@ -121,9 +127,26 @@ Assets/ScriptableAsset/
     Boss/                     ← ボス敵（F10B_Boslime作成済み）
   Skilllist/                  ← スキルデータ（001〜018作成済み）
   Skilleffect/                ← スキル効果SO
-  Talklist/                   ← 会話イベントデータ
+  Talklist/                   ← 会話イベントデータ（OP_Opening〜BOSS_F10_VICTORY 全13件作成済み）
   Talkcondition/              ← 会話発生条件
 ```
+
+## 作成済み会話イベント（F1-F10）
+| ID | floor | step | 報酬 | 内容 |
+|----|-------|------|------|------|
+| OP_Opening | 0 | 0 | なし | 世界観導入。町到着、怪しい看板、拠点確保 |
+| F01_S02 | 1 | 2 | なし | フェゴール初登場。塔の由来、サポート宣言 |
+| F02_S02 | 2 | 2 | なし | 一本道・後戻り不可。中間地点11階 |
+| F03_S02 | 3 | 2 | なし | アイテム/モンスター=魔力製偽物。ゴールドなし。デスペナ説明 |
+| F04_S02 | 4 | 2 | なし | 4-5階モンスター予習。図鑑誘導 |
+| F05_S02 | 5 | 2 | なし | パッシブ減衰（0.1倍）クイズ |
+| F06_S02 | 6 | 2 | ヒール魔導書 | 6-7階モンスター予習。救済付与 |
+| F07_S02 | 7 | 2 | ルーペ | ルーペ確定入手。複数所持の伏線 |
+| F08_S02 | 8 | 2 | なし | 装備耐性計算クイズ |
+| F09_S02 | 9 | 2 | ステポイントアイテム | ステ振り説明。ステポイント付与 |
+| F10_S02 | 10 | 2 | なし | レアモンスター・ステアップドロップ説明 |
+| F10_S19_boss | 10 | 19 | ポイズン魔導書 | ボス攻略ヒント。ポイズン魔導書付与 |
+| BOSS_F10_VICTORY | 0 | 0 | なし | ボス勝利後。11階帰還注意喚起 |
 
 ## 作成済みモンスター（F1-F10）
 | ID | 名前 | 出現階 | HP | ATK | DEF | 特徴 |
@@ -138,7 +161,7 @@ Assets/ScriptableAsset/
 | 008_kaenhousyaki | 火炎放射器 | 6-10 | 65 | 10 | 15 | 炎無効、雷-200%弱点、MDEF10、毒無効 |
 | 009_1pa-kun | 1%で999ダメージくん | 6-10 | 70 | 0 | 0 | 99% Idle + 1% 固定999ダメージ |
 | 010_seireikaminari | 雷の精霊 | 10のみ | 80 | 15 | 10 | 雷無効、Weight0.3、確定ドロップ:ステUP3、MDEF10 |
-| F10B_Boslime | ボスライム | ボス | 500 | 30 | 20 | 毒攻撃+炎攻撃、毒耐性なし |
+| F10B_Boslime | ボスライム | ボス | 500 | 30 | 20 | 毒攻撃+炎攻撃+ヒール、毒耐性なし |
 
 ## 作成済みスキル
 | ID | 名前 | タイプ | 備考 |
@@ -165,6 +188,7 @@ Assets/ScriptableAsset/
 | 016_raikiri | 雷切 | SkillAttack | 斬×2.0+bonusDamage10、CT5 |
 | 017_18attack | 18アタック | SkillAttack | 氷×0.1×18回、CT18 |
 | 018_depoizu | デポイズ | SkillAttack | 非ダメージ+毒消し、noBattleOk=true |
+| 019_mthun | 未確認 | — | 新規追加（Inspector未確認） |
 
 ## 拾得アイテム一覧（F1-F10）
 

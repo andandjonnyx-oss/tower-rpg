@@ -64,6 +64,7 @@ public static class SaveManager
             data.initialLUC = GameState.I.initialLUC;
 
             data.statusPoint = GameState.I.statusPoint;
+            data.gp = GameState.I.gp;
 
             data.equippedWeaponUid = GameState.I.equippedWeaponUid;
 
@@ -176,6 +177,7 @@ public static class SaveManager
             GameState.I.initialLUC = data.initialLUC;
 
             GameState.I.statusPoint = data.statusPoint;
+            GameState.I.gp = data.gp;
 
             GameState.I.equippedWeaponUid = data.equippedWeaponUid ?? "";
 
@@ -270,6 +272,7 @@ public class SaveData
     public int initialLUC = 1;
 
     public int statusPoint = 10;
+    public int gp = 0;
 
     // --- ‘•”õ ---
     public string equippedWeaponUid = "";
