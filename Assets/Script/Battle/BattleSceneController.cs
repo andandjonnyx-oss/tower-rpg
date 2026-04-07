@@ -426,6 +426,12 @@ public partial class BattleSceneController : MonoBehaviour
             Debug.Log($"[Battle] GP+1 → 合計{GameState.I.gp}");
         }
 
+        // 自爆や勝利後毒でHPが0の時は1にする
+        if (GameState.I != null && GameState.I.currentHp <= 0)
+        {
+            GameState.I.currentHp = 1;
+        }
+
 
         // =========================================================
         // 経験値付与・レベルアップ処理（追加）

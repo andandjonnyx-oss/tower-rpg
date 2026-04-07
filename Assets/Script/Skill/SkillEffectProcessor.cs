@@ -15,6 +15,13 @@ using UnityEngine;
 ///       isPlayerAttack: true,
 ///       enemyMonster, ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp);
 ///   foreach (var log in logs) AddLog(log);
+///
+///   // 反動ダメージ付きスキルの場合:
+///   var logs = SkillEffectProcessor.ProcessEffects(
+///       skill.additionalEffects,
+///       isPlayerAttack: true,
+///       enemyMonster, ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp,
+///       lastDamageDealt: totalDamage);
 /// </summary>
 public static class SkillEffectProcessor
 {
@@ -27,6 +34,7 @@ public static class SkillEffectProcessor
     /// <param name="enemyIsPoisoned">敵の毒状態フラグ（ref）</param>
     /// <param name="enemyIsStunned">敵の気絶状態フラグ（ref）</param>
     /// <param name="enemyCurrentHp">敵の現在HP（ref、回復効果等で変化する場合）</param>
+    /// <param name="lastDamageDealt">直前に与えたダメージ量（反動ダメージ計算用。デフォルト0）</param>
     /// <returns>バトルログメッセージのリスト</returns>
     public static List<string> ProcessEffects(
         List<SkillEffectEntry> effects,
@@ -34,7 +42,8 @@ public static class SkillEffectProcessor
         Monster enemyMonster,
         ref bool enemyIsPoisoned,
         ref bool enemyIsStunned,
-        ref int enemyCurrentHp)
+        ref int enemyCurrentHp,
+        int lastDamageDealt = 0)
     {
         var logs = new List<string>();
         if (effects == null || effects.Count == 0) return logs;
@@ -59,12 +68,19 @@ public static class SkillEffectProcessor
                             ref enemyCurrentHp, logs);
             }
             // =========================================================
-            // 自爆エフェクト（追加）
+            // 自爆エフェクト
             // =========================================================
             else if (entry.effectData is SelfDestructEffectData)
             {
                 ProcessSelfDestruct(entry, isPlayerAttack, enemyMonster,
                                     ref enemyCurrentHp, logs);
+            }
+            // =========================================================
+            // 反動ダメージエフェクト（追加）
+            // =========================================================
+            else if (entry.effectData is RecoilEffectData)
+            {
+                ProcessRecoil(entry, isPlayerAttack, lastDamageDealt, logs);
             }
             else
             {
@@ -124,7 +140,14 @@ public static class SkillEffectProcessor
             if (isPlayerAttack)
             {
                 // プレイヤー → 敵に毒付与
-                if (enemyIsPoisoned) return; // 既に毒ならスキップ
+                string eName = (enemyMonster != null)
+                    ? enemyMonster.Mname : "敵";
+                if (enemyIsPoisoned)
+                {
+                    // 既に毒 → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
+                    return;
+                }
                 int enemyPoisonResist = (enemyMonster != null)
                     ? enemyMonster.PoisonResistance : 0;
                 bool poisoned = StatusEffectSystem.TryInflict(
@@ -132,19 +155,32 @@ public static class SkillEffectProcessor
                 if (poisoned)
                 {
                     enemyIsPoisoned = true;
-                    string eName = (enemyMonster != null)
-                        ? enemyMonster.Mname : "敵";
                     logs.Add($"{eName} は毒を受けた！");
+                }
+                else
+                {
+                    // 耐性で抵抗 → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
                 }
             }
             else
             {
                 // 敵 → プレイヤーに毒付与
-                if (GameState.I != null && GameState.I.isPoisoned) return;
+                if (GameState.I != null && GameState.I.isPoisoned)
+                {
+                    // 既に毒 → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
+                    return;
+                }
                 bool poisoned = StatusEffectSystem.TryPoisonPlayer(entry.chance);
                 if (poisoned)
                 {
                     logs.Add("You は毒を受けた！");
+                }
+                else
+                {
+                    // 耐性で抵抗 → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
                 }
             }
         }
@@ -156,7 +192,12 @@ public static class SkillEffectProcessor
             if (isPlayerAttack)
             {
                 // プレイヤー → 敵にスタン付与
-                if (enemyIsStunned) return; // 既にスタンならスキップ
+                if (enemyIsStunned)
+                {
+                    // 既にスタン → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
+                    return;
+                }
                 int enemyStunResist = StatusEffectSystem.GetEnemyStunResistance(enemyMonster);
                 bool stunned = StatusEffectSystem.TryStunEnemy(
                     entry.chance, enemyStunResist);
@@ -166,6 +207,11 @@ public static class SkillEffectProcessor
                     string eName = (enemyMonster != null)
                         ? enemyMonster.Mname : "敵";
                     logs.Add($"{eName} は気絶した！");
+                }
+                else
+                {
+                    // 耐性で抵抗 → 効果なしログ
+                    logs.Add("…しかし効果がなかった！");
                 }
             }
             else
@@ -387,7 +433,7 @@ public static class SkillEffectProcessor
     }
 
     // =========================================================
-    // 自爆（追加）
+    // 自爆
     // =========================================================
 
     /// <summary>
@@ -431,6 +477,62 @@ public static class SkillEffectProcessor
                 logs.Add("You は力尽きた！");
                 Debug.Log("[SkillEffectProcessor] 自爆: プレイヤーの HP を 0 に設定");
             }
+        }
+    }
+
+    // =========================================================
+    // 反動ダメージ（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 反動ダメージ効果を処理する。
+    /// 与えたダメージの一定割合を使用者自身が受ける。
+    ///
+    /// 【計算式】
+    ///   recoilDamage = floor(lastDamageDealt × intValue / 100)
+    ///   ※ intValue = 反射率（%）
+    ///   ※ 与ダメージが0の場合は反動なし
+    ///   ※ 反動ダメージの最低値は1（intValue > 0 かつ lastDamageDealt > 0 の場合）
+    ///
+    /// 【対応範囲】
+    ///   isPlayerAttack == true（プレイヤーが使用）: プレイヤーの HP を減算する。
+    ///   isPlayerAttack == false（敵が使用）: 現状未対応（ログ出力のみ）。
+    /// </summary>
+    private static void ProcessRecoil(
+        SkillEffectEntry entry,
+        bool isPlayerAttack,
+        int lastDamageDealt,
+        List<string> logs)
+    {
+        // 発動率判定
+        if (entry.chance < 100)
+        {
+            int roll = Random.Range(0, 100);
+            if (roll >= entry.chance) return;
+        }
+
+        // 与ダメージが0なら反動なし
+        if (lastDamageDealt <= 0) return;
+
+        int recoilPercent = (entry.intValue > 0) ? entry.intValue : 10; // デフォルト10%
+        int recoilDamage = Mathf.FloorToInt(lastDamageDealt * recoilPercent / 100f);
+        if (recoilDamage < 1) recoilDamage = 1;
+
+        if (isPlayerAttack)
+        {
+            // プレイヤーが使用 → プレイヤー自身にダメージ
+            if (GameState.I != null)
+            {
+                GameState.I.currentHp -= recoilDamage;
+                if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
+                logs.Add($"呪いの反動で You は {recoilDamage} ダメージ！");
+                Debug.Log($"[SkillEffectProcessor] 反動ダメージ: {lastDamageDealt} × {recoilPercent}% = {recoilDamage}");
+            }
+        }
+        else
+        {
+            // 敵が使用 → 敵自身に反動（将来対応用）
+            Debug.Log("[SkillEffectProcessor] 敵→敵自身の反動ダメージは未実装");
         }
     }
 }

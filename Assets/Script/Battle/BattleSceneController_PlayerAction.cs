@@ -116,6 +116,17 @@ public partial class BattleSceneController
         if (skill.IsNonDamage)
         {
             string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "先制スキル";
+
+            // 敵対象の非ダメージ先制スキルは回避判定を行う
+            if (skill.IsHostileNonDamage)
+            {
+                if (!CheckEnemyHit(skill.baseHitRate))
+                {
+                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    return;
+                }
+            }
+
             AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
             ProcessEnemySkillEffects(skill);
             return;
@@ -381,6 +392,17 @@ public partial class BattleSceneController
         // =========================================================
         if (skill.IsNonDamage)
         {
+            // 敵対象の非ダメージスキル（毒付与等）は回避判定を行う
+            if (skill.IsHostileNonDamage)
+            {
+                if (!CheckPlayerHit(skill.baseHitRate))
+                {
+                    AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                    FlushLogsAndThen(() => EnemyTurn());
+                    return;
+                }
+            }
+
             AddLog($"You は {skill.skillName}！");
             ProcessPlayerSkillEffects(skill);
 
@@ -483,7 +505,22 @@ public partial class BattleSceneController
         }
 
         // 追加効果の実行
-        ProcessPlayerSkillEffects(skill);
+        ProcessPlayerSkillEffects(skill, totalDamage);
+
+        // 反動ダメージでプレイヤーが倒された場合の判定
+        if (GameState.I != null && GameState.I.currentHp <= 0)
+        {
+            if (enemyCurrentHp <= 0)
+            {
+                // 敵も倒れている → 勝利扱い（攻撃で敵を倒した後に反動で自分も倒れた）
+                FlushLogsAndThen(() => OnVictory());
+            }
+            else
+            {
+                FlushLogsAndThen(() => OnDefeat());
+            }
+            return;
+        }
 
         if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
         FlushLogsAndThen(() => EnemyTurn());
@@ -541,6 +578,17 @@ public partial class BattleSceneController
         // =========================================================
         if (magic.IsNonDamage)
         {
+            // 敵対象の非ダメージ魔法（毒付与等）は回避判定を行う
+            if (magic.IsHostileNonDamage)
+            {
+                if (!CheckPlayerHit(magic.baseHitRate))
+                {
+                    AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                    FlushLogsAndThen(() => EnemyTurn());
+                    return;
+                }
+            }
+
             AddLog($"You は {magic.skillName}！ MP-{magic.mpCost}");
             ProcessPlayerSkillEffects(magic);
 
@@ -645,7 +693,21 @@ public partial class BattleSceneController
         }
 
         // 追加効果の実行（全ヒット完了後に1回だけ）
-        ProcessPlayerSkillEffects(magic);
+        ProcessPlayerSkillEffects(magic, totalDamage);
+
+        // 反動ダメージでプレイヤーが倒された場合の判定
+        if (GameState.I != null && GameState.I.currentHp <= 0)
+        {
+            if (enemyCurrentHp <= 0)
+            {
+                FlushLogsAndThen(() => OnVictory());
+            }
+            else
+            {
+                FlushLogsAndThen(() => OnDefeat());
+            }
+            return;
+        }
 
         if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
         FlushLogsAndThen(() => EnemyTurn());
@@ -710,6 +772,32 @@ public partial class BattleSceneController
         }
 
         RefreshBattleStatusEffectUI(); // ★追加: 状態異常UIを更新
+    }
+
+    /// <summary>
+    /// プレイヤースキルの追加効果を実行する（与ダメージ付き）。
+    /// 反動ダメージ（RecoilEffectData）を持つスキル用。
+    /// lastDamageDealt に直前に与えた合計ダメージを渡す。
+    /// </summary>
+    private void ProcessPlayerSkillEffects(SkillData skill, int lastDamageDealt)
+    {
+        if (!skill.HasAdditionalEffects) return;
+
+        var logs = SkillEffectProcessor.ProcessEffects(
+            skill.additionalEffects,
+            isPlayerAttack: true,
+            enemyMonster,
+            ref enemyIsPoisoned,
+            ref enemyIsStunned,
+            ref enemyCurrentHp,
+            lastDamageDealt: lastDamageDealt);
+
+        for (int i = 0; i < logs.Count; i++)
+        {
+            AddLog(logs[i]);
+        }
+
+        RefreshBattleStatusEffectUI();
     }
 
     // =========================================================

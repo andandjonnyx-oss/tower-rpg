@@ -12,6 +12,7 @@ using UnityEngine;
 ///   HealEffectData             → intValue（ラベル: SO.formulaType に応じて変化）, chance
 ///   LevelDrainEffectData       → intValue（ラベル: ドレイン量）, chance
 ///   SelfDestructEffectData     → chance（ラベル: 自爆発動率）
+///   RecoilEffectData           → intValue（ラベル: 反射率）, chance
 ///   その他                     → chance, intValue（汎用表示）
 /// </summary>
 [CustomPropertyDrawer(typeof(SkillEffectEntry))]
@@ -49,6 +50,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         else if (effectData is SelfDestructEffectData)
         {
             lineCount += 1; // chance のみ
+        }
+        else if (effectData is RecoilEffectData)
+        {
+            lineCount += 2; // intValue（反射率）+ chance
         }
         else
         {
@@ -94,6 +99,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         else if (effectData is SelfDestructEffectData)
         {
             DrawSelfDestructFields(position, property, ref y, lineH, spacing);
+        }
+        else if (effectData is RecoilEffectData)
+        {
+            DrawRecoilFields(position, property, ref y, lineH, spacing);
         }
         else
         {
@@ -184,7 +193,7 @@ public class SkillEffectEntryDrawer : PropertyDrawer
     }
 
     // =========================================================
-    // 自爆系（追加）
+    // 自爆系
     // =========================================================
     private void DrawSelfDestructFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
@@ -193,6 +202,25 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
         EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("自爆発動率 (%)"));
+        y += lineH + spacing;
+    }
+
+    // =========================================================
+    // 反動ダメージ系（追加）
+    // =========================================================
+    private void DrawRecoilFields(Rect position, SerializedProperty property,
+        ref float y, float lineH, float spacing)
+    {
+        // intValue（反射率）
+        var intValueProp = property.FindPropertyRelative("intValue");
+        var intRect = new Rect(position.x, y, position.width, lineH);
+        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("反射率（%）"));
+        y += lineH + spacing;
+
+        // chance
+        var chanceProp = property.FindPropertyRelative("chance");
+        var chanceRect = new Rect(position.x, y, position.width, lineH);
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("発動率 (%)"));
         y += lineH + spacing;
     }
 

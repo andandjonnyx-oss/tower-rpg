@@ -186,6 +186,42 @@ public class SkillData : ScriptableObject
     /// 実効ヒット数を返す。最低1。
     /// </summary>
     public int EffectiveHitCount => hitCount > 1 ? hitCount : 1;
+
+
+    /// <summary>
+    /// 敵を対象とする非ダメージスキルかどうか。
+    /// IsNonDamage == true かつ、追加効果に敵対象の効果を含む場合 true。
+    ///
+    /// 敵対象の効果:
+    ///   StatusAilmentEffectData (ailmentMode == Inflict)
+    ///   LevelDrainEffectData
+    ///
+    /// true の場合、非ダメージスキルでも回避判定を行う。
+    /// false の場合（ヒール、デポイズ等）、回避判定をスキップする。
+    /// </summary>
+    public bool IsHostileNonDamage
+    {
+        get
+        {
+            if (!IsNonDamage) return false;
+            if (additionalEffects == null) return false;
+            for (int i = 0; i < additionalEffects.Count; i++)
+            {
+                var entry = additionalEffects[i];
+                if (entry == null || entry.effectData == null) continue;
+
+                if (entry.effectData is StatusAilmentEffectData
+                    && entry.ailmentMode == AilmentMode.Inflict)
+                    return true;
+
+                if (entry.effectData is LevelDrainEffectData)
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
 }
 
 /// <summary>

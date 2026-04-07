@@ -25,6 +25,10 @@ using UnityEngine;
 ///     intValue           → ドレイン量（デフォルト1）
 ///     chance             → 発動率（%）
 ///
+///   RecoilEffectData:
+///     intValue           → 反射率（%）。与ダメージのこの割合を自分が受ける。
+///     chance             → 発動率（%）
+///
 /// 【インスペクター表示】
 ///   SkillEffectEntryDrawer（カスタム PropertyDrawer）により、
 ///   effectData のジャンルに応じて必要なフィールドのみ表示する。
@@ -55,12 +59,14 @@ public class SkillEffectEntry
            + "StatusAilmentEffectData (Inflict): 状態異常の基礎付与率\n"
            + "LevelDrainEffectData: 発動率\n"
            + "HealEffectData: 発動率\n"
+           + "RecoilEffectData: 反動発動率\n"
            + "StatusAilmentEffectData (Cure): 使用しない（確定回復）")]
     [Range(0, 100)]
     public int chance = 100;
 
     [Tooltip("効果の数値パラメータ（整数）。\n"
            + "LevelDrainEffectData: ドレイン量（デフォルト1）\n"
-           + "HealEffectData: 回復量（計算式タイプにより解釈が変わる）")]
+           + "HealEffectData: 回復量（計算式タイプにより解釈が変わる）\n"
+           + "RecoilEffectData: 反射率（%）。与ダメージのこの割合を自分が受ける。")]
     public int intValue = 0;
 }

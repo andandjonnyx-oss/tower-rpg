@@ -327,11 +327,20 @@ public partial class BattleSceneController
         if (skill.IsNonDamage)
         {
             string effectSkillName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "スキル";
+
+            // 敵対象の非ダメージスキル（毒付与等）は回避判定を行う
+            if (skill.IsHostileNonDamage)
+            {
+                if (!CheckEnemyHit(skill.baseHitRate))
+                {
+                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    AfterEnemyAction();
+                    return;
+                }
+            }
+
             AddLog($"{enemyMonster.Mname} の{effectSkillName}！");
-
-            // 追加効果の実行
             ProcessEnemySkillEffects(skill);
-
             AfterEnemyAction();
             return;
         }

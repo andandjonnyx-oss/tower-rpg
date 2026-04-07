@@ -73,6 +73,14 @@ public class ItemBoxManager : MonoBehaviour
         if (GameState.I != null)
             GameState.I.equippedWeaponUid = invItem.uid;
         Debug.Log($"[ItemBoxManager] Equip: {invItem.data.itemName} uid={invItem.uid}");
+
+        // 装備の equipMaxHp / equipMaxMp を即座に反映するため再計算
+        if (GameState.I != null)
+        {
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
+        }
+
         SaveManager.Save(); // 即時セーブ
     }
 
@@ -82,6 +90,12 @@ public class ItemBoxManager : MonoBehaviour
         if (GameState.I.equippedWeaponUid == invItem.uid)
         {
             GameState.I.equippedWeaponUid = "";
+
+            // 装備解除で equipMaxHp / equipMaxMp が無くなるため再計算
+            // RecalcMaxHp 内で currentHp > 新maxHp ならクランプされる
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
+
             SaveManager.Save(); // 即時セーブ
         }
     }

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W009_livesword
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W009_livesword
+  itemName: "\u30EA\u30D3\u30F3\u30B0\u30BD\u30FC\u30C9"
+  description: "\u751F\u304D\u305F\u5263\u3002\u8840\u3092\u5438\u3046\u304C\u30CE\u30EA\u306E\u826F\u3044\u5974\u3002\n\u653B\u6483\u529B+30\u3001HP\uFF0D30\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  weaponAttribute: 1
+  attackPower: 30
+  skills:
+  - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: -30
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 0
