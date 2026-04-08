@@ -38,7 +38,7 @@ MonoBehaviour:
   weaponAttribute: 1
   attackPower: 3
   skills:
-  - {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
+  - {fileID: 11400000, guid: 78749ea9bc4db5f41995a7156952645f, type: 2}
   weaponInflictEffect: 1
   weaponInflictChance: 20
   equipDefense: 0

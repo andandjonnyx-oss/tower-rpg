@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 014_kemusi
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 014_kemusi
+  Mname: "\u30A2\u30AA\u30B1\u30E0\u30B7"
+  Image: {fileID: 0}
+  Minfloor: 14
+  Minstep: 1
+  Maxfloor: 18
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 80
+  Attack: 30
+  Defense: 15
+  MagicDefense: 10
+  Speed: 0
+  Luck: 5
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 100
+  StunResistance: 0
+  ParalyzeResistance: 100
+  BlindResistance: 0
+  RageResistance: 0
+  attributeResistances: []
+  Exp: 350
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  Help: "\u6BD2\u3082\u9EBB\u75FA\u3082\u4F7F\u3063\u3066\u304F\u308B\u5384\u4ECB\u306A\u866B\u3060\u305C\uFF01\n\u9032\u5316\u5F8C\u306F\u591A\u5206\u5F8C\u534A\u306B\u51FA\u3066\u6765\u308B\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: e1911c7cb31cb6c439b7a977c22f6416, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 3a5b53e8a7f712143a3c00e5c2d4f61a, type: 2}
+    threshold: 100
+  baseActionRange: 100

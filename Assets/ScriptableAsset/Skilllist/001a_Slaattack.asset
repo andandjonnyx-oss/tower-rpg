@@ -13,15 +13,17 @@ MonoBehaviour:
   m_Name: 001a_Slaattack
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: 001a_Slaattack
-  skillName: "\u901A\u5E38\u65AC\u653B\u6483"
-  description: 
+  skillName: "\u653B\u6483"
+  description: "\u65AC\u5C5E\u6027"
   skillSource: 0
   actionType: 2
   skillAttribute: 1
   damageCategory: 0
   damageMultiplier: 1
-  fixedDamage: 0
+  bonusDamage: 0
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
+  hitCount: 1
+  noBattleOk: 0
   additionalEffects: []

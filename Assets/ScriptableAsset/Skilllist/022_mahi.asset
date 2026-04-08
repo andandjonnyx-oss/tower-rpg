@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: 001_Strattack
+  m_Name: 022_mahi
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 001_Strattack
-  skillName: "\u653B\u6483"
-  description: "\u6BB4\u6253\u5C5E\u6027"
-  skillSource: 0
+  skillId: 006_poison
+  skillName: "\u30DD\u30A4\u30BA\u30F3"
+  description: "\u6BD2\u306B\u3059\u308B"
+  skillSource: 1
   actionType: 2
   skillAttribute: 0
   damageCategory: 0
-  damageMultiplier: 1
+  damageMultiplier: 0
   bonusDamage: 0
   cooldownTurns: 0
-  mpCost: 0
-  baseHitRate: 95
+  mpCost: 8
+  baseHitRate: 100
   hitCount: 1
   noBattleOk: 0
-  additionalEffects: []
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 2
+    chance: 80
+    intValue: 0

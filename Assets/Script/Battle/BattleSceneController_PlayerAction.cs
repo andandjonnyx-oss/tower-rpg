@@ -11,6 +11,17 @@ using UnityEngine.SceneManagement;
 ///   各プレイヤー行動メソッド（OnAttackClicked 等）では、プレイヤーの行動処理の前に
 ///   ExecutePreemptiveAttack() を呼び出して先制割り込みを処理する。
 ///   先制でプレイヤーが倒された場合はプレイヤー行動をスキップする。
+///
+/// 【麻痺（Phase2追加）】
+///   各行動冒頭で麻痺チェック。20%で行動キャンセル→敵ターンへ。
+///
+/// 【暗闇（Phase2追加）】
+///   プレイヤーが暗闇の場合、敵回避力を2倍として命中計算する。
+///   → CheckPlayerHitWithBlind() を使用。
+///
+/// 【怒り（Phase2追加）】
+///   怒り中はスキル/魔法/アイテム/防御ボタンの押下を拒否、攻撃のみ許可。
+///   攻撃力に RageAttackMultiplier（1.5倍）を乗算。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -34,6 +45,83 @@ public partial class BattleSceneController
                 items[i].data.category == ItemCategory.Weapon)
                 items[i].TickCooldowns();
         }
+    }
+
+    // =========================================================
+    // 暗闇対応の命中判定ラッパー（Phase2追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤー攻撃の命中判定。暗闇の場合、敵の回避力を2倍にして計算する。
+    /// CombatUtils.CheckPlayerHit() の内部では enemyMonster.Evasion を直接参照するため、
+    /// ここでは暗闇時に hitRate そのものを補正するのではなく、
+    /// CombatUtils 側で暗闇を考慮した CheckPlayerHitBlind() を呼ぶ。
+    ///
+    /// 設計判断: CombatUtils を変更せず、呼び出し側で敵回避力を2倍換算する。
+    /// → baseHitRate × (1 - (enemyEvasion×2 - accuracy)/100) で実質命中率が下がる。
+    /// </summary>
+    private bool CheckPlayerHitWithBlind(int baseHitRate)
+    {
+        if (GameState.I != null && GameState.I.isBlind)
+        {
+            // 暗闇: 敵回避力2倍として計算
+            // CheckPlayerHit 内部で enemyMonster.Evasion を参照するため、
+            // ここでは baseHitRate を実質的に下げて同じ効果を実現する。
+            // 計算: hitChance = baseHitRate × (1 - (evasion*2 - accuracy)/100)
+            //       = baseHitRate × (1 - evasion/100 - evasion/100 + accuracy/100)
+            //       = [baseHitRate × (1 - (evasion - accuracy)/100)] - baseHitRate × evasion/100
+            // → 簡易実装: baseHitRate を半分にして通常の CheckPlayerHit を呼ぶ
+            //   これは「暗闇で命中率が半分になる」のと概ね同等の効果。
+            //   ただし敵回避力2倍の方が仕様に忠実なので、CombatUtils に委譲する。
+            return CheckPlayerHitBlindInternal(baseHitRate);
+        }
+        return CheckPlayerHit(baseHitRate);
+    }
+
+    /// <summary>
+    /// 暗闇時の命中判定（内部）。敵回避力を2倍にして計算する。
+    /// CheckPlayerHit と同じロジックだが、enemyEvasion を2倍にする。
+    /// </summary>
+    private bool CheckPlayerHitBlindInternal(int baseHitRate)
+    {
+        int playerAccuracy = (GameState.I != null) ? GameState.I.Accuracy : 0;
+        int enemyEvasion = (enemyMonster != null) ? enemyMonster.Evasion * 2 : 0; // ★暗闇: 2倍
+
+        float hitChance = baseHitRate * (1f - (enemyEvasion - playerAccuracy) / 100f);
+
+        if (hitChance < 25f) hitChance = 25f;
+        if (hitChance > 100f) hitChance = 100f;
+
+        float roll = Random.Range(0f, 100f);
+        bool hit = roll < hitChance;
+
+        Debug.Log($"[Battle] PlayerHitCheck(Blind): baseHit={baseHitRate} accuracy={playerAccuracy} " +
+                  $"enemyEvasion={enemyEvasion}(x2) hitChance={hitChance:F2}% roll={roll:F2} hit={hit}");
+
+        return hit;
+    }
+
+    // =========================================================
+    // 麻痺チェック共通処理（Phase2追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの麻痺による行動キャンセルを判定する。
+    /// 麻痺中は 20% で行動がキャンセルされ、敵ターンに移行する。
+    /// </summary>
+    /// <returns>true: 行動キャンセル（呼び出し元は return すべき）</returns>
+    private bool CheckPlayerParalyze()
+    {
+        if (GameState.I == null) return false;
+        if (!GameState.I.isParalyzed) return false;
+
+        if (StatusEffectSystem.CheckParalyzeCancel())
+        {
+            AddLog("You は麻痺して動けない！");
+            FlushLogsAndThen(() => EnemyTurn());
+            return true;
+        }
+        return false;
     }
 
     // =========================================================
@@ -109,6 +197,10 @@ public partial class BattleSceneController
 
         SkillData skill = action.skill;
 
+        // Phase2: 暗闇補正（先制攻撃にも適用）
+        int effectiveHitRate = skill.baseHitRate;
+        if (enemyIsBlind) effectiveHitRate = effectiveHitRate / 2;
+
         // =========================================================
         // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
         // （ヒール等の自己対象スキルは命中判定不要）
@@ -120,7 +212,7 @@ public partial class BattleSceneController
             // 敵対象の非ダメージ先制スキルは回避判定を行う
             if (skill.IsHostileNonDamage)
             {
-                if (!CheckEnemyHit(skill.baseHitRate))
+                if (!CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
                     return;
@@ -134,7 +226,7 @@ public partial class BattleSceneController
 
         // --- ここから先はダメージスキルのみ ---
         // 命中判定
-        if (!CheckEnemyHit(skill.baseHitRate))
+        if (!CheckEnemyHit(effectiveHitRate))
         {
             string missName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName : "先制攻撃";
@@ -155,8 +247,8 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            // 多段攻撃の2発目以降は個別に命中判定
-            if (h > 0 && !CheckEnemyHit(skill.baseHitRate))
+            // 多段攻撃の2発目以降は個別に命中判定（暗闇補正付き）
+            if (h > 0 && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
@@ -164,7 +256,15 @@ public partial class BattleSceneController
 
             int baseDamage;
             if (skill.damageMultiplier > 0f)
-                baseDamage = Mathf.FloorToInt(enemyMonster.Attack * skill.damageMultiplier + 0.5f);
+            {
+                int attackPower = enemyMonster.Attack;
+                // Phase2: 怒り中は攻撃力1.5倍
+                if (enemyRageTurn > 0)
+                {
+                    attackPower = Mathf.FloorToInt(attackPower * StatusEffectSystem.RageAttackMultiplier + 0.5f);
+                }
+                baseDamage = Mathf.FloorToInt(attackPower * skill.damageMultiplier + 0.5f);
+            }
             else
                 baseDamage = 0;
             baseDamage += skill.bonusDamage;
@@ -239,18 +339,11 @@ public partial class BattleSceneController
     /// <summary>
     /// 攻撃ボタンが押された時の処理（プレイヤーターン・通常攻撃）。
     ///
-    /// ダメージ計算:
-    ///   GameState.Attack（= baseSTR + 装備attackPower + パッシブ攻撃ボーナス）
-    ///   → 敵の属性耐性で軽減（武器の weaponAttribute を参照）
-    ///   → 防御ダイスで軽減（クリティカル時は防御無視）
-    ///
-    /// 命中判定:
-    ///   基礎命中率（武器の baseHitRate、素手=95）× (1 - (敵回避力 - 命中力)/100)
-    ///   最低25%保証。ミス時はダメージ0でターン終了。
-    ///
-    /// クリティカル判定:
-    ///   命中後に CriticalRate% の確率でクリティカル。
-    ///   クリティカル時: 防御無視、ダメージ2倍（属性耐性は適用済み）。
+    /// Phase2:
+    ///   - 麻痺チェック（20%行動キャンセル）
+    ///   - 暗闇時は CheckPlayerHitWithBlind() を使用
+    ///   - 怒り中は攻撃力に RageAttackMultiplier を乗算
+    ///   - 武器付与処理を汎用 switch 化
     /// </summary>
     private void OnAttackClicked()
     {
@@ -259,6 +352,9 @@ public partial class BattleSceneController
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
+        // Phase2: 麻痺チェック
+        if (CheckPlayerParalyze()) return;
+
         // 先制攻撃割り込み
         if (ExecutePreemptiveIfNeeded()) return;
 
@@ -266,7 +362,8 @@ public partial class BattleSceneController
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
         int baseHit = GetEquippedWeaponBaseHitRate();
 
-        if (!CheckPlayerHit(baseHit))
+        // Phase2: 暗闇対応の命中判定
+        if (!CheckPlayerHitWithBlind(baseHit))
         {
             AddLog($"You は {weaponName} で攻撃！ …しかし外れた！");
             FlushLogsAndThen(() => EnemyTurn());
@@ -274,6 +371,11 @@ public partial class BattleSceneController
         }
 
         int damage = (GameState.I != null) ? GameState.I.Attack : 1;
+        // Phase2: 怒り中は攻撃力1.5倍
+        if (playerRageTurn > 0)
+        {
+            damage = Mathf.FloorToInt(damage * StatusEffectSystem.RageAttackMultiplier + 0.5f);
+        }
         if (damage < 1) damage = 1;
 
         // 属性耐性によるダメージ軽減
@@ -306,35 +408,65 @@ public partial class BattleSceneController
         else
             AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
 
-        // 武器の毒付与判定 - 既に毒ならスキップ（ログも出さない）
+        // =========================================================
+        // 武器の状態異常付与判定 — 汎用 switch 化（Phase2）
+        // =========================================================
         if (equippedWeaponItem != null && equippedWeaponItem.data != null
-            && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Poison
-            && equippedWeaponItem.data.weaponInflictChance > 0
-            && !enemyIsPoisoned)
+            && equippedWeaponItem.data.weaponInflictChance > 0)
         {
-            int enemyPoisonResist = (enemyMonster != null) ? enemyMonster.PoisonResistance : 0;
-            bool poisoned = StatusEffectSystem.TryInflict(
-                equippedWeaponItem.data.weaponInflictChance, enemyPoisonResist);
-            if (poisoned)
-            {
-                enemyIsPoisoned = true;
-                AddLog($"{enemyMonster.Mname} は毒を受けた！");
-            }
-        }
+            StatusEffect inflictEffect = equippedWeaponItem.data.weaponInflictEffect;
+            float inflictChance = equippedWeaponItem.data.weaponInflictChance;
+            string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
 
-        // 武器のスタン付与判定 - 既にスタンならスキップ（ログも出さない）
-        if (equippedWeaponItem != null && equippedWeaponItem.data != null
-            && equippedWeaponItem.data.weaponInflictEffect == StatusEffect.Stun
-            && equippedWeaponItem.data.weaponInflictChance > 0
-            && !enemyIsStunned)
-        {
-            int enemyStunResist = StatusEffectSystem.GetEnemyStunResistance(enemyMonster);
-            bool stunned = StatusEffectSystem.TryStunEnemy(
-                equippedWeaponItem.data.weaponInflictChance, enemyStunResist);
-            if (stunned)
+            switch (inflictEffect)
             {
-                enemyIsStunned = true;
-                AddLog($"{enemyMonster.Mname} は気絶した！");
+                case StatusEffect.Poison:
+                    if (!enemyIsPoisoned)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Poison, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            enemyIsPoisoned = true;
+                            AddLog($"{eName} は毒を受けた！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Stun:
+                    if (!enemyIsStunned)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Stun, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            enemyIsStunned = true;
+                            AddLog($"{eName} は気絶した！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Paralyze:
+                    if (!enemyIsParalyzed)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Paralyze, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            enemyIsParalyzed = true;
+                            AddLog($"{eName} は麻痺した！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Blind:
+                    if (!enemyIsBlind)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Blind, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            enemyIsBlind = true;
+                            AddLog($"{eName} は暗闇に包まれた！");
+                        }
+                    }
+                    break;
             }
         }
 
@@ -344,27 +476,19 @@ public partial class BattleSceneController
 
     /// <summary>
     /// スキルボタンが押された時の処理（プレイヤーターン・武器スキル攻撃）。
-    /// 装備中武器の最初のスキルを使用する。
-    /// skill.damageCategory（Physical/Magical）に応じて敵の防御ダイスを選択する。
-    ///
-    /// ダメージ計算:
-    ///   GameState.Attack × skill.damageMultiplier
-    ///   → 敵の属性耐性で軽減（skill.skillAttribute を参照）
-    ///   → 防御ダイスで軽減
-    ///
-    /// 非ダメージスキル:
-    ///   IsNonDamage == true の場合は命中判定・ダメージ計算をスキップし、追加効果のみ実行。
-    ///
-    /// 命中判定:
-    ///   skill.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
-    ///   クールダウンは命中に関わらず消費する。
-    ///
-    /// クリティカル判定:
-    ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
+    /// Phase2: 怒り中はスキル使用不可。麻痺チェック追加。暗闇対応。
     /// </summary>
     private void OnSkillClicked()
     {
         if (battleEnded) return;
+
+        // Phase2: 怒り中はスキル使用不可
+        if (playerRageTurn > 0)
+        {
+            AddLogImmediate("怒りで我を忘れている！ 攻撃しかできない！");
+            return;
+        }
+
         SkillData skill = GetFirstSkill();
         if (skill == null) { AddLogImmediate("使えるスキルがない！"); return; }
 
@@ -383,19 +507,20 @@ public partial class BattleSceneController
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
         equippedWeaponItem.UseSkill(skill);
 
+        // Phase2: 麻痺チェック
+        if (CheckPlayerParalyze()) return;
+
         // 先制攻撃割り込み
         if (ExecutePreemptiveIfNeeded()) return;
 
         // =========================================================
         // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
-        // （ヒール等の自己対象スキルは命中判定不要）
         // =========================================================
         if (skill.IsNonDamage)
         {
-            // 敵対象の非ダメージスキル（毒付与等）は回避判定を行う
             if (skill.IsHostileNonDamage)
             {
-                if (!CheckPlayerHit(skill.baseHitRate))
+                if (!CheckPlayerHitWithBlind(skill.baseHitRate))
                 {
                     AddLog($"You は {skill.skillName}！ …しかし外れた！");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -412,19 +537,15 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        if (!CheckPlayerHit(skill.baseHitRate))
+        if (!CheckPlayerHitWithBlind(skill.baseHitRate))
         {
             AddLog($"You は {skill.skillName}！ …しかし外れた！");
             FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
-
         // =========================================================
-        // 多段攻撃対応（追加）
-        // hitCount > 1 の場合、ヒット回数分ループして各ヒットを個別に処理する。
-        // 各ヒットごとに独立して命中判定・ダメージ計算・クリティカル判定を行う。
-        // 途中で敵HPが0になったら残りをスキップする。
+        // 多段攻撃対応
         // =========================================================
         int hits = skill.EffectiveHitCount;
         int totalDamage = 0;
@@ -437,14 +558,18 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            // 多段攻撃の2発目以降は個別に命中判定
-            if (h > 0 && !CheckPlayerHit(skill.baseHitRate))
+            if (h > 0 && !CheckPlayerHitWithBlind(skill.baseHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
             int attack = (GameState.I != null) ? GameState.I.Attack : 1;
+            // Phase2: 怒り中は攻撃力1.5倍
+            if (playerRageTurn > 0)
+            {
+                attack = Mathf.FloorToInt(attack * StatusEffectSystem.RageAttackMultiplier + 0.5f);
+            }
             int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
             damage += skill.bonusDamage; // ★bonusDamage加算
 
@@ -478,7 +603,6 @@ public partial class BattleSceneController
 
             if (hits > 1)
             {
-                // 多段攻撃: 各ヒットのログ
                 string hitPrefix = $"  {h + 1}撃目";
                 if (isCrit)
                     AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
@@ -487,18 +611,15 @@ public partial class BattleSceneController
             }
             else
             {
-                // 単発攻撃: 従来ログ
                 if (isCrit)
                     AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
                 else
                     AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
             }
 
-            // 途中で敵が倒れたら残りをスキップ
             if (enemyCurrentHp <= 0) break;
         }
 
-        // 多段攻撃の合計ログ
         if (hits > 1)
         {
             AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
@@ -512,7 +633,6 @@ public partial class BattleSceneController
         {
             if (enemyCurrentHp <= 0)
             {
-                // 敵も倒れている → 勝利扱い（攻撃で敵を倒した後に反動で自分も倒れた）
                 FlushLogsAndThen(() => OnVictory());
             }
             else
@@ -532,28 +652,19 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 魔法ボタンが押された時の処理（プレイヤーターン・魔法スキル発動）。
-    /// ドロップダウンで選択中の魔法スキルを MP 消費して発動する。
-    /// skill.damageCategory（通常 Magical）に応じて敵の防御ダイスを選択する。
-    ///
-    /// ダメージ計算:
-    ///   fixedDamage > 0 → そのまま使用（固定ダメージ）
-    ///   damageMultiplier > 0 → GameState.MagicAttack × 倍率
-    ///   → 敵の属性耐性で軽減（magic.skillAttribute を参照）
-    ///   → 防御ダイスで軽減
-    ///
-    /// 非ダメージスキル:
-    ///   IsNonDamage == true の場合は命中判定・ダメージ計算をスキップし、追加効果のみ実行。
-    ///
-    /// 命中判定:
-    ///   magic.baseHitRate × (1 - (敵回避力 - 命中力)/100)、最低25%。
-    ///   ミス時も MP は消費する。
-    ///
-    /// クリティカル判定:
-    ///   命中後に CriticalRate% でクリティカル（防御無視・2倍ダメージ）。
+    /// Phase2: 怒り中は魔法使用不可。麻痺チェック追加。暗闇対応。
     /// </summary>
     private void OnMagicClicked()
     {
         if (battleEnded) return;
+
+        // Phase2: 怒り中は魔法使用不可
+        if (playerRageTurn > 0)
+        {
+            AddLogImmediate("怒りで我を忘れている！ 攻撃しかできない！");
+            return;
+        }
+
         SkillData magic = GetSelectedMagicSkill();
         if (magic == null) { AddLogImmediate("魔法が選択されていない！"); return; }
 
@@ -569,19 +680,20 @@ public partial class BattleSceneController
         TickAllWeaponCooldowns();
         if (GameState.I != null) GameState.I.currentMp -= magic.mpCost;
 
+        // Phase2: 麻痺チェック
+        if (CheckPlayerParalyze()) return;
+
         // 先制攻撃割り込み
         if (ExecutePreemptiveIfNeeded()) return;
 
         // =========================================================
-        // 非ダメージスキル: 命中判定をスキップし、追加効果のみ実行
-        // （ヒール等の自己対象スキルは命中判定不要）
+        // 非ダメージスキル
         // =========================================================
         if (magic.IsNonDamage)
         {
-            // 敵対象の非ダメージ魔法（毒付与等）は回避判定を行う
             if (magic.IsHostileNonDamage)
             {
-                if (!CheckPlayerHit(magic.baseHitRate))
+                if (!CheckPlayerHitWithBlind(magic.baseHitRate))
                 {
                     AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -598,16 +710,15 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        if (!CheckPlayerHit(magic.baseHitRate))
+        if (!CheckPlayerHitWithBlind(magic.baseHitRate))
         {
             AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
             FlushLogsAndThen(() => EnemyTurn());
             return;
         }
 
-
         // =========================================================
-        // 多段攻撃対応（追加）
+        // 多段攻撃対応
         // =========================================================
         int hits = magic.EffectiveHitCount;
         int totalDamage = 0;
@@ -620,18 +731,22 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            // 多段攻撃の2発目以降は個別に命中判定
-            if (h > 0 && !CheckPlayerHit(magic.baseHitRate))
+            if (h > 0 && !CheckPlayerHitWithBlind(magic.baseHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
-            // ★ OnMagicClicked 固有: fixedDamage 優先、MagicAttack ベース
+            // ★ OnMagicClicked 固有: MagicAttack ベース
             int damage;
             if (magic.damageMultiplier > 0)
             {
                 int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
+                // Phase2: 怒り中は攻撃力1.5倍（魔法攻撃にも適用）
+                if (playerRageTurn > 0)
+                {
+                    magicAttack = Mathf.FloorToInt(magicAttack * StatusEffectSystem.RageAttackMultiplier + 0.5f);
+                }
                 damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
             }
             else
@@ -666,7 +781,6 @@ public partial class BattleSceneController
 
             if (hits > 1)
             {
-                // 多段攻撃: 各ヒットのログ
                 string hitPrefix = $"  {h + 1}撃目";
                 if (isCrit)
                     AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
@@ -675,18 +789,15 @@ public partial class BattleSceneController
             }
             else
             {
-                // 単発攻撃: 従来ログ
                 if (isCrit)
                     AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
                 else
                     AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
             }
 
-            // 途中で敵が倒れたら残りをスキップ
             if (enemyCurrentHp <= 0) break;
         }
 
-        // 多段攻撃の合計ログ
         if (hits > 1)
         {
             AddLog($"  → 合計 {totalDamage}ダメージ！（{hitSuccess}/{hits}命中）");
@@ -714,33 +825,33 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // 防御コマンド（追加）
-    // =========================================================
-    //
-    // 防御を選択すると、そのターンの敵攻撃に対して以下の効果が適用される:
-    //   1. 物理防御力・魔法防御力が 2倍 になる
-    //   2. 防御ダイスの diceRange が 1.5f になる（通常2.0f → 成功率50%→67%）
-    //
-    // 防御フラグ（isDefending）は BeginPlayerTurn() で false にリセットされるため、
-    // 防御の効果は選択したターンの敵攻撃1回分のみ。
-    //
-    // 防御中は行動せずにターン終了するため、クールダウンは進める。
+    // 防御コマンド
     // =========================================================
 
     /// <summary>
     /// 防御ボタンが押された時の処理（プレイヤーターン・防御）。
-    /// isDefending フラグを true にセットし、敵ターンに移行する。
-    /// 防御フラグは次の BeginPlayerTurn() で false にリセットされる。
+    /// Phase2: 怒り中は防御不可。麻痺チェック追加。
     /// </summary>
     private void OnDefendClicked()
     {
         if (battleEnded) return;
+
+        // Phase2: 怒り中は防御不可
+        if (playerRageTurn > 0)
+        {
+            AddLogImmediate("怒りで我を忘れている！ 攻撃しかできない！");
+            return;
+        }
+
         BeginPlayerTurn(); // ターン開始ログ（前ターンの防御はここでリセット）
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
         // 防御フラグをセット（このターンの敵攻撃に対して有効）
         isDefending = true;
+
+        // Phase2: 麻痺チェック
+        if (CheckPlayerParalyze()) return;
 
         // 先制攻撃割り込み（防御フラグは既にセット済みなので先制攻撃にも防御が適用される）
         if (ExecutePreemptiveIfNeeded()) return;
@@ -752,7 +863,7 @@ public partial class BattleSceneController
 
     /// <summary>
     /// プレイヤースキルの追加効果を実行する共通メソッド。
-    /// SkillEffectProcessor を呼び出し、結果のログを追加する。
+    /// Phase2: フル版シグネチャ（11引数）に切り替え。
     /// </summary>
     private void ProcessPlayerSkillEffects(SkillData skill)
     {
@@ -764,7 +875,12 @@ public partial class BattleSceneController
             enemyMonster,
             ref enemyIsPoisoned,
             ref enemyIsStunned,
-            ref enemyCurrentHp);
+            ref enemyCurrentHp,
+            0,
+            ref enemyIsParalyzed,
+            ref enemyIsBlind,
+            ref enemyRageTurn,
+            ref playerRageTurn);
 
         for (int i = 0; i < logs.Count; i++)
         {
@@ -776,8 +892,7 @@ public partial class BattleSceneController
 
     /// <summary>
     /// プレイヤースキルの追加効果を実行する（与ダメージ付き）。
-    /// 反動ダメージ（RecoilEffectData）を持つスキル用。
-    /// lastDamageDealt に直前に与えた合計ダメージを渡す。
+    /// Phase2: フル版シグネチャ（11引数）に切り替え。
     /// </summary>
     private void ProcessPlayerSkillEffects(SkillData skill, int lastDamageDealt)
     {
@@ -790,7 +905,11 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            lastDamageDealt: lastDamageDealt);
+            lastDamageDealt,
+            ref enemyIsParalyzed,
+            ref enemyIsBlind,
+            ref enemyRageTurn,
+            ref playerRageTurn);
 
         for (int i = 0; i < logs.Count; i++)
         {
@@ -806,16 +925,19 @@ public partial class BattleSceneController
 
     /// <summary>
     /// アイテムボタンが押された時の処理。
-    /// Itembox シーンへ遷移する（ターン消費なし）。
-    /// ※ アイテム使用はターン消費扱いだが、BeginPlayerTurn は
-    ///   Itembox から戻った後（battleTurnConsumed 処理）に呼ばれない。
-    ///   アイテム使用時のターン開始ログは、Itembox 側でターン消費が
-    ///   確定した時点で battleItemActionLog にまとめて記録される。
-    ///   → ターン区切り線はアイテム使用時には出ない（仕様）。
+    /// Phase2: 怒り中はアイテム使用不可。
     /// </summary>
     private void OnItemClicked()
     {
         if (battleEnded) return;
+
+        // Phase2: 怒り中はアイテム使用不可
+        if (playerRageTurn > 0)
+        {
+            AddLogImmediate("怒りで我を忘れている！ 攻撃しかできない！");
+            return;
+        }
+
         if (GameState.I != null)
         {
             GameState.I.isInBattle = true;

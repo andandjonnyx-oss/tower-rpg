@@ -148,6 +148,19 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool enemyIsStunned = false;
 
     // =========================================================
+    // 敵の新状態異常（Phase2 追加）
+    // =========================================================
+
+    /// <summary>戦闘中の敵の麻痺状態。戦闘終了でリセット。</summary>
+    private static bool enemyIsParalyzed = false;
+    /// <summary>戦闘中の敵の暗闇状態。戦闘終了でリセット。</summary>
+    private static bool enemyIsBlind = false;
+    /// <summary>敵の怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
+    private static int enemyRageTurn = 0;
+    /// <summary>プレイヤーの怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
+    private static int playerRageTurn = 0;
+
+    // =========================================================
     // 防御フラグ（追加）
     // =========================================================
     //
@@ -291,6 +304,10 @@ public partial class BattleSceneController : MonoBehaviour
             currentTurnNumber = 0; // ターンカウンターリセット
             isDefending = false; // 防御フラグリセット
             enemyIsStunned = false;
+            enemyIsParalyzed = false; // Phase2: 麻痺リセット
+            enemyIsBlind = false;     // Phase2: 暗闇リセット
+            enemyRageTurn = 0;        // Phase2: 敵怒りリセット
+            playerRageTurn = 0;       // Phase2: プレイヤー怒りリセット
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
@@ -411,8 +428,6 @@ public partial class BattleSceneController : MonoBehaviour
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
-        enemyIsPoisoned = false;
-        enemyIsStunned = false;
 
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
@@ -652,8 +667,6 @@ public partial class BattleSceneController : MonoBehaviour
         AddLog("You は倒れた…");
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
-        enemyIsPoisoned = false;
-        enemyIsStunned = false;
 
         // ログを全部表示してからポップアップ表示
         FlushLogsAndThen(() =>
@@ -855,6 +868,10 @@ public partial class BattleSceneController : MonoBehaviour
         currentTurnNumber = 0; // ターンカウンターもリセット
         enemyIsPoisoned = false;
         enemyIsStunned = false;
+        enemyIsParalyzed = false; // Phase2: 麻痺リセット
+        enemyIsBlind = false;     // Phase2: 暗闇リセット
+        enemyRageTurn = 0;        // Phase2: 敵怒りリセット
+        playerRageTurn = 0;       // Phase2: プレイヤー怒りリセット
         isDefending = false; // 防御フラグもリセット
         pendingEnemyAction = null; // 先制攻撃もリセット
         isEnemyPreemptive = false;
@@ -1212,22 +1229,33 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     /// 
     // =========================================================
-    // 状態異常表示（追加）
+    // 状態異常表示（Phase2 拡張: 毒・麻痺・暗闇・怒り 複数表示対応）
     // TowerState.RefreshStatusEffectUI() と同じ表示ロジック。
     // =========================================================
 
     /// <summary>
     /// 戦闘中の状態異常テキストを更新する。
-    /// TowerState と同じ表示仕様（紫色で【毒】等）。
+    /// 複数の状態異常を【毒・麻痺・暗闇】のように連結表示する。
+    /// プレイヤーの怒り状態も表示する。
     /// battleStatusEffectText が未設定なら何もしない。
     /// </summary>
     private void RefreshBattleStatusEffectUI()
     {
         if (battleStatusEffectText == null) return;
 
-        if (GameState.I != null && GameState.I.isPoisoned)
+        var parts = new List<string>();
+
+        if (GameState.I != null)
         {
-            battleStatusEffectText.text = "【毒】";
+            if (GameState.I.isPoisoned) parts.Add("毒");
+            if (GameState.I.isParalyzed) parts.Add("麻痺");
+            if (GameState.I.isBlind) parts.Add("暗闇");
+        }
+        if (playerRageTurn > 0) parts.Add("怒り");
+
+        if (parts.Count > 0)
+        {
+            battleStatusEffectText.text = "【" + string.Join("・", parts) + "】";
             battleStatusEffectText.color = new Color(0.5f, 0f, 0.8f);
         }
         else
