@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 014_kemusi
+  m_Name: 015_koumori
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 014_kemusi
-  Mname: "\u30A2\u30AA\u30B1\u30E0\u30B7"
+  ID: 015_koumori
+  Mname: "\u8759\u8760"
   Image: {fileID: 0}
   Minfloor: 14
   Minstep: 1
@@ -22,28 +22,26 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 100
-  Attack: 35
-  Defense: 15
+  MaxHp: 80
+  Attack: 30
+  Defense: 10
   MagicDefense: 10
   Speed: 0
   Luck: 5
-  Evasion: 0
+  Evasion: 60
   BaseHitRate: 90
-  PoisonResistance: 100
+  PoisonResistance: 0
   StunResistance: 0
-  ParalyzeResistance: 100
-  BlindResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 100
   RageResistance: 0
   attributeResistances: []
-  Exp: 350
+  Exp: 300
   Gold: 0
-  dropItem: {fileID: 11400000, guid: 7ae1815dab7b76f4d94a91571a4c1808, type: 2}
+  dropItem: {fileID: 11400000, guid: 23185dd37ada9f04bb60586bccee1a47, type: 2}
   dropRate: 0.2
-  Help: "\u6BD2\u3082\u9EBB\u75FA\u3082\u4F7F\u3063\u3066\u304F\u308B\u5384\u4ECB\u306A\u866B\u3060\u305C\uFF01\n\u9032\u5316\u5F8C\u306F\u591A\u5206\u5F8C\u534A\u306B\u51FA\u3066\u6765\u308B\u305C\uFF01"
+  Help: "\u3053\u3046\u3082\u308A\u3063\u3066\u8AAD\u3080\u3093\u3060\u305C\uFF01\n\u307E\u3041\u30B0\u30E9\u30D5\u30A3\u30C3\u30AF\u898B\u308A\u3083\u308F\u304B\u308B\u3088\u306A\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: e1911c7cb31cb6c439b7a977c22f6416, type: 2}
-    threshold: 50
-  - skill: {fileID: 11400000, guid: 3a5b53e8a7f712143a3c00e5c2d4f61a, type: 2}
+  - skill: {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}
     threshold: 100
   baseActionRange: 100

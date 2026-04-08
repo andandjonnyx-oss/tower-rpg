@@ -15,11 +15,11 @@ MonoBehaviour:
   itemId: W010_parareipia
   itemName: "\u30D1\u30E9\u30EC\u30A4\u30D4\u30A2"
   description: "\u75FA\u308C\u308B\u4E00\u7A81\u304D\uFF01\uFF08\u96F7\u5C5E\u6027\u3067\u306F\u7121\u3044\uFF09\n\u653B\u6483+20
-    2\u5272\u3067\u9EBB\u75FA\n\u30B9\u30AD\u30EB\uFF1A\u30D1\u30E9\u30E9\u30A2\u30BF\u30C3\u30AF\uFF08CT1\u30011\u500D\u300140%\u9EBB\u75FA\uFF09"
+    2\u5272\u3067\u9EBB\u75FA \u9EBB\u75FA\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30D1\u30E9\u30E9\u30A2\u30BF\u30C3\u30AF\n\uFF08CT3\u30011\u500D\u300140%\u9EBB\u75FA\uFF09"
   icon: {fileID: 0}
   Minfloor: 14
   Minstep: 1
-  Maxfloor: 20
+  Maxfloor: 17
   Maxstep: 20
   category: 1
   stackable: 1
@@ -57,7 +57,9 @@ MonoBehaviour:
   equipCritical: 0
   baseHitRate: 95
   equipResistances: []
-  equipStatusEffectResistances: []
+  equipStatusEffectResistances:
+  - statusEffect: 2
+    value: 50
   magicSkill: {fileID: 0}
   passiveEffects: []
   sortOrder: 10

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: C008_mahikesi
   itemName: "\u9EBB\u75FA\u6D88\u3057\u8349"
-  description: "\u75FA\u308C\u308B\u7F8E\u5473\u3055\uFF01\u2026\u2026\u3042\u308C\uFF1F\n\u9EBB\u75FA\u6CBB\u7642\uFF0BHP20\u56DE\u5FA9"
+  description: "\u75FA\u308C\u308B\u7F8E\u5473\u3055\uFF01\u2026\u2026\u3042\u308C\uFF1F\n\u9EBB\u75FA\u6CBB\u7642+HP30\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 14
   Minstep: 1
@@ -23,7 +23,7 @@ MonoBehaviour:
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 20
+  healAmount: 30
   mpHealAmount: 0
   curesPoison: 0
   curesParalyze: 1
@@ -58,4 +58,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 2
+  sortOrder: 8

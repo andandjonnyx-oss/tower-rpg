@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M017M_mahi
+  m_Name: W011_kurayamiken
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M017M_mahi
-  itemName: "\u30D1\u30E9\u30E9\u30A4"
-  description: "\u6575\u3092\u9EBB\u75FA\u306B\u3059\u308B\u3000\nMP8 \u57FA\u790E\u547D\u4E2D80"
+  itemId: W011_kurayamiken
+  itemName: "\u6697\u9ED2\u306E\u62F3"
+  description: "\u6F06\u9ED2\u306E\u4E00\u6483\uFF01\uFF08\u95C7\u5C5E\u6027\u3067\u306F\u7121\u3044\uFF09\n\u653B\u6483+20
+    2\u5272\u3067\u6697\u95C7 \u6697\u95C7\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30D6\u30E9\u30A4\u30F3\u30C9\u30A2\u30BF\u30C3\u30AF\n\uFF08CT3\u30011\u500D\u300140%\u6697\u95C7\uFF09"
   icon: {fileID: 0}
   Minfloor: 14
   Minstep: 1
   Maxfloor: 17
   Maxstep: 20
-  category: 2
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -40,10 +41,11 @@ MonoBehaviour:
   eatCuresParalyze: 0
   eatCuresBlind: 0
   weaponAttribute: 0
-  attackPower: 0
-  skills: []
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
+  attackPower: 20
+  skills:
+  - {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}
+  weaponInflictEffect: 4
+  weaponInflictChance: 20
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
@@ -55,7 +57,9 @@ MonoBehaviour:
   equipCritical: 0
   baseHitRate: 95
   equipResistances: []
-  equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: af3c2441b92cb7b44a8f1381f9bf8d8f, type: 2}
+  equipStatusEffectResistances:
+  - statusEffect: 4
+    value: 50
+  magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 17
+  sortOrder: 11
