@@ -847,11 +847,11 @@ public partial class BattleSceneController
         SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
-        // 防御フラグをセット（このターンの敵攻撃に対して有効）
-        isDefending = true;
-
         // Phase2: 麻痺チェック
         if (CheckPlayerParalyze()) return;
+
+        // 防御フラグをセット（このターンの敵攻撃に対して有効）
+        isDefending = true;
 
         // 先制攻撃割り込み（防御フラグは既にセット済みなので先制攻撃にも防御が適用される）
         if (ExecutePreemptiveIfNeeded()) return;

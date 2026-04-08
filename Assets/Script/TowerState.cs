@@ -22,15 +22,20 @@ public class TowerState : MonoBehaviour
     [Tooltip("状態異常時にメッセージを表示するテキスト。未設定なら表示しない。")]
     [SerializeField] private TextMeshProUGUI statusEffectText;
 
-    // =========================================================
-    // 暗闇オーバーレイ（Phase3 追加）
-    // =========================================================
     [Header("UI - Blind Overlay")]
     [Tooltip("暗闇時に背景を覆う黒い Image。\n"
            + "背景画像の上、ボタン類の下に配置する。\n"
            + "初期状態は非表示（SetActive(false)）にしておくこと。\n"
            + "未設定の場合は暗闇の背景暗転を行わない。")]
     [SerializeField] private GameObject blindOverlay;
+
+    [Header("UI - Paralyze Blocker")]
+    [Tooltip("麻痺待機中に全タッチ操作をブロックする透明パネル。\n"
+       + "Canvas の最前面に配置し、Raycast Target = true にする。\n"
+       + "初期状態は非表示にしておくこと。\n"
+       + "未設定の場合は進むボタンのみ無効化する。")]
+    [SerializeField] private GameObject paralyzeBlocker;
+
 
     // =========================================================
     // 非バトル魔法 UI（MagicSelector 版に変更）
@@ -110,7 +115,8 @@ public class TowerState : MonoBehaviour
     {
         isParalyzeWaiting = true;
 
-        // ボタンを無効化
+        // 全操作をブロック
+        if (paralyzeBlocker != null) paralyzeBlocker.SetActive(true);
         if (advanceButton != null) advanceButton.interactable = false;
 
         Debug.Log("[Tower] 麻痺: 1秒待機中…");
@@ -118,7 +124,8 @@ public class TowerState : MonoBehaviour
 
         isParalyzeWaiting = false;
 
-        // ボタンを再有効化
+        // ブロック解除
+        if (paralyzeBlocker != null) paralyzeBlocker.SetActive(false);
         if (advanceButton != null) advanceButton.interactable = true;
 
         AdvanceInternal();
