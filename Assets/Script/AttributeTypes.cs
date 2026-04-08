@@ -16,18 +16,34 @@ public enum WeaponAttribute
 
 /// <summary>
 /// 状態異常の列挙型。
+///
+/// 【分類】
+///   持続型デバフ（戦闘後も残る、塔移動中にも効果あり）:
+///     Poison   - 毒
+///     Paralyze - 麻痺
+///     Blind    - 暗闇
+///
+///   戦闘限定デバフ:
+///     Stun     - 気絶（1ターン限定）
+///
+///   戦闘限定バフ（使用者自身に付与）:
+///     Rage     - 怒り（バーサク）。攻撃力UP+通常攻撃のみ。3ターン or 戦闘終了で解除。
+///
+///   予約（未使用）:
+///     Sleep, Silence, Burn, Freeze
 /// </summary>
 public enum StatusEffect
 {
     None,
     Poison,    // 毒
     Paralyze,  // 麻痺
-    Sleep,     // 睡眠
-    Blind,     // 暗闇
-    Silence,   // 沈黙
-    Burn,      // 火傷
-    Freeze,    // 凍結
+    Sleep,     // 睡眠（予約）
+    Blind,     // 暗闘
+    Silence,   // 沈黙（予約）
+    Burn,      // 火傷（予約）
+    Freeze,    // 凍結（予約）
     Stun,      // 気絶
+    Rage,      // 怒り（バーサク）
 }
 
 /// <summary>
@@ -64,6 +80,7 @@ public static class AttributeExtensions
             case StatusEffect.Burn: return "火傷";
             case StatusEffect.Freeze: return "凍結";
             case StatusEffect.Stun: return "気絶";
+            case StatusEffect.Rage: return "怒り";
             default: return effect.ToString();
         }
     }

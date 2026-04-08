@@ -79,12 +79,21 @@ public class GameState : MonoBehaviour
     public int gp = 0;
 
     // =========================================================
-    // 状態異常（追加）
+    // 状態異常
     // =========================================================
     //
-    // 現在のプレイヤーの状態異常フラグ。
-    // 毒は戦闘終了後も持続し、塔移動中にダメージを受ける。
-    // セーブ/ロード対象。
+    // 【持続型デバフ】（戦闘終了後も残る、塔移動中にも効果あり、セーブ対象）
+    //   isPoisoned   - 毒: ターン/歩行ごとにダメージ、10%自然治癒
+    //   isParalyzed  - 麻痺: 20%で行動キャンセル、塔移動が遅くなる、10%自然治癒
+    //   isBlind      - 暗闇: 命中/回避に影響、塔の背景が暗転、10%自然治癒
+    //
+    // 【戦闘限定バフ】（セーブ不要、BattleSceneController側で管理）
+    //   怒り（Rage）: 攻撃力UP+通常攻撃のみ、3ターン or 戦闘終了で解除
+    //   → rageTurnRemaining は BattleSceneController のフィールドで管理
+    //
+    // 【戦闘限定デバフ】（セーブ不要、BattleSceneController側で管理）
+    //   気絶（Stun）: 1ターン行動不能
+    //   → enemyIsStunned は BattleSceneController のフィールドで管理
     //
     // ★ブラッシュアップ:
     //   街に戻る = 全回復（状態異常含む）で統一。
@@ -95,22 +104,26 @@ public class GameState : MonoBehaviour
     [Tooltip("プレイヤーが毒状態かどうか。戦闘終了後も持続する。")]
     public bool isPoisoned = false;
 
+    [Tooltip("プレイヤーが麻痺状態かどうか。戦闘終了後も持続する。")]
+    public bool isParalyzed = false;
+
+    [Tooltip("プレイヤーが暗闇状態かどうか。戦闘終了後も持続する。")]
+    public bool isBlind = false;
+
     // =========================================================
-    // 状態異常の一括クリア（追加）
+    // 状態異常の一括クリア
     // =========================================================
 
     /// <summary>
     /// プレイヤーの全状態異常をクリアする。
     /// 街に戻る（帰還・敗北・ロード復帰）時に FullRecover() から呼ばれる。
-    /// 将来的に麻痺・睡眠等が追加された場合もここに追記する。
+    /// 持続型デバフ（毒・麻痺・暗闇）のみ。戦闘限定の状態はここでは扱わない。
     /// </summary>
     public void ClearAllStatusEffects()
     {
         isPoisoned = false;
-        // 今後追加される状態異常もここでクリアする
-        // isParalyzed = false;
-        // isSleeping = false;
-        // etc.
+        isParalyzed = false;
+        isBlind = false;
         Debug.Log("[GameState] 全状態異常をクリア");
     }
 

@@ -1,7 +1,7 @@
 # PROJECT_MAP
 
 リポジトリ: andandjonnyx-oss/tower-rpg
-更新日: 2026-04-06
+更新日: 2026-04-07
 
 ---
 
@@ -21,9 +21,9 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Script/Battle/
 | ファイル | 役割 |
 |---------|------|
-| BattleSceneController.cs | 戦闘メイン。UI・ログキュー・勝敗処理・先制抽選・ドロップアイテム処理・MagicSelector連携・状態異常UI表示 |
-| BattleSceneController_PlayerAction.cs | プレイヤー行動。攻撃/スキル/魔法/防御/先制割り込み。非ダメージスキルは命中判定スキップ |
-| BattleSceneController_EnemyAction.cs | 敵行動。LUC判定/SkillAttack統合処理/先制チェック/ターン終了。非ダメージスキルは命中判定スキップ |
+| BattleSceneController.cs | 戦闘メイン。UI・ログキュー・勝敗処理・先制抽選・ドロップアイテム処理・MagicSelector連携・状態異常UI表示・HP0勝利補正 |
+| BattleSceneController_PlayerAction.cs | プレイヤー行動。攻撃/スキル/魔法/防御/先制割り込み。非ダメージ敵対象は回避判定あり。反動ダメージ対応（totalDamage渡し） |
+| BattleSceneController_EnemyAction.cs | 敵行動。LUC判定/SkillAttack統合処理/先制チェック/ターン終了。非ダメージ敵対象は回避判定あり |
 | BattleSceneController_CombatUtils.cs | 命中/クリティカル/防御ダイス/属性耐性/ダメージ適用 |
 | BattleContext.cs | 戦闘シーン間データ受け渡し（static） |
 | Monster.cs | モンスターSO定義（ステータス/行動パターン/属性耐性/Weight(float)/ドロップ設定/StunResistance） |
@@ -36,10 +36,11 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Script/Skill/
 | ファイル | 役割 |
 |---------|------|
-| SkillData.cs | スキルSO定義（bonusDamage/noBattleOk追加済み）+ MonsterActionType/SkillSource enum |
+| SkillData.cs | スキルSO定義（bonusDamage/noBattleOk/IsHostileNonDamage追加済み）+ MonsterActionType/SkillSource enum |
 | SkillEffectData.cs | 追加効果基底クラス（abstract SO） |
-| SkillEffectEntry.cs | 追加効果エントリ（パラメータ保持） |
-| SkillEffectProcessor.cs | 追加効果実行（毒/スタン/レベドレ/回復/自爆） |
+| SkillEffectEntry.cs | 追加効果エントリ（パラメータ保持。RecoilEffectData説明追記済み） |
+| SkillEffectProcessor.cs | 追加効果実行（毒/スタン/レベドレ/回復/自爆/反動ダメージ。lastDamageDealt対応。状態異常失敗ログ対応） |
+| RecoilEffectData.cs | 反動ダメージエフェクトSO（★今回追加） |
 | SelfDestructEffectData.cs | 自爆エフェクトSO |
 | HealEffectData.cs | 回復エフェクトSO |
 | LevelDrainEffectData.cs | レベルドレインエフェクトSO |
@@ -57,7 +58,7 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 |---------|------|
 | Item.cs (ItemData) | アイテムSO定義（healAmount/curesPoison/statusPointGain/isEdible/eatHeal/transformInto/mpHealAmount/武器/魔法/パッシブ） |
 | InventoryItem.cs | インベントリ内アイテムインスタンス |
-| ItemBoxManager.cs | アイテムボックス管理 |
+| ItemBoxManager.cs | アイテムボックス管理（EquipItem/UnequipItemでRecalcMaxHp/RecalcMaxMp呼び出し追加済み） |
 | ItemDatabase.cs | アイテムDB |
 | ItemPickupWindow.cs | アイテム拾得ポップアップ（Tower/Battle/Talk報酬共用） |
 | ItemDetailPanel.cs | アイテム詳細パネル |
@@ -91,7 +92,7 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Script/ (ルート)
 | ファイル | 役割 |
 |---------|------|
-| GameState.cs | ゲーム全体の状態管理（HP/MP/レベル/EXP/ステータスポイント/セーブ/isRewardItem/talkReturnScene 追加済み） |
+| GameState.cs | ゲーム全体の状態管理（HP/MP/レベル/EXP/ステータスポイント/GP/セーブ/isRewardItem/talkReturnScene 追加済み） |
 | GameStateautocreate.cs | GameState自動生成 |
 | AttributeTypes.cs | WeaponAttribute enum + ToJapanese拡張 |
 | TowerState.cs | タワー探索制御（MagicSelector連携/非バトル魔法/RefreshFieldMagicFromExternal追加済み） |
@@ -105,7 +106,7 @@ Title → Main（街） → TowerEntrance → Tower（探索） → Battle（戦
 ### Assets/Editor/
 | ファイル | 役割 |
 |---------|------|
-| SkillEffectEntryDrawer.cs | 追加効果インスペクター表示（ジャンル別） |
+| SkillEffectEntryDrawer.cs | 追加効果インスペクター表示（ジャンル別。RecoilEffectData対応追加済み） |
 | ItemDatabaseViewer.cs / ItemDetailWindow.cs | アイテムDB閲覧ツール（bonusDamage対応） |
 | MonsterDatabaseViewer.cs / MonsterDetailWindow.cs | モンスターDB閲覧ツール（bonusDamage対応） |
 | Skilldatabaseviewer.cs / Skilldetailwindow.cs / Skilleffectdetailwindow.cs | スキルDB閲覧ツール（bonusDamage対応） |
@@ -122,11 +123,15 @@ Assets/ScriptableAsset/
       consume/                ← 消費アイテム（C001_Yakusou〜C007_18ice）
       magic/                  ← 魔法アイテム（M001_Fire〜M011_depoizu）
       Weapon/                 ← 武器（W001_Bokutou〜W008_icenobou）
+    F11-20/
+      weapon/                 ← 武器（W009_livesword 作成済み）
   Monsterlist/
-    Normal/F1-F10/            ← 1〜10階通常敵（001〜010作成済み）
+    Normal/
+      F1-F10/                 ← 1〜10階通常敵（001〜010作成済み）
+      F11-F20/                ← 11〜20階通常敵（011〜013作成済み）
     Boss/                     ← ボス敵（F10B_Boslime作成済み）
-  Skilllist/                  ← スキルデータ（001〜018作成済み）
-  Skilleffect/                ← スキル効果SO
+  Skilllist/                  ← スキルデータ（001〜020作成済み）
+  Skilleffect/                ← スキル効果SO（RecoilEffect追加済み）
   Talklist/                   ← 会話イベントデータ（OP_Opening〜BOSS_F10_VICTORY 全13件作成済み）
   Talkcondition/              ← 会話発生条件
 ```
@@ -163,6 +168,13 @@ Assets/ScriptableAsset/
 | 010_seireikaminari | 雷の精霊 | 10のみ | 80 | 15 | 10 | 雷無効、Weight0.3、確定ドロップ:ステUP3、MDEF10 |
 | F10B_Boslime | ボスライム | ボス | 500 | 30 | 20 | 毒攻撃+炎攻撃+ヒール、毒耐性なし |
 
+## 作成済みモンスター（F11-F20）
+| ID | 名前 | 出現階 | HP | ATK | DEF | EVA | 特徴 |
+|----|------|--------|-----|-----|-----|-----|------|
+| 011_livesword | リビングソード | 11-15 | 1 | 40 | 0 | 100 | 斬攻撃のみ。HP1の高回避高火力。DEXで対策 |
+| 012_livetate | リビングシールド | 11-15 | 50 | 25 | 30 | 0 | 殴攻撃+ヒール。毒スタン完全耐性。MDEF30。LUCで対策 |
+| 013_livekittin | リビングテーブル | 11-15 | 80 | 30 | 20 | 0 | 殴+雷+強撃のバランス型。MDEF15 |
+
 ## 作成済みスキル
 | ID | 名前 | タイプ | 備考 |
 |----|------|--------|------|
@@ -188,7 +200,8 @@ Assets/ScriptableAsset/
 | 016_raikiri | 雷切 | SkillAttack | 斬×2.0+bonusDamage10、CT5 |
 | 017_18attack | 18アタック | SkillAttack | 氷×0.1×18回、CT18 |
 | 018_depoizu | デポイズ | SkillAttack | 非ダメージ+毒消し、noBattleOk=true |
-| 019_mthun | 未確認 | — | 新規追加（Inspector未確認） |
+| 019_mthun | 未確認 | — | |
+| 020_noroiken | 呪われた一撃 | SkillAttack | 斬×3.0+反動ダメージ(RecoilEffectData)、CT0、プレイヤー専用 |
 
 ## 拾得アイテム一覧（F1-F10）
 
@@ -202,7 +215,7 @@ Assets/ScriptableAsset/
 | C006 | マナポーション | 6-10 | MP30回復 |
 | C007 | 18アイス | 8-10 | HP18回復（使用後アイテム変化） |
 
-### 武器
+### 武器（F1-F10）
 | ID | 名前 | 出現階 | ATK | 属性 | 特殊 |
 |----|------|--------|-----|------|------|
 | W001 | 木刀 | 1-3 | +3 | Slash | スキル:強撃(CT3,2倍) |
@@ -213,6 +226,11 @@ Assets/ScriptableAsset/
 | W006 | 雷の剣 | 6-10 | +10 | Slash | スキル:雷切、雷耐性50装備 |
 | W007 | さくらぼー | 8-10 | +15 | Pierce | スキル:三連突き、食べるとHP100回復 |
 | W008 | 18アイスブレード | 拾得不可 | +18 | Slash | スキル:18アタック(CT18) |
+
+### 武器（F11-F20）
+| ID | 名前 | 入手方法 | ATK | 属性 | 特殊 |
+|----|------|----------|-----|------|------|
+| W009 | リビングソード | 011ドロップ | +30 | Slash(Strike?) | スキル:呪われた一撃(CT0,3倍+反動)、MaxHP-30 |
 
 ### マジックアイテム
 | ID | 名前 | 出現階 |

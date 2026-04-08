@@ -52,7 +52,7 @@ public class Monster : ScriptableObject
     public int BaseHitRate = 90;
 
     // =========================================================
-    // 状態異常耐性（追加）
+    // 状態異常耐性
     // =========================================================
 
     [Header("Status Effect Resistance")]
@@ -65,6 +65,23 @@ public class Monster : ScriptableObject
            + "気絶の実質命中率 = 基礎命中率 × (1 - StunResistance/100)\n"
            + "100 = 気絶完全耐性。ボス等に高い値を設定して耐性を持たせる。")]
     public int StunResistance = 0;
+
+    [Tooltip("敵の麻痺耐性値（0〜100）。\n"
+           + "麻痺の実質命中率 = 基礎命中率 × (1 - ParalyzeResistance/100)\n"
+           + "100 = 麻痺完全耐性。")]
+    public int ParalyzeResistance = 0;
+
+    [Tooltip("敵の暗闇耐性値（0〜100）。\n"
+           + "暗闇の実質命中率 = 基礎命中率 × (1 - BlindResistance/100)\n"
+           + "100 = 暗闇完全耐性。")]
+    public int BlindResistance = 0;
+
+    [Tooltip("敵の怒り耐性値（0〜100）。\n"
+           + "怒りの実質命中率 = 基礎命中率 × (1 - RageResistance/100)\n"
+           + "100 = 怒り完全耐性。\n"
+           + "怒りは対象者自身にかかるバフ的効果だが、\n"
+           + "敵に強制付与する使い方もあり得るため耐性を用意。")]
+    public int RageResistance = 0;
 
     // =========================================================
     // 属性耐性（追加）
@@ -88,6 +105,28 @@ public class Monster : ScriptableObject
                 return attributeResistances[i].value;
         }
         return 0;
+    }
+
+    // =========================================================
+    // 汎用：状態異常耐性値の取得
+    // =========================================================
+
+    /// <summary>
+    /// 指定された状態異常に対する耐性値を返す。
+    /// 個別フィールドを switch で切り替えて返す。
+    /// 未定義の状態異常は 0（耐性なし）を返す。
+    /// </summary>
+    public int GetStatusEffectResistance(StatusEffect effect)
+    {
+        switch (effect)
+        {
+            case StatusEffect.Poison: return PoisonResistance;
+            case StatusEffect.Stun: return StunResistance;
+            case StatusEffect.Paralyze: return ParalyzeResistance;
+            case StatusEffect.Blind: return BlindResistance;
+            case StatusEffect.Rage: return RageResistance;
+            default: return 0;
+        }
     }
 
     [Header("Reward")]
