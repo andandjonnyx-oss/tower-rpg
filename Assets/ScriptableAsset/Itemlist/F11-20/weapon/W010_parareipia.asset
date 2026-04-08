@@ -21,7 +21,7 @@ MonoBehaviour:
   Minstep: 1
   Maxfloor: 20
   Maxstep: 20
-  category: 0
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -44,8 +44,8 @@ MonoBehaviour:
   attackPower: 20
   skills:
   - {fileID: 11400000, guid: 3a5b53e8a7f712143a3c00e5c2d4f61a, type: 2}
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
+  weaponInflictEffect: 2
+  weaponInflictChance: 20
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

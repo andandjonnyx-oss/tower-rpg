@@ -16,9 +16,9 @@ MonoBehaviour:
   itemName: "\u30C7\u30D1\u30E9\u30E9"
   description: "MP5\u3000\u9EBB\u75FA\u3068HP30\u56DE\u5FA9\n\u56DE\u5FA9\u3057\u3088\u3046\u3068\u3057\u305F\u306E\u306B\u9EBB\u75FA\u5224\u5B9A\u3067\u5931\u6557\u3057\u3066\u3082\u6C17\u306B\u3059\u308B\u306A\uFF01"
   icon: {fileID: 0}
-  Minfloor: 4
+  Minfloor: 14
   Minstep: 1
-  Maxfloor: 7
+  Maxfloor: 17
   Maxstep: 20
   category: 2
   stackable: 1
