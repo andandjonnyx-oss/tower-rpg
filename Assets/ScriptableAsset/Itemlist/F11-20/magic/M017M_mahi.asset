@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: C008_mahikesi
+  m_Name: M017M_mahi
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C008_mahikesi
-  itemName: "\u9EBB\u75FA\u6D88\u3057\u8349"
-  description: "\u75FA\u308C\u308B\u7F8E\u5473\u3055\uFF01\u2026\u2026\u3042\u308C\uFF1F\n\u9EBB\u75FA\u6CBB\u7642\uFF0BHP20\u56DE\u5FA9"
+  itemId: M017M_mahi
+  itemName: "\u30D1\u30E9\u30E9\u30A4"
+  description: "\u6575\u3092\u9EBB\u75FA\u306B\u3059\u308B\u3000\nMP8 \u57FA\u790E\u547D\u4E2D80"
   icon: {fileID: 0}
-  Minfloor: 14
-  Minstep: 1
-  Maxfloor: 17
-  Maxstep: 20
-  category: 0
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  category: 2
   stackable: 1
   maxStack: 99
-  healAmount: 20
+  healAmount: 0
   mpHealAmount: 0
   curesPoison: 0
-  curesParalyze: 1
+  curesParalyze: 0
   curesBlind: 0
   statusPointGain: 0
   battleDamage: 0
@@ -56,6 +56,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 0}
+  magicSkill: {fileID: 11400000, guid: af3c2441b92cb7b44a8f1381f9bf8d8f, type: 2}
   passiveEffects: []
-  sortOrder: 2
+  sortOrder: 17

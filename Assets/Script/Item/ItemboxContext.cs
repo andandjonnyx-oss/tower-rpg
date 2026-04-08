@@ -161,7 +161,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.healAmount;
         int mpHeal = invItem.data.mpHealAmount;
+
         bool curesPoison = invItem.data.curesPoison;
+        bool curesParalyze = invItem.data.curesParalyze;
+        bool curesBlind = invItem.data.curesBlind;
+
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
 
@@ -188,12 +192,21 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         }
 
         // =========================================================
-        // 毒消し効果の適用（追加）
+        // 状態異常回復の適用（追加）
         // =========================================================
         if (curesPoison && GameState.I != null)
         {
             StatusEffectSystem.CurePlayerPoison();
         }
+        if (curesParalyze && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
+        }
+        if (curesBlind && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
+        }
+
 
         // =========================================================
         // ステータスポイント付与効果の適用（追加）
@@ -263,6 +276,8 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.eatHealAmount;
         bool curesPoison = invItem.data.eatCuresPoison;
+        bool eatCuresParalyze = invItem.data.eatCuresParalyze;
+        bool eatCuresBlind = invItem.data.eatCuresBlind;
         ItemData transformInto = invItem.data.transformInto;
 
         // 装備中なら外す
@@ -284,6 +299,15 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (curesPoison && GameState.I != null)
         {
             StatusEffectSystem.CurePlayerPoison();
+        }
+        if (eatCuresParalyze && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
+        }
+
+        if (eatCuresBlind && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
         }
 
         // 元アイテムを消す

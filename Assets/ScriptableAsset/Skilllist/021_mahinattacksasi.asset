@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 021_mahinattacksasi
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: 021_mahinattacksasi
-  skillName: "\u9EBB\u75FA\u653B\u6483"
+  skillName: "\u30D1\u30E9\u30E9\u30A2\u30BF\u30C3\u30AF"
   description: "\u523A"
   skillSource: 0
   actionType: 2
@@ -21,7 +21,7 @@ MonoBehaviour:
   damageCategory: 0
   damageMultiplier: 1
   bonusDamage: 0
-  cooldownTurns: 0
+  cooldownTurns: 3
   mpCost: 0
   baseHitRate: 95
   hitCount: 1

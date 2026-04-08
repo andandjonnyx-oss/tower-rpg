@@ -34,6 +34,11 @@ public class ItemData : ScriptableObject
     [Tooltip("true の場合、使用時に毒状態を回復する。\n"
            + "毒消しアイテムに設定する。healAmount との併用可能。")]
     public bool curesPoison = false;
+    [Tooltip("true の場合、使用時に麻痺状態を回復する。")]
+    public bool curesParalyze = false;
+    [Tooltip("true の場合、使用時に暗闇状態を回復する。")]
+    public bool curesBlind = false;
+
 
     // =========================================================
     // 消費アイテム: ステータスポイント付与（追加）
@@ -129,6 +134,10 @@ public class ItemData : ScriptableObject
 
     [Tooltip("食べた時に毒状態を回復するかどうか。")]
     public bool eatCuresPoison = false;
+    [Tooltip("食べた時に麻痺状態を回復するかどうか。")]
+    public bool eatCuresParalyze = false;
+    [Tooltip("食べた時に暗闇状態を回復するかどうか。")]
+    public bool eatCuresBlind = false;
 
     [Header("Weapon")]
     public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;

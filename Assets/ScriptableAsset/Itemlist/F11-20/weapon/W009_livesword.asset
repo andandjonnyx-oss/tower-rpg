@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W009_livesword
   itemName: "\u30EA\u30D3\u30F3\u30B0\u30BD\u30FC\u30C9"
-  description: "\u751F\u304D\u305F\u5263\u3002\u8840\u3092\u5438\u3046\u304C\u30CE\u30EA\u306E\u826F\u3044\u5974\u3002\n\u653B\u6483\u529B+30\u3001HP\uFF0D30\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09"
+  description: "\u751F\u304D\u305F\u5263\u3002\u8840\u3092\u5438\u3046\u304C\u30CE\u30EA\u306E\u826F\u3044\u5974\u3002\n\u653B\u6483+30\u3001HP\uFF0D30\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09"
   icon: {fileID: 0}
   Minfloor: 0
   Minstep: 0
@@ -26,6 +26,8 @@ MonoBehaviour:
   healAmount: 0
   mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -35,6 +37,8 @@ MonoBehaviour:
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
   weaponAttribute: 1
   attackPower: 30
   skills:
@@ -55,4 +59,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 9
