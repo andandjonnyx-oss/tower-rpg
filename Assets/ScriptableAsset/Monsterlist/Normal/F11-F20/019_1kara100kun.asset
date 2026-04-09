@@ -44,5 +44,5 @@ MonoBehaviour:
   Help: "\u4E71\u6570\u304C\u504F\u3063\u3066\u308B\u306A\u3093\u3066\u82E6\u60C5\u306F\u53D7\u3051\u4ED8\u3051\u306A\u3044\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 1b1c6e4ee78213e4bbfa24aa792e3d69, type: 2}
-    threshold: 0
+    threshold: 100
   baseActionRange: 100

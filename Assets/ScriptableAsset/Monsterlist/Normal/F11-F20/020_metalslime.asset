@@ -40,7 +40,7 @@ MonoBehaviour:
   Exp: 2000
   Gold: 0
   dropItem: {fileID: 11400000, guid: 6dc1d67129ce4f04b94fa6d0e819f9e0, type: 2}
-  dropRate: 0
+  dropRate: 1
   Help: "\u9003\u3052\u306A\u3044\u304B\u3089\u5B89\u5FC3\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
