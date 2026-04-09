@@ -467,6 +467,19 @@ public partial class BattleSceneController
                         }
                     }
                     break;
+
+                case StatusEffect.Rage:
+                    if (playerRageTurn <= 0)
+                    {
+                        // 怒りは耐性判定なし（自分へのバフ扱い）、chanceのみ
+                        float rageRoll = Random.Range(0f, 100f);
+                        if (rageRoll < inflictChance)
+                        {
+                            playerRageTurn = StatusEffectSystem.RageDuration;
+                            AddLog("You は怒りに燃えた！ 攻撃力UP！");
+                        }
+                    }
+                    break;
             }
         }
 
