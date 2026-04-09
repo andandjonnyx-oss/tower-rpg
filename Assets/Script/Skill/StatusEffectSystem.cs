@@ -64,7 +64,7 @@ public static class StatusEffectSystem
     // =========================================================
 
     /// <summary>怒り（バーサク）の持続ターン数。</summary>
-    public const int RageDuration = 3;
+    public const int RageDuration = 4;
 
     /// <summary>怒り（バーサク）の攻撃力倍率。</summary>
     public const float RageAttackMultiplier = 1.5f;

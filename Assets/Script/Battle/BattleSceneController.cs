@@ -160,6 +160,9 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>プレイヤーの怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
     private static int playerRageTurn = 0;
 
+    /// <summary> 力溜め→攻撃のようなターンをまたがった行動用　 </summary>
+    private SkillData enemyForcedNextSkill;
+
     // =========================================================
     // 防御フラグ（追加）
     // =========================================================
@@ -310,6 +313,7 @@ public partial class BattleSceneController : MonoBehaviour
             playerRageTurn = 0;       // Phase2: プレイヤー怒りリセット
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
+            enemyForcedNextSkill = null; // 強制行動リセット
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
         }
         else

@@ -70,6 +70,8 @@ public class MagicSelector : MonoBehaviour
     [Tooltip("リストに表示する最大行数。これを超えるとスクロールになる。")]
     [SerializeField] private int maxVisibleItems = 20;
 
+    private GameObject blocker;
+
     /// <summary>現在選択中のインデックス。</summary>
     private int selectedIndex = 0;
 
@@ -178,6 +180,9 @@ public class MagicSelector : MonoBehaviour
 
         listPanel.SetActive(true);
         isOpen = true;
+
+        // 外部クリック検知用の透明パネルを生成
+        CreateBlocker();
     }
 
     /// <summary>
@@ -249,6 +254,7 @@ public class MagicSelector : MonoBehaviour
 
     private void CloseList()
     {
+        DestroyBlocker();
         if (listPanel != null) listPanel.SetActive(false);
         isOpen = false;
     }
@@ -343,5 +349,45 @@ public class MagicSelector : MonoBehaviour
     public void ForceClose()
     {
         CloseList();
+    }
+
+    /// <summary>
+    /// 画面全体を覆う透明パネルを生成する。
+    /// クリックされるとリストを閉じる。
+    /// listPanel より背面に配置する。
+    /// </summary>
+    private void CreateBlocker()
+    {
+        DestroyBlocker();
+
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) return;
+
+        blocker = new GameObject("MagicSelectorBlocker");
+        blocker.transform.SetParent(canvas.transform, false);
+
+        RectTransform blockerRect = blocker.AddComponent<RectTransform>();
+        blockerRect.anchorMin = Vector2.zero;
+        blockerRect.anchorMax = Vector2.one;
+        blockerRect.sizeDelta = Vector2.zero;
+
+        Image blockerImage = blocker.AddComponent<Image>();
+        blockerImage.color = Color.clear;
+
+        Button blockerButton = blocker.AddComponent<Button>();
+        blockerButton.onClick.AddListener(CloseList);
+
+        // ★ MagicSelector 自身の直前に配置する
+        // こうすると blocker は MagicSelector（とその子の listPanel）より背面になる
+        blocker.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
+    }
+
+    private void DestroyBlocker()
+    {
+        if (blocker != null)
+        {
+            Destroy(blocker);
+            blocker = null;
+        }
     }
 }

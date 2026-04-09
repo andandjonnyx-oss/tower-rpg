@@ -161,6 +161,14 @@ public class SkillData : ScriptableObject
            + "非ダメージスキル（倍率0 & ボーナス0）では追加効果のみ実行される。")]
     public List<SkillEffectEntry> additionalEffects = new List<SkillEffectEntry>();
 
+
+    // 力溜め→攻撃のようなターンをまたがった行動用
+    [Tooltip("敵がこのスキルを使用した次のターンに強制実行するスキル。\n"
+       + "null の場合は通常の行動抽選を行う。")]
+    public SkillData enemyNextForceSkill;
+
+
+
     // =========================================================
     // ヘルパープロパティ
     // =========================================================

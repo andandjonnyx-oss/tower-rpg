@@ -92,6 +92,7 @@ public partial class BattleSceneController
         if (enemyIsStunned)
         {
             enemyIsStunned = false; // 1ターンで解除
+            enemyForcedNextSkill = null; // 予定行動をキャンセル
             AddLog($"{enemyMonster.Mname} は気絶して動けない！");
             AfterEnemyAction();
             return;
@@ -104,11 +105,25 @@ public partial class BattleSceneController
         {
             if (StatusEffectSystem.CheckParalyzeCancel())
             {
+                enemyForcedNextSkill = null; // 予定行動をキャンセル
                 AddLog($"{enemyMonster.Mname} は麻痺して動けない！");
                 AfterEnemyAction();
                 return;
             }
         }
+
+        // =========================================================
+        // 次ターン強制行動チェック（力をためる等）
+        // =========================================================
+        if (enemyForcedNextSkill != null)
+        {
+            SkillData forced = enemyForcedNextSkill;
+            enemyForcedNextSkill = null; // 消費
+                                         // 強制スキルを actions[0] と同じ形式で実行
+            ExecuteEnemySkillAttack(forced);
+            return;
+        }
+
 
         // =========================================================
         // 怒り中の敵は通常攻撃のみ（Phase2追加）
@@ -306,6 +321,12 @@ public partial class BattleSceneController
             case MonsterActionType.Preemptive: ExecuteEnemySkillAttack(action.skill); break;
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
+        }
+
+        // ExecuteEnemyAction の末尾付近に追加
+        if (action.skill.enemyNextForceSkill != null)
+        {
+            enemyForcedNextSkill = action.skill.enemyNextForceSkill;
         }
     }
 
