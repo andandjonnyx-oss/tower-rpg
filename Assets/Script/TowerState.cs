@@ -375,12 +375,31 @@ public class TowerState : MonoBehaviour
     /// 非バトル魔法のログを表示する。
     /// magicLogText が設定されていなければ Debug.Log のみ。
     /// </summary>
+    /// <summary>ログ自動消去用コルーチン参照。</summary>
+    private Coroutine magicLogHideCoroutine;
+
     private void ShowFieldMagicLog(string message)
     {
         if (magicLogText != null)
         {
+            // 前回のタイマーが残っていれば停止
+            if (magicLogHideCoroutine != null)
+                StopCoroutine(magicLogHideCoroutine);
+
             magicLogText.text = message;
+            magicLogHideCoroutine = StartCoroutine(HideMagicLogAfterDelay(1.0f));
         }
+    }
+
+    /// <summary>
+    /// 指定秒数後に magicLogText を空にする。
+    /// </summary>
+    private IEnumerator HideMagicLogAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (magicLogText != null)
+            magicLogText.text = "";
+        magicLogHideCoroutine = null;
     }
 
     /// <summary>
