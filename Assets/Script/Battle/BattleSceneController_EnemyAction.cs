@@ -377,6 +377,46 @@ public partial class BattleSceneController
             return;
         }
 
+        // =========================================================
+        // 乱数ダメージスキル（追加）
+        // randomDamageMax > 0 の場合、1〜maxの乱数がベースダメージ。
+        // クリティカル無効、防御ダイス有効。属性は None を想定。
+        // =========================================================
+        if (skill.randomDamageMax > 0)
+        {
+            int rndBase = Random.Range(1, skill.randomDamageMax + 1);
+            string rndName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName : "攻撃";
+
+            // 防御ダイス
+            int defense = GetPlayerDefense(skill.damageCategory);
+            int blocked;
+            if (isDefending)
+            {
+                defense *= DefendDefenseMultiplier;
+                blocked = RollDefenseDice(defense, DefendDiceRange);
+            }
+            else
+            {
+                blocked = RollDefenseDice(defense);
+            }
+            int finalDmg = rndBase - blocked;
+            if (finalDmg < 0) finalDmg = 0;
+
+            ApplyDamageToPlayer(finalDmg);
+
+            string blockLog = blocked > 0 ? $"（防御{blocked}軽減）" : "";
+            AddLog($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}");
+
+            Debug.Log($"[Battle] RandomDamage: roll={rndBase} max={skill.randomDamageMax} " +
+                      $"defense={defense} blocked={blocked} final={finalDmg}");
+
+            ProcessEnemySkillEffects(skill);
+            AfterEnemyAction();
+            return;
+        }
+
+
         // --- ダメージ計算（多段攻撃対応） ---
         int hits = skill.EffectiveHitCount;
         int totalDamage = 0;

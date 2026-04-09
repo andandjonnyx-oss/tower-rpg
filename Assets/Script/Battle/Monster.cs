@@ -83,6 +83,12 @@ public class Monster : ScriptableObject
            + "敵に強制付与する使い方もあり得るため耐性を用意。")]
     public int RageResistance = 0;
 
+    [Header("Status Effect Resistance")]
+    [Tooltip("ONにすると全状態異常に完全耐性（100扱い）になる。\n"
+       + "メタル系・ボス等の状態異常完全無効に使用。\n"
+       + "個別の耐性値フィールドより優先される。")]
+    public bool immuneToAllAilments = false;
+
     // =========================================================
     // 属性耐性（追加）
     // =========================================================
@@ -118,6 +124,9 @@ public class Monster : ScriptableObject
     /// </summary>
     public int GetStatusEffectResistance(StatusEffect effect)
     {
+        // 完全耐性フラグ: ON なら全状態異常に 100 を返す
+        if (immuneToAllAilments) return 100;
+
         switch (effect)
         {
             case StatusEffect.Poison: return PoisonResistance;

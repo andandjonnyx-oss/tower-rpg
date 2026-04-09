@@ -21,9 +21,11 @@ MonoBehaviour:
   damageCategory: 0
   damageMultiplier: 1
   bonusDamage: 0
+  randomDamageMax: 0
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
   hitCount: 1
   noBattleOk: 0
   additionalEffects: []
+  enemyNextForceSkill: {fileID: 0}

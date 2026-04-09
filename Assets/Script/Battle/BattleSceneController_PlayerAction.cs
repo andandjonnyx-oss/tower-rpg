@@ -234,6 +234,37 @@ public partial class BattleSceneController
             return;
         }
 
+        // 乱数ダメージスキル（追加）
+        if (skill.randomDamageMax > 0)
+        {
+            int rndBase = Random.Range(1, skill.randomDamageMax + 1);
+            string rndName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName : "先制攻撃";
+
+            int defense = GetPlayerDefense(skill.damageCategory);
+            int blocked;
+            if (isDefending)
+            {
+                defense *= DefendDefenseMultiplier;
+                blocked = RollDefenseDice(defense, DefendDiceRange);
+            }
+            else
+            {
+                blocked = RollDefenseDice(defense);
+            }
+            int finalDmg = rndBase - blocked;
+            if (finalDmg < 0) finalDmg = 0;
+
+            ApplyDamageToPlayer(finalDmg);
+
+            string blockLog = blocked > 0 ? $"（防御{blocked}軽減）" : "";
+            AddLog($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}");
+
+            ProcessEnemySkillEffects(skill);
+            return;
+        }
+
+
         // ダメージ計算（多段攻撃対応）
         int hits = skill.EffectiveHitCount;
         int totalDamage = 0;

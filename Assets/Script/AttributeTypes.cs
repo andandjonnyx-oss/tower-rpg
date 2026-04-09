@@ -12,6 +12,8 @@ public enum WeaponAttribute
     Thunder,  // —‹
     Holy,     // ¹
     Dark,     // ˆÅ
+    None,     // –³i‘®«‘Ï«‚Ì‘ÎÛŠOj
+
 }
 
 /// <summary>
@@ -63,6 +65,8 @@ public static class AttributeExtensions
             case WeaponAttribute.Thunder: return "—‹";
             case WeaponAttribute.Holy: return "¹";
             case WeaponAttribute.Dark: return "ˆÅ";
+            case WeaponAttribute.None: return "–³";
+
             default: return attr.ToString();
         }
     }

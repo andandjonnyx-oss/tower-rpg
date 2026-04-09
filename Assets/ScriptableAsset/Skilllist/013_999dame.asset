@@ -17,12 +17,15 @@ MonoBehaviour:
   description: 
   skillSource: 0
   actionType: 2
-  skillAttribute: 0
+  skillAttribute: 8
   damageCategory: 0
   damageMultiplier: 0
   bonusDamage: 999
+  randomDamageMax: 0
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
   hitCount: 1
+  noBattleOk: 0
   additionalEffects: []
+  enemyNextForceSkill: {fileID: 0}
