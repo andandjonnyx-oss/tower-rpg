@@ -483,6 +483,8 @@ public partial class BattleSceneController
             }
         }
 
+        RefreshBattleStatusEffectUI(); // ★追加: 武器付与後にランプ更新
+
         if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
         FlushLogsAndThen(() => EnemyTurn());
     }

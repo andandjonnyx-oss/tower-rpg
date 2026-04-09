@@ -18,9 +18,10 @@ public class TowerState : MonoBehaviour
     // =========================================================
     // 状態異常表示用 UI（追加）
     // =========================================================
-    [Header("UI - Status Effect (Optional)")]
-    [Tooltip("状態異常時にメッセージを表示するテキスト。未設定なら表示しない。")]
-    [SerializeField] private TextMeshProUGUI statusEffectText;
+
+    [Header("UI - Status Effect Lamp")]
+    [Tooltip("味方の状態異常ランプ（joutaiijoujoumikata にアタッチ）")]
+    [SerializeField] private StatusEffectLamp playerStatusLamp;
 
     [Header("UI - Blind Overlay")]
     [Tooltip("暗闇時に背景を覆う黒い Image。\n"
@@ -226,25 +227,15 @@ public class TowerState : MonoBehaviour
     /// </summary>
     private void RefreshStatusEffectUI()
     {
-        if (statusEffectText == null) return;
-
-        var parts = new List<string>();
-
-        if (GameState.I != null)
+        // --- ランプ方式 ---
+        if (playerStatusLamp != null && GameState.I != null)
         {
-            if (GameState.I.isPoisoned) parts.Add("毒");
-            if (GameState.I.isParalyzed) parts.Add("麻痺");
-            if (GameState.I.isBlind) parts.Add("暗闇");
-        }
-
-        if (parts.Count > 0)
-        {
-            statusEffectText.text = "【" + string.Join("・", parts) + "】";
-            statusEffectText.color = new Color(0.5f, 0f, 0.8f); // 紫色
-        }
-        else
-        {
-            statusEffectText.text = "";
+            playerStatusLamp.SetAll(
+                GameState.I.isPoisoned,
+                GameState.I.isParalyzed,
+                GameState.I.isBlind,
+                false  // Tower では怒り状態は発生しない
+            );
         }
     }
 

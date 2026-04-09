@@ -41,12 +41,16 @@ public partial class BattleSceneController : MonoBehaviour
     [Tooltip("戦闘画面右上に配置するログ詳細ボタン")]
     [SerializeField] private Button fullLogOpenButton;
 
+
     // =========================================================
-    // 状態異常表示 UI（追加）
+    // 状態異常ランプ UI（追加）
     // =========================================================
-    [Header("UI - Status Effect")]
-    [Tooltip("戦闘中の状態異常を表示するテキスト。TowerState と同じ表示仕様。")]
-    [SerializeField] private TMP_Text battleStatusEffectText;
+    [Header("UI - Status Effect Lamp")]
+    [Tooltip("味方の状態異常ランプ（joutaiijoujoumikata にアタッチ）")]
+    [SerializeField] private StatusEffectLamp playerStatusLamp;
+
+    [Tooltip("敵の状態異常ランプ（joutaiijoujouteki にアタッチ）")]
+    [SerializeField] private StatusEffectLamp enemyStatusLamp;
 
 
     [Header("UI - Buttons")]
@@ -1245,26 +1249,26 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     private void RefreshBattleStatusEffectUI()
     {
-        if (battleStatusEffectText == null) return;
-
-        var parts = new List<string>();
-
-        if (GameState.I != null)
+        // --- 味方のランプ更新 ---
+        if (playerStatusLamp != null && GameState.I != null)
         {
-            if (GameState.I.isPoisoned) parts.Add("毒");
-            if (GameState.I.isParalyzed) parts.Add("麻痺");
-            if (GameState.I.isBlind) parts.Add("暗闇");
+            playerStatusLamp.SetAll(
+                GameState.I.isPoisoned,
+                GameState.I.isParalyzed,
+                GameState.I.isBlind,
+                playerRageTurn > 0
+            );
         }
-        if (playerRageTurn > 0) parts.Add("怒り");
 
-        if (parts.Count > 0)
+        // --- 敵のランプ更新 ---
+        if (enemyStatusLamp != null)
         {
-            battleStatusEffectText.text = "【" + string.Join("・", parts) + "】";
-            battleStatusEffectText.color = new Color(0.5f, 0f, 0.8f);
-        }
-        else
-        {
-            battleStatusEffectText.text = "";
+            enemyStatusLamp.SetAll(
+                enemyIsPoisoned,
+                enemyIsParalyzed,
+                enemyIsBlind,
+                enemyRageTurn > 0
+            );
         }
     }
     private void ApplyBattleItemDamage()
