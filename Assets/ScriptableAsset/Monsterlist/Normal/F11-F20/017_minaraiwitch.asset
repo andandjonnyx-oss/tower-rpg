@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 017_minaraiwitch
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 017_minaraiwitch
+  Mname: "\u898B\u7FD2\u3044\u30A6\u30A3\u30C3\u30C1"
+  Image: {fileID: 0}
+  Minfloor: 16
+  Minstep: 1
+  Maxfloor: 20
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 130
+  Attack: 30
+  Defense: 15
+  MagicDefense: 50
+  Speed: 0
+  Luck: 15
+  Evasion: 20
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  immuneToAllAilments: 0
+  attributeResistances: []
+  Exp: 450
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  Help: "\u904B\u304C\u60AA\u3044\u3068\u5927\u9B54\u6CD5\u3092\u653E\u3063\u3066\u304F\u308B\u305E\uFF01\n\u521D\u671F\u30B9\u30C6\u30FC\u30BF\u30B9\u306F\u3084\u3081\u3068\u3051\u3088\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: c4c0c8402cf2d8743be903e2ae11aa4d, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: a84efe7599ebab84c8d863b4477c07db, type: 2}
+    threshold: 100
+  - skill: {fileID: 11400000, guid: f892bdb9bb1ad2d4d8ef3da3b0708f35, type: 2}
+    threshold: 120
+  baseActionRange: 100
