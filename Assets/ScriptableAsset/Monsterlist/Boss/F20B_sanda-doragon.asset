@@ -43,6 +43,8 @@ MonoBehaviour:
   dropRate: 0
   Help: "\u3055\u3001\u9178\u3060\u30FC\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: 62f641cd4fc10b94eb4ce0f3a8d273b1, type: 2}
+  - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 8b9c6a3c1a71c8a42af7a6b685434536, type: 2}
     threshold: 100
   baseActionRange: 100

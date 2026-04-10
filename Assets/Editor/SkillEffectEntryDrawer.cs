@@ -9,6 +9,7 @@ using UnityEngine;
 /// 【表示ルール】
 ///   effectData = null          → effectData のみ表示
 ///   StatusAilmentEffectData    → ailmentMode, targetStatusEffect, chance（Inflict時のみ）
+///                                 DefenseDown/DefenseUp の場合は追加で intValue（効果率）, duration（持続ターン）
 ///   HealEffectData             → intValue（ラベル: SO.formulaType に応じて変化）, chance
 ///   LevelDrainEffectData       → intValue（ラベル: ドレイン量）, chance
 ///   SelfDestructEffectData     → chance（ラベル: 自爆発動率）
@@ -37,6 +38,14 @@ public class SkillEffectEntryDrawer : PropertyDrawer
             if (ailmentModeProp.enumValueIndex == (int)AilmentMode.Inflict)
             {
                 lineCount += 1; // chance
+
+                // DefenseDown/DefenseUp の場合は追加フィールド
+                var targetProp = property.FindPropertyRelative("targetStatusEffect");
+                StatusEffect target = (StatusEffect)targetProp.enumValueIndex;
+                if (StatusEffectSystem.IsBuffDebuff(target))
+                {
+                    lineCount += 2; // intValue（効果率）+ duration（持続ターン）
+                }
             }
         }
         else if (effectData is HealEffectData)
@@ -138,6 +147,25 @@ public class SkillEffectEntryDrawer : PropertyDrawer
             var chanceRect = new Rect(position.x, y, position.width, lineH);
             EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("付与率 (%)"));
             y += lineH + spacing;
+
+            // =========================================================
+            // DefenseDown/DefenseUp の場合: 効果率 + 持続ターンを追加表示
+            // =========================================================
+            StatusEffect target = (StatusEffect)targetProp.enumValueIndex;
+            if (StatusEffectSystem.IsBuffDebuff(target))
+            {
+                // intValue（効果率）
+                var intValueProp = property.FindPropertyRelative("intValue");
+                var intRect = new Rect(position.x, y, position.width, lineH);
+                EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("効果率 (%)"));
+                y += lineH + spacing;
+
+                // duration（持続ターン）
+                var durationProp = property.FindPropertyRelative("duration");
+                var durRect = new Rect(position.x, y, position.width, lineH);
+                EditorGUI.PropertyField(durRect, durationProp, new GUIContent("持続ターン（0=デフォルト）"));
+                y += lineH + spacing;
+            }
         }
     }
 

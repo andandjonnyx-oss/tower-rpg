@@ -6616,8 +6616,8 @@ RectTransform:
   - {fileID: 1105196465}
   - {fileID: 622501732}
   - {fileID: 2109016402}
-  - {fileID: 316696510}
   - {fileID: 2039984028}
+  - {fileID: 316696510}
   m_Father: {fileID: 324370143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -6741,8 +6741,8 @@ MonoBehaviour:
   mahi: {fileID: 1105196464}
   kurayami: {fileID: 622501731}
   ikari: {fileID: 2109016401}
-  bougyoDown: {fileID: 316696509}
-  bougyoUp: {fileID: 2039984027}
+  bougyoDown: {fileID: 2039984027}
+  bougyoUp: {fileID: 316696509}
 --- !u!1 &1393629532
 GameObject:
   m_ObjectHideFlags: 0
@@ -7068,8 +7068,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291585536
-  m_fontColor: {r: 0, g: 0.4, b: 0.8, a: 1}
+    rgba: 4278216396
+  m_fontColor: {r: 0.8, g: 0.4, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7416,8 +7416,8 @@ RectTransform:
   - {fileID: 889549043}
   - {fileID: 1430677017}
   - {fileID: 1795849405}
-  - {fileID: 1538870783}
   - {fileID: 851307985}
+  - {fileID: 1538870783}
   m_Father: {fileID: 324370143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -7541,8 +7541,8 @@ MonoBehaviour:
   mahi: {fileID: 889549042}
   kurayami: {fileID: 1430677016}
   ikari: {fileID: 1795849404}
-  bougyoDown: {fileID: 1538870782}
-  bougyoUp: {fileID: 851307984}
+  bougyoDown: {fileID: 851307984}
+  bougyoUp: {fileID: 1538870782}
 --- !u!1 &1513089103
 GameObject:
   m_ObjectHideFlags: 0
@@ -10054,8 +10054,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291585536
-  m_fontColor: {r: 0, g: 0.4, b: 0.8, a: 1}
+    rgba: 4278216396
+  m_fontColor: {r: 0.8, g: 0.4, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
