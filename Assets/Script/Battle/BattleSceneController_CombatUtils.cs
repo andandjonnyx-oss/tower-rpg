@@ -153,12 +153,24 @@ public partial class BattleSceneController
     private int GetPlayerDefense(DamageCategory category)
     {
         if (GameState.I == null) return 0;
+        int baseDef;
         switch (category)
         {
-            case DamageCategory.Physical: return GameState.I.Defense;
-            case DamageCategory.Magical: return GameState.I.MagicDefense;
-            default: return GameState.I.Defense;
+            case DamageCategory.Physical: baseDef = GameState.I.Defense; break;
+            case DamageCategory.Magical: baseDef = GameState.I.MagicDefense; break;
+            default: baseDef = GameState.I.Defense; break;
         }
+
+        // Phase3: 防御バフ/デバフ適用（物理防御のみ）
+        if (category == DamageCategory.Physical)
+        {
+            baseDef = StatusEffectSystem.ApplyDefenseBuffDebuff(
+                baseDef,
+                playerDefBuffTurn > 0, playerDefBuffRate,
+                playerDefDebuffTurn > 0, playerDefDebuffRate);
+        }
+
+        return baseDef;
     }
 
     /// <summary>
@@ -169,12 +181,24 @@ public partial class BattleSceneController
     private int GetEnemyDefense(DamageCategory category)
     {
         if (enemyMonster == null) return 0;
+        int baseDef;
         switch (category)
         {
-            case DamageCategory.Physical: return enemyMonster.Defense;
-            case DamageCategory.Magical: return enemyMonster.MagicDefense;
-            default: return enemyMonster.Defense;
+            case DamageCategory.Physical: baseDef = enemyMonster.Defense; break;
+            case DamageCategory.Magical: baseDef = enemyMonster.MagicDefense; break;
+            default: baseDef = enemyMonster.Defense; break;
         }
+
+        // Phase3: 防御バフ/デバフ適用（物理防御のみ）
+        if (category == DamageCategory.Physical)
+        {
+            baseDef = StatusEffectSystem.ApplyDefenseBuffDebuff(
+                baseDef,
+                enemyDefBuffTurn > 0, enemyDefBuffRate,
+                enemyDefDebuffTurn > 0, enemyDefDebuffRate);
+        }
+
+        return baseDef;
     }
 
     /// <summary>

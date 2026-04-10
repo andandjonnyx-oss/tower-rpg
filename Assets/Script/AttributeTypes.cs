@@ -31,21 +31,27 @@ public enum WeaponAttribute
 ///   戦闘限定バフ（使用者自身に付与）:
 ///     Rage     - 怒り（バーサク）。攻撃力UP+通常攻撃のみ。3ターン or 戦闘終了で解除。
 ///
+///   戦闘限定パラメータバフ/デバフ:
+///     DefenseDown - 防御ダウン。戦闘限定。反対効果(DefenseUp)を解除してから付与。
+///     DefenseUp   - 防御アップ。戦闘限定。反対効果(DefenseDown)を解除してから付与。
+///
 ///   予約（未使用）:
 ///     Sleep, Silence, Burn, Freeze
 /// </summary>
 public enum StatusEffect
 {
     None,
-    Poison,    // 毒
-    Paralyze,  // 麻痺
-    Sleep,     // 睡眠（予約）
-    Blind,     // 暗闘
-    Silence,   // 沈黙（予約）
-    Burn,      // 火傷（予約）
-    Freeze,    // 凍結（予約）
-    Stun,      // 気絶
-    Rage,      // 怒り（バーサク）
+    Poison,      // 毒
+    Paralyze,    // 麻痺
+    Sleep,       // 睡眠（予約）
+    Blind,       // 暗闘
+    Silence,     // 沈黙（予約）
+    Burn,        // 火傷（予約）
+    Freeze,      // 凍結（予約）
+    Stun,        // 気絶
+    Rage,        // 怒り（バーサク）
+    DefenseDown, // 防御ダウン（戦闘限定バフ/デバフ）
+    DefenseUp,   // 防御アップ（戦闘限定バフ/デバフ）
 }
 
 /// <summary>
@@ -85,6 +91,8 @@ public static class AttributeExtensions
             case StatusEffect.Freeze: return "凍結";
             case StatusEffect.Stun: return "気絶";
             case StatusEffect.Rage: return "怒り";
+            case StatusEffect.DefenseDown: return "防御↓";
+            case StatusEffect.DefenseUp: return "防御↑";
             default: return effect.ToString();
         }
     }

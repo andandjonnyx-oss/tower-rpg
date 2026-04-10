@@ -13,8 +13,10 @@ using UnityEngine;
 ///
 ///   StatusAilmentEffectData:
 ///     ailmentMode        → Inflict（付与）/ Cure（回復）
-///     targetStatusEffect → Poison / Paralyze / Sleep ...
+///     targetStatusEffect → Poison / Paralyze / Sleep / DefenseDown / DefenseUp ...
 ///     chance             → 付与時の基礎付与率（%）。Cure時は不要。
+///     duration           → バフ/デバフの持続ターン数（DefenseDown/DefenseUp用）。0 = デフォルト値を使用。
+///     intValue           → バフ/デバフの効果率（%）。例: 30 = 防御30%変化。
 ///
 ///   HealEffectData:
 ///     intValue           → 回復量（計算式タイプにより解釈が変わる）
@@ -67,6 +69,17 @@ public class SkillEffectEntry
     [Tooltip("効果の数値パラメータ（整数）。\n"
            + "LevelDrainEffectData: ドレイン量（デフォルト1）\n"
            + "HealEffectData: 回復量（計算式タイプにより解釈が変わる）\n"
-           + "RecoilEffectData: 反射率（%）。与ダメージのこの割合を自分が受ける。")]
+           + "RecoilEffectData: 反射率（%）。与ダメージのこの割合を自分が受ける。\n"
+           + "DefenseDown/DefenseUp: 効果率（%）。例: 30 = 防御30%変化")]
     public int intValue = 0;
+
+    // =========================================================
+    // 持続ターン数（バフ/デバフ用）（追加）
+    // =========================================================
+
+    [Tooltip("バフ/デバフの持続ターン数。\n"
+           + "DefenseDown / DefenseUp で使用する。\n"
+           + "0 の場合はデフォルト値（StatusEffectSystem.DefaultBuffDebuffDuration）を使用。\n"
+           + "他の効果タイプでは無視される。")]
+    public int duration = 0;
 }

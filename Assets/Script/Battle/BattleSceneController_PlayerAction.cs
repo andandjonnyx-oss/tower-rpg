@@ -242,6 +242,12 @@ public partial class BattleSceneController
                 ? skill.skillName : "先制攻撃";
 
             int defense = GetPlayerDefense(skill.damageCategory);
+
+            if (skill.defenseIgnoreRate > 0f)
+            {
+                defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+            }
+
             int blocked;
             if (isDefending)
             {
@@ -307,6 +313,12 @@ public partial class BattleSceneController
             if (afterResist < 0) afterResist = 0;
 
             int defense = GetPlayerDefense(skill.damageCategory);
+
+            if (skill.defenseIgnoreRate > 0f)
+            {
+                defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+            }
+
             int blocked;
             if (isDefending)
             {
@@ -634,6 +646,12 @@ public partial class BattleSceneController
             else
             {
                 int enemyDef = GetEnemyDefense(skill.damageCategory);
+
+                if (skill.defenseIgnoreRate > 0f)
+                {
+                    enemyDef = Mathf.FloorToInt(enemyDef * (1f - skill.defenseIgnoreRate) + 0.5f);
+                }
+
                 int enemyBlocked = RollDefenseDice(enemyDef);
                 finalDamage = damage - enemyBlocked;
                 if (finalDamage < 1) finalDamage = 1;
@@ -812,6 +830,12 @@ public partial class BattleSceneController
             else
             {
                 int enemyDef = GetEnemyDefense(magic.damageCategory);
+
+                if (magic.defenseIgnoreRate > 0f)
+                {
+                    enemyDef = Mathf.FloorToInt(enemyDef * (1f - magic.defenseIgnoreRate) + 0.5f);
+                }
+
                 int enemyBlocked = RollDefenseDice(enemyDef);
                 finalDamage = damage - enemyBlocked;
                 if (finalDamage < 1) finalDamage = 1;
@@ -909,7 +933,6 @@ public partial class BattleSceneController
 
     /// <summary>
     /// プレイヤースキルの追加効果を実行する共通メソッド。
-    /// Phase2: フル版シグネチャ（11引数）に切り替え。
     /// </summary>
     private void ProcessPlayerSkillEffects(SkillData skill)
     {
@@ -926,7 +949,11 @@ public partial class BattleSceneController
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
-            ref playerRageTurn);
+            ref playerRageTurn,
+            ref playerDefDebuffTurn, ref playerDefDebuffRate,
+            ref playerDefBuffTurn, ref playerDefBuffRate,
+            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
+            ref enemyDefBuffTurn, ref enemyDefBuffRate);
 
         for (int i = 0; i < logs.Count; i++)
         {
@@ -938,7 +965,6 @@ public partial class BattleSceneController
 
     /// <summary>
     /// プレイヤースキルの追加効果を実行する（与ダメージ付き）。
-    /// Phase2: フル版シグネチャ（11引数）に切り替え。
     /// </summary>
     private void ProcessPlayerSkillEffects(SkillData skill, int lastDamageDealt)
     {
@@ -955,7 +981,11 @@ public partial class BattleSceneController
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
-            ref playerRageTurn);
+            ref playerRageTurn,
+            ref playerDefDebuffTurn, ref playerDefDebuffRate,
+            ref playerDefBuffTurn, ref playerDefBuffRate,
+            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
+            ref enemyDefBuffTurn, ref enemyDefBuffRate);
 
         for (int i = 0; i < logs.Count; i++)
         {

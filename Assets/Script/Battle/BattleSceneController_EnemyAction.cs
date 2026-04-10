@@ -390,6 +390,12 @@ public partial class BattleSceneController
 
             // 防御ダイス
             int defense = GetPlayerDefense(skill.damageCategory);
+
+            if (skill.defenseIgnoreRate > 0f)
+            {
+                defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+            }
+
             int blocked;
             if (isDefending)
             {
@@ -459,6 +465,12 @@ public partial class BattleSceneController
             if (afterResist < 0) afterResist = 0;
 
             int defense = GetPlayerDefense(skill.damageCategory);
+
+            if (skill.defenseIgnoreRate > 0f)
+            {
+                defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+            }
+
             int blocked;
             if (isDefending)
             {
@@ -534,7 +546,6 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 敵スキルの追加効果を実行する共通メソッド。
-    /// Phase2: フル版シグネチャ（11引数）に切り替え。
     /// </summary>
     private void ProcessEnemySkillEffects(SkillData skill)
     {
@@ -551,16 +562,19 @@ public partial class BattleSceneController
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
-            ref playerRageTurn);
+            ref playerRageTurn,
+            ref playerDefDebuffTurn, ref playerDefDebuffRate,
+            ref playerDefBuffTurn, ref playerDefBuffRate,
+            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
+            ref enemyDefBuffTurn, ref enemyDefBuffRate);
 
         for (int i = 0; i < logs.Count; i++)
         {
             AddLog(logs[i]);
         }
 
-        RefreshBattleStatusEffectUI(); // ★追加: 状態異常UIを更新
+        RefreshBattleStatusEffectUI();
     }
-
     /// <summary>
     /// 敵の行動後の共通処理。
     /// ターン終了時の毒ダメージを適用し、
@@ -616,6 +630,49 @@ public partial class BattleSceneController
                 AddLog("You の怒りが収まった。");
             }
         }
+
+        // =========================================================
+        // 防御バフ/デバフ ターンカウントダウン（Phase3追加）
+        // =========================================================
+        if (playerDefDebuffTurn > 0)
+        {
+            playerDefDebuffTurn--;
+            if (playerDefDebuffTurn <= 0)
+            {
+                playerDefDebuffRate = 0f;
+                AddLog("You の防御ダウンが解除された。");
+            }
+        }
+        if (playerDefBuffTurn > 0)
+        {
+            playerDefBuffTurn--;
+            if (playerDefBuffTurn <= 0)
+            {
+                playerDefBuffRate = 0f;
+                AddLog("You の防御アップが解除された。");
+            }
+        }
+        if (enemyDefDebuffTurn > 0)
+        {
+            enemyDefDebuffTurn--;
+            if (enemyDefDebuffTurn <= 0)
+            {
+                enemyDefDebuffRate = 0f;
+                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+                AddLog($"{eName} の防御ダウンが解除された。");
+            }
+        }
+        if (enemyDefBuffTurn > 0)
+        {
+            enemyDefBuffTurn--;
+            if (enemyDefBuffTurn <= 0)
+            {
+                enemyDefBuffRate = 0f;
+                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+                AddLog($"{eName} の防御アップが解除された。");
+            }
+        }
+
 
         // ログを全部表示してから勝敗判定・ターン移行
         FlushLogsAndThen(() =>

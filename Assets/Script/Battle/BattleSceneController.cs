@@ -168,6 +168,31 @@ public partial class BattleSceneController : MonoBehaviour
     private SkillData enemyForcedNextSkill;
 
     // =========================================================
+    // 防御バフ/デバフ（Phase3 追加）
+    // 戦闘限定。戦闘終了で自動解除（セーブ対象外）。
+    // =========================================================
+
+    /// <summary>プレイヤーの防御デバフ残りターン数。0 = なし。</summary>
+    private static int playerDefDebuffTurn = 0;
+    /// <summary>プレイヤーの防御デバフ効果率（%）。例: 30 = 30%減少。</summary>
+    private static float playerDefDebuffRate = 0f;
+    /// <summary>プレイヤーの防御バフ残りターン数。0 = なし。</summary>
+    private static int playerDefBuffTurn = 0;
+    /// <summary>プレイヤーの防御バフ効果率（%）。例: 30 = 30%増加。</summary>
+    private static float playerDefBuffRate = 0f;
+
+    /// <summary>敵の防御デバフ残りターン数。0 = なし。</summary>
+    private static int enemyDefDebuffTurn = 0;
+    /// <summary>敵の防御デバフ効果率（%）。</summary>
+    private static float enemyDefDebuffRate = 0f;
+    /// <summary>敵の防御バフ残りターン数。0 = なし。</summary>
+    private static int enemyDefBuffTurn = 0;
+    /// <summary>敵の防御バフ効果率（%）。</summary>
+    private static float enemyDefBuffRate = 0f;
+
+
+
+    // =========================================================
     // 防御フラグ（追加）
     // =========================================================
     //
@@ -318,6 +343,13 @@ public partial class BattleSceneController : MonoBehaviour
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
             enemyForcedNextSkill = null; // 強制行動リセット
+
+            // Phase3: バフ/デバフリセット
+            playerDefDebuffTurn = 0; playerDefDebuffRate = 0f;
+            playerDefBuffTurn = 0; playerDefBuffRate = 0f;
+            enemyDefDebuffTurn = 0; enemyDefDebuffRate = 0f;
+            enemyDefBuffTurn = 0; enemyDefBuffRate = 0f;
+
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
         }
         else
@@ -883,6 +915,13 @@ public partial class BattleSceneController : MonoBehaviour
         isDefending = false; // 防御フラグもリセット
         pendingEnemyAction = null; // 先制攻撃もリセット
         isEnemyPreemptive = false;
+
+        // Phase3: バフ/デバフリセット
+        playerDefDebuffTurn = 0; playerDefDebuffRate = 0f;
+        playerDefBuffTurn = 0; playerDefBuffRate = 0f;
+        enemyDefDebuffTurn = 0; enemyDefDebuffRate = 0f;
+        enemyDefBuffTurn = 0; enemyDefBuffRate = 0f;
+
     }
 
     // =========================================================
@@ -1256,7 +1295,9 @@ public partial class BattleSceneController : MonoBehaviour
                 GameState.I.isPoisoned,
                 GameState.I.isParalyzed,
                 GameState.I.isBlind,
-                playerRageTurn > 0
+                playerRageTurn > 0,
+                playerDefDebuffTurn > 0,
+                playerDefBuffTurn > 0
             );
         }
 
@@ -1267,7 +1308,9 @@ public partial class BattleSceneController : MonoBehaviour
                 enemyIsPoisoned,
                 enemyIsParalyzed,
                 enemyIsBlind,
-                enemyRageTurn > 0
+                enemyRageTurn > 0,
+                enemyDefDebuffTurn > 0,
+                enemyDefBuffTurn > 0
             );
         }
     }
