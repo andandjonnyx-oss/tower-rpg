@@ -32,8 +32,11 @@ public enum WeaponAttribute
 ///     Rage     - 怒り（バーサク）。攻撃力UP+通常攻撃のみ。3ターン or 戦闘終了で解除。
 ///
 ///   戦闘限定パラメータバフ/デバフ:
-///     DefenseDown - 防御ダウン。戦闘限定。反対効果(DefenseUp)を解除してから付与。
-///     DefenseUp   - 防御アップ。戦闘限定。反対効果(DefenseDown)を解除してから付与。
+///     DefenseDown / DefenseUp     - 物理防御（実装済み）
+///     AttackDown / AttackUp       - 攻撃力
+///     MagicAttackDown / MagicAttackUp - 魔法攻撃力（敵の場合は回避力として扱う）
+///     MagicDefenseDown / MagicDefenseUp - 魔法防御力
+///     LuckDown / LuckUp           - 運
 ///
 ///   予約（未使用）:
 ///     Sleep, Silence, Burn, Freeze
@@ -44,14 +47,22 @@ public enum StatusEffect
     Poison,      // 毒
     Paralyze,    // 麻痺
     Sleep,       // 睡眠（予約）
-    Blind,       // 暗闘
+    Blind,       // 暗闇
     Silence,     // 沈黙（予約）
     Burn,        // 火傷（予約）
     Freeze,      // 凍結（予約）
     Stun,        // 気絶
     Rage,        // 怒り（バーサク）
-    DefenseDown, // 防御ダウン（戦闘限定バフ/デバフ）
-    DefenseUp,   // 防御アップ（戦闘限定バフ/デバフ）
+    DefenseDown,      // 防御ダウン（戦闘限定バフ/デバフ）
+    DefenseUp,        // 防御アップ（戦闘限定バフ/デバフ）
+    AttackDown,       // 攻撃ダウン
+    AttackUp,         // 攻撃アップ
+    MagicAttackDown,  // 魔攻ダウン（敵: 回避ダウン）
+    MagicAttackUp,    // 魔攻アップ（敵: 回避アップ）
+    MagicDefenseDown, // 魔防ダウン
+    MagicDefenseUp,   // 魔防アップ
+    LuckDown,         // 運ダウン
+    LuckUp,           // 運アップ
 }
 
 /// <summary>
@@ -93,7 +104,29 @@ public static class AttributeExtensions
             case StatusEffect.Rage: return "怒り";
             case StatusEffect.DefenseDown: return "防御↓";
             case StatusEffect.DefenseUp: return "防御↑";
+            case StatusEffect.AttackDown: return "攻撃↓";
+            case StatusEffect.AttackUp: return "攻撃↑";
+            case StatusEffect.MagicAttackDown: return "魔攻↓";
+            case StatusEffect.MagicAttackUp: return "魔攻↑";
+            case StatusEffect.MagicDefenseDown: return "魔防↓";
+            case StatusEffect.MagicDefenseUp: return "魔防↑";
+            case StatusEffect.LuckDown: return "運↓";
+            case StatusEffect.LuckUp: return "運↑";
             default: return effect.ToString();
+        }
+    }
+
+    /// <summary>
+    /// 敵にとっての表示名を返す。
+    /// 敵は MagicAttack の概念がないため、MagicAttackDown/Up は「回避↓/↑」と表示する。
+    /// </summary>
+    public static string ToJapaneseEnemy(this StatusEffect effect)
+    {
+        switch (effect)
+        {
+            case StatusEffect.MagicAttackDown: return "回避↓";
+            case StatusEffect.MagicAttackUp: return "回避↑";
+            default: return effect.ToJapanese();
         }
     }
 

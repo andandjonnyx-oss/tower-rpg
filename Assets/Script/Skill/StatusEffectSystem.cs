@@ -29,13 +29,12 @@ using UnityEngine;
 ///     敵の場合: actionRange を 1 に固定（最初のアクション＝通常攻撃のみ）。
 ///
 /// 【戦闘限定パラメータバフ/デバフ】（BattleSceneController側で管理）
-///   防御ダウン（DefenseDown）:
-///     対象の物理防御力を指定割合だけ減少させる。
-///     持続ターン数は個別設定。戦闘終了で自動解除。
-///     反対効果（DefenseUp）を先に解除してから付与する。
-///   防御アップ（DefenseUp）:
-///     対象の物理防御力を指定割合だけ増加させる。
-///     仕様は DefenseDown の逆。
+///   5種ペア: 攻撃(ATK), 魔攻/回避(MATK/EVA), 防御(DEF), 魔防(MDEF), 運(LUC)
+///   共通仕様:
+///     - 反対効果を解除してから付与（後優先ルール）
+///     - 同効果の重ねがけはターン数リセット・率上書き
+///     - 戦闘限定（セーブ対象外）
+///     - 敵の MagicAttackDown/Up は回避力として適用される
 ///
 /// 付与判定:
 ///   実質命中率 = 基礎命中率 × (1 - 耐性/100)
@@ -79,19 +78,36 @@ public static class StatusEffectSystem
     public const float RageAttackMultiplier = 1.5f;
 
     // =========================================================
-    // バフ/デバフの定数（追加）
+    // バフ/デバフの定数
     // =========================================================
 
     /// <summary>バフ/デバフの持続ターン数のデフォルト値。SkillEffectEntry.duration が 0 の場合に使用。</summary>
     public const int DefaultBuffDebuffDuration = 5;
 
     // =========================================================
-    // バフ/デバフ: 反対効果のペア判定（追加）
+    // バフ/デバフ: 全ペアの定義
+    // =========================================================
+
+    /// <summary>
+    /// バフ/デバフのペア定義。
+    /// Down ↔ Up のマッピングに使用する。
+    /// </summary>
+    private static readonly StatusEffect[][] BuffDebuffPairs = new StatusEffect[][]
+    {
+        new[] { StatusEffect.DefenseDown,      StatusEffect.DefenseUp },
+        new[] { StatusEffect.AttackDown,       StatusEffect.AttackUp },
+        new[] { StatusEffect.MagicAttackDown,  StatusEffect.MagicAttackUp },
+        new[] { StatusEffect.MagicDefenseDown, StatusEffect.MagicDefenseUp },
+        new[] { StatusEffect.LuckDown,         StatusEffect.LuckUp },
+    };
+
+    // =========================================================
+    // バフ/デバフ: 反対効果のペア判定
     // =========================================================
 
     /// <summary>
     /// 指定した状態異常の反対効果を返す。
-    /// DefenseDown ↔ DefenseUp のペア。
+    /// 全バフ/デバフペアに対応。
     /// ペアがない場合は StatusEffect.None を返す。
     /// </summary>
     public static StatusEffect GetOpposite(StatusEffect effect)
@@ -100,6 +116,14 @@ public static class StatusEffectSystem
         {
             case StatusEffect.DefenseDown: return StatusEffect.DefenseUp;
             case StatusEffect.DefenseUp: return StatusEffect.DefenseDown;
+            case StatusEffect.AttackDown: return StatusEffect.AttackUp;
+            case StatusEffect.AttackUp: return StatusEffect.AttackDown;
+            case StatusEffect.MagicAttackDown: return StatusEffect.MagicAttackUp;
+            case StatusEffect.MagicAttackUp: return StatusEffect.MagicAttackDown;
+            case StatusEffect.MagicDefenseDown: return StatusEffect.MagicDefenseUp;
+            case StatusEffect.MagicDefenseUp: return StatusEffect.MagicDefenseDown;
+            case StatusEffect.LuckDown: return StatusEffect.LuckUp;
+            case StatusEffect.LuckUp: return StatusEffect.LuckDown;
             default: return StatusEffect.None;
         }
     }
@@ -113,6 +137,33 @@ public static class StatusEffectSystem
         {
             case StatusEffect.DefenseDown:
             case StatusEffect.DefenseUp:
+            case StatusEffect.AttackDown:
+            case StatusEffect.AttackUp:
+            case StatusEffect.MagicAttackDown:
+            case StatusEffect.MagicAttackUp:
+            case StatusEffect.MagicDefenseDown:
+            case StatusEffect.MagicDefenseUp:
+            case StatusEffect.LuckDown:
+            case StatusEffect.LuckUp:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// 指定した状態異常がデバフ（Down系）かどうかを返す。
+    /// バフ（Up系）は false。バフ/デバフ以外も false。
+    /// </summary>
+    public static bool IsDebuff(StatusEffect effect)
+    {
+        switch (effect)
+        {
+            case StatusEffect.DefenseDown:
+            case StatusEffect.AttackDown:
+            case StatusEffect.MagicAttackDown:
+            case StatusEffect.MagicDefenseDown:
+            case StatusEffect.LuckDown:
                 return true;
             default:
                 return false;
@@ -187,7 +238,7 @@ public static class StatusEffectSystem
     /// <summary>
     /// プレイヤーが指定の持続型状態異常にかかっているかを返す。
     /// 持続型デバフ（Poison/Paralyze/Blind）のみ対応。
-    /// 戦闘限定（Stun/Rage/DefenseDown/DefenseUp）は BattleSceneController 側で管理。
+    /// 戦闘限定（Stun/Rage/バフ/デバフ）は BattleSceneController 側で管理。
     /// </summary>
     public static bool IsPlayerAffected(StatusEffect effect)
     {
@@ -435,43 +486,53 @@ public static class StatusEffectSystem
     }
 
     // =========================================================
-    // バフ/デバフ: 防御力への適用計算（追加）
+    // バフ/デバフ: ステータスへの汎用適用計算
     // =========================================================
 
     /// <summary>
-    /// バフ/デバフの効果率を防御力に適用する。
+    /// バフ/デバフの効果率をステータス値に適用する汎用メソッド。
+    /// 防御・攻撃・魔攻・魔防・運のいずれにも使用できる。
     ///
-    /// isBuffed == true の場合: defense × (1 + rate/100) に増加
-    /// isDebuffed == true の場合: defense × (1 - rate/100) に減少
+    /// isBuffed == true の場合: baseStat × (1 + rate/100) に増加
+    /// isDebuffed == true の場合: baseStat × (1 - rate/100) に減少
     /// 両方 true になることはない（後優先ルールで排他制御されている）。
     /// 結果は最低0にクランプ。
     /// </summary>
-    /// <param name="baseDefense">基礎防御力</param>
-    /// <param name="isBuffed">防御バフがかかっているか</param>
+    /// <param name="baseStat">基礎ステータス値</param>
+    /// <param name="isBuffed">バフがかかっているか</param>
     /// <param name="buffRate">バフの効果率（%）</param>
-    /// <param name="isDebuffed">防御デバフがかかっているか</param>
+    /// <param name="isDebuffed">デバフがかかっているか</param>
     /// <param name="debuffRate">デバフの効果率（%）</param>
-    /// <returns>バフ/デバフ適用後の防御力</returns>
-    public static int ApplyDefenseBuffDebuff(int baseDefense,
+    /// <returns>バフ/デバフ適用後のステータス値</returns>
+    public static int ApplyStatBuffDebuff(int baseStat,
         bool isBuffed, float buffRate,
         bool isDebuffed, float debuffRate)
     {
         if (isDebuffed && debuffRate > 0f)
         {
-            int result = Mathf.FloorToInt(baseDefense * (1f - debuffRate / 100f) + 0.5f);
+            int result = Mathf.FloorToInt(baseStat * (1f - debuffRate / 100f) + 0.5f);
             if (result < 0) result = 0;
-            Debug.Log($"[StatusEffect] DefenseDebuff: base={baseDefense} rate={debuffRate}% result={result}");
             return result;
         }
 
         if (isBuffed && buffRate > 0f)
         {
-            int result = Mathf.FloorToInt(baseDefense * (1f + buffRate / 100f) + 0.5f);
-            Debug.Log($"[StatusEffect] DefenseBuff: base={baseDefense} rate={buffRate}% result={result}");
+            int result = Mathf.FloorToInt(baseStat * (1f + buffRate / 100f) + 0.5f);
             return result;
         }
 
-        return baseDefense;
+        return baseStat;
+    }
+
+    /// <summary>
+    /// 防御力専用のバフ/デバフ適用（後方互換）。
+    /// 新規コードは ApplyStatBuffDebuff を使用すること。
+    /// </summary>
+    public static int ApplyDefenseBuffDebuff(int baseDefense,
+        bool isBuffed, float buffRate,
+        bool isDebuffed, float debuffRate)
+    {
+        return ApplyStatBuffDebuff(baseDefense, isBuffed, buffRate, isDebuffed, debuffRate);
     }
 
     // =========================================================

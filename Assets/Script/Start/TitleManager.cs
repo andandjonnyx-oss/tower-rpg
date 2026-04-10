@@ -116,6 +116,10 @@ public class TitleUIManager : MonoBehaviour
     /// オープニングボタン: Talk シーンに遷移してオープニングイベントを再生する。
     /// Talk 終了後はタイトル画面に戻る。
     /// 何度でも繰り返し視聴可能。
+    ///
+    /// ★修正: Talk シーン内で MarkPlayed() → SaveManager.Save() が走るため、
+    /// セーブデータがある場合は事前にロードしておく。
+    /// これにより、初期状態のデータでセーブが上書きされるのを防ぐ。
     /// </summary>
     private void OnOpening()
     {
@@ -124,6 +128,15 @@ public class TitleUIManager : MonoBehaviour
         {
             Debug.LogError("[Title] GameState が存在しません。オープニングを開始できません。");
             return;
+        }
+
+        // ★修正: セーブデータがあれば事前にロードしておく
+        // Talk シーン内で MarkPlayed() → SaveManager.Save() が呼ばれた際に
+        // 初期値で上書きされるのを防止する。
+        if (SaveManager.HasSaveData())
+        {
+            SaveManager.Load();
+            Debug.Log("[Title] オープニング前にセーブデータをロード");
         }
 
         // Talk シーンへ渡すパラメータをセット
