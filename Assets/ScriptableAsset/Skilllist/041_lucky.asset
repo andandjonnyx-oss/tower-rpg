@@ -34,5 +34,5 @@ MonoBehaviour:
     targetStatusEffect: 19
     chance: 100
     intValue: 50
-    duration: 5
+    duration: 6
   enemyNextForceSkill: {fileID: 0}

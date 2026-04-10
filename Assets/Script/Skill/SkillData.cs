@@ -225,16 +225,21 @@ public class SkillData : ScriptableObject
     public int EffectiveHitCount => hitCount > 1 ? hitCount : 1;
 
 
+
     /// <summary>
     /// 敵を対象とする非ダメージスキルかどうか。
     /// IsNonDamage == true かつ、追加効果に敵対象の効果を含む場合 true。
     ///
     /// 敵対象の効果:
-    ///   StatusAilmentEffectData (ailmentMode == Inflict)
-    ///   LevelDrainEffectData
+    ///   StatusAilmentEffectData (ailmentMode == Inflict) のうち:
+    ///     - 毒/麻痺/暗闇/気絶: 相手に付与 → hostile
+    ///     - 怒り: 自分に付与だが、hostile 判定なしで問題ない
+    ///     - デバフ（Down系）: 相手に付与 → hostile
+    ///     - バフ（Up系）: 自分に付与 → hostile ではない
+    ///   LevelDrainEffectData → hostile
     ///
     /// true の場合、非ダメージスキルでも回避判定を行う。
-    /// false の場合（ヒール、デポイズ等）、回避判定をスキップする。
+    /// false の場合（ヒール、デポイズ、自己バフ等）、回避判定をスキップする。
     /// </summary>
     public bool IsHostileNonDamage
     {
@@ -249,7 +254,22 @@ public class SkillData : ScriptableObject
 
                 if (entry.effectData is StatusAilmentEffectData
                     && entry.ailmentMode == AilmentMode.Inflict)
+                {
+                    // バフ（Up系）は自分自身に付与するので hostile ではない
+                    if (StatusEffectSystem.IsBuffDebuff(entry.targetStatusEffect)
+                        && !StatusEffectSystem.IsDebuff(entry.targetStatusEffect))
+                    {
+                        continue; // Up系 → hostile ではないのでスキップ
+                    }
+
+                    // 怒り（Rage）も自分に付与するので hostile ではない
+                    if (entry.targetStatusEffect == StatusEffect.Rage)
+                    {
+                        continue;
+                    }
+
                     return true;
+                }
 
                 if (entry.effectData is LevelDrainEffectData)
                     return true;
