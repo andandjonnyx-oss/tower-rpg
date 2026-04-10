@@ -31,6 +31,12 @@ public partial class BattleSceneController
         int playerAccuracy = (GameState.I != null) ? GameState.I.Accuracy : 0;
         int enemyEvasion = (enemyMonster != null) ? enemyMonster.Evasion : 0;
 
+        // Phase4: 敵の回避バフ/デバフ適用（MagicAttack枠を回避力として使用）
+        enemyEvasion = StatusEffectSystem.ApplyStatBuffDebuff(
+            enemyEvasion,
+            buffState.enemy.matk.IsBuffed, buffState.enemy.matk.buffRate,
+            buffState.enemy.matk.IsDebuffed, buffState.enemy.matk.debuffRate);
+
         float hitChance = baseHitRate * (1f - (enemyEvasion - playerAccuracy) / 100f);
 
         if (hitChance < 25f) hitChance = 25f;
@@ -82,6 +88,11 @@ public partial class BattleSceneController
     private bool CheckEnemyHit(int enemyBaseHitRate)
     {
         float playerEvasion = (GameState.I != null) ? GameState.I.Evasion : 0f;
+
+        // Phase4: プレイヤーの魔攻バフ/デバフを回避力（MagicAttack枠）として適用
+        // ※ プレイヤー側は MagicAttack = 魔法攻撃力として使うため、
+        //    回避力は別途 GameState.Evasion で計算される。魔攻バフは魔法攻撃に影響する。
+        //    ここでは敵の命中に対するプレイヤー回避を処理するので、追加適用しない。
 
         float hitChance = enemyBaseHitRate * (1f - playerEvasion / 100f);
 
@@ -149,6 +160,8 @@ public partial class BattleSceneController
     /// DamageCategory に応じたプレイヤーの防御力を返す。
     /// Physical → GameState.Defense（VIT ベース + 装備 + パッシブ）
     /// Magical  → GameState.MagicDefense（INT ベース + 装備 + パッシブ）
+    ///
+    /// Phase4: 全カテゴリでバフ/デバフを適用する。
     /// </summary>
     private int GetPlayerDefense(DamageCategory category)
     {
@@ -161,13 +174,21 @@ public partial class BattleSceneController
             default: baseDef = GameState.I.Defense; break;
         }
 
-        // Phase3: 防御バフ/デバフ適用（物理防御のみ）
-        if (category == DamageCategory.Physical)
+        // Phase4: カテゴリに応じたバフ/デバフ適用
+        switch (category)
         {
-            baseDef = StatusEffectSystem.ApplyDefenseBuffDebuff(
-                baseDef,
-                playerDefBuffTurn > 0, playerDefBuffRate,
-                playerDefDebuffTurn > 0, playerDefDebuffRate);
+            case DamageCategory.Physical:
+                baseDef = StatusEffectSystem.ApplyStatBuffDebuff(
+                    baseDef,
+                    buffState.player.def.IsBuffed, buffState.player.def.buffRate,
+                    buffState.player.def.IsDebuffed, buffState.player.def.debuffRate);
+                break;
+            case DamageCategory.Magical:
+                baseDef = StatusEffectSystem.ApplyStatBuffDebuff(
+                    baseDef,
+                    buffState.player.mdef.IsBuffed, buffState.player.mdef.buffRate,
+                    buffState.player.mdef.IsDebuffed, buffState.player.mdef.debuffRate);
+                break;
         }
 
         return baseDef;
@@ -177,6 +198,8 @@ public partial class BattleSceneController
     /// DamageCategory に応じた敵の防御力を返す。
     /// Physical → Monster.Defense
     /// Magical  → Monster.MagicDefense
+    ///
+    /// Phase4: 全カテゴリでバフ/デバフを適用する。
     /// </summary>
     private int GetEnemyDefense(DamageCategory category)
     {
@@ -189,16 +212,64 @@ public partial class BattleSceneController
             default: baseDef = enemyMonster.Defense; break;
         }
 
-        // Phase3: 防御バフ/デバフ適用（物理防御のみ）
-        if (category == DamageCategory.Physical)
+        // Phase4: カテゴリに応じたバフ/デバフ適用
+        switch (category)
         {
-            baseDef = StatusEffectSystem.ApplyDefenseBuffDebuff(
-                baseDef,
-                enemyDefBuffTurn > 0, enemyDefBuffRate,
-                enemyDefDebuffTurn > 0, enemyDefDebuffRate);
+            case DamageCategory.Physical:
+                baseDef = StatusEffectSystem.ApplyStatBuffDebuff(
+                    baseDef,
+                    buffState.enemy.def.IsBuffed, buffState.enemy.def.buffRate,
+                    buffState.enemy.def.IsDebuffed, buffState.enemy.def.debuffRate);
+                break;
+            case DamageCategory.Magical:
+                baseDef = StatusEffectSystem.ApplyStatBuffDebuff(
+                    baseDef,
+                    buffState.enemy.mdef.IsBuffed, buffState.enemy.mdef.buffRate,
+                    buffState.enemy.mdef.IsDebuffed, buffState.enemy.mdef.debuffRate);
+                break;
         }
 
         return baseDef;
+    }
+
+    // =========================================================
+    // 攻撃力バフ/デバフ適用ヘルパー（Phase4追加）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの攻撃力にバフ/デバフを適用する。
+    /// OnAttackClicked / OnSkillClicked で使用する。
+    /// </summary>
+    private int ApplyPlayerAttackBuffDebuff(int baseAttack)
+    {
+        return StatusEffectSystem.ApplyStatBuffDebuff(
+            baseAttack,
+            buffState.player.atk.IsBuffed, buffState.player.atk.buffRate,
+            buffState.player.atk.IsDebuffed, buffState.player.atk.debuffRate);
+    }
+
+    /// <summary>
+    /// プレイヤーの魔法攻撃力にバフ/デバフを適用する。
+    /// OnMagicClicked で使用する。
+    /// </summary>
+    private int ApplyPlayerMagicAttackBuffDebuff(int baseMagicAttack)
+    {
+        return StatusEffectSystem.ApplyStatBuffDebuff(
+            baseMagicAttack,
+            buffState.player.matk.IsBuffed, buffState.player.matk.buffRate,
+            buffState.player.matk.IsDebuffed, buffState.player.matk.debuffRate);
+    }
+
+    /// <summary>
+    /// 敵の攻撃力にバフ/デバフを適用する。
+    /// ExecuteEnemySkillAttack / ExecuteLegacyAttack で使用する。
+    /// </summary>
+    private int ApplyEnemyAttackBuffDebuff(int baseAttack)
+    {
+        return StatusEffectSystem.ApplyStatBuffDebuff(
+            baseAttack,
+            buffState.enemy.atk.IsBuffed, buffState.enemy.atk.buffRate,
+            buffState.enemy.atk.IsDebuffed, buffState.enemy.atk.debuffRate);
     }
 
     /// <summary>

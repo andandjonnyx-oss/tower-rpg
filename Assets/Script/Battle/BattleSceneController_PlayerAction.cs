@@ -294,7 +294,7 @@ public partial class BattleSceneController
             int baseDamage;
             if (skill.damageMultiplier > 0f)
             {
-                int attackPower = enemyMonster.Attack;
+                int attackPower = ApplyEnemyAttackBuffDebuff(enemyMonster.Attack);
                 // Phase2: 怒り中は攻撃力1.5倍
                 if (enemyRageTurn > 0)
                 {
@@ -413,7 +413,7 @@ public partial class BattleSceneController
             return;
         }
 
-        int damage = (GameState.I != null) ? GameState.I.Attack : 1;
+        int damage = (GameState.I != null) ? ApplyPlayerAttackBuffDebuff(GameState.I.Attack) : 1;
         // Phase2: 怒り中は攻撃力1.5倍
         if (playerRageTurn > 0)
         {
@@ -622,7 +622,7 @@ public partial class BattleSceneController
                 continue;
             }
 
-            int attack = (GameState.I != null) ? GameState.I.Attack : 1;
+            int attack = (GameState.I != null) ? ApplyPlayerAttackBuffDebuff(GameState.I.Attack) : 1;
             // Phase2: 怒り中は攻撃力1.5倍
             if (playerRageTurn > 0)
             {
@@ -805,7 +805,7 @@ public partial class BattleSceneController
             int damage;
             if (magic.damageMultiplier > 0)
             {
-                int magicAttack = (GameState.I != null) ? GameState.I.MagicAttack : 1;
+                int magicAttack = (GameState.I != null) ? ApplyPlayerMagicAttackBuffDebuff(GameState.I.MagicAttack) : 1;
                 // Phase2: 怒り中は攻撃力1.5倍（魔法攻撃にも適用）
                 if (playerRageTurn > 0)
                 {
@@ -945,15 +945,12 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            0,
+            0,  // または lastDamageDealt
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
             ref playerRageTurn,
-            ref playerDefDebuffTurn, ref playerDefDebuffRate,
-            ref playerDefBuffTurn, ref playerDefBuffRate,
-            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-            ref enemyDefBuffTurn, ref enemyDefBuffRate);
+            ref buffState);
 
         for (int i = 0; i < logs.Count; i++)
         {
@@ -977,15 +974,12 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            lastDamageDealt,
+            0,  // または lastDamageDealt
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
             ref playerRageTurn,
-            ref playerDefDebuffTurn, ref playerDefDebuffRate,
-            ref playerDefBuffTurn, ref playerDefBuffRate,
-            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-            ref enemyDefBuffTurn, ref enemyDefBuffRate);
+            ref buffState);
 
         for (int i = 0; i < logs.Count; i++)
         {

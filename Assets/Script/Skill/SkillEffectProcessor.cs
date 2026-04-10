@@ -9,20 +9,21 @@ using UnityEngine;
 ///   効果タイプ（SkillEffectData の具象クラス）に応じて処理を分岐する。
 ///   新しい効果タイプを追加する場合は、このクラスに処理メソッドを追加する。
 ///
-/// 【オーバーロード構成】
+/// 【オーバーロード構成（Phase4: 構造体ベース）】
 ///   (A) 既存互換: 6引数（毒・スタンのみ、反動なし）
 ///   (B) 既存互換+反動: 7引数
-///   (C) Phase2 フル版: 11引数（全状態異常対応）
-///   (D) Phase3 フル版: 19引数（バフ/デバフ対応）  ← 追加
+///   (C) Phase2互換: 11引数（全状態異常対応）
+///   (D) Phase4 フル版: 構造体ベース（全バフ/デバフ対応）  ← 新メイン
 /// </summary>
 public static class SkillEffectProcessor
 {
     // =========================================================
-    // (D) Phase3 フル版: バフ/デバフ対応（内部実装本体）
+    // (D) Phase4 フル版: 構造体ベース（内部実装本体）
     // =========================================================
 
     /// <summary>
-    /// スキルの追加効果リストを順に実行し、バトルログを返す（Phase3フル版）。
+    /// スキルの追加効果リストを順に実行し、バトルログを返す（Phase4フル版）。
+    /// バフ/デバフは BattleBuffState 構造体で一元管理する。
     /// </summary>
     public static List<string> ProcessEffects(
         List<SkillEffectEntry> effects,
@@ -36,15 +37,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsBlind,
         ref int enemyRageTurn,
         ref int playerRageTurn,
-        // --- バフ/デバフ（Phase3 追加） ---
-        ref int playerDefDebuffTurn,
-        ref float playerDefDebuffRate,
-        ref int playerDefBuffTurn,
-        ref float playerDefBuffRate,
-        ref int enemyDefDebuffTurn,
-        ref float enemyDefDebuffRate,
-        ref int enemyDefBuffTurn,
-        ref float enemyDefBuffRate)
+        ref BattleBuffState buffState)
     {
         var logs = new List<string>();
         if (effects == null || effects.Count == 0) return logs;
@@ -60,10 +53,7 @@ public static class SkillEffectProcessor
                                      ref enemyIsPoisoned, ref enemyIsStunned,
                                      ref enemyIsParalyzed, ref enemyIsBlind,
                                      ref enemyRageTurn, ref playerRageTurn,
-                                     ref playerDefDebuffTurn, ref playerDefDebuffRate,
-                                     ref playerDefBuffTurn, ref playerDefBuffRate,
-                                     ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-                                     ref enemyDefBuffTurn, ref enemyDefBuffRate,
+                                     ref buffState,
                                      logs);
             }
             else if (entry.effectData is LevelDrainEffectData)
@@ -100,7 +90,7 @@ public static class SkillEffectProcessor
 
     /// <summary>
     /// Phase2互換オーバーロード（11引数版）。
-    /// バフ/デバフのダミー変数を用意して Phase3 版に委譲する。
+    /// バフ/デバフのダミー状態を用意して Phase4 版に委譲する。
     /// </summary>
     public static List<string> ProcessEffects(
         List<SkillEffectEntry> effects,
@@ -115,16 +105,12 @@ public static class SkillEffectProcessor
         ref int enemyRageTurn,
         ref int playerRageTurn)
     {
-        int dPDDT = 0; float dPDDR = 0f;
-        int dPDBT = 0; float dPDBR = 0f;
-        int dEDDT = 0; float dEDDR = 0f;
-        int dEDBT = 0; float dEDBR = 0f;
+        BattleBuffState dummy = new BattleBuffState();
         return ProcessEffects(effects, isPlayerAttack, enemyMonster,
             ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp,
             lastDamageDealt,
             ref enemyIsParalyzed, ref enemyIsBlind, ref enemyRageTurn, ref playerRageTurn,
-            ref dPDDT, ref dPDDR, ref dPDBT, ref dPDBR,
-            ref dEDDT, ref dEDDR, ref dEDBT, ref dEDBR);
+            ref dummy);
     }
 
     // =========================================================
@@ -188,14 +174,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsBlind,
         ref int enemyRageTurn,
         ref int playerRageTurn,
-        ref int playerDefDebuffTurn,
-        ref float playerDefDebuffRate,
-        ref int playerDefBuffTurn,
-        ref float playerDefBuffRate,
-        ref int enemyDefDebuffTurn,
-        ref float enemyDefDebuffRate,
-        ref int enemyDefBuffTurn,
-        ref float enemyDefBuffRate,
+        ref BattleBuffState buffState,
         List<string> logs)
     {
         if (entry.ailmentMode == AilmentMode.Inflict)
@@ -204,10 +183,7 @@ public static class SkillEffectProcessor
                                         ref enemyIsPoisoned, ref enemyIsStunned,
                                         ref enemyIsParalyzed, ref enemyIsBlind,
                                         ref enemyRageTurn, ref playerRageTurn,
-                                        ref playerDefDebuffTurn, ref playerDefDebuffRate,
-                                        ref playerDefBuffTurn, ref playerDefBuffRate,
-                                        ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-                                        ref enemyDefBuffTurn, ref enemyDefBuffRate,
+                                        ref buffState,
                                         logs);
         }
         else if (entry.ailmentMode == AilmentMode.Cure)
@@ -230,14 +206,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsBlind,
         ref int enemyRageTurn,
         ref int playerRageTurn,
-        ref int playerDefDebuffTurn,
-        ref float playerDefDebuffRate,
-        ref int playerDefBuffTurn,
-        ref float playerDefBuffRate,
-        ref int enemyDefDebuffTurn,
-        ref float enemyDefDebuffRate,
-        ref int enemyDefBuffTurn,
-        ref float enemyDefBuffRate,
+        ref BattleBuffState buffState,
         List<string> logs)
     {
         if (entry.chance <= 0) return;
@@ -297,17 +266,20 @@ public static class SkillEffectProcessor
                 break;
 
             // =========================================================
-            // 防御バフ/デバフ（Phase3 追加）— 双方向対応
+            // バフ/デバフ（Phase4: 全5種汎用処理）
             // =========================================================
             case StatusEffect.DefenseDown:
             case StatusEffect.DefenseUp:
-                ProcessDefenseBuffDebuff(
-                    entry, isPlayerAttack, enemyMonster,
-                    ref playerDefDebuffTurn, ref playerDefDebuffRate,
-                    ref playerDefBuffTurn, ref playerDefBuffRate,
-                    ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-                    ref enemyDefBuffTurn, ref enemyDefBuffRate,
-                    logs);
+            case StatusEffect.AttackDown:
+            case StatusEffect.AttackUp:
+            case StatusEffect.MagicAttackDown:
+            case StatusEffect.MagicAttackUp:
+            case StatusEffect.MagicDefenseDown:
+            case StatusEffect.MagicDefenseUp:
+            case StatusEffect.LuckDown:
+            case StatusEffect.LuckUp:
+                ProcessStatBuffDebuff(entry, isPlayerAttack, enemyMonster,
+                                      ref buffState, logs);
                 break;
 
             default:
@@ -441,50 +413,74 @@ public static class SkillEffectProcessor
     }
 
     // =========================================================
-    // 防御バフ/デバフ付与処理（Phase3 追加）
+    // バフ/デバフ付与処理（Phase4: 全5種汎用）
     // =========================================================
 
     /// <summary>
-    /// 防御バフ/デバフの付与処理。
+    /// 全5種のバフ/デバフ付与を汎用的に処理する。
     /// 双方向対応（プレイヤー→敵、敵→プレイヤー）。
     ///
     /// 【仕様】
+    ///   - Down系（デバフ）: 相手に付与。耐性判定あり。
+    ///   - Up系（バフ）: 自分自身に付与。耐性判定なし。
     ///   - 反対効果がかかっている場合: 反対効果を解除してから新効果を付与（後優先）
     ///   - 同じ効果が既にかかっている場合: ターン数をリセット（率は上書き）
-    ///   - 耐性判定あり（immuneToAllAilments や個別耐性で弾ける）
     ///   - intValue = 効果率（%）。例: 30 = 30%減少/増加
     ///   - duration = 持続ターン数。0 ならデフォルト値を使用。
     /// </summary>
-    private static void ProcessDefenseBuffDebuff(
+    private static void ProcessStatBuffDebuff(
         SkillEffectEntry entry,
         bool isPlayerAttack,
         Monster enemyMonster,
-        ref int playerDefDebuffTurn,
-        ref float playerDefDebuffRate,
-        ref int playerDefBuffTurn,
-        ref float playerDefBuffRate,
-        ref int enemyDefDebuffTurn,
-        ref float enemyDefDebuffRate,
-        ref int enemyDefBuffTurn,
-        ref float enemyDefBuffRate,
+        ref BattleBuffState buffState,
         List<string> logs)
     {
         StatusEffect effect = entry.targetStatusEffect;
-        StatusEffect opposite = StatusEffectSystem.GetOpposite(effect);
+        bool isDebuff = StatusEffectSystem.IsDebuff(effect);
         float rate = (entry.intValue > 0) ? entry.intValue : 30f;
         int dur = (entry.duration > 0) ? entry.duration : StatusEffectSystem.DefaultBuffDebuffDuration;
-        string effectName = effect.ToJapanese();
 
+        // 表示用名前の取得
+        string effectName;
+        string oppositeName;
         if (isPlayerAttack)
         {
-            // プレイヤーが使用
-            // DefenseDown → 敵に防御デバフ / DefenseUp → プレイヤー自身に防御バフ
-            if (effect == StatusEffect.DefenseDown)
-            {
-                // 敵に防御デバフ付与
-                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+            // プレイヤーが使用 → 敵にデバフ or 自分にバフ
+            // 敵用の表示名を使う場合は ToJapaneseEnemy
+            if (isDebuff)
+                effectName = effect.ToJapaneseEnemy();
+            else
+                effectName = effect.ToJapanese();
 
-                // 耐性判定
+            StatusEffect opposite = StatusEffectSystem.GetOpposite(effect);
+            if (isDebuff)
+                oppositeName = opposite.ToJapaneseEnemy();
+            else
+                oppositeName = opposite.ToJapanese();
+        }
+        else
+        {
+            // 敵が使用 → プレイヤーにデバフ or 敵自身にバフ
+            if (isDebuff)
+                effectName = effect.ToJapanese();
+            else
+                effectName = effect.ToJapaneseEnemy();
+
+            StatusEffect opposite = StatusEffectSystem.GetOpposite(effect);
+            if (isDebuff)
+                oppositeName = opposite.ToJapanese();
+            else
+                oppositeName = opposite.ToJapaneseEnemy();
+        }
+
+        string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+
+        if (isDebuff)
+        {
+            // --- デバフ: 相手に付与 ---
+            if (isPlayerAttack)
+            {
+                // プレイヤー → 敵にデバフ
                 int resist = StatusEffectSystem.GetEnemyResistance(effect, enemyMonster);
                 if (!StatusEffectSystem.TryInflict(entry.chance, resist))
                 {
@@ -492,42 +488,23 @@ public static class SkillEffectProcessor
                     return;
                 }
 
-                // 反対効果（DefenseUp）を解除
-                if (enemyDefBuffTurn > 0)
+                ref BuffDebuffPair enemyPair = ref buffState.enemy.GetPairRef(effect);
+                // 反対効果（バフ）を解除
+                if (enemyPair.buffTurn > 0)
                 {
-                    enemyDefBuffTurn = 0;
-                    enemyDefBuffRate = 0f;
-                    logs.Add($"{eName} の防御アップが解除された！");
+                    enemyPair.buffTurn = 0;
+                    enemyPair.buffRate = 0f;
+                    StatusEffect opposite = StatusEffectSystem.GetOpposite(effect);
+                    logs.Add($"{eName} の{oppositeName}が解除された！");
                 }
 
-                // 付与（同効果なら上書き）
-                enemyDefDebuffTurn = dur;
-                enemyDefDebuffRate = rate;
-                logs.Add($"{eName} の防御が {rate}%下がった！（{dur}ターン）");
+                enemyPair.debuffTurn = dur;
+                enemyPair.debuffRate = rate;
+                logs.Add($"{eName} の{effectName}！ {rate}%低下！（{dur}ターン）");
             }
-            else if (effect == StatusEffect.DefenseUp)
+            else
             {
-                // プレイヤー自身に防御バフ付与（耐性判定なし — 自分へのバフ）
-                // 反対効果（DefenseDown）を解除
-                if (playerDefDebuffTurn > 0)
-                {
-                    playerDefDebuffTurn = 0;
-                    playerDefDebuffRate = 0f;
-                    logs.Add("You の防御ダウンが解除された！");
-                }
-
-                playerDefBuffTurn = dur;
-                playerDefBuffRate = rate;
-                logs.Add($"You の防御が {rate}%上がった！（{dur}ターン）");
-            }
-        }
-        else
-        {
-            // 敵が使用
-            // DefenseDown → プレイヤーに防御デバフ / DefenseUp → 敵自身に防御バフ
-            if (effect == StatusEffect.DefenseDown)
-            {
-                // プレイヤーに防御デバフ付与
+                // 敵 → プレイヤーにデバフ
                 int resist = StatusEffectSystem.GetPlayerResistance(effect);
                 if (!StatusEffectSystem.TryInflict(entry.chance, resist))
                 {
@@ -535,34 +512,54 @@ public static class SkillEffectProcessor
                     return;
                 }
 
-                // 反対効果（DefenseUp）を解除
-                if (playerDefBuffTurn > 0)
+                ref BuffDebuffPair playerPair = ref buffState.player.GetPairRef(effect);
+                // 反対効果（バフ）を解除
+                if (playerPair.buffTurn > 0)
                 {
-                    playerDefBuffTurn = 0;
-                    playerDefBuffRate = 0f;
-                    logs.Add("You の防御アップが解除された！");
+                    playerPair.buffTurn = 0;
+                    playerPair.buffRate = 0f;
+                    logs.Add($"You の{oppositeName}が解除された！");
                 }
 
-                playerDefDebuffTurn = dur;
-                playerDefDebuffRate = rate;
-                logs.Add($"You の防御が {rate}%下がった！（{dur}ターン）");
+                playerPair.debuffTurn = dur;
+                playerPair.debuffRate = rate;
+                logs.Add($"You の{effectName}！ {rate}%低下！（{dur}ターン）");
             }
-            else if (effect == StatusEffect.DefenseUp)
+        }
+        else
+        {
+            // --- バフ: 自分自身に付与（耐性判定なし） ---
+            if (isPlayerAttack)
             {
-                // 敵自身に防御バフ付与（耐性判定なし — 自分へのバフ）
-                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
-
-                // 反対効果（DefenseDown）を解除
-                if (enemyDefDebuffTurn > 0)
+                // プレイヤーが使用 → プレイヤー自身にバフ
+                ref BuffDebuffPair playerPair = ref buffState.player.GetPairRef(effect);
+                // 反対効果（デバフ）を解除
+                if (playerPair.debuffTurn > 0)
                 {
-                    enemyDefDebuffTurn = 0;
-                    enemyDefDebuffRate = 0f;
-                    logs.Add($"{eName} の防御ダウンが解除された！");
+                    playerPair.debuffTurn = 0;
+                    playerPair.debuffRate = 0f;
+                    logs.Add($"You の{oppositeName}が解除された！");
                 }
 
-                enemyDefBuffTurn = dur;
-                enemyDefBuffRate = rate;
-                logs.Add($"{eName} の防御が {rate}%上がった！（{dur}ターン）");
+                playerPair.buffTurn = dur;
+                playerPair.buffRate = rate;
+                logs.Add($"You の{effectName}！ {rate}%上昇！（{dur}ターン）");
+            }
+            else
+            {
+                // 敵が使用 → 敵自身にバフ
+                ref BuffDebuffPair enemyPair = ref buffState.enemy.GetPairRef(effect);
+                // 反対効果（デバフ）を解除
+                if (enemyPair.debuffTurn > 0)
+                {
+                    enemyPair.debuffTurn = 0;
+                    enemyPair.debuffRate = 0f;
+                    logs.Add($"{eName} の{oppositeName}が解除された！");
+                }
+
+                enemyPair.buffTurn = dur;
+                enemyPair.buffRate = rate;
+                logs.Add($"{eName} の{effectName}！ {rate}%上昇！（{dur}ターン）");
             }
         }
     }

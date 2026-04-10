@@ -185,7 +185,7 @@ public partial class BattleSceneController
         }
 
         // Phase2: 怒り中は攻撃力1.5倍
-        int enemyDamage = enemyMonster.Attack;
+        int enemyDamage = ApplyEnemyAttackBuffDebuff(enemyMonster.Attack);
         if (enemyRageTurn > 0)
         {
             enemyDamage = Mathf.FloorToInt(enemyDamage * StatusEffectSystem.RageAttackMultiplier + 0.5f);
@@ -446,7 +446,7 @@ public partial class BattleSceneController
             int baseDamage;
             if (skill.damageMultiplier > 0f)
             {
-                int attackPower = enemyMonster.Attack;
+                int attackPower = ApplyEnemyAttackBuffDebuff(enemyMonster.Attack);
                 // Phase2: 怒り中は攻撃力1.5倍
                 if (enemyRageTurn > 0)
                 {
@@ -563,10 +563,7 @@ public partial class BattleSceneController
             ref enemyIsBlind,
             ref enemyRageTurn,
             ref playerRageTurn,
-            ref playerDefDebuffTurn, ref playerDefDebuffRate,
-            ref playerDefBuffTurn, ref playerDefBuffRate,
-            ref enemyDefDebuffTurn, ref enemyDefDebuffRate,
-            ref enemyDefBuffTurn, ref enemyDefBuffRate);
+            ref buffState);
 
         for (int i = 0; i < logs.Count; i++)
         {
@@ -632,44 +629,13 @@ public partial class BattleSceneController
         }
 
         // =========================================================
-        // 防御バフ/デバフ ターンカウントダウン（Phase3追加）
+        // バフ/デバフ ターンカウントダウン（Phase4: 全5種一括）
         // =========================================================
-        if (playerDefDebuffTurn > 0)
         {
-            playerDefDebuffTurn--;
-            if (playerDefDebuffTurn <= 0)
+            var buffLogs = TickBuffDebuffTurns();
+            for (int bl = 0; bl < buffLogs.Count; bl++)
             {
-                playerDefDebuffRate = 0f;
-                AddLog("You の防御ダウンが解除された。");
-            }
-        }
-        if (playerDefBuffTurn > 0)
-        {
-            playerDefBuffTurn--;
-            if (playerDefBuffTurn <= 0)
-            {
-                playerDefBuffRate = 0f;
-                AddLog("You の防御アップが解除された。");
-            }
-        }
-        if (enemyDefDebuffTurn > 0)
-        {
-            enemyDefDebuffTurn--;
-            if (enemyDefDebuffTurn <= 0)
-            {
-                enemyDefDebuffRate = 0f;
-                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
-                AddLog($"{eName} の防御ダウンが解除された。");
-            }
-        }
-        if (enemyDefBuffTurn > 0)
-        {
-            enemyDefBuffTurn--;
-            if (enemyDefBuffTurn <= 0)
-            {
-                enemyDefBuffRate = 0f;
-                string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
-                AddLog($"{eName} の防御アップが解除された。");
+                AddLog(buffLogs[bl]);
             }
         }
 
