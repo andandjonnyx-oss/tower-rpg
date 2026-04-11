@@ -1017,7 +1017,7 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            0,  // または lastDamageDealt
+            lastDamageDealt,  // ★反動ダメージ計算に必要な与ダメージを渡す
             ref enemyIsParalyzed,
             ref enemyIsBlind,
             ref enemyRageTurn,
