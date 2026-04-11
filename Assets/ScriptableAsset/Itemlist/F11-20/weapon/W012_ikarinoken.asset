@@ -44,7 +44,7 @@ MonoBehaviour:
   skills:
   - {fileID: 11400000, guid: 4f5793cf23b26e0439b5bdfb93bfa18f, type: 2}
   weaponInflictEffect: 9
-  weaponInflictChance: 100
+  weaponInflictChance: 10
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

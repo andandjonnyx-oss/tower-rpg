@@ -32,6 +32,10 @@ MonoBehaviour:
   BaseHitRate: 90
   PoisonResistance: 100
   StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  immuneToAllAilments: 1
   attributeResistances:
   - attribute: 3
     value: 100

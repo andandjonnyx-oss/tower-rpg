@@ -672,6 +672,10 @@ MonoBehaviour:
     step: 20
     bossMonster: {fileID: 11400000, guid: ea821e1fe0984f44e88c973c188af8b5, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
+  - floor: 20
+    step: 20
+    bossMonster: {fileID: 11400000, guid: ef0896b75449972439e1e8180dea12ba, type: 2}
+    victoryTalkEvent: {fileID: 0}
   battleSceneName: Battle
 --- !u!1 &374993241
 GameObject:
@@ -4567,6 +4571,16 @@ MonoBehaviour:
   mahi: {fileID: 239696163}
   kurayami: {fileID: 2005640639}
   ikari: {fileID: 1402706892}
+  bougyoDown: {fileID: 0}
+  bougyoUp: {fileID: 0}
+  kougekiDown: {fileID: 0}
+  kougekiUp: {fileID: 0}
+  makouDown: {fileID: 0}
+  makouUp: {fileID: 0}
+  mabouDown: {fileID: 0}
+  mabouUp: {fileID: 0}
+  unDown: {fileID: 0}
+  unUp: {fileID: 0}
 --- !u!114 &1820788169
 MonoBehaviour:
   m_ObjectHideFlags: 0

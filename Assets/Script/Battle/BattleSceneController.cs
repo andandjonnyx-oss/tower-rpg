@@ -361,12 +361,14 @@ public partial class BattleSceneController : MonoBehaviour
                     FlushLogsAndThen(() => OnVictory());
                     RefreshSkillButton();
                     RefreshMagicSelector();
+                    RefreshBattleStatusEffectUI();  // ★追加: ここでも呼ぶ
                     return;
                 }
 
                 Invoke(nameof(EnemyTurn), 0.5f);
                 RefreshSkillButton();
                 RefreshMagicSelector();
+                RefreshBattleStatusEffectUI();  // ★追加: ここでも呼ぶ
                 return;
             }
         }

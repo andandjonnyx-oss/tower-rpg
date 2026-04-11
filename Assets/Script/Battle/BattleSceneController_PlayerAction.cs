@@ -16,12 +16,17 @@ using UnityEngine.SceneManagement;
 ///   各行動冒頭で麻痺チェック。20%で行動キャンセル→敵ターンへ。
 ///
 /// 【暗闇（Phase2追加）】
-///   プレイヤーが暗闇の場合、敵回避力を2倍として命中計算する。
+///   プレイヤーが暗闘の場合、敵回避力を2倍として命中計算する。
 ///   → CheckPlayerHitWithBlind() を使用。
 ///
 /// 【怒り（Phase2追加）】
 ///   怒り中はスキル/魔法/アイテム/防御ボタンの押下を拒否、攻撃のみ許可。
 ///   攻撃力に RageAttackMultiplier（1.5倍）を乗算。
+///
+/// 【多段攻撃の命中判定ルール】
+///   hitCount > 1 の多段攻撃スキルでは、スキル発動自体は100%確定。
+///   各ヒットごとに個別に命中/回避判定を行う。
+///   （単発スキルでは従来通りスキル発動前に命中判定を行う）
 /// </summary>
 public partial class BattleSceneController
 {
@@ -186,6 +191,9 @@ public partial class BattleSceneController
     ///
     /// 非ダメージスキル:
     ///   IsNonDamage == true の場合は命中判定をスキップし、追加効果のみ実行する。
+    ///
+    /// 多段攻撃:
+    ///   hitCount > 1 の場合、スキル発動自体は確定し、各ヒットごとに命中判定を行う。
     /// </summary>
     private void ExecutePreemptiveAction(EnemyActionEntry action)
     {
@@ -225,13 +233,22 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        // 命中判定
-        if (!CheckEnemyHit(effectiveHitRate))
+
+        // =========================================================
+        // 多段攻撃対応: hitCount > 1 の場合はスキル発動確定、各ヒットで個別判定
+        // =========================================================
+        int hits = skill.EffectiveHitCount;
+
+        // 単発スキル: 従来通りスキル発動前に命中判定
+        if (hits <= 1)
         {
-            string missName = !string.IsNullOrEmpty(skill.skillName)
-                ? skill.skillName : "先制攻撃";
-            AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
-            return;
+            if (!CheckEnemyHit(effectiveHitRate))
+            {
+                string missName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName : "先制攻撃";
+                AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                return;
+            }
         }
 
         // 乱数ダメージスキル（追加）
@@ -272,7 +289,6 @@ public partial class BattleSceneController
 
 
         // ダメージ計算（多段攻撃対応）
-        int hits = skill.EffectiveHitCount;
         int totalDamage = 0;
         int hitSuccess = 0;
 
@@ -284,8 +300,9 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            // 多段攻撃の2発目以降は個別に命中判定（暗闇補正付き）
-            if (h > 0 && !CheckEnemyHit(effectiveHitRate))
+            // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
+            // ★単発攻撃: ループ前で判定済みなのでここはスキップ
+            if (hits > 1 && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
@@ -535,6 +552,9 @@ public partial class BattleSceneController
     /// <summary>
     /// スキルボタンが押された時の処理（プレイヤーターン・武器スキル攻撃）。
     /// Phase2: 怒り中はスキル使用不可。麻痺チェック追加。暗闇対応。
+    ///
+    /// 多段攻撃（hitCount > 1）の場合:
+    ///   スキル発動自体は100%確定し、各ヒットごとに命中/回避判定を行う。
     /// </summary>
     private void OnSkillClicked()
     {
@@ -595,17 +615,25 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        if (!CheckPlayerHitWithBlind(skill.baseHitRate))
-        {
-            AddLog($"You は {skill.skillName}！ …しかし外れた！");
-            FlushLogsAndThen(() => EnemyTurn());
-            return;
-        }
 
         // =========================================================
         // 多段攻撃対応
+        // ★ hitCount > 1: スキル発動は確定、各ヒットで個別に命中判定
+        // ★ hitCount == 1: 従来通りスキル発動前に命中判定
         // =========================================================
         int hits = skill.EffectiveHitCount;
+
+        // 単発スキル: 発動前に命中判定（従来動作）
+        if (hits <= 1)
+        {
+            if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+            {
+                AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+        }
+
         int totalDamage = 0;
         int hitSuccess = 0;
 
@@ -616,7 +644,9 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            if (h > 0 && !CheckPlayerHitWithBlind(skill.baseHitRate))
+            // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
+            // ★単発攻撃: ループ前で判定済みなのでここはスキップ
+            if (hits > 1 && !CheckPlayerHitWithBlind(skill.baseHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
@@ -717,6 +747,9 @@ public partial class BattleSceneController
     /// <summary>
     /// 魔法ボタンが押された時の処理（プレイヤーターン・魔法スキル発動）。
     /// Phase2: 怒り中は魔法使用不可。麻痺チェック追加。暗闇対応。
+    ///
+    /// 多段攻撃（hitCount > 1）の場合:
+    ///   スキル発動自体は100%確定し、各ヒットごとに命中/回避判定を行う。
     /// </summary>
     private void OnMagicClicked()
     {
@@ -774,17 +807,25 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        if (!CheckPlayerHitWithBlind(magic.baseHitRate))
-        {
-            AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
-            FlushLogsAndThen(() => EnemyTurn());
-            return;
-        }
 
         // =========================================================
         // 多段攻撃対応
+        // ★ hitCount > 1: スキル発動は確定、各ヒットで個別に命中判定
+        // ★ hitCount == 1: 従来通りスキル発動前に命中判定
         // =========================================================
         int hits = magic.EffectiveHitCount;
+
+        // 単発スキル: 発動前に命中判定（従来動作）
+        if (hits <= 1)
+        {
+            if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+            {
+                AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+        }
+
         int totalDamage = 0;
         int hitSuccess = 0;
 
@@ -795,7 +836,9 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            if (h > 0 && !CheckPlayerHitWithBlind(magic.baseHitRate))
+            // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
+            // ★単発攻撃: ループ前で判定済みなのでここはスキップ
+            if (hits > 1 && !CheckPlayerHitWithBlind(magic.baseHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;

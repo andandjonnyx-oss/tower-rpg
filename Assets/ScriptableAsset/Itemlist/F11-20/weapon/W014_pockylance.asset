@@ -40,8 +40,8 @@ MonoBehaviour:
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
-  weaponAttribute: 0
-  attackPower: 0
+  weaponAttribute: 2
+  attackPower: 30
   skills:
   - {fileID: 11400000, guid: ce88878beea4042409dfac1c29b908a6, type: 2}
   weaponInflictEffect: 0

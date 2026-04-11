@@ -24,8 +24,8 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 50
   Attack: 25
-  Defense: 30
-  MagicDefense: 30
+  Defense: 25
+  MagicDefense: 25
   Speed: 0
   Luck: 1
   Evasion: 0
@@ -35,7 +35,14 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
-  attributeResistances: []
+  immuneToAllAilments: 0
+  attributeResistances:
+  - attribute: 3
+    value: 25
+  - attribute: 4
+    value: 25
+  - attribute: 5
+    value: 25
   Exp: 200
   Gold: 0
   dropItem: {fileID: 11400000, guid: 634a3130f70790540a7b8e5d4d0c1bbb, type: 2}

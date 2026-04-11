@@ -30,6 +30,11 @@
 ///   敵が怒り中は actionRange = 1（最初のアクション＝通常攻撃のみ）。
 ///   攻撃力に RageAttackMultiplier（1.5倍）を乗算。
 ///   AfterEnemyAction で怒りターンカウントダウン。
+///
+/// 【多段攻撃の命中判定ルール】
+///   hitCount > 1 の多段攻撃スキルでは、スキル発動自体は100%確定。
+///   各ヒットごとに個別に命中/回避判定を行う。
+///   （単発スキルでは従来通りスキル発動前に命中判定を行う）
 /// </summary>
 public partial class BattleSceneController
 {
@@ -358,6 +363,9 @@ public partial class BattleSceneController
     /// 敵のスキル攻撃。SkillData のパラメータでダメージ計算する。
     /// Phase2: 敵が暗闇の場合、baseHitRate を半分にする。
     /// Phase2: 敵が怒り中の場合、攻撃力に RageAttackMultiplier を乗算する。
+    ///
+    /// 多段攻撃（hitCount > 1）の場合:
+    ///   スキル発動自体は100%確定し、各ヒットごとに命中/回避判定を行う。
     /// </summary>
     private void ExecuteEnemySkillAttack(SkillData skill)
     {
@@ -391,14 +399,24 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
-        if (!CheckEnemyHit(effectiveHitRate))
+
+        // =========================================================
+        // 多段攻撃対応: hitCount > 1 の場合はスキル発動確定、各ヒットで個別判定
+        // =========================================================
+        int hits = skill.EffectiveHitCount;
+
+        // 単発スキル: 従来通りスキル発動前に命中判定
+        if (hits <= 1)
         {
-            string missName = !string.IsNullOrEmpty(skill.skillName)
-                ? skill.skillName
-                : $"{skill.skillAttribute.ToJapanese()}攻撃";
-            AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
-            AfterEnemyAction();
-            return;
+            if (!CheckEnemyHit(effectiveHitRate))
+            {
+                string missName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName
+                    : $"{skill.skillAttribute.ToJapanese()}攻撃";
+                AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                AfterEnemyAction();
+                return;
+            }
         }
 
         // =========================================================
@@ -448,7 +466,6 @@ public partial class BattleSceneController
 
 
         // --- ダメージ計算（多段攻撃対応） ---
-        int hits = skill.EffectiveHitCount;
         int totalDamage = 0;
         int hitSuccess = 0;
 
@@ -460,8 +477,9 @@ public partial class BattleSceneController
 
         for (int h = 0; h < hits; h++)
         {
-            // 多段攻撃の2発目以降は個別に命中判定（暗闇補正付き）
-            if (h > 0 && !CheckEnemyHit(effectiveHitRate))
+            // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
+            // ★単発攻撃: ループ前で判定済みなのでここはスキップ
+            if (hits > 1 && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;

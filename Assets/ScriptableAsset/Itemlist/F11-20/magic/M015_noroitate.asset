@@ -48,7 +48,7 @@ MonoBehaviour:
   equipMagicAttack: 0
   equipMagicDefense: 0
   equipLuck: 0
-  equipMaxHp: -50
+  equipMaxHp: 0
   equipMaxMp: 0
   equipAccuracy: 0
   equipEvasion: 0
@@ -69,5 +69,11 @@ MonoBehaviour:
     targetStat: 0
     targetStatusEffect: 0
     value: 20
+    floatValue: 0
+  - effectType: 3
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -50
     floatValue: 0
   sortOrder: 15
