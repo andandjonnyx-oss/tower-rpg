@@ -39,8 +39,8 @@ MonoBehaviour:
   attributeResistances: []
   Exp: 450
   Gold: 0
-  dropItem: {fileID: 0}
-  dropRate: 0
+  dropItem: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
+  dropRate: 0.2
   Help: "\u904B\u304C\u60AA\u3044\u3068\u5927\u9B54\u6CD5\u3092\u653E\u3063\u3066\u304F\u308B\u305E\uFF01\n\u521D\u671F\u30B9\u30C6\u30FC\u30BF\u30B9\u306F\u3084\u3081\u3068\u3051\u3088\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: c4c0c8402cf2d8743be903e2ae11aa4d, type: 2}

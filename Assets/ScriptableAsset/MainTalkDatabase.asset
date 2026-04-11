@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: MainTalkDatabase
   m_EditorClassIdentifier: Assembly-CSharp::TalkEventDatabase
   events:
+  - {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
+  - {fileID: 11400000, guid: 995869359adc1f348842540b2f6a46b7, type: 2}
   - {fileID: 11400000, guid: 3d837a55bd9656442862de08028320b3, type: 2}
   - {fileID: 11400000, guid: e2e193f1804e5964b8d062fdca66dfbe, type: 2}
   - {fileID: 11400000, guid: 0bcb0c4e1f377034988cb22ded69da44, type: 2}
@@ -25,4 +27,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3a2d4cb2029b3944f8af71a7259cd5c4, type: 2}
   - {fileID: 11400000, guid: eea2a04667a5e504c871239fb8861bc0, type: 2}
   - {fileID: 11400000, guid: 7a6bc23aaf44f404789943fcac5973c3, type: 2}
-  - {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
+  - {fileID: 11400000, guid: ee56a1ca10b74ac4eb97df2afb51c2df, type: 2}
+  - {fileID: 11400000, guid: 3e2ebaf7d331bca478b849df45672a6c, type: 2}
+  - {fileID: 11400000, guid: 86114eb4b2c57e14ab6cd6ed3ce4152f, type: 2}
+  - {fileID: 11400000, guid: 35cd5a5e5be1a814a956fec82feabfe4, type: 2}
+  - {fileID: 11400000, guid: caebab36b62be9b48ac1e73040d33e4e, type: 2}
+  - {fileID: 11400000, guid: e502fb162b5f3634f806be3221726cf6, type: 2}
+  - {fileID: 11400000, guid: fed658bf8a843d44bbe60ef2375441c9, type: 2}
+  - {fileID: 11400000, guid: af535c11ac5356242bfc88241f7febac, type: 2}
+  - {fileID: 11400000, guid: c64cefdf689aafd4daa8be1e5bba6880, type: 2}
+  - {fileID: 11400000, guid: 2e8b0b64312dd4449a40a9648253d394, type: 2}
+  - {fileID: 11400000, guid: 7ec626e62268acb42bd1ab3883156abb, type: 2}

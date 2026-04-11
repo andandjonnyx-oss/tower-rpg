@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F19_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F19_S02
+  floor: 19
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u6226\u95D8\u4E2D\u306B\u6B66\u5668\u3092\u6301\u3061\u66FF\u3048\u3066\u308B\u304B\uFF1F\n\u30BF\u30FC\u30F3\u306F\u6D88\u8CBB\u3059\u308B\u3051\u3069\u3001\u88C5\u5099\u3092\u5165\u308C\u66FF\u3048\u3089\u308C\u308B\u305C\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u6575\u306B\u5408\u3063\u305F\u6B66\u5668\u3092\u7528\u610F\u3059\u308B\u3063\u3066\u306E\u3082\u3042\u308A\u3060\u3057\u3001\n\u540C\u3058\u6B66\u5668\u3092\u8907\u6570\u6301\u3064\u3053\u3068\u306B\u3082\u610F\u5473\u304C\u3042\u308B\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u4F8B\u3048\u3070CT5\u3042\u308B\u30B9\u30AD\u30EB\u3092\u4F7F\u3063\u3066\u3001\n\u305D\u306E\u6B21\u306E\u30BF\u30FC\u30F3\u3067\u306F\u3082\u30461\u3064\u3042\u308B\u305D\u306E\u88C5\u5099\u306B\u5909\u66F4\u3059\u308B\u3002\n\u3059\u308B\u3068\u30012\u30BF\u30FC\u30F3\u5F8C\u306B\u307E\u305F\u305D\u306E\u30B9\u30AD\u30EB\u304C\u4F7F\u3048\u308B\u3063\u3066\u8A33\u3060\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "20\u500B\u306E\u30A2\u30A4\u30C6\u30E0\u67A0\u3092\u540C\u3058\u6B66\u5668\u3067\u57CB\u3081\u308B\u3063\u3066\u306E\u306F\u3001\n\u62B5\u6297\u304C\u3042\u308B\u304B\u3082\u3057\u308C\u306A\u3044\u304C\u3001\u5F37\u6B66\u5668\u5F37\u30B9\u30AD\u30EB\u30B4\u30EA\u62BC\u3057\u6226\u6CD5\u3082\n\u306A\u304B\u306A\u304B\u5F37\u3044\u3068\u601D\u3046\u305C\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

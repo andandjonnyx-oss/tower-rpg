@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F12_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F12_S02
+  floor: 12
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3042\u306E\u30A6\u30B6\u30A4\u5263\u306E\u6D17\u793C\u306F\u53D7\u3051\u305F\u304B\uFF1F\nHP\u306F\u305F\u3063\u305F\u306E1\u306A\u3093\u3060\u3051\u3069\u653B\u6483\u304C\u5F53\u305F\u3089\u306A\u3044\u3088\u306A\u3041\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3053\u3053\u3067\u5927\u30D2\u30F3\u30C8\u3060\u3002\u6575\u306B\u306F\u300E\u56DE\u907F\u529B\u300F\u3063\u3066\u306E\u304C\u3042\u3063\u3066\u3001\n\u305D\u3053\u304B\u3089\u304A\u524D\u306E\u300E\u547D\u4E2D\u529B\u300F\u3092\u5F15\u3044\u305F\u3082\u306E\u304C\n\u3044\u308F\u3086\u308B\u300E\u56DE\u907F\u7387\u300F\u306B\u306A\u308B\u3093\u3060\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u5177\u4F53\u7684\u306B\u306F\u3042\u306E\u5263\u306E\u56DE\u907F\u529B\u306F100\u3060\u304B\u3089\u3001\n\u304A\u524D\u306E\u547D\u4E2D\u529B\u304C50\u3042\u308C\u3070\u3001\u56DE\u907F\u7387\u306F50\u3063\u3066\u8A33\u3060\u306A\u3002\nDEX\u304C\u521D\u671F\u3068\u304B\u3060\u3068\u56DE\u907F\u738790\u3068\u304B\u306B\u306A\u308B\u304B\u3082\u306A\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u305F\u3060\u3001\u304A\u524D\u306E\u547D\u4E2D\u7387\u306F\u6700\u4F4E\u4FDD\u8A3C\u3068\u3057\u306625\uFF05\u304C\u8A2D\u5B9A\u3055\u308C\u3066\u3044\u308B\u3002\n\u66F4\u306B\u30C0\u30E1\u30FC\u30B8\u4FDD\u8A3C\u30821\u306F\u3042\u308B\u304B\u3089\u3001\u305F\u307E\u306B\u51FA\u3066\u6765\u308B\u9AD8\u56DE\u907F\u306E\u6575\u306E\u70BA\u306B\nDEX\u306B\u632F\u308B\u3088\u308A\u306F\u300125%\u306B\u671F\u5F85\u3057\u3066\u4ED6\u3092\u632F\u308B\u306E\u3082\u3042\u308A\u304B\u3082\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}
