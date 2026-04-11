@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M29M_magifire
+  m_Name: M029M_magifire
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M29M_magifire
   itemName: "\u30DE\u30B8\u30AB\u30EB\u30D5\u30EC\u30A4\u30E0"
