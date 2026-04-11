@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: H08_otokuheal
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: H07_dekura
+  skillName: "\u304A\u5F97\u30D2\u30FC\u30EB"
+  description: "\u72B6\u614B\u7570\u5E38\u56DE\u5FA9\u306B\u30D2\u30FC\u30EB\u304C\u3064\u3044\u3066\u3053\u306E\u30B3\u30B9\u30D1\uFF01"
+  skillSource: 1
+  actionType: 2
+  skillAttribute: 0
+  damageCategory: 0
+  damageMultiplier: 0
+  bonusDamage: 0
+  randomDamageMax: 0
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 8
+  baseHitRate: 95
+  hitCount: 1
+  noBattleOk: 1
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 0
+    chance: 100
+    intValue: 50
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 1
+    targetStatusEffect: 1
+    chance: 100
+    intValue: 50
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 1
+    targetStatusEffect: 2
+    chance: 100
+    intValue: 50
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 1
+    targetStatusEffect: 4
+    chance: 100
+    intValue: 50
+    duration: 0
+  enemyNextForceSkill: {fileID: 0}

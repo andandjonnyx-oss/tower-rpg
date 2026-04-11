@@ -272,6 +272,34 @@ public partial class BattleSceneController
             buffState.enemy.atk.IsDebuffed, buffState.enemy.atk.debuffRate);
     }
 
+    // =========================================================
+    // 運バフ/デバフ適用ヘルパー（LUC判定用）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの運にバフ/デバフを適用する。
+    /// SelectEnemyAction の actionRange 計算で使用する。
+    /// </summary>
+    private int ApplyPlayerLucBuffDebuff(int baseLuc)
+    {
+        return StatusEffectSystem.ApplyStatBuffDebuff(
+            baseLuc,
+            buffState.player.luc.IsBuffed, buffState.player.luc.buffRate,
+            buffState.player.luc.IsDebuffed, buffState.player.luc.debuffRate);
+    }
+
+    /// <summary>
+    /// 敵の運にバフ/デバフを適用する。
+    /// SelectEnemyAction の actionRange 計算で使用する。
+    /// </summary>
+    private int ApplyEnemyLucBuffDebuff(int baseLuc)
+    {
+        return StatusEffectSystem.ApplyStatBuffDebuff(
+            baseLuc,
+            buffState.enemy.luc.IsBuffed, buffState.enemy.luc.buffRate,
+            buffState.enemy.luc.IsDebuffed, buffState.enemy.luc.debuffRate);
+    }
+
     /// <summary>
     /// 防御ダイスの基準乱数範囲（通常時）。
     /// 0 ～ この値の乱数を振り、1未満が出た数の合計がダメージ軽減値。

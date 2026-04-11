@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SA012_noroiken
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SA012_noroiken
+  skillName: "\u546A\u308F\u308C\u305F\u4E00\u6483"
+  description: "\u5F37\u529B\u3067\u9023\u767A\u53EF\u80FD\u3060\u304C\u6301\u3061\u4E3B\u3092\u50B7\u3064\u3051\u308B\nCT0\u30013\u500D\u3001\u53CD\u52D53\u5272"
+  skillSource: 0
+  actionType: 2
+  skillAttribute: 1
+  damageCategory: 0
+  damageMultiplier: 3
+  bonusDamage: 0
+  randomDamageMax: 0
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 95
+  hitCount: 1
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 2c4f84d79e0c55d4ba4df4fdc27f7c4e, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 0
+    chance: 100
+    intValue: 30
+    duration: 0
+  enemyNextForceSkill: {fileID: 0}

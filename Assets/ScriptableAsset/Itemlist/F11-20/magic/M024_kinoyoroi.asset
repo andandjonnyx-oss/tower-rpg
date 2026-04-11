@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M024_kinoyoroi
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M024_kinoyoroi
+  itemName: "\u6728\u306E\u93A7"
+  description: "\u9811\u4E08\u306A\u6728\u3067\u4F5C\u3089\u308C\u305F\u93A7\u3002\n\u786C\u3044\u304C\u706B\u306B\u5F31\u3044\u3002\nHP+50
+    \u708E\u8010\u6027-100"
+  icon: {fileID: 0}
+  Minfloor: 11
+  Minstep: 1
+  Maxfloor: 15
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects:
+  - effectType: 3
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 50
+    floatValue: 0
+  - effectType: 0
+    targetAttribute: 3
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -200
+    floatValue: 0
+  sortOrder: 0

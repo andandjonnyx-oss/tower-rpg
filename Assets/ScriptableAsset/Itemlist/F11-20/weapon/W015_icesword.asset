@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W015_icesword
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W015_icesword
+  itemName: "\u30A2\u30A4\u30B9\u30BD\u30FC\u30C9"
+  description: "\u524D\u306E\u6301\u3061\u4E3B\u306E\u546A\u3044\u304C\u3042\u308B\u6A21\u69D8
+    \u901A\u5E38\u6642\u6C37\u5C5E\u6027\n\u653B\u6483\u529B+40 \u6C37\u8010\u6027+50
+    \u9632\u5FA1-20\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 18
+  Minstep: 1
+  Maxfloor: 20
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  weaponAttribute: 4
+  attackPower: 40
+  skills:
+  - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 0

@@ -50,6 +50,17 @@ public partial class BattleSceneController
     private const float DefendDiceRange = 1.5f;
 
     // =========================================================
+    // LUC判定の閾値切り替え定数
+    // =========================================================
+
+    /// <summary>
+    /// この値以下の敵LUCでは ±10 の固定差判定を使用する。
+    /// これを超えると 1.5倍/0.5倍 の比率判定に切り替わる。
+    /// 低LUC域では比率だと閾値が極端に小さくなるための救済措置。
+    /// </summary>
+    private const int LucFixedThresholdLimit = 20;
+
+    // =========================================================
     // 敵ターン
     // =========================================================
 
@@ -221,27 +232,25 @@ public partial class BattleSceneController
     /// 行動テーブルから行動を選択する。
     ///
     /// 比較対象:
-    ///   プレイヤー側 = GameState.I.baseLUC（生のステータス値）
-    ///   敵側         = Monster.Luck
+    ///   プレイヤー側 = GameState.I.baseLUC（生のステータス値）+ LUCバフ/デバフ適用
+    ///   敵側         = Monster.Luck + LUCバフ/デバフ適用
     ///
     /// actionRange の決定ルール（baseActionRange=100 の場合）:
-    ///   プレイヤー有利:
-    ///     baseLUC が敵Luck より 10以上高い OR baseLUC が敵Luck の 1.5倍以上（四捨五入）
-    ///     → actionRange = 80（敵が弱体化）
-    ///     ※どちらか片方でも満たせば適用。両方満たす場合も 80。
     ///
-    ///   敵有利:
-    ///     baseLUC が敵Luck より 10以上低い OR baseLUC が敵Luck の半分未満（四捨五入）
-    ///     → actionRange = 120（敵が強化）
-    ///     ※どちらか片方でも満たせば適用。両方満たす場合も 120。
+    /// 【判定方式の切り替え】
+    ///   敵LUC ≤ 20 の場合（低LUC域）:
+    ///     ±10 の固定差で判定する。比率だと閾値が極端に小さくなるため。
+    ///     有利閾値 = enemyLuc + 10
+    ///     不利閾値 = max(enemyLuc - 10, 1)
     ///
-    ///   互角:
-    ///     上記どちらの条件も満たさない場合
-    ///     → actionRange = baseActionRange（通常100）
+    ///   敵LUC > 20 の場合（通常域）:
+    ///     1.5倍/0.5倍 の比率で判定する。
+    ///     有利閾値 = enemyLuc × 1.5（四捨五入）
+    ///     不利閾値 = enemyLuc × 0.5（四捨五入）
     ///
-    ///   優先順位:
-    ///     プレイヤー有利 と 敵有利 の両方が真になることはロジック上ないが、
-    ///     万一の場合はプレイヤー有利（変動が大きい方）を優先する。
+    ///   プレイヤー有利: playerLuc >= 有利閾値 → actionRange = 80（敵が弱体化）
+    ///   敵有利:         playerLuc <  不利閾値 → actionRange = 120（敵が強化）
+    ///   互角:           上記どちらでもない   → actionRange = baseActionRange
     ///
     /// 乱数 0 ～ actionRange-1 を振り、
     /// actions[i].threshold を昇順に走査して、乱数値 < threshold の最初の行動を返す。
@@ -249,7 +258,11 @@ public partial class BattleSceneController
     private EnemyActionEntry SelectEnemyAction()
     {
         int playerLuc = (GameState.I != null) ? GameState.I.baseLUC : 1;
+        playerLuc = ApplyPlayerLucBuffDebuff(playerLuc);
+
         int enemyLuc = enemyMonster.Luck;
+        enemyLuc = ApplyEnemyLucBuffDebuff(enemyLuc);
+
         int actionRange = CalcActionRange(playerLuc, enemyLuc, enemyMonster.baseActionRange);
         int roll = Random.Range(0, actionRange);
 
@@ -266,22 +279,33 @@ public partial class BattleSceneController
 
     /// <summary>
     /// プレイヤーと敵の Luck を比較し、行動判定の乱数上限値を返す。
+    ///
+    /// 敵LUCが低い場合（LucFixedThresholdLimit以下）は ±10 の固定差で判定し、
+    /// それ以上の場合は 1.5倍/0.5倍 の比率で判定する。
     /// </summary>
     private int CalcActionRange(int playerLuc, int enemyLuc, int baseRange)
     {
-        int advByRatio = Mathf.FloorToInt(enemyLuc * 1.5f + 0.5f);
-        int advByFixed = enemyLuc + 10;
-        int advThreshold = Mathf.Max(advByRatio, advByFixed);
+        int advThreshold;
+        int disadvThreshold;
 
-        int disadvByRatio = Mathf.FloorToInt(enemyLuc * 0.5f + 0.5f);
-        int disadvByFixed = enemyLuc - 10;
-        int disadvThreshold = Mathf.Max(disadvByRatio, disadvByFixed);
+        if (enemyLuc <= LucFixedThresholdLimit)
+        {
+            // 低LUC域: ±10 の固定差で判定
+            advThreshold = enemyLuc + 10;
+            disadvThreshold = (enemyLuc - 10 > 0) ? (enemyLuc - 10) : 1;
+        }
+        else
+        {
+            // 通常域: 1.5倍/0.5倍 の比率で判定
+            advThreshold = Mathf.FloorToInt(enemyLuc * 1.5f + 0.5f);
+            disadvThreshold = Mathf.FloorToInt(enemyLuc * 0.5f + 0.5f);
+        }
 
         if (playerLuc >= advThreshold)
         {
             int range = Mathf.FloorToInt(baseRange * 0.8f + 0.5f);
             Debug.Log($"[Battle] LUC判定: プレイヤー有利 " +
-                      $"playerLuc={playerLuc} >= {advThreshold}(ratio={advByRatio},fixed={advByFixed}) " +
+                      $"playerLuc={playerLuc} >= {advThreshold} " +
                       $"actionRange={range}");
             return range;
         }
@@ -290,7 +314,7 @@ public partial class BattleSceneController
         {
             int range = Mathf.FloorToInt(baseRange * 1.2f + 0.5f);
             Debug.Log($"[Battle] LUC判定: 敵有利 " +
-                      $"playerLuc={playerLuc} < {disadvThreshold}(ratio={disadvByRatio},fixed={disadvByFixed}) " +
+                      $"playerLuc={playerLuc} < {disadvThreshold} " +
                       $"actionRange={range}");
             return range;
         }

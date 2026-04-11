@@ -14,6 +14,7 @@ using UnityEngine;
 ///   LevelDrainEffectData       → intValue（ラベル: ドレイン量）, chance
 ///   SelfDestructEffectData     → chance（ラベル: 自爆発動率）
 ///   RecoilEffectData           → intValue（ラベル: 反射率）, chance
+///   DispelEffectData           → chance（ラベル: 発動率）、※モードはSOアセット側で設定
 ///   その他                     → chance, intValue（汎用表示）
 /// </summary>
 [CustomPropertyDrawer(typeof(SkillEffectEntry))]
@@ -64,6 +65,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         {
             lineCount += 2; // intValue（反射率）+ chance
         }
+        else if (effectData is DispelEffectData)
+        {
+            lineCount += 1; // chance のみ（モードはSOアセット側）
+        }
         else
         {
             lineCount += 2; // chance + intValue（汎用）
@@ -112,6 +117,10 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         else if (effectData is RecoilEffectData)
         {
             DrawRecoilFields(position, property, ref y, lineH, spacing);
+        }
+        else if (effectData is DispelEffectData dispelData)
+        {
+            DrawDispelFields(position, property, ref y, lineH, spacing, dispelData);
         }
         else
         {
@@ -249,6 +258,38 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
         EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("発動率 (%)"));
+        y += lineH + spacing;
+    }
+
+    // =========================================================
+    // ディスペル系（バフ/デバフ解除）
+    // =========================================================
+    private void DrawDispelFields(Rect position, SerializedProperty property,
+        ref float y, float lineH, float spacing, DispelEffectData dispelData)
+    {
+        // chance（発動率）
+        var chanceProp = property.FindPropertyRelative("chance");
+        var chanceRect = new Rect(position.x, y, position.width, lineH);
+
+        // ラベルにモード情報を含めて分かりやすくする
+        string modeLabel;
+        switch (dispelData.dispelMode)
+        {
+            case DispelMode.CureOwnDebuffs:
+                modeLabel = "発動率 (%) [自分のデバフ全解除]";
+                break;
+            case DispelMode.DispelEnemyBuffs:
+                modeLabel = "発動率 (%) [相手のバフ全解除]";
+                break;
+            case DispelMode.DispelAll:
+                modeLabel = "発動率 (%) [全バフ/デバフ解除]";
+                break;
+            default:
+                modeLabel = "発動率 (%)";
+                break;
+        }
+
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent(modeLabel));
         y += lineH + spacing;
     }
 

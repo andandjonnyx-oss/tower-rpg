@@ -27,7 +27,7 @@ MonoBehaviour:
   Defense: 0
   MagicDefense: 0
   Speed: 0
-  Luck: 0
+  Luck: 1000
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0

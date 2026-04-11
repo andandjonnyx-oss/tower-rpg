@@ -47,7 +47,12 @@ public static class SkillEffectProcessor
             var entry = effects[i];
             if (entry == null || entry.effectData == null) continue;
 
-            if (entry.effectData is StatusAilmentEffectData)
+            if (entry.effectData is DispelEffectData dispelData)
+            {
+                ProcessDispel(entry, dispelData, isPlayerAttack, enemyMonster,
+                              ref buffState, logs);
+            }
+            else if (entry.effectData is StatusAilmentEffectData)
             {
                 ProcessStatusAilment(entry, isPlayerAttack, enemyMonster,
                                      ref enemyIsPoisoned, ref enemyIsStunned,
@@ -158,6 +163,133 @@ public static class SkillEffectProcessor
             ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp,
             lastDamageDealt,
             ref dP, ref dB, ref dER, ref dPR);
+    }
+
+    // =========================================================
+    // ディスペル（バフ/デバフ解除）
+    // =========================================================
+
+    /// <summary>
+    /// ディスペル効果を処理する。
+    /// DispelMode に応じて、自分のデバフ解除 / 相手のバフ解除 / 全解除 を行う。
+    ///
+    /// 【仕様】
+    ///   - CureOwnDebuffs  : 使用者自身のデバフ（Down系5種）を全解除
+    ///   - DispelEnemyBuffs : 相手のバフ（Up系5種）を全解除
+    ///   - DispelAll        : 敵味方双方のバフ/デバフ（Up/Down系5種全て）を全解除
+    ///   - いずれも状態異常（毒・麻痺・暗闇・怒り）は解除しない
+    ///   - chance による発動率判定あり
+    /// </summary>
+    private static void ProcessDispel(
+        SkillEffectEntry entry,
+        DispelEffectData dispelData,
+        bool isPlayerAttack,
+        Monster enemyMonster,
+        ref BattleBuffState buffState,
+        List<string> logs)
+    {
+        // 発動率判定
+        if (entry.chance < 100)
+        {
+            int roll = Random.Range(0, 100);
+            if (roll >= entry.chance)
+            {
+                logs.Add("…しかし効果がなかった！");
+                return;
+            }
+        }
+
+        string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+
+        switch (dispelData.dispelMode)
+        {
+            case DispelMode.CureOwnDebuffs:
+                if (isPlayerAttack)
+                {
+                    bool cleared = ClearDebuffs(ref buffState.player);
+                    if (cleared)
+                        logs.Add("You のデバフが全て解除された！");
+                    else
+                        logs.Add("…しかし効果がなかった！");
+                }
+                else
+                {
+                    bool cleared = ClearDebuffs(ref buffState.enemy);
+                    if (cleared)
+                        logs.Add($"{eName} のデバフが全て解除された！");
+                    else
+                        logs.Add("…しかし効果がなかった！");
+                }
+                break;
+
+            case DispelMode.DispelEnemyBuffs:
+                if (isPlayerAttack)
+                {
+                    bool cleared = ClearBuffs(ref buffState.enemy);
+                    if (cleared)
+                        logs.Add($"{eName} のバフが全て解除された！");
+                    else
+                        logs.Add("…しかし効果がなかった！");
+                }
+                else
+                {
+                    bool cleared = ClearBuffs(ref buffState.player);
+                    if (cleared)
+                        logs.Add("You のバフが全て解除された！");
+                    else
+                        logs.Add("…しかし効果がなかった！");
+                }
+                break;
+
+            case DispelMode.DispelAll:
+                {
+                    bool anyCleared = false;
+                    anyCleared |= ClearDebuffs(ref buffState.player);
+                    anyCleared |= ClearBuffs(ref buffState.player);
+                    anyCleared |= ClearDebuffs(ref buffState.enemy);
+                    anyCleared |= ClearBuffs(ref buffState.enemy);
+
+                    if (anyCleared)
+                        logs.Add("全てのバフ/デバフが解除された！");
+                    else
+                        logs.Add("…しかし効果がなかった！");
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"[SkillEffectProcessor] 未対応のDispelMode: {dispelData.dispelMode}");
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 指定した BuffDebuffSet のデバフ（Down系）を全て解除する。
+    /// 1つでも解除した場合は true を返す。
+    /// </summary>
+    private static bool ClearDebuffs(ref BuffDebuffSet set)
+    {
+        bool any = false;
+        if (set.def.IsDebuffed) { set.def.debuffTurn = 0; set.def.debuffRate = 0f; any = true; }
+        if (set.atk.IsDebuffed) { set.atk.debuffTurn = 0; set.atk.debuffRate = 0f; any = true; }
+        if (set.matk.IsDebuffed) { set.matk.debuffTurn = 0; set.matk.debuffRate = 0f; any = true; }
+        if (set.mdef.IsDebuffed) { set.mdef.debuffTurn = 0; set.mdef.debuffRate = 0f; any = true; }
+        if (set.luc.IsDebuffed) { set.luc.debuffTurn = 0; set.luc.debuffRate = 0f; any = true; }
+        return any;
+    }
+
+    /// <summary>
+    /// 指定した BuffDebuffSet のバフ（Up系）を全て解除する。
+    /// 1つでも解除した場合は true を返す。
+    /// </summary>
+    private static bool ClearBuffs(ref BuffDebuffSet set)
+    {
+        bool any = false;
+        if (set.def.IsBuffed) { set.def.buffTurn = 0; set.def.buffRate = 0f; any = true; }
+        if (set.atk.IsBuffed) { set.atk.buffTurn = 0; set.atk.buffRate = 0f; any = true; }
+        if (set.matk.IsBuffed) { set.matk.buffTurn = 0; set.matk.buffRate = 0f; any = true; }
+        if (set.mdef.IsBuffed) { set.mdef.buffTurn = 0; set.mdef.buffRate = 0f; any = true; }
+        if (set.luc.IsBuffed) { set.luc.buffTurn = 0; set.luc.buffRate = 0f; any = true; }
+        return any;
     }
 
     // =========================================================

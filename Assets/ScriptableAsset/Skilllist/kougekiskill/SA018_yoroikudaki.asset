@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SA018_yoroikudaki
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SA018_yoroikudaki
+  skillName: "\u93A7\u7815\u304D"
+  description: "\u93A7\u3092\u7815\u3044\u3066\u9632\u5FA1\u30C0\u30A6\u30F3"
+  skillSource: 0
+  actionType: 2
+  skillAttribute: 0
+  damageCategory: 0
+  damageMultiplier: 1
+  bonusDamage: 0
+  randomDamageMax: 0
+  defenseIgnoreRate: 0
+  cooldownTurns: 3
+  mpCost: 0
+  baseHitRate: 95
+  hitCount: 1
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 10
+    chance: 100
+    intValue: 30
+    duration: 6
+  enemyNextForceSkill: {fileID: 0}
