@@ -21,7 +21,7 @@ MonoBehaviour:
   Minstep: 1
   Maxfloor: 20
   Maxstep: 20
-  category: 0
+  category: 2
   stackable: 1
   maxStack: 99
   healAmount: 0

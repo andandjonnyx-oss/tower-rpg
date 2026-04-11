@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: C010_Steup5
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C003_Steup3
+  itemId: C010_Steup5
   itemName: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D75"
   description: "\u8CB4\u91CD\u306A\u85AC\u3002\u30B9\u30C6\u30FC\u30BF\u30B9\u30DD\u30A4\u30F3\u30C8\u30925\u4E0A\u3052\u308B\u3002\n\u6226\u95D8\u4E2D\u306B\u4F7F\u3063\u3066\u3082\u52B9\u679C\u306F\u5897\u3048\u306A\u3044\u305E\uFF01"
   icon: {fileID: 0}

@@ -47,7 +47,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
-  equipDefense: 0
+  equipDefense: -20
   equipMagicAttack: 0
   equipMagicDefense: 0
   equipLuck: 0
@@ -57,7 +57,9 @@ MonoBehaviour:
   equipEvasion: 0
   equipCritical: 0
   baseHitRate: 95
-  equipResistances: []
+  equipResistances:
+  - attribute: 4
+    value: 50
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
