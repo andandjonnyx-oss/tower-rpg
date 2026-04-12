@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 023_trimagi
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 023_trimagi
+  Mname: "\u30C8\u30EA\u30D7\u30EB\u30DE\u30FC\u30B8"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 21
+  Minstep: 1
+  Maxfloor: 25
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 200
+  Attack: 0
+  Defense: 20
+  MagicDefense: 50
+  Speed: 0
+  Luck: 20
+  Evasion: 40
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  immuneToAllAilments: 0
+  attributeResistances:
+  - attribute: 3
+    value: 50
+  - attribute: 4
+    value: 50
+  - attribute: 5
+    value: 50
+  Exp: 550
+  Gold: 0
+  dropItem: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
+  dropRate: 0.2
+  Help: "3\u7A2E\u306E\u9B54\u6CD5\u3092\u4F7F\u3063\u3066\u304F\u308B\u305E\uFF01\n\u4E00\u756A\u304D\u3064\u3044\u306E\u306F\u6C37\u9B54\u6CD5\u3060\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: a84efe7599ebab84c8d863b4477c07db, type: 2}
+    threshold: 40
+  - skill: {fileID: 11400000, guid: b71a716476ccccc43b9cd1215d1478ff, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: f892bdb9bb1ad2d4d8ef3da3b0708f35, type: 2}
+    threshold: 100
+  baseActionRange: 100

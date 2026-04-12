@@ -15,7 +15,6 @@ MonoBehaviour:
   items:
   - {fileID: 11400000, guid: 50cbdf1fc8a2948499e6211b24e65c0e, type: 2}
   - {fileID: 11400000, guid: 60179f5ec72397b4ebced6af31965555, type: 2}
-  - {fileID: 11400000, guid: 6dc1d67129ce4f04b94fa6d0e819f9e0, type: 2}
   - {fileID: 11400000, guid: dc9d6e67673ff264da2a005f0efe6816, type: 2}
   - {fileID: 11400000, guid: 5a7fd70e8d68f2f4eb33b23e5b334b36, type: 2}
   - {fileID: 11400000, guid: c831ad04c8e1f8d4cb7785fc63977d16, type: 2}
@@ -23,9 +22,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c99c21fea3dae5428302e8eee87de06, type: 2}
   - {fileID: 11400000, guid: 7ae1815dab7b76f4d94a91571a4c1808, type: 2}
   - {fileID: 11400000, guid: 23185dd37ada9f04bb60586bccee1a47, type: 2}
+  - {fileID: 11400000, guid: 6dc1d67129ce4f04b94fa6d0e819f9e0, type: 2}
   - {fileID: 11400000, guid: 7b557fb1213d7df4f9b0cb0ce2101a6b, type: 2}
   - {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
   - {fileID: 11400000, guid: a9a049a4187c3594a803b70cfef9fb42, type: 2}
+  - {fileID: 11400000, guid: b7907cd22fe56264d86ecbd49762b3c4, type: 2}
   - {fileID: 11400000, guid: 3c365f65a7d9ac4489e1f7a4ce6a97e0, type: 2}
   - {fileID: 11400000, guid: 60ddd741b098c9746971507201191bf6, type: 2}
   - {fileID: 11400000, guid: 4ec3fcb2da27b16448a4d3305b1c025e, type: 2}
@@ -55,6 +56,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 83b7c939d3ec5ef4ab2501ce390c8d9a, type: 2}
   - {fileID: 11400000, guid: cbfb9c5a0749ef540baa0f3ccc1547c3, type: 2}
   - {fileID: 11400000, guid: 54111b09a6ea21e4b9134d2b60378a92, type: 2}
+  - {fileID: 11400000, guid: c69091fba41a0f54bbfd81a7a0c8cb74, type: 2}
+  - {fileID: 11400000, guid: 588407432ce9c5a4c976644c911ea29d, type: 2}
   - {fileID: 11400000, guid: d3e2505951e84b844a02b787d1586b0f, type: 2}
   - {fileID: 11400000, guid: ec4b959d344b43643a08e51aebd15153, type: 2}
   - {fileID: 11400000, guid: db0c3a6f1a884344f9db1e5718da9e1b, type: 2}
@@ -70,5 +73,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: af2994a1e4b6c58459ece2159cc55ad8, type: 2}
   - {fileID: 11400000, guid: a85edab607a9da94cabb4ba37c03e3ee, type: 2}
   - {fileID: 11400000, guid: 126b61c38a0f5d34783124f4430db8b2, type: 2}
+  - {fileID: 11400000, guid: 85f8cffde900030488d2cd3958c17638, type: 2}
   maxFloor: 100
   maxStepPerFloor: 20

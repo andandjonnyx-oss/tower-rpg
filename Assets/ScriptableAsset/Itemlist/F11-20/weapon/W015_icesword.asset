@@ -30,6 +30,7 @@ MonoBehaviour:
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
+  curesSilence: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -41,6 +42,7 @@ MonoBehaviour:
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
+  eatCuresSilence: 0
   weaponAttribute: 4
   attackPower: 40
   skills:
@@ -63,4 +65,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 15

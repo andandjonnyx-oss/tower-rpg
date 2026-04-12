@@ -239,11 +239,22 @@ public class StorageContext : MonoBehaviour, IItemContext
                 GameState.I.currentMp = GameState.I.maxMp;
         }
 
-        // 毒消し
+        // 状態異常回復
         if (invItem.data.curesPoison)
         {
             StatusEffectSystem.CurePlayerPoison();
-            Debug.Log("[Storage] 毒を回復した");
+        }
+        if (invItem.data.curesParalyze)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
+        }
+        if (invItem.data.curesBlind)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
+        }
+        if (invItem.data.curesSilence)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
 
         // ステータスポイント付与
@@ -312,9 +323,23 @@ public class StorageContext : MonoBehaviour, IItemContext
             if (GameState.I.currentHp > GameState.I.maxHp)
                 GameState.I.currentHp = GameState.I.maxHp;
         }
+
+
         if (invItem.data.eatCuresPoison && GameState.I != null)
         {
             StatusEffectSystem.CurePlayerPoison();
+        }
+        if (invItem.data.eatCuresParalyze && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
+        }
+        if (invItem.data.eatCuresBlind && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
+        }
+        if (invItem.data.eatCuresSilence && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
 
         ItemData transformInto = invItem.data.transformInto;

@@ -12,21 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: SA019_dokusasikai
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 
-  skillName: 
-  description: 
+  skillId: SA019_dokusasikai
+  skillName: "\u6BD2\u306E\u9023\u7D9A\u523A\u3057"
+  description: "\u30B9\u30BA\u30E1\u30D0\u30C1\u306F\u9023\u767A\u53EF\u80FD"
   skillSource: 0
-  actionType: 2
-  skillAttribute: 0
+  actionType: 3
+  skillAttribute: 2
   damageCategory: 0
-  damageMultiplier: 0
+  damageMultiplier: 0.8
   bonusDamage: 0
   randomDamageMax: 0
   defenseIgnoreRate: 0
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
-  hitCount: 1
+  hitCount: 3
   noBattleOk: 0
-  additionalEffects: []
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 60
+    intValue: 0
+    duration: 0
   enemyNextForceSkill: {fileID: 0}

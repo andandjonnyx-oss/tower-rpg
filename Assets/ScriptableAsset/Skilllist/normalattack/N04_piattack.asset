@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: N04_piattack
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: 
-  skillName: 
-  description: 
+  skillId: N04_piattack
+  skillName: "\u653B\u6483"
+  description: "\u7A81\u5C5E\u6027"
   skillSource: 0
   actionType: 2
-  skillAttribute: 0
+  skillAttribute: 2
   damageCategory: 0
-  damageMultiplier: 0
+  damageMultiplier: 1
   bonusDamage: 0
   randomDamageMax: 0
   defenseIgnoreRate: 0

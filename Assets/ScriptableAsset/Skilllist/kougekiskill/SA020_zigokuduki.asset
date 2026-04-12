@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SA020_zigokuduki
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SA020_zigokuduki
+  skillName: "\u5730\u7344\u7A81\u304D"
+  description: "\u5589\u3092\u72D9\u3044\u6C88\u9ED9\u306B\u3059\u308B"
+  skillSource: 0
+  actionType: 2
+  skillAttribute: 0
+  damageCategory: 0
+  damageMultiplier: 1
+  bonusDamage: 0
+  randomDamageMax: 0
+  defenseIgnoreRate: 0
+  cooldownTurns: 3
+  mpCost: 0
+  baseHitRate: 95
+  hitCount: 1
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 5
+    chance: 40
+    intValue: 0
+    duration: 0
+  enemyNextForceSkill: {fileID: 0}

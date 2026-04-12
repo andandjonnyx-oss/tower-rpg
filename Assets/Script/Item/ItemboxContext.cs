@@ -165,6 +165,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool curesPoison = invItem.data.curesPoison;
         bool curesParalyze = invItem.data.curesParalyze;
         bool curesBlind = invItem.data.curesBlind;
+        bool curesSilence = invItem.data.curesSilence;
 
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
@@ -205,6 +206,10 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (curesBlind && GameState.I != null)
         {
             StatusEffectSystem.CurePlayer(StatusEffect.Blind);
+        }
+        if (curesSilence && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
 
 
@@ -278,6 +283,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool curesPoison = invItem.data.eatCuresPoison;
         bool eatCuresParalyze = invItem.data.eatCuresParalyze;
         bool eatCuresBlind = invItem.data.eatCuresBlind;
+        bool eatCuresSilence = invItem.data.eatCuresSilence;
         ItemData transformInto = invItem.data.transformInto;
 
         // 装備中なら外す
@@ -308,6 +314,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (eatCuresBlind && GameState.I != null)
         {
             StatusEffectSystem.CurePlayer(StatusEffect.Blind);
+        }
+
+        if (eatCuresSilence && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
 
         // 元アイテムを消す

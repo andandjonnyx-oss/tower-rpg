@@ -618,6 +618,7 @@ public partial class BattleSceneController
             0,
             ref enemyIsParalyzed,
             ref enemyIsBlind,
+            ref enemyIsSilenced,
             ref enemyRageTurn,
             ref playerRageTurn,
             ref buffState);

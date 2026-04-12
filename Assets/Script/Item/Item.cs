@@ -38,6 +38,8 @@ public class ItemData : ScriptableObject
     public bool curesParalyze = false;
     [Tooltip("true の場合、使用時に暗闇状態を回復する。")]
     public bool curesBlind = false;
+    [Tooltip("true の場合、使用時に沈黙状態を回復する。")]
+    public bool curesSilence = false;
 
 
     // =========================================================
@@ -138,6 +140,8 @@ public class ItemData : ScriptableObject
     public bool eatCuresParalyze = false;
     [Tooltip("食べた時に暗闇状態を回復するかどうか。")]
     public bool eatCuresBlind = false;
+    [Tooltip("食べた時に沈黙状態を回復するかどうか。")]
+    public bool eatCuresSilence = false;
 
     [Header("Weapon")]
     public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;

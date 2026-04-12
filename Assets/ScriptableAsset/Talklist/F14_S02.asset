@@ -15,7 +15,7 @@ MonoBehaviour:
   id: F14_S02
   floor: 14
   step: 2
-  backgroundImage: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u3053\u3053\u304B\u3089\u72B6\u614B\u7570\u5E38\u304C3\u3064\u3082\u5897\u3048\u308B\u305C\uFF01"

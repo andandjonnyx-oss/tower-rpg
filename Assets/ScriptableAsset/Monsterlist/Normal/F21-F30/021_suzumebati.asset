@@ -12,35 +12,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: 021_suzumebati
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 
-  Mname: 
-  Image: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  ID: 021_suzumebati
+  Mname: "\u30B9\u30BA\u30E1\u30D0\u30C1"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 21
+  Minstep: 1
+  Maxfloor: 25
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 150
+  Attack: 50
+  Defense: 10
+  MagicDefense: 10
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 5
+  Evasion: 80
   BaseHitRate: 90
-  PoisonResistance: 0
+  PoisonResistance: 100
   StunResistance: 0
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
   immuneToAllAilments: 0
-  attributeResistances: []
-  Exp: 0
+  attributeResistances:
+  - attribute: 3
+    value: -200
+  Exp: 550
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
-  Help: 
-  actions: []
+  Help: "\u540D\u524D\u306F\u53EF\u611B\u3044\u3093\u3060\u3051\u3069\u306A\u2026\u2026"
+  actions:
+  - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: e1911c7cb31cb6c439b7a977c22f6416, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 9afb25264874ec142bc31a951c96a2d0, type: 2}
+    threshold: 100
   baseActionRange: 100

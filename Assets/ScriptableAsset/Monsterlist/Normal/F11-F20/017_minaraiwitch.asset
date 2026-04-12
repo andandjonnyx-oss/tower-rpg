@@ -37,7 +37,7 @@ MonoBehaviour:
   RageResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
-  Exp: 450
+  Exp: 400
   Gold: 0
   dropItem: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
   dropRate: 0.2

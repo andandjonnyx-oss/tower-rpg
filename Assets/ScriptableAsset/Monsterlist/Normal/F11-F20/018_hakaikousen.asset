@@ -39,7 +39,7 @@ MonoBehaviour:
   attributeResistances:
   - attribute: 5
     value: -200
-  Exp: 500
+  Exp: 400
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0

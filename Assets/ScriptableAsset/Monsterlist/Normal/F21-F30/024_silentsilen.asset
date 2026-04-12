@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 024_silentsilen
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 024_silentsilen
+  Mname: "\u30B5\u30A4\u30EC\u30F3\u30C8\u30B5\u30A4\u30EC\u30F3"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 24
+  Minstep: 1
+  Maxfloor: 28
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 300
+  Attack: 60
+  Defense: 40
+  MagicDefense: 40
+  Speed: 0
+  Luck: 20
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  immuneToAllAilments: 1
+  attributeResistances:
+  - attribute: 5
+    value: -200
+  Exp: 650
+  Gold: 0
+  dropItem: {fileID: 11400000, guid: b7907cd22fe56264d86ecbd49762b3c4, type: 2}
+  dropRate: 0
+  Help: "\u30B5\u30A4\u30EC\u30F3\u3092\u9CF4\u3089\u3059\u3051\u3069\u30DF\u30E5\u30FC\u30C8\u72B6\u614B\u3060\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 70f79c1f50d5d7041a81fec5ddb6b265, type: 2}
+    threshold: 100
+  baseActionRange: 100
