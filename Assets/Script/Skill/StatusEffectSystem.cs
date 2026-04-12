@@ -68,6 +68,13 @@ public static class StatusEffectSystem
     public const float ParalyzeCancelChance = 20f;
 
     // =========================================================
+    // 沈黙の定数
+    // =========================================================
+    /// <summary>沈黙中の敵が魔法系スキルを使用した時の失敗確率（%）。</summary>
+    public const float SilenceFailChance = 70f;
+
+
+    // =========================================================
     // 怒りの定数
     // =========================================================
 
@@ -248,6 +255,8 @@ public static class StatusEffectSystem
             case StatusEffect.Poison: return GameState.I.isPoisoned;
             case StatusEffect.Paralyze: return GameState.I.isParalyzed;
             case StatusEffect.Blind: return GameState.I.isBlind;
+            case StatusEffect.Silence: return GameState.I.isSilenced;
+
             default: return false;
         }
     }
@@ -267,6 +276,8 @@ public static class StatusEffectSystem
             case StatusEffect.Poison: GameState.I.isPoisoned = value; break;
             case StatusEffect.Paralyze: GameState.I.isParalyzed = value; break;
             case StatusEffect.Blind: GameState.I.isBlind = value; break;
+            case StatusEffect.Silence: GameState.I.isSilenced = value; break;
+
         }
     }
 
@@ -328,6 +339,21 @@ public static class StatusEffectSystem
         Debug.Log($"[StatusEffect] ParalyzeCancel: chance={ParalyzeCancelChance}% roll={roll:F2} cancel={cancel}");
         return cancel;
     }
+
+    /// <summary>
+    /// 沈黙による魔法失敗判定を行う。
+    /// SilenceFailChance（70%）の確率で魔法が失敗する。
+    /// </summary>
+    /// <returns>true: 魔法失敗</returns>
+    public static bool CheckSilenceFail()
+    {
+        float roll = Random.Range(0f, 100f);
+        bool fail = roll < SilenceFailChance;
+        Debug.Log($"[StatusEffect] SilenceFail: chance={SilenceFailChance}% roll={roll:F2} fail={fail}");
+        return fail;
+    }
+
+
 
     // =========================================================
     // 毒ダメージ計算
@@ -483,6 +509,17 @@ public static class StatusEffectSystem
                 logs.Add("暗闇が自然に治った！");
             }
         }
+
+        // --- 沈黙: 自然治癒のみ ---
+        if (gs.isSilenced)
+        {
+            if (TryNaturalCure())
+            {
+                gs.isSilenced = false;
+                logs.Add("沈黙が自然に治った！");
+            }
+        }
+
     }
 
     // =========================================================

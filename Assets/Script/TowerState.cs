@@ -234,7 +234,8 @@ public class TowerState : MonoBehaviour
                 GameState.I.isPoisoned,
                 GameState.I.isParalyzed,
                 GameState.I.isBlind,
-                false  // Tower では怒り状態は発生しない
+                false,
+                GameState.I.isSilenced
             );
         }
     }
@@ -310,6 +311,14 @@ public class TowerState : MonoBehaviour
     {
         if (magicSelector == null) return;
         if (fieldMagicList == null || fieldMagicList.Count == 0) return;
+
+        // 沈黙チェック
+        if (GameState.I != null && GameState.I.isSilenced)
+        {
+            ShowFieldMagicLog("沈黙中で魔法が使えない！");
+            return;
+        }
+
 
         int index = magicSelector.Value;
         if (index < 0 || index >= fieldMagicList.Count) return;

@@ -159,6 +159,9 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool enemyIsParalyzed = false;
     /// <summary>戦闘中の敵の暗闇状態。戦闘終了でリセット。</summary>
     private static bool enemyIsBlind = false;
+    /// <summary>戦闘中の敵の沈黙状態。戦闘終了でリセット。</summary>
+    private static bool enemyIsSilenced = false;
+
     /// <summary>敵の怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
     private static int enemyRageTurn = 0;
     /// <summary>プレイヤーの怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
@@ -318,6 +321,8 @@ public partial class BattleSceneController : MonoBehaviour
             enemyIsParalyzed = false; // Phase2: 麻痺リセット
             enemyIsBlind = false;     // Phase2: 暗闇リセット
             enemyRageTurn = 0;        // Phase2: 敵怒りリセット
+            enemyIsSilenced = false;
+
             playerRageTurn = 0;       // Phase2: プレイヤー怒りリセット
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
@@ -888,6 +893,7 @@ public partial class BattleSceneController : MonoBehaviour
         enemyIsStunned = false;
         enemyIsParalyzed = false; // Phase2: 麻痺リセット
         enemyIsBlind = false;     // Phase2: 暗闇リセット
+        enemyIsSilenced = false;
         enemyRageTurn = 0;        // Phase2: 敵怒りリセット
         playerRageTurn = 0;       // Phase2: プレイヤー怒りリセット
         isDefending = false; // 防御フラグもリセット
@@ -978,6 +984,15 @@ public partial class BattleSceneController : MonoBehaviour
 
     private void RefreshMagicSelector()
     {
+
+        // 沈黙チェック: 味方が沈黙中は魔法UI全体を非表示
+        if (GameState.I != null && GameState.I.isSilenced)
+        {
+            if (magicSelector != null) magicSelector.SetVisible(false);
+            if (magicButton != null) magicButton.gameObject.SetActive(false);
+            return;
+        }
+
         magicSkillList = PassiveCalculator.CollectMagicSkills();
         if (magicSkillList.Count == 0)
         {

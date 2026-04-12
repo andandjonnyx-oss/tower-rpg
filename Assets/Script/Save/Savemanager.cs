@@ -73,6 +73,8 @@ public static class SaveManager
 
             // 状態異常（追加）
             data.isPoisoned = GameState.I.isPoisoned;
+            data.isSilenced = GameState.I.isSilenced;
+
         }
 
         // --- ItemBoxManager（所持品）から収集 ---
@@ -280,6 +282,8 @@ public class SaveData
     // --- 状態異常（追加） ---
     // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
     public bool isPoisoned = false;
+    public bool isSilenced = false;
+
 
     // --- 既読イベントID一覧 ---
     public List<string> playedEventIds = new List<string>();

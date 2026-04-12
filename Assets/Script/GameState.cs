@@ -110,6 +110,9 @@ public class GameState : MonoBehaviour
     [Tooltip("プレイヤーが暗闇状態かどうか。戦闘終了後も持続する。")]
     public bool isBlind = false;
 
+    [Tooltip("プレイヤーが沈黙状態かどうか。戦闘終了後も持続する。")]
+    public bool isSilenced = false;
+
     // =========================================================
     // 状態異常の一括クリア
     // =========================================================
@@ -124,6 +127,7 @@ public class GameState : MonoBehaviour
         isPoisoned = false;
         isParalyzed = false;
         isBlind = false;
+        isSilenced = false;
         Debug.Log("[GameState] 全状態異常をクリア");
     }
 

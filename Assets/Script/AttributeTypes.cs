@@ -24,6 +24,7 @@ public enum WeaponAttribute
 ///     Poison   - 毒
 ///     Paralyze - 麻痺
 ///     Blind    - 暗闇
+///     Silence  - 沈黙（味方: 魔法使用不可 / 敵: 魔法系スキル70%失敗）
 ///
 ///   戦闘限定デバフ:
 ///     Stun     - 気絶（1ターン限定）
@@ -39,7 +40,7 @@ public enum WeaponAttribute
 ///     LuckDown / LuckUp           - 運
 ///
 ///   予約（未使用）:
-///     Sleep, Silence, Burn, Freeze
+///     Sleep, Burn, Freeze
 /// </summary>
 public enum StatusEffect
 {
@@ -48,7 +49,7 @@ public enum StatusEffect
     Paralyze,    // 麻痺
     Sleep,       // 睡眠（予約）
     Blind,       // 暗闇
-    Silence,     // 沈黙（予約）
+    Silence,     // 沈黙（実装済み）
     Burn,        // 火傷（予約）
     Freeze,      // 凍結（予約）
     Stun,        // 気絶

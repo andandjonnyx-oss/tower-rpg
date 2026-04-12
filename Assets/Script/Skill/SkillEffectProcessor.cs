@@ -14,16 +14,17 @@ using UnityEngine;
 ///   (B) 既存互換+反動: 7引数
 ///   (C) Phase2互換: 11引数（全状態異常対応）
 ///   (D) Phase4 フル版: 構造体ベース（全バフ/デバフ対応）  ← 新メイン
+///   (E) Phase5 フル版: Phase4 + 沈黙（enemyIsSilenced）   ← 最新メイン
 /// </summary>
 public static class SkillEffectProcessor
 {
     // =========================================================
-    // (D) Phase4 フル版: 構造体ベース（内部実装本体）
+    // (E) Phase5 フル版: Phase4 + 沈黙対応（最新メイン実装）
     // =========================================================
 
     /// <summary>
-    /// スキルの追加効果リストを順に実行し、バトルログを返す（Phase4フル版）。
-    /// バフ/デバフは BattleBuffState 構造体で一元管理する。
+    /// スキルの追加効果リストを順に実行し、バトルログを返す（Phase5フル版）。
+    /// Phase4 に enemyIsSilenced を追加。
     /// </summary>
     public static List<string> ProcessEffects(
         List<SkillEffectEntry> effects,
@@ -35,6 +36,7 @@ public static class SkillEffectProcessor
         int lastDamageDealt,
         ref bool enemyIsParalyzed,
         ref bool enemyIsBlind,
+        ref bool enemyIsSilenced,
         ref int enemyRageTurn,
         ref int playerRageTurn,
         ref BattleBuffState buffState)
@@ -57,6 +59,7 @@ public static class SkillEffectProcessor
                 ProcessStatusAilment(entry, isPlayerAttack, enemyMonster,
                                      ref enemyIsPoisoned, ref enemyIsStunned,
                                      ref enemyIsParalyzed, ref enemyIsBlind,
+                                     ref enemyIsSilenced,
                                      ref enemyRageTurn, ref playerRageTurn,
                                      ref buffState,
                                      logs);
@@ -87,6 +90,37 @@ public static class SkillEffectProcessor
         }
 
         return logs;
+    }
+
+    // =========================================================
+    // (D) Phase4 フル版: 構造体ベース（後方互換ブリッジ → Phase5 に委譲）
+    // =========================================================
+
+    /// <summary>
+    /// Phase4互換オーバーロード。
+    /// enemyIsSilenced のダミーを用意して Phase5 版に委譲する。
+    /// </summary>
+    public static List<string> ProcessEffects(
+        List<SkillEffectEntry> effects,
+        bool isPlayerAttack,
+        Monster enemyMonster,
+        ref bool enemyIsPoisoned,
+        ref bool enemyIsStunned,
+        ref int enemyCurrentHp,
+        int lastDamageDealt,
+        ref bool enemyIsParalyzed,
+        ref bool enemyIsBlind,
+        ref int enemyRageTurn,
+        ref int playerRageTurn,
+        ref BattleBuffState buffState)
+    {
+        bool dummySilenced = false;
+        return ProcessEffects(effects, isPlayerAttack, enemyMonster,
+            ref enemyIsPoisoned, ref enemyIsStunned, ref enemyCurrentHp,
+            lastDamageDealt,
+            ref enemyIsParalyzed, ref enemyIsBlind, ref dummySilenced,
+            ref enemyRageTurn, ref playerRageTurn,
+            ref buffState);
     }
 
     // =========================================================
@@ -177,7 +211,7 @@ public static class SkillEffectProcessor
     ///   - CureOwnDebuffs  : 使用者自身のデバフ（Down系5種）を全解除
     ///   - DispelEnemyBuffs : 相手のバフ（Up系5種）を全解除
     ///   - DispelAll        : 敵味方双方のバフ/デバフ（Up/Down系5種全て）を全解除
-    ///   - いずれも状態異常（毒・麻痺・暗闇・怒り）は解除しない
+    ///   - いずれも状態異常（毒・麻痺・暗闇・沈黙・怒り）は解除しない
     ///   - chance による発動率判定あり
     /// </summary>
     private static void ProcessDispel(
@@ -304,6 +338,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsStunned,
         ref bool enemyIsParalyzed,
         ref bool enemyIsBlind,
+        ref bool enemyIsSilenced,
         ref int enemyRageTurn,
         ref int playerRageTurn,
         ref BattleBuffState buffState,
@@ -314,6 +349,7 @@ public static class SkillEffectProcessor
             ProcessStatusAilmentInflict(entry, isPlayerAttack, enemyMonster,
                                         ref enemyIsPoisoned, ref enemyIsStunned,
                                         ref enemyIsParalyzed, ref enemyIsBlind,
+                                        ref enemyIsSilenced,
                                         ref enemyRageTurn, ref playerRageTurn,
                                         ref buffState,
                                         logs);
@@ -336,6 +372,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsStunned,
         ref bool enemyIsParalyzed,
         ref bool enemyIsBlind,
+        ref bool enemyIsSilenced,
         ref int enemyRageTurn,
         ref int playerRageTurn,
         ref BattleBuffState buffState,
@@ -348,14 +385,16 @@ public static class SkillEffectProcessor
         switch (effect)
         {
             // =========================================================
-            // 持続型デバフ（双方向対応）: 毒・麻痺・暗闇
+            // 持続型デバフ（双方向対応）: 毒・麻痺・暗闇・沈黙
             // =========================================================
             case StatusEffect.Poison:
             case StatusEffect.Paralyze:
             case StatusEffect.Blind:
+            case StatusEffect.Silence:
                 ProcessBidirectionalAilment(
                     effect, entry.chance, isPlayerAttack, enemyMonster,
                     ref enemyIsPoisoned, ref enemyIsParalyzed, ref enemyIsBlind,
+                    ref enemyIsSilenced,
                     logs);
                 break;
 
@@ -422,7 +461,7 @@ public static class SkillEffectProcessor
 
     /// <summary>
     /// 双方向対応の持続型デバフ付与処理。
-    /// Poison / Paralyze / Blind を統一的に処理する。
+    /// Poison / Paralyze / Blind / Silence を統一的に処理する。
     /// </summary>
     private static void ProcessBidirectionalAilment(
         StatusEffect effect,
@@ -432,6 +471,7 @@ public static class SkillEffectProcessor
         ref bool enemyIsPoisoned,
         ref bool enemyIsParalyzed,
         ref bool enemyIsBlind,
+        ref bool enemyIsSilenced,
         List<string> logs)
     {
         string ailmentName = effect.ToJapanese();
@@ -441,7 +481,8 @@ public static class SkillEffectProcessor
         {
             // プレイヤー → 敵に付与
             ref bool enemyFlag = ref GetEnemyAilmentRef(effect,
-                ref enemyIsPoisoned, ref enemyIsParalyzed, ref enemyIsBlind);
+                ref enemyIsPoisoned, ref enemyIsParalyzed, ref enemyIsBlind,
+                ref enemyIsSilenced);
 
             if (enemyFlag)
             {
@@ -489,12 +530,14 @@ public static class SkillEffectProcessor
         StatusEffect effect,
         ref bool enemyIsPoisoned,
         ref bool enemyIsParalyzed,
-        ref bool enemyIsBlind)
+        ref bool enemyIsBlind,
+        ref bool enemyIsSilenced)
     {
         switch (effect)
         {
             case StatusEffect.Paralyze: return ref enemyIsParalyzed;
             case StatusEffect.Blind: return ref enemyIsBlind;
+            case StatusEffect.Silence: return ref enemyIsSilenced;
             case StatusEffect.Poison:
             default: return ref enemyIsPoisoned;
         }
@@ -714,6 +757,7 @@ public static class SkillEffectProcessor
                 case StatusEffect.Poison:
                 case StatusEffect.Paralyze:
                 case StatusEffect.Blind:
+                case StatusEffect.Silence:
                     if (StatusEffectSystem.IsPlayerAffected(effect))
                     {
                         StatusEffectSystem.CurePlayer(effect);

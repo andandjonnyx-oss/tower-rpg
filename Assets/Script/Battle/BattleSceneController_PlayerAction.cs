@@ -762,6 +762,13 @@ public partial class BattleSceneController
             return;
         }
 
+        // 沈黙チェック: 味方が沈黙中は魔法使用不可
+        if (GameState.I != null && GameState.I.isSilenced)
+        {
+            AddLogImmediate("沈黙で魔法が唱えられない！");
+            return;
+        }
+
         SkillData magic = GetSelectedMagicSkill();
         if (magic == null) { AddLogImmediate("魔法が選択されていない！"); return; }
 
@@ -988,9 +995,10 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            0,  // または lastDamageDealt
+            0,
             ref enemyIsParalyzed,
             ref enemyIsBlind,
+            ref enemyIsSilenced, 
             ref enemyRageTurn,
             ref playerRageTurn,
             ref buffState);
@@ -1017,9 +1025,10 @@ public partial class BattleSceneController
             ref enemyIsPoisoned,
             ref enemyIsStunned,
             ref enemyCurrentHp,
-            lastDamageDealt,  // ★反動ダメージ計算に必要な与ダメージを渡す
+            lastDamageDealt,
             ref enemyIsParalyzed,
             ref enemyIsBlind,
+            ref enemyIsSilenced,
             ref enemyRageTurn,
             ref playerRageTurn,
             ref buffState);

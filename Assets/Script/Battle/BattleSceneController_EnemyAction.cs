@@ -341,6 +341,21 @@ public partial class BattleSceneController
             ExecuteLegacyAttack();
             return;
         }
+
+        // 沈黙判定: 敵が沈黙中で魔法系スキルなら70%で失敗
+        if (enemyIsSilenced && action.skill.skillSource == SkillSource.Magic)
+        {
+            if (StatusEffectSystem.CheckSilenceFail())
+            {
+                string silenceName = !string.IsNullOrEmpty(action.skill.skillName)
+                    ? action.skill.skillName : "魔法";
+                AddLog($"{enemyMonster.Mname} は{silenceName}を唱えようとした…しかし沈黙で失敗した！");
+                AfterEnemyAction();
+                return;
+            }
+        }
+
+
         switch (action.skill.actionType)
         {
 #pragma warning disable 0618 // Obsolete 警告を抑制（既存アセット互換のため）
