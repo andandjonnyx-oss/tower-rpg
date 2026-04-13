@@ -45,6 +45,16 @@ public enum HpDependentType
     /// </summary>
     MaxHpPercent = 3,
 
+    /// <summary>
+    /// 使用者の現在HPをダメージとして与える。
+    /// ダメージ = 使用者の現在HP
+    /// 他のHP依存タイプと異なり、防御ダイス・属性耐性を適用する。
+    /// defenseIgnoreRate で防御貫通率を制御可能。
+    /// skillAttribute で属性を設定可能（None なら無属性）。
+    /// 主に自爆系の敵が SelfDestructEffectData と組み合わせて使用する。
+    /// 例: HP500の敵が自爆 → 500ダメージ（防御・耐性で軽減あり）
+    /// </summary>
+    CurrentHpDamage = 4,
 
 }
 

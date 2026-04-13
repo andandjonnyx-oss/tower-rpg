@@ -292,6 +292,62 @@ public partial class BattleSceneController
         // =========================================================
         if (skill.IsHpDependent)
         {
+
+            if (skill.hpDependentType == HpDependentType.CurrentHpDamage)
+            {
+                string cdName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName : "先制攻撃";
+
+                if (!CheckEnemyHit(effectiveHitRate))
+                {
+                    AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
+                    return;
+                }
+
+                int baseDamage = enemyCurrentHp;
+                if (baseDamage < 1) baseDamage = 1;
+
+                int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
+                float reductionRate = resistance / 100f;
+                int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+                if (afterResist < 0) afterResist = 0;
+
+                int defense = GetPlayerDefense(skill.damageCategory);
+                if (skill.defenseIgnoreRate > 0f)
+                {
+                    defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+                }
+                int blocked;
+                if (isDefending)
+                {
+                    defense *= DefendDefenseMultiplier;
+                    blocked = RollDefenseDice(defense, DefendDiceRange);
+                }
+                else
+                {
+                    blocked = RollDefenseDice(defense);
+                }
+                int finalDamage = afterResist - blocked;
+                if (finalDamage < 0) finalDamage = 0;
+
+                ApplyDamageToPlayer(finalDamage);
+
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+
+                AddLog($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}");
+
+                Debug.Log($"[Battle] CurrentHpDamage(Preemptive): userHp={baseDamage} " +
+                          $"resistance={resistance} afterResist={afterResist} " +
+                          $"defense={defense} blocked={blocked} final={finalDamage}");
+
+                ProcessEnemySkillEffects(skill);
+                return;
+            }
+
             string hpDepName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName : "先制攻撃";
 
@@ -659,6 +715,58 @@ public partial class BattleSceneController
         // =========================================================
         if (skill.IsHpDependent)
         {
+            if (skill.hpDependentType == HpDependentType.CurrentHpDamage)
+            {
+                if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+                {
+                    AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                    FlushLogsAndThen(() => EnemyTurn());
+                    return;
+                }
+
+                // ダメージ = 使用者（プレイヤー）の現在HP
+                int baseDamage = (GameState.I != null) ? GameState.I.currentHp : 1;
+                if (baseDamage < 1) baseDamage = 1;
+
+                // 属性耐性を適用
+                string resistLog;
+                int afterResist = ApplyEnemyAttributeResistance(baseDamage, skill.skillAttribute, out resistLog);
+
+                // 防御ダイスを適用（defenseIgnoreRate 対応）
+                int enemyDef = GetEnemyDefense(skill.damageCategory);
+                if (skill.defenseIgnoreRate > 0f)
+                {
+                    enemyDef = Mathf.FloorToInt(enemyDef * (1f - skill.defenseIgnoreRate) + 0.5f);
+                }
+                int enemyBlocked = RollDefenseDice(enemyDef);
+                int finalDamage = afterResist - enemyBlocked;
+                if (finalDamage < 1) finalDamage = 1;
+                if (afterResist <= 0) finalDamage = 0;
+
+                enemyCurrentHp -= finalDamage;
+                if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+                string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
+                AddLog($"You は {skill.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog}");
+
+                Debug.Log($"[Battle] CurrentHpDamage(Player→Enemy/Skill): userHp={baseDamage} " +
+                          $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
+
+                ProcessPlayerSkillEffects(skill, finalDamage);
+
+                if (GameState.I != null && GameState.I.currentHp <= 0)
+                {
+                    if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                    else { FlushLogsAndThen(() => OnDefeat()); }
+                    return;
+                }
+
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+
             // 単発前提: 命中判定
             if (!CheckPlayerHitWithBlind(skill.baseHitRate))
             {
@@ -913,6 +1021,55 @@ public partial class BattleSceneController
         // =========================================================
         if (magic.IsHpDependent)
         {
+            if (magic.hpDependentType == HpDependentType.CurrentHpDamage)
+            {
+                if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+                {
+                    AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                    FlushLogsAndThen(() => EnemyTurn());
+                    return;
+                }
+
+                int baseDamage = (GameState.I != null) ? GameState.I.currentHp : 1;
+                if (baseDamage < 1) baseDamage = 1;
+
+                string resistLog;
+                int afterResist = ApplyEnemyAttributeResistance(baseDamage, magic.skillAttribute, out resistLog);
+
+                int enemyDef = GetEnemyDefense(magic.damageCategory);
+                if (magic.defenseIgnoreRate > 0f)
+                {
+                    enemyDef = Mathf.FloorToInt(enemyDef * (1f - magic.defenseIgnoreRate) + 0.5f);
+                }
+                int enemyBlocked = RollDefenseDice(enemyDef);
+                int finalDamage = afterResist - enemyBlocked;
+                if (finalDamage < 1) finalDamage = 1;
+                if (afterResist <= 0) finalDamage = 0;
+
+                enemyCurrentHp -= finalDamage;
+                if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+                string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
+                AddLog($"You は {magic.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog} MP-{magic.mpCost}");
+
+                Debug.Log($"[Battle] CurrentHpDamage(Player→Enemy/Magic): userHp={baseDamage} " +
+                          $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
+
+                ProcessPlayerSkillEffects(magic, finalDamage);
+
+                if (GameState.I != null && GameState.I.currentHp <= 0)
+                {
+                    if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                    else { FlushLogsAndThen(() => OnDefeat()); }
+                    return;
+                }
+
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+
             // 単発前提: 命中判定
             if (!CheckPlayerHitWithBlind(magic.baseHitRate))
             {

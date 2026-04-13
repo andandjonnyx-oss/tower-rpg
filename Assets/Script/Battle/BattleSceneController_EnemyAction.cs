@@ -486,6 +486,72 @@ public partial class BattleSceneController
         // =========================================================
         if (skill.IsHpDependent)
         {
+
+            // =========================================================
+            // CurrentHpDamage: 使用者のHP依存ダメージ（自爆系）
+            // 防御ダイス・属性耐性を適用する独立処理
+            // =========================================================
+            if (skill.hpDependentType == HpDependentType.CurrentHpDamage)
+            {
+                string cdName = !string.IsNullOrEmpty(skill.skillName)
+                    ? skill.skillName : "攻撃";
+
+                if (!CheckEnemyHit(effectiveHitRate))
+                {
+                    AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
+                    AfterEnemyAction();
+                    return;
+                }
+
+                // ダメージ = 使用者（敵）の現在HP
+                int baseDamage = enemyCurrentHp;
+                if (baseDamage < 1) baseDamage = 1;
+
+                // 属性耐性を適用
+                int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
+                float reductionRate = resistance / 100f;
+                int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
+                if (afterResist < 0) afterResist = 0;
+
+                // 防御ダイスを適用（defenseIgnoreRate 対応）
+                int defense = GetPlayerDefense(skill.damageCategory);
+                if (skill.defenseIgnoreRate > 0f)
+                {
+                    defense = Mathf.FloorToInt(defense * (1f - skill.defenseIgnoreRate) + 0.5f);
+                }
+                int blocked;
+                if (isDefending)
+                {
+                    defense *= DefendDefenseMultiplier;
+                    blocked = RollDefenseDice(defense, DefendDiceRange);
+                }
+                else
+                {
+                    blocked = RollDefenseDice(defense);
+                }
+                int finalDamage = afterResist - blocked;
+                if (finalDamage < 0) finalDamage = 0;
+
+                ApplyDamageToPlayer(finalDamage);
+
+                string logSuffix = "";
+                if (resistance > 0 && blocked > 0) logSuffix = $"（耐性+防御{blocked}軽減）";
+                else if (resistance > 0) logSuffix = "（耐性で軽減）";
+                else if (resistance < 0) logSuffix = "（弱点で増加）";
+                else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
+
+                AddLog($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}");
+
+                Debug.Log($"[Battle] CurrentHpDamage(Enemy→Player): userHp={baseDamage} " +
+                          $"resistance={resistance} afterResist={afterResist} " +
+                          $"defense={defense} blocked={blocked} final={finalDamage}");
+
+                ProcessEnemySkillEffects(skill);
+                AfterEnemyAction();
+                return;
+            }
+
+
             string hpDepName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName : "攻撃";
 
