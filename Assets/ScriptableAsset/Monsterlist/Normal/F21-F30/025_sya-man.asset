@@ -44,7 +44,7 @@ MonoBehaviour:
     value: 50
   - attribute: 5
     value: 50
-  Exp: 700
+  Exp: 520
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0

@@ -498,12 +498,19 @@ public partial class BattleSceneController
             }
 
             int playerHp = (GameState.I != null) ? GameState.I.currentHp : 0;
-            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp);
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp,
+                         (GameState.I != null) ? GameState.I.maxHp : 0, skill.hpDependentPercent);
 
             ApplyDamageToPlayer(hpDamage);
 
-            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
-                ? "（HP半減）" : "（HP→1）";
+            string hpDepLog;
+            switch (skill.hpDependentType)
+            {
+                case HpDependentType.HalfCurrentHp: hpDepLog = "（HP半減）"; break;
+                case HpDependentType.ReduceToOne: hpDepLog = "（HP→1）"; break;
+                case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
+                default: hpDepLog = ""; break;
+            }
             AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
 
             Debug.Log($"[Battle] HpDependent(Enemy→Player): type={skill.hpDependentType} " +

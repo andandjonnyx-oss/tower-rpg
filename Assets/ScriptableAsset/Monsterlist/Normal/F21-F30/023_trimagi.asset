@@ -35,6 +35,7 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
   immuneToAllAilments: 0
   attributeResistances:
   - attribute: 3
@@ -43,7 +44,7 @@ MonoBehaviour:
     value: 50
   - attribute: 5
     value: 50
-  Exp: 550
+  Exp: 480
   Gold: 0
   dropItem: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
   dropRate: 0.2

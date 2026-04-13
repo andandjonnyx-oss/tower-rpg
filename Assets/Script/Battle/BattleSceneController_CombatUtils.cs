@@ -369,7 +369,8 @@ public partial class BattleSceneController
     /// <param name="hpDependentType">HP依存タイプ</param>
     /// <param name="currentHp">対象の現在HP</param>
     /// <returns>与えるダメージ</returns>
-    private int CalcHpDependentDamage(HpDependentType hpDependentType, int currentHp)
+    private int CalcHpDependentDamage(HpDependentType hpDependentType, int currentHp, int maxHp = 0, int percent = 20)
+
     {
         switch (hpDependentType)
         {
@@ -377,8 +378,28 @@ public partial class BattleSceneController
                 return Mathf.FloorToInt(currentHp / 2f);
             case HpDependentType.ReduceToOne:
                 return (currentHp > 1) ? (currentHp - 1) : 0;
+
+            case HpDependentType.MaxHpPercent:
+                {
+                    int dmg = Mathf.FloorToInt(maxHp * percent / 100f);
+                    if (dmg < 1) dmg = 1; // 最低1ダメージ保証
+                    return dmg;
+                }
+
             default:
                 return 0;
         }
     }
+
+    /// <summary>
+    /// プレイヤーからのHP割合ダメージが敵に無効かどうかを判定する。
+    /// ボス(IsBoss) または メタル系(immuneToAllAilments) の敵には無効。
+    /// MaxHpPercent タイプのみに適用（HalfCurrentHp / ReduceToOne には適用しない）。
+    /// </summary>
+    private bool IsEnemyImmuneToMaxHpPercent()
+    {
+        if (enemyMonster == null) return false;
+        return enemyMonster.IsBoss || enemyMonster.immuneToAllAilments;
+    }
+
 }

@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M032M_sourubureiku
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M032M_sourubureiku
+  itemName: "\u30BD\u30A6\u30EB\u30D6\u30EC\u30A4\u30AF"
+  description: "\u9B42\u306B\u76F4\u63A5\u653B\u6483\nMP6 \u6700\u5927HP\u306E2\u5272\u56FA\u5B9A\u30C0\u30E1\u30FC\u30B8\n\u30DC\u30B9\u3084\u4E00\u90E8\u6575\u306B\u306F\u7121\u52B9"
+  icon: {fileID: 0}
+  Minfloor: 24
+  Minstep: 1
+  Maxfloor: 30
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 11400000, guid: b153db0eb9388344a85cf0be356adc5b, type: 2}
+  passiveEffects: []
+  sortOrder: 32

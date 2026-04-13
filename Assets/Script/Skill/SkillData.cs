@@ -33,7 +33,22 @@ public enum HpDependentType
     /// 例: HP1   → ダメージ0  → HP1（変化なし）
     /// </summary>
     ReduceToOne = 2,
+
+    /// <summary>
+    /// 対象の最大HPの一定割合をダメージとして与える。
+    /// ダメージ = FloorToInt(対象の最大HP × hpDependentPercent / 100)
+    /// 最低1ダメージ保証。
+    /// 残りHPがダメージ以下なら倒せる（即死ではなく通常のダメージ適用）。
+    /// プレイヤー→敵: ボス(IsBoss)またはメタル系(immuneToAllAilments)には無効。
+    /// 敵→プレイヤー: 制限なし。
+    /// 例: hpDependentPercent=20, 最大HP500 → ダメージ100
+    /// </summary>
+    MaxHpPercent = 3,
+
+
 }
+
+
 
 /// <summary>
 /// スキル1つ分のマスターデータ。
@@ -168,6 +183,11 @@ public class SkillData : ScriptableObject
            + "命中判定は通常通り行う。\n"
            + "多段攻撃とは併用不可（hitCount=1前提）。")]
     public HpDependentType hpDependentType = HpDependentType.None;
+
+    [Tooltip("MaxHpPercent 用: 最大HPの何%をダメージにするか。\n"
+       + "例: 20 = 最大HPの20%。HalfCurrentHp / ReduceToOne では使用しない。")]
+    [Range(1, 100)]
+    public int hpDependentPercent = 20;
 
     // =========================================================
     // 防御貫通（追加）

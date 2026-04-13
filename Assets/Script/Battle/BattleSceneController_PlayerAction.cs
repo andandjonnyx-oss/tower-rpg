@@ -302,12 +302,19 @@ public partial class BattleSceneController
             }
 
             int playerHp = (GameState.I != null) ? GameState.I.currentHp : 0;
-            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp);
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp,
+                            (GameState.I != null) ? GameState.I.maxHp : 0, skill.hpDependentPercent);
 
             ApplyDamageToPlayer(hpDamage);
 
-            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
-                ? "（HP半減）" : "（HP→1）";
+            string hpDepLog;
+            switch (skill.hpDependentType)
+            {
+                case HpDependentType.HalfCurrentHp: hpDepLog = "（HP半減）"; break;
+                case HpDependentType.ReduceToOne: hpDepLog = "（HP→1）"; break;
+                case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
+                default: hpDepLog = ""; break;
+            }
             AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
 
             Debug.Log($"[Battle] HpDependent(Preemptive): type={skill.hpDependentType} " +
@@ -660,13 +667,28 @@ public partial class BattleSceneController
                 return;
             }
 
-            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, enemyCurrentHp);
+            // MaxHpPercent: ボス/メタル系には無効
+            if (skill.hpDependentType == HpDependentType.MaxHpPercent && IsEnemyImmuneToMaxHpPercent())
+            {
+                AddLog($"You は {skill.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, enemyCurrentHp,
+                enemyMonster != null ? enemyMonster.MaxHp : 0, skill.hpDependentPercent);
 
             enemyCurrentHp -= hpDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
-                ? "（HP半減）" : "（HP→1）";
+            string hpDepLog;
+            switch (skill.hpDependentType)
+            {
+                case HpDependentType.HalfCurrentHp: hpDepLog = "（HP半減）"; break;
+                case HpDependentType.ReduceToOne: hpDepLog = "（HP→1）"; break;
+                case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
+                default: hpDepLog = ""; break;
+            }
             AddLog($"You は {skill.skillName}！ {hpDamage}ダメージ！{hpDepLog}");
 
             Debug.Log($"[Battle] HpDependent(Player→Enemy/Skill): type={skill.hpDependentType} " +
@@ -899,13 +921,28 @@ public partial class BattleSceneController
                 return;
             }
 
-            int hpDamage = CalcHpDependentDamage(magic.hpDependentType, enemyCurrentHp);
+            // MaxHpPercent: ボス/メタル系には無効
+            if (magic.hpDependentType == HpDependentType.MaxHpPercent && IsEnemyImmuneToMaxHpPercent())
+            {
+                AddLog($"You は {magic.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！ MP-{magic.mpCost}");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int hpDamage = CalcHpDependentDamage(magic.hpDependentType, enemyCurrentHp,
+                enemyMonster != null ? enemyMonster.MaxHp : 0, magic.hpDependentPercent);
 
             enemyCurrentHp -= hpDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-            string hpDepLog = (magic.hpDependentType == HpDependentType.HalfCurrentHp)
-                ? "（HP半減）" : "（HP→1）";
+            string hpDepLog;
+            switch (magic.hpDependentType)
+            {
+                case HpDependentType.HalfCurrentHp: hpDepLog = "（HP半減）"; break;
+                case HpDependentType.ReduceToOne: hpDepLog = "（HP→1）"; break;
+                case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{magic.hpDependentPercent}%）"; break;
+                default: hpDepLog = ""; break;
+            }
             AddLog($"You は {magic.skillName}！ {hpDamage}ダメージ！{hpDepLog} MP-{magic.mpCost}");
 
             Debug.Log($"[Battle] HpDependent(Player→Enemy/Magic): type={magic.hpDependentType} " +
