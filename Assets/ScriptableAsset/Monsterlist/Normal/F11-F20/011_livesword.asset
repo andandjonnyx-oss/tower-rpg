@@ -28,15 +28,22 @@ MonoBehaviour:
   MagicDefense: 0
   Speed: 0
   Luck: 1
-  Evasion: 100
+  Evasion: 120
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  immuneToAllAilments: 0
   attributeResistances: []
   Exp: 200
   Gold: 0
   dropItem: {fileID: 11400000, guid: 35e66c09fbde43a409564a60fcc17df6, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
   Help: "11\u968E\u306E\u6D17\u793C\u3063\u3066\u3084\u3064\u3060\uFF01\nDEX\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u3044\u3044\u30AB\u30E2\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}

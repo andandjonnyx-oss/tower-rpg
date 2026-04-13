@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: SP08_zibaku
+  m_Name: SE02_heal
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: SP08_zibaku
-  skillName: "\u81EA\u7206"
-  description: "\u3069\u304B\u30FC\u3093"
-  skillSource: 0
-  actionType: 2
-  skillAttribute: 8
+  skillId: SE02_heal
+  skillName: "\u30D2\u30FC\u30EB"
+  description: "\u5148\u5236\u30D2\u30FC\u30EB"
+  skillSource: 1
+  actionType: 3
+  skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0
-  hpDependentType: 4
-  hpDependentPercent: 100
-  defenseIgnoreRate: 0.5
+  hpDependentType: 0
+  hpDependentPercent: 20
+  defenseIgnoreRate: 0
   cooldownTurns: 0
   mpCost: 0
-  baseHitRate: 100
+  baseHitRate: 95
   hitCount: 1
   noBattleOk: 0
   additionalEffects:
-  - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
+  - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
     ailmentMode: 0
     targetStatusEffect: 0
     chance: 100
-    intValue: 0
+    intValue: 80
     duration: 0
   enemyNextForceSkill: {fileID: 0}

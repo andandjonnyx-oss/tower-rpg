@@ -72,7 +72,7 @@ public class Monster : ScriptableObject
     public int ParalyzeResistance = 0;
 
     [Tooltip("敵の暗闇耐性値（0〜100）。\n"
-           + "暗闇の実質命中率 = 基礎命中率 × (1 - BlindResistance/100)\n"
+           + "暗闘の実質命中率 = 基礎命中率 × (1 - BlindResistance/100)\n"
            + "100 = 暗闇完全耐性。")]
     public int BlindResistance = 0;
 
@@ -167,6 +167,26 @@ public class Monster : ScriptableObject
     [Tooltip("ドロップ確率（0〜1）。1.0 = 確定ドロップ。")]
     [Range(0f, 1f)]
     public float dropRate = 0f;
+
+    // =========================================================
+    // 自動回復（追加）
+    // =========================================================
+    //
+    // ONにすると、毎ターン終了時（毒ダメージ判定の後）に
+    // autoRegenAmount 分のHPを自動回復する。
+    // 毒で倒れた場合は回復しない（復活しない）。
+    // 最大HPを超えて回復しない。
+    //
+    // 例: ボス系の長期戦を促す場合に使用。
+    // 例: autoRegenAmount = 50 → 毎ターン50HP回復
+    // =========================================================
+
+    [Header("Auto Regen")]
+    [Tooltip("ONにすると毎ターン終了時にHPを自動回復する。")]
+    public bool autoRegenEnabled;
+
+    [Tooltip("毎ターンの自動回復量（固定値）。")]
+    public int autoRegenAmount;
 
     [Header("説明")]
     [TextArea(3, 6)]

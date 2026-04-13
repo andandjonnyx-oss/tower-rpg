@@ -10,44 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 016_ragetroll
+  m_Name: 028_troll
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 016_ragetroll
-  Mname: "\u30EC\u30A4\u30B8\u30C8\u30ED\u30FC\u30EB"
-  Image: {fileID: 0}
-  Minfloor: 14
+  ID: 028_troll
+  Mname: "\u30C8\u30ED\u30FC\u30EB"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 26
   Minstep: 1
-  Maxfloor: 18
+  Maxfloor: 30
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 150
-  Attack: 40
-  Defense: 20
-  MagicDefense: 10
+  MaxHp: 400
+  Attack: 60
+  Defense: 0
+  MagicDefense: 0
   Speed: 0
   Luck: 5
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
-  StunResistance: 100
+  StunResistance: 0
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
-  Exp: 270
+  Exp: 630
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
-  Help: "\u666E\u6BB5\u306F\u306E\u3093\u3073\u308A\u5C4B\u3060\u304C\u6012\u3063\u305F\u3089\u6016\u3044\u305E\uFF01\n\u9632\u5FA1\u3067\u8010\u3048\u308B\u306E\u3082\u30A2\u30EA\u3060\u306A\uFF01"
+  autoRegenEnabled: 1
+  autoRegenAmount: 30
+  Help: "\u30A4\u30A7\u30FC\u30A4\uFF01\u3000\u30EF\u30FC\u30AA\uFF01\u3000\u30D6\u30EA\u30E5\u30C3\uFF01\n\u2026\u2026\u5143\u30CD\u30BF\u77E5\u3063\u3066\u308B\u4EBA\u3044\u308B\u306E\u304B\u306A\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
-    threshold: 10
-  - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
-    threshold: 70
-  - skill: {fileID: 11400000, guid: 4a6769b59eb409a4a9c35760150f2344, type: 2}
     threshold: 100
   baseActionRange: 100

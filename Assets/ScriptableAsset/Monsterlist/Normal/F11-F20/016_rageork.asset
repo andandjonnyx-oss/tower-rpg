@@ -10,42 +10,46 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 026_sinigamininarai
+  m_Name: 016_rageork
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 026_sinigamininarai
-  Mname: "\u6B7B\u795E\u898B\u7FD2\u3044"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
-  Minfloor: 24
+  ID: 016_rageork
+  Mname: "\u30EC\u30A4\u30B8\u30AA\u30FC\u30AF"
+  Image: {fileID: 0}
+  Minfloor: 14
   Minstep: 1
-  Maxfloor: 28
+  Maxfloor: 18
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 200
-  Attack: 0
+  MaxHp: 150
+  Attack: 40
   Defense: 20
-  MagicDefense: 40
+  MagicDefense: 10
   Speed: 0
-  Luck: 0
+  Luck: 5
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
-  StunResistance: 0
+  StunResistance: 100
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
-  Exp: 520
+  Exp: 270
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
   autoRegenEnabled: 0
   autoRegenAmount: 0
-  Help: "\u99AC\u9E7F\u306E\u4E00\u3064\u899A\u3048\u307F\u305F\u3044\u306B\u9B42\u7815\u304D"
+  Help: "\u666E\u6BB5\u306F\u306E\u3093\u3073\u308A\u5C4B\u3060\u304C\u6012\u3063\u305F\u3089\u6016\u3044\u305E\uFF01\n\u9632\u5FA1\u3067\u8010\u3048\u308B\u306E\u3082\u30A2\u30EA\u3060\u306A\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: 524eb8fa6e1cd5a4e8c306913c2de9ec, type: 2}
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 10
+  - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 4a6769b59eb409a4a9c35760150f2344, type: 2}
     threshold: 100
   baseActionRange: 100

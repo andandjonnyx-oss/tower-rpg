@@ -783,6 +783,21 @@ public partial class BattleSceneController
         }
 
         // =========================================================
+        // 敵の自動回復（ターン終了時）
+        // 毒ダメージで倒れなかった場合のみ回復する。
+        // 最大HPを超えない。
+        // =========================================================
+        if (enemyMonster.autoRegenEnabled && enemyCurrentHp > 0)
+        {
+            int regenAmount = Mathf.Min(enemyMonster.autoRegenAmount, enemyMonster.MaxHp - enemyCurrentHp);
+            if (regenAmount > 0)
+            {
+                enemyCurrentHp += regenAmount;
+                AddLog($"{enemyMonster.Mname} は {regenAmount} HP回復した！");
+            }
+        }
+
+        // =========================================================
         // 怒りターンカウントダウン（Phase2追加）
         // =========================================================
         if (enemyRageTurn > 0)

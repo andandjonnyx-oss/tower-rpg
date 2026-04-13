@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\u30AB\u30A6\u30F3\u30C8\u30C0\u30A6\u30F33"
   description: 
   skillSource: 0
-  actionType: 0
+  actionType: 2
   skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 0

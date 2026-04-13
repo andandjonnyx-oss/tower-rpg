@@ -28,7 +28,7 @@ MonoBehaviour:
   MagicDefense: 10
   Speed: 0
   Luck: 5
-  Evasion: 80
+  Evasion: 100
   BaseHitRate: 90
   PoisonResistance: 100
   StunResistance: 0
@@ -44,6 +44,8 @@ MonoBehaviour:
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
   Help: "\u540D\u524D\u306F\u53EF\u611B\u3044\u3093\u3060\u3051\u3069\u306A\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
