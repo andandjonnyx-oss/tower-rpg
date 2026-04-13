@@ -1727,13 +1727,13 @@ RectTransform:
   - {fileID: 1030513531}
   - {fileID: 714724125}
   - {fileID: 1475971357}
-  - {fileID: 1619623996}
+  - {fileID: 1596879500}
   - {fileID: 1552286060}
   - {fileID: 1025555099}
   - {fileID: 1478005395}
   - {fileID: 1353275843}
   - {fileID: 1114667073}
-  - {fileID: 1596879500}
+  - {fileID: 1619623996}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -134,8 +134,7 @@ public partial class BattleSceneController
         if (enemyForcedNextSkill != null)
         {
             SkillData forced = enemyForcedNextSkill;
-            enemyForcedNextSkill = null; // 消費
-                                         // 強制スキルを actions[0] と同じ形式で実行
+            enemyForcedNextSkill = forced.enemyNextForceSkill; // 次の予約をセット（nullなら解除）
             ExecuteEnemySkillAttack(forced);
             return;
         }
@@ -746,10 +745,19 @@ public partial class BattleSceneController
     /// </summary>
     private void AfterEnemyAction()
     {
-        // =========================================================
-        // ターン終了時の毒ダメージ
-        // プレイヤーと敵の両方に毒ダメージを適用する
-        // =========================================================
+        if (enemyCurrentHp <= 0)
+        {
+            // プレイヤーも倒れている場合（敵の自爆で相打ち）は敗北扱い
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                FlushLogsAndThen(() => OnDefeat());
+            }
+            else
+            {
+                FlushLogsAndThen(() => OnVictory());
+            }
+            return;
+        }
 
         // --- プレイヤーの毒ダメージ ---
         int playerPoisonDmg = StatusEffectSystem.ApplyBattlePoisonToPlayer();
