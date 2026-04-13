@@ -83,6 +83,11 @@ public class Monster : ScriptableObject
            + "敵に強制付与する使い方もあり得るため耐性を用意。")]
     public int RageResistance = 0;
 
+    [Tooltip("敵の沈黙耐性値（0〜100）。\n"
+           + "沈黙の実質命中率 = 基礎命中率 × (1 - SilenceResistance/100)\n"
+           + "100 = 沈黙完全耐性。")]
+    public int SilenceResistance = 0;
+
     [Header("Status Effect Resistance")]
     [Tooltip("ONにすると全状態異常に完全耐性（100扱い）になる。\n"
        + "メタル系・ボス等の状態異常完全無効に使用。\n"
@@ -134,6 +139,7 @@ public class Monster : ScriptableObject
             case StatusEffect.Paralyze: return ParalyzeResistance;
             case StatusEffect.Blind: return BlindResistance;
             case StatusEffect.Rage: return RageResistance;
+            case StatusEffect.Silence: return SilenceResistance;
             default: return 0;
         }
     }

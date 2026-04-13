@@ -2,6 +2,40 @@
 using UnityEngine;
 
 /// <summary>
+/// HP依存ダメージの種類。
+/// 通常のダメージ計算（倍率+固定+防御ダイス）をバイパスし、
+/// 対象の現在HPに基づいたダメージを与える。
+///
+/// 【共通仕様】
+///   - 命中判定: 通常通り行う（回避可能）
+///   - 防御/属性耐性/バフ/クリティカル: 全てスキップ
+///   - ダメージ最低保証: なし（0ダメージもあり得る）
+///   - 端数処理: 切り下げ（FloorToInt）
+///   - 双方向: プレイヤー→敵、敵→プレイヤー両方で使用可能
+/// </summary>
+public enum HpDependentType
+{
+    /// <summary>通常スキル（HP依存なし）</summary>
+    None = 0,
+
+    /// <summary>
+    /// 対象の現在HPを半分にする。
+    /// ダメージ = FloorToInt(対象の現在HP / 2)
+    /// 例: HP99 → ダメージ49 → HP50
+    /// 例: HP1  → ダメージ0  → HP1（変化なし）
+    /// </summary>
+    HalfCurrentHp = 1,
+
+    /// <summary>
+    /// 対象のHPを1にする。
+    /// ダメージ = 対象の現在HP - 1
+    /// 例: HP100 → ダメージ99 → HP1
+    /// 例: HP1   → ダメージ0  → HP1（変化なし）
+    /// </summary>
+    ReduceToOne = 2,
+}
+
+/// <summary>
 /// スキル1つ分のマスターデータ。
 /// プレイヤー用（武器スキル/魔法スキル）と敵用の両方をこの1つのクラスで表現する。
 ///
@@ -33,6 +67,12 @@ using UnityEngine;
 ///   各ヒットごとに独立して命中判定・防御ダイス・クリティカル判定を行う。
 ///   途中で対象のHPが0になったら残りの判定をスキップする。
 ///   追加効果は全ヒット完了後に1回だけ実行する。
+///
+/// 【HP依存ダメージ】
+///   hpDependentType != None の場合、通常のダメージ計算をバイパスし、
+///   対象の現在HPに基づいたダメージを与える。
+///   防御/属性耐性/バフ/クリティカルは全てスキップ。
+///   命中判定は通常通り行う。多段攻撃とは併用不可（hitCount=1前提）。
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Skill Data")]
 public class SkillData : ScriptableObject
@@ -114,6 +154,20 @@ public class SkillData : ScriptableObject
            + "damageMultiplier / bonusDamage は無視される。\n"
            + "例: randomDamageMax=100 → 1〜100のランダムダメージ")]
     public int randomDamageMax = 0;
+
+    // =========================================================
+    // HP依存ダメージ（追加）
+    // =========================================================
+
+    [Header("HP Dependent Damage")]
+    [Tooltip("HP依存ダメージの種類。None = 通常スキル。\n"
+           + "HalfCurrentHp = 対象の現在HPを半分にする（切り下げ）。\n"
+           + "ReduceToOne = 対象のHPを1にする。\n"
+           + "設定時は damageMultiplier=0, bonusDamage=0 にすること。\n"
+           + "防御/属性耐性/バフ/クリティカルは全てスキップ。\n"
+           + "命中判定は通常通り行う。\n"
+           + "多段攻撃とは併用不可（hitCount=1前提）。")]
+    public HpDependentType hpDependentType = HpDependentType.None;
 
     // =========================================================
     // 防御貫通（追加）
@@ -203,9 +257,17 @@ public class SkillData : ScriptableObject
 
     /// <summary>
     /// ダメージを与えないスキルかどうか。
-    /// damageMultiplier == 0 かつ bonusDamage == 0 の場合 true。
+    /// damageMultiplier == 0 かつ bonusDamage == 0 かつ randomDamageMax == 0
+    /// かつ hpDependentType == None の場合 true。
+    /// HP依存ダメージが設定されている場合はダメージスキル扱い。
     /// </summary>
-    public bool IsNonDamage => damageMultiplier <= 0f && bonusDamage <= 0 && randomDamageMax <= 0;
+    public bool IsNonDamage => damageMultiplier <= 0f && bonusDamage <= 0 && randomDamageMax <= 0
+                               && hpDependentType == HpDependentType.None;
+
+    /// <summary>
+    /// HP依存ダメージスキルかどうか。
+    /// </summary>
+    public bool IsHpDependent => hpDependentType != HpDependentType.None;
 
 
     /// <summary>

@@ -479,6 +479,41 @@ public partial class BattleSceneController
             return;
         }
 
+        // =========================================================
+        // HP依存ダメージスキル（追加）
+        // hpDependentType != None の場合、対象のHP割合でダメージを決定。
+        // 防御/属性耐性/バフ/クリティカルは全てスキップ。
+        // =========================================================
+        if (skill.IsHpDependent)
+        {
+            string hpDepName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName : "攻撃";
+
+            // 単発前提（多段併用不可）: 命中判定
+            if (!CheckEnemyHit(effectiveHitRate))
+            {
+                AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                AfterEnemyAction();
+                return;
+            }
+
+            int playerHp = (GameState.I != null) ? GameState.I.currentHp : 0;
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp);
+
+            ApplyDamageToPlayer(hpDamage);
+
+            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
+                ? "（HP半減）" : "（HP→1）";
+            AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
+
+            Debug.Log($"[Battle] HpDependent(Enemy→Player): type={skill.hpDependentType} " +
+                      $"beforeHp={playerHp} damage={hpDamage}");
+
+            ProcessEnemySkillEffects(skill);
+            AfterEnemyAction();
+            return;
+        }
+
 
         // --- ダメージ計算（多段攻撃対応） ---
         int totalDamage = 0;

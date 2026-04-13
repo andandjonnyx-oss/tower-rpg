@@ -287,6 +287,37 @@ public partial class BattleSceneController
             return;
         }
 
+        // =========================================================
+        // HP依存ダメージスキル（先制攻撃版）
+        // =========================================================
+        if (skill.IsHpDependent)
+        {
+            string hpDepName = !string.IsNullOrEmpty(skill.skillName)
+                ? skill.skillName : "先制攻撃";
+
+            if (!CheckEnemyHit(effectiveHitRate))
+            {
+                AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                return;
+            }
+
+            int playerHp = (GameState.I != null) ? GameState.I.currentHp : 0;
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, playerHp);
+
+            ApplyDamageToPlayer(hpDamage);
+
+            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
+                ? "（HP半減）" : "（HP→1）";
+            AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
+
+            Debug.Log($"[Battle] HpDependent(Preemptive): type={skill.hpDependentType} " +
+                      $"beforeHp={playerHp} damage={hpDamage}");
+
+            ProcessEnemySkillEffects(skill);
+            return;
+        }
+
+
 
         // ダメージ計算（多段攻撃対応）
         int totalDamage = 0;
@@ -617,6 +648,46 @@ public partial class BattleSceneController
         // --- ここから先はダメージスキルのみ ---
 
         // =========================================================
+        // HP依存ダメージスキル（追加）
+        // =========================================================
+        if (skill.IsHpDependent)
+        {
+            // 単発前提: 命中判定
+            if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+            {
+                AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int hpDamage = CalcHpDependentDamage(skill.hpDependentType, enemyCurrentHp);
+
+            enemyCurrentHp -= hpDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+            string hpDepLog = (skill.hpDependentType == HpDependentType.HalfCurrentHp)
+                ? "（HP半減）" : "（HP→1）";
+            AddLog($"You は {skill.skillName}！ {hpDamage}ダメージ！{hpDepLog}");
+
+            Debug.Log($"[Battle] HpDependent(Player→Enemy/Skill): type={skill.hpDependentType} " +
+                      $"beforeHp={enemyCurrentHp + hpDamage} damage={hpDamage}");
+
+            ProcessPlayerSkillEffects(skill, hpDamage);
+
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                else { FlushLogsAndThen(() => OnDefeat()); }
+                return;
+            }
+
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
+
+        // =========================================================
         // 多段攻撃対応
         // ★ hitCount > 1: スキル発動は確定、各ヒットで個別に命中判定
         // ★ hitCount == 1: 従来通りスキル発動前に命中判定
@@ -814,6 +885,46 @@ public partial class BattleSceneController
         }
 
         // --- ここから先はダメージスキルのみ ---
+
+        // =========================================================
+        // HP依存ダメージスキル（追加）
+        // =========================================================
+        if (magic.IsHpDependent)
+        {
+            // 単発前提: 命中判定
+            if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+            {
+                AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int hpDamage = CalcHpDependentDamage(magic.hpDependentType, enemyCurrentHp);
+
+            enemyCurrentHp -= hpDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+            string hpDepLog = (magic.hpDependentType == HpDependentType.HalfCurrentHp)
+                ? "（HP半減）" : "（HP→1）";
+            AddLog($"You は {magic.skillName}！ {hpDamage}ダメージ！{hpDepLog} MP-{magic.mpCost}");
+
+            Debug.Log($"[Battle] HpDependent(Player→Enemy/Magic): type={magic.hpDependentType} " +
+                      $"beforeHp={enemyCurrentHp + hpDamage} damage={hpDamage}");
+
+            ProcessPlayerSkillEffects(magic, hpDamage);
+
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                else { FlushLogsAndThen(() => OnDefeat()); }
+                return;
+            }
+
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
 
         // =========================================================
         // 多段攻撃対応

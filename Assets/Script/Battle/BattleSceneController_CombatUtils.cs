@@ -355,4 +355,30 @@ public partial class BattleSceneController
         GameState.I.currentHp -= damage;
         if (GameState.I.currentHp < 0) GameState.I.currentHp = 0;
     }
+
+    // =========================================================
+    // HP依存ダメージ計算ヘルパー（追加）
+    // =========================================================
+
+    /// <summary>
+    /// HP依存ダメージを計算する。
+    /// HalfCurrentHp: FloorToInt(currentHp / 2)
+    /// ReduceToOne:   currentHp - 1
+    /// ダメージ最低保証なし（0もあり得る）。
+    /// </summary>
+    /// <param name="hpDependentType">HP依存タイプ</param>
+    /// <param name="currentHp">対象の現在HP</param>
+    /// <returns>与えるダメージ</returns>
+    private int CalcHpDependentDamage(HpDependentType hpDependentType, int currentHp)
+    {
+        switch (hpDependentType)
+        {
+            case HpDependentType.HalfCurrentHp:
+                return Mathf.FloorToInt(currentHp / 2f);
+            case HpDependentType.ReduceToOne:
+                return (currentHp > 1) ? (currentHp - 1) : 0;
+            default:
+                return 0;
+        }
+    }
 }
