@@ -330,6 +330,7 @@ public partial class BattleSceneController : MonoBehaviour
 
             // Phase4: バフ/デバフリセット（構造体ベース）
             InitBuffDebuffFields();
+            ResetQuizBossStatics();
 
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
         }
@@ -902,6 +903,7 @@ public partial class BattleSceneController : MonoBehaviour
 
         // Phase4: バフ/デバフリセット（構造体ベース）
         ResetBuffDebuffFields();
+        ResetQuizBossStatics();
 
     }
 

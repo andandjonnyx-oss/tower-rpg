@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
+  m_Name: Q9_ork
+  m_EditorClassIdentifier: Assembly-CSharp::QuizData
+  questionText: "\u554F\u984C\uFF01\u3000\u30AA\u30FC\u30AF\u306F\u4F55\u79D1\u306E\u690D\u7269\uFF1F\nA:
+    \u30D6\u30CA\u79D1\nB: \u30AB\u30D0\u30CE\u30AD\u79D1"
+  choiceA: A
+  choiceB: B
+  correctAnswer: 0

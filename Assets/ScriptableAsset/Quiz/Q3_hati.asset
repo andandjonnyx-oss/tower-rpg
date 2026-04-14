@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
+  m_Name: Q3_hati
+  m_EditorClassIdentifier: Assembly-CSharp::QuizData
+  questionText: "\u554F\u984C\uFF01\u3000\u4E00\u5EA6\u91DD\u3092\u523A\u3059\u3068\u6B7B\u3093\u3067\u3057\u307E\u3046\u306E\u306F\uFF1F\nA:\u30DF\u30C4\u30D0\u30C1\nB:\u30B9\u30BA\u30E1\u30D0\u30C1"
+  choiceA: A
+  choiceB: B
+  correctAnswer: 0

@@ -188,6 +188,27 @@ public class Monster : ScriptableObject
     [Tooltip("毎ターンの自動回復量（固定値）。")]
     public int autoRegenAmount;
 
+
+    // =========================================================
+    // クイズボス設定（追加）
+    // =========================================================
+    //
+    // isQuizBoss = true にすると、EnemyTurn でクイズ出題モードに入る。
+    // quizDatabase に問題セットを設定する。
+    //
+    // 通常攻撃はほぼダメージが入らない前提（DEF/MDEF=9999等）。
+    // 正解で敵HP1割減少、不正解3回でプレイヤー即死、10問正解で勝利。
+    // =========================================================
+
+    [Header("Quiz Boss")]
+    [Tooltip("ONにするとクイズボスモードになる。敵ターンでクイズを出題する。")]
+    public bool isQuizBoss;
+
+    [Tooltip("クイズ問題データベース。isQuizBoss=true の場合に必須。")]
+    public QuizDatabase quizDatabase;
+
+
+
     [Header("説明")]
     [TextArea(3, 6)]
     public string Help;

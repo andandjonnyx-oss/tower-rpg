@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
+  m_Name: Q14_ living
+  m_EditorClassIdentifier: Assembly-CSharp::QuizData
+  questionText: "\u554F\u984C\uFF01\u3000\u546A\u308F\u308C\u305F\u76FE\u3068\u30C6\u30FC\u30D6\u30EB\u3092\u6301\u3061\u3001\n\u66F4\u306B\u546A\u308F\u308C\u305F\u5263\u3092\u88C5\u5099\u3057\u305F\u5834\u5408\u3001\u6700\u5927HP\u306F\u3069\u3046\u306A\u308B\uFF1F\nA:
+    110\u6E1B\u308B\nB: 120\u6E1B\u308B"
+  choiceA: A
+  choiceB: B
+  correctAnswer: 0

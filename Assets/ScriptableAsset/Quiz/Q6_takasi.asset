@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
+  m_Name: Q6_takasi
+  m_EditorClassIdentifier: Assembly-CSharp::QuizData
+  questionText: "\u554F\u984C\uFF01\u3000\u4F1A\u8A71\u30A4\u30D9\u30F3\u30C8\u3067\u5EA6\u3005\u51FA\u3066\u6765\u305F\n\u3084\u305F\u3089\u30A2\u30A4\u30C6\u30E0\u3092\u6301\u305F\u3055\u308C\u308B\u5C11\u5E74\u306E\u540D\u524D\u306F\uFF1F\nA:
+    \u305F\u3051\u3057\u541B\nB: \u305F\u304B\u3057\u541B"
+  choiceA: A
+  choiceB: B
+  correctAnswer: 1
