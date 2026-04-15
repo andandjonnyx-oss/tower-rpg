@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M036_sanmanogohu
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M036_sanmanogohu
+  itemName: "\u79CB\u5200\u9B5A\u306E\u8B77\u7B26"
+  description: "\u79CB\u5200\u9B5A\u3058\u3083\u306A\u304F\u3066\u4E09\u9B54\u3060\u308D\u2026\u2026\n\u708E\u96F7\u6C37\u8010\u6027+20"
+  icon: {fileID: 0}
+  Minfloor: 27
+  Minstep: 1
+  Maxfloor: 30
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects:
+  - effectType: 0
+    targetAttribute: 5
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 20
+    floatValue: 0
+  - effectType: 0
+    targetAttribute: 3
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 20
+    floatValue: 0
+  - effectType: 0
+    targetAttribute: 4
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 20
+    floatValue: 0
+  sortOrder: 36

@@ -29,6 +29,7 @@ MonoBehaviour:
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
+  curesSilence: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -40,6 +41,7 @@ MonoBehaviour:
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
+  eatCuresSilence: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
@@ -69,6 +71,6 @@ MonoBehaviour:
     targetAttribute: 3
     targetStat: 0
     targetStatusEffect: 0
-    value: -200
+    value: -100
     floatValue: 0
   sortOrder: 0

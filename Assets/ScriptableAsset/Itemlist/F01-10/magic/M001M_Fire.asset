@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M001M_Fire
   itemName: "\u30D5\u30A1\u30A4\u30A2\u30DC\u30FC\u30EB"
-  description: "\u706B\u306E\u7389\u3092\u6295\u3052\u308B\u3002\nMP5\u3000\u708E\u9B54\u6CD5\u3000\u5A01\u529B10"
+  description: "\u706B\u306E\u7389\u3092\u6295\u3052\u308B\u3002\nMP2\u3000\u708E\u9B54\u6CD5\u3000\u5A01\u529B10"
   icon: {fileID: 8885571523614577088, guid: e51cf823cc9baf54b9117e1e4e2f4810, type: 3}
   Minfloor: 1
   Minstep: 1
@@ -26,6 +26,9 @@ MonoBehaviour:
   healAmount: 0
   mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -35,6 +38,9 @@ MonoBehaviour:
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []

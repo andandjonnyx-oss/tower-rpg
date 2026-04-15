@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: BOSS_F30_VICTORY
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: BOSS_F30_VICTORY
+  floor: 0
+  step: 0
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u304A\u3081\u3067\u3068\u3046\uFF01\n\u52FF\u8AD6\u4E00\u767A\u30AF\u30EA\u30A2\u3057\u305F\u3088\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u6B63\u76F4\u554F\u984C\u306F15\u554F\u3057\u304B\u7528\u610F\u3057\u3066\u306A\u3044\u304B\u3089\u3001\n\u30B3\u30F3\u30C6\u30A3\u30CB\u30E5\u30FC\u3068\u304B\u3055\u308C\u308B\u3068\u3059\u3050\u306B\u91CD\u8907\u3060\u3089\u3051\u306B\u306A\u308B\u3093\u3060\u3088\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u307E\u305F\u30AF\u30A4\u30BA\u30A4\u30D9\u30F3\u30C8\u306F\u767A\u751F\u3059\u308B\u304B\u3082\u3057\u308C\u306A\u3044\u304B\u3089\u3001\n\u3053\u308C\u304B\u3089\u3082\u79C1\u306E\u8A71\u306F\u3061\u3083\u3093\u3068\u805E\u3044\u3066\u304A\u3051\u3088\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

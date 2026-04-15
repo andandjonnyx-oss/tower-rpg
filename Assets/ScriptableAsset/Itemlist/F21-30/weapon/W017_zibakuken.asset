@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W017_zibakuken
   itemName: "\u30DC\u30F3\u30D0\u30FC\u30D6\u30EC\u30FC\u30C9"
-  description: "\u81EA\u7206\u3057\u305F\u304F\u306A\u308B\u546A\u3044\u304C\u304B\u3051\u3089\u308C\u3066\u3044\u308B\n\uFF08\u5B9F\u969B\u306B\u7A81\u7136\u81EA\u7206\u3057\u305F\u308A\u306F\u3057\u307E\u305B\u3093\uFF09\n\u653B\u6483+50
+  description: "\u81EA\u7206\u3057\u305F\u304F\u306A\u308B\u546A\u3044\u304C\u304B\u3051\u3089\u308C\u3066\u3044\u308B\n\uFF08\u5B9F\u969B\u306B\u7A81\u7136\u81EA\u7206\u3057\u305F\u308A\u306F\u3057\u307E\u305B\u3093\uFF09\n\u653B\u6483+60
     \u708E\u8010\u6027-100\n\u30B9\u30AD\u30EB\uFF1A\u81EA\u7206\uFF01\uFF01\uFF01\uFF01\uFF01\u3000"
   icon: {fileID: 0}
   Minfloor: 26
@@ -43,7 +43,7 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   weaponAttribute: 1
-  attackPower: 50
+  attackPower: 60
   skills:
   - {fileID: 11400000, guid: a5965bcea58a0e74d8e0de1e5d31c25e, type: 2}
   weaponInflictEffect: 0

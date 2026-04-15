@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M034_mikawasi
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M034_mikawasi
+  itemName: "\u307F\u304B\u308F\u3057\u306E\u670D"
+  description: "\u7F8E\u5DDD\u6C0F\u306E\u7740\u3066\u3044\u305F\u670D\u3002\n\u56DE\u907F\u7387+20
+    HP-100 \u9632\u5FA1\u9B54\u6CD5\u9632\u5FA1-50"
+  icon: {fileID: 0}
+  Minfloor: 21
+  Minstep: 1
+  Maxfloor: 26
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects:
+  - effectType: 12
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 0
+    floatValue: 20
+  - effectType: 3
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -100
+    floatValue: 0
+  - effectType: 6
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -50
+    floatValue: 0
+  - effectType: 8
+    targetAttribute: 0
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -50
+    floatValue: 0
+  sortOrder: 34

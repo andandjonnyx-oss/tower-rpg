@@ -22,7 +22,7 @@ public partial class BattleSceneController
     ///   90 × (1 - (20-10)/100) = 90 × 0.9 = 81%
     ///
     /// 例: 基礎命中率95%、命中力30、敵回避力10 の場合
-    ///   95 × (1 - (10-30)/100) = 95 × 1.2 = 114% → 95%にクランプ
+    ///   回避率 = Max(0, 10-30) = 0 → 95 × 1.0 = 95%（基礎命中率が上限）
     /// </summary>
     /// <param name="baseHitRate">スキルまたは武器の基礎命中率（%）</param>
     /// <returns>true: 命中、false: ミス</returns>
@@ -37,10 +37,12 @@ public partial class BattleSceneController
             buffState.enemy.matk.IsBuffed, buffState.enemy.matk.buffRate,
             buffState.enemy.matk.IsDebuffed, buffState.enemy.matk.debuffRate);
 
-        float hitChance = baseHitRate * (1f - (enemyEvasion - playerAccuracy) / 100f);
+        // 回避率 = 敵回避力 - プレイヤー命中力（負の値にはならない＝命中力で基礎命中率を超えない）
+        float evasionRate = Mathf.Max(0f, enemyEvasion - playerAccuracy);
+        float hitChance = baseHitRate * (1f - evasionRate / 100f);
 
         if (hitChance < 25f) hitChance = 25f;
-        if (hitChance > 100f) hitChance = 100f;
+        if (hitChance > baseHitRate) hitChance = baseHitRate;
 
         float roll = Random.Range(0f, 100f);
         bool hit = roll < hitChance;

@@ -657,8 +657,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecdd08b1f560bf4db5206151d58a808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorButton
-  requiredFloor: 3
-  startFloor: 3
+  requiredFloor: 21
+  startFloor: 21
   towerSceneName: Tower
 --- !u!1 &1128165901
 GameObject:

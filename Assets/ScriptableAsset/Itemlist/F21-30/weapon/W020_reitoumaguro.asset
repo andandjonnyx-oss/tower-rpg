@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W020_reitoumaguro
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W020_reitoumaguro
+  itemName: "\u51B7\u51CD\u30DE\u30B0\u30ED"
+  description: "\u2026\u2026\u3069\u3046\u3084\u3063\u3066\u98DF\u3079\u308B\u3064\u3082\u308A\u3060\uFF1F\n\u653B\u6483\u529B+50
+    \u6C37\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30012\u500D\u300150\uFF05\u6C17\u7D76\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 26
+  Minstep: 1
+  Maxfloor: 30
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 1
+  eatHealAmount: 200
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  weaponAttribute: 0
+  attackPower: 50
+  skills:
+  - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances:
+  - attribute: 4
+    value: 50
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 20

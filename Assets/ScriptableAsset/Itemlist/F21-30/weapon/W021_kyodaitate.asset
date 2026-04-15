@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W021_kyodaitate
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W021_kyodaitate
+  itemName: "\u5DE8\u5927\u306A\u76FE"
+  description: "\u653B\u6483\u529B\u306F\u7121\u3044\u304C\u9632\u5FA1\u9762\u306B\u512A\u308C\u308B\u3002\n\u9B54\u6CD5\u4F7F\u3044\u304C\u4F7F\u3046\u4ED6\u3001\u529B\u81EA\u6162\u304C\u4F7F\u3046\u3053\u3068\u3082\u3002\n\u653B\u6483+0
+    \u9632\u5FA1\u9B54\u6CD5\u9632\u5FA1+30 \u6BB4\u65AC\u7A81\u8010\u6027+30\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30012\u500D\u300150\uFF05\u6C17\u7D76\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 24
+  Minstep: 1
+  Maxfloor: 27
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills:
+  - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 30
+  equipMagicAttack: 0
+  equipMagicDefense: 30
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances:
+  - attribute: 0
+    value: 30
+  - attribute: 1
+    value: 30
+  - attribute: 2
+    value: 30
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 21

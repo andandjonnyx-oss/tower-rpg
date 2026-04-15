@@ -22,6 +22,8 @@ MonoBehaviour:
   damageMultiplier: 10
   bonusDamage: 0
   randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
   mpCost: 20
