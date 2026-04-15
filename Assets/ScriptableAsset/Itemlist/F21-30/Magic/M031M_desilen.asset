@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: M031M_desilen
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M31M_desilen
+  itemId: M031M_desilen
   itemName: "\u30C7\u30B5\u30A4\u30EC\u30F3"
   description: "MP0\u3067\u6C88\u9ED9\u3092\u56DE\u5FA9\uFF01(\u7B11)"
   icon: {fileID: 0}

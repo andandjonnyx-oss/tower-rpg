@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F30_S19_boss
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F30_S19_boss
+  floor: 30
+  step: 19
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u6B21\u306E\u30DC\u30B9\u306F\u77E5\u8B58\u3092\u8A66\u3059\u305C\uFF01\n\u305D\u308A\u3083\u8A66\u7DF4\u306E\u5854\u3060\u3082\u3093\u306A\u3001\u8272\u3093\u306A\u8A66\u7DF4\u304C\u3042\u308B\u3088\u306A\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30EB\u30FC\u30EB\u306F\u7C21\u5358\u30022\u629E\u30AF\u30A4\u30BA\u304C\u51FA\u3055\u308C\u308B\u304B\u3089\u7B54\u3048\u308B\u3060\u3051\u3002\n10\u554F\u6B63\u89E3\u3067\u30AF\u30EA\u30A2\u30013\u554F\u4E0D\u6B63\u89E3\u3067\u6557\u5317\u3060\u3002\n\u79C1\u306E\u8A71\u3092\u3061\u3083\u3093\u3068\u805E\u3044\u3066\u308C\u3070\u4F59\u88D5\u3060\u3088\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

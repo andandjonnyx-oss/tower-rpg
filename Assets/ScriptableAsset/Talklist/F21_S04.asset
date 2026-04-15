@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
   m_Name: F21_S04
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
-  id: F21_S02
+  id: F21_S04
   floor: 21
   step: 4
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}

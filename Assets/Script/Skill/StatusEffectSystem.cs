@@ -216,14 +216,24 @@ public static class StatusEffectSystem
     /// <summary>
     /// プレイヤーの指定状態異常の耐性値を返す。
     /// 装備品（100%反映）＋パッシブ（重複ルール適用）の合算。
+    ///
+    /// Down系（デバフ）が指定された場合は StatusEffect.Debuff の耐性を返す。
+    /// これにより、デバフ耐性を装備/パッシブで設定すれば
+    /// ATK/DEF/MATK/MDEF/LUC の全デバフに対して一括で耐性が適用される。
     /// </summary>
     public static int GetPlayerResistance(StatusEffect effect)
     {
-        int equipRes = EquipmentCalculator.GetStatusEffectResistance(effect);
-        int passiveRes = PassiveCalculator.CalcStatusEffectResistance(effect);
+        // Down系はすべて Debuff（一括耐性）に変換する
+        StatusEffect resistKey = effect;
+        if (IsDebuff(effect))
+        {
+            resistKey = StatusEffect.Debuff;
+        }
+
+        int equipRes = EquipmentCalculator.GetStatusEffectResistance(resistKey);
+        int passiveRes = PassiveCalculator.CalcStatusEffectResistance(resistKey);
         return equipRes + passiveRes;
     }
-
     // =========================================================
     // 汎用：敵の状態異常耐性取得
     // =========================================================

@@ -35,16 +35,20 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
+  DebuffResistance: 90
   immuneToAllAilments: 0
   attributeResistances: []
   Exp: 0
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
   Help: 
   actions:
-  - skill: {fileID: 11400000, guid: 908e3625197f9ae48a6c73dceefa5850, type: 2}
-    threshold: 50
   - skill: {fileID: 11400000, guid: aaa2faaecc061f14998aa198f3f23c58, type: 2}
     threshold: 100
   baseActionRange: 100

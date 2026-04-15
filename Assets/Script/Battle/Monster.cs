@@ -88,6 +88,12 @@ public class Monster : ScriptableObject
            + "100 = 沈黙完全耐性。")]
     public int SilenceResistance = 0;
 
+    [Tooltip("敵のデバフ耐性値（0〜100）。\n"
+           + "ATK/DEF/MATK/MDEF/LUC の全デバフに対して一律で適用される。\n"
+           + "デバフの実質命中率 = 基礎命中率 × (1 - DebuffResistance/100)\n"
+           + "100 = 全デバフ完全耐性。")]
+    public int DebuffResistance = 0;
+
     [Header("Status Effect Resistance")]
     [Tooltip("ONにすると全状態異常に完全耐性（100扱い）になる。\n"
        + "メタル系・ボス等の状態異常完全無効に使用。\n"
@@ -125,6 +131,7 @@ public class Monster : ScriptableObject
     /// <summary>
     /// 指定された状態異常に対する耐性値を返す。
     /// 個別フィールドを switch で切り替えて返す。
+    /// Down系（デバフ）はすべて DebuffResistance を返す。
     /// 未定義の状態異常は 0（耐性なし）を返す。
     /// </summary>
     public int GetStatusEffectResistance(StatusEffect effect)
@@ -140,6 +147,18 @@ public class Monster : ScriptableObject
             case StatusEffect.Blind: return BlindResistance;
             case StatusEffect.Rage: return RageResistance;
             case StatusEffect.Silence: return SilenceResistance;
+
+            // デバフ全体（耐性カテゴリ）
+            case StatusEffect.Debuff: return DebuffResistance;
+
+            // Down系（個別デバフ）→ DebuffResistance で一括耐性
+            case StatusEffect.DefenseDown:
+            case StatusEffect.AttackDown:
+            case StatusEffect.MagicAttackDown:
+            case StatusEffect.MagicDefenseDown:
+            case StatusEffect.LuckDown:
+                return DebuffResistance;
+
             default: return 0;
         }
     }
