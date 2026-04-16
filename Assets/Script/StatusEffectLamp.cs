@@ -231,8 +231,22 @@ public class StatusEffectLamp : MonoBehaviour
         SetLuckUp(lucUp);
     }
 
-    /// <summary>全ランプをまとめて設定する（Phase5: 15引数 — 沈黙対応）。</summary>
+    /// <summary>全ランプをまとめて設定する（Phase5: 15引数 — 沈黙対応、石化は false 固定）。後方互換用。</summary>
     public void SetAll(bool poison, bool paralyze, bool blind, bool rage, bool silence,
+                       bool defDown, bool defUp,
+                       bool atkDown, bool atkUp,
+                       bool matkDown, bool matkUp,
+                       bool mdefDown, bool mdefUp,
+                       bool lucDown, bool lucUp)
+    {
+        SetAll(poison, paralyze, blind, rage, silence, false,
+               defDown, defUp, atkDown, atkUp,
+               matkDown, matkUp, mdefDown, mdefUp,
+               lucDown, lucUp);
+    }
+
+    /// <summary>全ランプをまとめて設定する（Phase C: 16引数 — 沈黙+石化+バフ/デバフ全対応）。</summary>
+    public void SetAll(bool poison, bool paralyze, bool blind, bool rage, bool silence, bool petrify,
                        bool defDown, bool defUp,
                        bool atkDown, bool atkUp,
                        bool matkDown, bool matkUp,
@@ -244,7 +258,7 @@ public class StatusEffectLamp : MonoBehaviour
         SetBlind(blind);
         SetRage(rage);
         SetSilence(silence);
-        SetPetrify(false);
+        SetPetrify(petrify);
         SetDefenseDown(defDown);
         SetDefenseUp(defUp);
         SetAttackDown(atkDown);

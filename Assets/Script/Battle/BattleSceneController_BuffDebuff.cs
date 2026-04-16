@@ -107,6 +107,7 @@ public partial class BattleSceneController
     /// <summary>
     /// バフ/デバフランプのUI表示を更新する。
     /// RefreshBattleStatusEffectUI() から呼ばれる。
+    /// Phase C: 16引数版 SetAll に変更し、石化ランプも反映する。
     /// </summary>
     public void RefreshBuffDebuffLamps()
     {
@@ -118,6 +119,7 @@ public partial class BattleSceneController
                 GameState.I.isBlind,
                 playerRageTurn > 0,
                 GameState.I.isSilenced,
+                GameState.I.isPetrified,
                 buffState.player.def.IsDebuffed,
                 buffState.player.def.IsBuffed,
                 buffState.player.atk.IsDebuffed,
@@ -139,6 +141,7 @@ public partial class BattleSceneController
                 enemyIsBlind,
                 enemyRageTurn > 0,
                 enemyIsSilenced,
+                EnemyIsPetrified,
                 buffState.enemy.def.IsDebuffed,
                 buffState.enemy.def.IsBuffed,
                 buffState.enemy.atk.IsDebuffed,
