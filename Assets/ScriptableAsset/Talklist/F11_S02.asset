@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: F11_S02
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: F11_S02
+  zukanTitle: 
   floor: 11
   step: 2
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
@@ -26,7 +27,7 @@ MonoBehaviour:
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "\u3053\u308C\u304C\u3053\u306E\u9858\u3044\u3068\u8A66\u7DF4\u306E\u5854\u306E\u30B3\u30F3\u30BB\u30D7\u30C8\u3060\uFF01\n\u3053\u308C\u3084\u308B\u304B\u3089\u6C17\u5F35\u3063\u3066\u884C\u3051\u3088\uFF01"
+    text: "\u3053\u308C\u304C\u3053\u306E\u8A66\u7DF4\u3068\u9858\u3044\u306E\u5854\u306E\u30B3\u30F3\u30BB\u30D7\u30C8\u3060\uFF01\n\u3053\u308C\u3084\u308B\u304B\u3089\u6C17\u5F35\u3063\u3066\u884C\u3051\u3088\uFF01"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []

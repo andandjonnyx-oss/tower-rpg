@@ -229,6 +229,7 @@ public class MonsterStatusView : MonoBehaviour
                     case MonsterActionType.Idle: actionTypeName = "[待機]"; break;
                     case MonsterActionType.SkillAttack: actionTypeName = "[スキル]"; break;
                     case MonsterActionType.Preemptive: actionTypeName = "[先制]"; break;
+                    case MonsterActionType.FoodRaid: actionTypeName = "[食い荒らし]"; break;
                     default: actionTypeName = ""; break;
                 }
             }

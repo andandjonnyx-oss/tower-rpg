@@ -31,6 +31,13 @@
 ///   攻撃力に RageAttackMultiplier（1.5倍）を乗算。
 ///   AfterEnemyAction で怒りターンカウントダウン。
 ///
+/// 【食い荒らし（FoodRaid）】
+///   プレイヤーの消費アイテム(Consumable)からランダムに1つを食べる。
+///   攻撃アイテム(battleDamage > 0)なら「まずい!」敵に最大HP半分のダメージ(即死可)。
+///   それ以外なら「うまい!」敵は最大HP半分を回復(MaxHpでクランプ)。
+///   所持消費アイテム0の場合は不発メッセージのみ。
+///   命中判定・防御・耐性・バフは一切適用しない。
+///
 /// 【多段攻撃の命中判定ルール】
 ///   hitCount > 1 の多段攻撃スキルでは、スキル発動自体は100%確定。
 ///   各ヒットごとに個別に命中/回避判定を行う。
@@ -128,15 +135,15 @@ public partial class BattleSceneController
             }
         }
 
-// =========================================================
-// クイズボス分岐（追加）
-// クイズボスの場合は通常行動をスキップしてクイズを出題する。
-// =========================================================
-            if (IsQuizBoss())
-            {
-                StartQuizTurn();
-                return;
-            }
+        // =========================================================
+        // クイズボス分岐（追加）
+        // クイズボスの場合は通常行動をスキップしてクイズを出題する。
+        // =========================================================
+        if (IsQuizBoss())
+        {
+            StartQuizTurn();
+            return;
+        }
 
 
 
@@ -375,6 +382,7 @@ public partial class BattleSceneController
 #pragma warning restore 0618
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttack(action.skill); break;
             case MonsterActionType.Preemptive: ExecuteEnemySkillAttack(action.skill); break;
+            case MonsterActionType.FoodRaid: ExecuteEnemyFoodRaid(action.skill); break;
             case MonsterActionType.Idle: ExecuteEnemyIdle(action.skill); break;
             default: ExecuteEnemyIdle(action.skill); break;
         }
@@ -720,6 +728,108 @@ public partial class BattleSceneController
     {
         string actionName = !string.IsNullOrEmpty(skill.skillName) ? skill.skillName : "様子を見ている";
         AddLog($"{enemyMonster.Mname} は{actionName}…");
+        AfterEnemyAction();
+    }
+
+    // =========================================================
+    // 食い荒らし (FoodRaid)
+    // =========================================================
+
+    /// <summary>
+    /// 敵の食い荒らし行動。
+    /// プレイヤーの所持消費アイテム(Consumable)からランダムに1つを食べる。
+    ///
+    /// 処理フロー:
+    ///   1. ItemBoxManager から Consumable カテゴリの所持品を列挙
+    ///   2. 0個 → 不発ログ「道具袋を漁ったが、不満そうに戻って行った……」
+    ///   3. 1個以上 → ランダムに1つ選択
+    ///   4. 選ばれたアイテムの IsBattleAttackItem(battleDamage>0) で分岐:
+    ///      - true  → 「まずい！」敵は MaxHp/2 のダメージ(クランプなし・即死可)
+    ///      - false → 「うまい！」敵は MaxHp/2 を回復(MaxHp でクランプ)
+    ///   5. アイテムを RemoveItem で削除(transformInto は参照しない)
+    ///   6. AfterEnemyAction で勝敗判定・ターン終了処理
+    ///
+    /// 仕様:
+    ///   - 命中判定なし(必中)
+    ///   - 防御ダイス・属性耐性・バフ/デバフ一切なし
+    ///   - 追加効果(additionalEffects)は実行しない
+    ///   - 多段攻撃とは非対応(hitCount無視)
+    ///   - SkillData.skillName は不発・成功ログのどちらにも使用しない
+    ///     (行動名は「食い荒らし」「道具袋を漁った」等でハードコード)
+    /// </summary>
+    private void ExecuteEnemyFoodRaid(SkillData skill)
+    {
+        // プレイヤーの消費アイテムを列挙
+        var pool = new System.Collections.Generic.List<InventoryItem>();
+        if (ItemBoxManager.Instance != null)
+        {
+            var items = ItemBoxManager.Instance.GetItems();
+            if (items != null)
+            {
+                for (int i = 0; i < items.Count; i++)
+                {
+                    var inv = items[i];
+                    if (inv == null || inv.data == null) continue;
+                    if (inv.data.category == ItemCategory.Consumable)
+                    {
+                        pool.Add(inv);
+                    }
+                }
+            }
+        }
+
+        // 不発: 消費アイテムを持っていない
+        if (pool.Count == 0)
+        {
+            AddLog($"{enemyMonster.Mname} は突然道具袋を漁ったが、不満そうに戻って行った……");
+            Debug.Log($"[Battle] FoodRaid: {enemyMonster.Mname} - no consumable items (miss)");
+            AfterEnemyAction();
+            return;
+        }
+
+        // ランダムに1つ選択
+        int pick = Random.Range(0, pool.Count);
+        InventoryItem target = pool[pick];
+        string itemName = target.data.itemName;
+
+        // 共通ログ: 「〇〇は△△を食べてしまった！」
+        AddLog($"{enemyMonster.Mname}は{itemName}を食べてしまった！");
+
+        // アイテム効果による分岐
+        int half = enemyMonster.MaxHp / 2;
+        if (half < 1) half = 1; // 念のため最低値保証(MaxHpが1の特殊モンスター対策)
+
+        if (target.data.IsBattleAttackItem)
+        {
+            // 攻撃アイテム → まずい！ ダメージ(クランプなし、即死可)
+            enemyCurrentHp -= half;
+            // 下限クランプは行わない(enemyCurrentHp が負になっても AfterEnemyAction で勝利判定される)
+            AddLog($"まずい！　{half}のダメージ！");
+            Debug.Log($"[Battle] FoodRaid: {enemyMonster.Mname} ate {itemName} (attack) -> {half} damage, HP now {enemyCurrentHp}");
+        }
+        else
+        {
+            // 回復系アイテム → うまい！ 回復(MaxHpでクランプ)
+            int healed = half;
+            if (enemyCurrentHp + healed > enemyMonster.MaxHp)
+            {
+                healed = enemyMonster.MaxHp - enemyCurrentHp;
+                if (healed < 0) healed = 0;
+            }
+            enemyCurrentHp += healed;
+            AddLog($"うまい！　HPを{healed}回復！");
+            Debug.Log($"[Battle] FoodRaid: {enemyMonster.Mname} ate {itemName} (non-attack) -> {healed} heal, HP now {enemyCurrentHp}");
+        }
+
+        // アイテムを消費(transformInto は参照しない: 純粋に消えるだけ)
+        if (ItemBoxManager.Instance != null)
+        {
+            ItemBoxManager.Instance.RemoveItem(target);
+        }
+
+        // HP変化を UI に反映
+        RefreshBattleStatusEffectUI();
+
         AfterEnemyAction();
     }
 

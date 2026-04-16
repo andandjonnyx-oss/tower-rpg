@@ -49,6 +49,6 @@ MonoBehaviour:
   quizDatabase: {fileID: 0}
   Help: 
   actions:
-  - skill: {fileID: 11400000, guid: aaa2faaecc061f14998aa198f3f23c58, type: 2}
+  - skill: {fileID: 11400000, guid: b82ae25a62bdc704ca961477d99fe7b8, type: 2}
     threshold: 100
   baseActionRange: 100

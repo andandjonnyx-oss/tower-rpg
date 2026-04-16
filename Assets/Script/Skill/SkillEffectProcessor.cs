@@ -82,6 +82,10 @@ public static class SkillEffectProcessor
             {
                 ProcessRecoil(entry, isPlayerAttack, lastDamageDealt, logs);
             }
+            else if (entry.effectData is MpDamageEffectData)
+            {
+                ProcessMpDamage(entry, isPlayerAttack, logs);
+            }
             else
             {
                 Debug.LogWarning($"[SkillEffectProcessor] 未対応の効果タイプ: " +
@@ -991,5 +995,51 @@ public static class SkillEffectProcessor
         {
             Debug.Log("[SkillEffectProcessor] 敵→敵自身の反動ダメージは未実装");
         }
+    }
+
+    // =========================================================
+    // MPダメージ（敵→プレイヤーのみ）
+    // =========================================================
+
+    /// <summary>
+    /// MPダメージ効果を処理する。
+    /// 敵→プレイヤー方向のみ有効（プレイヤー→敵は発動しない）。
+    ///
+    /// 【仕様】
+    ///   - 固定値（entry.intValue）でそのまま削る
+    ///   - MDEFで軽減されない（素通し）
+    ///   - MP0でクランプ（マイナスにならない）
+    ///   - 発動率は entry.chance（%）
+    ///   - 既にMP0の場合: ログなしでスキップ（自然な演出のため）
+    /// </summary>
+    private static void ProcessMpDamage(
+        SkillEffectEntry entry,
+        bool isPlayerAttack,
+        List<string> logs)
+    {
+        // プレイヤー→敵方向は発動しない（敵にMP概念なし、ログも出さない）
+        if (isPlayerAttack) return;
+
+        // 発動率判定
+        if (entry.chance < 100)
+        {
+            int roll = Random.Range(0, 100);
+            if (roll >= entry.chance) return;
+        }
+
+        if (GameState.I == null) return;
+
+        int damage = (entry.intValue > 0) ? entry.intValue : 0;
+        if (damage <= 0) return;
+
+        int before = GameState.I.currentMp;
+        if (before <= 0) return; // 既にMP0なら何もしない（ログも出さない）
+
+        int after = Mathf.Max(0, before - damage);
+        GameState.I.currentMp = after;
+        int actual = before - after;
+
+        logs.Add($"You のMPが {actual} 減った！");
+        Debug.Log($"[SkillEffectProcessor] MPダメージ: {before} → {after} (-{actual})");
     }
 }
