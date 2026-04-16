@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 031_kumabati
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 031_kumabati
+  Mname: "\u30AF\u30DE\u30D0\u30C1"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 31
+  Minstep: 1
+  Maxfloor: 35
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 450
+  Attack: 70
+  Defense: 40
+  MagicDefense: 0
+  Speed: 0
+  Luck: 20
+  Evasion: 100
+  BaseHitRate: 90
+  PoisonResistance: 100
+  StunResistance: 0
+  ParalyzeResistance: 100
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  DebuffResistance: 0
+  immuneToAllAilments: 0
+  attributeResistances: []
+  Exp: 700
+  Gold: 0
+  dropItem: {fileID: 11400000, guid: 21428ac2c0101b34e8c0e68d37ac37ca, type: 2}
+  dropRate: 0.3
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u98DB\u3093\u3067\u308B\u306E\u306F\u57FA\u672C\u30AA\u30B9\u3060\u304B\u3089\u91DD\u304C\u7121\u3044\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 10
+  - skill: {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
+    threshold: 40
+  - skill: {fileID: 11400000, guid: 5d10b5aaa14183c49b4ad98cb420fd43, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 4a6769b59eb409a4a9c35760150f2344, type: 2}
+    threshold: 100
+  baseActionRange: 100

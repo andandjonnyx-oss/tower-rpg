@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: SA013_mahinattacksasi
+  m_Name: SA023_pararastr
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: SA013_mahinattacksasi
+  skillId: SA023_mahinattackstr
   skillName: "\u30D1\u30E9\u30E9\u30A2\u30BF\u30C3\u30AF"
-  description: "\u523A"
+  description: "\u6BB4"
   skillSource: 0
   actionType: 2
-  skillAttribute: 2
+  skillAttribute: 0
   damageCategory: 0
   damageMultiplier: 1
   bonusDamage: 0
