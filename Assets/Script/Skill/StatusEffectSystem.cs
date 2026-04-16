@@ -15,6 +15,10 @@ using UnityEngine;
 ///   暗闇（Blind）:
 ///     戦闘中: プレイヤーが暗闇→敵の回避力2倍、敵が暗闇→基礎命中率半分
 ///     塔移動中: 背景が暗転、10%で自然治癒
+///   石化（Petrify）:
+///     戦闘中: DEF/MDEF倍率増加、残0で敗北（Phase B 実装済み）
+///     塔移動中: 10%で残ターン-1（自然治癒ではない専用処理）、残0で30秒ロック
+///     自然治癒の対象外。専用アイテム/スキルでのみ解除可能（Phase D）
 ///
 /// 【戦闘限定デバフ】（BattleSceneController側で管理）
 ///   気絶（Stun）:
@@ -90,6 +94,13 @@ public static class StatusEffectSystem
 
     /// <summary>バフ/デバフの持続ターン数のデフォルト値。SkillEffectEntry.duration が 0 の場合に使用。</summary>
     public const int DefaultBuffDebuffDuration = 5;
+
+    // =========================================================
+    // 石化の塔歩行定数（Phase C 追加）
+    // =========================================================
+
+    /// <summary>塔移動中に石化残ターンが進行する確率（%）。自然治癒ではなく専用処理。</summary>
+    private const float TowerPetrifyProgressChance = 10f;
 
     // =========================================================
     // バフ/デバフ: 全ペアの定義
@@ -474,12 +485,19 @@ public static class StatusEffectSystem
     /// 各状態異常の自然治癒判定を行い、ログメッセージを返す。
     /// 毒ダメージの適用もここで行う。
     ///
-    /// 麻痺の移動遅延・暗闇の背景暗転は呼び出し元（TowerState）で処理する。
+    /// 麻痺の移動遅延・暗闘の背景暗転は呼び出し元（TowerState）で処理する。
+    ///
+    /// Phase C 追加: 石化の歩行進行処理。
+    /// 10% の確率で残ターン-1。自然治癒ではなく専用処理。
+    /// 残ターンが 0 に到達した場合、petrifyReachedZero = true を返す。
+    /// 呼び出し元（TowerState）が 30 秒ロックを発動する。
     /// </summary>
     /// <param name="logs">出力: 表示用ログメッセージのリスト</param>
-    public static void ApplyTowerStepEffects(out List<string> logs)
+    /// <param name="petrifyReachedZero">出力: 石化残ターンが 0 に到達したか</param>
+    public static void ApplyTowerStepEffects(out List<string> logs, out bool petrifyReachedZero)
     {
         logs = new List<string>();
+        petrifyReachedZero = false;
         var gs = GameState.I;
         if (gs == null) return;
 
@@ -530,6 +548,45 @@ public static class StatusEffectSystem
             }
         }
 
+        // --- 石化: 10% で残ターン-1（Phase C 追加） ---
+        // 自然治癒対象外。TryNaturalCure() は使わない。
+        // 専用の確率判定で残ターンを減らす。
+        if (gs.isPetrified && gs.playerPetrifyTurns > 0)
+        {
+            float roll = Random.Range(0f, 100f);
+            bool progressed = roll < TowerPetrifyProgressChance;
+            Debug.Log($"[StatusEffect] TowerPetrifyProgress: chance={TowerPetrifyProgressChance}% " +
+                      $"roll={roll:F2} progressed={progressed}");
+
+            if (progressed)
+            {
+                gs.playerPetrifyTurns--;
+                if (gs.playerPetrifyTurns <= 0)
+                {
+                    // 残ターン 0 到達 → 呼び出し元で 30 秒ロック発動
+                    petrifyReachedZero = true;
+                    logs.Add("石化が完成した！");
+                    Debug.Log("[StatusEffect] Tower petrify reached zero!");
+                }
+                else
+                {
+                    logs.Add($"石化が進行した…（残り{gs.playerPetrifyTurns}ターン）");
+                }
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 後方互換用: out 引数なしの旧シグネチャ。
+    /// petrifyReachedZero を捨てる場合に使う。
+    /// ※ TowerState の呼び出し元を新シグネチャに更新した後は不要だが、
+    ///   他の呼び出し元があった場合に備えて残す。
+    /// </summary>
+    public static void ApplyTowerStepEffects(out List<string> logs)
+    {
+        bool dummy;
+        ApplyTowerStepEffects(out logs, out dummy);
     }
 
     // =========================================================

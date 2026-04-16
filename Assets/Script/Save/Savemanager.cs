@@ -78,6 +78,11 @@ public static class SaveManager
             data.isPoisoned = GameState.I.isPoisoned;
             data.isSilenced = GameState.I.isSilenced;
 
+            // 石化（Phase C 追加）
+            data.playerIsPetrified = GameState.I.isPetrified;
+            data.playerPetrifyTurns = GameState.I.playerPetrifyTurns;
+            data.playerPetrifyMaxTurns = GameState.I.playerPetrifyMaxTurns;
+
         }
 
         // --- ItemBoxManager（所持品）から収集 ---
@@ -203,6 +208,7 @@ public static class SaveManager
             // 「街に戻る = 全回復（状態異常含む）」で統一。
             // 以前は isPoisoned を復元していたが、
             // ロードは常に街（Main）スタートなので全クリアが正しい。
+            // 石化もここでクリアされる（ClearAllStatusEffects が石化リセットを含む）。
             GameState.I.ClearAllStatusEffects();
         }
 
@@ -289,6 +295,13 @@ public class SaveData
     // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
     public bool isPoisoned = false;
     public bool isSilenced = false;
+
+    // --- 石化（Phase C 追加） ---
+    // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
+    // 既存セーブデータとの互換性: JSON デシリアライズのデフォルト値（false/0）で自動対応。
+    public bool playerIsPetrified = false;
+    public int playerPetrifyTurns = 0;
+    public int playerPetrifyMaxTurns = 0;
 
 
     // --- 既読イベントID一覧 ---

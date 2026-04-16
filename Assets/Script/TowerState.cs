@@ -34,7 +34,8 @@ public class TowerState : MonoBehaviour
     [Tooltip("麻痺待機中に全タッチ操作をブロックする透明パネル。\n"
        + "Canvas の最前面に配置し、Raycast Target = true にする。\n"
        + "初期状態は非表示にしておくこと。\n"
-       + "未設定の場合は進むボタンのみ無効化する。")]
+       + "未設定の場合は進むボタンのみ無効化する。\n"
+       + "石化ロック時にも流用する。")]
     [SerializeField] private GameObject paralyzeBlocker;
 
 
@@ -72,6 +73,9 @@ public class TowerState : MonoBehaviour
     /// <summary>麻痺待機中かどうか。二重実行防止用。</summary>
     private bool isParalyzeWaiting = false;
 
+    /// <summary>石化ロック中かどうか。二重実行防止用。（Phase C 追加）</summary>
+    private bool isPetrifyLocked = false;
+
     private void Start()
     {
         var gs = GameState.I;
@@ -93,6 +97,9 @@ public class TowerState : MonoBehaviour
 
         if (TowerItemTrigger.Instance != null && TowerItemTrigger.Instance.IsBusy)
             return;
+
+        // 石化ロック中は操作不可（Phase C 追加）
+        if (isPetrifyLocked) return;
 
         // =========================================================
         // 麻痺チェック（Phase3 追加）
@@ -167,9 +174,11 @@ public class TowerState : MonoBehaviour
         // =========================================================
         // 状態異常ステップ処理（Phase3: ApplyTowerStepEffects に統合）
         // 毒ダメージ + 全状態異常の自然治癒を一括処理する。
+        // Phase C: 石化の歩行進行処理も含む。残0到達時は 30 秒ロック発動。
         // =========================================================
         List<string> stepLogs;
-        StatusEffectSystem.ApplyTowerStepEffects(out stepLogs);
+        bool petrifyReachedZero;
+        StatusEffectSystem.ApplyTowerStepEffects(out stepLogs, out petrifyReachedZero);
 
         if (stepLogs.Count > 0)
         {
@@ -181,6 +190,13 @@ public class TowerState : MonoBehaviour
             RefreshStatusEffectUI();
             RefreshBlindOverlay(); // Phase3: 暗闇治癒の反映
             SaveManager.Save(); // 状態異常変化後にセーブ
+        }
+
+        // 石化残0到達 → 30秒ロック発動（Phase C 追加）
+        if (petrifyReachedZero)
+        {
+            StartCoroutine(PetrifyLockCoroutine());
+            return; // ロック中は以降の処理（会話・エンカウント等）をスキップ
         }
 
         // 階層進行を即時セーブ
@@ -215,6 +231,67 @@ public class TowerState : MonoBehaviour
 
     }
 
+    // =========================================================
+    // 石化30秒ロックコルーチン（Phase C 追加）
+    // =========================================================
+
+    /// <summary>
+    /// 石化の残ターンが塔歩行中に 0 に到達した時の 30 秒ロック。
+    /// paralyzeBlocker を流用して全操作をブロックし、
+    /// 30 秒後に石化を解除して通常状態に復帰する。
+    ///
+    /// 注意:
+    ///   magicLogHideCoroutine が動いている場合は停止して、
+    ///   ロックメッセージが消えないようにする。
+    /// </summary>
+    private IEnumerator PetrifyLockCoroutine()
+    {
+        isPetrifyLocked = true;
+
+        // ログ自動消去コルーチンを停止（競合防止）
+        if (magicLogHideCoroutine != null)
+        {
+            StopCoroutine(magicLogHideCoroutine);
+            magicLogHideCoroutine = null;
+        }
+
+        // 全操作ブロック
+        if (paralyzeBlocker != null) paralyzeBlocker.SetActive(true);
+        if (advanceButton != null) advanceButton.interactable = false;
+
+        // ロックメッセージ表示
+        if (magicLogText != null)
+            magicLogText.text = "石化が完成した！ 30秒間動けない…";
+
+        Debug.Log("[Tower] 石化ロック開始: 30秒間操作不可");
+
+        yield return new WaitForSeconds(30f);
+
+        // 石化を解除
+        if (GameState.I != null)
+        {
+            GameState.I.isPetrified = false;
+            GameState.I.playerPetrifyTurns = 0;
+            GameState.I.playerPetrifyMaxTurns = 0;
+        }
+
+        // ブロック解除
+        if (paralyzeBlocker != null) paralyzeBlocker.SetActive(false);
+        if (advanceButton != null) advanceButton.interactable = true;
+
+        // ログクリア
+        if (magicLogText != null)
+            magicLogText.text = "";
+
+        isPetrifyLocked = false;
+
+        // UI 更新 + セーブ
+        RefreshStatusEffectUI();
+        SaveManager.Save();
+
+        Debug.Log("[Tower] 石化ロック解除: 石化クリア、操作復帰");
+    }
+
     private void RefreshUI()
     {
         if (floorText != null) floorText.text = $"{Floor}階";
@@ -223,6 +300,7 @@ public class TowerState : MonoBehaviour
 
     /// <summary>
     /// 状態異常 UI の更新（Phase3 拡張: 毒・麻痺・暗闇 複数表示対応）。
+    /// Phase C: 石化ランプ追加。
     /// statusEffectText が設定されている場合のみ表示する。
     /// </summary>
     private void RefreshStatusEffectUI()
@@ -235,7 +313,8 @@ public class TowerState : MonoBehaviour
                 GameState.I.isParalyzed,
                 GameState.I.isBlind,
                 false,
-                GameState.I.isSilenced
+                GameState.I.isSilenced,
+                GameState.I.isPetrified
             );
         }
     }
@@ -311,6 +390,9 @@ public class TowerState : MonoBehaviour
     {
         if (magicSelector == null) return;
         if (fieldMagicList == null || fieldMagicList.Count == 0) return;
+
+        // 石化ロック中は操作不可（Phase C 追加）
+        if (isPetrifyLocked) return;
 
         // 沈黙チェック
         if (GameState.I != null && GameState.I.isSilenced)

@@ -2,7 +2,7 @@
 
 /// <summary>
 /// 状態異常ランプ表示コンポーネント。
-/// 各状態異常に対応する子オブジェクト（doku/mahi/kurayami/ikari/chinmoku + バフ/デバフ10個）の
+/// 各状態異常に対応する子オブジェクト（doku/mahi/kurayami/ikari/chinmoku/sekika + バフ/デバフ10個）の
 /// SetActive(true/false) を切り替えて状態異常を表示する。
 ///
 /// Inspectorで各ランプオブジェクトを割り当てる。
@@ -10,7 +10,7 @@
 ///
 /// 使い方:
 ///   lamp.SetPoison(true);   // 毒ランプ点灯
-///   lamp.SetAll(poison, paralyze, blind, rage, silence,
+///   lamp.SetAll(poison, paralyze, blind, rage, silence, petrify,
 ///               defDown, defUp, atkDown, atkUp,
 ///               matkDown, matkUp, mdefDown, mdefUp,
 ///               lucDown, lucUp);
@@ -33,6 +33,9 @@ public class StatusEffectLamp : MonoBehaviour
 
     [Tooltip("沈黙ランプ")]
     [SerializeField] private GameObject chinmoku;
+
+    [Tooltip("石化ランプ（Phase C 追加）")]
+    [SerializeField] private GameObject sekika;
 
     // =========================================================
     // バフ/デバフランプ（5ペア = 10個）
@@ -103,6 +106,12 @@ public class StatusEffectLamp : MonoBehaviour
         if (chinmoku != null) chinmoku.SetActive(active);
     }
 
+    /// <summary>石化ランプの点灯/消灯を設定する。（Phase C 追加）</summary>
+    public void SetPetrify(bool active)
+    {
+        if (sekika != null) sekika.SetActive(active);
+    }
+
     /// <summary>防御ダウンランプの点灯/消灯を設定する。</summary>
     public void SetDefenseDown(bool active)
     {
@@ -167,6 +176,7 @@ public class StatusEffectLamp : MonoBehaviour
         SetBlind(blind);
         SetRage(rage);
         SetSilence(false);
+        SetPetrify(false);
     }
 
     /// <summary>全ランプをまとめて設定する（Tower用: 5引数 — 沈黙対応）。</summary>
@@ -177,20 +187,23 @@ public class StatusEffectLamp : MonoBehaviour
         SetBlind(blind);
         SetRage(rage);
         SetSilence(silence);
+        SetPetrify(false);
     }
 
-    /// <summary>全ランプをまとめて設定する（Phase3互換: 6引数）。</summary>
-    public void SetAll(bool poison, bool paralyze, bool blind, bool rage,
-                       bool defDown, bool defUp)
+    /// <summary>全ランプをまとめて設定する（Tower用: 6引数 — 沈黙+石化対応、Phase C 追加）。</summary>
+    public void SetAll(bool poison, bool paralyze, bool blind, bool rage, bool silence, bool petrify)
     {
         SetPoison(poison);
         SetParalyze(paralyze);
         SetBlind(blind);
         SetRage(rage);
-        SetSilence(false);
-        SetDefenseDown(defDown);
-        SetDefenseUp(defUp);
+        SetSilence(silence);
+        SetPetrify(petrify);
     }
+
+    // Phase3 の 6引数版（poison, paralyze, blind, rage, defDown, defUp）は
+    // Phase C で追加した 6引数版（poison, paralyze, blind, rage, silence, petrify）と
+    // シグネチャが衝突するため削除。旧呼び出し元は 14引数版 or 15引数版に移行済み。
 
     /// <summary>全ランプをまとめて設定する（Phase4フル版: 14引数 → 後方互換維持、沈黙なし）。</summary>
     public void SetAll(bool poison, bool paralyze, bool blind, bool rage,
@@ -205,6 +218,7 @@ public class StatusEffectLamp : MonoBehaviour
         SetBlind(blind);
         SetRage(rage);
         SetSilence(false);
+        SetPetrify(false);
         SetDefenseDown(defDown);
         SetDefenseUp(defUp);
         SetAttackDown(atkDown);
@@ -230,6 +244,7 @@ public class StatusEffectLamp : MonoBehaviour
         SetBlind(blind);
         SetRage(rage);
         SetSilence(silence);
+        SetPetrify(false);
         SetDefenseDown(defDown);
         SetDefenseUp(defUp);
         SetAttackDown(atkDown);
@@ -245,11 +260,21 @@ public class StatusEffectLamp : MonoBehaviour
     /// <summary>全ランプを消灯する。</summary>
     public void ClearAll()
     {
-        SetAll(false, false, false, false, false,
-               false, false,
-               false, false,
-               false, false,
-               false, false,
-               false, false);
+        SetPoison(false);
+        SetParalyze(false);
+        SetBlind(false);
+        SetRage(false);
+        SetSilence(false);
+        SetPetrify(false);
+        SetDefenseDown(false);
+        SetDefenseUp(false);
+        SetAttackDown(false);
+        SetAttackUp(false);
+        SetMagicAttackDown(false);
+        SetMagicAttackUp(false);
+        SetMagicDefenseDown(false);
+        SetMagicDefenseUp(false);
+        SetLuckDown(false);
+        SetLuckUp(false);
     }
 }

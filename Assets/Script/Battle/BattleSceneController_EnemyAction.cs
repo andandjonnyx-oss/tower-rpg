@@ -986,13 +986,14 @@ public partial class BattleSceneController
             string elog = TickEnemyPetrifyTurns(eName);
             if (!string.IsNullOrEmpty(elog)) AddLog(elog);
 
-            // 敵の石化完成 → 勝利ルート
+            // 敵の石化完成 → 勝利ルート（ただしプレイヤーも倒れていたら敗北優先）
             if (EnemyPetrifyJustReachedZero)
             {
                 enemyCurrentHp = 0; // 既存の勝利ルートに乗せる
 
-                // プレイヤーも同時に石化完成なら相打ち → 敗北優先
-                if (PlayerPetrifyReachedZero)
+                // プレイヤーが HP0 or 石化完成なら相打ち → 敗北優先
+                bool playerDead = GameState.I != null && GameState.I.currentHp <= 0;
+                if (playerDead || PlayerPetrifyReachedZero)
                 {
                     FlushLogsAndThen(() => OnDefeat());
                 }
