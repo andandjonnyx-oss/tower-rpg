@@ -42,6 +42,15 @@
 ///   hitCount > 1 の多段攻撃スキルでは、スキル発動自体は100%確定。
 ///   各ヒットごとに個別に命中/回避判定を行う。
 ///   （単発スキルでは従来通りスキル発動前に命中判定を行う）
+///
+/// 【石化（Phase B1追加）】
+///   AfterEnemyAction のターン終了処理で TickPlayerPetrifyTurns /
+///   TickEnemyPetrifyTurns を呼ぶ。残0到達で以下を発動:
+///     - 敵石化完成: enemyCurrentHp = 0 にして OnVictory ルート
+///     - プレイヤー石化完成: OnDefeat ルート（Continue可）
+///     - 両方同時: 相打ち → 敗北優先（既存の HP0 相打ちルール踏襲）
+///   敵を既に倒している場合（enemyCurrentHp <= 0）はティックそのものが
+///   呼ばれないため、「敵を倒した場合はカウントが減らない」仕様が自動達成される。
 /// </summary>
 public partial class BattleSceneController
 {
@@ -58,7 +67,7 @@ public partial class BattleSceneController
     /// <summary>防御中の防御力倍率。</summary>
     private const int DefendDefenseMultiplier = 2;
 
-    /// <summary>防御中の防御ダイス乱数上限（成功率67%）。</summary>
+    /// <summary>防御中の防御ダイス乱数上限(成功率67%)。</summary>
     private const float DefendDiceRange = 1.5f;
 
     // =========================================================
@@ -867,6 +876,16 @@ public partial class BattleSceneController
     /// ターン終了時の毒ダメージを適用し、
     /// 怒りターンカウントダウンを行い、
     /// プレイヤー敗北判定を行い、生存していればプレイヤーターンに戻す。
+    ///
+    /// 【Phase B1: 石化ターン処理】
+    /// TickBuffDebuffTurns の直後に石化ティックを追加。
+    /// 敵石化完成は enemyCurrentHp=0 で OnVictory に乗せ、
+    /// プレイヤー石化完成は PlayerPetrifyReachedZero を見て OnDefeat へ。
+    /// 両方完成した場合は敗北優先（既存の相打ちルール踏襲）。
+    ///
+    /// 敵HP0チェックが関数冒頭にあるため、敵を既に倒した場合は
+    /// このメソッド自体がティック処理の手前でリターンし、
+    /// 「敵を倒した場合はカウントが減らない」仕様が自動達成される。
     /// </summary>
     private void AfterEnemyAction()
     {
@@ -953,12 +972,45 @@ public partial class BattleSceneController
             }
         }
 
+        // =========================================================
+        // 石化ターンカウントダウン（Phase B1追加）
+        // プレイヤー → 敵 の順で処理。
+        // 敵が石化完成した場合は enemyCurrentHp=0 にして OnVictory へ。
+        // プレイヤー石化完成の敗北判定は後続の FlushLogsAndThen で処理。
+        // =========================================================
+        {
+            string plog = TickPlayerPetrifyTurns();
+            if (!string.IsNullOrEmpty(plog)) AddLog(plog);
+
+            string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+            string elog = TickEnemyPetrifyTurns(eName);
+            if (!string.IsNullOrEmpty(elog)) AddLog(elog);
+
+            // 敵の石化完成 → 勝利ルート
+            if (EnemyPetrifyJustReachedZero)
+            {
+                enemyCurrentHp = 0; // 既存の勝利ルートに乗せる
+
+                // プレイヤーも同時に石化完成なら相打ち → 敗北優先
+                if (PlayerPetrifyReachedZero)
+                {
+                    FlushLogsAndThen(() => OnDefeat());
+                }
+                else
+                {
+                    FlushLogsAndThen(() => OnVictory());
+                }
+                return;
+            }
+        }
+
 
         // ログを全部表示してから勝敗判定・ターン移行
         FlushLogsAndThen(() =>
         {
-            // プレイヤー敗北判定
-            if (GameState.I != null && GameState.I.currentHp <= 0)
+            // プレイヤー敗北判定（HP0 or 石化完成）
+            if (GameState.I != null
+                && (GameState.I.currentHp <= 0 || PlayerPetrifyReachedZero))
             {
                 OnDefeat();
                 return;

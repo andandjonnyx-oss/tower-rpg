@@ -15,6 +15,8 @@ using UnityEngine.UI;
 ///   BattleSceneController_PlayerAction.cs … プレイヤー行動（攻撃/スキル/魔法/防御/アイテム）
 ///   BattleSceneController_EnemyAction.cs  … 敵行動（行動選択/LUC判定/各種攻撃/ターン終了処理）
 ///   BattleSceneController_CombatUtils.cs  … 命中判定/クリティカル/防御ダイス/ダメージ適用
+///   BattleSceneController_BuffDebuff.cs   … バフ/デバフ5種ペアの管理
+///   BattleSceneController_Petrify.cs      … 石化の管理（Phase A で追加）
 /// </summary>
 public partial class BattleSceneController : MonoBehaviour
 {
@@ -330,6 +332,10 @@ public partial class BattleSceneController : MonoBehaviour
 
             // Phase4: バフ/デバフリセット（構造体ベース）
             InitBuffDebuffFields();
+
+            // Phase A: 敵側の石化リセット（プレイヤー側は戦闘終了後も継続）
+            ResetEnemyPetrifyFields();
+
             ResetQuizBossStatics();
 
             // モンスター図鑑: 遭遇記録
@@ -909,6 +915,10 @@ public partial class BattleSceneController : MonoBehaviour
 
         // Phase4: バフ/デバフリセット（構造体ベース）
         ResetBuffDebuffFields();
+
+        // Phase A: 敵側の石化リセット（プレイヤー側は戦闘終了後も継続するので触らない）
+        ResetEnemyPetrifyFields();
+
         ResetQuizBossStatics();
 
     }

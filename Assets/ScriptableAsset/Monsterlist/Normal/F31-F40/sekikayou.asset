@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: F1000B_debug
+  m_Name: sekikayou
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: F1000B_debug
-  Mname: "\u30C7\u30D0\u30C3\u30B0\u304F\u3093"
+  ID: sekikayou
+  Mname: "\u77F3\u5316\u7528"
   Image: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  Minfloor: 41
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 9999
+  MaxHp: 1
   Attack: 0
   Defense: 0
   MagicDefense: 0
   Speed: 0
-  Luck: 1000
+  Luck: 0
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
-  DebuffResistance: 90
+  DebuffResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
   Exp: 0
@@ -49,6 +49,6 @@ MonoBehaviour:
   quizDatabase: {fileID: 0}
   Help: 
   actions:
-  - skill: {fileID: 11400000, guid: 0a89b272a390b5d4499a1f3cd2abefc8, type: 2}
+  - skill: {fileID: 11400000, guid: c6e4674bd38590947839bb06e6f10488, type: 2}
     threshold: 100
   baseActionRange: 100

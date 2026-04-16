@@ -94,6 +94,7 @@ public class GameState : MonoBehaviour
     //   isPoisoned   - 毒: ターン/歩行ごとにダメージ、10%自然治癒
     //   isParalyzed  - 麻痺: 20%で行動キャンセル、塔移動が遅くなる、10%自然治癒
     //   isBlind      - 暗闇: 命中/回避に影響、塔の背景が暗転、10%自然治癒
+    //   isPetrified  - 石化: DEF/MDEF倍率、残ターン0で敗北（Continue可）。自然治癒なし、専用解除のみ。
     //
     // 【戦闘限定バフ】（セーブ不要、BattleSceneController側で管理）
     //   怒り（Rage）: 攻撃力UP+通常攻撃のみ、3ターン or 戦闘終了で解除
@@ -121,6 +122,17 @@ public class GameState : MonoBehaviour
     [Tooltip("プレイヤーが沈黙状態かどうか。戦闘終了後も持続する。")]
     public bool isSilenced = false;
 
+    // ---- 石化（Phase A: フィールドのみ追加。効果は Phase B 以降で実装） ----
+
+    [Tooltip("プレイヤーが石化状態かどうか。戦闘終了後も持続する。自然治癒なし。")]
+    public bool isPetrified = false;
+
+    [Tooltip("石化の残りターン数。0 で敗北（戦闘中）/ロック（塔内）。初期付与時は 5。")]
+    public int playerPetrifyTurns = 0;
+
+    [Tooltip("石化の最大ターン数（DEF/MDEF倍率計算用）。初期付与時は 5 固定、進行しても不変。")]
+    public int playerPetrifyMaxTurns = 0;
+
     // =========================================================
     // 状態異常の一括クリア
     // =========================================================
@@ -128,7 +140,7 @@ public class GameState : MonoBehaviour
     /// <summary>
     /// プレイヤーの全状態異常をクリアする。
     /// 街に戻る（帰還・敗北・ロード復帰）時に FullRecover() から呼ばれる。
-    /// 持続型デバフ（毒・麻痺・暗闇）のみ。戦闘限定の状態はここでは扱わない。
+    /// 持続型デバフ（毒・麻痺・暗闇・沈黙・石化）のみ。戦闘限定の状態はここでは扱わない。
     /// </summary>
     public void ClearAllStatusEffects()
     {
@@ -136,6 +148,9 @@ public class GameState : MonoBehaviour
         isParalyzed = false;
         isBlind = false;
         isSilenced = false;
+        isPetrified = false;
+        playerPetrifyTurns = 0;
+        playerPetrifyMaxTurns = 0;
         Debug.Log("[GameState] 全状態異常をクリア");
     }
 

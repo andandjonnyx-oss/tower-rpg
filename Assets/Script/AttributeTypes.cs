@@ -25,6 +25,7 @@ public enum WeaponAttribute
 ///     Paralyze - 麻痺
 ///     Blind    - 暗闇
 ///     Silence  - 沈黙（味方: 魔法使用不可 / 敵: 魔法系スキル70%失敗）
+///     Petrify  - 石化（戦闘中も塔内でも継続、DEF/MDEF倍率持ち、残ターン0で敗北/撃破）
 ///
 ///   戦闘限定デバフ:
 ///     Stun     - 気絶（1ターン限定）
@@ -55,6 +56,7 @@ public enum StatusEffect
     Silence,     // 沈黙（実装済み）
     Burn,        // 火傷（予約）
     Freeze,      // 凍結（予約）
+    Petrify,     // 石化（持続型デバフ・戦闘中も塔内でも継続）
     Stun,        // 気絶
     Rage,        // 怒り（バーサク）
     DefenseDown,      // 防御ダウン（戦闘限定バフ/デバフ）
@@ -105,6 +107,7 @@ public static class AttributeExtensions
             case StatusEffect.Silence: return "沈黙";
             case StatusEffect.Burn: return "火傷";
             case StatusEffect.Freeze: return "凍結";
+            case StatusEffect.Petrify: return "石化";
             case StatusEffect.Stun: return "気絶";
             case StatusEffect.Rage: return "怒り";
             case StatusEffect.DefenseDown: return "防御↓";

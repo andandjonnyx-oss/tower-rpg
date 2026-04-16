@@ -403,6 +403,14 @@ public static class SkillEffectProcessor
                 break;
 
             // =========================================================
+            // 石化（Petrify）— Phase A: 付与のみ実装
+            // 独立処理: bool だけでなく残ターン/最大ターンを扱うため専用メソッドに分離
+            // =========================================================
+            case StatusEffect.Petrify:
+                ProcessPetrifyInflict(entry.chance, isPlayerAttack, enemyMonster, logs);
+                break;
+
+            // =========================================================
             // 気絶（Stun）— プレイヤー→敵のみ
             // =========================================================
             case StatusEffect.Stun:
@@ -544,6 +552,65 @@ public static class SkillEffectProcessor
             case StatusEffect.Silence: return ref enemyIsSilenced;
             case StatusEffect.Poison:
             default: return ref enemyIsPoisoned;
+        }
+    }
+
+    /// <summary>
+    /// 石化付与処理（双方向対応・Phase A）。
+    /// プレイヤー→敵、敵→プレイヤー両方に対応。
+    ///
+    /// 【Phase A の挙動】
+    ///   - 既に石化中の場合: 残ターンを1減らす（最低1でクランプ）
+    ///   - 未石化の場合: 石化フラグを立て、残ターンを初期値（プレイヤー5/敵10）にセット
+    ///   - 発動率 chance と耐性判定を経る
+    ///   - Phase A では耐性 petrifyResistance は 0 固定扱い（EnemyData に未追加のため）
+    ///   - プレイヤー側の耐性は StatusEffectSystem.GetPlayerResistance(Petrify) を使用
+    ///   - 敵の immuneToAllAilments は尊重する
+    ///
+    /// 【Phase B 以降で追加予定】
+    ///   - DEF/MDEF 倍率の適用
+    ///   - ターン進行時の残ターン-1（TickPetrifyTurns）
+    ///   - 残ターン0到達時の敗北/撃破判定
+    /// </summary>
+    private static void ProcessPetrifyInflict(
+        int chance,
+        bool isPlayerAttack,
+        Monster enemyMonster,
+        List<string> logs)
+    {
+        string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+
+        if (isPlayerAttack)
+        {
+            // プレイヤー → 敵に付与
+            // immuneToAllAilments チェック（耐性100扱い）
+            int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Petrify, enemyMonster);
+            // Phase A: petrifyResistance は EnemyData に未追加のため、
+            // 現状は汎用の GetEnemyResistance(Petrify) が immuneToAllAilments のみ判定する想定。
+
+            bool inflicted = StatusEffectSystem.TryInflict(chance, resist);
+            if (!inflicted)
+            {
+                logs.Add("…しかし効果がなかった！");
+                return;
+            }
+
+            string msg = BattleSceneController.InflictPetrifyToEnemy();
+            logs.Add($"{eName} は{msg}");
+        }
+        else
+        {
+            // 敵 → プレイヤーに付与
+            int resist = StatusEffectSystem.GetPlayerResistance(StatusEffect.Petrify);
+            bool inflicted = StatusEffectSystem.TryInflict(chance, resist);
+            if (!inflicted)
+            {
+                logs.Add("…しかし効果がなかった！");
+                return;
+            }
+
+            string msg = BattleSceneController.InflictPetrifyToPlayer();
+            logs.Add($"You は{msg}");
         }
     }
 
