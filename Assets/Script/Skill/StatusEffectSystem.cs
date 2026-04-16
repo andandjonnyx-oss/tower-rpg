@@ -568,9 +568,13 @@ public static class StatusEffectSystem
                     logs.Add("石化が完成した！");
                     Debug.Log("[StatusEffect] Tower petrify reached zero!");
                 }
+                else if (gs.playerPetrifyTurns == 1)
+                {
+                    logs.Add("もうすぐ完全に石化してしまう！");
+                }
                 else
                 {
-                    logs.Add($"石化が進行した…（残り{gs.playerPetrifyTurns}ターン）");
+                    logs.Add("石化が進行した…");
                 }
             }
         }

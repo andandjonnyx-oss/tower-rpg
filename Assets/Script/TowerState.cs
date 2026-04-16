@@ -182,6 +182,10 @@ public class TowerState : MonoBehaviour
 
         if (stepLogs.Count > 0)
         {
+            // 全ログを結合して magicLogText に表示（プレイヤーに見えるように）
+            string combined = string.Join("\n", stepLogs);
+            ShowFieldMagicLog(combined);
+
             for (int i = 0; i < stepLogs.Count; i++)
             {
                 Debug.Log($"[Tower] {stepLogs[i]}");
