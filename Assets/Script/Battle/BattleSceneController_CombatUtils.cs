@@ -164,6 +164,7 @@ public partial class BattleSceneController
     /// Magical  → GameState.MagicDefense（INT ベース + 装備 + パッシブ）
     ///
     /// Phase4: 全カテゴリでバフ/デバフを適用する。
+    /// Phase B2: バフ/デバフ適用後の値に石化倍率を最外側で乗算する。
     /// </summary>
     private int GetPlayerDefense(DamageCategory category)
     {
@@ -193,6 +194,13 @@ public partial class BattleSceneController
                 break;
         }
 
+        // Phase B2: 石化倍率を最外側で適用（DEF/MDEF 共通）
+        float petrifyMult = GetPlayerPetrifyDefMultiplier();
+        if (petrifyMult > 1f)
+        {
+            baseDef = Mathf.FloorToInt(baseDef * petrifyMult + 0.5f);
+        }
+
         return baseDef;
     }
 
@@ -202,6 +210,7 @@ public partial class BattleSceneController
     /// Magical  → Monster.MagicDefense
     ///
     /// Phase4: 全カテゴリでバフ/デバフを適用する。
+    /// Phase B2: バフ/デバフ適用後の値に石化倍率を最外側で乗算する。
     /// </summary>
     private int GetEnemyDefense(DamageCategory category)
     {
@@ -229,6 +238,13 @@ public partial class BattleSceneController
                     buffState.enemy.mdef.IsBuffed, buffState.enemy.mdef.buffRate,
                     buffState.enemy.mdef.IsDebuffed, buffState.enemy.mdef.debuffRate);
                 break;
+        }
+
+        // Phase B2: 石化倍率を最外側で適用（DEF/MDEF 共通）
+        float petrifyMult = GetEnemyPetrifyDefMultiplier();
+        if (petrifyMult > 1f)
+        {
+            baseDef = Mathf.FloorToInt(baseDef * petrifyMult + 0.5f);
         }
 
         return baseDef;

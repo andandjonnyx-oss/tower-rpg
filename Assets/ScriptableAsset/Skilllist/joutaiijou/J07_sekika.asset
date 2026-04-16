@@ -33,7 +33,7 @@ MonoBehaviour:
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
-    targetStatusEffect: 8
+    targetStatusEffect: 21
     chance: 80
     intValue: 0
     duration: 0

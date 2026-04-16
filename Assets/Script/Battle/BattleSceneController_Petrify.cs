@@ -236,7 +236,65 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // 参照ヘルパー（Phase B 以降で使用予定）
+    // DEF/MDEF 倍率計算（Phase B2）
+    // =========================================================
+
+    /// <summary>
+    /// 石化によるDEF/MDEF倍率のステップ値（プレイヤー側）。
+    /// 残ターンが減るほど倍率が上がる。残1ターン時に×2.0。
+    /// 計算式: 1.0 + (maxTurns - remainingTurns + 1) × step
+    /// </summary>
+    private const float PlayerPetrifyStep = 0.2f;
+
+    /// <summary>
+    /// 石化によるDEF/MDEF倍率のステップ値（敵側）。
+    /// 残1ターン時に×2.0。
+    /// </summary>
+    private const float EnemyPetrifyStep = 0.1f;
+
+    /// <summary>
+    /// プレイヤーの石化DEF/MDEF倍率を返す。
+    /// 石化中でなければ 1.0f（変化なし）。
+    ///
+    /// 例（maxTurns=5, step=0.2）:
+    ///   残5 → 1.0 + (5-5+1)×0.2 = 1.2
+    ///   残3 → 1.0 + (5-3+1)×0.2 = 1.6
+    ///   残1 → 1.0 + (5-1+1)×0.2 = 2.0
+    /// </summary>
+    public static float GetPlayerPetrifyDefMultiplier()
+    {
+        if (GameState.I == null) return 1f;
+        if (!GameState.I.isPetrified) return 1f;
+        if (GameState.I.playerPetrifyTurns <= 0) return 1f; // 完成済み（敗北判定中）
+
+        float maxTurns = GameState.I.playerPetrifyMaxTurns;
+        float remaining = GameState.I.playerPetrifyTurns;
+        float mult = 1f + (maxTurns - remaining + 1f) * PlayerPetrifyStep;
+        return mult;
+    }
+
+    /// <summary>
+    /// 敵の石化DEF/MDEF倍率を返す。
+    /// 石化中でなければ 1.0f（変化なし）。
+    ///
+    /// 例（maxTurns=10, step=0.1）:
+    ///   残10 → 1.0 + (10-10+1)×0.1 = 1.1
+    ///   残5  → 1.0 + (10-5+1)×0.1  = 1.6
+    ///   残1  → 1.0 + (10-1+1)×0.1  = 2.0
+    /// </summary>
+    public static float GetEnemyPetrifyDefMultiplier()
+    {
+        if (!enemyIsPetrified) return 1f;
+        if (enemyPetrifyTurns <= 0) return 1f; // 完成済み（撃破判定中）
+
+        float maxTurns = enemyPetrifyMaxTurns;
+        float remaining = enemyPetrifyTurns;
+        float mult = 1f + (maxTurns - remaining + 1f) * EnemyPetrifyStep;
+        return mult;
+    }
+
+    // =========================================================
+    // 参照ヘルパー
     // =========================================================
 
     /// <summary>敵が石化中かどうか。外部から読み取るためのプロパティ。</summary>

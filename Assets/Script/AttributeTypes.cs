@@ -45,6 +45,14 @@ public enum WeaponAttribute
 ///
 ///   予約（未使用）:
 ///     Sleep, Burn, Freeze
+///
+/// 【重要: enum 値の互換性について】
+///   このenumに項目を追加する際は、必ず既存項目の後ろに追加すること。
+///   既存項目の途中に挿入すると、ScriptableObject アセットに保存されている
+///   数値インデックスが全てズレて、既存のスキル/アイテム設定が壊れる。
+///
+///   Petrify は後から追加されたため、カテゴリ的には持続型デバフ（Poison〜Silence）の
+///   仲間だが、互換性のため enum 末尾（Debuff の後）に配置している。
 /// </summary>
 public enum StatusEffect
 {
@@ -56,7 +64,6 @@ public enum StatusEffect
     Silence,     // 沈黙（実装済み）
     Burn,        // 火傷（予約）
     Freeze,      // 凍結（予約）
-    Petrify,     // 石化（持続型デバフ・戦闘中も塔内でも継続）
     Stun,        // 気絶
     Rage,        // 怒り（バーサク）
     DefenseDown,      // 防御ダウン（戦闘限定バフ/デバフ）
@@ -70,6 +77,7 @@ public enum StatusEffect
     LuckDown,         // 運ダウン
     LuckUp,           // 運アップ
     Debuff,           // デバフ全体（耐性カテゴリ用）— 実際の状態異常ではなく、耐性指定用
+    Petrify,          // 石化（持続型デバフ・戦闘中も塔内でも継続）— 互換性のため末尾に配置
 }
 
 /// <summary>
@@ -107,7 +115,6 @@ public static class AttributeExtensions
             case StatusEffect.Silence: return "沈黙";
             case StatusEffect.Burn: return "火傷";
             case StatusEffect.Freeze: return "凍結";
-            case StatusEffect.Petrify: return "石化";
             case StatusEffect.Stun: return "気絶";
             case StatusEffect.Rage: return "怒り";
             case StatusEffect.DefenseDown: return "防御↓";
@@ -121,6 +128,7 @@ public static class AttributeExtensions
             case StatusEffect.LuckDown: return "運↓";
             case StatusEffect.LuckUp: return "運↑";
             case StatusEffect.Debuff: return "デバフ";
+            case StatusEffect.Petrify: return "石化";
             default: return effect.ToString();
         }
     }
