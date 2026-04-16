@@ -8,6 +8,9 @@ public class TalkEvent : ScriptableObject
     [Header("Identity")]
     public string id; // 一意（手入力推奨。例: "F01_S03_Intro"）
 
+    [Tooltip("図鑑に表示するタイトル。未設定の場合は id がフォールバック表示される。")]
+    public string zukanTitle;
+
     [Header("Trigger Condition")]
     public int floor;
     public int step;

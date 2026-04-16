@@ -153,12 +153,16 @@ public class TalkRunner : MonoBehaviour
         // isRewardItem フラグを見て、通常の入手ポップアップを表示する。
         // （「整理が完了しました」メッセージは表示されない）
         // =========================================================
-        if (current.rewardItem != null)
+        // 図鑑リプレイ時は報酬を付与しない（二重付与防止）
+        if (current.rewardItem != null && !gs.isZukanReplay)
         {
             gs.pendingItemData = current.rewardItem;
             gs.isRewardItem = true;
             Debug.Log($"[TalkRunner] 報酬アイテムを pendingItemData にセット: {current.rewardItem.itemName}");
         }
+
+        // 図鑑リプレイフラグをクリア
+        gs.isZukanReplay = false;
 
         ReturnToPreviousScene();
     }

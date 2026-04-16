@@ -332,6 +332,12 @@ public partial class BattleSceneController : MonoBehaviour
             InitBuffDebuffFields();
             ResetQuizBossStatics();
 
+            // モンスター図鑑: 遭遇記録
+            if (GameState.I != null && enemyMonster != null)
+            {
+                GameState.I.MarkEncountered(enemyMonster.ID);
+            }
+
             AddLogImmediate($"{enemyMonster.Mname} が現れた！");
         }
         else

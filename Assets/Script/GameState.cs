@@ -18,6 +18,14 @@ public class GameState : MonoBehaviour
     [NonSerialized] public ItemData pendingItemData = null;
     [NonSerialized] public bool isRewardItem = false;
 
+    /// <summary>
+    /// 会話図鑑からの再生中かどうか。
+    /// true の場合、TalkRunner.Finish() で報酬アイテムを付与しない。
+    /// Talk シーン遷移前にセットし、TalkRunner.Finish() で参照後クリアされる。
+    /// </summary>
+    [NonSerialized] public bool isZukanReplay = false;
+
+
     [Header("Equipment")]
     public string equippedWeaponUid = "";
 
@@ -741,6 +749,39 @@ public class GameState : MonoBehaviour
             {
                 if (!string.IsNullOrEmpty(id))
                     played.Add(id);
+            }
+        }
+    }
+
+    // =========================================================
+    // モンスター図鑑（遭遇記録）
+    // =========================================================
+    private HashSet<string> encounteredMonsters = new HashSet<string>();
+
+    public bool IsEncountered(string monsterId)
+        => !string.IsNullOrEmpty(monsterId) && encounteredMonsters.Contains(monsterId);
+
+    public void MarkEncountered(string monsterId)
+    {
+        if (!string.IsNullOrEmpty(monsterId) && encounteredMonsters.Add(monsterId))
+        {
+            Debug.Log($"[GameState] モンスター遭遇記録: {monsterId}");
+            SaveManager.Save();
+        }
+    }
+
+    public List<string> GetAllEncounteredIds()
+        => new List<string>(encounteredMonsters);
+
+    public void RestoreEncounteredIds(List<string> ids)
+    {
+        encounteredMonsters.Clear();
+        if (ids != null)
+        {
+            foreach (var id in ids)
+            {
+                if (!string.IsNullOrEmpty(id))
+                    encounteredMonsters.Add(id);
             }
         }
     }

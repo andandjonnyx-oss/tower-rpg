@@ -71,6 +71,9 @@ public static class SaveManager
             // 既読イベントID一覧
             data.playedEventIds = GameState.I.GetAllPlayedIds();
 
+            // 遭遇モンスターID一覧
+            data.encounteredMonsterIds = GameState.I.GetAllEncounteredIds();
+
             // 状態異常（追加）
             data.isPoisoned = GameState.I.isPoisoned;
             data.isSilenced = GameState.I.isSilenced;
@@ -186,6 +189,9 @@ public static class SaveManager
             // 既読イベント復元
             GameState.I.RestorePlayedIds(data.playedEventIds);
 
+            // 遭遇モンスター復元
+            GameState.I.RestoreEncounteredIds(data.encounteredMonsterIds);
+
             // バトル中フラグをクリア（中断復帰なので安全な状態にする）
             GameState.I.isInBattle = false;
             GameState.I.battleTurnConsumed = false;
@@ -287,6 +293,9 @@ public class SaveData
 
     // --- 既読イベントID一覧 ---
     public List<string> playedEventIds = new List<string>();
+
+    // --- 遭遇モンスターID一覧 ---
+    public List<string> encounteredMonsterIds = new List<string>();
 
     // --- 所持アイテム一覧 ---
     public List<SavedItem> inventoryItems = new List<SavedItem>();
