@@ -809,7 +809,10 @@ public static class SkillEffectProcessor
             }
         }
     }
-
+    /// 【Phase D 追加】
+    ///   Petrify ケースを追加。石化中であれば CurePlayer(Petrify) で解除。
+    ///   CurePlayer 内で SetPlayerAilment(Petrify, false) が呼ばれ、
+    ///   isPetrified / playerPetrifyTurns / playerPetrifyMaxTurns が全てリセットされる。
     /// <summary>
     /// 状態異常回復を処理する。
     /// 使用者自身の状態異常を回復する。
@@ -835,6 +838,14 @@ public static class SkillEffectProcessor
                         logs.Add($"You の{effect.ToJapanese()}が治った！");
                     }
                     break;
+                case StatusEffect.Petrify:
+                    if (StatusEffectSystem.IsPlayerAffected(StatusEffect.Petrify))
+                    {
+                        StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
+                        logs.Add("You の石化が治った！");
+                    }
+                    break;
+
                 default:
                     Debug.Log($"[SkillEffectProcessor] 未実装の状態異常回復: {effect}");
                     break;

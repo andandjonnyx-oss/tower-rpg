@@ -41,6 +41,11 @@ public class ItemData : ScriptableObject
     [Tooltip("true の場合、使用時に沈黙状態を回復する。")]
     public bool curesSilence = false;
 
+    [Tooltip("true の場合、使用時に石化状態を回復する。\n"
+           + "石化は CureAilments では解除不可。専用アイテムでのみ解除。")]
+    public bool curesPetrify = false;
+
+
 
     // =========================================================
     // 消費アイテム: ステータスポイント付与（追加）
@@ -142,6 +147,10 @@ public class ItemData : ScriptableObject
     public bool eatCuresBlind = false;
     [Tooltip("食べた時に沈黙状態を回復するかどうか。")]
     public bool eatCuresSilence = false;
+
+    [Tooltip("食べた時に石化状態を回復するかどうか。")]
+    public bool eatCuresPetrify = false;
+
 
     [Header("Weapon")]
     public WeaponAttribute weaponAttribute = WeaponAttribute.Strike;

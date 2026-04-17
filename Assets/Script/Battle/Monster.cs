@@ -88,6 +88,13 @@ public class Monster : ScriptableObject
            + "100 = 沈黙完全耐性。")]
     public int SilenceResistance = 0;
 
+    // ▼▼▼ 追加 ▼▼▼
+    [Tooltip("敵の石化耐性値（0〜100）。\n"
+           + "石化の実質命中率 = 基礎命中率 × (1 - PetrifyResistance/100)\n"
+           + "100 = 石化完全耐性。")]
+    public int PetrifyResistance = 0;
+    // ▲▲▲ 追加 ▲▲▲
+
     [Tooltip("敵のデバフ耐性値（0〜100）。\n"
            + "ATK/DEF/MATK/MDEF/LUC の全デバフに対して一律で適用される。\n"
            + "デバフの実質命中率 = 基礎命中率 × (1 - DebuffResistance/100)\n"
@@ -147,6 +154,8 @@ public class Monster : ScriptableObject
             case StatusEffect.Blind: return BlindResistance;
             case StatusEffect.Rage: return RageResistance;
             case StatusEffect.Silence: return SilenceResistance;
+            case StatusEffect.Petrify: return PetrifyResistance;
+
 
             // デバフ全体（耐性カテゴリ）
             case StatusEffect.Debuff: return DebuffResistance;

@@ -10,36 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: sekikayou
+  m_Name: 038_ookoumori
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: sekikayou
-  Mname: "\u77F3\u5316\u7528"
-  Image: {fileID: 0}
-  Minfloor: 41
+  ID: 038_ookoumori
+  Mname: "\u5927\u8759\u8760"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 36
   Minstep: 1
-  Maxfloor: 50
+  Maxfloor: 40
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 1
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 400
+  Attack: 70
+  Defense: 30
+  MagicDefense: 20
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 30
+  Evasion: 250
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
   ParalyzeResistance: 0
-  BlindResistance: 0
+  BlindResistance: 100
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
   DebuffResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
-  Exp: 0
+  Exp: 880
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -47,8 +48,12 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
+  Help: "\u6697\u95C7\u4EE5\u5916\u306E\u72B6\u614B\u7570\u5E38\u3092\u5F15\u3063\u63D0\u3052\u3066\u623B\u3063\u3066\u6765\u305F\u305C\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: c6e4674bd38590947839bb06e6f10488, type: 2}
+  - skill: {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
+    threshold: 75
+  - skill: {fileID: 11400000, guid: 5d10b5aaa14183c49b4ad98cb420fd43, type: 2}
     threshold: 100
   baseActionRange: 100

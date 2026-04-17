@@ -265,7 +265,7 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// プレイヤーが指定の持続型状態異常にかかっているかを返す。
-    /// 持続型デバフ（Poison/Paralyze/Blind）のみ対応。
+    /// 持続型デバフ（Poison/Paralyze/Blind/Silence/Petrify）に対応。
     /// 戦闘限定（Stun/Rage/バフ/デバフ）は BattleSceneController 側で管理。
     /// </summary>
     public static bool IsPlayerAffected(StatusEffect effect)
@@ -277,6 +277,8 @@ public static class StatusEffectSystem
             case StatusEffect.Paralyze: return GameState.I.isParalyzed;
             case StatusEffect.Blind: return GameState.I.isBlind;
             case StatusEffect.Silence: return GameState.I.isSilenced;
+            case StatusEffect.Petrify: return GameState.I.isPetrified;
+
 
             default: return false;
         }
@@ -288,6 +290,7 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// プレイヤーの持続型状態異常フラグを設定する。
+    /// Petrify の場合、false（解除）時に残ターン/最大ターンもリセットする。
     /// </summary>
     public static void SetPlayerAilment(StatusEffect effect, bool value)
     {
@@ -298,6 +301,15 @@ public static class StatusEffectSystem
             case StatusEffect.Paralyze: GameState.I.isParalyzed = value; break;
             case StatusEffect.Blind: GameState.I.isBlind = value; break;
             case StatusEffect.Silence: GameState.I.isSilenced = value; break;
+            case StatusEffect.Petrify:
+                GameState.I.isPetrified = value;
+                if (!value)
+                {
+                    // 石化解除時は残ターン/最大ターンもリセット
+                    GameState.I.playerPetrifyTurns = 0;
+                    GameState.I.playerPetrifyMaxTurns = 0;
+                }
+                break;
 
         }
     }

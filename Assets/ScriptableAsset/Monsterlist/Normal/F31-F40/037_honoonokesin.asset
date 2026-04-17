@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 034_harapeko
+  m_Name: 037_honoonokesin
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 034_harapeko
-  Mname: "\u306F\u3089\u307A\u3053\u30A2\u30AA\u30B1\u30E0\u30B7"
+  ID: 037_honoonokesin
+  Mname: "\u708E\u306E\u5316\u8EAB"
   Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
-  Minfloor: 34
+  Minfloor: 36
   Minstep: 1
-  Maxfloor: 38
+  Maxfloor: 40
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 500
-  Attack: 60
-  Defense: 20
-  MagicDefense: 20
+  MaxHp: 550
+  Attack: 75
+  Defense: 30
+  MagicDefense: 30
   Speed: 0
-  Luck: 20
-  Evasion: 100
+  Luck: 30
+  Evasion: 150
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -39,8 +39,12 @@ MonoBehaviour:
   PetrifyResistance: 0
   DebuffResistance: 0
   immuneToAllAilments: 0
-  attributeResistances: []
-  Exp: 780
+  attributeResistances:
+  - attribute: 3
+    value: 100
+  - attribute: 4
+    value: -200
+  Exp: 860
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -48,10 +52,12 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: "\u898B\u305F\u76EE\u304B\u3089\u60F3\u50CF\u51FA\u6765\u306A\u3044\u7D20\u65E9\u3055\u3067\n\u9053\u5177\u888B\u306E\u4E2D\u8EAB\u3092\u98DF\u3044\u8352\u3089\u3059\u305C\uFF01"
+  Help: "\u3053\u3046\u3044\u3046\u6575\u3092\u4F5C\u3063\u3066\u304B\u3089\u3001\n\u300C\u3042\u3001\u3058\u3083\u3042\u65B0\u3057\u3044\u6C37\u9B54\u6CD5\u3082\u3053\u306E\u8FBA\u3067\u8FFD\u52A0\u3057\u306A\u304D\u3083\u300D\n\u3063\u3066\u306A\u3063\u3061\u3083\u3046\u306E\u306F\u306A\u3093\u3060\u304B\u306A\u3041\u3063\u3066\u601D\u3046\u305C\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
-    threshold: 70
-  - skill: {fileID: 11400000, guid: 328878645e85c734cb6a3692527f174a, type: 2}
-    threshold: 100
+  - skill: {fileID: 11400000, guid: 963d58ed43f200d4b800ec57abba9462, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 4d206c75088ff5a429551aa107f105c5, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 4a6769b59eb409a4a9c35760150f2344, type: 2}
+    threshold: 80
   baseActionRange: 100

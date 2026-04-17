@@ -166,6 +166,8 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool curesParalyze = invItem.data.curesParalyze;
         bool curesBlind = invItem.data.curesBlind;
         bool curesSilence = invItem.data.curesSilence;
+        bool curesPetrify = invItem.data.curesPetrify;
+
 
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
@@ -211,7 +213,10 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
-
+        if (curesPetrify && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
+        }
 
         // =========================================================
         // ステータスポイント付与効果の適用（追加）
@@ -284,6 +289,8 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool eatCuresParalyze = invItem.data.eatCuresParalyze;
         bool eatCuresBlind = invItem.data.eatCuresBlind;
         bool eatCuresSilence = invItem.data.eatCuresSilence;
+        bool eatCuresPetrify = invItem.data.eatCuresPetrify;
+
         ItemData transformInto = invItem.data.transformInto;
 
         // 装備中なら外す
@@ -320,6 +327,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         }
+        if (eatCuresPetrify && GameState.I != null)
+        {
+            StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
+        }
+
 
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);

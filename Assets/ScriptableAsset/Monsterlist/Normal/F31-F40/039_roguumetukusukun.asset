@@ -10,25 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 034_harapeko
+  m_Name: 039_roguumetukusukun
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 034_harapeko
-  Mname: "\u306F\u3089\u307A\u3053\u30A2\u30AA\u30B1\u30E0\u30B7"
+  ID: 039_roguumetukusukun
+  Mname: "\u30ED\u30B0\u57CB\u3081\u5C3D\u304F\u3059\u304F\u3093"
   Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
-  Minfloor: 34
+  Minfloor: 36
   Minstep: 1
-  Maxfloor: 38
+  Maxfloor: 40
   Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 500
-  Attack: 60
-  Defense: 20
-  MagicDefense: 20
+  MaxHp: 600
+  Attack: 50
+  Defense: 0
+  MagicDefense: 0
   Speed: 0
-  Luck: 20
-  Evasion: 100
+  Luck: 1
+  Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   DebuffResistance: 0
   immuneToAllAilments: 0
   attributeResistances: []
-  Exp: 780
+  Exp: 0
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -48,10 +48,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: "\u898B\u305F\u76EE\u304B\u3089\u60F3\u50CF\u51FA\u6765\u306A\u3044\u7D20\u65E9\u3055\u3067\n\u9053\u5177\u888B\u306E\u4E2D\u8EAB\u3092\u98DF\u3044\u8352\u3089\u3059\u305C\uFF01"
+  Help: "\u9632\u5FA1\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u4F59\u88D5\u3060\u3051\u3069\n\u6226\u95D8\u306E\u30C6\u30F3\u30DD\u304C\u60AA\u304F\u306A\u308B\u305C\uFF01"
   actions:
-  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
-    threshold: 70
-  - skill: {fileID: 11400000, guid: 328878645e85c734cb6a3692527f174a, type: 2}
+  - skill: {fileID: 11400000, guid: 8e3b389368ab0594d8d4eb530c424341, type: 2}
     threshold: 100
   baseActionRange: 100

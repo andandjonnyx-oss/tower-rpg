@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M044M_sekika
   itemName: "\u30B9\u30C8\u30FC\u30F3"
   description: "\u6575\u3092\u77F3\u5316\u3055\u305B\u308B\u3002\u65E2\u306B\u9032\u884C\u4E2D\u306E\u5834\u5408\u65E9\u3081\u308B\nMP10
-    \u57FA\u790E\u547D\u4E2D80"
+    \u57FA\u790E\u547D\u4E2D60"
   icon: {fileID: 0}
   Minfloor: 34
   Minstep: 1
@@ -30,6 +30,7 @@ MonoBehaviour:
   curesParalyze: 0
   curesBlind: 0
   curesSilence: 0
+  curesPetrify: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -42,6 +43,7 @@ MonoBehaviour:
   eatCuresParalyze: 0
   eatCuresBlind: 0
   eatCuresSilence: 0
+  eatCuresPetrify: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
