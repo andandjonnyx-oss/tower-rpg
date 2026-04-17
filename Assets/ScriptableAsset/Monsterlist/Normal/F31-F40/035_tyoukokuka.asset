@@ -43,7 +43,7 @@ MonoBehaviour:
   Exp: 800
   Gold: 0
   dropItem: {fileID: 11400000, guid: 7b946f0c1d996c1428a7591b77480200, type: 2}
-  dropRate: 0
+  dropRate: 0.3
   autoRegenEnabled: 0
   autoRegenAmount: 0
   isQuizBoss: 0
@@ -53,5 +53,5 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}
     threshold: 70
   - skill: {fileID: 11400000, guid: c6e4674bd38590947839bb06e6f10488, type: 2}
-    threshold: 70
+    threshold: 100
   baseActionRange: 100

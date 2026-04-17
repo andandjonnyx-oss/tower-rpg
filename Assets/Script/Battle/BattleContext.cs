@@ -27,9 +27,13 @@ public static class BattleContext
     /// </summary>
     public static int BossFloor;
 
-    // =========================================================
-    // デバッグ戦闘フラグ（追加）
-    // =========================================================
+    /// <summary>
+    /// ボス戦でイベント勝利（餌付け等）したかどうか。
+    /// true の場合、OnVictory で通常勝利とは異なる会話に分岐する。
+    /// BattleSceneController が即勝利処理時にセットし、
+    /// 会話遷移後にリセットされる。
+    /// </summary>
+    public static bool IsBossEventWin;
 
     /// <summary>
     /// デバッグシーンから開始した戦闘かどうか。

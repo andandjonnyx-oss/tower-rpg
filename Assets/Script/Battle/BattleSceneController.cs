@@ -362,6 +362,21 @@ public partial class BattleSceneController : MonoBehaviour
                 }
 
                 // =========================================================
+                // ボス餌付け即勝利判定（追加）
+                // =========================================================
+                if (GameState.I.pendingBattleItemInstantWin)
+                {
+                    GameState.I.pendingBattleItemInstantWin = false;
+                    BattleContext.IsBossEventWin = true;
+                    Debug.Log("[Battle] ボス餌付けアイテムによる即勝利！");
+                    FlushLogsAndThen(() => OnVictory());
+                    RefreshSkillButton();
+                    RefreshMagicSelector();
+                    RefreshBattleStatusEffectUI();
+                    return;
+                }
+
+                // =========================================================
                 // 攻撃アイテムのダメージ処理（追加）
                 // =========================================================
                 if (GameState.I.pendingBattleItemDamage > 0)
@@ -584,7 +599,27 @@ public partial class BattleSceneController : MonoBehaviour
                 Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
             }
 
-            string victoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
+            // イベント勝利（餌付け等）と通常勝利で会話IDを分岐
+            string baseVictoryTalkId = BossEncounterSystem.GetBossVictoryTalkId(bossFloor);
+            string victoryTalkId;
+            if (BattleContext.IsBossEventWin)
+            {
+                victoryTalkId = baseVictoryTalkId + "_EVENT";
+            }
+            else
+            {
+                victoryTalkId = baseVictoryTalkId;
+            }
+
+            // 図鑑: どちらで勝っても両方の会話を既読にする（片方しか見られないため）
+            if (GameState.I != null)
+            {
+                GameState.I.MarkPlayed(baseVictoryTalkId);
+                GameState.I.MarkPlayed(baseVictoryTalkId + "_EVENT");
+            }
+
+            // フラグリセット
+            BattleContext.IsBossEventWin = false;
 
             if (GameState.I != null && !GameState.I.IsPlayed(victoryTalkId))
             {

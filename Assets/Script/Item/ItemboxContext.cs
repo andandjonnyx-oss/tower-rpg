@@ -99,7 +99,14 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                 }
                 else
                 {
-                    list.Add(new DetailButtonDef("使う", () => UseConsumable(invItem)));
+                    // ボス戦中 + 餌付けアイテム → ラベルを「与える」に変更
+                    bool isBossFeed = inBattle
+                                     && BattleContext.IsBossBattle
+                                     && invItem.data.bossFeedItem
+                                     && BattleContext.EnemyMonster != null
+                                     && BattleContext.EnemyMonster.acceptsFeedItem;
+                    string label = isBossFeed ? "与える" : "使う";
+                    list.Add(new DetailButtonDef(label, () => UseConsumable(invItem)));
                 }
                 break;
 
@@ -167,6 +174,8 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool curesBlind = invItem.data.curesBlind;
         bool curesSilence = invItem.data.curesSilence;
         bool curesPetrify = invItem.data.curesPetrify;
+
+        bool isBossFeedItem = invItem.data.bossFeedItem;
 
 
         int spGain = invItem.data.statusPointGain;
@@ -239,6 +248,19 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             GameState.I.pendingBattleItemName = itemName;
             Debug.Log($"[Itembox] 攻撃アイテム使用: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
         }
+
+        // =========================================================
+        // ボス餌付けアイテム: 即勝利フラグを GameState に保存（追加）
+        // =========================================================
+        if (isBossFeedItem && inBattle && BattleContext.IsBossBattle
+            && BattleContext.EnemyMonster != null
+            && BattleContext.EnemyMonster.acceptsFeedItem
+            && GameState.I != null)
+        {
+            GameState.I.pendingBattleItemInstantWin = true;
+            Debug.Log($"[Itembox] ボス餌付けアイテム使用: {itemName} → 即勝利フラグON");
+        }
+
 
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);

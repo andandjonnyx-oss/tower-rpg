@@ -816,7 +816,11 @@ MonoBehaviour:
   - floor: 30
     step: 20
     bossMonster: {fileID: 11400000, guid: 51cfcefc431798b448101f3f383dc046, type: 2}
-    victoryTalkEvent: {fileID: 0}
+    victoryTalkEvent: {fileID: 11400000, guid: efa1b20a00f28cd42ba0c6784b802658, type: 2}
+  - floor: 40
+    step: 20
+    bossMonster: {fileID: 11400000, guid: 7874d8e462c588e44a79fa6f6d424763, type: 2}
+    victoryTalkEvent: {fileID: 11400000, guid: 78684ae114dc125428f8c70b2803a91d, type: 2}
   battleSceneName: Battle
 --- !u!1 &374993241
 GameObject:

@@ -728,6 +728,17 @@ public class GameState : MonoBehaviour
     [NonSerialized] public string pendingBattleItemName = "";
 
     // =========================================================
+    // バトル中ボス餌付け: 即勝利フラグの一時保存（追加）
+    // =========================================================
+
+    /// <summary>
+    /// ボス餌付けアイテムを使用した場合 true。
+    /// BattleSceneController がシーン復帰時にこれを見て即勝利処理を行う。
+    /// 処理後に false にリセットされる。
+    /// </summary>
+    [NonSerialized] public bool pendingBattleItemInstantWin = false;
+
+    // =========================================================
     // イベント既読管理
     // =========================================================
     private HashSet<string> played = new HashSet<string>();
