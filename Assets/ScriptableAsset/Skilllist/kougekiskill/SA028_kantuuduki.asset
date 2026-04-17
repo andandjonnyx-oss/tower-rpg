@@ -25,8 +25,8 @@ MonoBehaviour:
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0.5
-  cooldownTurns: 0
-  mpCost: 4
+  cooldownTurns: 4
+  mpCost: 0
   baseHitRate: 95
   hitCount: 1
   noBattleOk: 0
