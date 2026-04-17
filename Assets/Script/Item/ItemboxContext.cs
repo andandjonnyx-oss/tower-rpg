@@ -136,7 +136,14 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // ƒoƒgƒ‹’†‚ÍŽÌ‚Ä‚é•s‰Â
         if (!inBattle)
         {
-            list.Add(new DetailButtonDef("ŽÌ‚Ä‚é", () => DiscardItem(invItem)));
+            if (invItem.data.cannotDiscard)
+            {
+                list.Add(new DetailButtonDef("ŽÌ‚Ä‚é‚È", null, interactable: false));
+            }
+            else
+            {
+                list.Add(new DetailButtonDef("ŽÌ‚Ä‚é", () => DiscardItem(invItem)));
+            }
         }
 
         return list;

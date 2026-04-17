@@ -74,7 +74,8 @@ public class TowerItemTrigger : MonoBehaviour
                     pending.icon,
                     canGet: true,
                     isFull: false,
-                    OnItemResult);
+                    OnItemResult,
+                    cannotIgnore: pending.cannotDiscard);
             }
             else
             {
@@ -95,7 +96,8 @@ public class TowerItemTrigger : MonoBehaviour
                 pending.itemName, pending.description, pending.icon,
                 canGet: false,
                 isFull: true,
-                OnItemResult);
+                OnItemResult,
+                cannotIgnore: pending.cannotDiscard);
         }
     }
 

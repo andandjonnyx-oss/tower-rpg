@@ -48,8 +48,9 @@ public class ItemPickupWindow : MonoBehaviour
     string description,
     Sprite sprite,
     bool canGet,
-    bool isFull,          // ← 新パラメータ追加
-    Action<ItemPickupResult> resultCallback)
+    bool isFull,
+    Action<ItemPickupResult> resultCallback,
+    bool cannotIgnore = false)
     {
         onResult = resultCallback;
         this.currentIsFull = isFull;
@@ -89,6 +90,12 @@ public class ItemPickupWindow : MonoBehaviour
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
                 if (txt != null) txt.text = "入手する";
             }
+        }
+
+        // 諦めるボタンの表示制御
+        if (ignoreButton != null)
+        {
+            ignoreButton.gameObject.SetActive(!cannotIgnore);
         }
 
         if (windowRoot != null)

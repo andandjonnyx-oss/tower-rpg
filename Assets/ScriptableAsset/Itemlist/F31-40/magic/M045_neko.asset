@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M045_neko
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M045_neko
+  itemName: "\u732B"
+  description: "\u306B\u3083\u30FC\u3093\n\u30B2\u30FC\u30E0\u7684\u306B\u306F\u4F55\u306E\u5F79\u306B\u3082\u7ACB\u305F\u306A\u3044\u304C\n\u30ED\u30FC\u30EB\u30D7\u30EC\u30A4\u7684\u306B\u306F\u5F8C\u308D\u306B\u3064\u3044\u3066\u3053\u3055\u305B\u3066\u3082\u3044\u3044\u3060\u308D\u3046"
+  icon: {fileID: 0}
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 1
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 45
