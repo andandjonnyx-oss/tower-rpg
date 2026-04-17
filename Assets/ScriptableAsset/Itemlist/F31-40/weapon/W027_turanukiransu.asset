@@ -45,9 +45,10 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   eatCuresPetrify: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
+  weaponAttribute: 2
+  attackPower: 90
+  skills:
+  - {fileID: 11400000, guid: 6b5729e114363e847b68b5d8f95ff378, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   equipDefense: 0
@@ -64,4 +65,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 27

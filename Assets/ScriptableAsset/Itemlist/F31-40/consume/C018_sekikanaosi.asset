@@ -30,7 +30,7 @@ MonoBehaviour:
   curesParalyze: 0
   curesBlind: 0
   curesSilence: 0
-  curesPetrify: 0
+  curesPetrify: 1
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

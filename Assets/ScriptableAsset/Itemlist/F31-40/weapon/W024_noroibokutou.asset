@@ -47,7 +47,7 @@ MonoBehaviour:
   eatCuresSilence: 0
   eatCuresPetrify: 0
   weaponAttribute: 1
-  attackPower: 120
+  attackPower: 110
   skills:
   - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
   weaponInflictEffect: 0
