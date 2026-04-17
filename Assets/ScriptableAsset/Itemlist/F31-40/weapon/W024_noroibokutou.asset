@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W024_noroibokutou
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W024_noroibokutou
+  itemName: "\u546A\u3044\u306E\u6728\u5200"
+  description: "\u5FA1\u795E\u6728\u3067\u6728\u5200\u4F5C\u3063\u305F\u3089\u795F\u3089\u308C\u3061\u3083\u3063\u305F\u2606\n\u653B\u6483+110
+    HP-50\u3000\u706B\u8010\u6027-50\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 31
+  Minstep: 1
+  Maxfloor: 35
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  weaponAttribute: 1
+  attackPower: 120
+  skills:
+  - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: -50
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances:
+  - attribute: 3
+    value: -50
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 24

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: C019_tyo-ru
   itemName: "\u3061\u3087\u30FC\u308B"
-  description: "\u307E\u305A\u3044\u3002\u4EBA\u9593\u306E\u98DF\u3079\u7269\u306A\u306E\u304B\uFF1F"
+  description: "\u307E\u305A\u3044\u3002\u4EBA\u9593\u306E\u98DF\u3079\u7269\u306A\u306E\u304B\uFF1F\nHP30\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 31
   Minstep: 1
@@ -36,6 +36,7 @@ MonoBehaviour:
   battleDamageCategory: 0
   battleOnly: 0
   bossFeedItem: 1
+  cannotDiscard: 0
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
@@ -63,4 +64,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 19

@@ -37,6 +37,7 @@ MonoBehaviour:
   battleDamageCategory: 0
   battleOnly: 0
   bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
@@ -64,4 +65,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 18

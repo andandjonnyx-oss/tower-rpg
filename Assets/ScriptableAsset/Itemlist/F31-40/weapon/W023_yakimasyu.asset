@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W023_yakimasyu
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W023_yakimasyu
+  itemName: "\u713C\u304D\u30DE\u30B7\u30E5\u30DE\u30ED"
+  description: "\u68D2\u306B\u523A\u3057\u3066\u713C\u3044\u305F\u71B1\u3005\u306E\u30DE\u30B7\u30E5\u30DE\u30ED\n\u653B\u6483+80
+    \u901A\u5E38\u653B\u6483\u706B\u5C5E\u6027\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u30012\u500D\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 34
+  Minstep: 1
+  Maxfloor: 40
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 1
+  eatHealAmount: 250
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 1
+  weaponAttribute: 3
+  attackPower: 80
+  skills:
+  - {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 23

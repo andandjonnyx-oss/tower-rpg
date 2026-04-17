@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: F40B_neko
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: F40B_neko
-  Mname: "\u732B"
+  Mname: "\u30A8\u30DF\u30EA\u30FC\u3061\u3083\u3093"
   Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 0
   Minstep: 0
@@ -22,13 +22,13 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 1
   IsUnique: 0
-  MaxHp: 1
-  Attack: 0
-  Defense: 9999
-  MagicDefense: 9999
+  MaxHp: 5000
+  Attack: 150
+  Defense: 500
+  MagicDefense: 300
   Speed: 0
-  Luck: 9999
-  Evasion: 1
+  Luck: 100
+  Evasion: 500
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   immuneToAllAilments: 1
   acceptsFeedItem: 1
   attributeResistances: []
-  Exp: 0
+  Exp: 8000
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -49,8 +49,12 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
+  Help: "\u5834\u9055\u3044\u306B\u5F37\u3044\u305C\uFF01\n\u990C\u3067\u3082\u4E0E\u3048\u308C\u3070\u5927\u4EBA\u3057\u304F\u306A\u308A\u305D\u3046\u306A\u3093\u3060\u304C\u2026\u2026"
   actions:
-  - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
-    threshold: 0
+  - skill: {fileID: 11400000, guid: 1cf74533a2b88d246b38a22b8e26a411, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: a6eae40223f8813499cda99dd2fbab9b, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 3b4532093a8415f4e8293177a4e12348, type: 2}
+    threshold: 100
   baseActionRange: 100

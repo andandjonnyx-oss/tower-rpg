@@ -49,6 +49,6 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
+  Help: "\u304C\u304A\u30FC"
   actions: []
   baseActionRange: 100
