@@ -101,7 +101,6 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                 {
                     // ボス戦中 + 餌付けアイテム → ラベルを「与える」に変更
                     bool isBossFeed = inBattle
-                                     && BattleContext.IsBossBattle
                                      && invItem.data.bossFeedItem
                                      && BattleContext.EnemyMonster != null
                                      && BattleContext.EnemyMonster.acceptsFeedItem;
@@ -259,7 +258,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // =========================================================
         // ボス餌付けアイテム: 即勝利フラグを GameState に保存（追加）
         // =========================================================
-        if (isBossFeedItem && inBattle && BattleContext.IsBossBattle
+        if (isBossFeedItem && inBattle
             && BattleContext.EnemyMonster != null
             && BattleContext.EnemyMonster.acceptsFeedItem
             && GameState.I != null)

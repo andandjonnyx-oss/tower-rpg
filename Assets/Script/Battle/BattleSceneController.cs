@@ -368,6 +368,14 @@ public partial class BattleSceneController : MonoBehaviour
                 {
                     GameState.I.pendingBattleItemInstantWin = false;
                     BattleContext.IsBossEventWin = true;
+
+                    // 餌付け専用ログ（敵名 + アイテム名）
+                    string feedEnemyName = enemyMonster != null ? enemyMonster.Mname : "敵";
+                    string feedItemName = GameState.I.pendingBattleItemName;
+                    AddLog($"{feedEnemyName} は{feedItemName}を貪っている……");
+                    AddLog($"{feedEnemyName} は満足した！");
+
+                    GameState.I.pendingBattleItemName = "";
                     Debug.Log("[Battle] ボス餌付けアイテムによる即勝利！");
                     FlushLogsAndThen(() => OnVictory());
                     RefreshSkillButton();

@@ -18,13 +18,9 @@ MonoBehaviour:
   step: 0
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   lines:
-  - speaker: 
-    text: 
-    portrait: {fileID: 0}
-    backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u52D5\u7269\u8650\u5F85\u306F\u3093\u305F\u30FC\u3044\uFF01"
     portrait: {fileID: 0}
     backgroundOverride: {fileID: 0}
   conditions: []
-  rewardItem: {fileID: 0}
+  rewardItem: {fileID: 11400000, guid: 0aa3ce835fe0e4a4ba9fcf190192f453, type: 2}

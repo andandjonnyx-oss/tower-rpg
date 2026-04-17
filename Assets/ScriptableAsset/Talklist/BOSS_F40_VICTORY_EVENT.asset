@@ -23,4 +23,4 @@ MonoBehaviour:
     portrait: {fileID: 0}
     backgroundOverride: {fileID: 0}
   conditions: []
-  rewardItem: {fileID: 0}
+  rewardItem: {fileID: 11400000, guid: 0aa3ce835fe0e4a4ba9fcf190192f453, type: 2}
