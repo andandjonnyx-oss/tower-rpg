@@ -253,7 +253,13 @@ public static class StatusEffectSystem
 
         int equipRes = EquipmentCalculator.GetStatusEffectResistance(resistKey);
         int passiveRes = PassiveCalculator.CalcStatusEffectResistance(resistKey);
-        return equipRes + passiveRes;
+        int total = equipRes + passiveRes;
+
+        // 魅了中は全状態異常耐性 -100
+        if (GameState.I != null && GameState.I.isCharmed)
+            total -= 100;
+
+        return total;
     }
     // =========================================================
     // 汎用：敵の状態異常耐性取得
@@ -266,7 +272,13 @@ public static class StatusEffectSystem
     public static int GetEnemyResistance(StatusEffect effect, Monster monster)
     {
         if (monster == null) return 0;
-        return monster.GetStatusEffectResistance(effect);
+        int resist = monster.GetStatusEffectResistance(effect);
+
+        // 敵が魅了中は全状態異常耐性 -100
+        if (SkillEffectProcessor.IsEnemyCharmed)
+            resist -= 100;
+
+        return resist;
     }
 
     // =========================================================

@@ -434,4 +434,20 @@ public partial class BattleSceneController
         return enemyMonster.IsBoss || enemyMonster.immuneToAllAilments;
     }
 
+    /// <summary>
+    /// 魅了によるダメージ減少を適用する（隠し効果・ログなし）。
+    /// プレイヤーが魅了中かつ敵が女性型（isGirl）の場合、ダメージを30%減少させる。
+    /// 最終ダメージに対する乗算として適用する（属性耐性計算とは独立）。
+    /// 攻撃アイテムには適用しない（通常攻撃/スキル/魔法のみ）。
+    /// </summary>
+    private int ApplyCharmDamageReduction(int damage)
+    {
+        if (damage <= 0) return damage;
+        if (GameState.I == null || !GameState.I.isCharmed) return damage;
+        if (enemyMonster == null || !enemyMonster.isGirl) return damage;
+
+        int reduced = Mathf.FloorToInt(damage * 0.7f + 0.5f);
+        Debug.Log($"[Battle] CharmReduction: {damage} → {reduced} (isGirl=true)");
+        return reduced;
+    }
 }

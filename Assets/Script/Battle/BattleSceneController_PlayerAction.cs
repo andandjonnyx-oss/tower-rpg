@@ -554,6 +554,8 @@ public partial class BattleSceneController
         // 完全無効（耐性100以上）の場合は0ダメージ
         if (damage <= 0) finalDamage = 0;
 
+        finalDamage = ApplyCharmDamageReduction(finalDamage);
+
         enemyCurrentHp -= finalDamage;
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
@@ -743,6 +745,8 @@ public partial class BattleSceneController
                 if (finalDamage < 1) finalDamage = 1;
                 if (afterResist <= 0) finalDamage = 0;
 
+                finalDamage = ApplyCharmDamageReduction(finalDamage);
+
                 enemyCurrentHp -= finalDamage;
                 if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
@@ -890,6 +894,8 @@ public partial class BattleSceneController
 
             // 完全無効（耐性100以上）の場合は0ダメージ
             if (damage <= 0) finalDamage = 0;
+
+            finalDamage = ApplyCharmDamageReduction(finalDamage);
 
             enemyCurrentHp -= finalDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
@@ -1046,6 +1052,8 @@ public partial class BattleSceneController
                 if (finalDamage < 1) finalDamage = 1;
                 if (afterResist <= 0) finalDamage = 0;
 
+                finalDamage = ApplyCharmDamageReduction(finalDamage);
+
                 enemyCurrentHp -= finalDamage;
                 if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
@@ -1198,6 +1206,8 @@ public partial class BattleSceneController
 
             // 完全無効（耐性100以上）の場合は0ダメージ
             if (damage <= 0) finalDamage = 0;
+
+            finalDamage = ApplyCharmDamageReduction(finalDamage);
 
             enemyCurrentHp -= finalDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
