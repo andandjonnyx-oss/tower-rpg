@@ -19,6 +19,16 @@ using UnityEngine;
 ///     戦闘中: DEF/MDEF倍率増加、残0で敗北（Phase B 実装済み）
 ///     塔移動中: 10%で残ターン-1（自然治癒ではない専用処理）、残0で30秒ロック
 ///     自然治癒の対象外。専用アイテム/スキルでのみ解除可能（Phase D）
+///   魅了（Charm）:
+///     戦闘中: 全状態異常耐性-100 + 女性型モンスターへのダメージ3割減（後日実装）
+///     塔移動中: 効果は戦闘中のみ
+///     自然治癒なし。専用アイテム/スキルでのみ解除可能。
+///   呪い（Curse）:
+///     戦闘中: 全魔法属性（火/氷/雷/聖/闇）の耐性 -100
+///     塔移動中: 10%で自然治癒
+///   ガラス（Glass）:
+///     戦闘中: 全物理属性（殴/斬/突）の耐性 -100
+///     塔移動中: 10%で自然治癒
 ///
 /// 【戦闘限定デバフ】（BattleSceneController側で管理）
 ///   気絶（Stun）:
@@ -61,7 +71,7 @@ public static class StatusEffectSystem
     /// <summary>塔移動中の毒ダメージ: 最大HPの何%か。</summary>
     private const float TowerPoisonPercent = 3f;
 
-    /// <summary>塔移動中の自然治癒確率（%）。毒・麻痺・暗闇共通。</summary>
+    /// <summary>塔移動中の自然治癒確率（%）。毒・麻痺・暗闇・沈黙・呪い・ガラス共通。</summary>
     private const float TowerNaturalCureChance = 10f;
 
     // =========================================================
@@ -265,7 +275,7 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// プレイヤーが指定の持続型状態異常にかかっているかを返す。
-    /// 持続型デバフ（Poison/Paralyze/Blind/Silence/Petrify）に対応。
+    /// 持続型デバフ（Poison/Paralyze/Blind/Silence/Petrify/Charm/Curse/Glass）に対応。
     /// 戦闘限定（Stun/Rage/バフ/デバフ）は BattleSceneController 側で管理。
     /// </summary>
     public static bool IsPlayerAffected(StatusEffect effect)
@@ -278,7 +288,9 @@ public static class StatusEffectSystem
             case StatusEffect.Blind: return GameState.I.isBlind;
             case StatusEffect.Silence: return GameState.I.isSilenced;
             case StatusEffect.Petrify: return GameState.I.isPetrified;
-
+            case StatusEffect.Charm: return GameState.I.isCharmed;
+            case StatusEffect.Curse: return GameState.I.isCursed;
+            case StatusEffect.Glass: return GameState.I.isGlassed;
 
             default: return false;
         }
@@ -311,13 +323,13 @@ public static class StatusEffectSystem
                 }
                 break;
             case StatusEffect.Charm:
-                GameState.I.isCharmed = false;
+                GameState.I.isCharmed = value;
                 break;
             case StatusEffect.Curse:
-                GameState.I.isCursed = false;
+                GameState.I.isCursed = value;
                 break;
             case StatusEffect.Glass:
-                GameState.I.isGlassed = false;
+                GameState.I.isGlassed = value;
                 break;
 
         }
@@ -429,7 +441,7 @@ public static class StatusEffectSystem
 
     /// <summary>
     /// 塔移動中の自然治癒判定を行う。
-    /// 10%の確率で治癒する。毒・麻痺・暗闇共通。
+    /// 10%の確率で治癒する。毒・麻痺・暗闇・沈黙・呪い・ガラス共通。
     /// </summary>
     /// <returns>true: 治癒、false: 継続</returns>
     public static bool TryNaturalCure()
@@ -569,6 +581,27 @@ public static class StatusEffectSystem
             }
         }
 
+        // --- 呪い: 自然治癒のみ ---
+        if (gs.isCursed)
+        {
+            if (TryNaturalCure())
+            {
+                gs.isCursed = false;
+                logs.Add("呪いが自然に解けた！");
+            }
+        }
+
+        // --- ガラス: 自然治癒のみ ---
+        if (gs.isGlassed)
+        {
+            if (TryNaturalCure())
+            {
+                gs.isGlassed = false;
+                logs.Add("ガラスが自然に治った！");
+            }
+        }
+
+        // ★魅了（Charm）は自然治癒なし。ここには追加しない。
 
 
         // --- 石化: 10% で残ターン-1（Phase C 追加） ---

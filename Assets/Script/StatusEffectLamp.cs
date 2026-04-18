@@ -2,7 +2,7 @@
 
 /// <summary>
 /// 状態異常ランプ表示コンポーネント。
-/// 各状態異常に対応する子オブジェクト（doku/mahi/kurayami/ikari/chinmoku/sekika + バフ/デバフ10個）の
+/// 各状態異常に対応する子オブジェクト（doku/mahi/kurayami/ikari/chinmoku/sekika/miryou/noroi/garasu + バフ/デバフ10個）の
 /// SetActive(true/false) を切り替えて状態異常を表示する。
 ///
 /// Inspectorで各ランプオブジェクトを割り当てる。
@@ -11,6 +11,7 @@
 /// 使い方:
 ///   lamp.SetPoison(true);   // 毒ランプ点灯
 ///   lamp.SetAll(poison, paralyze, blind, rage, silence, petrify,
+///               charm, curse, glass,
 ///               defDown, defUp, atkDown, atkUp,
 ///               matkDown, matkUp, mdefDown, mdefUp,
 ///               lucDown, lucUp);
@@ -36,6 +37,15 @@ public class StatusEffectLamp : MonoBehaviour
 
     [Tooltip("石化ランプ（Phase C 追加）")]
     [SerializeField] private GameObject sekika;
+
+    [Tooltip("魅了ランプ（ピンク系 #FF69B4）")]
+    [SerializeField] private GameObject miryou;
+
+    [Tooltip("呪いランプ（紫系 #8B008B）")]
+    [SerializeField] private GameObject noroi;
+
+    [Tooltip("ガラスランプ（水色系 #87CEEB）")]
+    [SerializeField] private GameObject garasu;
 
     // =========================================================
     // バフ/デバフランプ（5ペア = 10個）
@@ -112,6 +122,24 @@ public class StatusEffectLamp : MonoBehaviour
         if (sekika != null) sekika.SetActive(active);
     }
 
+    /// <summary>魅了ランプの点灯/消灯を設定する。</summary>
+    public void SetCharm(bool active)
+    {
+        if (miryou != null) miryou.SetActive(active);
+    }
+
+    /// <summary>呪いランプの点灯/消灯を設定する。</summary>
+    public void SetCurse(bool active)
+    {
+        if (noroi != null) noroi.SetActive(active);
+    }
+
+    /// <summary>ガラスランプの点灯/消灯を設定する。</summary>
+    public void SetGlass(bool active)
+    {
+        if (garasu != null) garasu.SetActive(active);
+    }
+
     /// <summary>防御ダウンランプの点灯/消灯を設定する。</summary>
     public void SetDefenseDown(bool active)
     {
@@ -177,6 +205,9 @@ public class StatusEffectLamp : MonoBehaviour
         SetRage(rage);
         SetSilence(false);
         SetPetrify(false);
+        SetCharm(false);
+        SetCurse(false);
+        SetGlass(false);
     }
 
     /// <summary>全ランプをまとめて設定する（Tower用: 5引数 — 沈黙対応）。</summary>
@@ -188,6 +219,9 @@ public class StatusEffectLamp : MonoBehaviour
         SetRage(rage);
         SetSilence(silence);
         SetPetrify(false);
+        SetCharm(false);
+        SetCurse(false);
+        SetGlass(false);
     }
 
     /// <summary>全ランプをまとめて設定する（Tower用: 6引数 — 沈黙+石化対応、Phase C 追加）。</summary>
@@ -199,6 +233,9 @@ public class StatusEffectLamp : MonoBehaviour
         SetRage(rage);
         SetSilence(silence);
         SetPetrify(petrify);
+        SetCharm(false);
+        SetCurse(false);
+        SetGlass(false);
     }
 
     // Phase3 の 6引数版（poison, paralyze, blind, rage, defDown, defUp）は
@@ -219,6 +256,9 @@ public class StatusEffectLamp : MonoBehaviour
         SetRage(rage);
         SetSilence(false);
         SetPetrify(false);
+        SetCharm(false);
+        SetCurse(false);
+        SetGlass(false);
         SetDefenseDown(defDown);
         SetDefenseUp(defUp);
         SetAttackDown(atkDown);
@@ -240,6 +280,7 @@ public class StatusEffectLamp : MonoBehaviour
                        bool lucDown, bool lucUp)
     {
         SetAll(poison, paralyze, blind, rage, silence, false,
+               false, false, false,
                defDown, defUp, atkDown, atkUp,
                matkDown, matkUp, mdefDown, mdefUp,
                lucDown, lucUp);
@@ -253,12 +294,31 @@ public class StatusEffectLamp : MonoBehaviour
                        bool mdefDown, bool mdefUp,
                        bool lucDown, bool lucUp)
     {
+        SetAll(poison, paralyze, blind, rage, silence, petrify,
+               false, false, false,
+               defDown, defUp, atkDown, atkUp,
+               matkDown, matkUp, mdefDown, mdefUp,
+               lucDown, lucUp);
+    }
+
+    /// <summary>全ランプをまとめて設定する（最新フル版: 19引数 — 魅了+呪い+ガラス+バフ/デバフ全対応）。</summary>
+    public void SetAll(bool poison, bool paralyze, bool blind, bool rage, bool silence, bool petrify,
+                       bool charm, bool curse, bool glass,
+                       bool defDown, bool defUp,
+                       bool atkDown, bool atkUp,
+                       bool matkDown, bool matkUp,
+                       bool mdefDown, bool mdefUp,
+                       bool lucDown, bool lucUp)
+    {
         SetPoison(poison);
         SetParalyze(paralyze);
         SetBlind(blind);
         SetRage(rage);
         SetSilence(silence);
         SetPetrify(petrify);
+        SetCharm(charm);
+        SetCurse(curse);
+        SetGlass(glass);
         SetDefenseDown(defDown);
         SetDefenseUp(defUp);
         SetAttackDown(atkDown);
@@ -280,6 +340,9 @@ public class StatusEffectLamp : MonoBehaviour
         SetRage(false);
         SetSilence(false);
         SetPetrify(false);
+        SetCharm(false);
+        SetCurse(false);
+        SetGlass(false);
         SetDefenseDown(false);
         SetDefenseUp(false);
         SetAttackDown(false);

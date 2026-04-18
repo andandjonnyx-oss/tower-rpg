@@ -314,6 +314,7 @@ public partial class BattleSceneController : MonoBehaviour
 
         if (!battleInitialized)
         {
+            SkillEffectProcessor.ResetEnemyAilmentDummies();
             enemyCurrentHp = enemyMonster.MaxHp;
             battleInitialized = true;
             persistentLogLines.Clear();

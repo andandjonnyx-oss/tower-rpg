@@ -53,11 +53,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42650bd67defee8488fa53ec50f52a87, type: 2}
   - {fileID: 11400000, guid: c39432b1168095643a6353c41fe2e4d6, type: 2}
   - {fileID: 11400000, guid: 10e2d23c047e7c145a709ffca4842e78, type: 2}
-  - {fileID: 11400000, guid: c4441b35d24aca0419d9722d3f21222f, type: 2}
   - {fileID: 11400000, guid: b09f41fe21ee59243b8cc2ee9556e8ac, type: 2}
   - {fileID: 11400000, guid: ea821e1fe0984f44e88c973c188af8b5, type: 2}
   - {fileID: 11400000, guid: ef0896b75449972439e1e8180dea12ba, type: 2}
   - {fileID: 11400000, guid: 51cfcefc431798b448101f3f383dc046, type: 2}
   - {fileID: 11400000, guid: 7874d8e462c588e44a79fa6f6d424763, type: 2}
+  - {fileID: 11400000, guid: 85151e6e8c27d0c4bb6f4bd8930fa6d3, type: 2}
   maxFloor: 100
   maxStepPerFloor: 20

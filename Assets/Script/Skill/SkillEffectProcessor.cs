@@ -389,12 +389,15 @@ public static class SkillEffectProcessor
         switch (effect)
         {
             // =========================================================
-            // 持続型デバフ（双方向対応）: 毒・麻痺・暗闇・沈黙
+            // 持続型デバフ（双方向対応）: 毒・麻痺・暗闇・沈黙・呪い・ガラス・魅了
             // =========================================================
             case StatusEffect.Poison:
             case StatusEffect.Paralyze:
             case StatusEffect.Blind:
             case StatusEffect.Silence:
+            case StatusEffect.Charm:
+            case StatusEffect.Curse:
+            case StatusEffect.Glass:
                 ProcessBidirectionalAilment(
                     effect, entry.chance, isPlayerAttack, enemyMonster,
                     ref enemyIsPoisoned, ref enemyIsParalyzed, ref enemyIsBlind,
@@ -473,7 +476,11 @@ public static class SkillEffectProcessor
 
     /// <summary>
     /// 双方向対応の持続型デバフ付与処理。
-    /// Poison / Paralyze / Blind / Silence を統一的に処理する。
+    /// Poison / Paralyze / Blind / Silence / Charm / Curse / Glass を統一的に処理する。
+    ///
+    /// 敵側フラグは GetEnemyAilmentRef で取得する。
+    /// Charm / Curse / Glass は敵側フラグが BattleSceneController に未定義のため、
+    /// GetEnemyAilmentRef 内でダミー static フィールドを返す（将来対応用）。
     /// </summary>
     private static void ProcessBidirectionalAilment(
         StatusEffect effect,
@@ -535,8 +542,36 @@ public static class SkillEffectProcessor
         }
     }
 
+    // =========================================================
+    // 敵側の状態異常フラグ参照ヘルパー
+    // =========================================================
+
+    /// <summary>
+    /// Charm / Curse / Glass の敵側フラグ用ダミー。
+    /// BattleSceneController に enemyIsCharmed 等が追加されるまでの暫定措置。
+    /// static なので複数戦闘をまたいでも問題ないが、戦闘開始時にリセットが必要。
+    /// </summary>
+    private static bool _enemyCharmDummy = false;
+    private static bool _enemyCurseDummy = false;
+    private static bool _enemyGlassDummy = false;
+
+    /// <summary>
+    /// 戦闘開始時にダミーフラグをリセットする。
+    /// BattleSceneController の戦闘初期化ブロックから呼ぶこと。
+    /// </summary>
+    public static void ResetEnemyAilmentDummies()
+    {
+        _enemyCharmDummy = false;
+        _enemyCurseDummy = false;
+        _enemyGlassDummy = false;
+    }
+
     /// <summary>
     /// 状態異常ごとに敵側の対応するフラグの参照を返すヘルパー。
+    /// Charm / Curse / Glass は BattleSceneController に専用フラグが未定義のため、
+    /// static ダミーフィールドを返す。将来 BattleSceneController に
+    /// enemyIsCharmed / enemyIsCursed / enemyIsGlassed を追加した際に
+    /// ここの参照先を切り替えれば移行完了。
     /// </summary>
     private static ref bool GetEnemyAilmentRef(
         StatusEffect effect,
@@ -550,6 +585,9 @@ public static class SkillEffectProcessor
             case StatusEffect.Paralyze: return ref enemyIsParalyzed;
             case StatusEffect.Blind: return ref enemyIsBlind;
             case StatusEffect.Silence: return ref enemyIsSilenced;
+            case StatusEffect.Charm: return ref _enemyCharmDummy;
+            case StatusEffect.Curse: return ref _enemyCurseDummy;
+            case StatusEffect.Glass: return ref _enemyGlassDummy;
             case StatusEffect.Poison:
             default: return ref enemyIsPoisoned;
         }
@@ -832,6 +870,9 @@ public static class SkillEffectProcessor
                 case StatusEffect.Paralyze:
                 case StatusEffect.Blind:
                 case StatusEffect.Silence:
+                case StatusEffect.Charm:
+                case StatusEffect.Curse:
+                case StatusEffect.Glass:
                     if (StatusEffectSystem.IsPlayerAffected(effect))
                     {
                         StatusEffectSystem.CurePlayer(effect);

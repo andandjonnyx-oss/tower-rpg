@@ -74,9 +74,14 @@ public static class SaveManager
             // 遭遇モンスターID一覧
             data.encounteredMonsterIds = GameState.I.GetAllEncounteredIds();
 
-            // 状態異常（追加）
+            // 状態異常（全持続型デバフを統一セーブ）
             data.isPoisoned = GameState.I.isPoisoned;
+            data.isParalyzed = GameState.I.isParalyzed;
+            data.isBlind = GameState.I.isBlind;
             data.isSilenced = GameState.I.isSilenced;
+            data.isCharmed = GameState.I.isCharmed;
+            data.isCursed = GameState.I.isCursed;
+            data.isGlassed = GameState.I.isGlassed;
 
             // 石化（Phase C 追加）
             data.playerIsPetrified = GameState.I.isPetrified;
@@ -138,7 +143,7 @@ public static class SaveManager
     /// ★ブラッシュアップ:
     ///   ロード後は Main シーンに遷移し、HP/MP は全回復＋状態異常クリア。
     ///   「街に戻る = 全回復（状態異常含む）」で統一。
-    ///   セーブデータには isPoisoned を保持するが、
+    ///   セーブデータには全状態異常を保持するが、
     ///   ロード復帰時は全クリアする。
     /// </summary>
     public static bool Load()
@@ -206,7 +211,7 @@ public static class SaveManager
 
             // ★ブラッシュアップ: ロード時は全状態異常をクリア
             // 「街に戻る = 全回復（状態異常含む）」で統一。
-            // 以前は isPoisoned を復元していたが、
+            // セーブデータには全状態異常を保持しているが、
             // ロードは常に街（Main）スタートなので全クリアが正しい。
             // 石化もここでクリアされる（ClearAllStatusEffects が石化リセットを含む）。
             GameState.I.ClearAllStatusEffects();
@@ -291,10 +296,16 @@ public class SaveData
     // --- 装備 ---
     public string equippedWeaponUid = "";
 
-    // --- 状態異常（追加） ---
+    // --- 状態異常（全持続型デバフを統一セーブ） ---
     // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
+    // 既存セーブデータとの互換性: JSON デシリアライズのデフォルト値（false）で自動対応。
     public bool isPoisoned = false;
+    public bool isParalyzed = false;
+    public bool isBlind = false;
     public bool isSilenced = false;
+    public bool isCharmed = false;
+    public bool isCursed = false;
+    public bool isGlassed = false;
 
     // --- 石化（Phase C 追加） ---
     // セーブには保存するが、ロード時は ClearAllStatusEffects() でクリアする。
