@@ -29,11 +29,14 @@ MonoBehaviour:
   curesParalyze: 0
   curesBlind: 0
   curesSilence: 0
+  curesPetrify: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 1
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
@@ -41,6 +44,7 @@ MonoBehaviour:
   eatCuresParalyze: 0
   eatCuresBlind: 0
   eatCuresSilence: 0
+  eatCuresPetrify: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []

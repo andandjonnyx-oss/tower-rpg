@@ -9,6 +9,9 @@ using UnityEngine.UI;
 /// バトル中 (GameState.isInBattle): 使う/装備変更のみ。捨てる不可。
 ///   アイテム操作後は自動でバトルシーンへ戻り1ターン消費。
 ///   戻るボタンはターン消費なしでバトルシーンへ。
+///
+/// ボタン構築と効果適用は ItemActionHelper を経由し、
+/// StorageContext と仕様を統一する。
 /// </summary>
 public class ItemboxContext : MonoBehaviour, IItemContext
 {
@@ -89,43 +92,27 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         switch (invItem.data.category)
         {
             case ItemCategory.Consumable:
-                // =========================================================
-                // battleOnly チェック（追加）
-                // battleOnly == true のアイテムは非バトル時に「使う」を表示しない
-                // =========================================================
-                if (invItem.data.battleOnly && !inBattle)
                 {
-                    // 戦闘中のみ使用可能 → 非バトル時はボタンなし
+                    var btn = ItemActionHelper.BuildUseConsumableButton(
+                        invItem, inBattle, () => UseConsumable(invItem));
+                    if (btn != null) list.Add(btn);
+                    break;
                 }
-                else
-                {
-                    // ボス戦中 + 餌付けアイテム → ラベルを「与える」に変更
-                    bool isBossFeed = inBattle
-                                     && invItem.data.bossFeedItem
-                                     && BattleContext.EnemyMonster != null
-                                     && BattleContext.EnemyMonster.acceptsFeedItem;
-                    string label = isBossFeed ? "与える" : "使う";
-                    list.Add(new DetailButtonDef(label, () => UseConsumable(invItem)));
-                }
-                break;
 
             case ItemCategory.Weapon:
-                bool equipped = GameState.I != null
-                    && GameState.I.equippedWeaponUid == invItem.uid;
-                if (equipped)
-                    list.Add(new DetailButtonDef("外す", () => UnequipWeapon(invItem)));
-                else
-                    list.Add(new DetailButtonDef("装備", () => EquipWeapon(invItem)));
-
-                // =========================================================
-                // 食べられる武器（追加）
-                // isEdible == true の場合、「食べる」ボタンを追加
-                // =========================================================
-                if (invItem.data.isEdible)
                 {
-                    list.Add(new DetailButtonDef("食べる", () => EatWeapon(invItem)));
+                    bool equipped = GameState.I != null
+                        && GameState.I.equippedWeaponUid == invItem.uid;
+                    if (equipped)
+                        list.Add(new DetailButtonDef("外す", () => UnequipWeapon(invItem)));
+                    else
+                        list.Add(new DetailButtonDef("装備", () => EquipWeapon(invItem)));
+
+                    var eatBtn = ItemActionHelper.BuildEatWeaponButton(
+                        invItem, () => EatWeapon(invItem));
+                    if (eatBtn != null) list.Add(eatBtn);
+                    break;
                 }
-                break;
 
             case ItemCategory.Magic:
                 // Magic にはボタンなし
@@ -135,14 +122,8 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // バトル中は捨てる不可
         if (!inBattle)
         {
-            if (invItem.data.cannotDiscard)
-            {
-                list.Add(new DetailButtonDef("捨てるな", null, interactable: false));
-            }
-            else
-            {
-                list.Add(new DetailButtonDef("捨てる", () => DiscardItem(invItem)));
-            }
+            list.Add(ItemActionHelper.BuildDiscardButton(
+                invItem, () => DiscardItem(invItem)));
         }
 
         return list;
@@ -173,79 +154,19 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // 必要な値を事前に取得しておく
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.healAmount;
-        int mpHeal = invItem.data.mpHealAmount;
-
-        bool curesPoison = invItem.data.curesPoison;
-        bool curesParalyze = invItem.data.curesParalyze;
-        bool curesBlind = invItem.data.curesBlind;
-        bool curesSilence = invItem.data.curesSilence;
-        bool curesPetrify = invItem.data.curesPetrify;
-
         bool isBossFeedItem = invItem.data.bossFeedItem;
-
-
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
 
-        // =========================================================
-        // 攻撃アイテム: ダメージ情報の事前取得（追加）
-        // =========================================================
+        // 攻撃アイテム: ダメージ情報の事前取得
         int battleDmg = invItem.data.battleDamage;
         WeaponAttribute battleAttr = invItem.data.battleAttribute;
         DamageCategory battleDmgCat = invItem.data.battleDamageCategory;
 
-        // 回復効果の適用
-        if (healAmount > 0 && GameState.I != null)
-        {
-            GameState.I.currentHp += healAmount;
-            if (GameState.I.currentHp > GameState.I.maxHp)
-                GameState.I.currentHp = GameState.I.maxHp;
-        }
+        // ヘルパー経由で効果適用（HP/MP/状態異常/SP すべて含む）
+        ItemActionHelper.ApplyConsumableEffects(invItem);
 
-        if (mpHeal > 0 && GameState.I != null)
-        {
-            GameState.I.currentMp += mpHeal;
-            if (GameState.I.currentMp > GameState.I.maxMp)
-                GameState.I.currentMp = GameState.I.maxMp;
-        }
-
-        // =========================================================
-        // 状態異常回復の適用（追加）
-        // =========================================================
-        if (curesPoison && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayerPoison();
-        }
-        if (curesParalyze && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
-        }
-        if (curesBlind && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
-        }
-        if (curesSilence && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
-        }
-        if (curesPetrify && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
-        }
-
-        // =========================================================
-        // ステータスポイント付与効果の適用（追加）
-        // =========================================================
-        if (spGain > 0 && GameState.I != null)
-        {
-            GameState.I.statusPoint += spGain;
-            Debug.Log($"[Itembox] ステータスポイント +{spGain} (合計: {GameState.I.statusPoint})");
-        }
-
-        // =========================================================
-        // 攻撃アイテム: ダメージ情報を GameState に一時保存（追加）
-        // BattleSceneController 復帰時にダメージ計算を実行する。
-        // =========================================================
+        // 攻撃アイテム: ダメージ情報を GameState に一時保存
         if (battleDmg > 0 && inBattle && GameState.I != null)
         {
             GameState.I.pendingBattleItemDamage = battleDmg;
@@ -255,9 +176,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             Debug.Log($"[Itembox] 攻撃アイテム使用: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
         }
 
-        // =========================================================
-        // ボス餌付けアイテム: 即勝利フラグを GameState に保存（追加）
-        // =========================================================
+        // ボス餌付けアイテム: 即勝利フラグを GameState に保存
         if (isBossFeedItem && inBattle
             && BattleContext.EnemyMonster != null
             && BattleContext.EnemyMonster.acceptsFeedItem
@@ -267,14 +186,10 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             Debug.Log($"[Itembox] ボス餌付けアイテム使用: {itemName} → 即勝利フラグON");
         }
 
-
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
-        // =========================================================
-        // 使用後にアイテム変化（追加）
-        // 先に元アイテムを消してから追加するので枠は±0
-        // =========================================================
+        // 使用後にアイテム変化
         if (transformInto != null && ItemBoxManager.Instance != null)
         {
             ItemBoxManager.Instance.AddItem(transformInto);
@@ -296,13 +211,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     }
 
     // =========================================================
-    // 武器を食べる（追加）
-    // =========================================================
-    //
-    // isEdible == true の武器を消費する。
-    // 装備中の場合は自動的に外してから消費する。
-    // 回復効果を適用し、transformInto があれば変化先を追加する。
-    // バトル中は1ターン消費する。
+    // 武器を食べる
     // =========================================================
 
     private void EatWeapon(InventoryItem invItem)
@@ -313,53 +222,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // 事前取得（RemoveItem 後に参照できなくなるため）
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.eatHealAmount;
-        bool curesPoison = invItem.data.eatCuresPoison;
-        bool eatCuresParalyze = invItem.data.eatCuresParalyze;
-        bool eatCuresBlind = invItem.data.eatCuresBlind;
-        bool eatCuresSilence = invItem.data.eatCuresSilence;
-        bool eatCuresPetrify = invItem.data.eatCuresPetrify;
-
         ItemData transformInto = invItem.data.transformInto;
 
-        // 装備中なら外す
-        if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
-        {
-            GameState.I.equippedWeaponUid = "";
-            Debug.Log($"[Itembox] 食べる前に装備を外した: {itemName}");
-        }
-
-        // 回復効果の適用
-        if (healAmount > 0 && GameState.I != null)
-        {
-            GameState.I.currentHp += healAmount;
-            if (GameState.I.currentHp > GameState.I.maxHp)
-                GameState.I.currentHp = GameState.I.maxHp;
-        }
-
-        // 毒消し
-        if (curesPoison && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayerPoison();
-        }
-        if (eatCuresParalyze && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
-        }
-
-        if (eatCuresBlind && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Blind);
-        }
-
-        if (eatCuresSilence && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Silence);
-        }
-        if (eatCuresPetrify && GameState.I != null)
-        {
-            StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
-        }
-
+        // ヘルパー経由で装備解除 + 効果適用
+        ItemActionHelper.UnequipIfNeeded(invItem);
+        ItemActionHelper.ApplyEatWeaponEffects(invItem);
 
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);
