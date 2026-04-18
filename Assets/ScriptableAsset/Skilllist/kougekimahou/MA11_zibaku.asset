@@ -34,7 +34,7 @@ MonoBehaviour:
   - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
     ailmentMode: 0
     targetStatusEffect: 0
-    chance: 0
+    chance: 100
     intValue: 0
     duration: 0
   enemyNextForceSkill: {fileID: 0}

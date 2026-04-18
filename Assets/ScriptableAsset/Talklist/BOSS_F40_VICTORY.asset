@@ -19,8 +19,24 @@ MonoBehaviour:
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "\u52D5\u7269\u8650\u5F85\u306F\u3093\u305F\u30FC\u3044\uFF01"
-    portrait: {fileID: 0}
+    text: "\u30A8\u30DF\u30EA\u30FC\u3061\u3083\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3093\uFF01\n\u3046\u308F\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\u3042\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u52D5\u7269\u8650\u5F85\u306F\u3093\u305F\u30FC\u3044\uFF01\n\u30A4\u30D9\u30F3\u30C8\u6226\u306B\u52DD\u3064\u305F\u3081\u306B\u7A3C\u304E\u307E\u304F\u3063\u3066\u307E\u3067\u3001\n\u3053\u3093\u306A\u3053\u3068\u304C\u3084\u308A\u305F\u304B\u3063\u305F\u306E\u304B\u304A\u524D\u306F\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u2026\u2026\u3057\u3087\u3046\u304C\u306A\u3044\u304B\u3089\u3001\u65B0\u3057\u3044\u732B\u3092\u4F5C\u308D\u3046\u3063\u3068\u3002\n\u4ECA\u5EA6\u306F\u30DE\u30F3\u30C1\u30AB\u30F3\u3063\u3066\u306E\u306B\u3057\u3088\u3046\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: You
+    text: "\u5207\u308A\u66FF\u3048\u304C\u65E9\u3044\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u304A\u524D\u306B\u3082\u5148\u4EE3\u30A8\u30DF\u30EA\u30FC\u3061\u3083\u3093\u3092\u3084\u308B\u304B\u3089\u3001\n\u53CD\u7701\u3057\u3066\u3061\u3083\u3093\u3068\u98FC\u3046\u3093\u3060\u305E\u3002\n\u5165\u624B\u3092\u8AE6\u3081\u3089\u308C\u306A\u3044\u3057\u6368\u3066\u3089\u308C\u306A\u3044\u546A\u3044\u306E\u30A2\u30A4\u30C6\u30E0\u306B\u3057\u3066\u304A\u3044\u305F\u304B\u3089\u306A\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
   rewardItem: {fileID: 11400000, guid: 0aa3ce835fe0e4a4ba9fcf190192f453, type: 2}

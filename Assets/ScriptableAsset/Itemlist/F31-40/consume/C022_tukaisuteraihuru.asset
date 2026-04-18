@@ -35,10 +35,10 @@ MonoBehaviour:
   battleDamage: 300
   battleAttribute: 3
   battleDamageCategory: 0
-  battleOnly: 0
+  battleOnly: 1
   bossFeedItem: 0
   cannotDiscard: 0
-  transformInto: {fileID: 0}
+  transformInto: {fileID: 11400000, guid: 7507ba43f54c00347a1596dcf254c753, type: 2}
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0

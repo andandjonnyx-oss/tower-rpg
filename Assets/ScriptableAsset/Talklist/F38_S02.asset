@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F38_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F38_S02
+  zukanTitle: 
+  floor: 38
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30C0\u30E1\u30FC\u30B8\u8A08\u7B97\u3092\u3059\u308B\u6642\u306F\u3001\n\u307E\u305A\u8010\u6027\u306B\u3088\u308B\u5897\u6E1B\u304C\u5165\u308B\u305C\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u4F8B\u3048\u3070100\u30C0\u30E1\u30FC\u30B8\u306E\u708E\u653B\u6483\u3092\u3001\n\u8010\u602750\u3067\u9632\u5FA120\u306E\u72B6\u614B\u3067\u53D7\u3051\u305F\u3068\u3059\u308B\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3059\u308B\u3068\u307E\u305A\u534A\u6E1B\u3057\u306650\u306B\u306A\u308A\u3001\n\u305D\u3053\u304B\u3089\u9632\u5FA120\u3067\u30C0\u30A4\u30B9\u3092\u632F\u3063\u3066\u3001\u5E73\u574710\u6E1B\u5C11\u3002\n\u6700\u7D42\u7684\u306B\u306F40\u30C0\u30E1\u30FC\u30B8\u304F\u3089\u3044\u306B\u306A\u308B\u8A33\u3060\u306A\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3053\u308C\u304C\u9006\u3060\u3063\u305F\u3089\u3001\u6E1B\u5C11\u3057\u306690\u306B\u306A\u3063\u305F\u5F8C\u3001\n\u534A\u6E1B\u3059\u308B\u304B\u308945\u30C0\u30E1\u30FC\u30B8\u304F\u3089\u3044\u306B\u306A\u308B\u3002\n\u30C0\u30E1\u30FC\u30B8\u8A08\u7B97\u3059\u308B\u6642\u306F\u3053\u306E\u8FBA\u9593\u9055\u3048\u308B\u306A\u3088\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

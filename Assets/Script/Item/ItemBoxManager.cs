@@ -40,7 +40,11 @@ public class ItemBoxManager : MonoBehaviour
         SaveManager.Save(); // 即時セーブ
 
         // MaxHpBonus / DefenseBonus を持つアイテムの追加に備えて maxHp を再計算
-        if (GameState.I != null) GameState.I.RecalcMaxHp();
+        if (GameState.I != null)
+        {
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
+        }
 
         return true;
     }
@@ -61,7 +65,11 @@ public class ItemBoxManager : MonoBehaviour
 
             // MaxHpBonus を持つアイテムの破棄で maxHp が下がる場合に備えて再計算
             // RecalcMaxHp 内で currentHp > maxHp ならクランプされる
-            if (GameState.I != null) GameState.I.RecalcMaxHp();
+            if (GameState.I != null)
+            {
+                GameState.I.RecalcMaxHp();
+                GameState.I.RecalcMaxMp();
+            }
         }
         return removed;
     }
@@ -151,7 +159,11 @@ public class ItemBoxManager : MonoBehaviour
         Debug.Log($"[ItemBoxManager] 復元完了: {items.Count} 個のアイテム");
 
         // 復元後に maxHp を再計算（MaxHpBonus を持つアイテムの復元に対応）
-        if (GameState.I != null) GameState.I.RecalcMaxHp();
+        if (GameState.I != null)
+        {
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
+        }
     }
 
     // =========================================================
@@ -210,7 +222,11 @@ public class ItemBoxManager : MonoBehaviour
         Debug.Log($"[ItemBoxManager] スナップショット復元完了: {items.Count} 個のアイテム");
 
         // 復元後に maxHp を再計算
-        if (GameState.I != null) GameState.I.RecalcMaxHp();
+        if (GameState.I != null)
+        {
+            GameState.I.RecalcMaxHp();
+            GameState.I.RecalcMaxMp();
+        }
     }
 
     /// <summary>

@@ -39,12 +39,13 @@ MonoBehaviour:
   PetrifyResistance: 0
   DebuffResistance: 0
   immuneToAllAilments: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: 100
   - attribute: 4
     value: -200
-  Exp: 860
+  Exp: 900
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
