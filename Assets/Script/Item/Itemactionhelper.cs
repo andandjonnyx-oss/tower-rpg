@@ -93,7 +93,10 @@ public static class ItemActionHelper
             invItem.data.curesParalyze,
             invItem.data.curesBlind,
             invItem.data.curesSilence,
-            invItem.data.curesPetrify);
+            invItem.data.curesPetrify,
+            invItem.data.curesCharm,    // ← 追加
+            invItem.data.curesCurse,    // ← 追加
+            invItem.data.curesGlass);
 
         // ステータスポイント付与
         if (invItem.data.statusPointGain > 0)
@@ -125,7 +128,10 @@ public static class ItemActionHelper
             invItem.data.eatCuresParalyze,
             invItem.data.eatCuresBlind,
             invItem.data.eatCuresSilence,
-            invItem.data.eatCuresPetrify);
+            invItem.data.eatCuresPetrify,
+            invItem.data.eatCuresCharm,    // ← 追加
+            invItem.data.eatCuresCurse,    // ← 追加
+            invItem.data.eatCuresGlass);
     }
 
     /// <summary>
@@ -148,12 +154,16 @@ public static class ItemActionHelper
     /// 状態異常回復の共通処理。UseConsumable / EatWeapon 両方から呼ばれる。
     /// </summary>
     private static void ApplyCureEffects(
-        bool poison, bool paralyze, bool blind, bool silence, bool petrify)
+        bool poison, bool paralyze, bool blind, bool silence, bool petrify,
+        bool charm, bool curse, bool glass)
     {
         if (poison) StatusEffectSystem.CurePlayerPoison();
         if (paralyze) StatusEffectSystem.CurePlayer(StatusEffect.Paralyze);
         if (blind) StatusEffectSystem.CurePlayer(StatusEffect.Blind);
         if (silence) StatusEffectSystem.CurePlayer(StatusEffect.Silence);
         if (petrify) StatusEffectSystem.CurePlayer(StatusEffect.Petrify);
+        if (charm) StatusEffectSystem.CurePlayer(StatusEffect.Charm);
+        if (curse) StatusEffectSystem.CurePlayer(StatusEffect.Curse);
+        if (glass) StatusEffectSystem.CurePlayer(StatusEffect.Glass);
     }
 }

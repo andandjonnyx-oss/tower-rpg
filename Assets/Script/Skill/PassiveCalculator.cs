@@ -68,7 +68,21 @@ public static class PassiveCalculator
     {
         int equipRes = EquipmentCalculator.GetAttributeResistance(attr);
         int passiveRes = CalcAttributeResistance(attr);
-        return equipRes + passiveRes;
+        int total = equipRes + passiveRes;
+
+        // ▼▼▼ 呪い/ガラスによる属性耐性低下（追加） ▼▼▼
+        if (GameState.I != null)
+        {
+            // 呪い: 全魔法属性（火/氷/雷/聖/闇）の耐性 -100
+            if (GameState.I.isCursed && attr.IsMagical())
+                total -= 100;
+
+            // ガラス: 全物理属性（殴/斬/突）の耐性 -100
+            if (GameState.I.isGlassed && attr.IsPhysical())
+                total -= 100;
+        }
+
+        return total;
     }
 
     /// <summary>

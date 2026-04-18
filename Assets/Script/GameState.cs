@@ -133,6 +133,20 @@ public class GameState : MonoBehaviour
     [Tooltip("石化の最大ターン数（DEF/MDEF倍率計算用）。初期付与時は 5 固定、進行しても不変。")]
     public int playerPetrifyMaxTurns = 0;
 
+    // ---- 魅了（先行追加: フラグのみ。戦闘効果は後日実装） ----
+    [Tooltip("プレイヤーが魅了状態かどうか。戦闘終了後も持続する。自然治癒なし。")]
+    public bool isCharmed = false;
+
+    // ---- 呪い ----
+    [Tooltip("プレイヤーが呪い状態かどうか。戦闘終了後も持続する。自然治癒あり。\n"
+           + "全魔法属性（火/氷/雷/聖/闇）の耐性が -100 される。")]
+    public bool isCursed = false;
+
+    // ---- ガラス ----
+    [Tooltip("プレイヤーがガラス状態かどうか。戦闘終了後も持続する。自然治癒あり。\n"
+           + "全物理属性（殴/斬/突）の耐性が -100 される。")]
+    public bool isGlassed = false;
+
     // =========================================================
     // 状態異常の一括クリア
     // =========================================================
@@ -151,6 +165,9 @@ public class GameState : MonoBehaviour
         isPetrified = false;
         playerPetrifyTurns = 0;
         playerPetrifyMaxTurns = 0;
+        isCharmed = false;
+        isCursed = false;
+        isGlassed = false;
         Debug.Log("[GameState] 全状態異常をクリア");
     }
 

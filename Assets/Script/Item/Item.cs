@@ -44,6 +44,12 @@ public class ItemData : ScriptableObject
     [Tooltip("true の場合、使用時に石化状態を回復する。\n"
            + "石化は CureAilments では解除不可。専用アイテムでのみ解除。")]
     public bool curesPetrify = false;
+    [Tooltip("true の場合、使用時に魅了状態を回復する。")]
+    public bool curesCharm = false;
+    [Tooltip("true の場合、使用時に呪い状態を回復する。")]
+    public bool curesCurse = false;
+    [Tooltip("true の場合、使用時にガラス状態を回復する。")]
+    public bool curesGlass = false;
 
 
 
@@ -170,6 +176,12 @@ public class ItemData : ScriptableObject
 
     [Tooltip("食べた時に石化状態を回復するかどうか。")]
     public bool eatCuresPetrify = false;
+    [Tooltip("食べた時に魅了状態を回復するかどうか。")]
+    public bool eatCuresCharm = false;
+    [Tooltip("食べた時に呪い状態を回復するかどうか。")]
+    public bool eatCuresCurse = false;
+    [Tooltip("食べた時にガラス状態を回復するかどうか。")]
+    public bool eatCuresGlass = false;
 
 
     [Header("Weapon")]

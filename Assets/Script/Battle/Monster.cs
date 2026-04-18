@@ -88,12 +88,10 @@ public class Monster : ScriptableObject
            + "100 = 沈黙完全耐性。")]
     public int SilenceResistance = 0;
 
-    // ▼▼▼ 追加 ▼▼▼
     [Tooltip("敵の石化耐性値（0〜100）。\n"
            + "石化の実質命中率 = 基礎命中率 × (1 - PetrifyResistance/100)\n"
            + "100 = 石化完全耐性。")]
     public int PetrifyResistance = 0;
-    // ▲▲▲ 追加 ▲▲▲
 
     [Tooltip("敵のデバフ耐性値（0〜100）。\n"
            + "ATK/DEF/MATK/MDEF/LUC の全デバフに対して一律で適用される。\n"
@@ -101,11 +99,28 @@ public class Monster : ScriptableObject
            + "100 = 全デバフ完全耐性。")]
     public int DebuffResistance = 0;
 
+    [Tooltip("敵の魅了耐性値（0〜100）。\n"
+           + "魅了の実質命中率 = 基礎命中率 × (1 - CharmResistance/100)\n"
+           + "100 = 魅了完全耐性。")]
+    public int CharmResistance = 0;
+
+    [Tooltip("敵の呪い耐性値（0〜100）。")]
+    public int CurseResistance = 0;
+
+    [Tooltip("敵のガラス耐性値（0〜100）。")]
+    public int GlassResistance = 0;
+
+
     [Header("Status Effect Resistance")]
     [Tooltip("ONにすると全状態異常に完全耐性（100扱い）になる。\n"
        + "メタル系・ボス等の状態異常完全無効に使用。\n"
        + "個別の耐性値フィールドより優先される。")]
     public bool immuneToAllAilments = false;
+
+    [Header("Monster Type")]
+    [Tooltip("ONにすると女性型モンスターとして扱う。\n"
+       + "プレイヤーが魅了状態の場合、このモンスターへの最終ダメージが30%減少する。")]
+    public bool isGirl = false;
 
     // =========================================================
     // 餌付けアイテム受付（追加）
@@ -164,6 +179,9 @@ public class Monster : ScriptableObject
             case StatusEffect.Rage: return RageResistance;
             case StatusEffect.Silence: return SilenceResistance;
             case StatusEffect.Petrify: return PetrifyResistance;
+            case StatusEffect.Charm: return CharmResistance;
+            case StatusEffect.Curse: return CurseResistance;
+            case StatusEffect.Glass: return GlassResistance;
 
 
             // デバフ全体（耐性カテゴリ）

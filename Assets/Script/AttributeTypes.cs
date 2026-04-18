@@ -78,6 +78,9 @@ public enum StatusEffect
     LuckUp,           // 運アップ
     Debuff,           // デバフ全体（耐性カテゴリ用）— 実際の状態異常ではなく、耐性指定用
     Petrify,          // 石化（持続型デバフ・戦闘中も塔内でも継続）— 互換性のため末尾に配置
+    Charm,            // 魅了（持続型デバフ・自然治癒なし・全状態異常耐性-100 + 女性型ダメージ3割減）
+    Curse,            // 呪い（持続型デバフ・自然治癒あり・全魔法属性耐性-100）
+    Glass,            // ガラス（持続型デバフ・自然治癒あり・全物理属性耐性-100）
 }
 
 /// <summary>
@@ -129,6 +132,9 @@ public static class AttributeExtensions
             case StatusEffect.LuckUp: return "運↑";
             case StatusEffect.Debuff: return "デバフ";
             case StatusEffect.Petrify: return "石化";
+            case StatusEffect.Charm: return "魅了";
+            case StatusEffect.Curse: return "呪い";
+            case StatusEffect.Glass: return "ガラス";
             default: return effect.ToString();
         }
     }
@@ -176,4 +182,23 @@ public static class AttributeExtensions
             default: return source.ToString();
         }
     }
+
+    /// <summary>物理属性かどうか（殴/斬/突）。ガラス状態の耐性低下対象。</summary>
+    public static bool IsPhysical(this WeaponAttribute attr)
+    {
+        return attr == WeaponAttribute.Strike
+            || attr == WeaponAttribute.Slash
+            || attr == WeaponAttribute.Pierce;
+    }
+
+    /// <summary>魔法属性かどうか（火/氷/雷/聖/闇）。呪い状態の耐性低下対象。</summary>
+    public static bool IsMagical(this WeaponAttribute attr)
+    {
+        return attr == WeaponAttribute.Fire
+            || attr == WeaponAttribute.Ice
+            || attr == WeaponAttribute.Thunder
+            || attr == WeaponAttribute.Holy
+            || attr == WeaponAttribute.Dark;
+    }
+
 }

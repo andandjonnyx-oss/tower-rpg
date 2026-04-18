@@ -310,6 +310,15 @@ public static class StatusEffectSystem
                     GameState.I.playerPetrifyMaxTurns = 0;
                 }
                 break;
+            case StatusEffect.Charm:
+                GameState.I.isCharmed = false;
+                break;
+            case StatusEffect.Curse:
+                GameState.I.isCursed = false;
+                break;
+            case StatusEffect.Glass:
+                GameState.I.isGlassed = false;
+                break;
 
         }
     }
@@ -559,6 +568,8 @@ public static class StatusEffectSystem
                 logs.Add("沈黙が自然に治った！");
             }
         }
+
+
 
         // --- 石化: 10% で残ターン-1（Phase C 追加） ---
         // 自然治癒対象外。TryNaturalCure() は使わない。
