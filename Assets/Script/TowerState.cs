@@ -309,7 +309,6 @@ public class TowerState : MonoBehaviour
     /// </summary>
     private void RefreshStatusEffectUI()
     {
-        // --- ランプ方式 ---
         if (playerStatusLamp != null && GameState.I != null)
         {
             playerStatusLamp.SetAll(
@@ -320,6 +319,10 @@ public class TowerState : MonoBehaviour
                 GameState.I.isSilenced,
                 GameState.I.isPetrified
             );
+            // 呪い/ガラス/魅了ランプを個別に更新
+            playerStatusLamp.SetCharm(GameState.I.isCharmed);
+            playerStatusLamp.SetCurse(GameState.I.isCursed);
+            playerStatusLamp.SetGlass(GameState.I.isGlassed);
         }
     }
 
