@@ -555,6 +555,13 @@ public static class SkillEffectProcessor
     private static bool _enemyCurseDummy = false;
     private static bool _enemyGlassDummy = false;
 
+    /// <summary>敵が魅了状態かどうか。BattleSceneController 等から参照する読み取り専用プロパティ。</summary>
+    public static bool IsEnemyCharmed => _enemyCharmDummy;
+    /// <summary>敵が呪い状態かどうか。ApplyEnemyAttributeResistance 等から参照する読み取り専用プロパティ。</summary>
+    public static bool IsEnemyCursed => _enemyCurseDummy;
+    /// <summary>敵がガラス状態かどうか。ApplyEnemyAttributeResistance 等から参照する読み取り専用プロパティ。</summary>
+    public static bool IsEnemyGlassed => _enemyGlassDummy;
+
     /// <summary>
     /// 戦闘開始時にダミーフラグをリセットする。
     /// BattleSceneController の戦闘初期化ブロックから呼ぶこと。

@@ -124,6 +124,10 @@ public partial class BattleSceneController
     ///
     /// 例: baseDamage=10, 耐性50 → 10 × 50/100 = 5
     /// 例: baseDamage=10, 耐性-50 → 10 × 150/100 = 15
+    ///  【呪い/ガラス補正】
+    ///   敵が呪い状態の場合、魔法属性（火/氷/雷/聖/闇）の耐性を -100 する。
+    ///   敵がガラス状態の場合、物理属性（殴/斬/突）の耐性を -100 する。
+    ///   敵側の呪い/ガラスフラグは SkillEffectProcessor のダミーフィールドを参照する。
     /// </summary>
     /// <param name="baseDamage">耐性適用前のダメージ</param>
     /// <param name="attackAttribute">攻撃の属性</param>
@@ -135,6 +139,16 @@ public partial class BattleSceneController
         if (enemyMonster == null) return baseDamage;
 
         int resistance = enemyMonster.GetAttributeResistance(attackAttribute);
+
+        // ▼ 敵側の呪い/ガラスによる属性耐性低下 ▼
+        // 呪い: 全魔法属性（火/氷/雷/聖/闇）の耐性 -100
+        if (SkillEffectProcessor.IsEnemyCursed && attackAttribute.IsMagical())
+            resistance -= 100;
+
+        // ガラス: 全物理属性（殴/斬/突）の耐性 -100
+        if (SkillEffectProcessor.IsEnemyGlassed && attackAttribute.IsPhysical())
+            resistance -= 100;
+
         if (resistance == 0) return baseDamage;
 
         float reductionRate = resistance / 100f;
