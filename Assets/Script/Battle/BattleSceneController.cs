@@ -330,6 +330,8 @@ public partial class BattleSceneController : MonoBehaviour
             pendingEnemyAction = null; // 先制攻撃リセット
             isEnemyPreemptive = false;
             enemyForcedNextSkill = null; // 強制行動リセット
+            turnLowHpMode = false;
+            turnActionCount = 1;
 
             // Phase4: バフ/デバフリセット（構造体ベース）
             InitBuffDebuffFields();
@@ -453,7 +455,12 @@ public partial class BattleSceneController : MonoBehaviour
         isEnemyPreemptive = false;
 
         if (enemyMonster == null) return;
-        if (enemyMonster.actions == null || enemyMonster.actions.Length == 0) return;
+
+        // ターンスナップショット: この時点のHP割合で行動テーブル・行動回数を固定
+        SnapshotTurnActionMode();
+
+        EnemyActionEntry[] table = GetTurnActionTable();
+        if (table == null || table.Length == 0) return;
 
         pendingEnemyAction = SelectEnemyAction();
 
@@ -956,6 +963,8 @@ public partial class BattleSceneController : MonoBehaviour
         isDefending = false; // 防御フラグもリセット
         pendingEnemyAction = null; // 先制攻撃もリセット
         isEnemyPreemptive = false;
+        turnLowHpMode = false;
+        turnActionCount = 1;
 
         // Phase4: バフ/デバフリセット（構造体ベース）
         ResetBuffDebuffFields();

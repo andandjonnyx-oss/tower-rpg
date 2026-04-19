@@ -4,7 +4,13 @@
 /// BattleSceneController の敵行動パート（partial class）。
 /// 敵ターン処理、行動選択（LUC判定）、各種攻撃実行、ターン終了処理を担当する。
 ///
-/// 【複数回行動（Phase C追加）】
+/// 【ターンスナップショット方式】
+///   行動テーブル・行動回数は BeginPlayerTurn() の PreRollEnemyAction() 時点で
+///   スナップショット（turnLowHpMode / turnActionCount）として固定される。
+///   プレイヤーの攻撃で敵HPが変動しても、そのターン中は行動パターンが変わらない。
+///   次のターンの PreRollEnemyAction() で再評価される。
+///
+/// 【複数回行動】
 ///   Monster.actionCount（デフォルト1）で1ターンの行動回数を指定。
 ///   低HP時は Monster.lowHpActionCount（0=通常値使用）で上書き可能。
 ///   - スタン/麻痺は全行動キャンセル
@@ -13,7 +19,7 @@
 ///   - AfterEnemyAction は全行動完了後に1回だけ実行
 ///   各行動間は FlushLogsAndThen で待機する。
 ///
-/// 【低HP行動テーブル切り替え（Phase C追加）】
+/// 【低HP行動テーブル切り替え】
 ///   Monster.lowHpThreshold > 0 かつ lowHpActions が空でない場合、
 ///   現在HP / MaxHP <= threshold で行動テーブルが切り替わる。
 ///   lowHpBaseActionRange（0=通常値）で actionRange も切り替え可能。
@@ -71,6 +77,12 @@ public partial class BattleSceneController
     // =========================================================
     // 防御コマンド定数
     // =========================================================
+    //
+    // 防御中の防御力倍率とダイス成功率。
+    //   DefendDefenseMultiplier: 防御力を何倍にするか（2倍）
+    //   DefendDiceRange: 防御ダイスの乱数上限（1.5f → 成功率67%）
+    //   通常時の diceRange は DefaultDefenseDiceRange = 2.0f（成功率50%）
+    // =========================================================
 
     /// <summary>防御中の防御力倍率。</summary>
     private const int DefendDefenseMultiplier = 2;
@@ -90,13 +102,30 @@ public partial class BattleSceneController
     private const int LucFixedThresholdLimit = 20;
 
     // =========================================================
-    // 低HP行動テーブル切り替えヘルパー
+    // ターンスナップショット
+    // =========================================================
+    //
+    // 行動テーブル・行動回数はターン開始時（PreRollEnemyAction）に
+    // 1回だけ評価し、そのターン中は固定する。
+    // これにより、プレイヤーの攻撃で敵HPが変動しても
+    // 行動パターンの切り替えは「次のターンから」になる。
+    // =========================================================
+
+    /// <summary>このターンで低HPモードを使用するか。PreRollEnemyAction で設定。</summary>
+    private static bool turnLowHpMode = false;
+
+    /// <summary>このターンの行動回数。PreRollEnemyAction で設定。</summary>
+    private static int turnActionCount = 1;
+
+    // =========================================================
+    // 低HP判定・スナップショット ヘルパー
     // =========================================================
 
     /// <summary>
-    /// 低HPモード条件を満たしているかを判定する。
+    /// 現在のHP割合で低HPモード条件を満たしているかをリアルタイム判定する。
+    /// SnapshotTurnActionMode でスナップショットを作るときに使う。
     /// </summary>
-    private bool IsLowHpMode()
+    private bool IsLowHpModeNow()
     {
         if (enemyMonster.lowHpThreshold <= 0f) return false;
         if (enemyMonster.lowHpActions == null || enemyMonster.lowHpActions.Length == 0) return false;
@@ -106,35 +135,48 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// 現在のHP割合に応じた行動テーブルを返す。
+    /// ターンスナップショットを設定する。
+    /// PreRollEnemyAction() から呼ばれ、そのターン中の行動テーブルと行動回数を固定する。
     /// </summary>
-    private EnemyActionEntry[] GetCurrentActionTable()
+    private void SnapshotTurnActionMode()
     {
-        if (IsLowHpMode()) return enemyMonster.lowHpActions;
+        turnLowHpMode = IsLowHpModeNow();
+
+        int count;
+        if (turnLowHpMode && enemyMonster.lowHpActionCount > 0)
+            count = enemyMonster.lowHpActionCount;
+        else
+            count = enemyMonster.actionCount;
+        turnActionCount = (count < 1) ? 1 : count;
+
+        if (turnLowHpMode)
+        {
+            float hpRatio = (float)enemyCurrentHp / enemyMonster.MaxHp;
+            Debug.Log($"[Battle] TurnSnapshot: LowHP mode ON (hpRatio={hpRatio:F2} <= {enemyMonster.lowHpThreshold}), actionCount={turnActionCount}");
+        }
+        else
+        {
+            Debug.Log($"[Battle] TurnSnapshot: Normal mode, actionCount={turnActionCount}");
+        }
+    }
+
+    /// <summary>
+    /// ターンスナップショットに基づいた行動テーブルを返す。
+    /// </summary>
+    private EnemyActionEntry[] GetTurnActionTable()
+    {
+        if (turnLowHpMode) return enemyMonster.lowHpActions;
         return enemyMonster.actions;
     }
 
     /// <summary>
-    /// 現在のHP割合に応じた baseActionRange を返す。
+    /// ターンスナップショットに基づいた baseActionRange を返す。
     /// </summary>
-    private int GetCurrentBaseActionRange()
+    private int GetTurnBaseActionRange()
     {
-        if (IsLowHpMode() && enemyMonster.lowHpBaseActionRange > 0)
+        if (turnLowHpMode && enemyMonster.lowHpBaseActionRange > 0)
             return enemyMonster.lowHpBaseActionRange;
         return enemyMonster.baseActionRange;
-    }
-
-    /// <summary>
-    /// 現在のHP割合に応じた行動回数を返す。最低1を保証。
-    /// </summary>
-    private int GetEffectiveActionCount()
-    {
-        int count;
-        if (IsLowHpMode() && enemyMonster.lowHpActionCount > 0)
-            count = enemyMonster.lowHpActionCount;
-        else
-            count = enemyMonster.actionCount;
-        return (count < 1) ? 1 : count;
     }
 
     // =========================================================
@@ -159,6 +201,27 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 敵の行動処理。
+    ///
+    /// 【先制攻撃システム対応】
+    ///   pendingEnemyAction が残っている場合:
+    ///     - 先制技だった場合: PlayerAction 側で既に実行済みなので、ここでは
+    ///       ターン終了処理（毒ダメージ等）のみ行う。
+    ///     - 通常技だった場合: 事前抽選済みの行動をそのまま実行する。
+    ///   pendingEnemyAction が null の場合:
+    ///     - actions 配列があれば新規に抽選して実行する。
+    ///     - なければ Legacy 通常攻撃。
+    ///
+    /// 【気絶（スタン）チェック】
+    ///   先制チェック後にスタンチェックを行い、スタン中は行動スキップ。
+    ///
+    /// 【麻痺チェック（Phase2追加）】
+    ///   スタンチェック後に麻痺チェック。20%で行動キャンセル。
+    ///
+    /// 【複数回行動】
+    ///   turnActionCount（PreRollEnemyAction でスナップショット済み）で
+    ///   行動回数を決定し、ループで実行。
+    ///   AfterEnemyAction は全行動完了後に1回だけ呼ぶ。
+    ///   各行動間は FlushLogsAndThen で待機する。
     /// </summary>
     private void EnemyTurn()
     {
@@ -169,8 +232,8 @@ public partial class BattleSceneController
         // =========================================================
         if (isEnemyPreemptive)
         {
-            isEnemyPreemptive = false;
-            pendingEnemyAction = null;
+            isEnemyPreemptive = false; // フラグをリセット
+            pendingEnemyAction = null; // 念のためクリア
             AfterEnemyAction();
             return;
         }
@@ -180,21 +243,21 @@ public partial class BattleSceneController
         // =========================================================
         if (enemyIsStunned)
         {
-            enemyIsStunned = false;
-            enemyForcedNextSkill = null;
+            enemyIsStunned = false; // 1ターンで解除
+            enemyForcedNextSkill = null; // 予定行動をキャンセル
             AddLog($"{enemyMonster.Mname} は気絶して動けない！");
             AfterEnemyAction();
             return;
         }
 
         // =========================================================
-        // 麻痺チェック — 全行動キャンセル
+        // 麻痺チェック（Phase2追加） — 全行動キャンセル
         // =========================================================
         if (enemyIsParalyzed)
         {
             if (StatusEffectSystem.CheckParalyzeCancel())
             {
-                enemyForcedNextSkill = null;
+                enemyForcedNextSkill = null; // 予定行動をキャンセル
                 AddLog($"{enemyMonster.Mname} は麻痺して動けない！");
                 AfterEnemyAction();
                 return;
@@ -203,12 +266,16 @@ public partial class BattleSceneController
 
         // =========================================================
         // クイズボス分岐
+        // クイズボスの場合は通常行動をスキップしてクイズを出題する。
         // =========================================================
         if (IsQuizBoss())
         {
             StartQuizTurn();
             return;
         }
+
+
+
 
         // =========================================================
         // 次ターン強制行動チェック（力をためる等）
@@ -217,20 +284,23 @@ public partial class BattleSceneController
         if (enemyForcedNextSkill != null)
         {
             SkillData forced = enemyForcedNextSkill;
-            enemyForcedNextSkill = forced.enemyNextForceSkill;
+            enemyForcedNextSkill = forced.enemyNextForceSkill; // 次の予約をセット（nullなら解除）
             ExecuteEnemySkillAttack(forced);
             return;
         }
 
+
         // =========================================================
-        // 怒り中の敵は通常攻撃のみ（複数回行動しない）
-        // 低HPテーブルを考慮して適切なテーブルの最初のアクションを強制選択。
+        // 怒り中の敵は通常攻撃のみ（Phase2追加）
+        // ターンスナップショットのテーブルから最初のアクションを強制選択。
+        // 複数回行動しない。
         // =========================================================
         if (enemyRageTurn > 0)
         {
-            EnemyActionEntry[] rageTable = GetCurrentActionTable();
+            EnemyActionEntry[] rageTable = GetTurnActionTable();
             if (rageTable != null && rageTable.Length > 0)
             {
+                // 最初のアクションを強制使用（通常攻撃想定）
                 ExecuteEnemyAction(rageTable[0]);
                 return;
             }
@@ -242,10 +312,9 @@ public partial class BattleSceneController
         if (pendingEnemyAction != null)
         {
             EnemyActionEntry pending = pendingEnemyAction;
-            pendingEnemyAction = null;
+            pendingEnemyAction = null; // 消費
 
-            int totalActions = GetEffectiveActionCount();
-            if (totalActions <= 1)
+            if (turnActionCount <= 1)
             {
                 // 1回行動: 従来通り
                 ExecuteEnemyAction(pending);
@@ -255,23 +324,21 @@ public partial class BattleSceneController
             // 複数回行動: 1回目は pending、2回目以降は通常抽選
             ExecuteEnemySingleAction(pending);
             if (IsBattleEndedOrDead()) { AfterEnemyAction(); return; }
-            ExecuteRemainingActions(totalActions, 1);
+            ExecuteRemainingActions(turnActionCount, 1);
             return;
         }
 
         // =========================================================
         // 通常の行動抽選（actions 未設定の場合は Legacy 攻撃）
         // =========================================================
-        EnemyActionEntry[] currentTable = GetCurrentActionTable();
+        EnemyActionEntry[] currentTable = GetTurnActionTable();
         if (currentTable == null || currentTable.Length == 0)
         {
             ExecuteLegacyAttack();
             return;
         }
 
-        int actionCount = GetEffectiveActionCount();
-
-        if (actionCount <= 1)
+        if (turnActionCount <= 1)
         {
             // 1回行動: 従来通り
             EnemyActionEntry selectedAction = SelectEnemyAction();
@@ -282,11 +349,11 @@ public partial class BattleSceneController
         // =========================================================
         // 複数回行動ループ
         // =========================================================
-        Debug.Log($"[Battle] Multi-action: {actionCount} actions this turn");
+        Debug.Log($"[Battle] Multi-action: {turnActionCount} actions this turn");
         EnemyActionEntry firstAction = SelectEnemyAction();
         ExecuteEnemySingleAction(firstAction);
         if (IsBattleEndedOrDead()) { AfterEnemyAction(); return; }
-        ExecuteRemainingActions(actionCount, 1);
+        ExecuteRemainingActions(turnActionCount, 1);
     }
 
     // =========================================================
@@ -306,7 +373,7 @@ public partial class BattleSceneController
             return;
         }
 
-        // 沈黙判定
+        // 沈黙判定: 敵が沈黙中で魔法系スキルなら70%で失敗
         if (enemyIsSilenced && action.skill.skillSource == SkillSource.Magic)
         {
             if (StatusEffectSystem.CheckSilenceFail())
@@ -320,7 +387,7 @@ public partial class BattleSceneController
 
         switch (action.skill.actionType)
         {
-#pragma warning disable 0618
+#pragma warning disable 0618 // Obsolete 警告を抑制（既存アセット互換のため）
             case MonsterActionType.NormalAttack: ExecuteEnemySkillAttackCore(action.skill); break;
 #pragma warning restore 0618
             case MonsterActionType.SkillAttack: ExecuteEnemySkillAttackCore(action.skill); break;
@@ -345,13 +412,16 @@ public partial class BattleSceneController
     {
         if (completedCount >= totalActions)
         {
+            // 全行動完了 → ターン終了処理
             AfterEnemyAction();
             return;
         }
 
-        int nextIndex = completedCount;
+        // ログを表示してから次の行動を実行
+        int nextIndex = completedCount; // キャプチャ用
         FlushLogsAndThen(() =>
         {
+            // 戦闘終了チェック
             if (IsBattleEndedOrDead())
             {
                 AfterEnemyAction();
@@ -376,6 +446,7 @@ public partial class BattleSceneController
                 return;
             }
 
+            // 再帰的に次の行動へ
             ExecuteRemainingActions(totalActions, nextIndex + 1);
         });
     }
@@ -386,6 +457,17 @@ public partial class BattleSceneController
 
     /// <summary>
     /// 従来の敵攻撃処理（actions 未設定時のフォールバック）。
+    /// Monster.Attack をそのままダメージとして使用する。
+    /// 防御ダイスによる軽減を適用する。
+    /// プレイヤーが防御中の場合、防御力2倍・ダイス優遇を適用する。
+    ///
+    /// ※ actions 配列が未設定のモンスター用の安全ネット。
+    ///   新規モンスターは必ず actions を設定すること。
+    ///
+    /// 命中判定:
+    ///   Monster.BaseHitRate × (1 - プレイヤー回避率/100)、最低10%。
+    ///   敵が暗闇の場合、baseHitRate を半分にする。
+    ///
     /// AfterEnemyAction 付き。
     /// </summary>
     private void ExecuteLegacyAttack()
@@ -399,6 +481,7 @@ public partial class BattleSceneController
     /// </summary>
     private void ExecuteLegacyAttackCore()
     {
+        // Phase2: 暗闇補正
         int hitRate = enemyMonster.BaseHitRate;
         if (enemyIsBlind) hitRate = hitRate / 2;
 
@@ -408,6 +491,7 @@ public partial class BattleSceneController
             return;
         }
 
+        // Phase2: 怒り中は攻撃力1.5倍
         int enemyDamage = ApplyEnemyAttackBuffDebuff(enemyMonster.Attack);
         if (enemyRageTurn > 0)
         {
@@ -445,26 +529,40 @@ public partial class BattleSceneController
     /// LUC 差に応じた乱数の上限値（actionRange）を計算し、
     /// 行動テーブルから行動を選択する。
     ///
-    /// 低HP時は GetCurrentActionTable() / GetCurrentBaseActionRange() で
-    /// 自動的に適切なテーブルと基準値が使用される。
+    /// ターンスナップショット（turnLowHpMode）に基づいて
+    /// 行動テーブルと actionRange 基準値を決定する。
     ///
     /// 比較対象:
     ///   プレイヤー側 = GameState.I.baseLUC（生のステータス値）+ LUCバフ/デバフ適用
     ///   敵側         = Monster.Luck + LUCバフ/デバフ適用
     ///
     /// actionRange の決定ルール（baseActionRange=100 の場合）:
-    ///   敵LUC ≤ 20: ±10 の固定差判定
-    ///   敵LUC > 20: 1.5倍/0.5倍 の比率判定
-    ///   プレイヤー有利: actionRange = 80
-    ///   敵有利: actionRange = 120
-    ///   互角: actionRange = baseActionRange
+    ///
+    /// 【判定方式の切り替え】
+    ///   敵LUC ≤ 20 の場合（低LUC域）:
+    ///     ±10 の固定差で判定する。比率だと閾値が極端に小さくなるため。
+    ///     有利閾値 = enemyLuc + 10
+    ///     不利閾値 = max(enemyLuc - 10, 1)
+    ///
+    ///   敵LUC > 20 の場合（通常域）:
+    ///     1.5倍/0.5倍 の比率で判定する。
+    ///     有利閾値 = enemyLuc × 1.5（四捨五入）
+    ///     不利閾値 = enemyLuc × 0.5（四捨五入）
+    ///
+    ///   プレイヤー有利: playerLuc >= 有利閾値 → actionRange = 80（敵が弱体化）
+    ///   敵有利:         playerLuc <  不利閾値 → actionRange = 120（敵が強化）
+    ///   互角:           上記どちらでもない   → actionRange = baseActionRange
+    ///
+    /// 乱数 0 ～ actionRange-1 を振り、
+    /// actions[i].threshold を昇順に走査して、乱数値 < threshold の最初の行動を返す。
     /// </summary>
     private EnemyActionEntry SelectEnemyAction()
     {
-        EnemyActionEntry[] actionTable = GetCurrentActionTable();
-        int baseRange = GetCurrentBaseActionRange();
+        // ターンスナップショットに基づいた行動テーブルと基準値
+        EnemyActionEntry[] actionTable = GetTurnActionTable();
+        int baseRange = GetTurnBaseActionRange();
 
-        if (IsLowHpMode())
+        if (turnLowHpMode)
         {
             float hpRatio = (float)enemyCurrentHp / enemyMonster.MaxHp;
             Debug.Log($"[Battle] LowHP mode: hpRatio={hpRatio:F2} <= {enemyMonster.lowHpThreshold} -> using lowHpActions");
@@ -480,7 +578,7 @@ public partial class BattleSceneController
         int roll = Random.Range(0, actionRange);
 
         Debug.Log($"[Battle] EnemyAction: playerLuc={playerLuc} enemyLuc={enemyLuc} " +
-                  $"baseRange={baseRange} actionRange={actionRange} roll={roll}");
+                  $"baseRange={baseRange} actionRange={actionRange} roll={roll} lowHpMode={turnLowHpMode}");
 
         for (int i = 0; i < actionTable.Length; i++)
         {
@@ -503,11 +601,13 @@ public partial class BattleSceneController
 
         if (enemyLuc <= LucFixedThresholdLimit)
         {
+            // 低LUC域: ±10 の固定差で判定
             advThreshold = enemyLuc + 10;
             disadvThreshold = (enemyLuc - 10 > 0) ? (enemyLuc - 10) : 1;
         }
         else
         {
+            // 通常域: 1.5倍/0.5倍 の比率で判定
             advThreshold = Mathf.FloorToInt(enemyLuc * 1.5f + 0.5f);
             disadvThreshold = Mathf.FloorToInt(enemyLuc * 0.5f + 0.5f);
         }
@@ -578,7 +678,6 @@ public partial class BattleSceneController
             default: ExecuteEnemyIdle(action.skill); break;
         }
 
-        // ExecuteEnemyAction の末尾付近に追加
         if (action.skill.enemyNextForceSkill != null)
         {
             enemyForcedNextSkill = action.skill.enemyNextForceSkill;
@@ -601,7 +700,6 @@ public partial class BattleSceneController
     /// <summary>
     /// 敵のスキル攻撃コア処理。SkillData のパラメータでダメージ計算する。
     /// AfterEnemyAction は呼ばない。呼び出し元が責任を持つ。
-    ///
     /// Phase2: 敵が暗闇の場合、baseHitRate を半分にする。
     /// Phase2: 敵が怒り中の場合、攻撃力に RageAttackMultiplier を乗算する。
     ///
@@ -658,7 +756,7 @@ public partial class BattleSceneController
         }
 
         // =========================================================
-        // 乱数ダメージスキル（追加）
+        // 乱数ダメージスキル
         // randomDamageMax > 0 の場合、1〜maxの乱数がベースダメージ。
         // クリティカル無効、防御ダイス有効。属性は None を想定。
         // =========================================================
@@ -702,7 +800,7 @@ public partial class BattleSceneController
         }
 
         // =========================================================
-        // HP依存ダメージスキル（追加）
+        // HP依存ダメージスキル
         // hpDependentType != None の場合、対象のHP割合でダメージを決定。
         // 防御/属性耐性/バフ/クリティカルは全てスキップ。
         // =========================================================
@@ -964,6 +1062,14 @@ public partial class BattleSceneController
     ///      - true  → 「まずい！」敵は MaxHp/2 のダメージ(クランプなし・即死可)
     ///      - false → 「うまい！」敵は MaxHp/2 を回復(MaxHp でクランプ)
     ///   5. アイテムを RemoveItem で削除(transformInto は参照しない)
+    ///
+    /// 仕様:
+    ///   - 命中判定なし(必中)
+    ///   - 防御ダイス・属性耐性・バフ/デバフ一切なし
+    ///   - 追加効果(additionalEffects)は実行しない
+    ///   - 多段攻撃とは非対応(hitCount無視)
+    ///   - SkillData.skillName は不発・成功ログのどちらにも使用しない
+    ///     (行動名は「食い荒らし」「道具袋を漁った」等でハードコード)
     /// </summary>
     private void ExecuteEnemyFoodRaidCore(SkillData skill)
     {
