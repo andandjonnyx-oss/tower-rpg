@@ -142,14 +142,7 @@ public partial class BattleSceneController
                 // プレイヤーが倒されたかチェック
                 if (GameState.I != null && GameState.I.currentHp <= 0)
                 {
-                    if (enemyCurrentHp <= 0)
-                    {
-                        FlushLogsAndThen(() => OnVictory());
-                    }
-                    else
-                    {
-                        FlushLogsAndThen(() => OnDefeat());
-                    }
+                    FlushLogsAndThen(() => OnDefeat());
                     return true;
                 }
 
@@ -199,16 +192,7 @@ public partial class BattleSceneController
         // プレイヤーが倒されたかチェック
         if (GameState.I != null && GameState.I.currentHp <= 0)
         {
-            // 先制でプレイヤーが倒された → 敵の自爆チェック後に敗北処理
-            if (enemyCurrentHp <= 0)
-            {
-                // 敵も自爆で死んだ → 勝利扱い（先に敵が倒れた扱い）
-                FlushLogsAndThen(() => OnVictory());
-            }
-            else
-            {
-                FlushLogsAndThen(() => OnDefeat());
-            }
+            FlushLogsAndThen(() => OnDefeat());
             return true; // プレイヤー行動スキップ
         }
 
