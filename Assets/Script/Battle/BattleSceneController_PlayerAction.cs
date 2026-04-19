@@ -339,6 +339,11 @@ public partial class BattleSceneController
                 if (!CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
+                    // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
+                    if (skill.executeEffectsOnMiss)
+                    {
+                    ProcessEnemySkillEffects(skill);
+                    }
                     return;
                 }
 

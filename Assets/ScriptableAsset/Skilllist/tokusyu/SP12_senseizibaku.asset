@@ -16,7 +16,7 @@ MonoBehaviour:
   skillName: "\u81EA\u7206"
   description: 
   skillSource: 0
-  actionType: 2
+  actionType: 3
   skillAttribute: 8
   damageCategory: 0
   damageMultiplier: 0
@@ -28,6 +28,7 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 100
+  executeEffectsOnMiss: 1
   hitCount: 1
   multiHitEntries: []
   noBattleOk: 0

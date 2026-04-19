@@ -28,7 +28,9 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 100
+  executeEffectsOnMiss: 1
   hitCount: 1
+  multiHitEntries: []
   noBattleOk: 0
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
@@ -38,3 +40,5 @@ MonoBehaviour:
     intValue: 0
     duration: 0
   enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

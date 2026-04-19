@@ -979,9 +979,12 @@ public partial class BattleSceneController
                 if (!CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
-                    // 自爆系スキルは外しても自滅する（追加効果の SelfDestruct を実行）
+
+                    // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
+                    if (skill.executeEffectsOnMiss)
+                    {
                     ProcessEnemySkillEffects(skill);
-                    return;
+                    }
                 }
 
                 // ダメージ = 使用者（敵）の現在HP
