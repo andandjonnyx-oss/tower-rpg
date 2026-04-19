@@ -402,8 +402,10 @@ public partial class BattleSceneController
                 continue;
             }
 
+            float hitMul = skill.GetHitDamageMultiplier(h);
+            int hitBonus = skill.GetHitBonusDamage(h);
             int baseDamage;
-            if (skill.damageMultiplier > 0f)
+            if (hitMul > 0f)
             {
                 int attackPower = ApplyEnemyAttackBuffDebuff(enemyMonster.Attack);
                 // Phase2: 怒り中は攻撃力1.5倍
@@ -411,14 +413,16 @@ public partial class BattleSceneController
                 {
                     attackPower = Mathf.FloorToInt(attackPower * StatusEffectSystem.RageAttackMultiplier + 0.5f);
                 }
-                baseDamage = Mathf.FloorToInt(attackPower * skill.damageMultiplier + 0.5f);
+                baseDamage = Mathf.FloorToInt(attackPower * hitMul + 0.5f);
             }
             else
                 baseDamage = 0;
-            baseDamage += skill.bonusDamage;
+            baseDamage += hitBonus;
             if (baseDamage < 1) baseDamage = 1;
 
-            int resistance = PassiveCalculator.CalcTotalAttributeResistance(skill.skillAttribute);
+            WeaponAttribute hitAttr = skill.GetHitAttribute(h);
+            int resistance = PassiveCalculator.CalcTotalAttributeResistance(hitAttr);
+
             float reductionRate = resistance / 100f;
             int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
             if (afterResist < 0) afterResist = 0;
@@ -469,7 +473,7 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-                AddLog($"{enemyMonster.Mname} の{actionName}！（{skill.skillAttribute.ToJapanese()}属性） " +
+                AddLog($"{enemyMonster.Mname} の{actionName}！（{hitAttr.ToJapanese()}属性） " +
                        $"{finalDamage}ダメージ！{logSuffix}");
 
                 Debug.Log($"[Battle] Preemptive: base={baseDamage} resistance={resistance} " +
@@ -863,12 +867,22 @@ public partial class BattleSceneController
             {
                 attack = Mathf.FloorToInt(attack * StatusEffectSystem.RageAttackMultiplier + 0.5f);
             }
-            int damage = Mathf.FloorToInt(attack * skill.damageMultiplier + 0.5f);
-            damage += skill.bonusDamage; // ★bonusDamage加算
+            float hitMul = skill.GetHitDamageMultiplier(h);
+            int hitBonus = skill.GetHitBonusDamage(h);
+            int damage;
+            if (hitMul > 0f)
+            {
+                damage = Mathf.FloorToInt(attack * hitMul + 0.5f);
+            }
+            else
+            {
+                damage = 0;
+            }
+            damage += hitBonus;
 
             if (damage < 1) damage = 1;
 
-            WeaponAttribute skillAttr = skill.skillAttribute;
+            WeaponAttribute skillAttr = skill.GetHitAttribute(h);
             string resistLog;
             damage = ApplyEnemyAttributeResistance(damage, skillAttr, out resistLog);
 
@@ -1165,8 +1179,10 @@ public partial class BattleSceneController
             }
 
             // ★ OnMagicClicked 固有: MagicAttack ベース
+            float hitMul = magic.GetHitDamageMultiplier(h);
+            int hitBonus = magic.GetHitBonusDamage(h);
             int damage;
-            if (magic.damageMultiplier > 0)
+            if (hitMul > 0)
             {
                 int magicAttack = (GameState.I != null) ? ApplyPlayerMagicAttackBuffDebuff(GameState.I.MagicAttack) : 1;
                 // Phase2: 怒り中は攻撃力1.5倍（魔法攻撃にも適用）
@@ -1174,18 +1190,19 @@ public partial class BattleSceneController
                 {
                     magicAttack = Mathf.FloorToInt(magicAttack * StatusEffectSystem.RageAttackMultiplier + 0.5f);
                 }
-                damage = Mathf.FloorToInt(magicAttack * magic.damageMultiplier + 0.5f);
+                damage = Mathf.FloorToInt(magicAttack * hitMul + 0.5f);
             }
             else
             {
                 damage = 0;
             }
-            damage += magic.bonusDamage;
+            damage += hitBonus;
             if (damage < 1) damage = 1;
 
             // 属性耐性によるダメージ軽減
+            WeaponAttribute hitAttr = magic.GetHitAttribute(h);
             string resistLog;
-            damage = ApplyEnemyAttributeResistance(damage, magic.skillAttribute, out resistLog);
+            damage = ApplyEnemyAttributeResistance(damage, hitAttr, out resistLog);
 
             bool isCrit = CheckPlayerCrit();
             int finalDamage;

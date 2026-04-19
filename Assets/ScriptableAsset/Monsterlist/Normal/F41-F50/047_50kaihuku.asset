@@ -23,7 +23,7 @@ MonoBehaviour:
   IsBoss: 0
   IsUnique: 0
   MaxHp: 1000
-  Attack: 0
+  Attack: 100
   Defense: 0
   MagicDefense: 0
   Speed: 0
@@ -55,9 +55,7 @@ MonoBehaviour:
   quizDatabase: {fileID: 0}
   Help: 
   actions:
-  - skill: {fileID: 11400000, guid: 0a3e44994a4bd1347a36905b13d5418c, type: 2}
-    threshold: 10
-  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+  - skill: {fileID: 11400000, guid: b42f159973513ed4a8625a3b76d8f8a6, type: 2}
     threshold: 100
   baseActionRange: 100
   actionCount: 1

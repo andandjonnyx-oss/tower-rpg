@@ -93,6 +93,13 @@ public enum HpDependentType
 ///   途中で対象のHPが0になったら残りの判定をスキップする。
 ///   追加効果は全ヒット完了後に1回だけ実行する。
 ///
+/// 【マルチ属性ヒット】
+///   multiHitEntries が設定されている場合（Length > 0）、
+///   ヒットごとに属性・威力倍率・追加固定ダメージを個別に指定できる。
+///   配列の長さは hitCount と一致させること。
+///   未設定（空配列）の場合は全ヒットが skillAttribute / damageMultiplier を使用（従来動作）。
+///   GetHitAttribute / GetHitDamageMultiplier / GetHitBonusDamage ヘルパーで参照する。
+///
 /// 【HP依存ダメージ】
 ///   hpDependentType != None の場合、通常のダメージ計算をバイパスし、
 ///   対象の現在HPに基づいたダメージを与える。
@@ -258,6 +265,17 @@ public class SkillData : ScriptableObject
            + "例: 三連突き = hitCount=3, damageMultiplier=0.6")]
     public int hitCount = 1;
 
+    // =========================================================
+    // マルチ属性ヒット(追加)
+    // =========================================================
+
+    [Header("Multi-Hit Attribute Override")]
+    [Tooltip("ヒットごとの属性・威力を個別指定する。\n"
+           + "配列の長さ = hitCount にすること。\n"
+           + "空(Length==0)の場合は全ヒットが skillAttribute / damageMultiplier を使用（従来動作）。\n"
+           + "例: 炎→氷→雷の3連撃 = hitCount=3, multiHitEntries[0]=Fire, [1]=Ice, [2]=Thunder")]
+    public MultiHitEntry[] multiHitEntries;
+
     [Header("Field Usage")]
     [Tooltip("true の場合、塔シーン(非バトル時)でも使用可能。\n"
        + "所持魔法のうちこのフラグが true のものだけが塔の魔法ドロップダウンに表示される。\n"
@@ -335,6 +353,53 @@ public class SkillData : ScriptableObject
     /// </summary>
     public int EffectiveHitCount => hitCount > 1 ? hitCount : 1;
 
+    /// <summary>
+    /// マルチ属性ヒットが有効かどうか。
+    /// multiHitEntries が設定されていて要素が1つ以上ある場合 true。
+    /// </summary>
+    public bool HasMultiHitEntries =>
+        multiHitEntries != null && multiHitEntries.Length > 0;
+
+    // =========================================================
+    // マルチ属性ヒット ヘルパー
+    // =========================================================
+
+    /// <summary>
+    /// ヒットインデックスに応じた攻撃属性を返す。
+    /// multiHitEntries が設定されていればそちらを使用、なければ skillAttribute。
+    /// </summary>
+    public WeaponAttribute GetHitAttribute(int hitIndex)
+    {
+        if (multiHitEntries != null && multiHitEntries.Length > hitIndex)
+            return multiHitEntries[hitIndex].attribute;
+        return skillAttribute;
+    }
+
+    /// <summary>
+    /// ヒットインデックスに応じたダメージ倍率を返す。
+    /// multiHitEntries が設定されていてかつ値が 0 より大きければそちらを使用。
+    /// 0 以下の場合はスキル本体の damageMultiplier をフォールバック。
+    /// </summary>
+    public float GetHitDamageMultiplier(int hitIndex)
+    {
+        if (multiHitEntries != null && multiHitEntries.Length > hitIndex
+            && multiHitEntries[hitIndex].damageMultiplier > 0f)
+            return multiHitEntries[hitIndex].damageMultiplier;
+        return damageMultiplier;
+    }
+
+    /// <summary>
+    /// ヒットインデックスに応じた追加固定ダメージを返す。
+    /// multiHitEntries が設定されていてかつ bonusDamage >= 0 ならそちらを使用。
+    /// -1 の場合はスキル本体の bonusDamage をフォールバック。
+    /// </summary>
+    public int GetHitBonusDamage(int hitIndex)
+    {
+        if (multiHitEntries != null && multiHitEntries.Length > hitIndex
+            && multiHitEntries[hitIndex].bonusDamage >= 0)
+            return multiHitEntries[hitIndex].bonusDamage;
+        return bonusDamage;
+    }
 
 
     /// <summary>
@@ -500,4 +565,36 @@ public enum RerollCondition
     /// SkillData.rerollHpThreshold で閾値を指定する。
     /// </summary>
     UserHpAboveThreshold = 4,
+}
+
+/// <summary>
+/// マルチ属性ヒット用のエントリ。
+/// ヒットごとに属性・威力倍率・追加固定ダメージを個別指定する。
+///
+/// 【使用方法】
+///   SkillData.multiHitEntries にこの構造体の配列を設定する。
+///   配列の長さは hitCount と一致させること。
+///   未設定（空配列）の場合は従来動作（全ヒット同一属性）。
+///
+/// 【フォールバック】
+///   damageMultiplier = 0  → スキル本体の damageMultiplier を使用
+///   bonusDamage      = -1 → スキル本体の bonusDamage を使用
+///
+/// 【設定例: 炎→氷→雷の3連撃】
+///   hitCount = 3
+///   multiHitEntries[0] = { Fire,    0.8, -1 }
+///   multiHitEntries[1] = { Ice,     0.8, -1 }
+///   multiHitEntries[2] = { Thunder, 0.8, -1 }
+/// </summary>
+[System.Serializable]
+public struct MultiHitEntry
+{
+    [Tooltip("このヒットの攻撃属性")]
+    public WeaponAttribute attribute;
+
+    [Tooltip("ダメージ倍率の上書き。0 = スキルの damageMultiplier を使用")]
+    public float damageMultiplier;
+
+    [Tooltip("追加固定ダメージの上書き。-1 = スキルの bonusDamage を使用")]
+    public int bonusDamage;
 }
