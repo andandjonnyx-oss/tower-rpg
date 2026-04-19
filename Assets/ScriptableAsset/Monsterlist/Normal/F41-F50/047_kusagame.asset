@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 047_kusagame
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 047_kusagame
+  Mname: "\u30AF\u30B5\u30AC\u30E1"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 46
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 600
+  Attack: 120
+  Defense: 200
+  MagicDefense: 50
+  Speed: 0
+  Luck: 60
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
+  attributeResistances:
+  - attribute: 3
+    value: -100
+  - attribute: 4
+    value: -100
+  - attribute: 5
+    value: -100
+  Exp: 1230
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u8349\u3060\u304B\u3089\u706B\u306B\u5F31\u3044\uFF01\n\u5909\u6E29\u52D5\u7269\u3060\u304B\u3089\u6C37\u306B\u5F31\u3044\uFF01\n\u4E80\u3060\u304B\u3089\u96F7\u306B\u5F31\u3044\uFF01\n\u504F\u898B\u904E\u304E\u308B\u3060\u308D\u2026\u2026\n"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 980c589e3ac9c964296d9da23c3eb626, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: ceb48dc75b88ffe4486827772e32b6f6, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

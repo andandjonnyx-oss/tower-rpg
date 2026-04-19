@@ -183,6 +183,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             && GameState.I != null)
         {
             GameState.I.pendingBattleItemInstantWin = true;
+            GameState.I.pendingBattleItemName = itemName;
             Debug.Log($"[Itembox] ボス餌付けアイテム使用: {itemName} → 即勝利フラグON");
         }
 

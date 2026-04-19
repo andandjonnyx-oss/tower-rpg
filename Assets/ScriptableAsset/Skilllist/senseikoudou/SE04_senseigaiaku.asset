@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SE04_senseigaiaku
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SE04_senseigaiaku
+  skillName: "\u72B6\u614B\u7570\u5E38\u30AC\u30B9\u7206\u767A"
+  description: 
+  skillSource: 0
+  actionType: 3
+  skillAttribute: 0
+  damageCategory: 0
+  damageMultiplier: 0
+  bonusDamage: 0
+  randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 100
+  executeEffectsOnMiss: 0
+  hitCount: 1
+  multiHitEntries: []
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 1
+    chance: 80
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 2
+    chance: 80
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 4
+    chance: 80
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 5
+    chance: 80
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 21
+    chance: 60
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 22
+    chance: 60
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 22
+    chance: 100
+    intValue: 0
+    duration: 0
+  enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

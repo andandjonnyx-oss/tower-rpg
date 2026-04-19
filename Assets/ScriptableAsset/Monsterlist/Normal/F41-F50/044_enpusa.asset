@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 044_enpusa
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 044_enpusa
+  Mname: "\u30A8\u30F3\u30D7\u30FC\u30B5"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 44
+  Minstep: 1
+  Maxfloor: 48
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 550
+  Attack: 0
+  Defense: 50
+  MagicDefense: 80
+  Speed: 0
+  Luck: 50
+  Evasion: 350
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 100
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 100
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 1
+  acceptsFeedItem: 0
+  attributeResistances: []
+  Exp: 1150
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u6C88\u9ED9\u8010\u6027\u3092\u3064\u3051\u3066\u3066\u3082\u3001\u9B45\u4E86\u3055\u308C\u305F\u3089\u610F\u5473\u7121\u3044\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: f892bdb9bb1ad2d4d8ef3da3b0708f35, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 4d7a3ec242b38df4994f828d333f0f6a, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 990a2fc3afdfcbc4d946b1f04364bc25, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
