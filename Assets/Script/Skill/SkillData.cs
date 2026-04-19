@@ -280,6 +280,24 @@ public class SkillData : ScriptableObject
        + "null の場合は通常の行動抽選を行う。")]
     public SkillData enemyNextForceSkill;
 
+    // =========================================================
+    // 敵行動：再抽選条件（スマート抽選）
+    // =========================================================
+
+    [Header("Enemy Reroll")]
+    [Tooltip("敵がこのスキルを選んだとき、指定条件を満たしていたら再抽選する。\n"
+           + "None = 再抽選なし（従来通り）\n"
+           + "TargetAlreadyAilment = 対象が既にこのスキルの状態異常にかかっている\n"
+           + "UserNotAilment = 使用者がこのスキルの状態異常にかかっていない（怒り等の自己付与用）\n"
+           + "UserHpAboveHalf = 使用者のHPが50%以上（回復技用）\n"
+           + "UserHpAboveThreshold = 使用者のHPがカスタム閾値以上（汎用版）")]
+    public RerollCondition rerollCondition = RerollCondition.None;
+
+    [Tooltip("UserHpAboveThreshold 用: 再抽選する HP 閾値（0〜1）。\n"
+           + "例: 0.8 = HPが80%以上なら再抽選。\n"
+           + "UserHpAboveHalf の場合はこの値を無視して 0.5 固定。")]
+    [Range(0f, 1f)]
+    public float rerollHpThreshold = 0.5f;
 
 
     // =========================================================
@@ -434,4 +452,52 @@ public enum MonsterActionType
     /// 多段・追加効果とは非対応(SkillData の他フィールドは参照しない)。
     /// </summary>
     FoodRaid = 4,
+}
+
+/// <summary>
+/// 敵の行動抽選時の再抽選条件。
+/// SkillData に設定し、SelectEnemyAction() で使用する。
+///
+/// 【仕様】
+///   抽選されたスキルの rerollCondition が None 以外の場合、
+///   条件を満たしていたら別のスキルを再抽選する（最大5回）。
+///   5回超えたら元の抽選結果をそのまま使用する（無限ループ防止）。
+///
+/// 【使用例】
+///   毒攻撃スキル:       TargetAlreadyAilment → プレイヤーが既に毒なら再抽選
+///   バーサク(自己付与):  UserNotAilment       → 敵が怒り状態でないなら再抽選（＝既に怒りなら使わない）
+///   回復スキル:         UserHpAboveHalf      → HPが50%以上なら再抽選
+///   緊急回復スキル:     UserHpAboveThreshold → HPがカスタム閾値以上なら再抽選
+/// </summary>
+public enum RerollCondition
+{
+    /// <summary>再抽選なし（従来通り）。</summary>
+    None = 0,
+
+    /// <summary>
+    /// 対象（プレイヤー）が既にこのスキルの状態異常にかかっている場合に再抽選。
+    /// additionalEffects から StatusAilmentEffectData (Inflict) の targetStatusEffect を探し、
+    /// プレイヤーがその状態異常にかかっていれば再抽選する。
+    /// バフ/デバフ系は BattleBuffState から判定する。
+    /// </summary>
+    TargetAlreadyAilment = 1,
+
+    /// <summary>
+    /// 使用者（敵）がこのスキルの状態異常にかかっていない場合に再抽選。
+    /// 自己付与型スキル（怒り等）で、既にかかっているときだけ使いたい場合の逆条件。
+    /// ※ 通常は「かかっていないなら使う意味がない自己回復」のような用途。
+    /// 実際には「かかっていない＝再抽選」なので、既にかかっているときだけ通過する。
+    /// </summary>
+    UserNotAilment = 2,
+
+    /// <summary>
+    /// 使用者（敵）のHPが50%以上の場合に再抽選。回復技の無駄撃ち防止。
+    /// </summary>
+    UserHpAboveHalf = 3,
+
+    /// <summary>
+    /// 使用者（敵）のHPがカスタム閾値以上の場合に再抽選（汎用版）。
+    /// SkillData.rerollHpThreshold で閾値を指定する。
+    /// </summary>
+    UserHpAboveThreshold = 4,
 }

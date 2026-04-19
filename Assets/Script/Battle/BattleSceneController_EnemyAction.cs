@@ -580,12 +580,172 @@ public partial class BattleSceneController
         Debug.Log($"[Battle] EnemyAction: playerLuc={playerLuc} enemyLuc={enemyLuc} " +
                   $"baseRange={baseRange} actionRange={actionRange} roll={roll} lowHpMode={turnLowHpMode}");
 
-        for (int i = 0; i < actionTable.Length; i++)
+        EnemyActionEntry selected = PickFromTable(actionTable, roll);
+
+        // =========================================================
+        // 再抽選ループ（スマート抽選）
+        // 選ばれたスキルの rerollCondition を確認し、条件を満たしていたら再抽選。
+        // 最大5回まで。超えたら元の結果をそのまま使用する。
+        // =========================================================
+        const int maxReroll = 10;
+        for (int r = 0; r < maxReroll; r++)
         {
-            if (roll < actionTable[i].threshold)
-                return actionTable[i];
+            if (selected.skill == null) break;
+            if (selected.skill.rerollCondition == RerollCondition.None) break;
+            if (!ShouldReroll(selected.skill)) break;
+
+            int reroll = Random.Range(0, actionRange);
+            EnemyActionEntry next = PickFromTable(actionTable, reroll);
+            Debug.Log($"[Battle] Reroll {r + 1}/{maxReroll}: {selected.skill.skillName} -> {(next.skill != null ? next.skill.skillName : "null")} (roll={reroll})");
+            selected = next;
         }
-        return actionTable[actionTable.Length - 1];
+
+        return selected;
+    }
+
+    /// <summary>
+    /// 行動テーブルからロール値に対応するエントリを返す。
+    /// </summary>
+    private EnemyActionEntry PickFromTable(EnemyActionEntry[] table, int roll)
+    {
+        for (int i = 0; i < table.Length; i++)
+        {
+            if (roll < table[i].threshold)
+                return table[i];
+        }
+        return table[table.Length - 1];
+    }
+
+    /// <summary>
+    /// 再抽選条件を評価する。true = 再抽選すべき（条件を満たしている）。
+    /// </summary>
+    private bool ShouldReroll(SkillData skill)
+    {
+        switch (skill.rerollCondition)
+        {
+            case RerollCondition.TargetAlreadyAilment:
+                return IsTargetAlreadyAffected(skill);
+
+            case RerollCondition.UserNotAilment:
+                return IsUserNotAffected(skill);
+
+            case RerollCondition.UserHpAboveHalf:
+                return GetEnemyHpRatio() >= 0.5f;
+
+            case RerollCondition.UserHpAboveThreshold:
+                return GetEnemyHpRatio() >= skill.rerollHpThreshold;
+
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
+    /// 敵の現在HP割合を返す。
+    /// </summary>
+    private float GetEnemyHpRatio()
+    {
+        if (enemyMonster == null || enemyMonster.MaxHp <= 0) return 1f;
+        return (float)enemyCurrentHp / enemyMonster.MaxHp;
+    }
+
+    /// <summary>
+    /// TargetAlreadyAilment: プレイヤーが既にこのスキルの状態異常にかかっているか判定。
+    /// additionalEffects から StatusAilmentEffectData (Inflict) を探し、
+    /// そのtargetStatusEffect でプレイヤーの状態を確認する。
+    /// バフ/デバフ系は BattleBuffState のプレイヤー側を参照する。
+    /// </summary>
+    private bool IsTargetAlreadyAffected(SkillData skill)
+    {
+        if (skill.additionalEffects == null) return false;
+
+        for (int i = 0; i < skill.additionalEffects.Count; i++)
+        {
+            var entry = skill.additionalEffects[i];
+            if (entry == null || entry.effectData == null) continue;
+            if (!(entry.effectData is StatusAilmentEffectData)) continue;
+            if (entry.ailmentMode != AilmentMode.Inflict) continue;
+
+            StatusEffect effect = entry.targetStatusEffect;
+
+            // バフ/デバフ系: BattleBuffState で判定
+            if (StatusEffectSystem.IsBuffDebuff(effect))
+            {
+                if (StatusEffectSystem.IsDebuff(effect))
+                {
+                    // デバフ → プレイヤーに付与するもの
+                    ref BuffDebuffPair pair = ref buffState.player.GetPairRef(effect);
+                    if (pair.IsDebuffed) return true;
+                }
+                else
+                {
+                    // バフ → 自分（敵）に付与するもの → TargetAlreadyAilment の対象外
+                    // （自己バフは UserNotAilment で扱う）
+                    continue;
+                }
+            }
+            // 怒り → 自己付与なので TargetAlreadyAilment 対象外
+            else if (effect == StatusEffect.Rage)
+            {
+                continue;
+            }
+            // 持続型状態異常: GameState で判定
+            else if (StatusEffectSystem.IsPlayerAffected(effect))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// UserNotAilment: 敵自身がこのスキルの状態異常にかかっていない場合 true（→ 再抽選する）。
+    /// 自己付与型スキル（怒り、自己バフ等）で使用。
+    /// 「既にかかっている状態でのみ使いたい」ケースではなく、
+    /// 「まだかかっていないなら使う意味がない」自己回復/維持スキル用。
+    /// </summary>
+    private bool IsUserNotAffected(SkillData skill)
+    {
+        if (skill.additionalEffects == null) return false;
+
+        for (int i = 0; i < skill.additionalEffects.Count; i++)
+        {
+            var entry = skill.additionalEffects[i];
+            if (entry == null || entry.effectData == null) continue;
+            if (!(entry.effectData is StatusAilmentEffectData)) continue;
+            if (entry.ailmentMode != AilmentMode.Inflict) continue;
+
+            StatusEffect effect = entry.targetStatusEffect;
+
+            // 怒り: enemyRageTurn で判定
+            if (effect == StatusEffect.Rage)
+            {
+                if (enemyRageTurn <= 0) return true; // かかっていない → 再抽選
+                continue;
+            }
+
+            // 自己バフ: BattleBuffState 敵側で判定
+            if (StatusEffectSystem.IsBuffDebuff(effect) && !StatusEffectSystem.IsDebuff(effect))
+            {
+                ref BuffDebuffPair pair = ref buffState.enemy.GetPairRef(effect);
+                if (!pair.IsBuffed) return true; // かかっていない → 再抽選
+                continue;
+            }
+
+            // 敵の持続型状態異常（毒の自己回復等）
+            // 敵側フラグで判定
+            switch (effect)
+            {
+                case StatusEffect.Poison: if (!enemyIsPoisoned) return true; break;
+                case StatusEffect.Paralyze: if (!enemyIsParalyzed) return true; break;
+                case StatusEffect.Blind: if (!enemyIsBlind) return true; break;
+                case StatusEffect.Silence: if (!enemyIsSilenced) return true; break;
+                default: break;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -1326,4 +1486,7 @@ public partial class BattleSceneController
             RefreshBattleStatusEffectUI();
         });
     }
+
+
+
 }
