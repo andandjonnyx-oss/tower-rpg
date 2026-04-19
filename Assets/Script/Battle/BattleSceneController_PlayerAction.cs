@@ -113,6 +113,11 @@ public partial class BattleSceneController
     /// <summary>
     /// プレイヤーの麻痺による行動キャンセルを判定する。
     /// 麻痺中は 20% で行動がキャンセルされ、敵ターンに移行する。
+    /// 
+    /// 【先制攻撃との連携】
+    ///   麻痺キャンセルが発生しても、先制攻撃（Preemptive）は
+    ///   「プレイヤーの行動前に割り込む」仕組みのため発動する。
+    ///   先制攻撃でプレイヤーが倒された場合は敗北処理に入る。
     /// </summary>
     /// <returns>true: 行動キャンセル（呼び出し元は return すべき）</returns>
     private bool CheckPlayerParalyze()
@@ -123,6 +128,39 @@ public partial class BattleSceneController
         if (StatusEffectSystem.CheckParalyzeCancel())
         {
             AddLog("You は麻痺して動けない！");
+
+            // 先制攻撃が抽選されている場合は、麻痺中でも発動する
+            if (isEnemyPreemptive && pendingEnemyAction != null)
+            {
+                EnemyActionEntry preemptiveAction = pendingEnemyAction;
+                pendingEnemyAction = null;
+                // isEnemyPreemptive は true のまま → EnemyTurn で「先制済み」として通常行動スキップ
+
+                AddLog($"▶ {enemyMonster.Mname} の先制攻撃！");
+                ExecutePreemptiveAction(preemptiveAction);
+
+                // プレイヤーが倒されたかチェック
+                if (GameState.I != null && GameState.I.currentHp <= 0)
+                {
+                    if (enemyCurrentHp <= 0)
+                    {
+                        FlushLogsAndThen(() => OnVictory());
+                    }
+                    else
+                    {
+                        FlushLogsAndThen(() => OnDefeat());
+                    }
+                    return true;
+                }
+
+                // 敵が自爆で倒れた場合
+                if (enemyCurrentHp <= 0)
+                {
+                    FlushLogsAndThen(() => OnVictory());
+                    return true;
+                }
+            }
+
             FlushLogsAndThen(() => EnemyTurn());
             return true;
         }

@@ -23,7 +23,7 @@ MonoBehaviour:
   IsBoss: 0
   IsUnique: 0
   MaxHp: 800
-  Attack: 100
+  Attack: 90
   Defense: 0
   MagicDefense: 0
   Speed: 0
@@ -62,5 +62,10 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
     threshold: 80
   - skill: {fileID: 11400000, guid: f11af992be5cd83479af836858440963, type: 2}
-    threshold: 80
+    threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
