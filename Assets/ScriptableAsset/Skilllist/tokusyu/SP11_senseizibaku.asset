@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: DE02_garasu
+  m_Name: SP11_senseizibaku
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: DE02_garasu
-  skillName: "\u30AC\u30E9\u30B9"
+  skillId: 
+  skillName: 
   description: 
-  skillSource: 1
+  skillSource: 0
   actionType: 2
-  skillAttribute: 0
+  skillAttribute: 8
   damageCategory: 0
   damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0
-  hpDependentType: 0
-  hpDependentPercent: 20
-  defenseIgnoreRate: 0
+  hpDependentType: 4
+  hpDependentPercent: 100
+  defenseIgnoreRate: 1
   cooldownTurns: 0
-  mpCost: 7
+  mpCost: 0
   baseHitRate: 100
   hitCount: 1
   noBattleOk: 0
   additionalEffects:
-  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+  - effectData: {fileID: 11400000, guid: 3eba973624ae42f4e9b2f3973a5799f0, type: 2}
     ailmentMode: 0
-    targetStatusEffect: 24
-    chance: 80
+    targetStatusEffect: 0
+    chance: 100
     intValue: 0
     duration: 0
   enemyNextForceSkill: {fileID: 0}
