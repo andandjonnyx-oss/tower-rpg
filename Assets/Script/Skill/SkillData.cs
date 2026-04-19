@@ -329,7 +329,8 @@ public class SkillData : ScriptableObject
     /// HP依存ダメージが設定されている場合はダメージスキル扱い。
     /// </summary>
     public bool IsNonDamage => damageMultiplier <= 0f && bonusDamage <= 0 && randomDamageMax <= 0
-                               && hpDependentType == HpDependentType.None;
+                               && hpDependentType == HpDependentType.None
+                               && !HasMultiHitEntries;
 
     /// <summary>
     /// HP依存ダメージスキルかどうか。

@@ -1142,7 +1142,8 @@ public partial class BattleSceneController
                 else if (resistance > 0) logSuffix = "（耐性で軽減）";
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
-                AddLog($"  {h + 1}撃目 {finalDamage}ダメージ！{logSuffix}");
+                string attrTag = skill.HasMultiHitEntries ? $"（{hitAttr.ToJapanese()}）" : "";
+                AddLog($"  {h + 1}撃目{attrTag} {finalDamage}ダメージ！{logSuffix}");
             }
             else
             {
