@@ -679,9 +679,10 @@ public partial class BattleSceneController
                 }
                 else
                 {
-                    // バフ → 自分（敵）に付与するもの → TargetAlreadyAilment の対象外
-                    // （自己バフは UserNotAilment で扱う）
-                    continue;
+                    // バフ → 自分（敵）に付与するもの
+                    // 既に自分にバフがかかっていたら再抽選（重ねがけ回避）
+                    ref BuffDebuffPair selfPair = ref buffState.enemy.GetPairRef(effect);
+                    if (selfPair.IsBuffed) return true;
                 }
             }
             // 怒り → 自己付与なので TargetAlreadyAilment 対象外
