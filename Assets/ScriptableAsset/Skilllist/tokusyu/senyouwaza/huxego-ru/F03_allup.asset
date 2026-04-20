@@ -64,5 +64,5 @@ MonoBehaviour:
     intValue: 20
     duration: 5
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 2
+  rerollCondition: 1
   rerollHpThreshold: 0.5

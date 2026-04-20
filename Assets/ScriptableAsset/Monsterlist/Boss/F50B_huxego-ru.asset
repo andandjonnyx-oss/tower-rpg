@@ -56,18 +56,28 @@ MonoBehaviour:
   Help: "\u4E2D\u30DC\u30B9\u3068\u3057\u3066\u767B\u5834\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 965f79d602980f44fafed02ea330cafc, type: 2}
-    threshold: 20
+    threshold: 10
   - skill: {fileID: 11400000, guid: d56aa707c79cd074db31f21ad80a3f92, type: 2}
-    threshold: 40
-  - skill: {fileID: 11400000, guid: c1849e591ddd0724aac3d6343a47a545, type: 2}
+    threshold: 30
+  - skill: {fileID: 11400000, guid: 35cb4332f75d8e04fa6e796e60a807b2, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 0e312802664d30a4eb4d6f6dd83916d7, type: 2}
     threshold: 60
+  - skill: {fileID: 11400000, guid: c1849e591ddd0724aac3d6343a47a545, type: 2}
+    threshold: 70
   - skill: {fileID: 11400000, guid: 6bdcaf10a7e9a2d4ab9d1f2bfa706b00, type: 2}
     threshold: 80
   - skill: {fileID: 11400000, guid: e4a9a652137251d4fa84a8fd0ace5b7b, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: e528d802abbc74140ad2c2c21ffd2d89, type: 2}
     threshold: 100
+  - skill: {fileID: 11400000, guid: a3fab513ff88fc840996d68fdf7c3e37, type: 2}
+    threshold: 115
+  - skill: {fileID: 11400000, guid: b97ec861b7f638a4d9087a6611d963b4, type: 2}
+    threshold: 120
   baseActionRange: 100
   actionCount: 1
-  lowHpThreshold: 0
+  lowHpThreshold: 0.3
   lowHpActions: []
   lowHpBaseActionRange: 0
-  lowHpActionCount: 0
+  lowHpActionCount: 2

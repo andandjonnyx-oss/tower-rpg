@@ -701,50 +701,89 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// UserNotAilment: 敵自身がこのスキルの状態異常にかかっていない場合 true（→ 再抽選する）。
-    /// 自己付与型スキル（怒り、自己バフ等）で使用。
-    /// 「既にかかっている状態でのみ使いたい」ケースではなく、
-    /// 「まだかかっていないなら使う意味がない」自己回復/維持スキル用。
+    /// UserNotAilment: 再抽選すべきかを判定する。
+    /// 
+    /// Inflict モード（自己付与型）:
+    ///   敵自身がこのスキルの効果にかかっていない場合 true（→ 再抽選する）。
+    ///   1つでもかかっていなければ即 true。
+    /// 
+    /// Cure モード（自己回復型）:
+    ///   敵自身がこのスキルで治せる状態異常に1つもかかっていない場合 true（→ 再抽選する）。
+    ///   全てかかっていなければ true。1つでもかかっていれば false（使う価値あり）。
     /// </summary>
     private bool IsUserNotAffected(SkillData skill)
     {
         if (skill.additionalEffects == null) return false;
+
+        // Cure モード用: Cure エントリがあるかと、1つでもかかっているかを追跡
+        bool hasCureEntry = false;
+        bool anyCureTargetAffected = false;
 
         for (int i = 0; i < skill.additionalEffects.Count; i++)
         {
             var entry = skill.additionalEffects[i];
             if (entry == null || entry.effectData == null) continue;
             if (!(entry.effectData is StatusAilmentEffectData)) continue;
-            if (entry.ailmentMode != AilmentMode.Inflict) continue;
 
             StatusEffect effect = entry.targetStatusEffect;
 
-            // 怒り: enemyRageTurn で判定
-            if (effect == StatusEffect.Rage)
+            if (entry.ailmentMode == AilmentMode.Inflict)
             {
-                if (enemyRageTurn <= 0) return true; // かかっていない → 再抽選
-                continue;
-            }
+                // --- Inflict: 1つでもかかっていなければ即 return true ---
 
-            // 自己バフ: BattleBuffState 敵側で判定
-            if (StatusEffectSystem.IsBuffDebuff(effect) && !StatusEffectSystem.IsDebuff(effect))
-            {
-                ref BuffDebuffPair pair = ref buffState.enemy.GetPairRef(effect);
-                if (!pair.IsBuffed) return true; // かかっていない → 再抽選
-                continue;
-            }
+                // 怒り: enemyRageTurn で判定
+                if (effect == StatusEffect.Rage)
+                {
+                    if (enemyRageTurn <= 0) return true;
+                    continue;
+                }
 
-            // 敵の持続型状態異常（毒の自己回復等）
-            // 敵側フラグで判定
-            switch (effect)
+                // 自己バフ: BattleBuffState 敵側で判定
+                if (StatusEffectSystem.IsBuffDebuff(effect) && !StatusEffectSystem.IsDebuff(effect))
+                {
+                    ref BuffDebuffPair pair = ref buffState.enemy.GetPairRef(effect);
+                    if (!pair.IsBuffed) return true;
+                    continue;
+                }
+
+                // 敵の持続型状態異常
+                switch (effect)
+                {
+                    case StatusEffect.Poison: if (!enemyIsPoisoned) return true; break;
+                    case StatusEffect.Paralyze: if (!enemyIsParalyzed) return true; break;
+                    case StatusEffect.Blind: if (!enemyIsBlind) return true; break;
+                    case StatusEffect.Silence: if (!enemyIsSilenced) return true; break;
+                    default: break;
+                }
+            }
+            else if (entry.ailmentMode == AilmentMode.Cure)
             {
-                case StatusEffect.Poison: if (!enemyIsPoisoned) return true; break;
-                case StatusEffect.Paralyze: if (!enemyIsParalyzed) return true; break;
-                case StatusEffect.Blind: if (!enemyIsBlind) return true; break;
-                case StatusEffect.Silence: if (!enemyIsSilenced) return true; break;
-                default: break;
+                // --- Cure: 全てかかっていなければ再抽選 ---
+                hasCureEntry = true;
+
+                if (!anyCureTargetAffected)
+                {
+                    // 敵の持続型状態異常
+                    switch (effect)
+                    {
+                        case StatusEffect.Poison: if (enemyIsPoisoned) anyCureTargetAffected = true; break;
+                        case StatusEffect.Paralyze: if (enemyIsParalyzed) anyCureTargetAffected = true; break;
+                        case StatusEffect.Blind: if (enemyIsBlind) anyCureTargetAffected = true; break;
+                        case StatusEffect.Silence: if (enemyIsSilenced) anyCureTargetAffected = true; break;
+                        case StatusEffect.Charm:
+                            if (SkillEffectProcessor.IsEnemyCharmed) anyCureTargetAffected = true; break;
+                        case StatusEffect.Curse:
+                            if (SkillEffectProcessor.IsEnemyCursed) anyCureTargetAffected = true; break;
+                        case StatusEffect.Glass:
+                            if (SkillEffectProcessor.IsEnemyGlassed) anyCureTargetAffected = true; break;
+                        default: break;
+                    }
+                }
             }
         }
+
+        // Cure エントリがあり、1つもかかっていなければ再抽選
+        if (hasCureEntry && !anyCureTargetAffected) return true;
 
         return false;
     }
