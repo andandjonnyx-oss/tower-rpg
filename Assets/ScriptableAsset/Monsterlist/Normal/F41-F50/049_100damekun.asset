@@ -53,7 +53,7 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
+  Help: "100\u30C0\u30E1\u30FC\u30B8\u3078\u306E\u57F7\u7740\u304C\u51C4\u3044\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: c9b8671fae335364e8b54c5516f36781, type: 2}
     threshold: 100
