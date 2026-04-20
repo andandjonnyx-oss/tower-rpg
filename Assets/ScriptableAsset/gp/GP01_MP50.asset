@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320d1bf4e920b7142a53d89fbae4ee54, type: 3}
+  m_Name: GP01_MP50
+  m_EditorClassIdentifier: Assembly-CSharp::GpShopData
+  item: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
+  gpCost: 20
+  requiredFloor: 1
+  maxPurchaseCount: 100
+  sortOrder: 1

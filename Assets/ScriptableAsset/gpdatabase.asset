@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f9cb8c725b3c7e45b9aead97380eec0, type: 3}
+  m_Name: gpdatabase
+  m_EditorClassIdentifier: Assembly-CSharp::GpShopDatabase
+  shopItems:
+  - {fileID: 11400000, guid: be68e4917d5a1694890f99ae9b6c17e1, type: 2}
+  - {fileID: 11400000, guid: bf2dfcd6ea8bce148884e014664cc664, type: 2}
