@@ -49,7 +49,18 @@ public class GpShopView : MonoBehaviour
     [SerializeField] private TMP_Text gpText;
 
     [Header("Detail Popup")]
+    [Tooltip("ポップアップ全体の親オブジェクト（Blocker を含む）。\n"
+           + "SetActive で表示/非表示を切り替える。\n"
+           + "Blocker が画面全体を覆い、背面のボタンタップを防ぐ。")]
     [SerializeField] private GameObject detailPopup;
+
+    [Tooltip("画面全体を覆う半透明パネル（Blocker）。\n"
+           + "Raycast Target = true にして背面タップを防ぐ。\n"
+           + "detailPopup の直下の子として配置する。\n"
+           + "タップで閉じたい場合は Button コンポーネントを付けて closeButton と同じ動作にする。")]
+    [SerializeField] private Button blockerButton;
+
+
     [SerializeField] private Image popupIcon;
     [SerializeField] private TMP_Text popupName;
     [SerializeField] private TMP_Text popupDesc;
@@ -90,6 +101,10 @@ public class GpShopView : MonoBehaviour
 
         if (closeButton != null)
             closeButton.onClick.AddListener(HidePopup);
+
+        // ブロッカータップでもポップアップを閉じる
+        if (blockerButton != null)
+            blockerButton.onClick.AddListener(HidePopup);
 
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
