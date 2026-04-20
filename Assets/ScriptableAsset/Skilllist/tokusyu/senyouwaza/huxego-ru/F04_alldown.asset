@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: F04_alldown
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: F04_alldown
+  skillName: "\u30AA\u30FC\u30EB\u30C0\u30A6\u30F3"
+  description: 
+  skillSource: 1
+  actionType: 2
+  skillAttribute: 0
+  damageCategory: 0
+  damageMultiplier: 0
+  bonusDamage: 0
+  randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 95
+  executeEffectsOnMiss: 0
+  hitCount: 1
+  multiHitEntries: []
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 12
+    chance: 100
+    intValue: 30
+    duration: 5
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 10
+    chance: 100
+    intValue: 30
+    duration: 5
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 18
+    chance: 100
+    intValue: 30
+    duration: 5
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 16
+    chance: 100
+    intValue: 30
+    duration: 5
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 14
+    chance: 100
+    intValue: 30
+    duration: 5
+  enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 1
+  rerollHpThreshold: 0.5

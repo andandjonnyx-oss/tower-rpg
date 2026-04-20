@@ -66,6 +66,6 @@ MonoBehaviour:
   lowHpThreshold: 0.5
   lowHpActions:
   - skill: {fileID: 11400000, guid: 002067d41d9c9cf4ca5112f6dda306dd, type: 2}
-    threshold: 0
+    threshold: 100
   lowHpBaseActionRange: 0
   lowHpActionCount: 0

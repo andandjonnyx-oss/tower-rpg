@@ -360,7 +360,10 @@ public static class SkillEffectProcessor
         }
         else if (entry.ailmentMode == AilmentMode.Cure)
         {
-            ProcessStatusAilmentCure(entry, isPlayerAttack, logs);
+            ProcessStatusAilmentCure(entry, isPlayerAttack, enemyMonster,
+                                     ref enemyIsPoisoned, ref enemyIsParalyzed,
+                                     ref enemyIsBlind, ref enemyIsSilenced,
+                                     logs);
         }
     }
 
@@ -865,6 +868,11 @@ public static class SkillEffectProcessor
     private static void ProcessStatusAilmentCure(
         SkillEffectEntry entry,
         bool isPlayerAttack,
+        Monster enemyMonster,
+        ref bool enemyIsPoisoned,
+        ref bool enemyIsParalyzed,
+        ref bool enemyIsBlind,
+        ref bool enemyIsSilenced,
         List<string> logs)
     {
         StatusEffect effect = entry.targetStatusEffect;
@@ -901,7 +909,41 @@ public static class SkillEffectProcessor
         }
         else
         {
-            Debug.Log("[SkillEffectProcessor] 敵の状態異常回復は未実装");
+            // 敵が自分自身の状態異常を回復する
+            string eName = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+
+            switch (effect)
+            {
+                case StatusEffect.Poison:
+                    if (enemyIsPoisoned) { enemyIsPoisoned = false; logs.Add($"{eName} の毒が治った！"); }
+                    break;
+                case StatusEffect.Paralyze:
+                    if (enemyIsParalyzed) { enemyIsParalyzed = false; logs.Add($"{eName} の麻痺が治った！"); }
+                    break;
+                case StatusEffect.Blind:
+                    if (enemyIsBlind) { enemyIsBlind = false; logs.Add($"{eName} の暗闇が治った！"); }
+                    break;
+                case StatusEffect.Silence:
+                    if (enemyIsSilenced) { enemyIsSilenced = false; logs.Add($"{eName} の沈黙が治った！"); }
+                    break;
+                case StatusEffect.Charm:
+                    if (_enemyCharmDummy) { _enemyCharmDummy = false; logs.Add($"{eName} の魅了が治った！"); }
+                    break;
+                case StatusEffect.Curse:
+                    if (_enemyCurseDummy) { _enemyCurseDummy = false; logs.Add($"{eName} の呪いが治った！"); }
+                    break;
+                case StatusEffect.Glass:
+                    if (_enemyGlassDummy) { _enemyGlassDummy = false; logs.Add($"{eName} のガラスが治った！"); }
+                    break;
+                case StatusEffect.Petrify:
+                    // 敵の石化解除は BattleSceneController 側のメソッドが必要
+                    // 現時点では一部のボスのみの想定なので、必要になったら追加
+                    Debug.Log($"[SkillEffectProcessor] 敵の石化回復は未実装");
+                    break;
+                default:
+                    Debug.Log($"[SkillEffectProcessor] 敵の状態異常回復 未対応: {effect}");
+                    break;
+            }
         }
     }
 
