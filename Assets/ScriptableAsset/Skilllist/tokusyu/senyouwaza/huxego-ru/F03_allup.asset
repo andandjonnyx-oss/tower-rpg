@@ -38,31 +38,31 @@ MonoBehaviour:
     targetStatusEffect: 13
     chance: 100
     intValue: 20
-    duration: 5
+    duration: 6
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
     targetStatusEffect: 11
     chance: 100
     intValue: 20
-    duration: 5
+    duration: 6
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
     targetStatusEffect: 19
     chance: 100
     intValue: 20
-    duration: 5
+    duration: 6
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
     targetStatusEffect: 17
     chance: 100
     intValue: 20
-    duration: 5
+    duration: 6
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
     targetStatusEffect: 15
     chance: 100
     intValue: 20
-    duration: 5
+    duration: 6
   enemyNextForceSkill: {fileID: 0}
   rerollCondition: 1
   rerollHpThreshold: 0.5

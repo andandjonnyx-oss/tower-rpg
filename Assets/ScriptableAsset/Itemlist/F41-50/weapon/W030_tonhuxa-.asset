@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W030_tonhuxa-
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W030_tonhuxa-
+  itemName: "\u30C8\u30F3\u30D5\u30A1\u30FC"
+  description: "\u6728\u3067\u51FA\u6765\u305F\u30C0\u30A6\u30B8\u30F3\u30B0\u30DE\u30B7\u30F3\u3060\u305C\uFF01\n\u653B\u6483\u529B+120
+    \u7A81\u5C5E\u6027\n\u30B9\u30AD\u30EB\uFF1A\u30C8\u30F3\u30D5\u30A1\u30FC\u30AD\u30C3\u30AF\n\uFF08CT3\u30012\u500D\u3001\u6BB4\u5C5E\u6027\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 44
+  Minstep: 1
+  Maxfloor: 47
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 2
+  attackPower: 120
+  skills:
+  - {fileID: 11400000, guid: ca0bf37404704784894a1f274b6697a3, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 30

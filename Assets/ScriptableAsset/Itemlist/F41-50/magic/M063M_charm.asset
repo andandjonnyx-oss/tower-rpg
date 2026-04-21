@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M063M_charm
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M063M_charm
+  itemName: "\u30C1\u30E3\u30FC\u30E0"
+  description: "\u6575\u3092\u9B45\u4E86\u3059\u308B\u3002\u7537\u3067\u3082\u5973\u3067\u3082\u30E2\u30F3\u30B9\u30BF\u30FC\u3067\u3082\n\u304A\u524D\u306E\u9B45\u529B\u306F\u4F1D\u308F\u308B\u305C\uFF01\nMP10\u3000\u57FA\u790E\u547D\u4E2D60"
+  icon: {fileID: 0}
+  Minfloor: 44
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 11400000, guid: 990a2fc3afdfcbc4d946b1f04364bc25, type: 2}
+  passiveEffects: []
+  sortOrder: 63

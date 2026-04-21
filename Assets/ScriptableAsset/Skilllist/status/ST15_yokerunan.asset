@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_silentTA
+  m_Name: ST15_yokerunan
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_silentTA
-  skillName: "\u30B5\u30A4\u30EC\u30F3\u30C8"
-  description: "\u8CE2\u3044\u6575\u7528"
+  skillId: ST15_yokerunan
+  skillName: "\u30E8\u30B1\u30EB\u30CA\u30F3"
+  description: "5\u30BF\u30FC\u30F3\u306E\u9593\u3001\u56DE\u907F\u309280\uFF05\u4E0B\u3052\u308B"
   skillSource: 1
   actionType: 2
   skillAttribute: 0
@@ -26,8 +26,8 @@ MonoBehaviour:
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 0
-  baseHitRate: 100
+  mpCost: 10
+  baseHitRate: 99999
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
@@ -35,10 +35,10 @@ MonoBehaviour:
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
-    targetStatusEffect: 5
-    chance: 80
-    intValue: 0
-    duration: 0
+    targetStatusEffect: 14
+    chance: 100
+    intValue: 80
+    duration: 6
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5

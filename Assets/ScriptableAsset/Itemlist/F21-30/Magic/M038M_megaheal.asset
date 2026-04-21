@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M038M_megaheal
   itemName: "\u30E1\u30AC\u30D2\u30FC\u30EB"
-  description: "HP200\u56DE\u5FA9"
+  description: "MP20\nHP200\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 26
   Minstep: 1
@@ -29,11 +29,17 @@ MonoBehaviour:
   curesParalyze: 0
   curesBlind: 0
   curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
@@ -41,6 +47,10 @@ MonoBehaviour:
   eatCuresParalyze: 0
   eatCuresBlind: 0
   eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []

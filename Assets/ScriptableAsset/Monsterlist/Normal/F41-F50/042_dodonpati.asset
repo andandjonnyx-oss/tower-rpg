@@ -24,7 +24,7 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 400
   Attack: 70
-  Defense: 30
+  Defense: 80
   MagicDefense: 30
   Speed: 0
   Luck: 40

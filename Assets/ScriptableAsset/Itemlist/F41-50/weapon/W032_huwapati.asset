@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W032_huwapati
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W032_huwapati
+  itemName: "\u3075\u308F\u3071\u3061"
+  description: "\u5F3E\u3051\u308B\u7F8E\u5473\u3057\u3055 \u96F7\u5C5E\u6027\n\u653B\u6483\u529B+140
+    \u96F7\u8010\u6027+50 \u9EBB\u75FA\u8010\u6027+100\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT4\u30011\u500D\u3001\u30B9\u30BF\u30F350\uFF05\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 46
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 1
+  eatHealAmount: 400
+  eatCuresPoison: 0
+  eatCuresParalyze: 1
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 5
+  attackPower: 140
+  skills:
+  - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances:
+  - attribute: 5
+    value: 50
+  equipStatusEffectResistances:
+  - statusEffect: 2
+    value: 50
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 32

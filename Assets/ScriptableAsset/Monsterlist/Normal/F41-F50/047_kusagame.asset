@@ -22,9 +22,9 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 600
+  MaxHp: 700
   Attack: 120
-  Defense: 200
+  Defense: 300
   MagicDefense: 50
   Speed: 0
   Luck: 60
@@ -53,8 +53,8 @@ MonoBehaviour:
     value: -100
   Exp: 1230
   Gold: 0
-  dropItem: {fileID: 0}
-  dropRate: 0
+  dropItem: {fileID: 11400000, guid: e6db36a5fb9826940a7109d8863a1876, type: 2}
+  dropRate: 0.3
   autoRegenEnabled: 0
   autoRegenAmount: 0
   isQuizBoss: 0

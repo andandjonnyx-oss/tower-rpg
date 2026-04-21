@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M010M_heal2
   itemName: "\u30CF\u30A4\u30D2\u30FC\u30EB"
-  description: "\u9774\u3067\u306F\u7121\u3044\nMP12 HP100\u56DE\u5FA9"
+  description: "\u9774\u3067\u306F\u7121\u3044\nMP10 HP100\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 6
   Minstep: 1
@@ -26,15 +26,31 @@ MonoBehaviour:
   healAmount: 0
   mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []

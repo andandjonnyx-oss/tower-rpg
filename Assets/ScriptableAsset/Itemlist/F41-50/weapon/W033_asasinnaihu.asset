@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W033_asasinnaihu
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W033_asasinnaihu
+  itemName: "\u30A2\u30B5\u30B7\u30F3\u30CA\u30A4\u30D5"
+  description: "\u75FA\u308C\u3055\u305B\u3066\u9ED9\u3089\u305B\u3066\u6BD2\u3067\u3058\u308F\u3058\u308F\u3068\n\u653B\u6483\u529B+135
+    \u901A\u5E38\u653B\u6483\u6C88\u9ED920%\n\u30B9\u30AD\u30EB\uFF1A\u72E9\u308A\u306E\u6642\u9593\n\uFF08CT5\u30012\u500D\u3001\u6BD2\u9EBB\u75FA20%\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 46
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 1
+  attackPower: 135
+  skills:
+  - {fileID: 11400000, guid: 710f59cdd7dd1374b88dbc1d3044c9ba, type: 2}
+  weaponInflictEffect: 5
+  weaponInflictChance: 20
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 33

@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: M054M_3ma
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M054M_3ma
+  itemName: "\u30C8\u30EA\u30D7\u30EB\u30DE\u30B8\u30C3\u30AF"
+  description: "\u706B\u6C37\u96F7\u306E\u5A01\u529B100\u3092\u653E\u3064\n\u706B\u6C37\u96F7\u8010\u6027+15\nMP20"
+  icon: {fileID: 0}
+  Minfloor: 41
+  Minstep: 1
+  Maxfloor: 45
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 11400000, guid: 9de15be12106c2d4ba3248469a0055b9, type: 2}
+  passiveEffects:
+  - effectType: 0
+    targetAttribute: 3
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 15
+    floatValue: 0
+  - effectType: 0
+    targetAttribute: 4
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 15
+    floatValue: 0
+  - effectType: 0
+    targetAttribute: 5
+    targetStat: 0
+    targetStatusEffect: 0
+    value: 15
+    floatValue: 0
+  sortOrder: 54
