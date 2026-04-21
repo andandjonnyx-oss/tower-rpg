@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TowerState : MonoBehaviour
 {
@@ -63,6 +64,21 @@ public class TowerState : MonoBehaviour
            + "未設定の場合は麻痺の待機制御を行わない。")]
     [SerializeField] private Button advanceButton;
 
+    // =========================================================
+    // ダンジョン内倉庫アクセス（追加）
+    // =========================================================
+    [Header("UI - Tower Storage")]
+    [Tooltip("ダンジョン内で倉庫を開くボタン。\n"
+           + "ボス前19STEPでは無条件表示。\n"
+           + "それ以外では広告視聴で1回限り使用可能。")]
+    [SerializeField] private Button towerStorageButton;
+
+    [Tooltip("倉庫シーン名")]
+    [SerializeField] private string storageSceneName = "Itemsouko";
+
+    /// <summary>広告視聴による倉庫使用済みフラグ。塔に入り直すとリセット。</summary>
+    private bool usedStorageAd = false;
+
     /// <summary>ドロップダウンに表示中のスキルリストキャッシュ。</summary>
     private List<SkillData> fieldMagicList = new List<SkillData>();
 
@@ -89,6 +105,11 @@ public class TowerState : MonoBehaviour
         // 魔法ボタン登録
         if (magicButton != null) magicButton.onClick.AddListener(OnFieldMagicClicked);
         RefreshFieldMagicUI();
+
+        // ダンジョン内倉庫ボタン登録
+        if (towerStorageButton != null)
+            towerStorageButton.onClick.AddListener(OnTowerStorageClicked);
+        RefreshTowerStorageButton();
     }
 
     // 進むボタンから呼ぶ
@@ -300,6 +321,7 @@ public class TowerState : MonoBehaviour
     {
         if (floorText != null) floorText.text = $"{Floor}階";
         if (stepText != null) stepText.text = $"{Step}STEP";
+        RefreshTowerStorageButton();
     }
 
     /// <summary>
@@ -498,6 +520,123 @@ public class TowerState : MonoBehaviour
     public void RefreshFieldMagicFromExternal()
     {
         RefreshFieldMagicUI();
+    }
+
+    // =========================================================
+    // ダンジョン内倉庫アクセス（追加）
+    // =========================================================
+    //
+    // ボス前 19STEP（x0階の19STEP）では無条件で倉庫ボタンを表示する。
+    // それ以外の STEP では広告視聴で1回限り倉庫を開ける。
+    // 倉庫シーンの戻り先は StorageContext.ReturnScene で制御する。
+    // =========================================================
+
+    /// <summary>
+    /// ボス前 19STEP かどうかを判定する。
+    /// 10, 20, 30, 40, 50 ... 階の 19STEP が該当。
+    /// </summary>
+    private bool IsPreBossStep()
+    {
+        return Step == 19 && Floor % 10 == 0 && Floor > 0;
+    }
+
+    /// <summary>
+    /// 倉庫ボタンの表示・非表示・ラベルを更新する。
+    /// </summary>
+    private void RefreshTowerStorageButton()
+    {
+        if (towerStorageButton == null) return;
+
+        // 石化ロック中・麻痺待機中は非表示
+        if (isPetrifyLocked || isParalyzeWaiting)
+        {
+            towerStorageButton.gameObject.SetActive(false);
+            return;
+        }
+
+        if (IsPreBossStep())
+        {
+            // ボス前 19STEP: 無条件表示
+            towerStorageButton.gameObject.SetActive(true);
+            towerStorageButton.interactable = true;
+            var label = towerStorageButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (label != null) label.text = "倉庫";
+        }
+        else if (!usedStorageAd)
+        {
+            // 広告未使用: ボタン表示（広告付き）
+            towerStorageButton.gameObject.SetActive(true);
+            towerStorageButton.interactable = true;
+            var label = towerStorageButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (label != null) label.text = "倉庫(広告)";
+        }
+        else
+        {
+            // 広告使用済み & ボス前でもない: 非表示
+            towerStorageButton.gameObject.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// 倉庫ボタン押下時の処理。
+    /// ボス前 19STEP なら即遷移、それ以外は広告視聴後に遷移。
+    /// </summary>
+    private void OnTowerStorageClicked()
+    {
+        if (isPetrifyLocked) return;
+
+        if (TowerItemTrigger.Instance != null && TowerItemTrigger.Instance.IsBusy)
+            return;
+
+        if (IsPreBossStep())
+        {
+            // ボス前: 広告不要で倉庫へ
+            GoToStorageFromTower();
+        }
+        else if (!usedStorageAd)
+        {
+            // 広告視聴
+            if (AdManager.Instance != null)
+            {
+                AdManager.Instance.ShowRewardedAd(OnStorageAdResult);
+            }
+            else
+            {
+                Debug.LogWarning("[Tower] AdManager.Instance が null — 広告なしで倉庫を開く");
+                OnStorageAdResult(true);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 倉庫広告の視聴結果コールバック。
+    /// </summary>
+    private void OnStorageAdResult(bool success)
+    {
+        if (!success)
+        {
+            Debug.Log("[Tower] 倉庫広告: 視聴失敗/キャンセル");
+            return;
+        }
+
+        usedStorageAd = true;
+        Debug.Log("[Tower] 倉庫広告: 視聴完了 → 倉庫へ遷移");
+        GoToStorageFromTower();
+    }
+
+    /// <summary>
+    /// Tower → 倉庫シーンへの遷移処理。
+    /// 遷移前に戻り先を Tower に設定する。
+    /// </summary>
+    private void GoToStorageFromTower()
+    {
+        // 現在の状態をセーブ（floor/step を保持）
+        SaveManager.Save();
+
+        // 倉庫シーンの戻り先を Tower に設定
+        StorageContext.ReturnScene = "Tower";
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(storageSceneName);
     }
 
 }

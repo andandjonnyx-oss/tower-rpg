@@ -9,30 +9,65 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: M065M_meteo
-  m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: M065M_meteo
-  skillName: "\u30E1\u30C6\u30AA"
-  description: "\u5A01\u529B500\u3000\u708E\u9B54\u6CD5"
-  skillSource: 0
-  actionType: 2
-  skillAttribute: 0
-  damageCategory: 0
-  damageMultiplier: 0
-  bonusDamage: 0
-  randomDamageMax: 0
-  hpDependentType: 0
-  hpDependentPercent: 20
-  defenseIgnoreRate: 0
-  cooldownTurns: 0
-  mpCost: 0
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: M065M_meteo
+  itemName: "\u30E1\u30C6\u30AA"
+  description: "MP25 \u5A01\u529B500\u708E\u9B54\u6CD5"
+  icon: {fileID: 0}
+  Minfloor: 46
+  Minstep: 1
+  Maxfloor: 50
+  Maxstep: 20
+  category: 2
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
   baseHitRate: 95
-  executeEffectsOnMiss: 0
-  hitCount: 1
-  multiHitEntries: []
-  noBattleOk: 0
-  additionalEffects: []
-  enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 0
-  rerollHpThreshold: 0.5
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 11400000, guid: 71254bc1cf1027045bb272c6e7ae8c7e, type: 2}
+  passiveEffects: []
+  sortOrder: 65

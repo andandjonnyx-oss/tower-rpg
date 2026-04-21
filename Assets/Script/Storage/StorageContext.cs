@@ -13,6 +13,17 @@ using UnityEngine.UI;
 /// </summary>
 public class StorageContext : MonoBehaviour, IItemContext
 {
+    // =========================================================
+    // 戻り先シーンの動的切り替え（追加）
+    // =========================================================
+    /// <summary>
+    /// 倉庫シーンの「戻る」ボタンで遷移するシーン名。
+    /// Tower から開いた場合は "Tower" にセットされる。
+    /// Main から開いた場合は "Main"（デフォルト）。
+    /// 倉庫シーンを開く側で事前にセットすること。
+    /// </summary>
+    public static string ReturnScene = "Main";
+
     [Header("Inventory Slots (Left) - Inspector でアサイン")]
     [SerializeField] private ItemSlotView[] inventorySlots;
 
@@ -61,7 +72,12 @@ public class StorageContext : MonoBehaviour, IItemContext
                 if (s != null) s.onClicked = OnInventorySlotClicked;
 
         if (backButton != null)
-            backButton.onClick.AddListener(() => SceneManager.LoadScene(mainSceneName));
+        {
+            string returnTo = string.IsNullOrEmpty(ReturnScene) ? mainSceneName : ReturnScene;
+            backButton.onClick.AddListener(() => SceneManager.LoadScene(returnTo));
+            // 使用後にリセット（次回 Main から開いた時にデフォルトに戻す）
+            ReturnScene = "Main";
+        }
 
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
