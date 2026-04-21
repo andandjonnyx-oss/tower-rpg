@@ -21,6 +21,7 @@ public class MainSceneRecovery : MonoBehaviour
         gs.currentMp = gs.maxMp;
         gs.ClearAllStatusEffects();
         SaveManager.Save();
+        TowerState.ResetStorageAdFlag();
 
         Debug.Log($"[Main] ‘S‰ñ•œ: HP={gs.currentHp}/{gs.maxHp} MP={gs.currentMp}/{gs.maxMp} ó‘ÔˆÙíƒNƒŠƒA");
     }

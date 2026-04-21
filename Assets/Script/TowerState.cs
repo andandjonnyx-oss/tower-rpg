@@ -86,8 +86,9 @@ public class TowerState : MonoBehaviour
     [Tooltip("いいえボタン")]
     [SerializeField] private Button storageConfirmNo;
 
-    /// <summary>広告視聴による倉庫使用済みフラグ。塔に入り直すとリセット。</summary>
-    private bool usedStorageAd = false;
+    /// <summary>広告視聴による倉庫使用済みフラグ。static で倉庫→Tower復帰後も維持。
+    /// Main シーン到達時に MainSceneRecovery でリセットする。</summary>
+    private static bool usedStorageAd = false;
 
     /// <summary>ドロップダウンに表示中のスキルリストキャッシュ。</summary>
     private List<SkillData> fieldMagicList = new List<SkillData>();
@@ -663,4 +664,12 @@ public class TowerState : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(storageSceneName);
     }
 
+    /// <summary>
+    /// 倉庫広告使用済みフラグをリセットする。
+    /// Main シーン到達時に MainSceneRecovery から呼ばれる。
+    /// </summary>
+    public static void ResetStorageAdFlag()
+    {
+        usedStorageAd = false;
+    }
 }
