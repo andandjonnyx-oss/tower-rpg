@@ -1543,6 +1543,9 @@ MonoBehaviour:
   advanceButton: {fileID: 2070002105}
   towerStorageButton: {fileID: 951638134}
   storageSceneName: Itemsouko
+  storageConfirmPopup: {fileID: 601706506}
+  storageConfirmYes: {fileID: 231230503}
+  storageConfirmNo: {fileID: 1229955042}
 --- !u!4 &494491844
 Transform:
   m_ObjectHideFlags: 0
@@ -1793,12 +1796,12 @@ GameObject:
   m_Component:
   - component: {fileID: 601706507}
   m_Layer: 5
-  m_Name: ResetConfirmPopup
+  m_Name: soukoConfirmPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &601706507
 RectTransform:
   m_ObjectHideFlags: 0

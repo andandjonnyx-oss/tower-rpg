@@ -76,6 +76,16 @@ public class TowerState : MonoBehaviour
     [Tooltip("倉庫シーン名")]
     [SerializeField] private string storageSceneName = "Itemsouko";
 
+    [Header("UI - Tower Storage Popup")]
+    [Tooltip("広告確認ポップアップのルートオブジェクト")]
+    [SerializeField] private GameObject storageConfirmPopup;
+
+    [Tooltip("はいボタン")]
+    [SerializeField] private Button storageConfirmYes;
+
+    [Tooltip("いいえボタン")]
+    [SerializeField] private Button storageConfirmNo;
+
     /// <summary>広告視聴による倉庫使用済みフラグ。塔に入り直すとリセット。</summary>
     private bool usedStorageAd = false;
 
@@ -105,6 +115,14 @@ public class TowerState : MonoBehaviour
         // 魔法ボタン登録
         if (magicButton != null) magicButton.onClick.AddListener(OnFieldMagicClicked);
         RefreshFieldMagicUI();
+
+        // 倉庫広告確認ポップアップ
+        if (storageConfirmYes != null)
+            storageConfirmYes.onClick.AddListener(OnStorageConfirmYes);
+        if (storageConfirmNo != null)
+            storageConfirmNo.onClick.AddListener(OnStorageConfirmNo);
+        if (storageConfirmPopup != null)
+            storageConfirmPopup.SetActive(false);
 
         // ダンジョン内倉庫ボタン登録
         if (towerStorageButton != null)
@@ -554,21 +572,10 @@ public class TowerState : MonoBehaviour
             return;
         }
 
-        if (IsPreBossStep())
+        if (IsPreBossStep() || !usedStorageAd)
         {
-            // ボス前 19STEP: 無条件表示
             towerStorageButton.gameObject.SetActive(true);
             towerStorageButton.interactable = true;
-            var label = towerStorageButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (label != null) label.text = "倉庫";
-        }
-        else if (!usedStorageAd)
-        {
-            // 広告未使用: ボタン表示（広告付き）
-            towerStorageButton.gameObject.SetActive(true);
-            towerStorageButton.interactable = true;
-            var label = towerStorageButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (label != null) label.text = "倉庫(広告)";
         }
         else
         {
@@ -595,17 +602,34 @@ public class TowerState : MonoBehaviour
         }
         else if (!usedStorageAd)
         {
-            // 広告視聴
-            if (AdManager.Instance != null)
-            {
-                AdManager.Instance.ShowRewardedAd(OnStorageAdResult);
-            }
+            // ポップアップで確認
+            if (storageConfirmPopup != null)
+                storageConfirmPopup.SetActive(true);
             else
-            {
-                Debug.LogWarning("[Tower] AdManager.Instance が null — 広告なしで倉庫を開く");
-                OnStorageAdResult(true);
-            }
+                OnStorageConfirmYes(); // ポップアップ未設定ならそのまま広告へ
         }
+    }
+
+    private void OnStorageConfirmYes()
+    {
+        if (storageConfirmPopup != null)
+            storageConfirmPopup.SetActive(false);
+
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.ShowRewardedAd(OnStorageAdResult);
+        }
+        else
+        {
+            Debug.LogWarning("[Tower] AdManager.Instance が null — 広告なしで倉庫を開く");
+            OnStorageAdResult(true);
+        }
+    }
+
+    private void OnStorageConfirmNo()
+    {
+        if (storageConfirmPopup != null)
+            storageConfirmPopup.SetActive(false);
     }
 
     /// <summary>

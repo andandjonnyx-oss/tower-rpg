@@ -75,7 +75,14 @@ public class StorageContext : MonoBehaviour, IItemContext
         {
             string returnTo = string.IsNullOrEmpty(ReturnScene) ? mainSceneName : ReturnScene;
             backButton.onClick.AddListener(() => SceneManager.LoadScene(returnTo));
-            // 使用後にリセット（次回 Main から開いた時にデフォルトに戻す）
+
+            // ボタンラベルを戻り先に応じて変更
+            var label = backButton.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (label != null)
+            {
+                label.text = "戻る";
+            }
+
             ReturnScene = "Main";
         }
 
