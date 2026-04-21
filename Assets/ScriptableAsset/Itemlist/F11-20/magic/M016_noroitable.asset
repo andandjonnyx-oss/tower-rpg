@@ -28,17 +28,29 @@ MonoBehaviour:
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
@@ -48,7 +60,7 @@ MonoBehaviour:
   equipMagicAttack: 0
   equipMagicDefense: 0
   equipLuck: 0
-  equipMaxHp: -30
+  equipMaxHp: 0
   equipMaxMp: 0
   equipAccuracy: 0
   equipEvasion: 0
@@ -75,5 +87,11 @@ MonoBehaviour:
     targetStat: 0
     targetStatusEffect: 0
     value: 25
+    floatValue: 0
+  - effectType: 3
+    targetAttribute: 2
+    targetStat: 0
+    targetStatusEffect: 0
+    value: -30
     floatValue: 0
   sortOrder: 16

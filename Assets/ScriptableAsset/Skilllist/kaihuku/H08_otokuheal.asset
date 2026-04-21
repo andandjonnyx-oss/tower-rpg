@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
   m_Name: H08_otokuheal
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: H07_dekura
+  skillId: H08_otokuheal
   skillName: "\u304A\u5F97\u30D2\u30FC\u30EB"
   description: "\u72B6\u614B\u7570\u5E38\u56DE\u5FA9\u306B\u30D2\u30FC\u30EB\u304C\u3064\u3044\u3066\u3053\u306E\u30B3\u30B9\u30D1\uFF01"
   skillSource: 1
@@ -22,11 +22,15 @@ MonoBehaviour:
   damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
   mpCost: 8
   baseHitRate: 95
+  executeEffectsOnMiss: 0
   hitCount: 1
+  multiHitEntries: []
   noBattleOk: 1
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
@@ -54,3 +58,5 @@ MonoBehaviour:
     intValue: 50
     duration: 0
   enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

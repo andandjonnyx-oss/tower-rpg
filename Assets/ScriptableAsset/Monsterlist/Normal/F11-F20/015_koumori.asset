@@ -28,7 +28,7 @@ MonoBehaviour:
   MagicDefense: 10
   Speed: 0
   Luck: 5
-  Evasion: 60
+  Evasion: 80
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -36,14 +36,30 @@ MonoBehaviour:
   BlindResistance: 100
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 240
   Gold: 0
   dropItem: {fileID: 11400000, guid: 23185dd37ada9f04bb60586bccee1a47, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
   Help: "\u3053\u3046\u3082\u308A\u3063\u3066\u8AAD\u3080\u3093\u3060\u305C\uFF01\n\u307E\u3041\u30B0\u30E9\u30D5\u30A3\u30C3\u30AF\u898B\u308A\u3083\u308F\u304B\u308B\u3088\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

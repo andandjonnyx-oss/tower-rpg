@@ -627,13 +627,6 @@ public partial class BattleSceneController : MonoBehaviour
                 victoryTalkId = baseVictoryTalkId;
             }
 
-            // 図鑑: どちらで勝っても両方の会話を既読にする（片方しか見られないため）
-            if (GameState.I != null)
-            {
-                GameState.I.MarkPlayed(baseVictoryTalkId);
-                GameState.I.MarkPlayed(baseVictoryTalkId + "_EVENT");
-            }
-
             // フラグリセット
             BattleContext.IsBossEventWin = false;
 
@@ -641,11 +634,22 @@ public partial class BattleSceneController : MonoBehaviour
             {
                 return () =>
                 {
+                    // 会話遷移が決定してから既読にする
+                    GameState.I.MarkPlayed(baseVictoryTalkId);
+                    GameState.I.MarkPlayed(baseVictoryTalkId + "_EVENT");
+
                     GameState.I.pendingEventId = victoryTalkId;
                     BattleContext.IsBossBattle = false;
                     BattleContext.BossFloor = 0;
                     Invoke(nameof(ReturnToTalk), 1.0f);
                 };
+            }
+
+            // 会話が既に再生済みの場合もマーク（安全のため）
+            if (GameState.I != null)
+            {
+                GameState.I.MarkPlayed(baseVictoryTalkId);
+                GameState.I.MarkPlayed(baseVictoryTalkId + "_EVENT");
             }
 
             BattleContext.IsBossBattle = false;

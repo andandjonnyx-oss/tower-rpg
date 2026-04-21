@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: F20_S02
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: F20_S02
+  zukanTitle: "\u786C\u3044\u6575\u306E\u5BFE\u7B56"
   floor: 20
   step: 2
   backgroundImage: {fileID: 0}

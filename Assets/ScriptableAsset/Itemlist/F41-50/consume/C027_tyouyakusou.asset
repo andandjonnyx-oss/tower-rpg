@@ -23,7 +23,7 @@ MonoBehaviour:
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 0
+  healAmount: 500
   mpHealAmount: 0
   curesPoison: 0
   curesParalyze: 0

@@ -22,7 +22,7 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 50
+  MaxHp: 70
   Attack: 25
   Defense: 25
   MagicDefense: 25
@@ -35,7 +35,15 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: 25
@@ -47,6 +55,10 @@ MonoBehaviour:
   Gold: 0
   dropItem: {fileID: 11400000, guid: 634a3130f70790540a7b8e5d4d0c1bbb, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
   Help: "\u9045\u5EF6\u884C\u70BA\u306E\u9054\u4EBA\u3060\uFF01\nLUC\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u30D2\u30FC\u30EB\u3055\u308C\u306A\u3044\u305E\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -54,3 +66,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: cbee7ceb0dbadf94f845aa59b0b5a5f3, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

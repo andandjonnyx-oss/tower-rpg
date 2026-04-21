@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BOSS_F10_VICTORY
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: BOSS_F10_VICTORY
+  zukanTitle: "\u30DC\u30B9\u6483\u7834\u304A\u3081\u3067\u3068\u3046\uFF01"
   floor: 0
   step: 0
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
@@ -23,7 +24,7 @@ MonoBehaviour:
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u3061\u3083\u3093\u306811\u968E\u306B\u884C\u3063\u3066\u304B\u3089\u5E30\u9084\u3057\u306A\u3044\u3068\u3001\n\u307E\u305F1\u968E\u304B\u3089\u3084\u308A\u76F4\u3057\u3060\u304B\u3089\u306A\uFF1F\n1STEP\u306F\u6575\u304C\u51FA\u306A\u3044\u304B\u3089\u5B89\u5FC3\u3057\u3066\u9032\u3081\uFF01"
-    portrait: {fileID: -6922821552594260532, guid: 141cfae8b6673e24dbf751aad5e13ead, type: 3}
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
   rewardItem: {fileID: 0}

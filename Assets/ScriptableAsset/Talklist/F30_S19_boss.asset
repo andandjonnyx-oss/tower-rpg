@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: F30_S19_boss
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: F30_S19_boss
+  zukanTitle: "\u7A81\u7136\u306E\u30DF\u30CB\u30B2\u30FC\u30E0"
   floor: 30
   step: 19
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
