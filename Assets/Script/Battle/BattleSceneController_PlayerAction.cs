@@ -65,8 +65,15 @@ public partial class BattleSceneController
     /// 設計判断: CombatUtils を変更せず、呼び出し側で敵回避力を2倍換算する。
     /// → baseHitRate × (1 - (enemyEvasion×2 - accuracy)/100) で実質命中率が下がる。
     /// </summary>
-    private bool CheckPlayerHitWithBlind(int baseHitRate)
+    private bool CheckPlayerHitWithBlind(int baseHitRate, bool guaranteedHit = false)
+
     {
+        if (guaranteedHit)
+        {
+            Debug.Log("[Battle] PlayerHitCheck: GUARANTEED HIT (isGuaranteedHit=true)");
+            return true;
+        }
+
         if (GameState.I != null && GameState.I.isBlind)
         {
             // 暗闇: 敵回避力2倍として計算
@@ -242,7 +249,7 @@ public partial class BattleSceneController
             // 敵対象の非ダメージ先制スキルは回避判定を行う
             if (skill.IsHostileNonDamage)
             {
-                if (!CheckEnemyHit(effectiveHitRate))
+                if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
                     return;
@@ -264,7 +271,7 @@ public partial class BattleSceneController
         // 単発スキル: 従来通りスキル発動前に命中判定
         if (hits <= 1)
         {
-            if (!CheckEnemyHit(effectiveHitRate))
+            if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 string missName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName : "先制攻撃";
@@ -320,7 +327,7 @@ public partial class BattleSceneController
                 string cdName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName : "先制攻撃";
 
-                if (!CheckEnemyHit(effectiveHitRate))
+                if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
                     // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
@@ -378,7 +385,7 @@ public partial class BattleSceneController
             string hpDepName = !string.IsNullOrEmpty(skill.skillName)
                 ? skill.skillName : "先制攻撃";
 
-            if (!CheckEnemyHit(effectiveHitRate))
+            if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
                 return;
@@ -423,7 +430,7 @@ public partial class BattleSceneController
         {
             // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
-            if (hits > 1 && !CheckEnemyHit(effectiveHitRate))
+            if (hits > 1 && !skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
@@ -726,7 +733,7 @@ public partial class BattleSceneController
         {
             if (skill.IsHostileNonDamage)
             {
-                if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+                if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
                 {
                     AddLog($"You は {skill.skillName}！ …しかし外れた！");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -751,7 +758,7 @@ public partial class BattleSceneController
         {
             if (skill.hpDependentType == HpDependentType.CurrentHpDamage)
             {
-                if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+                if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
                 {
                     AddLog($"You は {skill.skillName}！ …しかし外れた！");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -804,7 +811,7 @@ public partial class BattleSceneController
 
 
             // 単発前提: 命中判定
-            if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+            if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
                 AddLog($"You は {skill.skillName}！ …しかし外れた！");
                 FlushLogsAndThen(() => EnemyTurn());
@@ -863,7 +870,7 @@ public partial class BattleSceneController
         // 単発スキル: 発動前に命中判定（従来動作）
         if (hits <= 1)
         {
-            if (!CheckPlayerHitWithBlind(skill.baseHitRate))
+            if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
                 AddLog($"You は {skill.skillName}！ …しかし外れた！");
                 FlushLogsAndThen(() => EnemyTurn());
@@ -883,7 +890,7 @@ public partial class BattleSceneController
         {
             // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
-            if (hits > 1 && !CheckPlayerHitWithBlind(skill.baseHitRate))
+            if (hits > 1 && !CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
@@ -1047,7 +1054,7 @@ public partial class BattleSceneController
         {
             if (magic.IsHostileNonDamage)
             {
-                if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+                if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
                 {
                     AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -1072,7 +1079,7 @@ public partial class BattleSceneController
         {
             if (magic.hpDependentType == HpDependentType.CurrentHpDamage)
             {
-                if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+                if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
                 {
                     AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                     FlushLogsAndThen(() => EnemyTurn());
@@ -1122,7 +1129,7 @@ public partial class BattleSceneController
 
 
             // 単発前提: 命中判定
-            if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+            if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
                 AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                 FlushLogsAndThen(() => EnemyTurn());
@@ -1181,7 +1188,7 @@ public partial class BattleSceneController
         // 単発スキル: 発動前に命中判定（従来動作）
         if (hits <= 1)
         {
-            if (!CheckPlayerHitWithBlind(magic.baseHitRate))
+            if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
                 AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                 FlushLogsAndThen(() => EnemyTurn());
@@ -1201,7 +1208,7 @@ public partial class BattleSceneController
         {
             // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
-            if (hits > 1 && !CheckPlayerHitWithBlind(magic.baseHitRate))
+            if (hits > 1 && !CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;

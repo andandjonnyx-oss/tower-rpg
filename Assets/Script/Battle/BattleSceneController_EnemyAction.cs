@@ -923,7 +923,7 @@ public partial class BattleSceneController
             // 敵対象の非ダメージスキル（毒付与等）は回避判定を行う
             if (skill.IsHostileNonDamage)
             {
-                if (!CheckEnemyHit(effectiveHitRate))
+                if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
                     return;
@@ -945,7 +945,7 @@ public partial class BattleSceneController
         // 単発スキル: 従来通りスキル発動前に命中判定
         if (hits <= 1)
         {
-            if (!CheckEnemyHit(effectiveHitRate))
+            if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 string missName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName
@@ -1016,7 +1016,7 @@ public partial class BattleSceneController
                 string cdName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName : "攻撃";
 
-                if (!CheckEnemyHit(effectiveHitRate))
+                if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
 
@@ -1079,7 +1079,7 @@ public partial class BattleSceneController
                 ? skill.skillName : "攻撃";
 
             // 単発前提（多段併用不可）: 命中判定
-            if (!CheckEnemyHit(effectiveHitRate))
+            if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
                 return;
@@ -1123,7 +1123,7 @@ public partial class BattleSceneController
         {
             // ★多段攻撃: 全ヒット（1発目含む）で個別に命中判定
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
-            if (hits > 1 && !CheckEnemyHit(effectiveHitRate))
+            if (hits > 1 && !skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"  {h + 1}撃目 …外れた！");
                 continue;
