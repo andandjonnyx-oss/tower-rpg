@@ -43,6 +43,19 @@ public class StatusView : MonoBehaviour
     [Header("Status1 - Reset Button")]
     [SerializeField] private Button resetButton;
 
+    // ===== ↓ここから追加 =====
+    [Header("Debug - Bulk Allocate")]
+    [SerializeField] private Button strPlus10Button;
+    [SerializeField] private Button vitPlus10Button;
+    [SerializeField] private Button intPlus10Button;
+    [SerializeField] private Button dexPlus10Button;
+    [SerializeField] private Button lucPlus10Button;
+    [SerializeField] private Button strPlus100Button;
+    [SerializeField] private Button vitPlus100Button;
+    [SerializeField] private Button intPlus100Button;
+    [SerializeField] private Button dexPlus100Button;
+    [SerializeField] private Button lucPlus100Button;
+
     [Header("Status2 - Derived Stats (Left Column)")]
     [SerializeField] private TMP_Text attackText;       // 攻撃力
     [SerializeField] private TMP_Text defenseText;      // 防御力
@@ -96,6 +109,19 @@ public class StatusView : MonoBehaviour
         if (intPlusButton != null) intPlusButton.onClick.AddListener(() => OnPlusClicked(StatType.INT));
         if (dexPlusButton != null) dexPlusButton.onClick.AddListener(() => OnPlusClicked(StatType.DEX));
         if (lucPlusButton != null) lucPlusButton.onClick.AddListener(() => OnPlusClicked(StatType.LUC));
+
+        if (strPlus10Button != null) strPlus10Button.onClick.AddListener(() => OnBulkAllocate(StatType.STR, 10));
+        if (vitPlus10Button != null) vitPlus10Button.onClick.AddListener(() => OnBulkAllocate(StatType.VIT, 10));
+        if (intPlus10Button != null) intPlus10Button.onClick.AddListener(() => OnBulkAllocate(StatType.INT, 10));
+        if (dexPlus10Button != null) dexPlus10Button.onClick.AddListener(() => OnBulkAllocate(StatType.DEX, 10));
+        if (lucPlus10Button != null) lucPlus10Button.onClick.AddListener(() => OnBulkAllocate(StatType.LUC, 10));
+
+        // デバッグ用 +100 ボタン
+        if (strPlus100Button != null) strPlus100Button.onClick.AddListener(() => OnBulkAllocate(StatType.STR, 100));
+        if (vitPlus100Button != null) vitPlus100Button.onClick.AddListener(() => OnBulkAllocate(StatType.VIT, 100));
+        if (intPlus100Button != null) intPlus100Button.onClick.AddListener(() => OnBulkAllocate(StatType.INT, 100));
+        if (dexPlus100Button != null) dexPlus100Button.onClick.AddListener(() => OnBulkAllocate(StatType.DEX, 100));
+        if (lucPlus100Button != null) lucPlus100Button.onClick.AddListener(() => OnBulkAllocate(StatType.LUC, 100));
 
         // リセットボタン → 確認ポップアップを開く
         if (resetButton != null) resetButton.onClick.AddListener(OnResetClicked);
@@ -154,6 +180,18 @@ public class StatusView : MonoBehaviour
         if (intPlusButton != null) intPlusButton.interactable = canAllocate;
         if (dexPlusButton != null) dexPlusButton.interactable = canAllocate;
         if (lucPlusButton != null) lucPlusButton.interactable = canAllocate;
+
+        // +10/+100 ボタンの有効/無効（ポイントが1以上あれば有効）
+        if (strPlus10Button != null) strPlus10Button.interactable = canAllocate;
+        if (vitPlus10Button != null) vitPlus10Button.interactable = canAllocate;
+        if (intPlus10Button != null) intPlus10Button.interactable = canAllocate;
+        if (dexPlus10Button != null) dexPlus10Button.interactable = canAllocate;
+        if (lucPlus10Button != null) lucPlus10Button.interactable = canAllocate;
+        if (strPlus100Button != null) strPlus100Button.interactable = canAllocate;
+        if (vitPlus100Button != null) vitPlus100Button.interactable = canAllocate;
+        if (intPlus100Button != null) intPlus100Button.interactable = canAllocate;
+        if (dexPlus100Button != null) dexPlus100Button.interactable = canAllocate;
+        if (lucPlus100Button != null) lucPlus100Button.interactable = canAllocate;
 
         // =====================================================
         // Status2 — 左列: 戦闘ステータス
@@ -218,6 +256,27 @@ public class StatusView : MonoBehaviour
         if (GameState.I == null) return;
         if (GameState.I.AllocatePoint(stat))
             RefreshAll();
+    }
+
+    /// <summary>
+    /// 指定ステータスに amount ポイントを一括振り分けする。
+    /// ポイントが amount 未満の場合は残り全ポイントを振る。
+    /// </summary>
+    private void OnBulkAllocate(StatType stat, int amount)
+    {
+        if (GameState.I == null) return;
+        if (GameState.I.statusPoint <= 0) return;
+
+        // 振る量 = 要求量と残ポイントの小さい方
+        int toAllocate = Mathf.Min(amount, GameState.I.statusPoint);
+
+        for (int i = 0; i < toAllocate; i++)
+        {
+            if (!GameState.I.AllocatePoint(stat))
+                break;
+        }
+
+        RefreshAll();
     }
 
     /// リセットボタン → 確認ポップアップを表示
