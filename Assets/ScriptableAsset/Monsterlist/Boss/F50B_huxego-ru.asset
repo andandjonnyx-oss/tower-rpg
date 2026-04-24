@@ -24,8 +24,8 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 5000
   Attack: 150
-  Defense: 200
-  MagicDefense: 200
+  Defense: 100
+  MagicDefense: 100
   Speed: 0
   Luck: 80
   Evasion: 500
@@ -45,12 +45,12 @@ MonoBehaviour:
   isGirl: 1
   acceptsFeedItem: 0
   attributeResistances: []
-  Exp: 20000
+  Exp: 12000
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
-  autoRegenEnabled: 1
-  autoRegenAmount: 100
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
   Help: "\u4E2D\u30DC\u30B9\u3068\u3057\u3066\u767B\u5834\u3060\u305C\uFF01"

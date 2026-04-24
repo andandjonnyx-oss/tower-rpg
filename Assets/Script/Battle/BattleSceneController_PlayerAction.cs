@@ -252,6 +252,10 @@ public partial class BattleSceneController
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    if (skill.executeEffectsOnMiss)
+                    {
+                        ProcessEnemySkillEffects(skill);
+                    }
                     return;
                 }
             }
@@ -276,6 +280,10 @@ public partial class BattleSceneController
                 string missName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName : "先制攻撃";
                 AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                if (skill.executeEffectsOnMiss)
+                {
+                    ProcessEnemySkillEffects(skill);
+                }
                 return;
             }
         }
@@ -388,6 +396,10 @@ public partial class BattleSceneController
             if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                if (skill.executeEffectsOnMiss)
+                {
+                    ProcessEnemySkillEffects(skill);
+                }
                 return;
             }
 

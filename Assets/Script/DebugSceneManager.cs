@@ -14,6 +14,8 @@ public class DebugSceneManager : MonoBehaviour
     [Header("Database")]
     [SerializeField] private ItemDatabase itemDatabase;
     [SerializeField] private MonsterDatabase monsterDatabase;
+    [SerializeField] private TalkEventDatabase talkEventDatabase;
+
 
     [Header("--- アイテム入手 ---")]
     [SerializeField] private TMP_Dropdown itemDropdown;
@@ -37,6 +39,10 @@ public class DebugSceneManager : MonoBehaviour
     [SerializeField] private Button warpButton;
     [SerializeField] private TextMeshProUGUI warpResultText;
 
+    [Header("--- 会話イベント開放 ---")]
+    [SerializeField] private Button unlockAllTalksButton;
+    [SerializeField] private TextMeshProUGUI talkResultText;
+
     [Header("--- ナビゲーション ---")]
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
@@ -57,6 +63,8 @@ public class DebugSceneManager : MonoBehaviour
         SetupStatusSection();
         SetupMonsterSection();
         SetupFloorSection();
+        SetupTalkUnlockSection();
+
 
         if (backButton != null)
             backButton.onClick.AddListener(() => SceneManager.LoadScene(mainSceneName));
@@ -228,4 +236,37 @@ public class DebugSceneManager : MonoBehaviour
     }
 
     private void ShowWarpResult(string msg) { if (warpResultText != null) warpResultText.text = msg; }
+
+    // =========================================================
+    // ⑤ 全会話イベント開放
+    // =========================================================
+    private void SetupTalkUnlockSection()
+    {
+        if (unlockAllTalksButton != null)
+            unlockAllTalksButton.onClick.AddListener(OnUnlockAllTalks);
+    }
+
+    private void OnUnlockAllTalks()
+    {
+        var gs = GameState.I;
+        if (gs == null) { ShowTalkResult("GameState が見つかりません"); return; }
+        if (talkEventDatabase == null) { ShowTalkResult("TalkEventDatabase が未設定です"); return; }
+
+        int count = 0;
+        foreach (var ev in talkEventDatabase.events)
+        {
+            if (ev == null || string.IsNullOrEmpty(ev.id)) continue;
+            if (!gs.IsPlayed(ev.id))
+            {
+                gs.MarkPlayed(ev.id);
+                count++;
+            }
+        }
+
+        SaveManager.Save();
+        ShowTalkResult($"全会話開放完了！ ({count}件 新規開放)");
+        Debug.Log($"[Debug] 全会話イベント開放: {count}件 を既読にマーク");
+    }
+
+    private void ShowTalkResult(string msg) { if (talkResultText != null) talkResultText.text = msg; }
 }

@@ -134,10 +134,20 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (slots == null) return;
         IReadOnlyList<InventoryItem> items = ItemBoxManager.Instance != null
             ? ItemBoxManager.Instance.GetItems() : null;
+        int cap = (ItemBoxManager.Instance != null) ? ItemBoxManager.Instance.Capacity : slots.Length;
 
         for (int i = 0; i < slots.Length; i++)
         {
             if (slots[i] == null) continue;
+
+            if (i >= cap)
+            {
+                // 容量外のスロットは非表示
+                slots[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            slots[i].gameObject.SetActive(true);
             InventoryItem invItem = (items != null && i < items.Count) ? items[i] : null;
             slots[i].SetItem(invItem);
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M010M_heal2
   itemName: "\u30CF\u30A4\u30D2\u30FC\u30EB"
   description: "\u9774\u3067\u306F\u7121\u3044\nMP10 HP100\u56DE\u5FA9"
-  icon: {fileID: 0}
+  icon: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 6
   Minstep: 1
   Maxfloor: 10

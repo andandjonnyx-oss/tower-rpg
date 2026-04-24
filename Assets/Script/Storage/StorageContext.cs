@@ -197,9 +197,19 @@ public class StorageContext : MonoBehaviour, IItemContext
     {
         if (inventorySlots == null) return;
         IReadOnlyList<InventoryItem> items = ItemBoxManager.Instance?.GetItems();
+        int cap = (ItemBoxManager.Instance != null) ? ItemBoxManager.Instance.Capacity : inventorySlots.Length;
+
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             if (inventorySlots[i] == null) continue;
+
+            if (i >= cap)
+            {
+                inventorySlots[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            inventorySlots[i].gameObject.SetActive(true);
             InventoryItem invItem = (items != null && i < items.Count) ? items[i] : null;
             inventorySlots[i].SetItem(invItem);
         }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 /// <summary>
 /// Status シーンの Canvas にアタッチする。
@@ -274,8 +275,30 @@ public class StatusView : MonoBehaviour
     private void ExecuteReset()
     {
         if (GameState.I == null) return;
-        GameState.I.ResetStatAllocation();
+        bool success = GameState.I.ResetStatAllocation();
+        if (!success)
+        {
+            // 容量超過で失敗 → ポップアップを閉じて警告表示
+            if (resetConfirmPopup != null)
+                resetConfirmPopup.SetActive(false);
+            Debug.Log("[StatusView] リセット不可: アイテムを先に整理してください");
+            // pointText を流用して警告を表示（1秒後に戻す）
+            if (pointText != null)
+            {
+                string original = pointText.text;
+                pointText.text = "アイテムを整理してからリセットしてください";
+                StartCoroutine(RestoreTextAfterDelay(pointText, original, 2f));
+            }
+            return;
+        }
         RefreshAll();
+    }
+
+    private System.Collections.IEnumerator RestoreTextAfterDelay(
+        TMPro.TMP_Text text, string original, float delay)
+    {
+        yield return new UnityEngine.WaitForSeconds(delay);
+        if (text != null) text.text = original;
     }
 
     private void OnToggleClicked()

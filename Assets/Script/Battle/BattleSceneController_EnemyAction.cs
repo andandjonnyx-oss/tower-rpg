@@ -926,6 +926,10 @@ public partial class BattleSceneController
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
                     AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    if (skill.executeEffectsOnMiss)
+                    {
+                        ProcessEnemySkillEffects(skill);
+                    }
                     return;
                 }
             }
@@ -951,6 +955,10 @@ public partial class BattleSceneController
                     ? skill.skillName
                     : $"{skill.skillAttribute.ToJapanese()}攻撃";
                 AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                if (skill.executeEffectsOnMiss)
+                {
+                    ProcessEnemySkillEffects(skill);
+                }
                 return;
             }
         }
@@ -1023,8 +1031,9 @@ public partial class BattleSceneController
                     // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
                     if (skill.executeEffectsOnMiss)
                     {
-                    ProcessEnemySkillEffects(skill);
+                        ProcessEnemySkillEffects(skill);
                     }
+                    return;  // ★追加: ミス時はここで終了
                 }
 
                 // ダメージ = 使用者（敵）の現在HP
@@ -1082,6 +1091,10 @@ public partial class BattleSceneController
             if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
                 AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                if (skill.executeEffectsOnMiss)
+                {
+                    ProcessEnemySkillEffects(skill);
+                }
                 return;
             }
 

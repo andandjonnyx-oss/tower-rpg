@@ -28,7 +28,8 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 100
-  executeEffectsOnMiss: 0
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 1
   hitCount: 1
   multiHitEntries: []
   noBattleOk: 0

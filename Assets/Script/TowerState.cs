@@ -64,6 +64,18 @@ public class TowerState : MonoBehaviour
            + "未設定の場合は麻痺の待機制御を行わない。")]
     [SerializeField] private Button advanceButton;
 
+    [Header("UI - Return to Main")]
+    [Tooltip("ダンジョンから街に帰還するボタン。\n"
+       + "元々 GoScene で直接遷移していたものをポップアップ経由にする。")]
+    [SerializeField] private Button returnToMainButton;
+    [Tooltip("帰還確認ポップアップのルートオブジェクト")]
+    [SerializeField] private GameObject returnConfirmPopup;
+    [Tooltip("はいボタン")]
+    [SerializeField] private Button returnConfirmYes;
+    [Tooltip("いいえボタン")]
+    [SerializeField] private Button returnConfirmNo;
+    [SerializeField] private string mainSceneName = "Main";
+
     // =========================================================
     // ダンジョン内倉庫アクセス（追加）
     // =========================================================
@@ -128,6 +140,17 @@ public class TowerState : MonoBehaviour
         // ダンジョン内倉庫ボタン登録
         if (towerStorageButton != null)
             towerStorageButton.onClick.AddListener(OnTowerStorageClicked);
+
+        // 帰還確認ポップアップ
+        if (returnToMainButton != null)
+            returnToMainButton.onClick.AddListener(OnReturnToMainClicked);
+        if (returnConfirmYes != null)
+            returnConfirmYes.onClick.AddListener(OnReturnConfirmYes);
+        if (returnConfirmNo != null)
+            returnConfirmNo.onClick.AddListener(OnReturnConfirmNo);
+        if (returnConfirmPopup != null)
+            returnConfirmPopup.SetActive(false);
+
         RefreshTowerStorageButton();
     }
 
@@ -672,4 +695,43 @@ public class TowerState : MonoBehaviour
     {
         usedStorageAd = false;
     }
+
+    // =========================================================
+    // ダンジョン帰還確認ポップアップ
+    // =========================================================
+
+    private void OnReturnToMainClicked()
+    {
+        if (isPetrifyLocked || isParalyzeWaiting) return;
+
+        if (returnConfirmPopup != null)
+        {
+            returnConfirmPopup.SetActive(true);
+        }
+        else
+        {
+            // ポップアップ未設定: 従来通り即遷移
+            ExecuteReturnToMain();
+        }
+    }
+
+    private void OnReturnConfirmYes()
+    {
+        if (returnConfirmPopup != null)
+            returnConfirmPopup.SetActive(false);
+        ExecuteReturnToMain();
+    }
+
+    private void OnReturnConfirmNo()
+    {
+        if (returnConfirmPopup != null)
+            returnConfirmPopup.SetActive(false);
+    }
+
+    private void ExecuteReturnToMain()
+    {
+        SaveManager.Save();
+        SceneManager.LoadScene(mainSceneName);
+    }
+
 }

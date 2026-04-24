@@ -647,8 +647,24 @@ public class GameState : MonoBehaviour
     {
     }
 
-    public void ResetStatAllocation()
+    /// <summary>
+    /// ステータスをリセットする。
+    /// リセット後の容量で現在の所持品が収まらない場合は false を返しリセットしない。
+    /// </summary>
+    public bool ResetStatAllocation()
     {
+
+        // 容量超過チェック
+        if (ItemBoxManager.Instance != null)
+        {
+            int resetCapacity = ItemBoxManager.Instance.CalcCapacityForSTR(initialSTR);
+            if (ItemBoxManager.Instance.Count > resetCapacity)
+            {
+                Debug.Log($"[GameState] リセット不可: 所持品{ItemBoxManager.Instance.Count}個 > リセット後容量{resetCapacity}個");
+                return false;
+            }
+        }
+
         int usedPoints = (baseSTR - initialSTR)
                        + (baseVIT - initialVIT)
                        + (baseINT - initialINT)
@@ -668,6 +684,7 @@ public class GameState : MonoBehaviour
         RecalcMaxMp();
 
         SaveManager.Save(); // 即時セーブ
+        return true;
     }
 
     public bool AllocatePoint(StatType stat)

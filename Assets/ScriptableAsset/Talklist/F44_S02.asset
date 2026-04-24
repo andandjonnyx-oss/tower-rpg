@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
-  m_Name: F44_S04
+  m_Name: F44_S02
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: F44_S04
   zukanTitle: "\u9B45\u4E86\u306A\u3093\u3066\u3055\u308C\u306A\u3044\u3088\u306A\uFF1F"
   floor: 44
-  step: 4
+  step: 2
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"

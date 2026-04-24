@@ -7,7 +7,9 @@ public class ItemBoxManager : MonoBehaviour
     public static ItemBoxManager Instance { get; private set; }
 
     [Header("Capacity")]
-    [SerializeField] private int capacity = 10;
+    [SerializeField] private int baseCapacity = 20;
+    private const int MaxCapacity = 30;
+    private const int StrPerSlot = 50;
 
     [Header("Item Database (セーブ復元用)")]
     [Tooltip("セーブデータから itemId でアイテムを復元するために必要")]
@@ -16,9 +18,36 @@ public class ItemBoxManager : MonoBehaviour
     // 所持品リスト。ItemData ではなく InventoryItem で管理する。
     [SerializeField] private List<InventoryItem> items = new();
 
-    public int Capacity => capacity;
+    /// <summary>
+    /// STR連動の現在の最大容量を返す。
+    /// baseCapacity + baseSTR / StrPerSlot（上限 MaxCapacity）。
+    /// </summary>
+    public int Capacity
+    {
+        get
+        {
+            int str = (GameState.I != null) ? GameState.I.baseSTR : 0;
+            int bonus = str / StrPerSlot;
+            int cap = baseCapacity + bonus;
+            if (cap > MaxCapacity) cap = MaxCapacity;
+            return cap;
+        }
+    }
+
     public int Count => items.Count;
-    public bool IsFull => items.Count >= capacity;
+    public bool IsFull => items.Count >= Capacity;
+
+    /// <summary>
+    /// 指定した baseSTR での容量を計算する（リセット前チェック用）。
+    /// </summary>
+    public int CalcCapacityForSTR(int str)
+    {
+        int bonus = str / StrPerSlot;
+        int cap = baseCapacity + bonus;
+        if (cap > MaxCapacity) cap = MaxCapacity;
+        return cap;
+    }
+
 
     private void Awake()
     {
@@ -29,7 +58,7 @@ public class ItemBoxManager : MonoBehaviour
 
     public IReadOnlyList<InventoryItem> GetItems() => items;
 
-    public bool CanAddItem(ItemData data) => data != null && items.Count < capacity;
+    public bool CanAddItem(ItemData data) => data != null && items.Count < Capacity;
 
     public bool AddItem(ItemData data)
     {

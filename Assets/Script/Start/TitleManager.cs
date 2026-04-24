@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,6 +16,16 @@ public class TitleUIManager : MonoBehaviour
     [SerializeField] private Button startButton;
     [Tooltip("セーブデータを削除して初期状態に戻す")]
     [SerializeField] private Button resetButton;
+
+    [Header("Reset Confirm Popup")]
+    [Tooltip("初期化確認ポップアップのルートオブジェクト")]
+    [SerializeField] private GameObject resetConfirmPopup;
+    [Tooltip("初期化確認メッセージテキスト")]
+    [SerializeField] private TMP_Text resetConfirmText;
+    [Tooltip("はいボタン")]
+    [SerializeField] private Button resetConfirmYes;
+    [Tooltip("いいえボタン")]
+    [SerializeField] private Button resetConfirmNo;
 
     // =========================================================
     // オープニングボタン（追加）
@@ -72,7 +83,15 @@ public class TitleUIManager : MonoBehaviour
             startButton.onClick.AddListener(OnStart);
 
         if (resetButton != null)
-            resetButton.onClick.AddListener(OnReset);
+            resetButton.onClick.AddListener(OnResetClicked);
+
+        // 初期化確認ポップアップ
+        if (resetConfirmYes != null)
+            resetConfirmYes.onClick.AddListener(OnResetConfirmYes);
+        if (resetConfirmNo != null)
+            resetConfirmNo.onClick.AddListener(OnResetConfirmNo);
+        if (resetConfirmPopup != null)
+            resetConfirmPopup.SetActive(false);
 
         if (openingButton != null)
             openingButton.onClick.AddListener(OnOpening);
@@ -146,6 +165,39 @@ public class TitleUIManager : MonoBehaviour
         Debug.Log($"[Title] オープニングイベント開始: {openingEventId}");
         SceneManager.LoadScene(talkSceneName);
     }
+
+    /// <summary>
+    /// 初期化ボタン押下 → ポップアップ表示。
+    /// ポップアップが未設定の場合は従来通り即実行。
+    /// </summary>
+    private void OnResetClicked()
+    {
+        if (resetConfirmPopup != null)
+        {
+            if (resetConfirmText != null)
+                resetConfirmText.text = "セーブデータを初期化しますか？\n（元に戻せません）";
+            resetConfirmPopup.SetActive(true);
+        }
+        else
+        {
+            // ポップアップ未設定: 従来通り即実行
+            OnReset();
+        }
+    }
+
+    private void OnResetConfirmYes()
+    {
+        if (resetConfirmPopup != null)
+            resetConfirmPopup.SetActive(false);
+        OnReset();
+    }
+
+    private void OnResetConfirmNo()
+    {
+        if (resetConfirmPopup != null)
+            resetConfirmPopup.SetActive(false);
+    }
+
 
     /// <summary>
     /// 初期化ボタン: セーブデータを削除し、GameState・所持品・倉庫をリセットする。

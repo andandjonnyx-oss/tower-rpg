@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 055_akumanokagami
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 055_akumanokagami
+  Mname: "\u30C7\u30D3\u30EB\u30DF\u30E9\u30FC"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 54
+  Minstep: 1
+  Maxfloor: 58
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 1000
+  Attack: 150
+  Defense: 200
+  MagicDefense: 100
+  Speed: 0
+  Luck: 50
+  Evasion: 450
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 100
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
+  attributeResistances:
+  - attribute: 0
+    value: 25
+  - attribute: 1
+    value: 25
+  - attribute: 2
+    value: 25
+  Exp: 1600
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u6B63\u9762\u306B\u3044\u308B\u3053\u306E\u93E1\u306B\u304A\u524D\u306E\u59FF\u306F\u6620\u3089\u306A\u3044\u3057\n\u4F1A\u8A71\u30A4\u30D9\u30F3\u30C8\u3067\u3082\u304A\u524D\u306E\u59FF\u306F\u6620\u3089\u306A\u3044\n\u304A\u524D\u306F\u672C\u5F53\u306B\u5B9F\u5728\u3057\u3066\u3044\u308B\u306E\u304B\uFF1F"
+  actions:
+  - skill: {fileID: 11400000, guid: 19878a06d0cd6b64c8ca19ca929e240a, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 1599ad99823cad8458c04ca905f6e35e, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
