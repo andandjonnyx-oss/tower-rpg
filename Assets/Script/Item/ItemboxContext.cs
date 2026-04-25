@@ -167,6 +167,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         bool isBossFeedItem = invItem.data.bossFeedItem;
         int spGain = invItem.data.statusPointGain;
         ItemData transformInto = invItem.data.transformInto;
+        int transformChanceValue = invItem.data.transformChance;
 
         // 攻撃アイテム: ダメージ情報の事前取得
         int battleDmg = invItem.data.battleDamage;
@@ -200,11 +201,25 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
-        // 使用後にアイテム変化
+        // 使用後にアイテム変化（確率判定対応）
+        bool transformed = false;
         if (transformInto != null && ItemBoxManager.Instance != null)
         {
-            ItemBoxManager.Instance.AddItem(transformInto);
-            Debug.Log($"[Itembox] アイテム変化: {itemName} → {transformInto.itemName}");
+            // transformChance が 0 なら常に変化（従来互換）
+            // 1以上なら確率判定
+            bool success = (transformChanceValue <= 0)
+                || Random.Range(1, 101) <= transformChanceValue;
+
+            if (success)
+            {
+                ItemBoxManager.Instance.AddItem(transformInto);
+                Debug.Log($"[Itembox] アイテム変化: {itemName} → {transformInto.itemName}");
+                transformed = true;
+            }
+            else
+            {
+                Debug.Log($"[Itembox] アイテム変化失敗: {itemName}（確率{transformChanceValue}%）");
+            }
         }
 
         // ログメッセージの組み立て
@@ -213,9 +228,14 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             logMsg += $" ステータスポイント +{spGain}！";
         }
-        if (transformInto != null)
+        if (transformed)
         {
             logMsg += $" {transformInto.itemName} を手に入れた！";
+        }
+        else if (transformInto != null)
+        {
+            // はずれ（transformInto が設定されていたが確率で失敗）
+            logMsg += " …はずれ！";
         }
 
         AfterAction(logMsg);
@@ -234,6 +254,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         string itemName = invItem.data.itemName;
         int healAmount = invItem.data.eatHealAmount;
         ItemData transformInto = invItem.data.transformInto;
+        int transformChanceValue = invItem.data.transformChance;
 
         // ヘルパー経由で装備解除 + 効果適用
         ItemActionHelper.UnequipIfNeeded(invItem);
@@ -242,18 +263,30 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         // 元アイテムを消す
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
-        // 変化先アイテムを追加
+        // 変化先アイテムを追加（確率判定対応）
+        bool transformed = false;
         if (transformInto != null && ItemBoxManager.Instance != null)
         {
-            ItemBoxManager.Instance.AddItem(transformInto);
-            Debug.Log($"[Itembox] 食べて変化: {itemName} → {transformInto.itemName}");
+            bool success = (transformChanceValue <= 0)
+                || Random.Range(1, 101) <= transformChanceValue;
+
+            if (success)
+            {
+                ItemBoxManager.Instance.AddItem(transformInto);
+                Debug.Log($"[Itembox] 食べて変化: {itemName} → {transformInto.itemName}");
+                transformed = true;
+            }
+            else
+            {
+                Debug.Log($"[Itembox] 食べて変化失敗: {itemName}（確率{transformChanceValue}%）");
+            }
         }
 
         // ログ
         string logMsg = $"You は {itemName} を食べた！";
         if (healAmount > 0) logMsg += $" HP が {healAmount} 回復した！";
-        if (transformInto != null) logMsg += $" {transformInto.itemName} を手に入れた！";
-
+        if (transformed) logMsg += $" {transformInto.itemName} を手に入れた！";
+        else if (transformInto != null) logMsg += " …はずれ！";
         AfterAction(logMsg);
     }
 

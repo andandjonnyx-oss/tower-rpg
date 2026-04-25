@@ -128,12 +128,16 @@ public partial class BattleSceneController
     private bool IsLowHpModeNow()
     {
         if (enemyMonster.lowHpThreshold <= 0f) return false;
-        if (enemyMonster.lowHpActions == null || enemyMonster.lowHpActions.Length == 0) return false;
+
+        // lowHpActions も lowHpActionCount も未設定なら切り替え不要
+        bool hasLowHpActions = enemyMonster.lowHpActions != null && enemyMonster.lowHpActions.Length > 0;
+        bool hasLowHpActionCount = enemyMonster.lowHpActionCount > 0;
+        if (!hasLowHpActions && !hasLowHpActionCount) return false;
+
         if (enemyMonster.MaxHp <= 0) return false;
         float hpRatio = (float)enemyCurrentHp / enemyMonster.MaxHp;
         return hpRatio <= enemyMonster.lowHpThreshold;
     }
-
     /// <summary>
     /// ターンスナップショットを設定する。
     /// PreRollEnemyAction() から呼ばれ、そのターン中の行動テーブルと行動回数を固定する。
@@ -165,10 +169,14 @@ public partial class BattleSceneController
     /// </summary>
     private EnemyActionEntry[] GetTurnActionTable()
     {
-        if (turnLowHpMode) return enemyMonster.lowHpActions;
+        if (turnLowHpMode)
+        {
+            // lowHpActions に中身があればそちらを使い、空なら通常テーブルで据え置き
+            if (enemyMonster.lowHpActions != null && enemyMonster.lowHpActions.Length > 0)
+                return enemyMonster.lowHpActions;
+        }
         return enemyMonster.actions;
     }
-
     /// <summary>
     /// ターンスナップショットに基づいた baseActionRange を返す。
     /// </summary>

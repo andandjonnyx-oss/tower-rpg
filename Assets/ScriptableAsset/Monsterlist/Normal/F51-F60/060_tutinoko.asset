@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 060_tutinoko
   Mname: "\u30C4\u30C1\u30CE\u30B3"
-  Image: {fileID: 0}
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 60
   Minstep: 1
   Maxfloor: 60
