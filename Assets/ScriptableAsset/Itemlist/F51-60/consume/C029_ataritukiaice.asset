@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: C029_ataritukiaice
   itemName: "\u30D6\u30E9\u30C3\u30AF\u30A8\u30D9\u30EC\u30B9\u30C8"
-  description: "10%\u3067\u5F53\u305F\u308A\u304C\u51FA\u3066\u666F\u54C1\u304C\u8CB0\u3048\u308B\nHP600\u56DE\u5FA9"
+  description: "10%\u3067\u5F53\u305F\u308A\u304C\u51FA\u3066\n\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D77\u304C\u8CB0\u3048\u308B\nHP600\u56DE\u5FA9"
   icon: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  Minfloor: 51
+  Minstep: 1
+  Maxfloor: 60
+  Maxstep: 20
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 0
+  healAmount: 600
   mpHealAmount: 0
   curesPoison: 0
   curesParalyze: 0
@@ -40,8 +40,8 @@ MonoBehaviour:
   battleOnly: 0
   bossFeedItem: 0
   cannotDiscard: 0
-  transformInto: {fileID: 0}
-  transformChance: 0
+  transformInto: {fileID: 11400000, guid: ffc5d994f21835b4d885476bb9afd5b2, type: 2}
+  transformChance: 10
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
@@ -71,4 +71,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 29

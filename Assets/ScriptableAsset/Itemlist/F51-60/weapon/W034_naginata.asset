@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: C028_mp150
+  m_Name: W034_naginata
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C028_mp150
-  itemName: "\u30DE\u30B8\u30C3\u30AF\u30DD\u30FC\u30B7\u30E7\u30F3Z"
-  description: "\u771F\u3088\u308A\u3082\u5F37\u3044\u3089\u3057\u3044\nMP150\u56DE\u5FA9"
+  itemId: W034_naginata
+  itemName: "\u8599\u5200"
+  description: "\u65AC\u3063\u3066\u826F\u3057\u3001\u7A81\u3044\u3066\u826F\u3057\n\u653B\u6483+160\u3000\u901A\u5E38\u65AC\u5C5E\u6027
+    \n\u30B9\u30AD\u30EB\uFF1A\u7A81\u6483\u7A81\u304D\uFF08CT4\u30012.5\u500D\uFF09"
   icon: {fileID: 0}
   Minfloor: 51
   Minstep: 1
-  Maxfloor: 60
+  Maxfloor: 55
   Maxstep: 20
-  category: 0
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
-  mpHealAmount: 150
+  mpHealAmount: 0
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
@@ -52,9 +53,10 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
+  weaponAttribute: 1
+  attackPower: 160
+  skills:
+  - {fileID: 11400000, guid: 92d77d41cabcb2140a9d35970773869e, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   equipDefense: 0
@@ -71,4 +73,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 28
+  sortOrder: 34

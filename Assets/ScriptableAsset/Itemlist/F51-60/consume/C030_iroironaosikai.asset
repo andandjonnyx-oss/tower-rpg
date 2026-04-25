@@ -10,29 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: C028_mp150
+  m_Name: C030_iroironaosikai
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C028_mp150
-  itemName: "\u30DE\u30B8\u30C3\u30AF\u30DD\u30FC\u30B7\u30E7\u30F3Z"
-  description: "\u771F\u3088\u308A\u3082\u5F37\u3044\u3089\u3057\u3044\nMP150\u56DE\u5FA9"
+  itemId: C030_iroironaosikai
+  itemName: "\u3044\u308D\u3044\u308D\u306A\u304A\u3057\u6539"
+  description: "\u9B45\u4E86\u4EE5\u5916\uFF0BHP300\u56DE\u5FA9"
   icon: {fileID: 0}
-  Minfloor: 51
+  Minfloor: 54
   Minstep: 1
   Maxfloor: 60
   Maxstep: 20
   category: 0
   stackable: 1
   maxStack: 99
-  healAmount: 0
-  mpHealAmount: 150
-  curesPoison: 0
-  curesParalyze: 0
-  curesBlind: 0
-  curesSilence: 0
-  curesPetrify: 0
+  healAmount: 300
+  mpHealAmount: 0
+  curesPoison: 1
+  curesParalyze: 1
+  curesBlind: 1
+  curesSilence: 1
+  curesPetrify: 1
   curesCharm: 0
-  curesCurse: 0
-  curesGlass: 0
+  curesCurse: 1
+  curesGlass: 1
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -71,4 +71,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 28
+  sortOrder: 30

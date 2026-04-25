@@ -258,12 +258,21 @@ public class StorageContext : MonoBehaviour, IItemContext
     {
         ItemActionHelper.ApplyConsumableEffects(invItem);
         ItemData transformInto = invItem.data?.transformInto;
+        int transformChanceValue = invItem.data != null ? invItem.data.transformChance : 0;
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
         if (transformInto != null && ItemBoxManager.Instance != null)
         {
-            ItemBoxManager.Instance.AddItem(transformInto);
-            Debug.Log($"[Storage] アイテム変化（所持品）: → {transformInto.itemName}");
+            bool success = (transformChanceValue <= 0) || Random.Range(1, 101) <= transformChanceValue;
+            if (success)
+            {
+                ItemBoxManager.Instance.AddItem(transformInto);
+                Debug.Log($"[Storage] アイテム変化（所持品）: → {transformInto.itemName}");
+            }
+            else
+            {
+                Debug.Log($"[Storage] アイテム変化失敗（所持品）: 確率{transformChanceValue}%");
+            }
         }
 
         AfterAction();
@@ -273,12 +282,21 @@ public class StorageContext : MonoBehaviour, IItemContext
     {
         ItemActionHelper.ApplyConsumableEffects(invItem);
         ItemData transformInto = invItem.data?.transformInto;
+        int transformChanceValue = invItem.data != null ? invItem.data.transformChance : 0;
         StorageManager.Instance?.RemoveItem(invItem);
 
         if (transformInto != null && StorageManager.Instance != null)
         {
-            StorageManager.Instance.AddItem(transformInto);
-            Debug.Log($"[Storage] アイテム変化（倉庫）: → {transformInto.itemName}");
+            bool success = (transformChanceValue <= 0) || Random.Range(1, 101) <= transformChanceValue;
+            if (success)
+            {
+                StorageManager.Instance.AddItem(transformInto);
+                Debug.Log($"[Storage] アイテム変化（倉庫）: → {transformInto.itemName}");
+            }
+            else
+            {
+                Debug.Log($"[Storage] アイテム変化失敗（倉庫）: 確率{transformChanceValue}%");
+            }
         }
 
         AfterAction();
@@ -296,11 +314,16 @@ public class StorageContext : MonoBehaviour, IItemContext
         ItemActionHelper.ApplyEatWeaponEffects(invItem);
 
         ItemData transformInto = invItem.data.transformInto;
+        int transformChanceValue = invItem.data.transformChance;
         ItemBoxManager.Instance?.RemoveItem(invItem);
 
         if (transformInto != null && ItemBoxManager.Instance != null)
         {
-            ItemBoxManager.Instance.AddItem(transformInto);
+            bool success = (transformChanceValue <= 0) || Random.Range(1, 101) <= transformChanceValue;
+            if (success)
+            {
+                ItemBoxManager.Instance.AddItem(transformInto);
+            }
         }
 
         AfterAction();
@@ -310,15 +333,19 @@ public class StorageContext : MonoBehaviour, IItemContext
     {
         if (invItem?.data == null || !invItem.data.isEdible) return;
 
-        // 倉庫内の武器は装備中にならないため UnequipIfNeeded は不要
         ItemActionHelper.ApplyEatWeaponEffects(invItem);
 
         ItemData transformInto = invItem.data.transformInto;
+        int transformChanceValue = invItem.data.transformChance;
         StorageManager.Instance?.RemoveItem(invItem);
 
         if (transformInto != null && StorageManager.Instance != null)
         {
-            StorageManager.Instance.AddItem(transformInto);
+            bool success = (transformChanceValue <= 0) || Random.Range(1, 101) <= transformChanceValue;
+            if (success)
+            {
+                StorageManager.Instance.AddItem(transformInto);
+            }
         }
 
         AfterAction();
@@ -378,4 +405,7 @@ public class StorageContext : MonoBehaviour, IItemContext
         RefreshSlots();
         SaveManager.Save(); // 操作結果を即時セーブ
     }
+
+
+
 }

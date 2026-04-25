@@ -47,6 +47,13 @@ public class ItemDataEditor : Editor
             EditorGUILayout.Space(5);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("cannotDiscard"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("transformInto"));
+
+            var transformIntoProp = serializedObject.FindProperty("transformInto");
+            if (transformIntoProp.objectReferenceValue != null)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("transformChance"));
+            }
+
             EditorGUILayout.PropertyField(serializedObject.FindProperty("sortOrder"));
             EditorGUI.indentLevel--;
         }

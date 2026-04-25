@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: C028_mp150
+  m_Name: C031_777bomu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C028_mp150
-  itemName: "\u30DE\u30B8\u30C3\u30AF\u30DD\u30FC\u30B7\u30E7\u30F3Z"
-  description: "\u771F\u3088\u308A\u3082\u5F37\u3044\u3089\u3057\u3044\nMP150\u56DE\u5FA9"
+  itemId: C032_777bomu
+  itemName: "\u30E9\u30C3\u30AD\u30FC\u30B9\u30BF\u30FC"
+  description: "\u5E78\u904B\u306E\u661F\u3092\u76F4\u63A5\u3076\u3064\u3051\u308B\n\u5A01\u529B777
+    \u6BB4\u5C5E\u6027\u7269\u7406"
   icon: {fileID: 0}
   Minfloor: 51
   Minstep: 1
@@ -24,7 +25,7 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
-  mpHealAmount: 150
+  mpHealAmount: 0
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
@@ -34,10 +35,10 @@ MonoBehaviour:
   curesCurse: 0
   curesGlass: 0
   statusPointGain: 0
-  battleDamage: 0
+  battleDamage: 777
   battleAttribute: 0
   battleDamageCategory: 0
-  battleOnly: 0
+  battleOnly: 1
   bossFeedItem: 0
   cannotDiscard: 0
   transformInto: {fileID: 0}
@@ -71,4 +72,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 28
+  sortOrder: 31
