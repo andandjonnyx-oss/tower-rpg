@@ -577,6 +577,21 @@ public static class SkillEffectProcessor
     }
 
     /// <summary>
+    /// 武器通常攻撃からダミーフラグをセットするためのヘルパー。
+    /// Charm / Curse / Glass を外部から設定できるようにする。
+    /// </summary>
+    public static void SetEnemyAilmentDummy(StatusEffect effect, bool value)
+    {
+        switch (effect)
+        {
+            case StatusEffect.Charm: _enemyCharmDummy = value; break;
+            case StatusEffect.Curse: _enemyCurseDummy = value; break;
+            case StatusEffect.Glass: _enemyGlassDummy = value; break;
+        }
+    }
+
+
+    /// <summary>
     /// 状態異常ごとに敵側の対応するフラグの参照を返すヘルパー。
     /// Charm / Curse / Glass は BattleSceneController に専用フラグが未定義のため、
     /// static ダミーフィールドを返す。将来 BattleSceneController に

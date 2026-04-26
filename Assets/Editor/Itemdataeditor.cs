@@ -149,8 +149,29 @@ public class ItemDataEditor : Editor
 
         EditorGUILayout.Space(5);
         EditorGUILayout.LabelField("通常攻撃時の状態異常付与", EditorStyles.boldLabel);
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponInflictEffect"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponInflictChance"));
+        DrawFilteredEnumPopup(serializedObject.FindProperty("weaponInflictEffect"),
+            "Weapon Inflict Effect", IsAilmentOrNone);
+        var inflictProp = serializedObject.FindProperty("weaponInflictEffect");
+        if (inflictProp.enumValueIndex != 0) // None 以外
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponInflictChance"));
+            EditorGUI.indentLevel--;
+        }
+
+        EditorGUILayout.Space(5);
+        EditorGUILayout.LabelField("通常攻撃時のデバフ付与", EditorStyles.boldLabel);
+        DrawFilteredEnumPopup(serializedObject.FindProperty("weaponInflictDebuff"),
+            "Weapon Inflict Debuff", IsBuffDebuffOrNone);
+        var debuffProp = serializedObject.FindProperty("weaponInflictDebuff");
+        if (debuffProp.enumValueIndex != 0) // None 以外
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponDebuffRate"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponDebuffDuration"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponDebuffChance"));
+            EditorGUI.indentLevel--;
+        }
 
         EditorGUILayout.Space(5);
         EditorGUILayout.LabelField("装備ステータス補正", EditorStyles.boldLabel);
@@ -217,4 +238,85 @@ public class ItemDataEditor : Editor
 
         EditorGUI.indentLevel--;
     }
+
+    // =========================================================
+    // フィルタ付き enum ポップアップ
+    // =========================================================
+
+    /// <summary>
+    /// StatusEffect enum の中から filter に合致する値のみをポップアップに表示する。
+    /// </summary>
+    private void DrawFilteredEnumPopup(SerializedProperty prop, string label,
+        System.Func<StatusEffect, bool> filter)
+    {
+        // フィルタに合致する値を収集
+        var allValues = System.Enum.GetValues(typeof(StatusEffect));
+        var filtered = new System.Collections.Generic.List<StatusEffect>();
+        var names = new System.Collections.Generic.List<string>();
+
+        foreach (StatusEffect val in allValues)
+        {
+            if (filter(val))
+            {
+                filtered.Add(val);
+                names.Add(val.ToString());
+            }
+        }
+
+        // 現在の値がフィルタ内のどこにあるか
+        StatusEffect current = (StatusEffect)prop.enumValueIndex;
+        int selectedIndex = filtered.IndexOf(current);
+        if (selectedIndex < 0) selectedIndex = 0; // 見つからなければ None（先頭）
+
+        int newIndex = EditorGUILayout.Popup(label, selectedIndex, names.ToArray());
+        if (newIndex >= 0 && newIndex < filtered.Count)
+        {
+            prop.enumValueIndex = (int)filtered[newIndex];
+        }
+    }
+
+    /// <summary>状態異常（+ None）のみ通すフィルタ。</summary>
+    private static bool IsAilmentOrNone(StatusEffect e)
+    {
+        switch (e)
+        {
+            case StatusEffect.None:
+            case StatusEffect.Poison:
+            case StatusEffect.Stun:
+            case StatusEffect.Paralyze:
+            case StatusEffect.Blind:
+            case StatusEffect.Silence:
+            case StatusEffect.Petrify:
+            case StatusEffect.Charm:
+            case StatusEffect.Curse:
+            case StatusEffect.Glass:
+            case StatusEffect.Rage:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>バフ/デバフ（+ None）のみ通すフィルタ。</summary>
+    private static bool IsBuffDebuffOrNone(StatusEffect e)
+    {
+        switch (e)
+        {
+            case StatusEffect.None:
+            case StatusEffect.DefenseDown:
+            case StatusEffect.DefenseUp:
+            case StatusEffect.AttackDown:
+            case StatusEffect.AttackUp:
+            case StatusEffect.MagicAttackDown:
+            case StatusEffect.MagicAttackUp:
+            case StatusEffect.MagicDefenseDown:
+            case StatusEffect.MagicDefenseUp:
+            case StatusEffect.LuckDown:
+            case StatusEffect.LuckUp:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }

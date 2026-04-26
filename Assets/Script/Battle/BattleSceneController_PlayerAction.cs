@@ -687,7 +687,114 @@ public partial class BattleSceneController
                         }
                     }
                     break;
+                case StatusEffect.Silence:
+                    if (!enemyIsSilenced)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Silence, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            enemyIsSilenced = true;
+                            AddLog($"{eName} は沈黙した！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Charm:
+                    if (!SkillEffectProcessor.IsEnemyCharmed)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Charm, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Charm, true);
+                            AddLog($"{eName} は魅了された！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Curse:
+                    if (!SkillEffectProcessor.IsEnemyCursed)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Curse, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Curse, true);
+                            AddLog($"{eName} は呪いを受けた！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Glass:
+                    if (!SkillEffectProcessor.IsEnemyGlassed)
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Glass, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Glass, true);
+                            AddLog($"{eName} はガラス状態になった！");
+                        }
+                    }
+                    break;
+
+                case StatusEffect.Petrify:
+                    {
+                        int resist = StatusEffectSystem.GetEnemyResistance(StatusEffect.Petrify, enemyMonster);
+                        if (StatusEffectSystem.TryInflict(inflictChance, resist))
+                        {
+                            string petrifyMsg = InflictPetrifyToEnemy();
+                            AddLog($"{eName} は{petrifyMsg}");
+                        }
+                    }
+                    break;
+
+
             }
+
+            // =========================================================
+            // 武器のバフ/デバフ付与判定
+            // デバフ（Down系）→ 敵に付与
+            // バフ（Up系）→ 自分に付与（怒りと同じパターン）
+            // =========================================================
+            if (equippedWeaponItem != null && equippedWeaponItem.data != null
+                && equippedWeaponItem.data.weaponDebuffChance > 0
+                && equippedWeaponItem.data.weaponDebuffDuration > 0)
+            {
+                StatusEffect bdEffect = equippedWeaponItem.data.weaponInflictDebuff;
+                int bdChance = equippedWeaponItem.data.weaponDebuffChance;
+                float bdRate = equippedWeaponItem.data.weaponDebuffRate;
+                int bdDuration = equippedWeaponItem.data.weaponDebuffDuration;
+
+                if (bdEffect != StatusEffect.None)
+                {
+                    float roll = Random.Range(0f, 100f);
+                    if (roll < bdChance)
+                    {
+                        bool isDebuff = StatusEffectSystem.IsDebuff(bdEffect);
+
+                        if (isDebuff)
+                        {
+                            // デバフ → 敵に付与
+                            ref BuffDebuffPair pair = ref buffState.enemy.GetPairRef(bdEffect);
+                            pair.debuffTurn = bdDuration;
+                            pair.debuffRate = bdRate;
+
+                            string debuffName = bdEffect.ToJapaneseEnemy();
+                            string eName2 = (enemyMonster != null) ? enemyMonster.Mname : "敵";
+                            AddLog($"{eName2} の{debuffName}！ {bdRate}%低下！（{bdDuration}ターン）");
+                        }
+                        else
+                        {
+                            // バフ → 自分に付与
+                            ref BuffDebuffPair pair = ref buffState.player.GetPairRef(bdEffect);
+                            pair.buffTurn = bdDuration;
+                            pair.buffRate = bdRate;
+
+                            string buffName = bdEffect.ToJapanese();
+                            AddLog($"You の{buffName}！ {bdRate}%上昇！（{bdDuration}ターン）");
+                        }
+                    }
+                }
+            }
+
         }
 
         RefreshBattleStatusEffectUI(); // ★追加: 武器付与後にランプ更新

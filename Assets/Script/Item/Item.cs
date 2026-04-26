@@ -212,6 +212,21 @@ public class ItemData : ScriptableObject
     [Range(0, 100)]
     public int weaponInflictChance = 0;
 
+    [Header("Weapon - Buff/Debuff on Hit")]
+    [Tooltip("通常攻撃命中時に敵に付与するデバフの種類。None なら付与しない。\n"
+           + "例: DefenseDown = 敵の防御力ダウン")]
+    public StatusEffect weaponInflictDebuff = StatusEffect.None;
+
+    [Tooltip("デバフの効果率（%）。例: 30 = 30%減少")]
+    public float weaponDebuffRate = 0f;
+
+    [Tooltip("デバフの持続ターン数")]
+    public int weaponDebuffDuration = 0;
+
+    [Tooltip("デバフの基礎付与率（%）")]
+    [Range(0, 100)]
+    public int weaponDebuffChance = 0;
+
     // =========================================================
     // 装備時のみ適用されるステータス補正
     // =========================================================

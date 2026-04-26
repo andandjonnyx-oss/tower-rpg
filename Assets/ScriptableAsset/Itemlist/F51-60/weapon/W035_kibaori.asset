@@ -57,8 +57,12 @@ MonoBehaviour:
   attackPower: 160
   skills:
   - {fileID: 11400000, guid: 8b9c6a3c1a71c8a42af7a6b685434536, type: 2}
-  weaponInflictEffect: 12
-  weaponInflictChance: 100
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  weaponInflictDebuff: 12
+  weaponDebuffRate: 30
+  weaponDebuffDuration: 6
+  weaponDebuffChance: 100
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
