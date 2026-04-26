@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: W035_kibaori
+  m_Name: W036_sinnoroiken
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: W035_kibaori
-  itemName: "\u7259\u6298\u308A\u306E\u62F3"
-  description: "\u7259\u304C\u7121\u3044\u76F8\u624B\u3067\u3082\u554F\u984C\u7121\u3057\n\u653B\u6483+160
-    20%\u3067\u653B\u6483\u30C7\u30D0\u30D530%\n\u30B9\u30AD\u30EB\uFF1A\u93A7\u7815\u304D\uFF08CT3\u30011\u500D\u3001\u9632\u5FA1\u30C7\u30D0\u30D530%\uFF09"
+  itemId: W036_sinnoroiken
+  itemName: "\u546A\u3044\u3057\u5263"
+  description: "\u81EA\u5206\u306B\u3082\u76F8\u624B\u306B\u3082\u546A\u3044\u3092\u304B\u3051\u308B\u5263\n\u653B\u6483+175
+    15%\u546A\u3044\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09\n"
   icon: {fileID: 0}
-  Minfloor: 51
+  Minfloor: 54
   Minstep: 1
-  Maxfloor: 55
+  Maxfloor: 58
   Maxstep: 20
   category: 1
   stackable: 1
@@ -53,16 +53,16 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 160
+  weaponAttribute: 1
+  attackPower: 175
   skills:
-  - {fileID: 11400000, guid: 8b9c6a3c1a71c8a42af7a6b685434536, type: 2}
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
-  weaponInflictDebuff: 12
-  weaponDebuffRate: 30
-  weaponDebuffDuration: 6
-  weaponDebuffChance: 20
+  - {fileID: 11400000, guid: 51dd41578ed3a8f468aed1c79269aeb8, type: 2}
+  weaponInflictEffect: 23
+  weaponInflictChance: 15
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
@@ -77,4 +77,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 35
+  sortOrder: 36

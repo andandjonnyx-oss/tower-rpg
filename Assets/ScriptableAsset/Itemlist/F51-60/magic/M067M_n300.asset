@@ -10,18 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: W035_kibaori
+  m_Name: M067M_n300
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: W035_kibaori
-  itemName: "\u7259\u6298\u308A\u306E\u62F3"
-  description: "\u7259\u304C\u7121\u3044\u76F8\u624B\u3067\u3082\u554F\u984C\u7121\u3057\n\u653B\u6483+160
-    20%\u3067\u653B\u6483\u30C7\u30D0\u30D530%\n\u30B9\u30AD\u30EB\uFF1A\u93A7\u7815\u304D\uFF08CT3\u30011\u500D\u3001\u9632\u5FA1\u30C7\u30D0\u30D530%\uFF09"
+  itemId: M067M_n300
+  itemName: "\u30CB\u30E5\u30FC\u30AF\u30EA\u30A2"
+  description: "MP25\n\u5A01\u529B300\u7121\u5C5E\u6027\u3000\u9632\u5FA1\u5B8C\u5168\u8CAB\u901A"
   icon: {fileID: 0}
   Minfloor: 51
   Minstep: 1
   Maxfloor: 55
   Maxstep: 20
-  category: 1
+  category: 2
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -54,15 +53,14 @@ MonoBehaviour:
   eatCuresCurse: 0
   eatCuresGlass: 0
   weaponAttribute: 0
-  attackPower: 160
-  skills:
-  - {fileID: 11400000, guid: 8b9c6a3c1a71c8a42af7a6b685434536, type: 2}
+  attackPower: 0
+  skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
-  weaponInflictDebuff: 12
-  weaponDebuffRate: 30
-  weaponDebuffDuration: 6
-  weaponDebuffChance: 20
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
@@ -75,6 +73,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 0}
+  magicSkill: {fileID: 11400000, guid: 70d5f0edb37231a48a0cf08034c6824b, type: 2}
   passiveEffects: []
-  sortOrder: 35
+  sortOrder: 67

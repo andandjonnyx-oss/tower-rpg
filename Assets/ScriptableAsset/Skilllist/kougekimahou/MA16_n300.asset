@@ -10,36 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_noroiTA
+  m_Name: MA16_n300
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_noroiTA
-  skillName: "\u30AB\u30FC\u30B9"
+  skillId: MA16_n300
+  skillName: "\u30CB\u30E5\u30FC\u30AF\u30EA\u30A2"
   description: 
   skillSource: 1
   actionType: 2
-  skillAttribute: 0
-  damageCategory: 0
+  skillAttribute: 8
+  damageCategory: 1
   damageMultiplier: 0
-  bonusDamage: 0
+  bonusDamage: 300
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
-  defenseIgnoreRate: 0
+  defenseIgnoreRate: 1
   cooldownTurns: 0
-  mpCost: 10
-  baseHitRate: 100
+  mpCost: 25
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
   noBattleOk: 0
-  additionalEffects:
-  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
-    ailmentMode: 0
-    targetStatusEffect: 23
-    chance: 60
-    intValue: 0
-    duration: 0
+  additionalEffects: []
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_noroiTA
+  m_Name: ST16_slucky
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_noroiTA
-  skillName: "\u30AB\u30FC\u30B9"
+  skillId: ST16_slucky
+  skillName: "\u30B9\u30FC\u30D1\u30FC\u30E9\u30C3\u30AD\u30FC"
   description: 
   skillSource: 1
   actionType: 2
@@ -26,8 +26,8 @@ MonoBehaviour:
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 10
-  baseHitRate: 100
+  mpCost: 8
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
@@ -36,10 +36,10 @@ MonoBehaviour:
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
-    targetStatusEffect: 23
-    chance: 60
-    intValue: 0
-    duration: 0
+    targetStatusEffect: 19
+    chance: 77
+    intValue: 77
+    duration: 6
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5

@@ -10,36 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_noroiTA
+  m_Name: SA036_kenzitugeki
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_noroiTA
-  skillName: "\u30AB\u30FC\u30B9"
+  skillId: SA036_kenzitugeki
+  skillName: "\u5805\u5B9F\u306A\u4E00\u6483"
   description: 
-  skillSource: 1
+  skillSource: 0
   actionType: 2
   skillAttribute: 0
   damageCategory: 0
-  damageMultiplier: 0
+  damageMultiplier: 1.5
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
-  cooldownTurns: 0
-  mpCost: 10
-  baseHitRate: 100
-  isGuaranteedHit: 0
+  cooldownTurns: 5
+  mpCost: 0
+  baseHitRate: 95
+  isGuaranteedHit: 1
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
   noBattleOk: 0
-  additionalEffects:
-  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
-    ailmentMode: 0
-    targetStatusEffect: 23
-    chance: 60
-    intValue: 0
-    duration: 0
+  additionalEffects: []
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5

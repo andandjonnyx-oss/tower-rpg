@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: W035_kibaori
+  m_Name: W038_joounomuti
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: W035_kibaori
-  itemName: "\u7259\u6298\u308A\u306E\u62F3"
-  description: "\u7259\u304C\u7121\u3044\u76F8\u624B\u3067\u3082\u554F\u984C\u7121\u3057\n\u653B\u6483+160
-    20%\u3067\u653B\u6483\u30C7\u30D0\u30D530%\n\u30B9\u30AD\u30EB\uFF1A\u93A7\u7815\u304D\uFF08CT3\u30011\u500D\u3001\u9632\u5FA1\u30C7\u30D0\u30D530%\uFF09"
+  itemId: W038_joounomuti
+  itemName: "\u5973\u738B\u69D8\u306E\u97AD"
+  description: "\u304A\u30FC\u307B\u307B\u307B\u307B\u307B\u307B\n\u653B\u6483+190
+    \u9B45\u4E8615%\n\u30B9\u30AD\u30EB\uFF1A\u30C1\u30E3\u30FC\u30E0\u30A2\u30BF\u30C3\u30AF\n\uFF08CT4\u30011\u500D\u300130%\u9B45\u4E86\uFF09"
   icon: {fileID: 0}
-  Minfloor: 51
+  Minfloor: 56
   Minstep: 1
-  Maxfloor: 55
+  Maxfloor: 60
   Maxstep: 20
   category: 1
   stackable: 1
@@ -53,16 +53,16 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 160
+  weaponAttribute: 1
+  attackPower: 190
   skills:
-  - {fileID: 11400000, guid: 8b9c6a3c1a71c8a42af7a6b685434536, type: 2}
+  - {fileID: 11400000, guid: 14eb963bc81c51d42801ca66ff8c075c, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
-  weaponInflictDebuff: 12
-  weaponDebuffRate: 30
-  weaponDebuffDuration: 6
-  weaponDebuffChance: 20
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
@@ -77,4 +77,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 35
+  sortOrder: 38

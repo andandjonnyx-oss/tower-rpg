@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_noroiTA
+  m_Name: SA035_charmatack
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_noroiTA
-  skillName: "\u30AB\u30FC\u30B9"
+  skillId: SA035_charmatack
+  skillName: "\u30C1\u30E3\u30FC\u30E0\u30A2\u30BF\u30C3\u30AF"
   description: 
-  skillSource: 1
+  skillSource: 0
   actionType: 2
-  skillAttribute: 0
+  skillAttribute: 1
   damageCategory: 0
-  damageMultiplier: 0
+  damageMultiplier: 1
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
-  cooldownTurns: 0
-  mpCost: 10
-  baseHitRate: 100
+  cooldownTurns: 4
+  mpCost: 0
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
@@ -36,10 +36,10 @@ MonoBehaviour:
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 0
-    targetStatusEffect: 23
-    chance: 60
+    targetStatusEffect: 22
+    chance: 30
     intValue: 0
     duration: 0
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5

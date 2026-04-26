@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: J10_noroiTA
+  m_Name: H17_dekarasu
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: J10_noroiTA
-  skillName: "\u30AB\u30FC\u30B9"
+  skillId: H17_dekarasu
+  skillName: 
   description: 
   skillSource: 1
   actionType: 2
@@ -26,8 +26,8 @@ MonoBehaviour:
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 10
-  baseHitRate: 100
+  mpCost: 15
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
@@ -35,11 +35,23 @@ MonoBehaviour:
   noBattleOk: 0
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
-    ailmentMode: 0
+    ailmentMode: 1
     targetStatusEffect: 23
-    chance: 60
+    chance: 0
     intValue: 0
     duration: 0
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 1
+    targetStatusEffect: 24
+    chance: 0
+    intValue: 0
+    duration: 0
+  - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
+    ailmentMode: 1
+    targetStatusEffect: 24
+    chance: 100
+    intValue: 200
+    duration: 0
   enemyNextForceSkill: {fileID: 0}
-  rerollCondition: 1
+  rerollCondition: 0
   rerollHpThreshold: 0.5
