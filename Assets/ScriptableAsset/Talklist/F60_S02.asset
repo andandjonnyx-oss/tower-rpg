@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F60_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F60_S02
+  zukanTitle: "\u30C4\u30C1\u30CE\u30B3\u306F\u3044\u305F\uFF01"
+  floor: 60
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3053\u3053\u306E\u30EC\u30A2\u30E2\u30F3\u30B9\u30BF\u30FC\u306F\u30C4\u30C1\u30CE\u30B3\u3060\u3002\n\u30B8\u30D1\u30F3\u30B0\u306B\u3044\u308B\u5E7B\u306E\u751F\u304D\u7269\u306A\u3093\u3060\u305C\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u9060\u898B\u306E\u9B54\u6CD5\u3067\u30B8\u30D1\u30F3\u30B0\u306E\u5C71\u5965\u3092\u89B3\u5149\u3057\u3066\u305F\u6642\u306B\u3001\n\u3044\u305F\u3093\u3060\u3088\uFF01\u3000\u30C4\u30C1\u30CE\u30B3\u304C\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u7269\u51C4\u3044\u30B8\u30E3\u30F3\u30D7\u3059\u308B\u3057\u3001\u706B\u3082\u5674\u304F\u3057\u3001\n\u6D41\u77F3\u306F\u5E7B\u306E\u751F\u304D\u7269\u3063\u3066\u611F\u3058\u3060\u3063\u305F\u306A\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: You
+    text: "\u4ECA\u307E\u3067\u666E\u901A\u306B\u30C9\u30E9\u30B4\u30F3\u3068\u304B\u51FA\u3057\u3066\u304A\u3044\u3066\u3001\n\u4ECA\u66F4\u305D\u3093\u306A\u4E8B\u3092\u8A00\u308F\u308C\u3066\u3082\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

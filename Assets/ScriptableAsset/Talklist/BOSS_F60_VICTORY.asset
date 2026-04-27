@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: BOSS_F60_VICTORY
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: BOSS_F60_VICTORY
+  zukanTitle: "\u30B4\u30EA\u62BC\u3057\u30D7\u30EC\u30A4\u30E4\u30FC\u306E\u30EC\u30D9\u30EB\u306F\u3044\u304F\u3064\u3060\uFF1F"
+  floor: 0
+  step: 0
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "60\u968E\u7A81\u7834\u304A\u3081\u3067\u3068\u3046\u3002\n\u8CE2\u3044\u541B\u306F\u52FF\u8AD6\u4F1A\u8A71\u306E\u30D2\u30F3\u30C8\u3092\u898B\u9003\u3055\u305A\u3001\n\u6BD2\u3067\u5012\u3057\u305F\u3088\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u653B\u7565\u6CD5\u306B\u6C17\u4ED8\u304B\u305A\u306B\u3072\u305F\u3059\u3089\u30EC\u30D9\u30EB\u3092\u4E0A\u3052\u3066\n\u80FD\u529B\u306E\u66B4\u529B\u3067\u5012\u3057\u305F\u541B\u306F\u3001\n\u9069\u6027\u30EC\u30D9\u30EB\u5927\u5E45\u306B\u8D8A\u3057\u3066\u308B\u304B\u3082\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u307E\u3041\u3001\u82E6\u52B4\u3057\u305F\u3089\u6B21\u306F\u697D\u306B\u306A\u308B\u3002\n\u697D\u3057\u305F\u3089\u6B21\u306F\u82E6\u52B4\u3059\u308B\u3002\n\u4EBA\u751F\u305D\u3093\u306A\u3082\u3093\u3060\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

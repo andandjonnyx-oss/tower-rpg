@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F53_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F53_S02
+  zukanTitle: "GP\u306F\u304C\u3093\u3070\u308A\u30DD\u30A4\u30F3\u30C8\u306E\u7565"
+  floor: 53
+  step: 2
+  backgroundImage: {fileID: 0}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u4F55\u306E\u8AAC\u660E\u3082\u7121\u304F\u5B58\u5728\u3059\u308BGP\u30B7\u30E7\u30C3\u30D7\u3001\n\u307E\u3041\u6575\u3092\u5012\u3057\u3066\u308C\u30701\u5897\u3048\u308B\u306E\u306F\u3001\u3082\u3046\u611F\u899A\u7684\u306B\u308F\u304B\u3063\u3066\u308B\u3088\u306A\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u56DE\u5FA9\u9B54\u6CD5\u306E\u9B54\u5C0E\u66F8\u3060\u3063\u305F\u308A\u3001MP\u56DE\u5FA9\u85AC\u3060\u3063\u305F\u308A\u3001\n\u5FC5\u9700\u54C1\u30EC\u30D9\u30EB\u3060\u3051\u3069\u53D6\u308A\u9003\u3057\u305F\uFF01\u3000\u3063\u3066\u4EBA\u306E\u70BA\u306B\u3001\n\u9032\u884C\u5177\u5408\u306B\u3088\u3063\u3066\u4EA4\u63DB\u51FA\u6765\u308B\u3088\u3046\u306B\u3057\u3066\u308B\u305C\u3002"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u307E\u3041\u3069\u3093\u306A\u6575\u3060\u308D\u3046\u304C\u4E00\u5F8B1\u3057\u304B\u5897\u3048\u306A\u3044\u304B\u3089\u3001\n\u3042\u304F\u307E\u3067\u304A\u307E\u3051\u306E\u6551\u6E08\u63AA\u7F6E\u304F\u3089\u3044\u306B\u8003\u3048\u3088\u3046\u306A\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  rewardItem: {fileID: 0}

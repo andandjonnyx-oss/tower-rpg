@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
   m_Name: C031_777bomu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: C032_777bomu
+  itemId: C031_777bomu
   itemName: "\u30E9\u30C3\u30AD\u30FC\u30B9\u30BF\u30FC"
   description: "\u5E78\u904B\u306E\u661F\u3092\u76F4\u63A5\u3076\u3064\u3051\u308B\n\u5A01\u529B777
     \u6BB4\u5C5E\u6027\u7269\u7406"
@@ -58,6 +58,10 @@ MonoBehaviour:
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

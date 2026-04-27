@@ -57,8 +57,8 @@ MonoBehaviour:
   attackPower: 190
   skills:
   - {fileID: 11400000, guid: 14eb963bc81c51d42801ca66ff8c075c, type: 2}
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
+  weaponInflictEffect: 22
+  weaponInflictChance: 15
   weaponInflictDebuff: 0
   weaponDebuffRate: 0
   weaponDebuffDuration: 0
