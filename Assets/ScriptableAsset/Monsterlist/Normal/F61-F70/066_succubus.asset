@@ -17,7 +17,7 @@ MonoBehaviour:
   Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 64
   Minstep: 1
-  Maxfloor: 66
+  Maxfloor: 68
   Maxstep: 20
   Weight: 1
   IsBoss: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   dropRate: 0
   autoRegenEnabled: 0
   autoRegenAmount: 0
-  isQuizBoss: 1
+  isQuizBoss: 0
   quizDatabase: {fileID: 0}
   Help: "\u7D50\u69CB\u653B\u6483\u304C\u6FC0\u3057\u304F\u3066\n\u30EC\u30D9\u30EB\u30C9\u30EC\u30A4\u30F3\u3055\u308C\u3066\u308B\u6687\u304C\u7121\u3044\u305C\uFF01"
   actions:

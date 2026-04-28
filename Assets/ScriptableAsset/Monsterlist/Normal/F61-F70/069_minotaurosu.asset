@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 069_minotaurosu
   Mname: "\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9"
-  Image: {fileID: 0}
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 66
   Minstep: 1
   Maxfloor: 70
@@ -45,7 +45,7 @@ MonoBehaviour:
   isGirl: 1
   acceptsFeedItem: 0
   attributeResistances: []
-  Exp: 0
+  Exp: 2000
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
