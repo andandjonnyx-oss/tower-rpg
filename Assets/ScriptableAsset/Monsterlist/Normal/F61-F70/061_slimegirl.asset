@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 061_slimegirl
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 061_slimegirl
+  Mname: "\u30B9\u30E9\u30A4\u30E0\u30AC\u30FC\u30EB"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 61
+  Minstep: 1
+  Maxfloor: 65
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 1500
+  Attack: 200
+  Defense: 130
+  MagicDefense: 100
+  Speed: 0
+  Luck: 60
+  Evasion: 700
+  BaseHitRate: 90
+  PoisonResistance: 100
+  StunResistance: 0
+  ParalyzeResistance: 100
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 1
+  acceptsFeedItem: 0
+  attributeResistances:
+  - attribute: 0
+    value: 50
+  - attribute: 2
+    value: 50
+  Exp: 1800
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u30AA\u30B9\u306E\u30B9\u30E9\u30A4\u30E0\u3092\u898B\u305F\u4E8B\u304C\u7121\u3044\u3093\u3060\u3088\u306A\u2026\u2026\n\u30B9\u30E9\u30A4\u30E0\u3063\u3066\u5168\u90E8\u30E1\u30B9\u306A\u306E\u304B\uFF1F"
+  actions:
+  - skill: {fileID: 11400000, guid: f6d23d3909689bf43856126186e44b82, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: 2c8a174e81f1f2d4db0678275413e5c9, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SA044_onpudaibakudan
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SA044_onpudaibakudan
+  skillName: "\u97F3\u7B26\u5927\u7206\u5F3E"
+  description: 
+  skillSource: 1
+  actionType: 2
+  skillAttribute: 8
+  damageCategory: 1
+  damageMultiplier: 2
+  bonusDamage: 0
+  randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 95
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 0
+  hitCount: 1
+  multiHitEntries: []
+  noBattleOk: 0
+  additionalEffects: []
+  enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

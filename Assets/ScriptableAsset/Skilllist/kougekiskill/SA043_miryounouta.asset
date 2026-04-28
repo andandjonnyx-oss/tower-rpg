@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
+  m_Name: SA043_miryounouta
+  m_EditorClassIdentifier: Assembly-CSharp::SkillData
+  skillId: SA043_miryounouta
+  skillName: "\u9B45\u4E86\u306E\u97F3\u7B26\u7206\u5F3E"
+  description: 
+  skillSource: 1
+  actionType: 2
+  skillAttribute: 8
+  damageCategory: 1
+  damageMultiplier: 1
+  bonusDamage: 0
+  randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
+  defenseIgnoreRate: 0
+  cooldownTurns: 0
+  mpCost: 0
+  baseHitRate: 95
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 0
+  hitCount: 1
+  multiHitEntries: []
+  noBattleOk: 0
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 22
+    chance: 20
+    intValue: 0
+    duration: 0
+  enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

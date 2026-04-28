@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 065_nekomata
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 065_nekomata
+  Mname: "\u30CD\u30B3\u30DE\u30BF"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 64
+  Minstep: 1
+  Maxfloor: 68
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 1000
+  Attack: 150
+  Defense: 150
+  MagicDefense: 120
+  Speed: 0
+  Luck: 100
+  Evasion: 1500
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 1
+  acceptsFeedItem: 1
+  attributeResistances: []
+  Exp: 1900
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u3061\u3087\u30FC\u308B\u3088\u3053\u305B\u306B\u3083"
+  actions:
+  - skill: {fileID: 11400000, guid: 1cf74533a2b88d246b38a22b8e26a411, type: 2}
+    threshold: 30
+  - skill: {fileID: 11400000, guid: a6eae40223f8813499cda99dd2fbab9b, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: 3b4532093a8415f4e8293177a4e12348, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

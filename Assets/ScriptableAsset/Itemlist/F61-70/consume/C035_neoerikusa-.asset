@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: C035_neoerikusa-
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: C035_neoerikusa-
+  itemName: "\u30CD\u30AA\u30A8\u30EA\u30AF\u30B5\u30FC"
+  description: "\u66F4\u306B\u304A\u5F97\u306B\u306A\u308A\u307E\u3057\u305F\nHP400
+    MP200\u56DE\u5FA9\n\u9B45\u4E86\u4EE5\u5916\u6CBB\u7642\n\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D72"
+  icon: {fileID: 0}
+  Minfloor: 66
+  Minstep: 1
+  Maxfloor: 70
+  Maxstep: 20
+  category: 0
+  stackable: 1
+  maxStack: 99
+  healAmount: 400
+  mpHealAmount: 200
+  curesPoison: 1
+  curesParalyze: 1
+  curesBlind: 1
+  curesSilence: 1
+  curesPetrify: 1
+  curesCharm: 0
+  curesCurse: 1
+  curesGlass: 1
+  statusPointGain: 2
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  transformChance: 0
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 0
+  attackPower: 0
+  skills: []
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 35

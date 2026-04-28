@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 064_batgirl
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 064_batgirl
+  Mname: "\u30D0\u30C3\u30C8\u30AC\u30FC\u30EB"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 64
+  Minstep: 1
+  Maxfloor: 68
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 1700
+  Attack: 200
+  Defense: 120
+  MagicDefense: 120
+  Speed: 0
+  Luck: 60
+  Evasion: 900
+  BaseHitRate: 90
+  PoisonResistance: 100
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 100
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 1
+  acceptsFeedItem: 0
+  attributeResistances: []
+  Exp: 1860
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u30B3\u30A6\u30E2\u30EA\u5A18\u3063\u3066\u30E1\u30AB\u30AF\u30EC\u304B\u3064\u9006\u3055\u307E\u306B\u306A\u3063\u3066\u308B\u3079\u304D\u3060\u3068\n\u601D\u3046\u3093\u3060\u3051\u3069\u539F\u7406\u4E3B\u7FA9\u904E\u304E\u308B\u304B\u306A\u2026\u2026\uFF1F"
+  actions:
+  - skill: {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}
+    threshold: 40
+  - skill: {fileID: 11400000, guid: 4e8853ffa1051b14bb58688dbd10cf11, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 2100cfd3ad46686418e7da016cf84da1, type: 2}
+    threshold: 100
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
