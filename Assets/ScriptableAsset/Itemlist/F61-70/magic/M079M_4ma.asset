@@ -19,7 +19,7 @@ MonoBehaviour:
   Minfloor: 61
   Minstep: 1
   Maxfloor: 65
-  Maxstep: 70
+  Maxstep: 20
   category: 2
   stackable: 1
   maxStack: 99

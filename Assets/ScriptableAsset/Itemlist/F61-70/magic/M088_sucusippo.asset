@@ -82,12 +82,6 @@ MonoBehaviour:
     targetStatusEffect: 22
     value: 30
     floatValue: 0
-  - effectType: 2
-    targetAttribute: 0
-    targetStat: 0
-    targetStatusEffect: 22
-    value: 50
-    floatValue: 0
   - effectType: 7
     targetAttribute: 0
     targetStat: 0
@@ -100,4 +94,4 @@ MonoBehaviour:
     targetStatusEffect: 22
     value: 50
     floatValue: 0
-  sortOrder: 0
+  sortOrder: 88

@@ -64,7 +64,7 @@ MonoBehaviour:
   weaponDebuffDuration: 0
   weaponDebuffChance: 0
   equipDefense: 0
-  equipMagicAttack: 10
+  equipMagicAttack: 5
   equipMagicDefense: 0
   equipLuck: 0
   equipMaxHp: 0
