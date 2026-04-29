@@ -496,6 +496,45 @@ public partial class BattleSceneController : MonoBehaviour
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
 
+        // =========================================================
+        // 第二形態連戦チェック（追加）
+        // =========================================================
+        if (BattleContext.Phase2Monster != null && !BattleContext.IsPhase2Transition
+            && BattleContext.IsBossBattle)
+        {
+            // 第一形態撃破 → 第二形態への連戦
+            AddLog("……しかし、真の姿が現れた！");
+
+            // フェーズフラグを1に更新してセーブ（アイテム状態も保存）
+            // F70のフィールド名はBossEntryのphase2StateFieldから取得すべきだが、
+            // ここではBossFloorから判定する
+            if (BattleContext.BossFloor == 70)
+            {
+                GameState.I.bossPhaseF70 = 1;
+            }
+            SaveManager.Save();
+
+            // 第二形態の戦闘を開始（HP/MPそのまま）
+            BattleContext.EnemyMonster = BattleContext.Phase2Monster;
+            BattleContext.Phase2Monster = null;
+            BattleContext.IsPhase2Transition = true;
+
+            // 戦闘ステートをリセット（HP/MPはそのまま）
+            ResetBattleStatics();
+            // IsBossBattle, BossFloor はそのまま維持
+
+            FlushLogsAndThen(() =>
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            });
+            return;
+        }
+
+        // 第二形態連戦後のフラグクリア
+        BattleContext.Phase2Monster = null;
+        BattleContext.IsPhase2Transition = false;
+
+
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
 
@@ -613,6 +652,11 @@ public partial class BattleSceneController : MonoBehaviour
             {
                 GameState.I.MarkPlayed(defeatedId);
                 Debug.Log($"[Battle] ボス撃破フラグ記録: {defeatedId}");
+                // 第二形態クリアフラグ（bossPhaseを2に）
+                if (bossFloor == 70)
+                {
+                    GameState.I.bossPhaseF70 = 2;
+                }
             }
 
             // イベント勝利（餌付け等）と通常勝利で会話IDを分岐
@@ -863,6 +907,12 @@ public partial class BattleSceneController : MonoBehaviour
                 ItemBoxManager.Instance.RestoreFromSnapshot(BattleContext.ItemSnapshot);
                 Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
             }
+
+            // 第二形態で敗北した場合: Phase2Monsterをクリアして
+            // 第二形態のモンスターで再戦（BossEncounterSystemが判定する）
+            BattleContext.Phase2Monster = null;
+            BattleContext.IsPhase2Transition = false;
+
 
             // 戦闘ステートをリセットして Battle シーンを再読込（再戦）
             ResetBattleStatics();

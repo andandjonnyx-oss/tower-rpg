@@ -101,15 +101,69 @@ public class BossEncounterSystem : MonoBehaviour
             return false;
         }
 
-        // ボス戦開始
-        Debug.Log($"[BossEncounter] ボス戦開始！ {entry.bossMonster.Mname} (floor={floor}, step={step})");
+        // =========================================================
+        // 第二形態対応: フェーズに応じて出すモンスターを切り替え
+        // =========================================================
+        Monster targetMonster = entry.bossMonster;
 
-        BattleContext.EnemyMonster = entry.bossMonster;
+        if (entry.phase2Monster != null && !string.IsNullOrEmpty(entry.phase2StateField))
+        {
+            int currentPhase = GetBossPhase(entry.phase2StateField);
+            if (currentPhase >= 1)
+            {
+                // 第一形態撃破済み → 第二形態から開始
+                targetMonster = entry.phase2Monster;
+                Debug.Log($"[BossEncounter] 第二形態から開始 (floor={floor}, phase={currentPhase})");
+            }
+            else
+            {
+                // 第一形態から開始 → 第二形態のモンスターをコンテキストに保持
+                BattleContext.Phase2Monster = entry.phase2Monster;
+                BattleContext.IsPhase2Transition = false;
+                Debug.Log($"[BossEncounter] 第一形態から開始 (floor={floor})");
+            }
+        }
+
+        // ボス戦開始
+        Debug.Log($"[BossEncounter] ボス戦開始！ {targetMonster.Mname} (floor={floor}, step={step})");
+
+        BattleContext.EnemyMonster = targetMonster;
         BattleContext.IsBossBattle = true;
         BattleContext.BossFloor = floor;
 
         SceneManager.LoadScene(battleSceneName, LoadSceneMode.Single);
         return true;
+    }
+
+    /// <summary>
+    /// GameState からボスフェーズの値を取得する。
+    /// フィールド名でリフレクションする。
+    /// </summary>
+    private int GetBossPhase(string fieldName)
+    {
+        if (GameState.I == null) return 0;
+        var field = typeof(GameState).GetField(fieldName);
+        if (field == null)
+        {
+            Debug.LogError($"[BossEncounter] GameState に {fieldName} フィールドが見つかりません");
+            return 0;
+        }
+        return (int)field.GetValue(GameState.I);
+    }
+
+    /// <summary>
+    /// GameState のボスフェーズの値を設定する。
+    /// </summary>
+    public static void SetBossPhase(string fieldName, int value)
+    {
+        if (GameState.I == null) return;
+        var field = typeof(GameState).GetField(fieldName);
+        if (field == null)
+        {
+            Debug.LogError($"[BossEncounter] GameState に {fieldName} フィールドが見つかりません");
+            return;
+        }
+        field.SetValue(GameState.I, value);
     }
 
     /// <summary>
@@ -154,4 +208,12 @@ public class BossEntry
              "設定すると勝利後に Talk シーンへ遷移する。\n" +
              "未設定なら勝利後は直接 Tower に戻る。")]
     public TalkEvent victoryTalkEvent;
+
+    [Tooltip("第二形態のモンスター。設定すると第一形態撃破後に連戦で第二形態が開始される。")]
+    public Monster phase2Monster;
+
+    [Tooltip("第二形態のフェーズ管理用GameStateフィールド名。\n" +
+             "空の場合は第二形態なし（従来動作）。")]
+    public string phase2StateField;
+
 }

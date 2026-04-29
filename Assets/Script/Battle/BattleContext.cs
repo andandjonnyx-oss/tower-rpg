@@ -48,6 +48,23 @@ public static class BattleContext
     public static string DebugReturnScene = "Debug";
 
     // =========================================================
+    // ボス第二形態 連戦フラグ（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 第一形態を倒した直後の連戦フラグ。
+    /// true の場合、OnVictory でクリアフラグを立てずに
+    /// 第二形態の戦闘を開始する。
+    /// </summary>
+    public static bool IsPhase2Transition;
+
+    /// <summary>
+    /// 第二形態のモンスターデータ。
+    /// BossEncounterSystem が第一形態開始時にセットする。
+    /// </summary>
+    public static Monster Phase2Monster;
+
+    // =========================================================
     // ボス戦コンティニュー用アイテムスナップショット（追加）
     // =========================================================
 

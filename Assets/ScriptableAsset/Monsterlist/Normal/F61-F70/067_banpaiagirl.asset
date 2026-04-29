@@ -46,9 +46,9 @@ MonoBehaviour:
   acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
-    value: -100
+    value: -200
   - attribute: 4
-    value: -100
+    value: -200
   Exp: 1950
   Gold: 0
   dropItem: {fileID: 0}

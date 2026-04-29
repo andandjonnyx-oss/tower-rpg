@@ -25,10 +25,15 @@ MonoBehaviour:
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
-  cooldownTurns: 0
+  cooldownTurns: 5
   mpCost: 0
   baseHitRate: 95
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 0
   hitCount: 5
+  multiHitEntries: []
   noBattleOk: 0
   additionalEffects: []
   enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

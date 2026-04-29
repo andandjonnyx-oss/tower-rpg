@@ -1279,26 +1279,44 @@ MonoBehaviour:
     step: 20
     bossMonster: {fileID: 11400000, guid: ea821e1fe0984f44e88c973c188af8b5, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
   - floor: 20
     step: 20
     bossMonster: {fileID: 11400000, guid: ef0896b75449972439e1e8180dea12ba, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: 995869359adc1f348842540b2f6a46b7, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
   - floor: 30
     step: 20
     bossMonster: {fileID: 11400000, guid: 51cfcefc431798b448101f3f383dc046, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: efa1b20a00f28cd42ba0c6784b802658, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
   - floor: 40
     step: 20
     bossMonster: {fileID: 11400000, guid: 7874d8e462c588e44a79fa6f6d424763, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: 78684ae114dc125428f8c70b2803a91d, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
   - floor: 50
     step: 20
     bossMonster: {fileID: 11400000, guid: 138a25a5a64868347b0a3e5c1a441cf5, type: 2}
     victoryTalkEvent: {fileID: 11400000, guid: 56d380c744cc4cb4eb542e06d77632f7, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
   - floor: 60
     step: 20
     bossMonster: {fileID: 11400000, guid: c50b00105daa7934ab9b72af91128761, type: 2}
-    victoryTalkEvent: {fileID: 11400000, guid: 56d380c744cc4cb4eb542e06d77632f7, type: 2}
+    victoryTalkEvent: {fileID: 11400000, guid: 4bedcc9e481987046a22999826a9b274, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
+  - floor: 70
+    step: 20
+    bossMonster: {fileID: 11400000, guid: b13a3982f7d85734cbb3dc66d7c7b08e, type: 2}
+    victoryTalkEvent: {fileID: 11400000, guid: a6f216faa83767549b313e2212253dae, type: 2}
+    phase2Monster: {fileID: 11400000, guid: 8912bb1869511d049a2585f8b0a95077, type: 2}
+    phase2StateField: bossPhaseF70
   battleSceneName: Battle
 --- !u!1 &373320847
 GameObject:

@@ -38,7 +38,7 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 100
   DebuffResistance: 0
-  CharmResistance: 0
+  CharmResistance: 100
   CurseResistance: 0
   GlassResistance: 0
   immuneToAllAilments: 0
@@ -49,8 +49,8 @@ MonoBehaviour:
     value: 50
   Exp: 1980
   Gold: 0
-  dropItem: {fileID: 0}
-  dropRate: 0
+  dropItem: {fileID: 11400000, guid: 9efd2d0682d53ab48880966e48e30802, type: 2}
+  dropRate: 0.3
   autoRegenEnabled: 0
   autoRegenAmount: 0
   isQuizBoss: 0

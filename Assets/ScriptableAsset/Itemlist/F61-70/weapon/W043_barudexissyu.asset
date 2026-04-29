@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W043_barudexissyu
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W043_barudexissyu
+  itemName: "\u30D0\u30EB\u30C7\u30A3\u30C3\u30B7\u30E5"
+  description: "\u305F\u3060\u306E\u69CD\u306E\u306F\u305A\u3060\u304C\u3001\u3084\u305F\u3089\u3068\u9B54\u529B\u304C\u3042\u308B\n\u653B\u6483+210
+    MP+50 \u9B54\u6CD5\u653B\u6483+5\n\u30B9\u30AD\u30EB\uFF1A\u4E09\u9B54\u7A81\u304D\uFF08CT5\u30010.8\xD73\u3001\u706B\u6C37\u96F7\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 64
+  Minstep: 1
+  Maxfloor: 68
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  transformChance: 0
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 2
+  attackPower: 210
+  skills:
+  - {fileID: 11400000, guid: b79ec930b8f358344964821e266e30d7, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
+  equipDefense: 0
+  equipMagicAttack: 10
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 50
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances: []
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 43
