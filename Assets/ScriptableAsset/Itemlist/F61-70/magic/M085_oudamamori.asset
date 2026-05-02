@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M085_oudamamori
   itemName: "\u6BB4\u6253\u306E\u8B77\u308A"
-  description: "\u6BB4\u3092\u4F7F\u3046\u6575\u304C\u591A\u3044\u306E\u3067\n\u4ED6\u3088\u308A\u3082\u5C11\u3057\u8010\u6027\u4F4E\u3081\n\u6BB4\u8010\u6027+20"
+  description: "\u6BB4\u3092\u4F7F\u3046\u6575\u304C\u591A\u3044\u306E\u3067\n\u4ED6\u3088\u308A\u3082\u5C11\u3057\u8010\u6027\u4F4E\u3081\n\u6BB4\u8010\u6027+10"
   icon: {fileID: 0}
   Minfloor: 65
   Minstep: 1
@@ -79,6 +79,6 @@ MonoBehaviour:
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 0
-    value: 20
+    value: 10
     floatValue: 0
   sortOrder: 85

@@ -32,7 +32,7 @@ MonoBehaviour:
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
-  noBattleOk: 0
+  noBattleOk: 1
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
     ailmentMode: 0

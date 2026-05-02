@@ -22,13 +22,13 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 1500
+  MaxHp: 1300
   Attack: 25
   Defense: 130
   MagicDefense: 200
   Speed: 0
   Luck: 70
-  Evasion: 1000
+  Evasion: 800
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0

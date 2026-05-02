@@ -45,7 +45,7 @@ MonoBehaviour:
   isGirl: 0
   acceptsFeedItem: 0
   attributeResistances: []
-  Exp: 0
+  Exp: 20000
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0

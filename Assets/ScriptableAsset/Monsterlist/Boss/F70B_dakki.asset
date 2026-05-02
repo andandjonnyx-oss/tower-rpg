@@ -23,12 +23,12 @@ MonoBehaviour:
   IsBoss: 1
   IsUnique: 0
   MaxHp: 7000
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  Attack: 180
+  Defense: 250
+  MagicDefense: 350
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 100
+  Evasion: 900
   BaseHitRate: 90
   PoisonResistance: 100
   StunResistance: 0
@@ -53,8 +53,18 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  Help: "\u7B2C\u4E00\u5F62\u614B\u304F\u3089\u3044\u8EFD\u304F\u637B\u3063\u3066\u8CB0\u308F\u306A\u3044\u3068\u306A\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 35cb4332f75d8e04fa6e796e60a807b2, type: 2}
+    threshold: 60
+  - skill: {fileID: 11400000, guid: 71254bc1cf1027045bb272c6e7ae8c7e, type: 2}
+    threshold: 75
+  - skill: {fileID: 11400000, guid: 70d5f0edb37231a48a0cf08034c6824b, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: f5ba24d4365754c4c8ba3bd93ef0a54c, type: 2}
+    threshold: 100
+  - skill: {fileID: 11400000, guid: 1a6bfcc1bacbdeb48b0dd28dbe1b7c6b, type: 2}
+    threshold: 120
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

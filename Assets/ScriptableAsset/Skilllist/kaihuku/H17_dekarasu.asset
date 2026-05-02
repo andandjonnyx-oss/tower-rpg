@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: H17_dekarasu
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: H17_dekarasu
-  skillName: 
+  skillName: "\u30C7\u30AB\u30E9\u30B9"
   description: 
   skillSource: 1
   actionType: 2
@@ -32,7 +32,7 @@ MonoBehaviour:
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
-  noBattleOk: 0
+  noBattleOk: 1
   additionalEffects:
   - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
     ailmentMode: 1

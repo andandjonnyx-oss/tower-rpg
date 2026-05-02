@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M086_kirimamori
   itemName: "\u65AC\u6483\u306E\u8B77\u308A"
-  description: "\u722A\u6301\u3063\u3066\u305D\u3046\u306A\u3084\u3064\u306F\u5927\u62B5\u65AC\n\u65AC\u8010\u6027+30"
+  description: "\u722A\u6301\u3063\u3066\u305D\u3046\u306A\u3084\u3064\u306F\u5927\u62B5\u65AC\n\u65AC\u8010\u6027+20"
   icon: {fileID: 0}
   Minfloor: 65
   Minstep: 1
@@ -79,6 +79,6 @@ MonoBehaviour:
     targetAttribute: 1
     targetStat: 0
     targetStatusEffect: 0
-    value: 30
+    value: 20
     floatValue: 0
   sortOrder: 86
