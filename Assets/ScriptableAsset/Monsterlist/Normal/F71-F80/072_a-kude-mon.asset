@@ -12,40 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: 072_a-kude-mon
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 
-  Mname: 
-  Image: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  ID: 072_a-kude-mon
+  Mname: "\u30A2\u30FC\u30AF\u30C7\u30FC\u30E2\u30F3"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 71
+  Minstep: 1
+  Maxfloor: 75
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 1800
+  Attack: 300
+  Defense: 200
+  MagicDefense: 200
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 130
+  Evasion: 1200
   BaseHitRate: 90
-  PoisonResistance: 0
+  PoisonResistance: 100
   StunResistance: 0
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
-  SilenceResistance: 0
+  SilenceResistance: 100
   PetrifyResistance: 0
   DebuffResistance: 0
   CharmResistance: 0
-  CurseResistance: 0
-  GlassResistance: 0
+  CurseResistance: 100
+  GlassResistance: 100
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
-  attributeResistances: []
-  Exp: 0
+  attributeResistances:
+  - attribute: 6
+    value: -100
+  - attribute: 7
+    value: 100
+  Exp: 2050
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -53,8 +57,14 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  Help: "\u60AA\u30C7\u30FC\u30E2\u30F3\u3063\u3066\u66F8\u304F\u3068\n\u982D\u75DB\u304C\u75DB\u304F\u306A\u308B\u305C\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: f494afd97a90b044b87e6318d409b49f, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: f494afd97a90b044b87e6318d409b49f, type: 2}
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

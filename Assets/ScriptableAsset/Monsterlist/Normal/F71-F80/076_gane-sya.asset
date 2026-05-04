@@ -12,30 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
   m_Name: 076_gane-sya
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 
-  Mname: 
-  Image: {fileID: 0}
-  Minfloor: 0
-  Minstep: 0
-  Maxfloor: 0
-  Maxstep: 0
+  ID: 076_gane-sya
+  Mname: "\u30AC\u30CD\u30FC\u30B7\u30E3"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 74
+  Minstep: 1
+  Maxfloor: 78
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 2000
+  Attack: 250
+  Defense: 300
+  MagicDefense: 300
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 400
+  Evasion: 1000
   BaseHitRate: 90
-  PoisonResistance: 0
+  PoisonResistance: 100
   StunResistance: 0
   ParalyzeResistance: 0
-  BlindResistance: 0
+  BlindResistance: 100
   RageResistance: 0
-  SilenceResistance: 0
+  SilenceResistance: 100
   PetrifyResistance: 0
   DebuffResistance: 0
   CharmResistance: 0
@@ -44,8 +44,12 @@ MonoBehaviour:
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
-  attributeResistances: []
-  Exp: 0
+  attributeResistances:
+  - attribute: 6
+    value: 50
+  - attribute: 7
+    value: 50
+  Exp: 2150
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -53,8 +57,16 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  Help: "\u305F\u307E\u306B\u306F\u4ED6\u306E\u30BE\u30A6\u307F\u305F\u3044\u306B\n\u56DB\u8DB3\u6B69\u884C\u3057\u305F\u3044\u30BE\u30A6"
+  actions:
+  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+    threshold: 40
+  - skill: {fileID: 11400000, guid: 9d13a59554f9ec1439fd830b58f503b6, type: 2}
+    threshold: 60
+  - skill: {fileID: 11400000, guid: f494afd97a90b044b87e6318d409b49f, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

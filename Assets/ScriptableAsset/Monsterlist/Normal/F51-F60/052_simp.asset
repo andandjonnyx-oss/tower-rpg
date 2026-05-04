@@ -58,7 +58,7 @@ MonoBehaviour:
   Help: "\u30E1\u30C6\u30AA\u4F7F\u3048\u308B\u306A\u3089\u3082\u3046\u5C0F\u60AA\u9B54\u5352\u696D\u3060\u308D\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
-    threshold: 70
+    threshold: 80
   - skill: {fileID: 11400000, guid: 71254bc1cf1027045bb272c6e7ae8c7e, type: 2}
     threshold: 100
   baseActionRange: 100

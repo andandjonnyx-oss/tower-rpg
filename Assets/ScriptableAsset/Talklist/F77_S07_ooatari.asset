@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F77_S07_ooatari
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F77_S07_ooatari
+  zukanTitle: "\u5927\u5F53\u305F\u308A"
+  floor: 77
+  step: 7
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30AB\u30E9\u30F3\u30AB\u30E9\u30F3\u30AB\u30E9\u30FC\u30F3\uFF01\n\u8D85\u7D76\u5927\u5F53\u305F\u308A\uFF017.77\uFF05\u306E\u58C1\u3092\u8D85\u3048\u305F\u8005\u3088\uFF01\u304A\u3081\u3067\u3068\u3046\uFF01"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3068\u3044\u3046\u308F\u3051\u3067\u5927\u596E\u767A\u3057\u3066\u3001\n\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D777\u3092\u30D7\u30EC\u30BC\u30F3\u30C8\u3060\u3002\n\u3053\u306E\u904B\u3001\u5225\u30B2\u30FC\u3067\u30AC\u30C1\u30E3\u3067\u767A\u63EE\u3059\u308C\u3070\u826F\u304B\u3063\u305F\u306E\u306B\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  randomGroup: 777
+  randomWeight: 7.77
+  exclusiveIds:
+  - F77_S07_hazure
+  - F77_S07_atari
+  rewardItem: {fileID: 11400000, guid: 8d3620ecf27644741b4cd859812ecc7c, type: 2}
