@@ -18,7 +18,7 @@ MonoBehaviour:
   Minfloor: 76
   Minstep: 1
   Maxfloor: 80
-  Maxstep: 30
+  Maxstep: 20
   Weight: 1
   IsBoss: 0
   IsUnique: 0

@@ -62,7 +62,7 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
     threshold: 85
   - skill: {fileID: 11400000, guid: 74c3532fb2758bd4dbd0d9e54d913574, type: 2}
-    threshold: 85
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0
