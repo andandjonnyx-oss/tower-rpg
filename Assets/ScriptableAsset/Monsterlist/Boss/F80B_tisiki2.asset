@@ -41,7 +41,7 @@ MonoBehaviour:
   CharmResistance: 0
   CurseResistance: 0
   GlassResistance: 0
-  immuneToAllAilments: 0
+  immuneToAllAilments: 1
   isGirl: 0
   acceptsFeedItem: 0
   attributeResistances: []
