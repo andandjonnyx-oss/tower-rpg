@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
+  m_Name: 2Q 32
+  m_EditorClassIdentifier: Assembly-CSharp::QuizData
+  questionText: "\u708E\u8010\u602750\u306E\u72B6\u614B\u3067\u546A\u3044\u72B6\u614B\u306B\u306A\u308B\u3068\u3069\u3046\u306A\u308B\uFF1F"
+  choiceA: "\u708E\u8010\u602725\u306B\u306A\u308B"
+  choiceB: "\u708E\u8010\u6027-50\u306B\u306A\u308B"
+  correctAnswer: 1

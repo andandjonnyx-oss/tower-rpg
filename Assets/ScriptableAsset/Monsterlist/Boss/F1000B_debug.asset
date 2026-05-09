@@ -20,7 +20,7 @@ MonoBehaviour:
   Maxfloor: 0
   Maxstep: 0
   Weight: 1
-  IsBoss: 0
+  IsBoss: 1
   IsUnique: 0
   MaxHp: 9999
   Attack: 0
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: 
   actions:
   - skill: {fileID: 11400000, guid: 0a89b272a390b5d4499a1f3cd2abefc8, type: 2}

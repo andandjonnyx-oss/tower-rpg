@@ -238,6 +238,14 @@ public class Monster : ScriptableObject
     [Tooltip("クイズ問題データベース。isQuizBoss=true の場合に必須。")]
     public QuizDatabase quizDatabase;
 
+    [Tooltip("クイズ正解何問で勝利するか。デフォルト10。\n"
+       + "正解1回ごとに MaxHp / quizCorrectToWin のダメージを敵HPに与える。\n"
+       + "プレイヤーの攻撃でもHPを削れるため、実質的に正解ノルマが下がる。")]
+    public int quizCorrectToWin = 10;
+
+    [Tooltip("クイズ不正解何回でプレイヤー即死か。デフォルト3。")]
+    public int quizMaxWrong = 3;
+
 
 
     [Header("説明")]

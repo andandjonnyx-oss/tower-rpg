@@ -9,27 +9,24 @@ using TMPro;
 ///   - 敵ターンでクイズを出題する。
 ///   - 攻撃ボタン→選択肢A、防御ボタン→選択肢B に一時変化する。
 ///   - 魔法/スキル/アイテム/ギブアップは回答中は操作不能のまま。
-///   - 正解1回ごとに敵HP1割（MaxHp/10, 切り捨て, 最低1）減少。
-///   - 不正解3回でプレイヤー即死。
-///   - 10問正解で勝利。
+///   - 正解1回ごとに敵HP = MaxHp / quizCorrectToWin（切り捨て, 最低1）減少。
+///   - 不正解 quizMaxWrong 回でプレイヤー即死。
+///   - 勝利判定は enemyCurrentHp <= 0 で統一（攻撃でもクイズでも倒せる）。
 ///   - 回答後 → 正解/不正解判定 → AfterEnemyAction → プレイヤーターン（通常操作に復帰）。
+///   - プレイヤーターンでは攻撃/スキル/魔法/アイテム/防御が全て使える。
 ///
-/// 【使い方】
-///   Monster アセットで isQuizBoss = true, quizDatabase を設定する。
-///   EnemyTurn() から StartQuizTurn() を呼び出す。
+/// 【パラメータ（Monster アセット側）】
+///   isQuizBoss = true
+///   quizDatabase = クイズデータベースアセット
+///   quizCorrectToWin = 正解何問で倒せるか（デフォルト10、80Fボスは30）
+///   quizMaxWrong = 不正解何回で即死か（デフォルト3）
+///
+/// 【40Fボスとの互換性】
+///   Monster アセットの quizCorrectToWin / quizMaxWrong が
+///   デフォルト値（10 / 3）のまま → 従来と同じ挙動。
 /// </summary>
 public partial class BattleSceneController
 {
-    // =========================================================
-    // クイズボス定数
-    // =========================================================
-
-    /// <summary>不正解の許容回数。この回数に達するとプレイヤー即死。</summary>
-    private const int QuizMaxWrong = 3;
-
-    /// <summary>勝利に必要な正解回数。</summary>
-    private const int QuizCorrectToWin = 10;
-
     // =========================================================
     // クイズボス状態（static: シーンリロード対応）
     // =========================================================
@@ -73,6 +70,24 @@ public partial class BattleSceneController
             && enemyMonster.quizDatabase != null
             && enemyMonster.quizDatabase.quizzes != null
             && enemyMonster.quizDatabase.quizzes.Count > 0;
+    }
+
+    // =========================================================
+    // パラメータ取得ヘルパー
+    // =========================================================
+
+    /// <summary>勝利に必要な正解回数。Monster アセットから取得。</summary>
+    private int GetQuizCorrectToWin()
+    {
+        if (enemyMonster == null) return 10;
+        return enemyMonster.quizCorrectToWin > 0 ? enemyMonster.quizCorrectToWin : 10;
+    }
+
+    /// <summary>即死までの不正解回数。Monster アセットから取得。</summary>
+    private int GetQuizMaxWrong()
+    {
+        if (enemyMonster == null) return 3;
+        return enemyMonster.quizMaxWrong > 0 ? enemyMonster.quizMaxWrong : 3;
     }
 
     // =========================================================
@@ -264,6 +279,16 @@ public partial class BattleSceneController
 
     /// <summary>
     /// クイズの回答を判定し、結果に応じてダメージを与える。
+    /// 
+    /// 正解時:
+    ///   ダメージ = MaxHp / quizCorrectToWin（切り捨て、最低1）
+    ///   → 通常攻撃でHPが減っていれば、クイズ正解だけで倒すのに必要な問題数が減る。
+    /// 
+    /// 不正解時:
+    ///   quizMaxWrong 回でプレイヤー即死。
+    /// 
+    /// 勝利判定:
+    ///   enemyCurrentHp <= 0 で統一。AfterEnemyAction 内で判定される。
     /// </summary>
     private void ProcessQuizAnswer(QuizAnswer answer)
     {
@@ -275,20 +300,23 @@ public partial class BattleSceneController
 
         bool isCorrect = (answer == currentQuizData.correctAnswer);
 
+        int correctToWin = GetQuizCorrectToWin();
+        int maxWrong = GetQuizMaxWrong();
+
         if (isCorrect)
         {
             quizCorrectCount++;
 
-            // 敵にダメージ: MaxHp / 10（切り捨て、最低1）
-            int quizDamage = enemyMonster.MaxHp / 10;
+            // 敵にダメージ: MaxHp / quizCorrectToWin（切り捨て、最低1）
+            int quizDamage = enemyMonster.MaxHp / correctToWin;
             if (quizDamage < 1) quizDamage = 1;
             enemyCurrentHp -= quizDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
             AddLog($"正解！ {enemyMonster.Mname} に {quizDamage} ダメージ！");
-            AddLog($"（正解: {quizCorrectCount}/{QuizCorrectToWin}）");
+            AddLog($"（正解: {quizCorrectCount}問）");
 
-            Debug.Log($"[QuizBoss] 正解 {quizCorrectCount}/{QuizCorrectToWin} damage={quizDamage} enemyHp={enemyCurrentHp}");
+            Debug.Log($"[QuizBoss] 正解 {quizCorrectCount} damage={quizDamage} enemyHp={enemyCurrentHp}");
         }
         else
         {
@@ -299,12 +327,12 @@ public partial class BattleSceneController
                 : currentQuizData.choiceB;
 
             AddLog($"不正解… 正解は「{correctLabel}」！");
-            AddLog($"（不正解: {quizWrongCount}/{QuizMaxWrong}）");
+            AddLog($"（不正解: {quizWrongCount}/{maxWrong}）");
 
-            Debug.Log($"[QuizBoss] 不正解 {quizWrongCount}/{QuizMaxWrong}");
+            Debug.Log($"[QuizBoss] 不正解 {quizWrongCount}/{maxWrong}");
 
-            // 不正解3回で即死
-            if (quizWrongCount >= QuizMaxWrong)
+            // 不正解が上限に達したら即死
+            if (quizWrongCount >= maxWrong)
             {
                 AddLog($"{enemyMonster.Mname} の力が解放された！ You は倒れた…");
 

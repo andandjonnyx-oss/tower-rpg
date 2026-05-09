@@ -22,12 +22,12 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 3000
+  Attack: 500
+  Defense: 200
+  MagicDefense: 200
   Speed: 0
-  Luck: 0
+  Luck: 200
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
@@ -53,7 +53,9 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
+  Help: "\u30B9\u30C8\u30ED\u30F3\u30B0\u7CFB\u306F\u60AA\u9B54\u306E\u98F2\u307F\u7269\u3060\u3068\n\u9B3C\u3082\u5F15\u3044\u3066\u305F\u305C\uFF01"
   actions: []
   baseActionRange: 100
   actionCount: 1
