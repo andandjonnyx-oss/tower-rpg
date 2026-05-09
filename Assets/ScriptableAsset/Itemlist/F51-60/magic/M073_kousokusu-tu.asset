@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M073_kousokusu-tu
   itemName: "\u9AD8\u901F\u30B9\u30FC\u30C4"
   description: "\u975E\u5E38\u306B\u7D20\u65E9\u304F\u52D5\u3051\u308B\u304C\u4F53\u529B\u6D88\u8017\u304C\u51C4\u307E\u3058\u3044\n\u56DE\u907F\u7387+50
-    HP-500"
+    HP-1000"
   icon: {fileID: 0}
   Minfloor: 56
   Minstep: 1
@@ -86,6 +86,6 @@ MonoBehaviour:
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 0
-    value: -500
+    value: -1000
     floatValue: 0
   sortOrder: 73

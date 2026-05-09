@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: MA21_da-ku
   skillName: "\u30DD\u30A4\u30BA\u30F3\u30C0\u30FC\u30AF"
-  description: 
+  description: "\u6575\u7528"
   skillSource: 1
   actionType: 2
   skillAttribute: 7

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: MA20_syain
   skillName: "\u30DB\u30FC\u30EA\u30FC\u30B7\u30E3\u30A4\u30F3"
-  description: 
+  description: "\u6575\u7528"
   skillSource: 1
   actionType: 2
   skillAttribute: 6

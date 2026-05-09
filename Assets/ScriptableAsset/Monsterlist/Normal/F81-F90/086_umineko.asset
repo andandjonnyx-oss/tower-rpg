@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: 086_umineko
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: 086_umineko
+  Mname: "\u30A6\u30DF\u30CD\u30B3"
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Minfloor: 84
+  Minstep: 1
+  Maxfloor: 88
+  Maxstep: 20
+  Weight: 1
+  IsBoss: 0
+  IsUnique: 0
+  MaxHp: 0
+  Attack: 0
+  Defense: 0
+  MagicDefense: 0
+  Speed: 0
+  Luck: 0
+  Evasion: 0
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
+  attributeResistances: []
+  Exp: 0
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  Help: "\u6D77\u306B\u4F4F\u3093\u3067\u308B\u732B\u3060\u305C\uFF01\n\u5618\u3060\u305C\uFF01"
+  actions: []
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
