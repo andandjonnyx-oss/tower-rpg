@@ -19,7 +19,7 @@ MonoBehaviour:
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "80\u5C64\u306E\u4E2D\u6575\u30BE\u30FC\u30F3\u306F\u3001\n\u52D5\u7269\u5712\u306E\u4EBA\u6C17\u8005\u3001\u8C61\u30BE\u30FC\u30F3\u3060\uFF01"
+    text: "80\u5C64\u306E\u4E2D\u6575\u30BE\u30A6\u30F3\u306F\u3001\n\u52D5\u7269\u5712\u306E\u4EBA\u6C17\u8005\u3001\u8C61\u30BE\u30A6\u30F3\u3060\uFF01"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"

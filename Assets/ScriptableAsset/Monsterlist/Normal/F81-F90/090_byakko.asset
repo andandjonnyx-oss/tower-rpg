@@ -22,13 +22,13 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 2000
+  Attack: 550
+  Defense: 450
+  MagicDefense: 450
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 300
+  Evasion: 2400
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -43,9 +43,11 @@ MonoBehaviour:
   GlassResistance: 0
   immuneToAllAilments: 0
   isGirl: 0
-  acceptsFeedItem: 0
-  attributeResistances: []
-  Exp: 0
+  acceptsFeedItem: 1
+  attributeResistances:
+  - attribute: 6
+    value: 50
+  Exp: 2700
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -53,8 +55,18 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
+  Help: "\u56DB\u795E\u30AF\u30E9\u30B9\u3067\u3042\u3063\u3066\u3082\n\u3061\u3087\u30FC\u308B\u306B\u306F\u52DD\u3066\u306C"
+  actions:
+  - skill: {fileID: 11400000, guid: a6eae40223f8813499cda99dd2fbab9b, type: 2}
+    threshold: 25
+  - skill: {fileID: 11400000, guid: 35cb4332f75d8e04fa6e796e60a807b2, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: d56aa707c79cd074db31f21ad80a3f92, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 1cf74533a2b88d246b38a22b8e26a411, type: 2}
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

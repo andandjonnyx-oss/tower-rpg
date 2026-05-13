@@ -27,7 +27,7 @@ MonoBehaviour:
   Defense: 300
   MagicDefense: 300
   Speed: 0
-  Luck: 0
+  Luck: 300
   Evasion: 2200
   BaseHitRate: 90
   PoisonResistance: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
   attributeResistances:
   - attribute: 3
     value: 100
+  - attribute: 6
+    value: 50
   Exp: 2700
   Gold: 0
   dropItem: {fileID: 0}
