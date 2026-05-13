@@ -25,7 +25,7 @@ MonoBehaviour:
   MaxHp: 2000
   Attack: 300
   Defense: 600
-  MagicDefense: 0
+  MagicDefense: 300
   Speed: 0
   Luck: 150
   Evasion: 1000
@@ -55,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u7269\u7406\u53CD\u5C04\u306A\u3093\u3066\u3057\u306A\u3044\u304B\u3089\n\u5B89\u5FC3\u3057\u3066\u6B32\u3057\u3044\u30BE\u30A6"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}

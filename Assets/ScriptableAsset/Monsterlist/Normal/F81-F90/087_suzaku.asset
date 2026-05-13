@@ -22,13 +22,13 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 2500
+  Attack: 500
+  Defense: 300
+  MagicDefense: 300
   Speed: 0
   Luck: 0
-  Evasion: 0
+  Evasion: 2200
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -44,8 +44,10 @@ MonoBehaviour:
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
-  attributeResistances: []
-  Exp: 0
+  attributeResistances:
+  - attribute: 3
+    value: 100
+  Exp: 2700
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -53,8 +55,16 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
+  Help: "\u9CF3\u51F0\u3084\u30D5\u30A7\u30CB\u30C3\u30AF\u30B9\u3068\u9593\u9055\u308F\u308C\u308B\u306E\u304C\u60A9\u307F"
+  actions:
+  - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
+    threshold: 40
+  - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 982349841084bf241a3270b15f528844, type: 2}
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

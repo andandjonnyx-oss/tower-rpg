@@ -24,7 +24,7 @@ MonoBehaviour:
   IsUnique: 0
   MaxHp: 2000
   Attack: 250
-  Defense: 0
+  Defense: 300
   MagicDefense: 600
   Speed: 0
   Luck: 150
@@ -55,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30AE\u30EA\u30E1\u30AB\u30E9\u3068\u540C\u4E00\u5B58\u5728\u3068\u8A00\u308F\u308C\u3066\u3044\u308B\u305C\uFF01\n\u5B97\u6559\u306E\u5BFE\u7ACB\u306B\u3088\u3063\u3066\u5584\u306B\u306A\u3063\u305F\u308A\u60AA\u306B\u306A\u3063\u305F\u308A\n\u5FD9\u3057\u3044\u30BE\u30A6"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}

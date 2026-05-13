@@ -15,4 +15,4 @@ MonoBehaviour:
   questionText: "41\u968E\u304B\u308945\u968E\u3067\u62FE\u3048\u308B\u30A2\u30A4\u30C6\u30E0\u306F\uFF1F"
   choiceA: "\u30BB\u30B5\u30DF"
   choiceB: "\u30B5\u30B5\u30DF"
-  correctAnswer: 0
+  correctAnswer: 1

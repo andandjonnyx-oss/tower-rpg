@@ -28,7 +28,7 @@ MonoBehaviour:
   MagicDefense: 500
   Speed: 0
   Luck: 200
-  Evasion: 0
+  Evasion: 1200
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
   attributeResistances:
   - attribute: 5
     value: -200
+  - attribute: 4
+    value: 100
   Exp: 2500
   Gold: 0
   dropItem: {fileID: 0}
@@ -55,6 +57,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30AF\u30B8\u30E9\u3068\u30A4\u30EB\u30AB\u306E\u9055\u3044\u306F\u5927\u304D\u3055\u3060\u3051\u3060\u305C\uFF01\n\u6C34\u65CF\u9928\u30C7\u30FC\u30C8\u3067\u5973\u306E\u5B50\u306B\u8A00\u3048\u3070\u597D\u611F\u5EA6\u7206\u4E0A\u3052\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
