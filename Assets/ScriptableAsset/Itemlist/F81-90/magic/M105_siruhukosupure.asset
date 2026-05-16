@@ -18,7 +18,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   Minfloor: 81
   Minstep: 1
-  Maxfloor: 86
+  Maxfloor: 85
   Maxstep: 20
   category: 2
   stackable: 1
