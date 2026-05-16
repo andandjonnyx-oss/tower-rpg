@@ -34,6 +34,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 1
   curesGlass: 1
+  curesAllDebuffs: 1
   statusPointGain: 2
   battleDamage: 0
   battleAttribute: 0

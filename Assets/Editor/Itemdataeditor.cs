@@ -112,6 +112,10 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("statusPointGain"));
 
         EditorGUILayout.Space(5);
+        EditorGUILayout.LabelField("バフ/デバフ回復", EditorStyles.boldLabel);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("curesAllDebuffs"));
+
+        EditorGUILayout.Space(5);
         EditorGUILayout.LabelField("戦闘攻撃アイテム", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleDamage"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleAttribute"));

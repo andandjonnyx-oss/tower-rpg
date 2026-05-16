@@ -57,9 +57,11 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u305F\u307E\u306B\u306F\u4ED6\u306E\u30BE\u30A6\u307F\u305F\u3044\u306B\n\u56DB\u8DB3\u6B69\u884C\u3057\u305F\u3044\u30BE\u30A6"
   actions:
-  - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
+  - skill: {fileID: 11400000, guid: 54fc33ab62ec21741a001e66cedceb69, type: 2}
     threshold: 40
   - skill: {fileID: 11400000, guid: 9d13a59554f9ec1439fd830b58f503b6, type: 2}
     threshold: 60

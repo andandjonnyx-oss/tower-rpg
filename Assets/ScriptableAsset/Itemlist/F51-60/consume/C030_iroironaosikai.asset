@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 1
   curesGlass: 1
+  curesAllDebuffs: 1
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -57,6 +58,10 @@ MonoBehaviour:
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -73,6 +74,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 0}
+  magicSkill: {fileID: 11400000, guid: 6c2c26932b9e25e4eb73b0d263f0bcc3, type: 2}
   passiveEffects: []
   sortOrder: 103
