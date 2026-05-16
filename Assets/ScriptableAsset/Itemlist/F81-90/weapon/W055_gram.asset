@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M090_syain
+  m_Name: W055_gram
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M090_syain
-  itemName: "\u30DB\u30FC\u30EA\u30FC\u30B7\u30E3\u30A4\u30F3"
-  description: "MP30\n\u5A01\u529B600\u8056\u5C5E\u6027\n50\uFF05\u3067\u6697\u95C7"
+  itemId: W055_gram
+  itemName: "\u9B54\u5263\u30B0\u30E9\u30E0"
+  description: "\u30B0\u30E9\u30E0\u3060\u3051\u3060\u3068\u5927\u62B5\u8AA4\u89E3\u3055\u308C\u308B\n\u653B\u6483+400\n\u901A\u5E38\u653B\u6483\u6642\u81EA\u5206\u306B\u6012\u308A10%\n\u30B9\u30AD\u30EB:\u6EC5\u8336\u82E6\u8336\u65AC\u308A\n\uFF08CT5\u30010.5\u500D\xD75\u3001100%\u6012\u308A\uFF09"
   icon: {fileID: 0}
-  Minfloor: 71
+  Minfloor: 86
   Minstep: 1
-  Maxfloor: 75
+  Maxfloor: 90
   Maxstep: 20
-  category: 2
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -52,11 +52,12 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
-  weaponInflictEffect: 0
-  weaponInflictChance: 0
+  weaponAttribute: 1
+  attackPower: 400
+  skills:
+  - {fileID: 11400000, guid: 4f5793cf23b26e0439b5bdfb93bfa18f, type: 2}
+  weaponInflictEffect: 9
+  weaponInflictChance: 10
   weaponInflictDebuff: 0
   weaponDebuffRate: 0
   weaponDebuffDuration: 0
@@ -73,6 +74,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: 8a6d57c40ee6c1947b3c23b71c66d686, type: 2}
+  magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 90
+  sortOrder: 55

@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
+  m_Name: W052_huranberuju
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemId: W052_huranberuju
+  itemName: "\u30D5\u30E9\u30F3\u30D9\u30EB\u30B8\u30E5"
+  description: "\u5200\u8EAB\u304C\u708E\u3063\u307D\u3044\u666E\u901A\u306E\u5263\u306A\u306E\u3060\u304C\n\u30B2\u30FC\u30E0\u3060\u3068\u57FA\u672C\u706B\u5C5E\u6027\n\u653B\u6483+350
+    \u706B\u5C5E\u6027\n\u706B\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u5F37\u6483\uFF08CT3\u30012\u500D\uFF09"
+  icon: {fileID: 0}
+  Minfloor: 81
+  Minstep: 1
+  Maxfloor: 85
+  Maxstep: 20
+  category: 1
+  stackable: 1
+  maxStack: 99
+  healAmount: 0
+  mpHealAmount: 0
+  curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  statusPointGain: 0
+  battleDamage: 0
+  battleAttribute: 0
+  battleDamageCategory: 0
+  battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  transformChance: 0
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
+  weaponAttribute: 3
+  attackPower: 350
+  skills:
+  - {fileID: 11400000, guid: 72df2714a4535274b8bea0aec599d85a, type: 2}
+  weaponInflictEffect: 0
+  weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
+  equipDefense: 0
+  equipMagicAttack: 0
+  equipMagicDefense: 0
+  equipLuck: 0
+  equipMaxHp: 0
+  equipMaxMp: 0
+  equipAccuracy: 0
+  equipEvasion: 0
+  equipCritical: 0
+  baseHitRate: 95
+  equipResistances:
+  - attribute: 3
+    value: 50
+  equipStatusEffectResistances: []
+  magicSkill: {fileID: 0}
+  passiveEffects: []
+  sortOrder: 52

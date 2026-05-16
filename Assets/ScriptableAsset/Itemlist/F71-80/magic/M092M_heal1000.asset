@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M092_heal1000
+  m_Name: M092M_heal1000
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M092_heal1000
+  itemId: M092M_heal1000
   itemName: "\u30AA\u30E1\u30AC\u30D2\u30FC\u30EB"
   description: "MP60\nHP1000\u56DE\u5FA9"
   icon: {fileID: 0}

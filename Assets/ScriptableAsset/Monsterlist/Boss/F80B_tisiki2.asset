@@ -54,7 +54,7 @@ MonoBehaviour:
   isQuizBoss: 1
   quizDatabase: {fileID: 11400000, guid: fcb7a858a03712f409ccc8ab2ae95a3d, type: 2}
   quizCorrectToWin: 30
-  quizMaxWrong: 3
+  quizMaxWrong: 5
   Help: "\u77E5\u8B58\u306E\u7121\u3055\u306F\u529B\u3067\u30AB\u30D0\u30FC\u3060\u305C\uFF01"
   actions: []
   baseActionRange: 100

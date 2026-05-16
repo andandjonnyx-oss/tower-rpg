@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M094_pawa-
+  m_Name: W053_azukiba-
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M094_pawa-
-  itemName: "\u30D1\u30EF\u30FC\uFF01\uFF01\uFF01"
-  description: "MP50\n\u653B\u6483\u529B100%\u30D0\u30D5\u3000\u6B21\u30BF\u30FC\u30F3\u306E\u307F"
+  itemId: W053_azukiba-
+  itemName: AZUKIBAR
+  description: "\u786C\u3044\u3002\u786C\u3059\u304E\u308B\u3002\n\u653B\u6483+340
+    \u6C37\u5C5E\u6027\n\u6C37\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30012\u500D\u300150\uFF05\u6C17\u7D76\uFF09"
   icon: {fileID: 0}
-  Minfloor: 76
+  Minfloor: 81
   Minstep: 1
-  Maxfloor: 80
+  Maxfloor: 85
   Maxstep: 20
-  category: 2
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -42,8 +43,8 @@ MonoBehaviour:
   cannotDiscard: 0
   transformInto: {fileID: 0}
   transformChance: 0
-  isEdible: 0
-  eatHealAmount: 0
+  isEdible: 1
+  eatHealAmount: 1000
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
@@ -52,9 +53,10 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
+  weaponAttribute: 4
+  attackPower: 340
+  skills:
+  - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   weaponInflictDebuff: 0
@@ -71,8 +73,10 @@ MonoBehaviour:
   equipEvasion: 0
   equipCritical: 0
   baseHitRate: 95
-  equipResistances: []
+  equipResistances:
+  - attribute: 4
+    value: 50
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: bf474bdf47273a249a799ff10295a131, type: 2}
+  magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 94
+  sortOrder: 53

@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M091_dark
+  m_Name: M102M_toal
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M091_dark
-  itemName: "\u30DD\u30A4\u30BA\u30F3\u30C0\u30FC\u30AF"
-  description: "MP30\n\u5A01\u529B600\u95C7\u5C5E\u6027\n50\uFF05\u3067\u6BD2"
+  itemId: M102M_toal
+  itemName: "\u30C8\u30FC\u30EB\u306E\u6012\u308A"
+  description: "MP50 \n\u5A01\u529B1000 \u96F7\u5C5E\u6027\n50%\u3067\u9EBB\u75FA"
   icon: {fileID: 0}
-  Minfloor: 71
+  Minfloor: 81
   Minstep: 1
-  Maxfloor: 75
+  Maxfloor: 85
   Maxstep: 20
   category: 2
   stackable: 1
@@ -73,6 +73,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: 9eb794dde5e225a409dbec9e598c6f60, type: 2}
+  magicSkill: {fileID: 11400000, guid: 357c706532a2d5447a5e92515dcd8f4e, type: 2}
   passiveEffects: []
-  sortOrder: 91
+  sortOrder: 102

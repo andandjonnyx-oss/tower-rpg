@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M093_kaosu
+  m_Name: M093M_kaosu
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M093_kaosu
+  itemId: M093M_kaosu
   itemName: "\u30AB\u30AA\u30B9"
   description: "MP80\n\u9B54\u6CD5\u653B\u6483\xD715\n\u8056\u5C5E\u6027\u3068\u95C7\u5C5E\u6027\u30921\u767A\u305A\u3064"
   icon: {fileID: 0}

@@ -10,37 +10,37 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
-  m_Name: 101_syadouhuxego-ru
+  m_Name: F90B_daha-ka
   m_EditorClassIdentifier: Assembly-CSharp::Monster
-  ID: 101_syadouhuxego-ru
-  Mname: "\u30B7\u30E3\u30C9\u30A6\u30D5\u30A7\u30B4\u30FC\u30EB"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
-  Minfloor: 100
-  Minstep: 1
-  Maxfloor: 100
-  Maxstep: 20
-  Weight: 0.3
-  IsBoss: 0
+  ID: F90B_daha-ka
+  Mname: "\u30C0\u30CF\u30FC\u30AB"
+  Image: {fileID: 0}
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  Weight: 1
+  IsBoss: 1
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 20000
+  Attack: 400
+  Defense: 500
+  MagicDefense: 500
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 300
+  Evasion: 2000
   BaseHitRate: 90
-  PoisonResistance: 0
-  StunResistance: 0
-  ParalyzeResistance: 0
-  BlindResistance: 0
+  PoisonResistance: 100
+  StunResistance: 50
+  ParalyzeResistance: 100
+  BlindResistance: 100
   RageResistance: 0
-  SilenceResistance: 0
-  PetrifyResistance: 0
+  SilenceResistance: 100
+  PetrifyResistance: 100
   DebuffResistance: 0
-  CharmResistance: 0
-  CurseResistance: 0
-  GlassResistance: 0
+  CharmResistance: 100
+  CurseResistance: 100
+  GlassResistance: 100
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
   quizDatabase: {fileID: 0}
   quizCorrectToWin: 10
   quizMaxWrong: 3
-  Help: 
+  Help: "\u30A2\u30F3\u30EA\u30DE\u30E6\u30E9\u306B\u3088\u3063\u3066\u4F5C\u3089\u308C\u305F\u4E09\u3064\u9996\u306E\u9F8D\u3002\n\u51F6\u60AA\u306A\u95C7\u3068\u708E\u3092\u6271\u3046\u305C\uFF01"
   actions: []
   baseActionRange: 100
   actionCount: 1
