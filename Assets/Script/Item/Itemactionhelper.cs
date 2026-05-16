@@ -98,6 +98,14 @@ public static class ItemActionHelper
             invItem.data.curesCurse,    // ← 追加
             invItem.data.curesGlass);
 
+        // ▼▼▼ ここから新規挿入 ▼▼▼
+        // バフ/デバフ回復（プレイヤー側のデバフを一括解除）
+        if (invItem.data.curesAllDebuffs)
+        {
+            BattleSceneController.CurePlayerAllDebuffs();
+        }
+        // ▲▲▲ ここまで新規挿入 ▲▲▲
+
         // ステータスポイント付与
         if (invItem.data.statusPointGain > 0)
         {

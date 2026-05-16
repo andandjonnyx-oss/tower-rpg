@@ -51,6 +51,12 @@ public class ItemData : ScriptableObject
     [Tooltip("true の場合、使用時にガラス状態を回復する。")]
     public bool curesGlass = false;
 
+    [Header("Consumable - Buff/Debuff Cure")]
+    [Tooltip("true の場合、使用時にプレイヤーの全デバフ（DEF/ATK/MATK/MDEF/LUC ダウン）を一括解除する。\n"
+       + "バフは解除しない。戦闘外で使用しても効果なし（元々デバフが存在しないため）。\n"
+       + "例: デバフ消しの薬、聖水（拡張版）など")]
+    public bool curesAllDebuffs = false;
+
 
 
     // =========================================================

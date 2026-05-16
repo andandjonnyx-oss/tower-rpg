@@ -161,4 +161,59 @@ public partial class BattleSceneController
             );
         }
     }
+
+    // =========================================================
+    // デバフ解除（アイテムからの呼び出し用）
+    // =========================================================
+
+    /// <summary>
+    /// プレイヤーの全デバフ（DEF/ATK/MATK/MDEF/LUC ダウン）を一括解除する。
+    /// バフは解除しない。ItemActionHelper.ApplyConsumableEffects から呼ばれる。
+    /// 戦闘外で呼ばれても安全（buffState はデフォルト値のままなので空振り）。
+    /// </summary>
+    /// <returns>解除されたデバフの数（0 ならログ抑制用）</returns>
+    public static int CurePlayerAllDebuffs()
+    {
+        int curedCount = 0;
+
+        if (buffState == null || buffState.player == null) return 0;
+
+        if (buffState.player.def.IsDebuffed)
+        {
+            buffState.player.def.debuffTurn = 0;
+            buffState.player.def.debuffRate = 0f;
+            curedCount++;
+        }
+        if (buffState.player.atk.IsDebuffed)
+        {
+            buffState.player.atk.debuffTurn = 0;
+            buffState.player.atk.debuffRate = 0f;
+            curedCount++;
+        }
+        if (buffState.player.matk.IsDebuffed)
+        {
+            buffState.player.matk.debuffTurn = 0;
+            buffState.player.matk.debuffRate = 0f;
+            curedCount++;
+        }
+        if (buffState.player.mdef.IsDebuffed)
+        {
+            buffState.player.mdef.debuffTurn = 0;
+            buffState.player.mdef.debuffRate = 0f;
+            curedCount++;
+        }
+        if (buffState.player.luc.IsDebuffed)
+        {
+            buffState.player.luc.debuffTurn = 0;
+            buffState.player.luc.debuffRate = 0f;
+            curedCount++;
+        }
+
+        if (curedCount > 0)
+        {
+            Debug.Log($"[BuffDebuff] プレイヤーの全デバフを解除した（{curedCount}件）");
+        }
+
+        return curedCount;
+    }
 }
