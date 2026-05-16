@@ -20,9 +20,9 @@ MonoBehaviour:
   Maxfloor: 0
   Maxstep: 0
   Weight: 1
-  IsBoss: 0
+  IsBoss: 1
   IsUnique: 0
-  MaxHp: 30000
+  MaxHp: 25000
   Attack: 550
   Defense: 600
   MagicDefense: 600
@@ -56,9 +56,21 @@ MonoBehaviour:
   quizCorrectToWin: 10
   quizMaxWrong: 3
   Help: "\u5B9F\u969B\u306B\u306F\u30A2\u30B8\u306F\u86C7\u3063\u3066\u610F\u5473\u3089\u3057\u3044\u305C\uFF01"
-  actions: []
+  actions:
+  - skill: {fileID: 11400000, guid: c4cd976e3fcc2a749baff36bed1c6263, type: 2}
+    threshold: 30
+  - skill: {fileID: 11400000, guid: 54fc33ab62ec21741a001e66cedceb69, type: 2}
+    threshold: 60
+  - skill: {fileID: 11400000, guid: c1849e591ddd0724aac3d6343a47a545, type: 2}
+    threshold: 70
+  - skill: {fileID: 11400000, guid: 6bdcaf10a7e9a2d4ab9d1f2bfa706b00, type: 2}
+    threshold: 80
+  - skill: {fileID: 11400000, guid: 8ed741a8ac54313419306d713bb90d66, type: 2}
+    threshold: 90
+  - skill: {fileID: 11400000, guid: f9fb058b9296cb4418bd3c41fd2b3fca, type: 2}
+    threshold: 100
   baseActionRange: 100
-  actionCount: 1
+  actionCount: 3
   lowHpThreshold: 0
   lowHpActions: []
   lowHpBaseActionRange: 0
