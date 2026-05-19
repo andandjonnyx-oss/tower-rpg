@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F85_S02_have
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F85_S02_have
+  zukanTitle: "\u611B\u732B\u5BB6"
+  floor: 85
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u732B\u306F\u5143\u6C17\u3057\u3066\u308B\u304B\uFF1F"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30A8\u30DF\u30EA\u30FC\u3061\u3083\u3093"
+    text: "\u30CA\u30FC\u30AA\u266A"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u307E\u3058\u304B\u3088\u3001\u4F55\u306E\u5F79\u306B\u3082\u7ACB\u305F\u306A\u3044\u306E\u306B1\u67A0\u57CB\u3081\u308B\u3060\u3051\u306E\u5B58\u5728\u3092\n\u7D42\u76E4\u307E\u3067\u9023\u308C\u3066\u6765\u3066\u308B\u306E\u304B\u3088\u3001\u304A\u524D\u306E\u732B\u30AD\u30C1\u3063\u3077\u308A\u306B\u306F\u8131\u5E3D\u3060\u305C\u2026\u2026"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u307E\u3041\u3001\u7279\u306B\u30EC\u30A2\u30A2\u30A4\u30C6\u30E0\u304C\u8CB0\u3048\u308B\u3068\u304B\u3001\u305D\u3046\u3044\u3046\u306E\u306F\u7121\u3044\u3051\u3069\u306A\u3002\n\u5009\u5EAB\u306B\u9810\u3051\u3066\u308B\u30D0\u30FC\u30B8\u30E7\u30F3\u306E\u4F1A\u8A71\u3092\u898B\u305F\u4EBA\u9593\u304C\u3001\n\u56F3\u9451\u3067\u3053\u306E\u30A4\u30D9\u30F3\u30C8\u3092\u898B\u3066\u6094\u3057\u304C\u3089\u306A\u3044\u305F\u3081\u306E\u914D\u616E\u3063\u3066\u3082\u3093\u3060\u3002"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: You
+    text: "\u7D42\u76E4\u306B\u3053\u3046\u3044\u3046\u30A4\u30D9\u30F3\u30C8\u304C\u3042\u308B\u3068\u601D\u3063\u3066\u9023\u308C\u3066\u6765\u305F\u304C\u3001\n\u6069\u6075\u304C\u7121\u3044\u306A\u3089\u3059\u3050\u306B\u5009\u5EAB\u884C\u304D\u3060\u306A\u2026\u2026"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30A8\u30DF\u30EA\u30FC\u3061\u3083\u3093"
+    text: "\uFF01\uFF1F"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  randomGroup: F85_S02_neko_branch
+  randomWeight: 1
+  exclusiveIds:
+  - F85_S02_nohave
+  rewardItem: {fileID: 0}
+  requiredItem: {fileID: 11400000, guid: 0aa3ce835fe0e4a4ba9fcf190192f453, type: 2}
+  itemPossessionMode: 0

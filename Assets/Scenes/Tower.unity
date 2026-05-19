@@ -1317,6 +1317,18 @@ MonoBehaviour:
     victoryTalkEvent: {fileID: 11400000, guid: a6f216faa83767549b313e2212253dae, type: 2}
     phase2Monster: {fileID: 11400000, guid: 8912bb1869511d049a2585f8b0a95077, type: 2}
     phase2StateField: bossPhaseF70
+  - floor: 80
+    step: 20
+    bossMonster: {fileID: 11400000, guid: e2c724d1e2c7882429bfc0bbf34ca6ea, type: 2}
+    victoryTalkEvent: {fileID: 11400000, guid: b21b5356fa034dd49884bb35749d5e50, type: 2}
+    phase2Monster: {fileID: 0}
+    phase2StateField: 
+  - floor: 90
+    step: 20
+    bossMonster: {fileID: 11400000, guid: bf494031c5f034c4d818fb88b3ef14f0, type: 2}
+    victoryTalkEvent: {fileID: 11400000, guid: 3818cba52cfe9934b97e115babcec488, type: 2}
+    phase2Monster: {fileID: 11400000, guid: a2e262bcbcb0b9f42922ab6caa202198, type: 2}
+    phase2StateField: bossPhaseF90
   battleSceneName: Battle
 --- !u!1 &373320847
 GameObject:

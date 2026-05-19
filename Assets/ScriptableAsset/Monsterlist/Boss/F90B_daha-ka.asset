@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: F90B_daha-ka
   Mname: "\u30C0\u30CF\u30FC\u30AB"
-  Image: {fileID: 0}
+  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   quizDatabase: {fileID: 0}
   quizCorrectToWin: 10
   quizMaxWrong: 3
-  Help: "\u30A2\u30F3\u30EA\u30DE\u30E6\u30E9\u306B\u3088\u3063\u3066\u4F5C\u3089\u308C\u305F\u4E09\u3064\u9996\u306E\u9F8D\u3002\n\u51F6\u60AA\u306A\u95C7\u3068\u708E\u3092\u6271\u3046\u305C\uFF01"
+  Help: "\u30A2\u30F3\u30EA\u30DE\u30E6\u306B\u3088\u3063\u3066\u4F5C\u3089\u308C\u305F\u4E09\u3064\u9996\u306E\u9F8D\u3002\n\u51F6\u60AA\u306A\u95C7\u3068\u708E\u3092\u6271\u3046\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 5f16bb4b365c9cd4d92cefae0b354b1e, type: 2}
     threshold: 20
@@ -70,9 +70,9 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 1a6bfcc1bacbdeb48b0dd28dbe1b7c6b, type: 2}
     threshold: 70
   - skill: {fileID: 11400000, guid: 62f641cd4fc10b94eb4ce0f3a8d273b1, type: 2}
-    threshold: 85
+    threshold: 80
   - skill: {fileID: 11400000, guid: 982349841084bf241a3270b15f528844, type: 2}
-    threshold: 95
+    threshold: 90
   - skill: {fileID: 11400000, guid: f9fb058b9296cb4418bd3c41fd2b3fca, type: 2}
     threshold: 100
   baseActionRange: 100

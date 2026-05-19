@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: F82_S02
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: F82_S02
+  zukanTitle: "\u305D\u308D\u305D\u308D\u30CD\u30BF\u5207\u308C"
+  floor: 82
+  step: 2
+  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u65B0\u3057\u3044\u72B6\u614B\u7570\u5E38\u3068\u304B\u30E6\u30CB\u30FC\u30AF\u306A\u884C\u52D5\u3082\u7121\u3044\u3057\u3001\n\u305D\u308D\u305D\u308D\u8A71\u3059\u30CD\u30BF\u304C\u5C3D\u304D\u3064\u3064\u3042\u308B\u3093\u3060\u3088\u306A\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: You
+    text: "\u7121\u7406\u3057\u30661\u968E\u6BCE\u306B\u4F1A\u8A71\u3057\u306A\u304F\u3066\u3044\u3044\u3060\u308D\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u304A\u3044\u304A\u3044\u3001\u304A\u524D\u3068\u306E\u65C5\u3082\u3082\u3046\u3059\u3050\u7D42\u308F\u308A\u306A\u3093\u3060\u305C\uFF1F\n\u305D\u3093\u306A\u5BC2\u3057\u3044\u4E8B\u3092\u8A00\u3046\u306A\u3088\u2026\u2026\n\u305F\u307E\u306B\u306F\u304A\u524D\u304B\u3089\u8A71\u306E\u8A71\u984C\u3092\u632F\u3063\u3066\u3082\u3044\u3044\u3093\u3060\u305E\uFF1F"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  - speaker: You
+    text: "\u307E\u3041\u3001\u8003\u3048\u3068\u304F\u3088\u2026\u2026"
+    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    backgroundOverride: {fileID: 0}
+  conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
+  rewardItem: {fileID: 0}

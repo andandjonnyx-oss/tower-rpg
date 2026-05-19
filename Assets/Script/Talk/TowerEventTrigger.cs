@@ -28,15 +28,54 @@ public class TowerEventTrigger : MonoBehaviour
 
     private bool AreAllConditionsMet(TalkEvent e, GameState gs)
     {
-        if (e.conditions == null || e.conditions.Count == 0) return true;
-
-        foreach (var c in e.conditions)
+        // 既存の EventCondition リスト判定
+        if (e.conditions != null && e.conditions.Count > 0)
         {
-            if (c == null) continue; // 未設定条件は無視（好みでfalseにしてもOK）
-            if (!c.Evaluate(gs)) return false;
+            foreach (var c in e.conditions)
+            {
+                if (c == null) continue; // 未設定条件は無視（好みでfalseにしてもOK）
+                if (!c.Evaluate(gs)) return false;
+            }
         }
+
+        // =========================================================
+        // 所持アイテム判定（第33回追加）
+        // =========================================================
+        // requiredItem が null の場合は判定なし（従来互換）。
+        // 設定されている場合は itemPossessionMode に従って判定する。
+        // インベントリ（ItemBoxManager.Instance）のみが対象で、
+        // 倉庫の中身は判定対象外（倉庫預け = 未所持扱い）。
+        if (e.requiredItem != null)
+        {
+            bool hasItem = HasItemInInventory(e.requiredItem);
+            bool shouldHave = (e.itemPossessionMode == ItemPossessionMode.HasItem);
+            if (hasItem != shouldHave) return false;
+        }
+
         return true;
     }
+
+    /// <summary>
+    /// インベントリ（ItemBoxManager.Instance）に指定アイテムが含まれているかを返す。
+    /// 判定は itemId 文字列比較で行う（ScriptableObject の参照ではなく）。
+    /// 倉庫（Storagemanager）の中身は判定対象外。
+    /// </summary>
+    private bool HasItemInInventory(ItemData target)
+    {
+        if (target == null) return false;
+        if (ItemBoxManager.Instance == null) return false;
+
+        var items = ItemBoxManager.Instance.GetItems();
+        if (items == null) return false;
+
+        foreach (var inv in items)
+        {
+            if (inv == null || inv.data == null) continue;
+            if (inv.data.itemId == target.itemId) return true;
+        }
+        return false;
+    }
+
     public bool TryTriggerTalkEvent()
     {
 

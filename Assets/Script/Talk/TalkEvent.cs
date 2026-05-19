@@ -65,6 +65,41 @@ public class TalkEvent : ScriptableObject
     [Tooltip("イベント終了時にプレイヤーに付与するアイテム（null=報酬なし）")]
     public ItemData rewardItem;
 
+    // =========================================================
+    // 所持アイテムによる分岐（第33回追加）
+    // =========================================================
+    //
+    // インベントリに特定アイテムを持っているかどうかでイベント発動を分岐させる。
+    // F85_S02 のような「猫アイテムを持っているか」で会話パターンを変える用途。
+    //
+    // 使い方:
+    //   1. 同じ floor/step に2つのイベントを作成（例: F85_S02_neko_have / F85_S02_neko_none）
+    //   2. 両方に同じ requiredItem（例: M045_neko）を設定
+    //   3. _have 側は itemPossessionMode = HasItem
+    //      _none 側は itemPossessionMode = NotHasItem
+    //   4. 排他制御は randomGroup + exclusiveIds で行う（α案）。
+    //      同じ randomGroup を設定し、互いを exclusiveIds で参照することで、
+    //      どちらか一方を再生したら両方が MarkPlayed される。
+    //
+    // 判定対象はインベントリ（ItemBoxManager.Instance.GetItems()）のみ。
+    // 倉庫の中身は判定対象外（倉庫預け = 未所持扱い）。
+    // 判定は itemId 文字列比較で行うため、ScriptableObject の参照が壊れても安全。
+    //
+    // requiredItem が null の場合は所持判定なし（従来互換）。
+    // =========================================================
+
+    [Header("Item Possession Branch")]
+    [Tooltip("インベントリ所持判定に使うアイテム。\n"
+           + "null の場合は判定なし（従来互換）。\n"
+           + "倉庫の中身は判定対象外（インベントリのみ）。\n"
+           + "判定は itemId 文字列で行う。")]
+    public ItemData requiredItem;
+
+    [Tooltip("requiredItem の判定モード。\n"
+           + "HasItem    = インベントリに所持していれば発動条件を満たす\n"
+           + "NotHasItem = インベントリに所持していなければ発動条件を満たす（倉庫預け含む）")]
+    public ItemPossessionMode itemPossessionMode = ItemPossessionMode.HasItem;
+
     [Serializable]
     public class TalkLine
     {
@@ -78,6 +113,16 @@ public class TalkEvent : ScriptableObject
                + "null の場合は TalkEvent.backgroundImage が使われる。")]
         public Sprite backgroundOverride; // 台詞単位の背景オーバーライド
     }
+}
 
+// =========================================================
+// 所持アイテム判定モード（第33回追加）
+// =========================================================
+public enum ItemPossessionMode
+{
+    /// <summary>requiredItem をインベントリに所持していれば true</summary>
+    HasItem = 0,
 
+    /// <summary>requiredItem をインベントリに所持していなければ true（倉庫預け含む）</summary>
+    NotHasItem = 1,
 }
