@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M111M_dispel
+  m_Name: W056_sitisitou
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M111M_dispel
-  itemName: "\u30C7\u30A3\u30B9\u30DA\u30EB"
-  description: "MP20\n\u6575\u5473\u65B9\u5168\u3066\u306E\u30D0\u30D5\u30C7\u30D0\u30D5\u3092\u6D88\u53BB"
+  itemId: W056_sitisitou
+  itemName: "\u4E03\u652F\u5200"
+  description: "\u3069\u3046\u8003\u3048\u3066\u3082\u6B66\u5668\u3068\u3057\u3066\u306F\u4F7F\u3044\u3065\u3089\u3044\n\u653B\u6483+500\n\u30B9\u30AD\u30EB\uFF1A7\u9023\u6483\uFF08CT7\u30010.5\xD77\uFF09"
   icon: {fileID: 0}
   Minfloor: 91
   Minstep: 1
-  Maxfloor: 100
+  Maxfloor: 95
   Maxstep: 20
-  category: 2
+  category: 1
   stackable: 1
   maxStack: 99
   healAmount: 0
@@ -53,9 +53,10 @@ MonoBehaviour:
   eatCuresCharm: 0
   eatCuresCurse: 0
   eatCuresGlass: 0
-  weaponAttribute: 0
-  attackPower: 0
-  skills: []
+  weaponAttribute: 1
+  attackPower: 500
+  skills:
+  - {fileID: 11400000, guid: c3b09d0e4a0f6594fa9f37a2280793fd, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
   weaponInflictDebuff: 0
@@ -74,6 +75,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: 1b1107849c28871478ef3a2c5c49c755, type: 2}
+  magicSkill: {fileID: 0}
   passiveEffects: []
-  sortOrder: 111
+  sortOrder: 56

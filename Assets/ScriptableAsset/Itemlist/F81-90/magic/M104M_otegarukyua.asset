@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: M104M_otegarukyua
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M104M_otegarukyua
-  itemName: "\u304A\u624B\u8EFD\u30AD\u30E5\u30A2"
+  itemName: "\u30AD\u30E5\u30A2"
   description: "MP20\n\u9B45\u4E86\u4EE5\u5916\u56DE\u5FA9"
   icon: {fileID: 0}
   Minfloor: 81

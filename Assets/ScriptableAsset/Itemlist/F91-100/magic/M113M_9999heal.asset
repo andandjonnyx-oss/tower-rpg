@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 129ea6c8762467149acf592f054cab0b, type: 3}
-  m_Name: M111M_dispel
+  m_Name: M113M_9999heal
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemId: M111M_dispel
-  itemName: "\u30C7\u30A3\u30B9\u30DA\u30EB"
-  description: "MP20\n\u6575\u5473\u65B9\u5168\u3066\u306E\u30D0\u30D5\u30C7\u30D0\u30D5\u3092\u6D88\u53BB"
+  itemId: M113M_9999heal
+  itemName: "\u30D5\u30EB\u30EA\u30B9\u30C8\u30A2"
+  description: "MP150\nHP9999+\u9B45\u4E86\u4EE5\u5916\u56DE\u5FA9"
   icon: {fileID: 0}
-  Minfloor: 91
+  Minfloor: 96
   Minstep: 1
   Maxfloor: 100
   Maxstep: 20
@@ -74,6 +74,6 @@ MonoBehaviour:
   baseHitRate: 95
   equipResistances: []
   equipStatusEffectResistances: []
-  magicSkill: {fileID: 11400000, guid: 1b1107849c28871478ef3a2c5c49c755, type: 2}
+  magicSkill: {fileID: 11400000, guid: 2c331d5a76771bc469300f7a95b98c07, type: 2}
   passiveEffects: []
-  sortOrder: 111
+  sortOrder: 113

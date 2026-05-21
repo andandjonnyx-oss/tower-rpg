@@ -98,6 +98,11 @@ public class GameState : MonoBehaviour
     /// </summary>
     public int bossPhaseF70 = 0;
 
+    /// <summary>F90ボス（ダハーカ→アジ・ダハーカ）のフェーズ管理。</summary>
+    public int bossPhaseF90 = 0;
+
+    /// <summary>F100ボス（フェゴール→バアル＝フェゴール）のフェーズ管理。</summary>
+    public int bossPhaseF100 = 0;
 
     // =========================================================
     // 状態異常

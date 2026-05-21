@@ -10,28 +10,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: SA007_bunmawasi
+  m_Name: MA35_ragunaroku
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: SA007_bunmawasi
-  skillName: "\u3076\u3093\u56DE\u3057"
-  description: "\u5927\u632F\u308A\u306E\u653B\u6483\u3002"
-  skillSource: 0
+  skillId: MA35_ragunaroku
+  skillName: "\u30E9\u30B0\u30CA\u30ED\u30AF"
+  description: 
+  skillSource: 1
   actionType: 2
   skillAttribute: 0
-  damageCategory: 0
-  damageMultiplier: 3
+  damageCategory: 1
+  damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
-  cooldownTurns: 3
-  mpCost: 0
-  baseHitRate: 30
+  cooldownTurns: 0
+  mpCost: 200
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
-  multiHitEntries: []
+  multiHitEntries:
+  - attribute: 3
+    damageMultiplier: 10
+    bonusDamage: 0
+  - attribute: 4
+    damageMultiplier: 10
+    bonusDamage: 0
+  - attribute: 5
+    damageMultiplier: 10
+    bonusDamage: 0
+  - attribute: 6
+    damageMultiplier: 10
+    bonusDamage: 0
+  - attribute: 7
+    damageMultiplier: 10
+    bonusDamage: 0
   noBattleOk: 0
   additionalEffects: []
   enemyNextForceSkill: {fileID: 0}

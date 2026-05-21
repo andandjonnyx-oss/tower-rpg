@@ -18,7 +18,7 @@ MonoBehaviour:
   skillSource: 1
   actionType: 2
   skillAttribute: 0
-  damageCategory: 0
+  damageCategory: 1
   damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0

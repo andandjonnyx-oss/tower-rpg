@@ -66,6 +66,8 @@ public static class SaveManager
             data.statusPoint = GameState.I.statusPoint;
             data.gp = GameState.I.gp;
             data.bossPhaseF70 = GameState.I.bossPhaseF70;
+            data.bossPhaseF90 = GameState.I.bossPhaseF90;
+            data.bossPhaseF100 = GameState.I.bossPhaseF100;
 
 
             data.equippedWeaponUid = GameState.I.equippedWeaponUid;
@@ -196,6 +198,8 @@ public static class SaveManager
             GameState.I.statusPoint = data.statusPoint;
             GameState.I.gp = data.gp;
             GameState.I.bossPhaseF70 = data.bossPhaseF70;
+            GameState.I.bossPhaseF90 = data.bossPhaseF90;
+            GameState.I.bossPhaseF100 = data.bossPhaseF100;
 
 
             GameState.I.equippedWeaponUid = data.equippedWeaponUid ?? "";
@@ -297,6 +301,8 @@ public class SaveData
     public int statusPoint = 10;
     public int gp = 0;
     public int bossPhaseF70 = 0;
+    public int bossPhaseF90 = 0;
+    public int bossPhaseF100 = 0;
 
 
     // --- ‘•”õ ---

@@ -508,9 +508,18 @@ public partial class BattleSceneController : MonoBehaviour
             // フェーズフラグを1に更新してセーブ（アイテム状態も保存）
             // F70のフィールド名はBossEntryのphase2StateFieldから取得すべきだが、
             // ここではBossFloorから判定する
+            // フェーズフラグを1に更新してセーブ（アイテム状態も保存）
             if (BattleContext.BossFloor == 70)
             {
                 GameState.I.bossPhaseF70 = 1;
+            }
+            else if (BattleContext.BossFloor == 90)
+            {
+                GameState.I.bossPhaseF90 = 1;
+            }
+            else if (BattleContext.BossFloor == 100)
+            {
+                GameState.I.bossPhaseF100 = 1;
             }
             SaveManager.Save();
 
@@ -656,6 +665,14 @@ public partial class BattleSceneController : MonoBehaviour
                 if (bossFloor == 70)
                 {
                     GameState.I.bossPhaseF70 = 2;
+                }
+                else if (bossFloor == 90)
+                {
+                    GameState.I.bossPhaseF90 = 2;
+                }
+                else if (bossFloor == 100)
+                {
+                    GameState.I.bossPhaseF100 = 2;
                 }
             }
 

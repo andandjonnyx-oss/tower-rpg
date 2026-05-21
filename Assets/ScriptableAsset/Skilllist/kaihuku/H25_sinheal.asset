@@ -10,30 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68d9de3e8536a094b981dea0a2aca625, type: 3}
-  m_Name: SA007_bunmawasi
+  m_Name: H25_sinheal
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillId: SA007_bunmawasi
-  skillName: "\u3076\u3093\u56DE\u3057"
-  description: "\u5927\u632F\u308A\u306E\u653B\u6483\u3002"
-  skillSource: 0
+  skillId: H25_sinheal
+  skillName: "\u30B7\u30F3\u30FB\u30D2\u30FC\u30EB"
+  description: 
+  skillSource: 1
   actionType: 2
   skillAttribute: 0
   damageCategory: 0
-  damageMultiplier: 3
+  damageMultiplier: 0
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
-  cooldownTurns: 3
-  mpCost: 0
-  baseHitRate: 30
+  cooldownTurns: 0
+  mpCost: 100
+  baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
   multiHitEntries: []
-  noBattleOk: 0
-  additionalEffects: []
+  noBattleOk: 1
+  additionalEffects:
+  - effectData: {fileID: 11400000, guid: 46d69ad8833dbf14eb0091f4ef76c824, type: 2}
+    ailmentMode: 0
+    targetStatusEffect: 0
+    chance: 100
+    intValue: 2000
+    duration: 0
   enemyNextForceSkill: {fileID: 0}
   rerollCondition: 0
   rerollHpThreshold: 0.5
