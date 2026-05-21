@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BOSS_F90_VICTORY
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: BOSS_F90_VICTORY
-  zukanTitle: 
+  zukanTitle: "\u4E0D\u81EA\u7136\u306A\u6C37\u8010\u6027-200\u3067\u5BDF\u3057\u305F\u304B\uFF1F"
   floor: 0
   step: 0
   backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
@@ -31,3 +31,5 @@ MonoBehaviour:
   randomWeight: 0
   exclusiveIds: []
   rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

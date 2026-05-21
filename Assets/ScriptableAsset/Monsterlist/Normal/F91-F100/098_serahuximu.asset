@@ -22,30 +22,34 @@ MonoBehaviour:
   Weight: 1
   IsBoss: 0
   IsUnique: 0
-  MaxHp: 0
-  Attack: 0
-  Defense: 0
-  MagicDefense: 0
+  MaxHp: 6000
+  Attack: 700
+  Defense: 700
+  MagicDefense: 700
   Speed: 0
-  Luck: 0
-  Evasion: 0
+  Luck: 500
+  Evasion: 3000
   BaseHitRate: 90
-  PoisonResistance: 0
-  StunResistance: 0
-  ParalyzeResistance: 0
-  BlindResistance: 0
+  PoisonResistance: 50
+  StunResistance: 50
+  ParalyzeResistance: 50
+  BlindResistance: 50
   RageResistance: 0
-  SilenceResistance: 0
-  PetrifyResistance: 0
-  DebuffResistance: 0
-  CharmResistance: 0
-  CurseResistance: 0
-  GlassResistance: 0
+  SilenceResistance: 50
+  PetrifyResistance: 50
+  DebuffResistance: 50
+  CharmResistance: 50
+  CurseResistance: 50
+  GlassResistance: 50
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
-  attributeResistances: []
-  Exp: 0
+  attributeResistances:
+  - attribute: 3
+    value: 100
+  - attribute: 6
+    value: 100
+  Exp: 3500
   Gold: 0
   dropItem: {fileID: 0}
   dropRate: 0
@@ -53,8 +57,22 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
-  Help: 
-  actions: []
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
+  Help: "\u30BB\u30E9\u30D5\u30A3\u30E0\u3002\u3081\u3063\u3061\u3083\u5049\u3044\u5929\u4F7F\u3002\n\u307E\u3041\u3053\u3053\u3067\u306F\u79C1\u306E\u65B9\u304C\u5049\u3044\u3051\u3069\u306A\uFF01"
+  actions:
+  - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}
+    threshold: 25
+  - skill: {fileID: 11400000, guid: 5f16bb4b365c9cd4d92cefae0b354b1e, type: 2}
+    threshold: 50
+  - skill: {fileID: 11400000, guid: b5a8631ebdf8a6144a40554663c370d2, type: 2}
+    threshold: 75
+  - skill: {fileID: 11400000, guid: 982349841084bf241a3270b15f528844, type: 2}
+    threshold: 85
+  - skill: {fileID: 11400000, guid: adce48c3481013c4dad1e14b510c173e, type: 2}
+    threshold: 95
+  - skill: {fileID: 11400000, guid: 6a3a7a322b5de3345923e38f35d12518, type: 2}
+    threshold: 100
   baseActionRange: 100
   actionCount: 1
   lowHpThreshold: 0

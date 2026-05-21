@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M106_ribon
   itemName: "\u30EA\u30DC\u30F3"
-  description: "\u7537\u3060\u3063\u3066\u30EA\u30DC\u30F3\u3064\u3051\u3066\u3082\u3044\u3044\u3060\u308D\uFF01\n\u5168\u72B6\u614B\u7570\u5E38\u8010\u6027+50"
+  description: "\u7537\u3060\u3063\u3066\u30EA\u30DC\u30F3\u3064\u3051\u3066\u3082\u3044\u3044\u3060\u308D\uFF01\n\u5168\u72B6\u614B\u7570\u5E38\u8010\u6027+25"
   icon: {fileID: 0}
   Minfloor: 86
   Minstep: 1
@@ -80,54 +80,54 @@ MonoBehaviour:
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 1
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 2
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 4
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 5
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 20
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 21
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 22
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 23
-    value: 50
+    value: 25
     floatValue: 0
   - effectType: 10
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 24
-    value: 50
+    value: 25
     floatValue: 0
   sortOrder: 106

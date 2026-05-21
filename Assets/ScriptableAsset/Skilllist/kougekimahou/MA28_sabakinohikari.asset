@@ -15,7 +15,7 @@ MonoBehaviour:
   skillId: MA28_sabakinohikari
   skillName: "\u88C1\u304D\u306E\u5149"
   description: 
-  skillSource: 0
+  skillSource: 1
   actionType: 2
   skillAttribute: 6
   damageCategory: 1

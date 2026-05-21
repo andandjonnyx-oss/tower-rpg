@@ -39,8 +39,8 @@ MonoBehaviour:
   PetrifyResistance: 100
   DebuffResistance: 100
   CharmResistance: 100
-  CurseResistance: 0
-  GlassResistance: 0
+  CurseResistance: 100
+  GlassResistance: 100
   immuneToAllAilments: 0
   isGirl: 1
   acceptsFeedItem: 0
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u4E2D\u30DC\u30B9\u3068\u3057\u3066\u767B\u5834\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 965f79d602980f44fafed02ea330cafc, type: 2}
