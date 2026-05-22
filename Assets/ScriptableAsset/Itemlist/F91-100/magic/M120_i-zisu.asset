@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M120_i-zisu
   itemName: "\u30A4\u30FC\u30B8\u30B9"
-  description: "\u3059\u3054\u3044\u76FE\n\u6BB4\u65AC\u8010\u6027+30"
+  description: "\u3059\u3054\u3044\u76FE\n\u6BB4\u65AC\u7A81\u8010\u6027+30"
   icon: {fileID: 0}
   Minfloor: 96
   Minstep: 1
