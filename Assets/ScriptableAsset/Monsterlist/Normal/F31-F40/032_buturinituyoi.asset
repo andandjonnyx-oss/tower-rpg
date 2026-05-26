@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 032_buturinituyoi
   Mname: "\u30D6\u30C4\u30EA\u30CB\u30C4\u30E8\u30A4\u30E4\u30C4"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 161afc837c4da2c45938d59937c44726, type: 3}
   Minfloor: 31
   Minstep: 1
   Maxfloor: 35
@@ -38,7 +38,11 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 0
   DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances:
   - attribute: 0
@@ -55,6 +59,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u7269\u7406\u306B\u5F37\u3044\u305C\uFF01\n\u3067\u3082\u9B54\u6CD5\u304C\u5F31\u70B9\u3068\u304B\u305D\u3046\u3044\u3046\u308F\u3051\u3067\u306F\u306A\u3044\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: b71a716476ccccc43b9cd1215d1478ff, type: 2}
@@ -64,3 +70,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 1dd7478ca49f62d45a04c65a67e18f70, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 030_dokuhametu
   Mname: "\u6BD2\u3068\u7834\u6EC5\u306E\u4F7F\u5F92"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 63c3f6dfb4d847147995789447771686, type: 3}
   Minfloor: 30
   Minstep: 1
   Maxfloor: 30
@@ -36,7 +36,14 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 100
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 1000
   Gold: 0
@@ -44,6 +51,10 @@ MonoBehaviour:
   dropRate: 1
   autoRegenEnabled: 0
   autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u6BD2\u8010\u6027\u304C\u5B8C\u5168\u306B\u3042\u308C\u3070\u7D76\u5BFE\u8CA0\u3051\u306A\u3044\u3093\u3060\u304C\u306A\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: b97ec861b7f638a4d9087a6611d963b4, type: 2}
@@ -51,3 +62,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 267a186e87604b44daccd971bf49966e, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

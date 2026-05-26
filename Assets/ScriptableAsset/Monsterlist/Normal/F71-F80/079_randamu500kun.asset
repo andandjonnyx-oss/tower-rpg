@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 079_randamu500kun
   Mname: "1\u304B\u3089500\u30C0\u30E1\u30FC\u30B8\u304F\u3093\uFF08\u9632\u5FA1\u8CAB\u901A\uFF09"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 5e32c65e2606dc7428b6212216f4a760, type: 3}
   Minfloor: 76
   Minstep: 1
   Maxfloor: 80
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u540D\u524D\u306B\uFF08\uFF09\u3064\u3051\u308B\u306A\u3093\u3066\u975E\u5E38\u8B58\u306A\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: c1ef49273d471ef489c67de92b483603, type: 2}

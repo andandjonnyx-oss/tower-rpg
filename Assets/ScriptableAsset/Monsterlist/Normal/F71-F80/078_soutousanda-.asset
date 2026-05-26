@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 078_soutousanda-
   Mname: "\u30C0\u30D6\u30EB\u30B5\u30F3\u30C0\u30FC\u30C9\u30E9\u30B4\u30F3"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: bdd7711cf1466d1409f5a18b263c846b, type: 3}
   Minfloor: 76
   Minstep: 1
   Maxfloor: 80
@@ -55,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u76F8\u5F53\u5F37\u3044\u30B5\u30F3\u30C0\u30FC\u30C9\u30E9\u30B4\u30F3"
   actions:
   - skill: {fileID: 11400000, guid: e759319772bc5994984585d6db1c1fce, type: 2}

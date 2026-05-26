@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 006_ork
   Mname: "\u30AA\u30FC\u30AF"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 6683000a7cd0b354ab061dfbf8f0cb07, type: 3}
   Minfloor: 4
   Minstep: 1
   Maxfloor: 8
@@ -31,9 +31,30 @@ MonoBehaviour:
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 60
   Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30AA\u30FC\u30AF\uFF08\u82F1: oak\u3001\u4ECF: ch\xEAne\u3001\u72EC: Eiche\uFF09\u306F\u3001\u30D6\u30CA\u79D1
     \u30B3\u30CA\u30E9\u5C5E\uFF08\u5B66\u540D\uFF1AQuercus\uFF09\u306E\u690D\u7269\u306E\u7DCF\u79F0\u3002\n\u4E3B\u306B\u843D\u8449\u6A39\u3067\u3042\u308B\u30CA\u30E9\uFF08\u6962\uFF09\u306E\u7DCF\u79F0\u3002"
   actions:
@@ -42,3 +63,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 7688af8c2c2ec034ba7404461169248b, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

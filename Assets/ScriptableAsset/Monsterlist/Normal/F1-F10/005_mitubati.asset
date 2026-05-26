@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 005_mitubati
   Mname: "\u30DF\u30C4\u30D0\u30C1"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 5efcd38136f40d34ebce4f5b6eb518ca, type: 3}
   Minfloor: 4
   Minstep: 1
   Maxfloor: 8
@@ -32,6 +32,18 @@ MonoBehaviour:
   BaseHitRate: 90
   PoisonResistance: 100
   StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: 50
@@ -39,6 +51,12 @@ MonoBehaviour:
   Gold: 0
   dropItem: {fileID: 11400000, guid: 60179f5ec72397b4ebced6af31965555, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u907F\u3051\u308B\u3057\u706B\u306B\u306F\u5F37\u3044\u3057\u6BD2\u3042\u308B\u3057\u5384\u4ECB\u3060\u306A\uFF01\n\u3067\u3082\u81EA\u7206\u3057\u3066\u3082\u7D4C\u9A13\u5024\u304C\u5165\u308B\u3060\u3051\u3042\u308A\u304C\u305F\u3044\u3088\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -46,3 +64,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: dfeca690c7dda9042ab161e16f6c0ef8, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

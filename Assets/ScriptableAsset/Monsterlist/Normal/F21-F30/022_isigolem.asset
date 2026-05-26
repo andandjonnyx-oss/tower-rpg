@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 022_isigolem
   Mname: "\u30B9\u30C8\u30FC\u30F3\u30B4\u30FC\u30EC\u30E0"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 90acbf2a0e3109d4da6441504e8059be, type: 3}
   Minfloor: 21
   Minstep: 1
   Maxfloor: 25
@@ -36,7 +36,14 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 1
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 0
     value: -200
@@ -48,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u3076\u3093\u56DE\u3057\u304C\u5F53\u305F\u3063\u305F\u3089\u304B\u306A\u308A\u3084\u3070\u3044\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
@@ -57,3 +66,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 7688af8c2c2ec034ba7404461169248b, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

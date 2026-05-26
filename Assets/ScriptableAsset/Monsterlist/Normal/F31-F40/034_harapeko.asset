@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 034_harapeko
   Mname: "\u306F\u3089\u307A\u3053\u30A2\u30AA\u30B1\u30E0\u30B7"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: b3da07b94ebe802439483d1aa7b50944, type: 3}
   Minfloor: 34
   Minstep: 1
   Maxfloor: 38
@@ -38,7 +38,11 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 0
   DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances: []
   Exp: 800
@@ -49,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u898B\u305F\u76EE\u304B\u3089\u60F3\u50CF\u51FA\u6765\u306A\u3044\u7D20\u65E9\u3055\u3067\n\u9053\u5177\u888B\u306E\u4E2D\u8EAB\u3092\u98DF\u3044\u8352\u3089\u3059\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -56,3 +62,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 328878645e85c734cb6a3692527f174a, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 059_mpkarasukun
   Mname: "MP\u67AF\u3089\u3059\u304F\u3093"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: df20c1b3ff746414d806a0192eb898f2, type: 3}
   Minfloor: 56
   Minstep: 1
   Maxfloor: 60
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "MP\u56DE\u5FA9\u85AC\u306F\u5E38\u5099\u3057\u3066\u304A\u304D\u305F\u3044\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: b82ae25a62bdc704ca961477d99fe7b8, type: 2}

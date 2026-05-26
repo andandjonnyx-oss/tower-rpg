@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 015_koumori
   Mname: "\u8759\u8760"
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 0f02b3d094f0688449ee44d73cf17bf6, type: 3}
   Minfloor: 14
   Minstep: 1
   Maxfloor: 18
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u3053\u3046\u3082\u308A\u3063\u3066\u8AAD\u3080\u3093\u3060\u305C\uFF01\n\u307E\u3041\u30B0\u30E9\u30D5\u30A3\u30C3\u30AF\u898B\u308A\u3083\u308F\u304B\u308B\u3088\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 57b6369860a51de4ebd9e938fa462269, type: 2}

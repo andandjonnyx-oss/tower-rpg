@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 036_thunderd
   Mname: "\u30B5\u30F3\u30C0\u30FC\u30C9\u30E9\u30B4\u30F3"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 6f8c09a0aaf6a9b44b7ad9864862fdb9, type: 3}
   Minfloor: 34
   Minstep: 1
   Maxfloor: 38
@@ -38,7 +38,11 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 0
   DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances:
   - attribute: 5
@@ -51,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u672C\u5F53\u306E\u96F7\u9F8D"
   actions:
   - skill: {fileID: 11400000, guid: e759319772bc5994984585d6db1c1fce, type: 2}
@@ -60,3 +66,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 0b70eccc0a0ee3b4db0bd73baeb6267c, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

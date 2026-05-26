@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: 017_minaraiwitch
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 017_minaraiwitch
-  Mname: "\u898B\u7FD2\u3044\u30A6\u30A3\u30C3\u30C1"
-  Image: {fileID: 0}
+  Mname: "\u898B\u7FD2\u3044\u30DE\u30FC\u30B8"
+  Image: {fileID: 21300000, guid: b99b4e2f8ec52ed4b964ea2e7bf02355, type: 3}
   Minfloor: 16
   Minstep: 1
   Maxfloor: 20
@@ -36,12 +36,25 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 1
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 300
   Gold: 0
   dropItem: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u904B\u304C\u60AA\u3044\u3068\u5927\u9B54\u6CD5\u3092\u653E\u3063\u3066\u304F\u308B\u305E\uFF01\n\u521D\u671F\u30B9\u30C6\u30FC\u30BF\u30B9\u306F\u3084\u3081\u3068\u3051\u3088\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: c4c0c8402cf2d8743be903e2ae11aa4d, type: 2}
@@ -51,3 +64,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: f892bdb9bb1ad2d4d8ef3da3b0708f35, type: 2}
     threshold: 120
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

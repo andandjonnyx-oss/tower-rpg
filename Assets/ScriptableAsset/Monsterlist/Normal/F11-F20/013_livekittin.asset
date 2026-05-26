@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 013_livekittin
   Mname: "\u30EA\u30D3\u30F3\u30B0\u30C6\u30FC\u30D6\u30EB"
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 7a00ab80cd4ec2d4b8d5c2e74139def0, type: 3}
   Minfloor: 11
   Minstep: 1
   Maxfloor: 15
@@ -35,11 +35,26 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 200
   Gold: 0
   dropItem: {fileID: 11400000, guid: a83de589a04330746a0f16921a27f96f, type: 2}
   dropRate: 0.2
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u610F\u5916\u3068\u3053\u3046\u3044\u3046\u30AE\u30E3\u30B0\u3067\u4F5C\u3063\u305F\u6575\u304C\n\u30D0\u30E9\u30F3\u30B9\u5D29\u58CA\u3057\u3066\u308B\u3093\u3060\u3088\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -49,3 +64,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 327977218923a8e42ba1162712b26c24, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

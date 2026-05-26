@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 039_roguumetukusukun
   Mname: "\u30ED\u30B0\u57CB\u3081\u5C3D\u304F\u3059\u304F\u3093"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: d373e4931aa91a54e9714ad50f0b353f, type: 3}
   Minfloor: 36
   Minstep: 1
   Maxfloor: 40
@@ -38,7 +38,11 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 0
   DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances: []
   Exp: 1000
@@ -49,8 +53,15 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u9632\u5FA1\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u4F59\u88D5\u3060\u3051\u3069\n\u6226\u95D8\u306E\u30C6\u30F3\u30DD\u304C\u60AA\u304F\u306A\u308B\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 8e3b389368ab0594d8d4eb530c424341, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

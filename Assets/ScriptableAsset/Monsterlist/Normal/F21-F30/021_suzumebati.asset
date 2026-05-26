@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 021_suzumebati
   Mname: "\u30B9\u30BA\u30E1\u30D0\u30C1"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 7dcbcf5773e89f042907d528be2be7ff, type: 3}
   Minfloor: 21
   Minstep: 1
   Maxfloor: 25
@@ -36,7 +36,14 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: -200
@@ -48,6 +55,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u540D\u524D\u306F\u53EF\u611B\u3044\u3093\u3060\u3051\u3069\u306A\u2026\u2026"
   actions:
   - skill: {fileID: 11400000, guid: 34610928f42df9e47b25c0ec26de01b2, type: 2}
@@ -57,3 +66,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 9afb25264874ec142bc31a951c96a2d0, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 004_zonbie
   Mname: "\u30BE\u30F3\u30D3"
-  Image: {fileID: -688642859534287020, guid: 9bd54ecd20c945045ac4f2d2aa882346, type: 3}
+  Image: {fileID: 21300000, guid: ad625df52004f9e48ac2ec39f21eed90, type: 3}
   Minfloor: 4
   Minstep: 1
   Maxfloor: 8
@@ -31,11 +31,32 @@ MonoBehaviour:
   Evasion: 0
   BaseHitRate: 90
   PoisonResistance: 100
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: -400
   Exp: 50
   Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30BE\u30F3\u30D3\u306F\u706B\u306B\u5F31\u3044\u3063\u3066\u8A00\u3046\u3051\u3069\u3001\n\u7D20\u4F53\u306E\u4EBA\u9593\u3060\u3063\u3066\u706B\u306B\u5F31\u3044\u3060\u308D\uFF01\uFF1F\u3000\u7D0D\u5F97\u3044\u304B\u306D\u30FC\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: eb1437a0858ea75419e001348e877a8b, type: 2}
@@ -43,3 +64,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

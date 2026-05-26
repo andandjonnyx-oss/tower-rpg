@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 011_livesword
   Mname: "\u30EA\u30D3\u30F3\u30B0\u30BD\u30FC\u30C9"
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: 21e02978212a61b4295f05bd77b63565, type: 3}
   Minfloor: 11
   Minstep: 1
   Maxfloor: 15
@@ -36,7 +36,14 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 200
   Gold: 0
@@ -44,8 +51,17 @@ MonoBehaviour:
   dropRate: 0.2
   autoRegenEnabled: 0
   autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "11\u968E\u306E\u6D17\u793C\u3063\u3066\u3084\u3064\u3060\uFF01\nDEX\u304C\u3042\u308B\u7A0B\u5EA6\u3042\u308C\u3070\u3044\u3044\u30AB\u30E2\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

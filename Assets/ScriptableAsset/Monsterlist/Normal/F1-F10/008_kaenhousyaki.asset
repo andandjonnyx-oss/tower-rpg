@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 008_kaenhousyaki
   Mname: "\u706B\u708E\u653E\u5C04\u5668"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 9b58f6055526d364287d86d536249492, type: 3}
   Minfloor: 6
   Minstep: 1
   Maxfloor: 10
@@ -35,7 +35,15 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 1
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
     value: 100
@@ -45,8 +53,19 @@ MonoBehaviour:
   Gold: 0
   dropItem: {fileID: 11400000, guid: 2f3f9f7120f17dc42a575d336b97b5b8, type: 2}
   dropRate: 0.1
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u5263\u3068\u9B54\u6CD5\u306E\u30D5\u30A1\u30F3\u30BF\u30B8\u30FC\u4E16\u754C\u306B\u6A5F\u68B0\u3092\u51FA\u3059\u306A\u3063\u3066\uFF1F\n\u305D\u308C\u306F\u8A00\u308F\u306A\u3044\u7D04\u675F\u3060\u308D\uFF01\uFF1F"
   actions:
   - skill: {fileID: 11400000, guid: 5f16bb4b365c9cd4d92cefae0b354b1e, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

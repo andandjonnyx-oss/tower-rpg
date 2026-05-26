@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 020_metalslime
   Mname: "\u30B7\u30EB\u30D0\u30FC\u30B9\u30E9\u30A4\u30E0"
-  Image: {fileID: 0}
+  Image: {fileID: 21300000, guid: df6fac811dcf8624f80718ff055db4cb, type: 3}
   Minfloor: 20
   Minstep: 1
   Maxfloor: 20
@@ -35,12 +35,26 @@ MonoBehaviour:
   ParalyzeResistance: 0
   BlindResistance: 0
   RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 1
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances: []
   Exp: 2000
   Gold: 0
   dropItem: {fileID: 11400000, guid: 6dc1d67129ce4f04b94fa6d0e819f9e0, type: 2}
   dropRate: 1
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u9003\u3052\u306A\u3044\u304B\u3089\u5B89\u5FC3\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -48,3 +62,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 4a23b8c8973c89c40a9431bfea279b8f, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0
