@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4fd37f875fbe6f44a4a2b3404468d32, type: 3}
+  m_Name: F080B_tisiki2
+  m_EditorClassIdentifier: Assembly-CSharp::Monster
+  ID: F080B_tisiki2
+  Mname: "\u30B7\u30F3\u30FB\u77E5\u8B58\u306E\u756A\u4EBA"
+  Image: {fileID: 21300000, guid: 70028ab9d4e7bd94e82b49138d70408c, type: 3}
+  Minfloor: 0
+  Minstep: 0
+  Maxfloor: 0
+  Maxstep: 0
+  Weight: 1
+  IsBoss: 1
+  IsUnique: 0
+  MaxHp: 20000
+  Attack: 0
+  Defense: 1000
+  MagicDefense: 1000
+  Speed: 0
+  Luck: 1
+  Evasion: 2000
+  BaseHitRate: 90
+  PoisonResistance: 0
+  StunResistance: 0
+  ParalyzeResistance: 0
+  BlindResistance: 0
+  RageResistance: 0
+  SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
+  immuneToAllAilments: 1
+  isGirl: 0
+  acceptsFeedItem: 0
+  attributeResistances: []
+  Exp: 30000
+  Gold: 0
+  dropItem: {fileID: 0}
+  dropRate: 0
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 1
+  quizDatabase: {fileID: 11400000, guid: fcb7a858a03712f409ccc8ab2ae95a3d, type: 2}
+  quizCorrectToWin: 30
+  quizMaxWrong: 5
+  Help: "\u77E5\u8B58\u306E\u7121\u3055\u306F\u529B\u3067\u30AB\u30D0\u30FC\u3060\u305C\uFF01"
+  actions: []
+  baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

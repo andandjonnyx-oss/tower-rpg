@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 053_sgob
   Mname: "\u30B9\u30FC\u30D1\u30FC\u30B4\u30D6\u30EA\u30F3"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: a63bd6433fc63cf4daacfe9338847b2d, type: 3}
   Minfloor: 51
   Minstep: 1
   Maxfloor: 55
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u5F8C\u534A\u306B\u306A\u308B\u3068\u3001\u6575\u306E\u5F37\u6483\u3068\u304B\u304C\u304D\u3064\u3044\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 1dad5af4470d75341970a4b59e2620b3, type: 2}

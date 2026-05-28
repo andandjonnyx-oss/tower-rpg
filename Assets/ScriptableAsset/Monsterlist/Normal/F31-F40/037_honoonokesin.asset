@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 037_honoonokesin
   Mname: "\u708E\u306E\u5316\u8EAB"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 5feeb0612894d2d4fb13686fa0282d77, type: 3}
   Minfloor: 36
   Minstep: 1
   Maxfloor: 40
@@ -38,7 +38,11 @@ MonoBehaviour:
   SilenceResistance: 0
   PetrifyResistance: 0
   DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 0
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances:
   - attribute: 3
@@ -53,6 +57,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u3053\u3046\u3044\u3046\u6575\u3092\u4F5C\u3063\u3066\u304B\u3089\u3001\n\u300C\u3042\u3001\u3058\u3083\u3042\u65B0\u3057\u3044\u6C37\u9B54\u6CD5\u3082\u3053\u306E\u8FBA\u3067\u8FFD\u52A0\u3057\u306A\u304D\u3083\u300D\n\u3063\u3066\u306A\u3063\u3061\u3083\u3046\u306E\u306F\u306A\u3093\u3060\u304B\u306A\u3041\u3063\u3066\u601D\u3046\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 963d58ed43f200d4b800ec57abba9462, type: 2}
@@ -62,3 +68,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 4a6769b59eb409a4a9c35760150f2344, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

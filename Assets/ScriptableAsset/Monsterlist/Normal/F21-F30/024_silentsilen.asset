@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 024_silentsilen
   Mname: "\u30B5\u30A4\u30EC\u30F3\u30C8\u30B5\u30A4\u30EC\u30F3"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 371c051d1bee4704995225e553e7161e, type: 3}
   Minfloor: 24
   Minstep: 1
   Maxfloor: 28
@@ -36,7 +36,14 @@ MonoBehaviour:
   BlindResistance: 0
   RageResistance: 0
   SilenceResistance: 0
+  PetrifyResistance: 0
+  DebuffResistance: 0
+  CharmResistance: 0
+  CurseResistance: 0
+  GlassResistance: 0
   immuneToAllAilments: 1
+  isGirl: 0
+  acceptsFeedItem: 0
   attributeResistances:
   - attribute: 5
     value: -200
@@ -44,6 +51,12 @@ MonoBehaviour:
   Gold: 0
   dropItem: {fileID: 11400000, guid: b7907cd22fe56264d86ecbd49762b3c4, type: 2}
   dropRate: 0.5
+  autoRegenEnabled: 0
+  autoRegenAmount: 0
+  isQuizBoss: 0
+  quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30B5\u30A4\u30EC\u30F3\u3092\u9CF4\u3089\u3059\u3051\u3069\u30DF\u30E5\u30FC\u30C8\u72B6\u614B\u3060\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 524be5b5771dde540bc23670dd12a62d, type: 2}
@@ -51,3 +64,8 @@ MonoBehaviour:
   - skill: {fileID: 11400000, guid: 70f79c1f50d5d7041a81fec5ddb6b265, type: 2}
     threshold: 100
   baseActionRange: 100
+  actionCount: 1
+  lowHpThreshold: 0
+  lowHpActions: []
+  lowHpBaseActionRange: 0
+  lowHpActionCount: 0

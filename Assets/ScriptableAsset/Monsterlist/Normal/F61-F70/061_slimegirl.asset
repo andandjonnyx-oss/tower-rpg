@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 061_slimegirl
   Mname: "\u30B9\u30E9\u30A4\u30E0\u30AC\u30FC\u30EB"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 9646055da9f829c4a9ea7422817618d2, type: 3}
   Minfloor: 61
   Minstep: 1
   Maxfloor: 65
@@ -57,6 +57,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30AA\u30B9\u306E\u30B9\u30E9\u30A4\u30E0\u3092\u898B\u305F\u4E8B\u304C\u7121\u3044\u3093\u3060\u3088\u306A\u2026\u2026\n\u30B9\u30E9\u30A4\u30E0\u3063\u3066\u5168\u90E8\u30E1\u30B9\u306A\u306E\u304B\uFF1F"
   actions:
   - skill: {fileID: 11400000, guid: f6d23d3909689bf43856126186e44b82, type: 2}

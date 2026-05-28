@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 069_minotaurosu
   Mname: "\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 79fabf804acb20c4ca2de4f2dca7e8e5, type: 3}
   Minfloor: 66
   Minstep: 1
   Maxfloor: 70
@@ -53,6 +53,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u6012\u308A\u304B\u3089\u306E\u3076\u3093\u56DE\u3057\u304C\u5F53\u305F\u3063\u305F\u3089\u5373\u6B7B\u30EC\u30D9\u30EB\u3060\u304B\u3089\u6C17\u3092\u3064\u3051\u308D\u3088\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 2e8d8017b79d2c147a90a39591748237, type: 2}

@@ -30,7 +30,7 @@ MonoBehaviour:
   baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
-  hitCount: 1
+  hitCount: 8
   multiHitEntries:
   - attribute: 0
     damageMultiplier: 0.4

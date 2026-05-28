@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 055_akumanokagami
   Mname: "\u30C7\u30D3\u30EB\u30DF\u30E9\u30FC"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: dda14ae8e4431904cb1db26a24c4354a, type: 3}
   Minfloor: 54
   Minstep: 1
   Maxfloor: 58
@@ -59,6 +59,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u6B63\u9762\u306B\u3044\u308B\u3053\u306E\u93E1\u306B\u304A\u524D\u306E\u59FF\u306F\u6620\u3089\u306A\u3044\u3057\n\u4F1A\u8A71\u30A4\u30D9\u30F3\u30C8\u3067\u3082\u304A\u524D\u306E\u59FF\u306F\u6620\u3089\u306A\u3044\n\u304A\u524D\u306F\u672C\u5F53\u306B\u5B9F\u5728\u3057\u3066\u3044\u308B\u306E\u304B\uFF1F"
   actions:
   - skill: {fileID: 11400000, guid: 19878a06d0cd6b64c8ca19ca929e240a, type: 2}

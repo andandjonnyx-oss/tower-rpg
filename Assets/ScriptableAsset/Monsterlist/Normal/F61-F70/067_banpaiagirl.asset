@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 067_banpaiagirl
   Mname: "\u30D0\u30F3\u30D1\u30A4\u30A2\u30AC\u30FC\u30EB"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 644e46ddf24edbc428bfd6eef0bc691b, type: 3}
   Minfloor: 66
   Minstep: 1
   Maxfloor: 70
@@ -57,6 +57,8 @@ MonoBehaviour:
   autoRegenAmount: 0
   isQuizBoss: 0
   quizDatabase: {fileID: 0}
+  quizCorrectToWin: 10
+  quizMaxWrong: 3
   Help: "\u30D7\u30E9\u30A4\u30C9\u304C\u9AD8\u304F\u3001\u30D0\u30C3\u30C8\u30AC\u30FC\u30EB\u3068\u4E00\u7DD2\u306B\u3055\u308C\u308B\u306E\u3092\u5ACC\u304C\u308B\u3002\n\u3057\u304B\u3057\u706B\u306B\u3082\u5F31\u3051\u308C\u3070\u6C34\u306B\u3082\u5F31\u3044\u3002"
   actions:
   - skill: {fileID: 11400000, guid: 35cb4332f75d8e04fa6e796e60a807b2, type: 2}

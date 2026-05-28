@@ -42,7 +42,7 @@ MonoBehaviour:
   CurseResistance: 0
   GlassResistance: 0
   immuneToAllAilments: 0
-  isGirl: 1
+  isGirl: 0
   acceptsFeedItem: 0
   attributeResistances: []
   Exp: 300

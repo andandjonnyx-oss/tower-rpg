@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: 091_ouryuu
   Mname: "\u9EC4\u9F8D"
-  Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  Image: {fileID: 21300000, guid: 06a3270942bfd124095e2bb1822e02a1, type: 3}
   Minfloor: 90
   Minstep: 1
   Maxfloor: 90
