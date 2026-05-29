@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
   m_Name: 2Q 1
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
-  questionText: "\u306F\u3089\u307A\u3053\u3042\u304A\u3080\u3057\u304C\n\u6700\u7D42\u7684\u306B\u306A\u3063\u305F\u306E\u306F\uFF1F"
+  questionText: "\u306F\u3089\u307A\u3053\u3042\u304A\u3080\u3057\u304C\n\u6700\u7D42\u7684\u306B\u306A\u3063\u305F\u306E\u306F\uFF1F\nA:Butterfly\nB:Butterfry"
   choiceA: Butterfly
   choiceB: Butterfry
   correctAnswer: 0
