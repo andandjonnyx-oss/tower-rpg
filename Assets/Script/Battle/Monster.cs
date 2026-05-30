@@ -14,6 +14,7 @@ public class Monster : ScriptableObject
     [Header("Image")]
     public Sprite Image;
 
+
     [Header("Range")]
     public int Minfloor;
     public int Minstep;

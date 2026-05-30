@@ -261,6 +261,37 @@ public partial class BattleSceneController : MonoBehaviour
         {
             enemyImage.sprite = enemyMonster.Image;
             enemyImage.preserveAspect = true;
+
+            // =========================================================
+            // バトル中の素材アスペクト比対応（追加）
+            // =========================================================
+            // 素材のアスペクト比に応じて RectTransform の Width を自動調整する。
+            // これにより、横長素材（例: 1200×600）と正方形素材（600×600）が
+            // 「同じ縮尺（1pxあたり同じ表示サイズ）」で表示される。
+            //
+            //   600×600  → Width=600,  Height=600 （正方形、変化なし）
+            //   1200×600 → Width=1200, Height=600 （横長、左右に広がる）
+            //   1800×600 → Width=1800, Height=600 （超横長）
+            //
+            // 図鑑等では Sprite 単体表示で preserveAspect=true により
+            // 正方形枠内に縦横比保持で収まる（既存挙動を維持）。
+            // =========================================================
+            if (enemyMonster.Image != null)
+            {
+                RectTransform rt = enemyImage.rectTransform;
+                float baseHeight = rt.sizeDelta.y;
+
+                // テクスチャの実ピクセルサイズを使う（トリミングの影響を受けない）
+                float spriteW = enemyMonster.Image.texture.width;
+                float spriteH = enemyMonster.Image.texture.height;
+
+                if (spriteH > 0f)
+                {
+                    float aspectRatio = spriteW / spriteH;
+                    float newWidth = baseHeight * aspectRatio;
+                    rt.sizeDelta = new Vector2(newWidth, baseHeight);
+                }
+            }
         }
 
         equippedWeaponItem = GetEquippedWeaponItem();
