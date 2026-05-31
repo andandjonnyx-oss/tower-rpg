@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: C011_kaminaribom
   itemName: "\u30B5\u30F3\u30C0\u30FC\u30DC\u30E0"
   description: "\u5A01\u529B100\u3000\u96F7\u5C5E\u6027\u7269\u7406\u30C0\u30E1\u30FC\u30B8"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f059bb186bfc82745b8af852f449bd8e, type: 3}
   Minfloor: 11
   Minstep: 1
   Maxfloor: 20
@@ -28,22 +28,40 @@ MonoBehaviour:
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 100
   battleAttribute: 5
   battleDamageCategory: 0
   battleOnly: 1
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 8
   attackPower: 0
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

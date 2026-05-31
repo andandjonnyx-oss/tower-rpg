@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: W026_hyakunin
   itemName: "\u767E\u4EBA\u4E00\u9996\u30D6\u30EC\u30FC\u30C9"
   description: "\u767E\u4EBA\u4E00\u9996\u3063\u3066\u51B7\u9759\u306B\u8003\u3048\u305F\u3089\u6016\u3044\u6587\u5B57\n\u653B\u6483+100\n\u30B9\u30AD\u30EB\uFF1A\u767E\u4EBA\u65AC\u308A\uFF08CT5\u30011.5\u500D+100\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bd59113ce93ca3c4bac0a300fa00c83e, type: 3}
   Minfloor: 36
   Minstep: 1
   Maxfloor: 40
@@ -30,6 +30,10 @@ MonoBehaviour:
   curesBlind: 0
   curesSilence: 0
   curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -38,6 +42,7 @@ MonoBehaviour:
   bossFeedItem: 0
   cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
@@ -45,12 +50,19 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 1
   attackPower: 100
   skills:
   - {fileID: 11400000, guid: 196433aeadcadc44ea194408a93d63ab, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

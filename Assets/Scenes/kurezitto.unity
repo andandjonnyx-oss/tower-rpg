@@ -176,7 +176,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u304A\u501F\u308A\u3057\u305F\u7D20\u6750\n\n\u30E2\u30F3\u30B9\u30BF\u30FC\u753B\u50CF\n\u6CBC\u304B\u3089\u73FE\u308C\u305F\u69D8\u3000\uFF08URL\uFF1Ahttp://kb147.web.fc2.com/\uFF09\r\n"
+  m_text: "\u304A\u501F\u308A\u3057\u305F\u7D20\u6750\n\n\n\u6CBC\u304B\u3089\u73FE\u308C\u305F\u69D8\n\u300E\u6CBC\u304B\u3089\u30E2\u30F3\u30B9\u30BF\u30FC\u300F\nhttp://kb147.web.fc2.com/\n\n\u4E03\u4E09\u3086\u304D
+    / Yuki Nanami \u69D8\n\u300E\u30B2\u30FC\u30E0\u5236\u4F5C\u5411\u3051\u30A2\u30A4\u30B3\u30F3\u7D20\u6750\u96C6\u300F\nhttps://nanamiyuki73.booth.pm/items/4059928\n\n\u306D\u304F\u3089\u69D8\n\u300E\u30D5\u30A1\u30F3\u30BF\u30B8\u30FC\u30B2\u30FC\u30E0UI\u753B\u50CF\u7D20\u6750\u96C6\u300F\nhttps://nekuramap.booth.pm/items/965940\n\nAI
+    Art Stock\u69D8\nhttps://aiartstock.booth.pm/items/6747435\n\nGame Material Store\u69D8\nhttps://gms.booth.pm/items/4322266\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}
   m_sharedMaterial: {fileID: -4704401064743154688, guid: d96b2b5e178ac1744b049e7637b4823d, type: 2}

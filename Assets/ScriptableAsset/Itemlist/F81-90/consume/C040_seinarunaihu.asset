@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: C040_seinarunaihu
   itemName: "\u8056\u306A\u308B\u6295\u3052\u30CA\u30A4\u30D5"
   description: "\u5A01\u529B1200\n\u8056\u5C5E\u6027\u7269\u7406"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5c55fa2ff78c1124e97c5c0c069c30b0, type: 3}
   Minfloor: 81
   Minstep: 1
   Maxfloor: 90
@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 1200
   battleAttribute: 6

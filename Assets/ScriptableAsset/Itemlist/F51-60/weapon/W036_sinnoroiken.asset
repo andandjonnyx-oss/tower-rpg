@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\u546A\u3044\u3057\u5263"
   description: "\u81EA\u5206\u306B\u3082\u76F8\u624B\u306B\u3082\u546A\u3044\u3092\u304B\u3051\u308B\u5263\n\u653B\u6483+175
     15%\u546A\u3044\n\u30B9\u30AD\u30EB\uFF1A\u546A\u308F\u308C\u305F\u4E00\u6483\n\uFF08CT0\u30013\u500D\u3001\u53CD\u52D53\u5272\uFF09\n"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 043591b4b2dbb7c49b53aeefc3681c51, type: 3}
   Minfloor: 54
   Minstep: 1
   Maxfloor: 58
@@ -34,6 +34,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

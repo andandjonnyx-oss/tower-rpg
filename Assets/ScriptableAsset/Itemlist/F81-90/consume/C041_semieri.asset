@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\u30BB\u30DF\u30D5\u30A1\u30A4\u30CA\u30EB\u30A8\u30EA\u30AF\u30B5\u30FC"
   description: "\u811A\u3092\u9589\u3058\u3066\u308B\u304B\u304C\u5224\u5225\u306B\u4F7F\u3048\u308B\u3089\u3057\u3044\u305C\uFF01\nHP800
     MP300\u56DE\u5FA9\n\u9B45\u4E86\u4EE5\u5916\u6CBB\u7642\n\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D73"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: efbd62d74062ec44096f94f5f3c8aaeb, type: 3}
   Minfloor: 81
   Minstep: 1
   Maxfloor: 90

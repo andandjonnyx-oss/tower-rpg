@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\u30CD\u30AA\u30A8\u30EA\u30AF\u30B5\u30FC"
   description: "\u66F4\u306B\u304A\u5F97\u306B\u306A\u308A\u307E\u3057\u305F\nHP400
     MP200\u56DE\u5FA9\n\u9B45\u4E86\u4EE5\u5916\u6CBB\u7642\n\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D72"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 33da4cc8ed73cb444a5097c593521286, type: 3}
   Minfloor: 66
   Minstep: 1
   Maxfloor: 70

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
   m_Name: 2Q 21
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
-  questionText: "\u3061\u3087\u30FC\u308B\u306EHP\u56DE\u5FA9\u91CF\u306F\uFF1F"
+  questionText: "\u3061\u3087\u30FC\u308B\u306EHP\u56DE\u5FA9\u91CF\u306F\uFF1F\nA:30\nB:40"
   choiceA: 30
   choiceB: 40
   correctAnswer: 0

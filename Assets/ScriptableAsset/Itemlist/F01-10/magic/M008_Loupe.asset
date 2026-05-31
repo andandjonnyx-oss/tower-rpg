@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M008_Loupe
   itemName: "\u30EB\u30FC\u30DA"
   description: "\u6301\u3063\u3066\u304A\u304F\u3068\u6575\u306EHP\u304C\u30D0\u30FC\u3067\u8868\u793A\u3055\u308C\u308B\u3002\n1\u3064\u306F\u6301\u3063\u3066\u304A\u304D\u305F\u3044"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c7e56d829c8f9df4dab6358d92ec4371, type: 3}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 10
@@ -26,20 +26,42 @@ MonoBehaviour:
   healAmount: 0
   mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

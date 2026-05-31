@@ -180,6 +180,8 @@ public class ItemIconComposer : EditorWindow
             if (outputPath.StartsWith("Assets/"))
             {
                 AssetDatabase.ImportAsset(outputPath, ImportAssetOptions.ForceUpdate);
+                // ★追加：Sprite Importer設定を統一（トリミング防止）
+                ApplySpriteImportSettings(outputPath);
             }
             AssetDatabase.Refresh();
 
@@ -538,6 +540,37 @@ public class ItemIconComposer : EditorWindow
         RenderTexture.active = prev;
         RenderTexture.ReleaseTemporary(rt);
         return copy;
+    }
+
+    // ============================================================
+    // 出力したPNGのSprite Importer設定を統一
+    //   - TextureType: Sprite
+    //   - MeshType: FullRect (透過領域のトリミング防止)
+    //   - SpriteMode: Single
+    //   - Alpha Is Transparency: ON
+    //   - Filter Mode: Bilinear
+    // ============================================================
+    private static void ApplySpriteImportSettings(string assetPath)
+    {
+        TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+        if (importer == null) return;
+
+        importer.textureType = TextureImporterType.Sprite;
+        importer.spriteImportMode = SpriteImportMode.Single;
+        importer.spritePixelsPerUnit = 100;
+        importer.alphaIsTransparency = true;
+        importer.mipmapEnabled = false;
+        importer.filterMode = FilterMode.Bilinear;
+
+        // ★最重要：MeshType を FullRect に（透過領域もメッシュに含める）
+        TextureImporterSettings settings = new TextureImporterSettings();
+        importer.ReadTextureSettings(settings);
+        settings.spriteMeshType = SpriteMeshType.FullRect;
+        settings.spriteExtrude = 0;
+        settings.spriteGenerateFallbackPhysicsShape = false;
+        importer.SetTextureSettings(settings);
+
+        importer.SaveAndReimport();
     }
 }
 #endif
