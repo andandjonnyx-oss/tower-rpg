@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: W004_pikohan
   itemName: "\u30D4\u30B3\u30CF\u30F3"
   description: "\u5F53\u305F\u3063\u3066\u3082\u75DB\u304F\u306A\u3055\u305D\u3046\u3068\u3044\u3046\u6CB9\u65AD\u3092\u8A98\u3046\u3000\u653B\u6483+6\n\u30B9\u30AD\u30EB\uFF1A\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30012\u500D\u300150\uFF05\u6C17\u7D76\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c080a12d51d093547b0ff2f1b3468c0c, type: 3}
   Minfloor: 4
   Minstep: 1
   Maxfloor: 7
@@ -24,18 +24,45 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  transformChance: 0
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 6
   skills:
   - {fileID: 11400000, guid: d6ab6c76ff5d04c4a983f35b9a07cc17, type: 2}
   weaponInflictEffect: 8
   weaponInflictChance: 10
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

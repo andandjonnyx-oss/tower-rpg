@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\u718A\u306E\u624B"
   description: "\u30CF\u30C1\u30DF\u30C4\u305F\u3063\u3077\u308A\n\u653B\u6483+60
     \u6BD2\u9EBB\u75FA\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30D9\u30A2\u30AF\u30E9\u30C3\u30B7\u30E5\uFF08CT5\u30013\u500D\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 563fc2c1c5004004880e112651b739c9, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0
@@ -31,6 +31,10 @@ MonoBehaviour:
   curesBlind: 0
   curesSilence: 0
   curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -39,6 +43,7 @@ MonoBehaviour:
   bossFeedItem: 0
   cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 1
   eatHealAmount: 300
   eatCuresPoison: 1
@@ -46,12 +51,19 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 60
   skills:
   - {fileID: 11400000, guid: 8b4752f76cb19584fbd34f852e8a4885, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W059_100t
   itemName: "100\u30C8\u30F3\u30CF\u30F3\u30DE\u30FC"
-  description: "\u5B9F\u969B\u306B\u306F\u6570\u767E\u30AD\u30ED\u3002\u305D\u308C\u3067\u3082\u91CD\u3059\u304E\u308B\u3002\n\u653B\u6483+2000\u3000\u57FA\u790E\u547D\u4E2D50\n\u30B9\u30AD\u30EB\uFF1A\u3076\u3093\u56DE\u3057\uFF08CT3\u30013\u500D\u3001\u547D\u4E2D30\uFF09"
+  description: "\u5B9F\u969B\u306B\u306F\u6570\u767E\u30AD\u30ED\u3002\u305D\u308C\u3067\u3082\u91CD\u3059\u304E\u308B\u3002\n\u653B\u6483+2000\u3000\u57FA\u790E\u547D\u4E2D30\n\u30B9\u30AD\u30EB\uFF1A\u3076\u3093\u56DE\u3057\uFF08CT3\u30013\u500D\u3001\u547D\u4E2D30\uFF09"
   icon: {fileID: 0}
   Minfloor: 96
   Minstep: 1
@@ -72,7 +72,7 @@ MonoBehaviour:
   equipAccuracy: 0
   equipEvasion: 0
   equipCritical: 0
-  baseHitRate: 50
+  baseHitRate: 30
   equipResistances: []
   equipStatusEffectResistances: []
   magicSkill: {fileID: 0}

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: W056_sitisitou
   itemName: "\u4E03\u652F\u5200"
   description: "\u3069\u3046\u8003\u3048\u3066\u3082\u6B66\u5668\u3068\u3057\u3066\u306F\u4F7F\u3044\u3065\u3089\u3044\n\u653B\u6483+500\n\u30B9\u30AD\u30EB\uFF1A7\u9023\u6483\uFF08CT7\u30010.5\xD77\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f73eadc1914c7d94c9c9b7541ac61638, type: 3}
   Minfloor: 91
   Minstep: 1
   Maxfloor: 95

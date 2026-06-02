@@ -16,7 +16,7 @@ MonoBehaviour:
   itemName: "\u30D1\u30E9\u30EC\u30A4\u30D4\u30A2"
   description: "\u75FA\u308C\u308B\u4E00\u7A81\u304D\uFF01\uFF08\u96F7\u5C5E\u6027\u3067\u306F\u7121\u3044\uFF09\n\u653B\u6483+20
     2\u5272\u3067\u9EBB\u75FA \u9EBB\u75FA\u8010\u6027+50\n\u30B9\u30AD\u30EB\uFF1A\u30D1\u30E9\u30E9\u30A2\u30BF\u30C3\u30AF\n\uFF08CT3\u30011\u500D\u300140%\u9EBB\u75FA\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fe940a0b610605145813ac23de6020d0, type: 3}
   Minfloor: 14
   Minstep: 1
   Maxfloor: 17
@@ -29,23 +29,41 @@ MonoBehaviour:
   curesPoison: 0
   curesParalyze: 0
   curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 2
   attackPower: 20
   skills:
   - {fileID: 11400000, guid: 3a5b53e8a7f712143a3c00e5c2d4f61a, type: 2}
   weaponInflictEffect: 2
   weaponInflictChance: 20
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: W002_Kinoyari
   itemName: "\u6728\u306E\u69CD"
   description: "\u5148\u7AEF\u306E\u5C16\u3063\u305F\u6728\u306E\u68D2\u3002\u653B\u6483\u529B+5\n\u30B9\u30AD\u30EB\uFF1A\u4E09\u9023\u7A81\u304D\uFF08CT4\u30010.6\u500D\xD73\uFF09"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2d6c4747e629f8b4494d3c50acbd0e82, type: 3}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 5
@@ -24,18 +24,45 @@ MonoBehaviour:
   stackable: 1
   maxStack: 99
   healAmount: 0
+  mpHealAmount: 0
   curesPoison: 0
+  curesParalyze: 0
+  curesBlind: 0
+  curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
+  transformInto: {fileID: 0}
+  transformChance: 0
+  isEdible: 0
+  eatHealAmount: 0
+  eatCuresPoison: 0
+  eatCuresParalyze: 0
+  eatCuresBlind: 0
+  eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 2
   attackPower: 5
   skills:
   - {fileID: 11400000, guid: ce88878beea4042409dfac1c29b908a6, type: 2}
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0
