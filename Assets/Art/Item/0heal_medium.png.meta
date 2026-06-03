@@ -1,0 +1,728 @@
+fileFormatVersion: 2
+guid: fa1a9acd5483d14418774a088507b110
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4048206589434988514
+    second: 0heal_medium_0
+  - first:
+      213: -3410422693704799899
+    second: 0heal_medium_1
+  - first:
+      213: 312394314984889276
+    second: 0heal_medium_2
+  - first:
+      213: -2484403712171466376
+    second: 0heal_medium_3
+  - first:
+      213: -7287303815083152616
+    second: 0heal_medium_4
+  - first:
+      213: -2017846564303997755
+    second: 0heal_medium_5
+  - first:
+      213: -8075139440367218665
+    second: 0heal_medium_6
+  - first:
+      213: -5644452303186779581
+    second: 0heal_medium_7
+  - first:
+      213: 5179461917912605144
+    second: 0heal_medium_8
+  - first:
+      213: 767248875306435895
+    second: 0heal_medium_9
+  - first:
+      213: -928198672159502991
+    second: 0heal_medium_10
+  - first:
+      213: -7441753768746716457
+    second: 0heal_medium_11
+  - first:
+      213: -4815014565585876173
+    second: 0heal_medium_12
+  - first:
+      213: 6040950570806450128
+    second: 0heal_medium_13
+  - first:
+      213: 3779224195622657101
+    second: 0heal_medium_14
+  - first:
+      213: -6153931393377475386
+    second: 0heal_medium_15
+  - first:
+      213: -8639611691306749016
+    second: 0heal_medium_16
+  - first:
+      213: 6039717767227433118
+    second: 0heal_medium_17
+  - first:
+      213: -1803925262248621501
+    second: 0heal_medium_18
+  - first:
+      213: -1754580131137457675
+    second: 0heal_medium_19
+  - first:
+      213: 8935800207999223935
+    second: 0heal_medium_20
+  - first:
+      213: -6545118276218857197
+    second: 0heal_medium_21
+  - first:
+      213: -1968191998365206626
+    second: 0heal_medium_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 0heal_medium_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 0
+        width: 989
+        height: 1006
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e18f4532e81e1d7c0800000000000000
+      internalID: -4048206589434988514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_1
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 906
+        width: 68
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5696bc711aebba0d0800000000000000
+      internalID: -3410422693704799899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_2
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 955
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbb968e69f8d55400800000000000000
+      internalID: 312394314984889276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_3
+      rect:
+        serializedVersion: 2
+        x: 602
+        y: 949
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 871ab599cff958dd0800000000000000
+      internalID: -2484403712171466376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_4
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 946
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81bae9b3acb4eda90800000000000000
+      internalID: -7287303815083152616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_5
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 895
+        width: 14
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c4fa63ad3b2ff3e0800000000000000
+      internalID: -2017846564303997755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_6
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 909
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7105a2186775fef80800000000000000
+      internalID: -8075139440367218665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_7
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 911
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 342aaec2980eaa1b0800000000000000
+      internalID: -5644452303186779581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_8
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 903
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d128d02c2521e740800000000000000
+      internalID: 5179461917912605144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_9
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 895
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73545fa79c0d5aa00800000000000000
+      internalID: 767248875306435895
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_10
+      rect:
+        serializedVersion: 2
+        x: 559
+        y: 879
+        width: 42
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17d81f8b9306e13f0800000000000000
+      internalID: -928198672159502991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_11
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 865
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d27deb106499b890800000000000000
+      internalID: -7441753768746716457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_12
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 874
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33b0ced73c1ad2db0800000000000000
+      internalID: -4815014565585876173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_13
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 871
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d79c9ea984c5d350800000000000000
+      internalID: 6040950570806450128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_14
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 563
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4c56aaf160827430800000000000000
+      internalID: 3779224195622657101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_15
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 389
+        width: 98
+        height: 101
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c46c9da008d89aa0800000000000000
+      internalID: -6153931393377475386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_16
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 237
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a3795ef0fee91880800000000000000
+      internalID: -8639611691306749016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_17
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 223
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e90e43b3f4361d350800000000000000
+      internalID: 6039717767227433118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_18
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 223
+        width: 9
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34a4156188b27f6e0800000000000000
+      internalID: -1803925262248621501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_19
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 216
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f1f799baaa76a7e0800000000000000
+      internalID: -1754580131137457675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_20
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 215
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f78c7adf1f6520c70800000000000000
+      internalID: 8935800207999223935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_21
+      rect:
+        serializedVersion: 2
+        x: 854
+        y: 199
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 319de05fa911b25a0800000000000000
+      internalID: -6545118276218857197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 0heal_medium_22
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 191
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e97fcaf2ec39fa4e0800000000000000
+      internalID: -1968191998365206626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      0heal_medium_0: -4048206589434988514
+      0heal_medium_1: -3410422693704799899
+      0heal_medium_10: -928198672159502991
+      0heal_medium_11: -7441753768746716457
+      0heal_medium_12: -4815014565585876173
+      0heal_medium_13: 6040950570806450128
+      0heal_medium_14: 3779224195622657101
+      0heal_medium_15: -6153931393377475386
+      0heal_medium_16: -8639611691306749016
+      0heal_medium_17: 6039717767227433118
+      0heal_medium_18: -1803925262248621501
+      0heal_medium_19: -1754580131137457675
+      0heal_medium_2: 312394314984889276
+      0heal_medium_20: 8935800207999223935
+      0heal_medium_21: -6545118276218857197
+      0heal_medium_22: -1968191998365206626
+      0heal_medium_3: -2484403712171466376
+      0heal_medium_4: -7287303815083152616
+      0heal_medium_5: -2017846564303997755
+      0heal_medium_6: -8075139440367218665
+      0heal_medium_7: -5644452303186779581
+      0heal_medium_8: 5179461917912605144
+      0heal_medium_9: 767248875306435895
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

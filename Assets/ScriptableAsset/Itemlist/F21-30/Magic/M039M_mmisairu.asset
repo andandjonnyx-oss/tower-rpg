@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M039M_mmisairu
   itemName: "\u30DE\u30B8\u30C3\u30AF\u30DF\u30B5\u30A4\u30EB"
   description: "\u8CB4\u91CD\u306A\u7121\u5C5E\u6027\u9B54\u6CD5\nMP10 \u5A01\u529B150"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ea7148634766ea3409781777bbceb747, type: 3}
   Minfloor: 21
   Minstep: 1
   Maxfloor: 25
@@ -29,23 +29,39 @@ MonoBehaviour:
   curesParalyze: 0
   curesBlind: 0
   curesSilence: 0
+  curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
   battleDamageCategory: 0
   battleOnly: 0
+  bossFeedItem: 0
+  cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0
   eatCuresSilence: 0
+  eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

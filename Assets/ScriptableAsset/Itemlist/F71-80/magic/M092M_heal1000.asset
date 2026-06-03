@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M092M_heal1000
   itemName: "\u30AA\u30E1\u30AC\u30D2\u30FC\u30EB"
   description: "MP60\nHP1000\u56DE\u5FA9"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e9bd0de58880c72478d49187d26deeac, type: 3}
   Minfloor: 71
   Minstep: 1
   Maxfloor: 80
@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

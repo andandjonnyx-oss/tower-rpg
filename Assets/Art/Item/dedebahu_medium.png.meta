@@ -1,0 +1,650 @@
+fileFormatVersion: 2
+guid: 5160bff0c2cc74c4e9551fcc32667882
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7794410475440994887
+    second: dedebahu_medium_0
+  - first:
+      213: -7954124215096675357
+    second: dedebahu_medium_1
+  - first:
+      213: -969356794081860355
+    second: dedebahu_medium_2
+  - first:
+      213: -5603009006025004311
+    second: dedebahu_medium_3
+  - first:
+      213: -8197815161416281096
+    second: dedebahu_medium_4
+  - first:
+      213: 5079998232636018883
+    second: dedebahu_medium_5
+  - first:
+      213: -4555783635167850806
+    second: dedebahu_medium_6
+  - first:
+      213: -6045101252516458209
+    second: dedebahu_medium_7
+  - first:
+      213: -6361751711492118426
+    second: dedebahu_medium_8
+  - first:
+      213: -3224323114333795243
+    second: dedebahu_medium_9
+  - first:
+      213: -653739040265273558
+    second: dedebahu_medium_10
+  - first:
+      213: 1663461261199977411
+    second: dedebahu_medium_11
+  - first:
+      213: -6517739388225094107
+    second: dedebahu_medium_12
+  - first:
+      213: 7265727965407896948
+    second: dedebahu_medium_13
+  - first:
+      213: 4350325375091827250
+    second: dedebahu_medium_14
+  - first:
+      213: 6912810495046186903
+    second: dedebahu_medium_15
+  - first:
+      213: -5908290294375294830
+    second: dedebahu_medium_16
+  - first:
+      213: -3158481069294241962
+    second: dedebahu_medium_17
+  - first:
+      213: -8405707945622897622
+    second: dedebahu_medium_18
+  - first:
+      213: -4189016245933938800
+    second: dedebahu_medium_19
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: dedebahu_medium_0
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 63
+        width: 1005
+        height: 956
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74a7e36e70f4b2c60800000000000000
+      internalID: 7794410475440994887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_1
+      rect:
+        serializedVersion: 2
+        x: 899
+        y: 761
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e374db4b264d9190800000000000000
+      internalID: -7954124215096675357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_2
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 674
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df4a324b1272c82f0800000000000000
+      internalID: -969356794081860355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_3
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 479
+        width: 166
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eaa09abefc1e32b0800000000000000
+      internalID: -5603009006025004311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_4
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 88
+        width: 373
+        height: 494
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f398796b828b3e80800000000000000
+      internalID: -8197815161416281096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_5
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 440
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c0d1e34a77cf7640800000000000000
+      internalID: 5079998232636018883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_6
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 426
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ace4840ebea96c0c0800000000000000
+      internalID: -4555783635167850806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_7
+      rect:
+        serializedVersion: 2
+        x: 748
+        y: 421
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f11dc7c607c7b1ca0800000000000000
+      internalID: -6045101252516458209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_8
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 399
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 668674f368486b7a0800000000000000
+      internalID: -6361751711492118426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_9
+      rect:
+        serializedVersion: 2
+        x: 885
+        y: 399
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55c8d01f537e043d0800000000000000
+      internalID: -3224323114333795243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_10
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 391
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2ffe297ec37de6f0800000000000000
+      internalID: -653739040265273558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_11
+      rect:
+        serializedVersion: 2
+        x: 833
+        y: 369
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cba273243dc51710800000000000000
+      internalID: 1663461261199977411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_12
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 374
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52e75421f865c85a0800000000000000
+      internalID: -6517739388225094107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_13
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 360
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47562ccc61d05d460800000000000000
+      internalID: 7265727965407896948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_14
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 349
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23267bf21e57f5c30800000000000000
+      internalID: 4350325375091827250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_15
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 343
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 797f1d4058c3fef50800000000000000
+      internalID: 6912810495046186903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_16
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 323
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2985fddd749810ea0800000000000000
+      internalID: -5908290294375294830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_17
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 295
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 657bbeaa332da24d0800000000000000
+      internalID: -3158481069294241962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_18
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 235
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2cf777a82de85b80800000000000000
+      internalID: -8405707945622897622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: dedebahu_medium_19
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 244
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09764ce2bef9dd5c0800000000000000
+      internalID: -4189016245933938800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      dedebahu_medium_0: 7794410475440994887
+      dedebahu_medium_1: -7954124215096675357
+      dedebahu_medium_10: -653739040265273558
+      dedebahu_medium_11: 1663461261199977411
+      dedebahu_medium_12: -6517739388225094107
+      dedebahu_medium_13: 7265727965407896948
+      dedebahu_medium_14: 4350325375091827250
+      dedebahu_medium_15: 6912810495046186903
+      dedebahu_medium_16: -5908290294375294830
+      dedebahu_medium_17: -3158481069294241962
+      dedebahu_medium_18: -8405707945622897622
+      dedebahu_medium_19: -4189016245933938800
+      dedebahu_medium_2: -969356794081860355
+      dedebahu_medium_3: -5603009006025004311
+      dedebahu_medium_4: -8197815161416281096
+      dedebahu_medium_5: 5079998232636018883
+      dedebahu_medium_6: -4555783635167850806
+      dedebahu_medium_7: -6045101252516458209
+      dedebahu_medium_8: -6361751711492118426
+      dedebahu_medium_9: -3224323114333795243
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

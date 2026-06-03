@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: b429d26d9c255c24d96bcd0c1b2f601d
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5781575375734345038
+    second: deparara_0
+  - first:
+      213: -5355389941091271128
+    second: deparara_1
+  - first:
+      213: 5645145719245430180
+    second: deparara_2
+  - first:
+      213: -4509936193466509818
+    second: deparara_3
+  - first:
+      213: 2087425787522582579
+    second: deparara_4
+  - first:
+      213: 5497764913964765861
+    second: deparara_5
+  - first:
+      213: 1139314015848885172
+    second: deparara_6
+  - first:
+      213: -514208877830016005
+    second: deparara_7
+  - first:
+      213: -2963957826496653072
+    second: deparara_8
+  - first:
+      213: -4293157869209584625
+    second: deparara_9
+  - first:
+      213: 3466502818645899315
+    second: deparara_10
+  - first:
+      213: -6784436134179952183
+    second: deparara_11
+  - first:
+      213: 5860009737781744757
+    second: deparara_12
+  - first:
+      213: -3516518757776270143
+    second: deparara_13
+  - first:
+      213: -7428428443712252612
+    second: deparara_14
+  - first:
+      213: -1881068043753112163
+    second: deparara_15
+  - first:
+      213: -8517460738779009930
+    second: deparara_16
+  - first:
+      213: 7807948629015272391
+    second: deparara_17
+  - first:
+      213: 3668626060399532328
+    second: deparara_18
+  - first:
+      213: -6888056620146024476
+    second: deparara_19
+  - first:
+      213: -3626683925542377325
+    second: deparara_20
+  - first:
+      213: -7955453989404014196
+    second: deparara_21
+  - first:
+      213: 6822251859228689131
+    second: deparara_22
+  - first:
+      213: 5759592243320388123
+    second: deparara_23
+  - first:
+      213: 6510332810502464352
+    second: deparara_24
+  - first:
+      213: 2155488017679814995
+    second: deparara_25
+  - first:
+      213: -2682258755877549215
+    second: deparara_26
+  - first:
+      213: 2945783615795180750
+    second: deparara_27
+  - first:
+      213: -5572435716329789055
+    second: deparara_28
+  - first:
+      213: -4153228013164418227
+    second: deparara_29
+  - first:
+      213: -5029293984518569072
+    second: deparara_30
+  - first:
+      213: 239102984516597009
+    second: deparara_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: deparara_0
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 704
+        width: 121
+        height: 179
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4d8ac01c284c3050800000000000000
+      internalID: 5781575375734345038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_1
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 832
+        width: 57
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82efd8ff835dda5b0800000000000000
+      internalID: -5355389941091271128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_2
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 872
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4add0f45f16975e40800000000000000
+      internalID: 5645145719245430180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_3
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 792
+        width: 107
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60650cc3dec7961c0800000000000000
+      internalID: -4509936193466509818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_4
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 752
+        width: 43
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3380640b1b608fc10800000000000000
+      internalID: 2087425787522582579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_5
+      rect:
+        serializedVersion: 2
+        x: 479
+        y: 763
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a2d9739f0cfb4c40800000000000000
+      internalID: 5497764913964765861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_6
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 761
+        width: 50
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bbeb42af08afcf00800000000000000
+      internalID: 1139314015848885172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_7
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 755
+        width: 19
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf3f69000c92dd8f0800000000000000
+      internalID: -514208877830016005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_8
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 672
+        width: 227
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f89d6e7f08edd6d0800000000000000
+      internalID: -2963957826496653072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_9
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 627
+        width: 192
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0cf6110aa3ab64c0800000000000000
+      internalID: -4293157869209584625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_10
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 447
+        width: 264
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 338774e72fd7b1030800000000000000
+      internalID: 3466502818645899315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_11
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 683
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c921ec0847d8d1a0800000000000000
+      internalID: -6784436134179952183
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_12
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 699
+        width: 23
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5749fc01fcfe25150800000000000000
+      internalID: 5860009737781744757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_13
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 685
+        width: 73
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1cc5fb432d0d23fc0800000000000000
+      internalID: -3516518757776270143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_14
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 653
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c359f1d10bbe8e890800000000000000
+      internalID: -7428428443712252612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_15
+      rect:
+        serializedVersion: 2
+        x: 646
+        y: 615
+        width: 48
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9db1cd949a15e5e0800000000000000
+      internalID: -1881068043753112163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_16
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 591
+        width: 63
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67cadb4e596ebc980800000000000000
+      internalID: -8517460738779009930
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_17
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 552
+        width: 52
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cb14f8e8e76b5c60800000000000000
+      internalID: 7807948629015272391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_18
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 583
+        width: 10
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 829dad7f6f399e230800000000000000
+      internalID: 3668626060399532328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_19
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 575
+        width: 33
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ef1b6b9ff4b860a0800000000000000
+      internalID: -6888056620146024476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_20
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 504
+        width: 45
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3986d694f2e6badc0800000000000000
+      internalID: -3626683925542377325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_21
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 533
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c890c961fbc889190800000000000000
+      internalID: -7955453989404014196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_22
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 508
+        width: 41
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be2039d8be18dae50800000000000000
+      internalID: 6822251859228689131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_23
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 400
+        width: 267
+        height: 155
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1af43231ae2eef40800000000000000
+      internalID: 5759592243320388123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_24
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 391
+        width: 83
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 063e19ba239595a50800000000000000
+      internalID: 6510332810502464352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_25
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 479
+        width: 27
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3519a6b8ee4d9ed10800000000000000
+      internalID: 2155488017679814995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_26
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 421
+        width: 51
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16bcc3c6fd3b6cad0800000000000000
+      internalID: -2682258755877549215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_27
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 449
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec433a4579681e820800000000000000
+      internalID: 2945783615795180750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_28
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 452
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 189a6727d3bbaa2b0800000000000000
+      internalID: -5572435716329789055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_29
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 442
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4b22247025cc56c0800000000000000
+      internalID: -4153228013164418227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_30
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 57
+        width: 638
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09303c574cb543ab0800000000000000
+      internalID: -5029293984518569072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: deparara_31
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 392
+        width: 43
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 115f8d8c5e6715300800000000000000
+      internalID: 239102984516597009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      deparara_0: 5781575375734345038
+      deparara_1: -5355389941091271128
+      deparara_10: 3466502818645899315
+      deparara_11: -6784436134179952183
+      deparara_12: 5860009737781744757
+      deparara_13: -3516518757776270143
+      deparara_14: -7428428443712252612
+      deparara_15: -1881068043753112163
+      deparara_16: -8517460738779009930
+      deparara_17: 7807948629015272391
+      deparara_18: 3668626060399532328
+      deparara_19: -6888056620146024476
+      deparara_2: 5645145719245430180
+      deparara_20: -3626683925542377325
+      deparara_21: -7955453989404014196
+      deparara_22: 6822251859228689131
+      deparara_23: 5759592243320388123
+      deparara_24: 6510332810502464352
+      deparara_25: 2155488017679814995
+      deparara_26: -2682258755877549215
+      deparara_27: 2945783615795180750
+      deparara_28: -5572435716329789055
+      deparara_29: -4153228013164418227
+      deparara_3: -4509936193466509818
+      deparara_30: -5029293984518569072
+      deparara_31: 239102984516597009
+      deparara_4: 2087425787522582579
+      deparara_5: 5497764913964765861
+      deparara_6: 1139314015848885172
+      deparara_7: -514208877830016005
+      deparara_8: -2963957826496653072
+      deparara_9: -4293157869209584625
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
