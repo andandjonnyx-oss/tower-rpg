@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M098_zenmamori
   itemName: "\u30AA\u30FC\u30EB\u30AC\u30FC\u30C9"
   description: "\u3068\u306B\u304B\u304F\u8272\u3005\u3061\u3087\u3063\u3068\u8B77\u308B\n\u66F8\u304D\u304D\u308C\u306A\u3044\u304F\u3089\u3044\u8272\u3005\u8B77\u308B"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2ae4f3c76756dfe48b5c289f39609d56, type: 3}
   Minfloor: 76
   Minstep: 1
   Maxfloor: 80
@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

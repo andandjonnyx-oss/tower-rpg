@@ -1,0 +1,468 @@
+fileFormatVersion: 2
+guid: 3550f5ca4ed17a64dac672ff7d656d22
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2163407244455580415
+    second: ragunaroku_medium_0
+  - first:
+      213: 4067301330558886557
+    second: ragunaroku_medium_1
+  - first:
+      213: 8461995013271197901
+    second: ragunaroku_medium_2
+  - first:
+      213: -6167023068888214790
+    second: ragunaroku_medium_3
+  - first:
+      213: -1850068926107681965
+    second: ragunaroku_medium_4
+  - first:
+      213: 7073831799720838796
+    second: ragunaroku_medium_5
+  - first:
+      213: -8343750982481533156
+    second: ragunaroku_medium_6
+  - first:
+      213: 2320061541594095602
+    second: ragunaroku_medium_7
+  - first:
+      213: -5305311719160485631
+    second: ragunaroku_medium_8
+  - first:
+      213: 2161401331538407558
+    second: ragunaroku_medium_9
+  - first:
+      213: 8669858099763437761
+    second: ragunaroku_medium_10
+  - first:
+      213: 503756973243867714
+    second: ragunaroku_medium_11
+  - first:
+      213: -7468801786219075159
+    second: ragunaroku_medium_12
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ragunaroku_medium_0
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 32
+        width: 1000
+        height: 987
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff218463d67f50e10800000000000000
+      internalID: 2163407244455580415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_1
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 912
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d92af6ab205f17830800000000000000
+      internalID: 4067301330558886557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_2
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 607
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc8182981ab0f6570800000000000000
+      internalID: 8461995013271197901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_3
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 592
+        width: 106
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af2574171355a6aa0800000000000000
+      internalID: -6167023068888214790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_4
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 562
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35bfc512d1c3356e0800000000000000
+      internalID: -1850068926107681965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_5
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 560
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8609370b8c4b2260800000000000000
+      internalID: 7073831799720838796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_6
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 489
+        width: 152
+        height: 109
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c172fd240ba053c80800000000000000
+      internalID: -8343750982481533156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_7
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 478
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ffd2cb0ea3823020800000000000000
+      internalID: 2320061541594095602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_8
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 477
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 109e8b4a91fbf56b0800000000000000
+      internalID: -5305311719160485631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_9
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 449
+        width: 30
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68037673f07defd10800000000000000
+      internalID: 2161401331538407558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_10
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 415
+        width: 12
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c06171c106815870800000000000000
+      internalID: 8669858099763437761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_11
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 343
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 242a3535c44bdf600800000000000000
+      internalID: 503756973243867714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ragunaroku_medium_12
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 271
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a9eb9ac85c795890800000000000000
+      internalID: -7468801786219075159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      ragunaroku_medium_0: 2163407244455580415
+      ragunaroku_medium_1: 4067301330558886557
+      ragunaroku_medium_10: 8669858099763437761
+      ragunaroku_medium_11: 503756973243867714
+      ragunaroku_medium_12: -7468801786219075159
+      ragunaroku_medium_2: 8461995013271197901
+      ragunaroku_medium_3: -6167023068888214790
+      ragunaroku_medium_4: -1850068926107681965
+      ragunaroku_medium_5: 7073831799720838796
+      ragunaroku_medium_6: -8343750982481533156
+      ragunaroku_medium_7: 2320061541594095602
+      ragunaroku_medium_8: -5305311719160485631
+      ragunaroku_medium_9: 2161401331538407558
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

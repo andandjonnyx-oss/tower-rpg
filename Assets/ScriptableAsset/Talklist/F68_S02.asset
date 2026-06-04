@@ -23,7 +23,7 @@ MonoBehaviour:
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "\u3057\u304B\u3082\u30CD\u30B3\u30DE\u30BF\u3001\u30B5\u30AD\u30E5\u30D0\u30B9\u3001\u30E9\u30DF\u30A2\u3001\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9\u3068\u3001\n\u4E2D\u76E4\u304B\u3089\u5F8C\u534A\u306B\u51FA\u3066\u6765\u308B\u6575\u3070\u304B\u308A\u3060\uFF01"
+    text: "\u3057\u304B\u3082\u30CD\u30B3\u30DE\u30BF\u3001\u30B5\u30AD\u30E5\u30D0\u30B9\u3001\u30E1\u30C7\u30E5\u30FC\u30B5\u3001\u30DF\u30CE\u30BF\u30A6\u30ED\u30B9\u3068\u3001\n\u4E2D\u76E4\u304B\u3089\u5F8C\u534A\u306B\u51FA\u3066\u6765\u308B\u6575\u3070\u304B\u308A\u3060\uFF01"
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
@@ -31,4 +31,9 @@ MonoBehaviour:
     portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
   rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

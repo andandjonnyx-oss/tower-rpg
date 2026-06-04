@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M045_neko
   itemName: "\u732B"
   description: "\u306B\u3083\u30FC\u3093\n\u30B2\u30FC\u30E0\u7684\u306B\u306F\u4F55\u306E\u5F79\u306B\u3082\u7ACB\u305F\u306A\u3044\u304C\n\u30ED\u30FC\u30EB\u30D7\u30EC\u30A4\u7684\u306B\u306F\u5F8C\u308D\u306B\u3064\u3044\u3066\u3053\u3055\u305B\u3066\u3082\u3044\u3044\u3060\u308D\u3046"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 98b806ed02b25a74b9f19f75f6661c92, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0
@@ -30,6 +30,10 @@ MonoBehaviour:
   curesBlind: 0
   curesSilence: 0
   curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -38,6 +42,7 @@ MonoBehaviour:
   bossFeedItem: 0
   cannotDiscard: 1
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
@@ -45,11 +50,18 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

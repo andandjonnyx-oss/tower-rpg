@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M097_yaminomamori
   itemName: "\u95C7\u306E\u8B77\u308A"
   description: "\u591C\u306F\u5E38\u306B\u4E16\u754C\u3092\u5305\u307F\u8FBC\u3080\n\u7686\u306E\u7720\u308A\u3092\u8B77\u308B\u305F\u3081\u306B\n\u95C7\u8010\u6027+50"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 46a7a10b2369d0d4698377ebd53e87d2, type: 3}
   Minfloor: 71
   Minstep: 1
   Maxfloor: 75
@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

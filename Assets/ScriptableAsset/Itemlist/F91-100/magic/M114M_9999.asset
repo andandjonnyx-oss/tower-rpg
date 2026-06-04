@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M114M_9999
   itemName: "\u30ED\u30DE\u30F3\u7832"
   description: "MP999\n\u5A01\u529B9999\u3000\u7121\u5C5E\u6027\u9B54\u6CD5"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9a1def4e2f3f0844abbb98eabbd15e56, type: 3}
   Minfloor: 91
   Minstep: 1
   Maxfloor: 100

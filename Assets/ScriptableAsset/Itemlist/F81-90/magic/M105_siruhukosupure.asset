@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M105_siruhukosupure
   itemName: "\u30B7\u30EB\u30D5\u30B3\u30B9\u30D7\u30EC\u30BB\u30C3\u30C8"
   description: "\u4FFA\u81EA\u8EAB\u304C\u30B7\u30EB\u30D5\u306B\u306A\u308B\u4E8B\u3060\n\u56DE\u907F\u7387+10%"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c1e9cf8f1f446c34ab4460a5454c2ad7, type: 3}
   Minfloor: 81
   Minstep: 1
   Maxfloor: 85

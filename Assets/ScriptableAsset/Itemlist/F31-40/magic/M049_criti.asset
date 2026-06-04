@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M049_criti
   itemName: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u30D1\u30B9"
   description: "\u793E\u4F1A\u4EBA\u306B\u306A\u3063\u3066\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u3068\u8A00\u3048\u3070\n\u3053\u3063\u3061\u3092\u601D\u3044\u6D6E\u304B\u3079\u308B\u3088\u3046\u306B\u306A\u3063\u305F\u4EBA\u3082\u3044\u308B\u304B\u3082\u306A\uFF01\n\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u7387+3%"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3a041229e5660f047ab43745ec2993d2, type: 3}
   Minfloor: 31
   Minstep: 1
   Maxfloor: 35
@@ -30,6 +30,10 @@ MonoBehaviour:
   curesBlind: 0
   curesSilence: 0
   curesPetrify: 0
+  curesCharm: 0
+  curesCurse: 0
+  curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0
@@ -38,6 +42,7 @@ MonoBehaviour:
   bossFeedItem: 0
   cannotDiscard: 0
   transformInto: {fileID: 0}
+  transformChance: 0
   isEdible: 0
   eatHealAmount: 0
   eatCuresPoison: 0
@@ -45,11 +50,18 @@ MonoBehaviour:
   eatCuresBlind: 0
   eatCuresSilence: 0
   eatCuresPetrify: 0
+  eatCuresCharm: 0
+  eatCuresCurse: 0
+  eatCuresGlass: 0
   weaponAttribute: 0
   attackPower: 0
   skills: []
   weaponInflictEffect: 0
   weaponInflictChance: 0
+  weaponInflictDebuff: 0
+  weaponDebuffRate: 0
+  weaponDebuffDuration: 0
+  weaponDebuffChance: 0
   equipDefense: 0
   equipMagicAttack: 0
   equipMagicDefense: 0

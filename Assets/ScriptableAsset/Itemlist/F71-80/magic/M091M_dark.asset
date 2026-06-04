@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M091M_dark
   itemName: "\u30DD\u30A4\u30BA\u30F3\u30C0\u30FC\u30AF"
   description: "MP30\n\u5A01\u529B600\u95C7\u5C5E\u6027\n50\uFF05\u3067\u6BD2"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9e97eff524df14c46939f7854d858b0f, type: 3}
   Minfloor: 71
   Minstep: 1
   Maxfloor: 75
@@ -33,6 +33,7 @@ MonoBehaviour:
   curesCharm: 0
   curesCurse: 0
   curesGlass: 0
+  curesAllDebuffs: 0
   statusPointGain: 0
   battleDamage: 0
   battleAttribute: 0

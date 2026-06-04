@@ -15,7 +15,7 @@ MonoBehaviour:
   itemId: M111M_dispel
   itemName: "\u30C7\u30A3\u30B9\u30DA\u30EB"
   description: "MP20\n\u6575\u5473\u65B9\u5168\u3066\u306E\u30D0\u30D5\u30C7\u30D0\u30D5\u3092\u6D88\u53BB"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7cbe7a5177462124ca07239031896314, type: 3}
   Minfloor: 91
   Minstep: 1
   Maxfloor: 100
