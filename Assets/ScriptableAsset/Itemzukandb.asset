@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35068f88dcd834542997a05877cabefe, type: 3}
+  m_Name: Itemzukandb
+  m_EditorClassIdentifier: Assembly-CSharp::ItemZukanCategoryDatabase
+  majorCategories:
+  - majorName: "\u6D88\u8CBB"
+    subCategories:
+    - headerText: "\u56DE\u5FA9\u30A2\u30A4\u30C6\u30E0"
+      items: []
+    - headerText: "\u653B\u6483\u30A2\u30A4\u30C6\u30E0"
+      items: []
+    - headerText: "\u305D\u306E\u4ED6\u30A2\u30A4\u30C6\u30E0"
+      items: []
+  - majorName: "\u6B66\u5668"
+    subCategories:
+    - headerText: "\u6B66\u5668"
+      items: []
+  - majorName: "\u9B54\u5C0E\u66F8"
+    subCategories:
+    - headerText: "\u56DE\u5FA9\u9B54\u6CD5"
+      items: []
+    - headerText: "\u653B\u6483\u9B54\u6CD5"
+      items: []
+    - headerText: "\u72B6\u614B\u7570\u5E38\u9B54\u6CD5"
+      items: []
+    - headerText: "\u305D\u306E\u4ED6\u9B54\u6CD5"
+      items: []
+  - majorName: "\u30D1\u30C3\u30B7\u30D6"
+    subCategories:
+    - headerText: "\u30D1\u30C3\u30B7\u30D6"
+      items: []

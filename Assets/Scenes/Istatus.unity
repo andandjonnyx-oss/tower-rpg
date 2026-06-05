@@ -1483,6 +1483,7 @@ GameObject:
   - component: {fileID: 1872329523}
   - component: {fileID: 1872329522}
   - component: {fileID: 1872329521}
+  - component: {fileID: 1872329525}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1576,6 +1577,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1872329525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1872329519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c1829a12af1bc5429b72507b612d506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemStatusView
+  itemImage: {fileID: 1804599345}
+  nameText: {fileID: 532980049}
+  floorRangeText: {fileID: 668364131}
+  helpText: {fileID: 740505122}
+  backButton: {fileID: 1298642987}
+  upButton: {fileID: 849980400}
+  downButton: {fileID: 438247999}
+  zukanISceneName: ZukanI
 --- !u!1 &1901052355
 GameObject:
   m_ObjectHideFlags: 0
