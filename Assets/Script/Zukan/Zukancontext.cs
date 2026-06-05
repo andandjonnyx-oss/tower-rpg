@@ -21,4 +21,18 @@ public static class ZukanContext
     /// EncounteredList 内の現在のインデックス。
     /// </summary>
     public static int CurrentIndex;
+
+    /// <summary>
+    /// 詳細画面(Mstatus)から一覧(ZukanM)へ戻る最中かどうか。
+    /// true の場合、ZukanM は ReturnTargetMonster を画面内に収めるよう
+    /// スクロール位置を復元する。トップ(Zukan)から来た場合は false で先頭表示。
+    /// 一度使用したら ZukanM 側でクリアする。
+    /// </summary>
+    public static bool ReturningFromDetail;
+
+    /// <summary>
+    /// 詳細から戻る際、一覧で画面内に収めたいモンスター。
+    /// 通常/ボスどちらのタブを開くかもこのモンスターの IsBoss から判定する。
+    /// </summary>
+    public static Monster ReturnTargetMonster;
 }

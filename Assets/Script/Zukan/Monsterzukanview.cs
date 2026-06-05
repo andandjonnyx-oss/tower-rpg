@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -43,6 +44,9 @@ public class MonsterZukanView : MonoBehaviour
     [Tooltip("戻るボタン（Zukan シーンへ）")]
     [SerializeField] private Button backButton;
 
+    [Tooltip("グリッドの ScrollRect（詳細から戻った際のスクロール位置復元に使用）")]
+    [SerializeField] private ScrollRect scrollRect;
+
     [Header("Scene Names")]
     [SerializeField] private string zukanSceneName = "Zukan";
     [SerializeField] private string mstatusSceneName = "Mstatus";
@@ -77,10 +81,30 @@ public class MonsterZukanView : MonoBehaviour
         if (bossButton != null) bossButton.onClick.AddListener(OnBossClicked);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
 
-        // 初期表示: 通常モンスター
-        showingBoss = false;
-        RefreshGrid();
-        UpdateButtonVisual();
+        // 詳細から戻ったかどうかで初期表示を分岐
+        if (ZukanContext.ReturningFromDetail && ZukanContext.ReturnTargetMonster != null)
+        {
+            Monster target = ZukanContext.ReturnTargetMonster;
+
+            // 戻り対象がボスならボスタブで開く（通常タブに戻ってしまうバグの修正）
+            showingBoss = target.IsBoss;
+            RefreshGrid();
+            UpdateButtonVisual();
+
+            // グリッドのレイアウト確定後に対象を画面内へスクロール
+            StartCoroutine(ScrollToTargetNextFrame(target));
+
+            // フラグは使い切り
+            ZukanContext.ReturningFromDetail = false;
+            ZukanContext.ReturnTargetMonster = null;
+        }
+        else
+        {
+            // トップ(Zukan)から来た場合: 通常タブ・先頭表示
+            showingBoss = false;
+            RefreshGrid();
+            UpdateButtonVisual();
+        }
     }
 
     // =========================================================
@@ -280,5 +304,59 @@ public class MonsterZukanView : MonoBehaviour
 
         // 残り長さで比較（短い方が先）
         return (a.Length - i) - (b.Length - j);
+    }
+
+    /// <summary>
+    /// 1フレーム待ってレイアウト確定後、対象モンスターのセルが
+    /// 画面内に収まるようスクロール位置を調整する。
+    /// Content の実高さとセルの行位置から正規化スクロール位置を算出する。
+    /// 端付近は 0/1 にクランプされ自然に端表示になる。
+    /// </summary>
+    private System.Collections.IEnumerator ScrollToTargetNextFrame(Monster target)
+    {
+        // グリッド生成直後はレイアウト未確定なので待ってから確定させる
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        yield return null;
+
+        if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null)
+            yield break;
+
+        List<Monster> list = showingBoss ? bossMonsters : normalMonsters;
+        int index = list.IndexOf(target);
+        if (index < 0) yield break;
+
+        var grid = gridContent != null ? gridContent.GetComponent<GridLayoutGroup>() : null;
+        if (grid == null) yield break;
+
+        // 固定5列前提（FixedColumnCount）。念のため取得して使う。
+        int columns = (grid.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
+            ? Mathf.Max(1, grid.constraintCount)
+            : 5;
+
+        int row = index / columns;  // 対象が何行目か（0始まり）
+
+        // 対象行の上端Y（Content座標系。上方向に積み上がる）
+        float rowTop = grid.padding.top + row * (grid.cellSize.y + grid.spacing.y);
+        // 対象セルの中心を狙う
+        float rowCenter = rowTop + grid.cellSize.y * 0.5f;
+
+        float contentHeight = scrollRect.content.rect.height;
+        float viewportHeight = scrollRect.viewport.rect.height;
+
+        // スクロール可能量がなければ先頭でよい
+        if (contentHeight <= viewportHeight)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+            yield break;
+        }
+
+        // 対象セル中心がビューポート中央に来るような上端からの距離
+        float targetTop = rowCenter - viewportHeight * 0.5f;
+        float maxScroll = contentHeight - viewportHeight;
+        float normalizedFromTop = Mathf.Clamp01(targetTop / maxScroll);
+
+        // verticalNormalizedPosition は 1=最上 / 0=最下 なので反転
+        scrollRect.verticalNormalizedPosition = 1f - normalizedFromTop;
     }
 }

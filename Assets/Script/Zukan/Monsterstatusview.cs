@@ -356,6 +356,9 @@ public class MonsterStatusView : MonoBehaviour
 
     private void OnBackClicked()
     {
+        ZukanContext.ReturningFromDetail = true;
+        ZukanContext.ReturnTargetMonster = monster;
+
         SceneManager.LoadScene(zukanMSceneName);
     }
 }

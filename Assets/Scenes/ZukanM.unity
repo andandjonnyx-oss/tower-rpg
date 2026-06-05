@@ -1673,6 +1673,7 @@ MonoBehaviour:
   normalButton: {fileID: 1193634313}
   bossButton: {fileID: 1755829234}
   backButton: {fileID: 989983502}
+  scrollRect: {fileID: 1352901658}
   zukanSceneName: Zukan
   mstatusSceneName: Mstatus
 --- !u!1 &2063594407
