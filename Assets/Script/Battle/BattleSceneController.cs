@@ -541,6 +541,37 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     private void OnVictory()
     {
+        // 二重実行ガード（演出中の再呼び出し防止）
+        if (battleEnded) return;
+        battleEnded = true;
+        SetButtonsInteractable(false);
+
+        // =========================================================
+        // 撃破演出の出し分け（BattleContext の状態は OnVictoryCore で
+        // 書き換わる前にここで確定させる）
+        // =========================================================
+        bool feedWin = BattleContext.IsBossEventWin;                 // 餌付け勝利 → 画像不変
+        bool toPhase2 = BattleContext.Phase2Monster != null          // 第二形態への連戦 → 既存ロジックで差し替え
+                        && !BattleContext.IsPhase2Transition
+                        && BattleContext.IsBossBattle;
+        bool isBoss = BattleContext.IsBossBattle;                    // ボス撃破（沈降演出）
+
+        // 餌付け勝利・第二形態連戦は演出なしで即本体処理
+        if (feedWin || toPhase2)
+        {
+            OnVictoryCore();
+            return;
+        }
+
+        // 通常モンスター（飛散）/ ボス（点滅→沈降）の演出を再生してから本体処理
+        StartCoroutine(PlayDefeatThenVictory(isBoss));
+    }
+
+    /// <summary>
+    /// 勝利時の本体処理。撃破演出の完了後（または演出不要時）に呼ばれる。
+    /// </summary>
+    private void OnVictoryCore()
+    {
         battleEnded = true;
         AddLog($"{enemyMonster.Mname} を倒した！");
         SetButtonsInteractable(false);
