@@ -20,6 +20,21 @@ using UnityEngine.UI;
 /// </summary>
 public partial class BattleSceneController : MonoBehaviour
 {
+    [Header("UI - Background")]
+    [Tooltip("背景表示用 Image。Canvas 最背面（enemyImage より後ろ）に配置する。\n"
+       + "Anchor=stretch / Left,Right,Top,Bottom=0 で全画面表示推奨。\n"
+       + "未設定の場合は背景切り替えを行わない。")]
+    [SerializeField] private Image backgroundImage;
+
+    [Tooltip("塔内部の背景（通常ステップ用）。")]
+    [SerializeField] private Sprite bgInterior;
+
+    [Tooltip("塔内部・階段が見える背景（各階20STEP / 100Fは19STEP用）。")]
+    [SerializeField] private Sprite bgStairs;
+
+    [Tooltip("頂上の背景（100Fの20STEP用）。")]
+    [SerializeField] private Sprite bgSummit;
+
     [Header("UI - Enemy")]
     [SerializeField] private Image enemyImage;
 
@@ -256,6 +271,11 @@ public partial class BattleSceneController : MonoBehaviour
             Debug.LogError("[Battle] EnemyMonster is null");
             return;
         }
+
+        // 現在地に応じた背景を適用（Tower と同じ判定）
+        var gsBg = GameState.I;
+        if (gsBg != null)
+            DungeonBackground.Apply(backgroundImage, gsBg.floor, gsBg.step, bgInterior, bgStairs, bgSummit);
 
         if (enemyImage != null)
         {

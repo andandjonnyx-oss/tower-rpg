@@ -16,6 +16,22 @@ public class TowerState : MonoBehaviour
     [SerializeField] private TextMeshProUGUI floorText; // 「1階」
     [SerializeField] private TextMeshProUGUI stepText;  // 「1STEP」
 
+    [Header("UI - Background")]
+    [Tooltip("背景表示用 Image。Canvas 最背面（floorText 等より後ろ）に配置する。\n"
+       + "Anchor=stretch / Left,Right,Top,Bottom=0 で全画面表示推奨。\n"
+       + "未設定の場合は背景切り替えを行わない。")]
+    [SerializeField] private Image backgroundImage;
+
+    [Tooltip("塔内部の背景（通常ステップ用）。")]
+    [SerializeField] private Sprite bgInterior;
+
+    [Tooltip("塔内部・階段が見える背景（各階20STEP / 100Fは19STEP用）。")]
+    [SerializeField] private Sprite bgStairs;
+
+    [Tooltip("頂上の背景（100Fの20STEP用）。")]
+    [SerializeField] private Sprite bgSummit;
+
+
     // =========================================================
     // 状態異常表示用 UI（追加）
     // =========================================================
@@ -363,7 +379,17 @@ public class TowerState : MonoBehaviour
     {
         if (floorText != null) floorText.text = $"{Floor}階";
         if (stepText != null) stepText.text = $"{Step}STEP";
+        RefreshBackground();
         RefreshTowerStorageButton();
+    }
+
+    /// <summary>
+    /// 現在地（Floor / Step）に応じて背景画像を切り替える。
+    /// 通常ステップ=塔内部 / 各階20STEP=階段 / 100Fの20STEP=頂上。
+    /// </summary>
+    private void RefreshBackground()
+    {
+        DungeonBackground.Apply(backgroundImage, Floor, Step, bgInterior, bgStairs, bgSummit);
     }
 
     /// <summary>
