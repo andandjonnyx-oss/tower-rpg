@@ -554,12 +554,23 @@ public partial class BattleSceneController : MonoBehaviour
         bool toPhase2 = BattleContext.Phase2Monster != null          // 第二形態への連戦 → 既存ロジックで差し替え
                         && !BattleContext.IsPhase2Transition
                         && BattleContext.IsBossBattle;
-        bool isBoss = BattleContext.IsBossBattle;                    // ボス撃破（沈降演出）
 
-        // 餌付け勝利・第二形態連戦は演出なしで即本体処理
-        if (feedWin || toPhase2)
+        // ボス撃破（沈降演出）。本番ボス戦、またはモンスター自身が IsBoss フラグを
+        // 持つ場合（デバッグ戦闘で IsBoss モンスターを呼んだ時もこれで沈降演出になる）。
+        bool isBoss = BattleContext.IsBossBattle
+                      || (enemyMonster != null && enemyMonster.IsBoss);
+
+        // 餌付け勝利は演出なしで即本体処理（画像不変）
+        if (feedWin)
         {
             OnVictoryCore();
+            return;
+        }
+
+        // 連戦（第二形態へ移行）: 第一形態を消してから本体処理（→ 再読込で第二形態出現）
+        if (toPhase2)
+        {
+            StartCoroutine(Phase1VanishThenContinue());
             return;
         }
 
