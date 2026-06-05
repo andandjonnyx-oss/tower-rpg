@@ -43,6 +43,8 @@ public class TowerItemTrigger : MonoBehaviour
 
         ItemData pending = gs.pendingItemData;
         currentItem = pending;
+        // 図鑑記録（入手・諦め問わずウィンドウ表示時点で登録）
+        if (GameState.I != null) GameState.I.MarkItemDiscovered(pending.itemId);
         gs.pendingItemData = null;
         IsBusy = true;
 
@@ -117,6 +119,7 @@ public class TowerItemTrigger : MonoBehaviour
         IsBusy = true;
         currentItem = null;
 
+
         if (itemDatabase == null)
         {
             Debug.LogError("[TowerItemTrigger] ItemDatabase is not assigned.");
@@ -141,6 +144,8 @@ public class TowerItemTrigger : MonoBehaviour
         }
 
         currentItem = item;
+        // 図鑑記録（入手・諦め問わずウィンドウ表示時点で登録）
+        if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
 
         bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
         bool canGet = ItemBoxManager.Instance != null && ItemBoxManager.Instance.CanAddItem(item);

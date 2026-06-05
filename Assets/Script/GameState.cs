@@ -864,6 +864,42 @@ public class GameState : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // アイテム図鑑（発見記録）
+    // =========================================================
+    // モンスター遭遇（encounteredMonsters）と同じ設計。
+    // アイテム獲得ウィンドウが表示された時点、または交換所での交換時に
+    // MarkItemDiscovered を呼んで記録する。入手・諦めるは問わない。
+    private HashSet<string> discoveredItems = new HashSet<string>();
+
+    public bool IsItemDiscovered(string itemId)
+        => !string.IsNullOrEmpty(itemId) && discoveredItems.Contains(itemId);
+
+    public void MarkItemDiscovered(string itemId)
+    {
+        if (!string.IsNullOrEmpty(itemId) && discoveredItems.Add(itemId))
+        {
+            Debug.Log($"[GameState] アイテム発見記録: {itemId}");
+            SaveManager.Save();
+        }
+    }
+
+    public List<string> GetAllDiscoveredItemIds()
+        => new List<string>(discoveredItems);
+
+    public void RestoreDiscoveredItemIds(List<string> ids)
+    {
+        discoveredItems.Clear();
+        if (ids != null)
+        {
+            foreach (var id in ids)
+            {
+                if (!string.IsNullOrEmpty(id))
+                    discoveredItems.Add(id);
+            }
+        }
+    }
+
     private void Awake()
     {
         if (I != null) { Destroy(gameObject); return; }

@@ -762,6 +762,8 @@ public partial class BattleSceneController : MonoBehaviour
     private void ShowDropItemPopup(ItemData item, Action afterTransition)
     {
         droppedItemData = item;
+        // 図鑑記録（入手・諦め問わずドロップ確定時点で登録）
+        if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
         pendingVictoryTransition = afterTransition;
 
         // ポップアップが未設定の場合: 自動入手フォールバック

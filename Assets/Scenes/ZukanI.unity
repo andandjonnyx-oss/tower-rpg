@@ -224,17 +224,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
---- !u!114 &90171820 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
-  m_PrefabInstance: {fileID: 90171819}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &90171821 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1844478735119512597, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
@@ -1079,7 +1068,6 @@ GameObject:
   - component: {fileID: 1206772167}
   - component: {fileID: 1206772166}
   - component: {fileID: 1206772165}
-  - component: {fileID: 1206772164}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1087,27 +1075,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1206772164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206772163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a2cadde0445c254faaa7ffef6241fea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MonsterZukanView
-  monsterDatabase: {fileID: 11400000, guid: f20c45ed52962084f8718f0d4e946ee1, type: 2}
-  cellPrefab: {fileID: 2258215285824424610, guid: 02e8c7902227b99409f892bf61a9a273, type: 3}
-  gridContent: {fileID: 917425608}
-  normalButton: {fileID: 1870671650}
-  bossButton: {fileID: 1892807012}
-  backButton: {fileID: 90171820}
-  scrollRect: {fileID: 2016133334}
-  zukanSceneName: Zukan
-  mstatusSceneName: Mstatus
 --- !u!114 &1206772165
 MonoBehaviour:
   m_ObjectHideFlags: 0

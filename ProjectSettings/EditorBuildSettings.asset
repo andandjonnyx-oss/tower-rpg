@@ -56,6 +56,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ZukanI.unity
     guid: 9cb191536a67d214696d5a3b803c8b8b
+  - enabled: 1
+    path: Assets/Scenes/Istatus.unity
+    guid: 484aa32b35165164a8d9ab764ff3bf86
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

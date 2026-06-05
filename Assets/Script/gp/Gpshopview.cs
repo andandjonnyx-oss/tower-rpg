@@ -260,6 +260,9 @@ public class GpShopView : MonoBehaviour
 
         if (added)
         {
+            // 図鑑記録（交換成立時点で登録）
+            if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
+
             Debug.Log($"[GpShopView] 交換成功: {item.itemName} ({cost}GP消費, 残りGP={GameState.I.gp})");
             ShowMessage($"{item.itemName} を手に入れた！");
 
