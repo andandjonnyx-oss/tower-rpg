@@ -15,6 +15,8 @@ public class FontReplacer : EditorWindow
     private bool processPrefabs = true;
     private bool processUguiText = true;
     private bool processTmpText = true;
+    private bool processActiveScene = false;
+
 
     [MenuItem("Tools/Font Replacer")]
     public static void Open() => GetWindow<FontReplacer>("Font Replacer");
@@ -35,6 +37,8 @@ public class FontReplacer : EditorWindow
         EditorGUILayout.Space();
         processScenes = EditorGUILayout.Toggle("Build Settings のシーンを処理", processScenes);
         processPrefabs = EditorGUILayout.Toggle("全Prefabを処理", processPrefabs);
+        processActiveScene = EditorGUILayout.Toggle("現在のシーンのみ処理", processActiveScene);
+
 
         EditorGUILayout.Space();
         if (GUILayout.Button("実行", GUILayout.Height(36)))
@@ -52,6 +56,7 @@ public class FontReplacer : EditorWindow
         int total = 0;
         if (processPrefabs) total += ProcessAllPrefabs();
         if (processScenes) total += ProcessAllScenes();
+        if (processActiveScene) total += ProcessActiveScene();
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -129,6 +134,18 @@ public class FontReplacer : EditorWindow
             }
         }
 
+        return count;
+    }
+
+    private int ProcessActiveScene()
+    {
+        var scene = EditorSceneManager.GetActiveScene();
+        int count = 0;
+        foreach (var go in scene.GetRootGameObjects())
+            count += ApplyToHierarchy(go);
+
+        if (count > 0)
+            EditorSceneManager.MarkSceneDirty(scene); // 保存はCtrl+Sで手動
         return count;
     }
 }

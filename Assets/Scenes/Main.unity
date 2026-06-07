@@ -211,6 +211,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: gpshop
@@ -224,9 +232,17 @@ PrefabInstance:
       value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: m_fontSizeBase
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -466,6 +482,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Debug
@@ -474,6 +498,14 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u30C7\u30D0\u30C3\u30B0"
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -655,6 +687,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3589532926605468968, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -679,6 +719,22 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u30B9\u30C6\u30FC\u30BF\u30B9"
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents:
     - {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
     m_RemovedGameObjects: []
@@ -878,6 +934,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Zukan
@@ -886,6 +950,14 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u56F3\u9451\u3078"
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1143,6 +1215,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Itemsouko
@@ -1151,6 +1231,14 @@ PrefabInstance:
       propertyPath: m_text
       value: "\u5009\u5EAB\u3078"
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1253,10 +1341,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Towerin
       objectReference: {fileID: 0}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+    - target: {fileID: 6838851103111533797, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
