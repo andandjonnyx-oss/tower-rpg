@@ -59,6 +59,10 @@ public class MonsterStatusView : MonoBehaviour
     [SerializeField] private TMP_Text resRageText;
     [SerializeField] private TMP_Text resSilenceText;
     [SerializeField] private TMP_Text resDebuffText;
+    [SerializeField] private TMP_Text resPetrifyText;  // 石化耐性
+    [SerializeField] private TMP_Text resCharmText;     // 魅了耐性
+    [SerializeField] private TMP_Text resCurseText;     // 呪い耐性
+    [SerializeField] private TMP_Text resGlassText;     // ガラス耐性
     [SerializeField] private TMP_Text immuneText;  // 全耐性フラグ表示
 
     [Header("Panel3 - Action Pattern")]
@@ -138,7 +142,7 @@ public class MonsterStatusView : MonoBehaviour
         if (floorRangeText != null)
         {
             if (monster.IsBoss)
-                floorRangeText.text = $"出現: {monster.Minfloor}F ボス";
+                floorRangeText.text = "出現: ボス";
             else
                 floorRangeText.text = $"出現: {monster.Minfloor}F-{monster.Maxfloor}F";
         }
@@ -150,17 +154,17 @@ public class MonsterStatusView : MonoBehaviour
         if (luckText != null) luckText.text = $"LUC: {monster.Luck}";
         if (expText != null) expText.text = $"EXP: {monster.Exp}";
 
-        // ドロップアイテム
+        // ドロップアイテム（1行目: ドロップ: / 2行目: アイテム名 (%)）
         if (dropText != null)
         {
             if (monster.dropItem != null && monster.dropRate > 0f)
             {
                 int percent = Mathf.RoundToInt(monster.dropRate * 100f);
-                dropText.text = $"ドロップ: {monster.dropItem.itemName} ({percent}%)";
+                dropText.text = $"ドロップ:\n{monster.dropItem.itemName} ({percent}%)";
             }
             else
             {
-                dropText.text = "ドロップ: なし";
+                dropText.text = "ドロップ:\nなし";
             }
         }
 
@@ -175,23 +179,27 @@ public class MonsterStatusView : MonoBehaviour
     private void RefreshPanel2()
     {
         // 属性耐性
-        if (resStrikeText != null) resStrikeText.text = $"殴: {monster.GetAttributeResistance(WeaponAttribute.Strike)}";
-        if (resSlashText != null) resSlashText.text = $"斬: {monster.GetAttributeResistance(WeaponAttribute.Slash)}";
-        if (resPierceText != null) resPierceText.text = $"突: {monster.GetAttributeResistance(WeaponAttribute.Pierce)}";
-        if (resFireText != null) resFireText.text = $"火: {monster.GetAttributeResistance(WeaponAttribute.Fire)}";
-        if (resIceText != null) resIceText.text = $"氷: {monster.GetAttributeResistance(WeaponAttribute.Ice)}";
-        if (resThunderText != null) resThunderText.text = $"雷: {monster.GetAttributeResistance(WeaponAttribute.Thunder)}";
-        if (resHolyText != null) resHolyText.text = $"聖: {monster.GetAttributeResistance(WeaponAttribute.Holy)}";
-        if (resDarkText != null) resDarkText.text = $"闇: {monster.GetAttributeResistance(WeaponAttribute.Dark)}";
+        if (resStrikeText != null) resStrikeText.text = $"殴耐性: {monster.GetAttributeResistance(WeaponAttribute.Strike)}";
+        if (resSlashText != null) resSlashText.text = $"斬耐性: {monster.GetAttributeResistance(WeaponAttribute.Slash)}";
+        if (resPierceText != null) resPierceText.text = $"突耐性: {monster.GetAttributeResistance(WeaponAttribute.Pierce)}";
+        if (resFireText != null) resFireText.text = $"火耐性: {monster.GetAttributeResistance(WeaponAttribute.Fire)}";
+        if (resIceText != null) resIceText.text = $"氷耐性: {monster.GetAttributeResistance(WeaponAttribute.Ice)}";
+        if (resThunderText != null) resThunderText.text = $"雷耐性: {monster.GetAttributeResistance(WeaponAttribute.Thunder)}";
+        if (resHolyText != null) resHolyText.text = $"聖耐性: {monster.GetAttributeResistance(WeaponAttribute.Holy)}";
+        if (resDarkText != null) resDarkText.text = $"闇耐性: {monster.GetAttributeResistance(WeaponAttribute.Dark)}";
 
         // 状態異常耐性
-        if (resPoisonText != null) resPoisonText.text = $"毒: {monster.GetStatusEffectResistance(StatusEffect.Poison)}";
-        if (resStunText != null) resStunText.text = $"気絶: {monster.GetStatusEffectResistance(StatusEffect.Stun)}";
-        if (resParalyzeText != null) resParalyzeText.text = $"麻痺: {monster.GetStatusEffectResistance(StatusEffect.Paralyze)}";
-        if (resBlindText != null) resBlindText.text = $"暗闇: {monster.GetStatusEffectResistance(StatusEffect.Blind)}";
-        if (resRageText != null) resRageText.text = $"怒り: {monster.GetStatusEffectResistance(StatusEffect.Rage)}";
-        if (resSilenceText != null) resSilenceText.text = $"沈黙: {monster.GetStatusEffectResistance(StatusEffect.Silence)}";
-        if (resDebuffText != null) resDebuffText.text = $"デバフ: {monster.GetStatusEffectResistance(StatusEffect.Debuff)}";
+        if (resPoisonText != null) resPoisonText.text = $"毒耐性: {monster.GetStatusEffectResistance(StatusEffect.Poison)}";
+        if (resStunText != null) resStunText.text = $"気絶耐性: {monster.GetStatusEffectResistance(StatusEffect.Stun)}";
+        if (resParalyzeText != null) resParalyzeText.text = $"麻痺耐性: {monster.GetStatusEffectResistance(StatusEffect.Paralyze)}";
+        if (resBlindText != null) resBlindText.text = $"暗闇耐性: {monster.GetStatusEffectResistance(StatusEffect.Blind)}";
+        if (resRageText != null) resRageText.text = $"怒り耐性: {monster.GetStatusEffectResistance(StatusEffect.Rage)}";
+        if (resSilenceText != null) resSilenceText.text = $"沈黙耐性: {monster.GetStatusEffectResistance(StatusEffect.Silence)}";
+        if (resDebuffText != null) resDebuffText.text = $"デバフ耐性: {monster.GetStatusEffectResistance(StatusEffect.Debuff)}";
+        if (resPetrifyText != null) resPetrifyText.text = $"石化耐性: {monster.GetStatusEffectResistance(StatusEffect.Petrify)}";
+        if (resCharmText != null) resCharmText.text = $"魅了耐性: {monster.GetStatusEffectResistance(StatusEffect.Charm)}";
+        if (resCurseText != null) resCurseText.text = $"呪い耐性: {monster.GetStatusEffectResistance(StatusEffect.Curse)}";
+        if (resGlassText != null) resGlassText.text = $"ガラス耐性: {monster.GetStatusEffectResistance(StatusEffect.Glass)}";
 
         // 全耐性フラグ
         if (immuneText != null)
@@ -283,7 +291,7 @@ public class MonsterStatusView : MonoBehaviour
     // ZukanContext.EncounteredList 内を前後に移動する。
     // 端に達したらループする（末尾→先頭、先頭→末尾）。
     // シーン遷移なしで monster を差し替えて RefreshAll() するだけなので軽い。
-    // パネル位置はリセットせず現在のまま維持する。
+    // モンスター切替時はパネルを1/3（基本情報）にリセットする。
     // =========================================================
 
     /// <summary>↑ 前のモンスターへ切替</summary>
@@ -311,6 +319,7 @@ public class MonsterStatusView : MonoBehaviour
     /// <summary>
     /// 指定インデックスのモンスターに切り替える。
     /// シーン遷移なし。表示内容を即座に更新する。
+    /// モンスター切替時はパネルを1/3（基本情報）にリセットする。
     /// </summary>
     private void SwitchToMonster(int newIndex)
     {
@@ -318,8 +327,9 @@ public class MonsterStatusView : MonoBehaviour
         monster = ZukanContext.EncounteredList[newIndex];
         ZukanContext.SelectedMonster = monster;
 
+        currentPanel = 0;   // モンスター切替時は必ず基本情報(1/3)に戻す
+
         RefreshAll();
-        // パネル位置は維持（リセットしない）
         ApplyPanelVisibility();
         UpdateMonsterNavButtons();
     }

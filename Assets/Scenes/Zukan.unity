@@ -317,6 +317,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: ZukanI
@@ -484,7 +492,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1152256920908389576, guid: a199b3ba68fcd8a448402b18c0658ee7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 948d9fa4705653c4490901def67a1f58, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -594,6 +602,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: Main
@@ -704,6 +720,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: ZukanT
@@ -893,6 +917,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2293354507014062582, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b138d4a4bb4952040af9be83349b868a, type: 3}
     - target: {fileID: 3836054887858836024, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: sceneName
       value: ZukanM

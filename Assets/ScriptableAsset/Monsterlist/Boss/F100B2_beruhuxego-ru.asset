@@ -69,6 +69,8 @@ MonoBehaviour:
     threshold: 70
   - skill: {fileID: 11400000, guid: 238230c221b236c46a8f22b37111940e, type: 2}
     threshold: 80
+  - skill: {fileID: 11400000, guid: f9fb058b9296cb4418bd3c41fd2b3fca, type: 2}
+    threshold: 90
   - skill: {fileID: 11400000, guid: 553f8acd52ca8c849a288b7e094a1dbe, type: 2}
     threshold: 100
   - skill: {fileID: 11400000, guid: a3fab513ff88fc840996d68fdf7c3e37, type: 2}

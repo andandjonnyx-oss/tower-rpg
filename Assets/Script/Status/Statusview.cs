@@ -81,6 +81,10 @@ public class StatusView : MonoBehaviour
     [SerializeField] private TMP_Text resParalyzeText;  // 麻痺耐性
     [SerializeField] private TMP_Text resBlindText;     // 暗闇耐性
     [SerializeField] private TMP_Text resSilenceText;   // 沈黙耐性
+    [SerializeField] private TMP_Text resPetrifyText;   // 石化耐性
+    [SerializeField] private TMP_Text resCharmText;     // 魅了耐性
+    [SerializeField] private TMP_Text resCurseText;     // 呪い耐性
+    [SerializeField] private TMP_Text resGlassText;     // ガラス耐性
     [SerializeField] private TMP_Text resDebuffText;    // デバフ耐性
 
     [Header("Buttons")]
@@ -208,23 +212,27 @@ public class StatusView : MonoBehaviour
         // =====================================================
         // Status2 — 中列: 属性耐性（装備＋パッシブ合算）
         // =====================================================
-        if (resStrikeText != null) resStrikeText.text = $"殴：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Strike)}";
-        if (resSlashText != null) resSlashText.text = $"斬：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Slash)}";
-        if (resPierceText != null) resPierceText.text = $"突：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Pierce)}";
-        if (resFireText != null) resFireText.text = $"火：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire)}";
-        if (resIceText != null) resIceText.text = $"氷：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Ice)}";
-        if (resThunderText != null) resThunderText.text = $"雷：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Thunder)}";
-        if (resHolyText != null) resHolyText.text = $"聖：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Holy)}";
-        if (resDarkText != null) resDarkText.text = $"闇：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Dark)}";
+        if (resStrikeText != null) resStrikeText.text = $"殴耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Strike)}";
+        if (resSlashText != null) resSlashText.text = $"斬耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Slash)}";
+        if (resPierceText != null) resPierceText.text = $"突耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Pierce)}";
+        if (resFireText != null) resFireText.text = $"火耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire)}";
+        if (resIceText != null) resIceText.text = $"氷耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Ice)}";
+        if (resThunderText != null) resThunderText.text = $"雷耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Thunder)}";
+        if (resHolyText != null) resHolyText.text = $"聖耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Holy)}";
+        if (resDarkText != null) resDarkText.text = $"闇耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Dark)}";
 
         // =====================================================
         // Status2 — 右列: 状態異常耐性（装備＋パッシブ合算）
         // =====================================================
-        if (resPoisonText != null) resPoisonText.text = $"毒：{CalcTotalStatusEffectResistance(StatusEffect.Poison)}";
-        if (resParalyzeText != null) resParalyzeText.text = $"麻痺：{CalcTotalStatusEffectResistance(StatusEffect.Paralyze)}";
-        if (resBlindText != null) resBlindText.text = $"暗闇：{CalcTotalStatusEffectResistance(StatusEffect.Blind)}";
-        if (resSilenceText != null) resSilenceText.text = $"沈黙：{CalcTotalStatusEffectResistance(StatusEffect.Silence)}";
-        if (resDebuffText != null) resDebuffText.text = $"デバフ：{CalcTotalStatusEffectResistance(StatusEffect.Debuff)}";
+        if (resPoisonText != null) resPoisonText.text = $"毒耐性：{CalcTotalStatusEffectResistance(StatusEffect.Poison)}";
+        if (resParalyzeText != null) resParalyzeText.text = $"麻痺耐性：{CalcTotalStatusEffectResistance(StatusEffect.Paralyze)}";
+        if (resBlindText != null) resBlindText.text = $"暗闇耐性：{CalcTotalStatusEffectResistance(StatusEffect.Blind)}";
+        if (resSilenceText != null) resSilenceText.text = $"沈黙耐性：{CalcTotalStatusEffectResistance(StatusEffect.Silence)}";
+        if (resPetrifyText != null) resPetrifyText.text = $"石化耐性：{CalcTotalStatusEffectResistance(StatusEffect.Petrify)}";
+        if (resCharmText != null) resCharmText.text = $"魅了耐性：{CalcTotalStatusEffectResistance(StatusEffect.Charm)}";
+        if (resCurseText != null) resCurseText.text = $"呪い耐性：{CalcTotalStatusEffectResistance(StatusEffect.Curse)}";
+        if (resGlassText != null) resGlassText.text = $"ガラス耐性：{CalcTotalStatusEffectResistance(StatusEffect.Glass)}";
+        if (resDebuffText != null) resDebuffText.text = $"デバフ耐性：{CalcTotalStatusEffectResistance(StatusEffect.Debuff)}";
     }
 
     /// <summary>
