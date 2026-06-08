@@ -31,20 +31,26 @@ MonoBehaviour:
   Evasion: 600
   BaseHitRate: 90
   PoisonResistance: 100
-  StunResistance: 100
-  ParalyzeResistance: 100
-  BlindResistance: 100
+  StunResistance: 200
+  ParalyzeResistance: 200
+  BlindResistance: 200
   RageResistance: 0
-  SilenceResistance: 100
-  PetrifyResistance: 100
-  DebuffResistance: 100
+  SilenceResistance: 200
+  PetrifyResistance: 200
+  DebuffResistance: 200
   CharmResistance: 0
-  CurseResistance: 100
-  GlassResistance: 100
+  CurseResistance: 200
+  GlassResistance: 200
   immuneToAllAilments: 0
   isGirl: 0
   acceptsFeedItem: 0
-  attributeResistances: []
+  attributeResistances:
+  - attribute: 0
+    value: 50
+  - attribute: 2
+    value: 50
+  - attribute: 3
+    value: 50
   Exp: 15000
   Gold: 0
   dropItem: {fileID: 0}

@@ -98,6 +98,10 @@ public class ItemStatusView : MonoBehaviour
     /// <summary>出現フロア表示文字列を作る。Minfloor〜Maxfloor。</summary>
     private string BuildFloorRange(ItemData item)
     {
+        // Minfloor / Maxfloor が両方0のアイテムはイベント入手扱い。
+        if (item.Minfloor == 0 && item.Maxfloor == 0)
+            return "出現: イベント";
+
         // Maxfloor が 0 や未設定の場合の表記はプロジェクトの慣習に合わせて調整可。
         if (item.Maxfloor > 0 && item.Maxfloor != item.Minfloor)
             return $"出現: {item.Minfloor}〜{item.Maxfloor}F";

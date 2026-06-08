@@ -607,6 +607,7 @@ MonoBehaviour:
   talkDatabase: {fileID: 11400000, guid: 85177fb14298ecb419100aecd1d20533, type: 2}
   cellPrefab: {fileID: 1934618386138107180, guid: 80268061590d2f340958e0fe767e83ba, type: 3}
   listContent: {fileID: 2030426230}
+  scrollRect: {fileID: 2081066561}
   backButton: {fileID: 830257557}
   zukanSceneName: Zukan
   talkSceneName: Talk
