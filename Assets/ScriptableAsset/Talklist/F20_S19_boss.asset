@@ -16,19 +16,24 @@ MonoBehaviour:
   zukanTitle: "\u30DC\u30B9\u6226\u524D\u306E\u5927\u30D2\u30F3\u30C8"
   floor: 20
   step: 19
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u3053\u306E\u514820\u968E\u306E\u30DC\u30B9\u3060\u305C\uFF01\n\u304D\u3061\u3093\u3068\u56DE\u5FA9\u3057\u3066\u304A\u3051\u3088\uFF01"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -3833558156305714257, guid: d0a1416310d325447b2072d177408040, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u305D\u3057\u3066\u4ECA\u56DE\u306E\u30B9\u30DA\u30B7\u30E3\u30EB\u5927\u30D2\u30F3\u30C8\uFF01\n\u30DC\u30B9\u306E\u540D\u524D\u306F\u300E\u3055\u3093\u3060\u30FC\u30C9\u30E9\u30B4\u30F3\u300F\u3060\uFF01\n\u3069\u3093\u306A\u5BFE\u7B56\u3092\u3059\u308C\u3070\u3044\u3044\u306E\u304B\u3001\u308F\u304B\u308B\u3088\u306A\uFF1F"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u3048\uFF1F\u3000\u843D\u3068\u3057\u7269\u3092\u3057\u3066\u306A\u3044\u304B\u3063\u3066\uFF1F\n\u3042\u30FC\u3001\u305D\u3046\u3044\u3048\u3070\u3055\u3063\u304D\u62FE\u3063\u305F\u3088\u3046\u306A\u2026\u2026"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
   rewardItem: {fileID: 11400000, guid: cbfb9c5a0749ef540baa0f3ccc1547c3, type: 2}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

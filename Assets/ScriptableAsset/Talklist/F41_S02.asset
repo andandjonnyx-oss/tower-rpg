@@ -16,19 +16,24 @@ MonoBehaviour:
   zukanTitle: "\u3082\u3046\u3059\u305050\u968E"
   floor: 41
   step: 2
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u3064\u3044\u306B40\u5C64\u5230\u9054\u3060\u306A\uFF01\n\u3082\u3046\u3059\u3050\u6298\u308A\u8FD4\u3057\u5730\u70B9\u3060\uFF01"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: You
     text: "\u308F\u304B\u3063\u305F\u304B\u3089\u3001\u3044\u3064\u3082\u306E\u991E\u5225\u3092\u304F\u308C\u3002"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u304A\u524D\u3061\u3087\u3063\u3068\u614B\u5EA6\u60AA\u304F\u7121\u3044\u304B\u2026\u2026\uFF1F\n\u30D7\u30EC\u30A4\u30E4\u30FC\u304C\u611F\u60C5\u79FB\u5165\u51FA\u6765\u306A\u304F\u306A\u3063\u305F\u3089\u7D42\u308F\u308A\u3060\u305E\u2026\u2026\uFF1F"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -8468336318900812975, guid: a71047c7cdbc5ef48950b42866cc45b3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
   rewardItem: {fileID: 11400000, guid: ffc5d994f21835b4d885476bb9afd5b2, type: 2}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

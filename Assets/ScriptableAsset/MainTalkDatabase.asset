@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TalkEventDatabase
   events:
   - {fileID: 11400000, guid: b12a0334eb1f4dd41aaaed052072879e, type: 2}
+  - {fileID: 11400000, guid: 7a79b13032207414baec25410b37cae6, type: 2}
   - {fileID: 11400000, guid: 995869359adc1f348842540b2f6a46b7, type: 2}
   - {fileID: 11400000, guid: efa1b20a00f28cd42ba0c6784b802658, type: 2}
   - {fileID: 11400000, guid: 78684ae114dc125428f8c70b2803a91d, type: 2}
@@ -124,3 +125,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4c556a8d8f4bacb46b2433f480f70805, type: 2}
   - {fileID: 11400000, guid: cf3e86aea85d9be4982da31513c2809d, type: 2}
   - {fileID: 11400000, guid: e2be10b416f2d5c44bb77e56334ec9ee, type: 2}
+  - {fileID: 11400000, guid: 5fd8710f44ac2e445bb9cb21438cfd59, type: 2}
+  - {fileID: 11400000, guid: d172bc803b8dc4a44988eab75f8babeb, type: 2}
+  - {fileID: 11400000, guid: e5e60cc5ac126c841bde434e4fa40c31, type: 2}
+  - {fileID: 11400000, guid: cb03fa955d3982d4f9d9eec83e75760e, type: 2}
+  - {fileID: 11400000, guid: be0e806a8c46a224895ccc1cd353d1ce, type: 2}
+  - {fileID: 11400000, guid: e20ddbaa88325fe4e913bc4fdc54d94a, type: 2}
+  - {fileID: 11400000, guid: 96138787bb591624588794528cf923c1, type: 2}
+  - {fileID: 11400000, guid: 9678d7849f25bf348b0684f8d0202991, type: 2}
+  - {fileID: 11400000, guid: cc6d587037194814da457efbfd537800, type: 2}
+  - {fileID: 11400000, guid: 9f04b24fc2e3e0f48ae6c2a74b580251, type: 2}
+  - {fileID: 11400000, guid: 46b6c84dc86b1584abade1005ede0e7f, type: 2}
+  - {fileID: 11400000, guid: fd0b462ceb07aab4ab1356da41e692c5, type: 2}
+  - {fileID: 11400000, guid: 2c896c5a3e16f754a9b3039d9969914a, type: 2}
+  - {fileID: 11400000, guid: a7bc2aaf212fd904281a407b2ac9b112, type: 2}
+  - {fileID: 11400000, guid: 1442f9a57ad09164db17094c4b6e74b2, type: 2}
+  - {fileID: 11400000, guid: 70323ab5100949640b53d0c04ce1aecd, type: 2}

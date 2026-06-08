@@ -16,30 +16,32 @@ MonoBehaviour:
   zukanTitle: "\u203B20\u6B73\u4EE5\u4E0A\u3067\u3059"
   floor: 83
   step: 2
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u4ECA\u304B\u3089\u9152\u5451\u7AE5\u5B50\u3068\u98F2\u307F\u4F1A\u306A\u3093\u3060\u3002\n\u304A\u524D\u3082\u6765\u308B\u304B\uFF1F"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: You
     text: "\u9152\u98F2\u3093\u3067\u30C0\u30F3\u30B8\u30E7\u30F3\u653B\u7565\u306A\u3093\u3066\u51FA\u6765\u308B\u304B\u3088\u2026\u2026"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u307E\u3041\u307E\u3041\u3001\u305F\u307E\u306B\u306F\u6226\u3044\u306A\u3093\u3066\u5FD8\u308C\u3066\u98F2\u3082\u3046\u305C\uFF1F\n\u2026\u2026\u305D\u3082\u305D\u3082\u304A\u524D\u3001\u9152\u98F2\u3081\u308B\u5E74\u9F62\u306A\u306E\u304B\uFF1F\n\u300E\u5192\u967A\u8005\u306E\u7537\u300F\u3063\u3066\u8A2D\u5B9A\u3060\u3051\u3067\u5E74\u9F62\u306F\u660E\u8A00\u3055\u308C\u3066\u306A\u3044\u3057\u3001\n\u7ACB\u3061\u7D75\u304C\u7121\u3044\u304B\u3089\u9854\u3064\u304D\u3082\u308F\u304B\u3089\u306A\u3044\u3057\u3001\u5B9F\u306F\u5B50\u4F9B\u3060\u3063\u305F\u308A\u306A\u2026\u2026"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: You
     text: "\u5B50\u4F9B\u304C\u4E16\u754C\u4E2D\u3092\u5192\u967A\u306A\u3093\u3066\u3059\u308B\u304B\u3088\u2026\u2026"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u6F2B\u753B\u3068\u304B\u30E9\u30CE\u30D9\u3068\u304B\u3060\u3068\n\u5192\u967A\u3057\u3066\u308B\u306E\u306F\u57FA\u672C\u5B50\u4F9B\u3060\u3051\u3069\u306A\u2026\u2026"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -1474213477433997886, guid: 9a865c02e1edaa349aa9835276d7453f, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
   randomGroup: 
   randomWeight: 0
   exclusiveIds: []
   rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

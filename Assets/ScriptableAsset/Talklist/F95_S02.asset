@@ -16,7 +16,7 @@ MonoBehaviour:
   zukanTitle: "\u7A81\u7136\u6D88\u3048\u308B\u30E9\u30F3\u30C9\u30DE\u30FC\u30AF"
   floor: 95
   step: 2
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: You
     text: "\u3053\u306E\u5854\u3092\u653B\u7565\u3057\u305F\u3089\u3001\u304A\u524D\u306F\u3069\u3046\u306A\u308B\u3093\u3060\uFF1F"

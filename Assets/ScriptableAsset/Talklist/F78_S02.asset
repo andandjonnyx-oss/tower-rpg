@@ -16,22 +16,24 @@ MonoBehaviour:
   zukanTitle: "\u98F2\u3081\u306A\u3044\u8056\u6C34"
   floor: 78
   step: 2
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u9000\u9B54\u306E\u8056\u6C34\u3063\u3066\u3001\u98F2\u3093\u3060\u3089\u56DE\u5FA9\u3057\u305D\u3046\u306A\u306E\u306B\n\u305D\u3082\u305D\u3082\u98DF\u3079\u3089\u308C\u306A\u3044\u4ED5\u69D8\u306A\u3093\u3060\u3088\u306A\u3002"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u77E5\u3063\u3066\u308B\u304B\uFF1F\u3000\u6700\u521D\u306FMP\u56DE\u5FA9\u52B9\u679C\u3092\n\u6301\u305F\u305B\u3088\u3046\u3068\u3057\u305F\u3093\u3060\u3051\u3069\u3001\u305D\u3053\u3067\u6C17\u4ED8\u3044\u305F\u3093\u3060\u3002\n\u300E\u98DF\u3079\u3089\u308C\u308B\u30A2\u30A4\u30C6\u30E0\u300F\u306BMP\u56DE\u5FA9\u8A2D\u5B9A\u304C\u7121\u3044\u3063\u3066\u3002"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u305D\u3053\u3067\u30D7\u30ED\u30B0\u30E9\u30E0\u3092\u66F8\u304D\u63DB\u3048\u3066MP\u56DE\u5FA9\u52B9\u679C\u3092\n\u8FFD\u52A0\u3059\u308C\u3070\u3044\u3044\u306E\u306B\u3001\u9762\u5012\u306B\u306A\u3063\u305F\u4E3B\u4EBA\u306F\n\u98DF\u3079\u3089\u308C\u306A\u3044\u8A2D\u5B9A\u306B\u3057\u305F\u3093\u3060\u3002\u60C5\u3051\u306A\u3044\u306A\uFF01"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -8468336318900812975, guid: a71047c7cdbc5ef48950b42866cc45b3, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
   randomGroup: 
   randomWeight: 0
   exclusiveIds: []
   rewardItem: {fileID: 11400000, guid: 09ee0835c759e5c489cd621deb4591eb, type: 2}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: BOSS_F100_VICTORY
   zukanTitle: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
-  floor: 0
+  floor: 9999
   step: 0
-  backgroundImage: {fileID: 0}
+  backgroundImage: {fileID: 21300000, guid: e38feb1a74bdd394c991dfd6ce1a34eb, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0\u4EEE\u67A0"

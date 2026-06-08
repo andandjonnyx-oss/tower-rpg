@@ -13,25 +13,27 @@ MonoBehaviour:
   m_Name: F72_S02
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
   id: F72_S02
-  zukanTitle: "\u4F55\u6545\u5149\u3092\u96C6\u3081\u308B\u3093\u3060\u3044\uFF1F"
+  zukanTitle: "\u8D85\u7D76\u5929\u4F7F\u30D5\u30A7\u30B4\u30FC\u30EB"
   floor: 72
   step: 2
-  backgroundImage: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  backgroundImage: {fileID: 21300000, guid: aef2ec3c256f226419898fc53b2fda28, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "\u2026\u2026\u4F55\u304B\u304A\u524D\u3001\u5149\u5C5E\u6027\u306E\u9B54\u6CD5\u3068\u304B\n\u6B66\u5668\u3068\u304B\u96C6\u3081\u3088\u3046\u3068\u3057\u3066\u7121\u3044\u304B\uFF1F"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    text: "\u2026\u2026\u4F55\u304B\u304A\u524D\u3001\u8056\u5C5E\u6027\u306E\u9B54\u6CD5\u3068\u304B\n\u6B66\u5668\u3068\u304B\u96C6\u3081\u3088\u3046\u3068\u3057\u3066\u7121\u3044\u304B\uFF1F"
+    portrait: {fileID: -8468336318900812975, guid: a71047c7cdbc5ef48950b42866cc45b3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
-    text: "\u4E00\u5FDC\u8A00\u3063\u3066\u304A\u304F\u3051\u3069\u306A\u3001\u79C1\u306F\u5225\u306B\n\u5149\u5C5E\u6027\u304C\u5F31\u70B9\u3068\u304B\u305D\u3046\u3044\u3046\u4E8B\u306F\u4F55\u3082\u7121\u3044\u305C\u3002"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    text: "\u4E00\u5FDC\u8A00\u3063\u3066\u304A\u304F\u3051\u3069\u306A\u3001\u79C1\u306F\u5225\u306B\n\u8056\u5C5E\u6027\u304C\u5F31\u70B9\u3068\u304B\u305D\u3046\u3044\u3046\u4E8B\u306F\u4F55\u3082\u7121\u3044\u305C\u3002"
+    portrait: {fileID: -8468336318900812975, guid: a71047c7cdbc5ef48950b42866cc45b3, type: 3}
     backgroundOverride: {fileID: 0}
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u305D\u308A\u3083\u3042\u898B\u305F\u76EE\u306F\u60AA\u9B54\u3060\u3051\u3069\u3088\u3049\u2026\u2026\n\u4E2D\u8EAB\u306F\u5929\u4F7F\u306A\u3093\u3060\u304B\u3089\u306A\uFF01"
-    portrait: {fileID: -9110550355602550490, guid: 1c9a759beefc7a545b788047293b1cf3, type: 3}
+    portrait: {fileID: -3833558156305714257, guid: d0a1416310d325447b2072d177408040, type: 3}
     backgroundOverride: {fileID: 0}
   conditions: []
   randomGroup: 
   randomWeight: 0
   exclusiveIds: []
   rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0
