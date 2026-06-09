@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 037_honoonokesin
   Mname: "\u708E\u306E\u5316\u8EAB"
   Image: {fileID: 21300000, guid: 5feeb0612894d2d4fb13686fa0282d77, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 36
   Minstep: 1
   Maxfloor: 40

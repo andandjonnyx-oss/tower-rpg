@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: F070B1_dakki
   Mname: "\u59B2\u5DF1"
   Image: {fileID: 21300000, guid: 7092af75c9652364cb93f0776fd44a7a, type: 3}
+  battleBgm: {fileID: 8300000, guid: df8d8e6755db8f348ab58607d280fc42, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0

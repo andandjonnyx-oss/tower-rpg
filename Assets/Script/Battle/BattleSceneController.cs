@@ -272,10 +272,16 @@ public partial class BattleSceneController : MonoBehaviour
             return;
         }
 
+
         // 現在地に応じた背景を適用（Tower と同じ判定）
         var gsBg = GameState.I;
         if (gsBg != null)
             DungeonBackground.Apply(backgroundImage, gsBg.floor, gsBg.step, bgInterior, bgStairs, bgSummit);
+
+        // バトル BGM 再生（敵ごとに異なる。メイン曲=塔曲などを退避して上から流す）
+        // Start() は Itembox 復帰時にも走るが、PlayOverlay は「同じclipなら鳴らし直さない」ため継続する。
+        if (AudioManager.I != null && enemyMonster.battleBgm != null)
+            AudioManager.I.PlayOverlay(enemyMonster.battleBgm);
 
         if (enemyImage != null)
         {
@@ -563,16 +569,23 @@ public partial class BattleSceneController : MonoBehaviour
         // 餌付け勝利は演出なしで即本体処理（画像不変）
         if (feedWin)
         {
+            // 勝敗確定 → BGM 停止
+            if (AudioManager.I != null) AudioManager.I.StopOverlayKeepSilent();
             OnVictoryCore();
             return;
         }
 
         // 連戦（第二形態へ移行）: 第一形態を消してから本体処理（→ 再読込で第二形態出現）
+        // ※ ここでは BGM を止めない。第二形態の Start() で次の BGM が鳴る（同じなら継続）。
         if (toPhase2)
         {
             StartCoroutine(Phase1VanishThenContinue());
             return;
         }
+
+        // 勝敗確定 → BGM 停止（連戦でない通常勝利／ボス撃破）
+        if (AudioManager.I != null) AudioManager.I.StopOverlayKeepSilent();
+
 
         // 通常モンスター（飛散）/ ボス（点滅→沈降）の演出を再生してから本体処理
         StartCoroutine(PlayDefeatThenVictory(isBoss));
@@ -914,6 +927,10 @@ public partial class BattleSceneController : MonoBehaviour
         AddLog("You は倒れた…");
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
+
+        // 勝敗確定 → BGM 停止
+        if (AudioManager.I != null) AudioManager.I.StopOverlayKeepSilent();
+
 
         // ログを全部表示してからポップアップ表示
         FlushLogsAndThen(() =>

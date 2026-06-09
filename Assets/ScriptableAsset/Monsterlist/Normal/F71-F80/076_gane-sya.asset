@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 076_gane-sya
   Mname: "\u30AC\u30CD\u30FC\u30B7\u30E3"
   Image: {fileID: 21300000, guid: 260f0c074f086e041bbb9bf946b37ec4, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 74
   Minstep: 1
   Maxfloor: 78

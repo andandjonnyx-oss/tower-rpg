@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 049_100damekun
   Mname: "\u7D76\u5BFE100\u30C0\u30E1\u4E0E\u3048\u308B\u304F\u3093"
   Image: {fileID: 21300000, guid: de353f539a901364298a4adf020677cb, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 46
   Minstep: 1
   Maxfloor: 50

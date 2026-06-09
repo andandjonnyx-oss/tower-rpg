@@ -14,6 +14,9 @@ public class Monster : ScriptableObject
     [Header("Image")]
     public Sprite Image;
 
+    [Header("Battle BGM")]
+    [Tooltip("この敵と戦う時に流す BGM。null の場合は直前の BGM が継続する（個別未設定の雑魚敵向け）。")]
+    public AudioClip battleBgm;
 
     [Header("Range")]
     public int Minfloor;

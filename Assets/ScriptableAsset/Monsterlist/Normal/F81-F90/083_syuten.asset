@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 083_syuten
   Mname: "\u9152\u5451\u7AE5\u5B50"
   Image: {fileID: 21300000, guid: 9b0bbdc718f55434bb6823c722d1ee0c, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 81
   Minstep: 1
   Maxfloor: 85

@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 002_inpu
   Mname: "\u30A4\u30F3\u30D7"
   Image: {fileID: 21300000, guid: 152f7d5f0d9fb7c4ebf25ed647214dea, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 1
   Minstep: 1
   Maxfloor: 5

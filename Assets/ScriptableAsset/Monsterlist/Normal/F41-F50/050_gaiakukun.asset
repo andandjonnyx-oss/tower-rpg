@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 050_gaiakukun
   Mname: "\u5BB3\u60AA\u304F\u3093"
   Image: {fileID: 21300000, guid: 2f7c58933590c124682ef57f5b7383b1, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 50
   Minstep: 1
   Maxfloor: 50

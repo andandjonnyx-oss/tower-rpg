@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 063_ha-pi-
   Mname: "\u30CF\u30FC\u30D4\u30FC"
   Image: {fileID: 21300000, guid: ea5118f3aea83924689c9818e8473378, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 61
   Minstep: 1
   Maxfloor: 65

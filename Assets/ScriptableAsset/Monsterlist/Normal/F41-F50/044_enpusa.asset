@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 044_enpusa
   Mname: "\u30A8\u30F3\u30D7\u30FC\u30B5"
   Image: {fileID: 21300000, guid: 2582bccae1ad52049951ba37d86cf2cc, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 44
   Minstep: 1
   Maxfloor: 48

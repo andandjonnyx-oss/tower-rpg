@@ -27,9 +27,6 @@ public class TitleUIManager : MonoBehaviour
     [Tooltip("いいえボタン")]
     [SerializeField] private Button resetConfirmNo;
 
-    [Header("BGM")]
-    [Tooltip("タイトル画面で再生する BGM")]
-    [SerializeField] private AudioClip titleBgm;
 
     // =========================================================
     // オープニングボタン（追加）
@@ -100,9 +97,6 @@ public class TitleUIManager : MonoBehaviour
         if (openingButton != null)
             openingButton.onClick.AddListener(OnOpening);
 
-        // タイトル BGM 再生
-        if (AudioManager.I != null && titleBgm != null)
-            AudioManager.I.PlayBgm(titleBgm);
     }
 
     /// <summary>

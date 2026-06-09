@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 071_a-kuenzeru
   Mname: "\u30A2\u30FC\u30AF\u30A8\u30F3\u30B8\u30A7\u30EB"
   Image: {fileID: 21300000, guid: 2a93c686d4595bf4c8aa5210075a3b8f, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 71
   Minstep: 1
   Maxfloor: 75

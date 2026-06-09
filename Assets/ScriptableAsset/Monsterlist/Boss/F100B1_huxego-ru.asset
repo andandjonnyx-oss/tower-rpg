@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: F100B1_huxego-ru
   Mname: "\u30D5\u30A7\u30B4\u30FC\u30EB"
   Image: {fileID: -5642793763813460095, guid: d227693ff385d6b42b19c6ffd3512034, type: 3}
+  battleBgm: {fileID: 8300000, guid: e9676922ff7b7da42ad52a75b7555ced, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0

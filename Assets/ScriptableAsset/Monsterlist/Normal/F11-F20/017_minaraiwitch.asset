@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 017_minaraiwitch
   Mname: "\u898B\u7FD2\u3044\u30DE\u30FC\u30B8"
   Image: {fileID: 21300000, guid: b99b4e2f8ec52ed4b964ea2e7bf02355, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 16
   Minstep: 1
   Maxfloor: 20

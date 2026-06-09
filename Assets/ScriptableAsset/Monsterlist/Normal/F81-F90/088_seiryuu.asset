@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 088_seiryuu
   Mname: "\u9752\u9F8D"
   Image: {fileID: 21300000, guid: ce1ebf1885bce0f4c9d22604b06e6546, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 86
   Minstep: 1
   Maxfloor: 90

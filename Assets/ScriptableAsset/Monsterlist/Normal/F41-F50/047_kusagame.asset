@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 047_kusagame
   Mname: "\u30AF\u30B5\u30AC\u30E1"
   Image: {fileID: 21300000, guid: a3f7dd507afe32d47ab93beb58e6480d, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 46
   Minstep: 1
   Maxfloor: 50

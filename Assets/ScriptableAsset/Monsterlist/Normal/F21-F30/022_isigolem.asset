@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: 022_isigolem
   Mname: "\u30B9\u30C8\u30FC\u30F3\u30B4\u30FC\u30EC\u30E0"
   Image: {fileID: 21300000, guid: 90acbf2a0e3109d4da6441504e8059be, type: 3}
+  battleBgm: {fileID: 8300000, guid: d39f74d99aa5f884582f0e94e6d63545, type: 3}
   Minfloor: 21
   Minstep: 1
   Maxfloor: 25

@@ -15,6 +15,7 @@ MonoBehaviour:
   ID: F070B2_kyuubi
   Mname: "\u4E5D\u5C3E\u306E\u72D0"
   Image: {fileID: 21300000, guid: 976cd993ecc3dec42be31ef35cd20af2, type: 3}
+  battleBgm: {fileID: 8300000, guid: df8d8e6755db8f348ab58607d280fc42, type: 3}
   Minfloor: 0
   Minstep: 0
   Maxfloor: 0
