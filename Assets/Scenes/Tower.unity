@@ -959,9 +959,9 @@ MonoBehaviour:
   useFloorRanges: 1
   floorBgmRanges:
   - minFloor: 1
-    maxFloor: 50
+    maxFloor: 1
     clip: {fileID: 8300000, guid: edd0413a3e6af8548bacc428aa959d9d, type: 3}
-  - minFloor: 51
+  - minFloor: 2
     maxFloor: 100
     clip: {fileID: 8300000, guid: 14ee2253b1feb4340aa4b415e21b2ccd, type: 3}
   fallbackBgm: {fileID: 0}

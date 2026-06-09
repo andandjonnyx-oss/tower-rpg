@@ -6,35 +6,37 @@ using UnityEngine.SceneManagement;
 /// DontDestroyOnLoad でシーンをまたいで存続する。
 /// 音量・ミュート状態は PlayerPrefs に永続化する（音量 0.0〜1.0）。
 ///
-/// 【BGM の2層モデル】
-///   ・メインBGM: 拠点曲・タイトル曲・塔曲など「そのフィールドの主BGM」。
-///       PlayMain(clip) で再生。同じ曲なら継続、一時停止中なら再開（位置保持）。
-///       PauseMain() で一時停止（再生位置を保持）。次のシーンで自動再開される。
-///   ・オーバーレイBGM: バトル曲など「メインを一時退避して上に重ねる曲」。
-///       PlayOverlay(clip) でメインを一時停止してオーバーレイ再生。
-///       StopOverlay() でオーバーレイを止めてメインBGMを再開。
+/// 【BGM の2系統 AudioSource】
+///   ・bgmSource     : メインBGM（拠点曲・タイトル曲・塔曲）。Pause/UnPause で位置保持。
+///   ・overlaySource : オーバーレイBGM（バトル曲）。メインとは独立。
+///   2本に分離することで、バトル曲を流している間もメイン曲の再生位置が
+///   bgmSource 内に保持され、戻った時に確実に「続きから」再開できる。
 ///
-/// 【自動再開（重要）】
-///   会話シーン等が PauseMain() した後、別シーン（会話図鑑など何も置かないシーン）へ
-///   入った時に BGM が止まったままにならないよう、シーンロードを監視して
-///   「一時停止中 かつ そのシーンが Pause を要求していない」なら自動的に再開する。
-///   SceneBgm が「このシーンは Pause したい」と宣言した場合はそのフレームの自動再開を抑止する。
+/// 【API】
+///   PlayMain(clip)  : メインBGMを再生。
+///       ・同じ曲が再生中 → 継続
+///       ・同じ曲が一時停止中 → 続きから再開
+///       ・違う曲 → 新規再生（頭から）  ← 階層で曲が変わった時はこれで切替
+///   PauseMain()     : メインBGMを一時停止（位置保持）。会話シーンで使用。
+///   PlayOverlay(clip): メインを一時停止し、バトル曲を別 source で再生。
+///   StopOverlay()        : バトル曲を止めてメインBGMを続きから再開。
+///   StopOverlayKeepSilent(): バトル曲を止めるがメインは再開しない（勝利SE用の無音）。
 ///
-/// 使い方:
-///   AudioManager.I.PlayMain(clip);   // 拠点/タイトル/塔 の SceneBgm から
-///   AudioManager.I.PauseMain();      // 会話シーンの SceneBgm から
-///   AudioManager.I.PlayOverlay(clip);// バトル開始時（敵ごとの曲）
-///   AudioManager.I.StopOverlay();    // バトル終了時（メインBGM再開）
-///   AudioManager.I.PlaySe(clip);     // SE
-///   AudioManager.I.SetBgmVolume(v); / SetSeVolume(v); / SetBgmMuted(b); / SetSeMuted(b);
+/// 【自動再開】
+///   会話（PauseMain）後、別シーン（何も置かない図鑑等）へ入った時に
+///   止まったままにならないよう、シーンロードを監視し
+///   「メインが一時停止中 かつ そのシーンが Pause を要求していない かつ オーバーレイ非アクティブ」
+///   なら自動的に再開する。
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager I { get; private set; }
 
     [Header("Audio Sources")]
-    [Tooltip("BGM 用の AudioSource（Loop=ON 推奨）")]
+    [Tooltip("メインBGM 用の AudioSource（拠点/タイトル/塔）。Loop=ON 推奨。")]
     [SerializeField] private AudioSource bgmSource;
+    [Tooltip("オーバーレイBGM 用の AudioSource（バトル曲）。未設定なら自動生成。")]
+    [SerializeField] private AudioSource overlaySource;
     [Tooltip("SE 用の AudioSource（Loop=OFF、PlayOneShot で使用）")]
     [SerializeField] private AudioSource seSource;
 
@@ -55,10 +57,10 @@ public class AudioManager : MonoBehaviour
     public bool SeMuted => seMuted;
 
     // =========================================================
-    // BGM 状態管理
+    // 状態
     // =========================================================
 
-    /// <summary>現在のメインBGM（拠点曲・塔曲など）。Pause しても保持される。</summary>
+    /// <summary>現在のメインBGMクリップ。Pause しても保持される。</summary>
     private AudioClip mainClip;
 
     /// <summary>メインBGMが一時停止中かどうか。</summary>
@@ -67,10 +69,7 @@ public class AudioManager : MonoBehaviour
     /// <summary>オーバーレイ（バトル曲）再生中かどうか。</summary>
     private bool overlayActive;
 
-    /// <summary>
-    /// 今フレーム、SceneBgm が「このシーンは Pause を要求している」と宣言したか。
-    /// 宣言があった場合、その回のシーンロード自動再開を抑止する。
-    /// </summary>
+    /// <summary>このシーンが Pause を要求したか（自動再開の抑止判定用）。</summary>
     private bool pauseRequestedThisScene;
 
     private void Awake()
@@ -88,6 +87,12 @@ public class AudioManager : MonoBehaviour
             bgmSource = gameObject.AddComponent<AudioSource>();
             bgmSource.loop = true;
             bgmSource.playOnAwake = false;
+        }
+        if (overlaySource == null)
+        {
+            overlaySource = gameObject.AddComponent<AudioSource>();
+            overlaySource.loop = true;
+            overlaySource.playOnAwake = false;
         }
         if (seSource == null)
         {
@@ -116,52 +121,56 @@ public class AudioManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // このシーンの SceneBgm 群は Awake/Start でこのフレームに各種要求を出す。
-        // sceneLoaded はそれらより前に来るため、1フレーム遅延させて判定する。
         StartCoroutine(AutoResumeNextFrame());
     }
 
     private System.Collections.IEnumerator AutoResumeNextFrame()
     {
-        // SceneBgm の Start() が走るのを待つ（Pause/Play 要求の確定を待つ）
+        // SceneBgm.Start()（Pause/Play 要求）が走るのを待つ
         yield return null;
 
-        // オーバーレイ中（バトル中）は触らない。
-        // メインが一時停止中で、このシーンが Pause を要求していなければ再開する。
+        // オーバーレイ中は触らない。メインが一時停止中で、このシーンが
+        // Pause も Play も要求していない（＝何も置いていないシーン）なら再開する。
         if (!overlayActive && mainPaused && !pauseRequestedThisScene)
         {
             ResumeMainInternal();
         }
 
-        // 次シーンの判定に備えてリセット
         pauseRequestedThisScene = false;
     }
 
     // =========================================================
-    // メインBGM（拠点・タイトル・塔）
+    // メインBGM
     // =========================================================
 
     /// <summary>
     /// メインBGMを再生する。SceneBgm（Playモード）から呼ぶ。
-    ///   ・同じ曲が再生中 → 何もしない（継続）
-    ///   ・同じ曲が一時停止中 → 再開（続きから）
-    ///   ・違う曲 → 新規再生
-    /// オーバーレイ（バトル曲）中に呼ばれた場合は「戻り先のメイン曲」として記憶し、
-    /// オーバーレイ終了時にこの曲を再開できるようにする。
+    ///   ・同じ曲が再生中 → 継続
+    ///   ・同じ曲が一時停止中 → 続きから再開
+    ///   ・違う曲 → 新規再生（頭から）
+    /// オーバーレイ（バトル曲）中に呼ばれた場合は、メイン source を直接いじらず
+    /// 「戻り先メイン曲」として記憶のみ更新する（StopOverlay 時に反映）。
     /// </summary>
     public void PlayMain(AudioClip clip, bool loop = true)
     {
         if (clip == null) return;
 
-        // バトル中などオーバーレイ再生中は、戻り先メインだけ更新して再生はしない
+        // オーバーレイ中: 戻り先メイン曲を更新するだけ（bgmSource は触らない）
         if (overlayActive)
         {
-            mainClip = clip;
-            mainPaused = true; // オーバーレイ終了時に再開対象とする
+            if (mainClip != clip)
+            {
+                // 違う曲に変わった → bgmSource を新しい曲で準備し直す（停止状態で待機）
+                mainClip = clip;
+                bgmSource.Stop();
+                bgmSource.clip = clip;
+                bgmSource.loop = loop;
+            }
+            mainPaused = true; // StopOverlay で再生/再開対象にする
             return;
         }
 
-        // 同じ曲なら継続 or 再開
+        // 同じ曲 → 継続 or 再開
         if (mainClip == clip)
         {
             if (mainPaused)
@@ -170,7 +179,6 @@ public class AudioManager : MonoBehaviour
             }
             else if (!bgmSource.isPlaying)
             {
-                // 念のため: 同じ曲指定だが止まっている場合は鳴らす
                 bgmSource.clip = clip;
                 bgmSource.loop = loop;
                 bgmSource.volume = CurrentBgmVolume();
@@ -179,9 +187,10 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // 違う曲 → 新規再生
+        // 違う曲 → 新規再生（頭から）
         mainClip = clip;
         mainPaused = false;
+        bgmSource.Stop();
         bgmSource.clip = clip;
         bgmSource.loop = loop;
         bgmSource.volume = CurrentBgmVolume();
@@ -189,39 +198,45 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// メインBGMを一時停止する（再生位置を保持）。会話シーンの SceneBgm から呼ぶ。
-    /// 次のシーンで自動再開される（そのシーンが再び Pause を要求しない限り）。
+    /// メインBGMを一時停止する（位置保持）。会話シーンの SceneBgm から呼ぶ。
     /// </summary>
     public void PauseMain()
     {
-        pauseRequestedThisScene = true; // このシーンは Pause 要求あり → 自動再開を抑止
+        pauseRequestedThisScene = true; // 自動再開を抑止
 
         if (overlayActive) return; // バトル中はメインは既に退避済み
 
         if (bgmSource.isPlaying)
         {
             bgmSource.Pause();
-            mainPaused = true;
         }
-        else if (mainClip != null)
-        {
-            // 既に止まっている場合も、状態としては一時停止扱いにしておく
-            mainPaused = true;
-        }
+        // 再生中でなくても、メイン曲があるなら一時停止状態として記録
+        if (mainClip != null) mainPaused = true;
     }
 
+    /// <summary>
+    /// メインBGMを続きから再開する（内部用）。
+    /// </summary>
     private void ResumeMainInternal()
     {
         if (mainClip == null) { mainPaused = false; return; }
 
-        if (bgmSource.clip != mainClip)
+        // bgmSource.clip がメイン曲と一致していれば UnPause で続きから。
+        // 一致していない（オーバーレイ準備等で差し替えた）場合は頭から再生。
+        if (bgmSource.clip == mainClip)
         {
-            bgmSource.clip = mainClip;
+            bgmSource.volume = CurrentBgmVolume();
+            bgmSource.UnPause();
+            if (!bgmSource.isPlaying) bgmSource.Play();
         }
-        bgmSource.loop = true;
-        bgmSource.volume = CurrentBgmVolume();
-        bgmSource.UnPause();
-        if (!bgmSource.isPlaying) bgmSource.Play();
+        else
+        {
+            bgmSource.Stop();
+            bgmSource.clip = mainClip;
+            bgmSource.loop = true;
+            bgmSource.volume = CurrentBgmVolume();
+            bgmSource.Play();
+        }
         mainPaused = false;
     }
 
@@ -230,45 +245,46 @@ public class AudioManager : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// バトル曲を再生する。メインBGM（塔曲など）を一時停止して退避し、上から流す。
-    /// 同じバトル曲が既に鳴っている場合は鳴らし直さない（Itembox 往復で途切れない）。
+    /// バトル曲を再生する。メインBGM（塔曲など）を一時停止して退避（位置保持）し、
+    /// 別 source で上から流す。同じバトル曲が既に鳴っているなら鳴らし直さない。
     /// </summary>
     public void PlayOverlay(AudioClip clip)
     {
         if (clip == null) return;
 
-        // 既に同じオーバーレイ曲が鳴っているなら継続
-        if (overlayActive && bgmSource.clip == clip && bgmSource.isPlaying) return;
+        // 既に同じバトル曲が鳴っているなら継続（Itembox 往復で途切れない）
+        if (overlayActive && overlaySource.clip == clip && overlaySource.isPlaying) return;
 
-        // メインBGMを退避（位置保持）。次回 PlayMain/StopOverlay で再開対象になる。
+        // メインBGMを一時停止して退避（bgmSource の位置はそのまま保持される）
         if (!overlayActive)
         {
-            if (bgmSource.isPlaying && bgmSource.clip != null)
+            if (bgmSource.isPlaying)
             {
-                // 現在鳴っているのがメイン曲なら退避
-                if (mainClip == null) mainClip = bgmSource.clip;
                 bgmSource.Pause();
+                mainPaused = true;
             }
-            mainPaused = (mainClip != null);
+            else if (mainClip != null)
+            {
+                mainPaused = true;
+            }
         }
 
         overlayActive = true;
-        bgmSource.clip = clip;
-        bgmSource.loop = true;
-        bgmSource.volume = CurrentBgmVolume();
-        bgmSource.Play();
+        overlaySource.clip = clip;
+        overlaySource.loop = true;
+        overlaySource.volume = CurrentBgmVolume();
+        overlaySource.Play();
     }
 
     /// <summary>
     /// バトル曲を止めてメインBGM（塔曲など）を続きから再開する。
-    /// バトル終了（勝敗確定）時に呼ぶ。メインBGMが無い場合（タイトル/メイン経由の戦闘等）は停止のみ。
     /// </summary>
     public void StopOverlay()
     {
         overlayActive = false;
-        bgmSource.Stop();
+        overlaySource.Stop();
+        overlaySource.clip = null;
 
-        // 退避していたメインBGMを再開
         if (mainClip != null)
         {
             ResumeMainInternal();
@@ -277,17 +293,16 @@ public class AudioManager : MonoBehaviour
 
     /// <summary>
     /// バトル曲を止めるが、メインBGM（塔曲など）は再開しない（無音のまま）。
-    /// 勝利演出中に勝利SE・レベルアップSE・ドロップSEを聞かせたい時に使う。
-    /// メインBGMは退避状態（mainPaused）のまま保持され、次に Tower 等へ戻った時に
-    /// その SceneBgm(Play) が PlayMain を呼んで「続きから」再開する。
+    /// 勝利演出で勝利SE・レベルアップSE・ドロップSEを聞かせたい時に使う。
+    /// メインBGMは一時停止状態のまま保持され、次に Tower 等へ戻った時に
+    /// その SceneBgm(Play) の PlayMain で「続きから」再開する。
     /// </summary>
     public void StopOverlayKeepSilent()
     {
         overlayActive = false;
-        bgmSource.Stop();
-        // mainClip / mainPaused はそのまま保持（再開しない）。
-        // mainClip があるのに mainPaused が false だと自動再開判定に乗らないため、
-        // 退避状態を明示しておく。
+        overlaySource.Stop();
+        overlaySource.clip = null;
+        // bgmSource は Pause 済みのまま。位置は保持される。
         if (mainClip != null) mainPaused = true;
     }
 
@@ -341,8 +356,11 @@ public class AudioManager : MonoBehaviour
         return bgmMuted ? 0f : bgmVolume;
     }
 
+    /// <summary>メイン・オーバーレイ両方の BGM 音量を現在値に反映する。</summary>
     private void ApplyBgmVolume()
     {
-        if (bgmSource != null) bgmSource.volume = CurrentBgmVolume();
+        float v = CurrentBgmVolume();
+        if (bgmSource != null) bgmSource.volume = v;
+        if (overlaySource != null) overlaySource.volume = v;
     }
 }
