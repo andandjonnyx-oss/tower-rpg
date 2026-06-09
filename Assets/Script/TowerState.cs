@@ -31,6 +31,11 @@ public class TowerState : MonoBehaviour
     [Tooltip("頂上の背景（100Fの20STEP用）。")]
     [SerializeField] private Sprite bgSummit;
 
+    [Header("BGM")]
+    [Tooltip("塔の階層別BGMを管理する SceneBgm（このシーンに置いた Play+useFloorRanges のもの）。\n"
+       + "階が変わった時に現在階のBGMへ切り替えるために参照する。")]
+    [SerializeField] private SceneBgm sceneBgm;
+
 
     // =========================================================
     // 状態異常表示用 UI（追加）
@@ -247,6 +252,12 @@ public class TowerState : MonoBehaviour
 
         gs2.floor = Floor;
         gs2.step = Step;
+
+        // 階層に応じた塔BGMへ切り替え（同一シーン内で階が変わるため Start では拾えない）
+        if (sceneBgm == null)
+            sceneBgm = FindFirstObjectByType<SceneBgm>();   // 未アサイン時の保険 // 未アサイン時の保険
+        if (sceneBgm != null)
+            sceneBgm.ApplyForCurrentFloor();
 
         RefreshUI();
 

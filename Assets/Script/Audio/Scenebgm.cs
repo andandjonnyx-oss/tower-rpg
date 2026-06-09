@@ -96,6 +96,20 @@ public class SceneBgm : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 現在の状況（現在階など）に応じた主BGMを今すぐ適用する。
+    /// 同一シーン内で階が変わった時など、Start() 以外のタイミングで
+    /// BGM を切り替えたい場合に外部（TowerState 等）から呼ぶ。
+    /// PlayMain は「同じ曲なら継続／違う曲なら頭から」を判定するため、
+    /// 同じレンジ内で連続して呼んでも曲はリスタートしない。
+    /// </summary>
+    public void ApplyForCurrentFloor()
+    {
+        if (AudioManager.I == null) return;
+        if (mode != Mode.Play) return;
+        PlayForCurrentContext();
+    }
+
     private void PlayForCurrentContext()
     {
         if (useFloorRanges)
