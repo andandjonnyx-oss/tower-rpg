@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Q3_hati
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
   questionText: "\u554F\u984C\uFF01\u3000\u4E00\u5EA6\u91DD\u3092\u523A\u3059\u3068\u6B7B\u3093\u3067\u3057\u307E\u3046\u306E\u306F\uFF1F\nA:\u30DF\u30C4\u30D0\u30C1\nB:\u30B9\u30BA\u30E1\u30D0\u30C1"
-  choiceA: A
-  choiceB: B
+  choiceA: "\u30DF\u30C4\u30D0\u30C1"
+  choiceB: "\u30B9\u30BA\u30E1\u30D0\u30C1"
   correctAnswer: 0

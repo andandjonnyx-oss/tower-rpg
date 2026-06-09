@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Q2_yakusou
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
   questionText: "\u554F\u984C\uFF01\u3000\u85AC\u8349\u306E\u56DE\u5FA9\u91CF\u306F\uFF1F\nA:30\nB:50"
-  choiceA: A
-  choiceB: B
+  choiceA: 30
+  choiceB: 50
   correctAnswer: 1

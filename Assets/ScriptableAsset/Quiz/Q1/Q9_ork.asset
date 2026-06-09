@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
   questionText: "\u554F\u984C\uFF01\u3000\u30AA\u30FC\u30AF\u306F\u4F55\u79D1\u306E\u690D\u7269\uFF1F\nA:
     \u30D6\u30CA\u79D1\nB: \u30AB\u30D0\u30CE\u30AD\u79D1"
-  choiceA: A
-  choiceB: B
+  choiceA: "\u30D6\u30CA\u79D1"
+  choiceB: "\u30AB\u30D0\u30CE\u30AD\u79D1"
   correctAnswer: 0

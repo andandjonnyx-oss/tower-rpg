@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 504168c93305a914c84420df0d014ac3, type: 3}
   m_Name: Q14_ living
   m_EditorClassIdentifier: Assembly-CSharp::QuizData
-  questionText: "\u554F\u984C\uFF01\u3000\u546A\u308F\u308C\u305F\u76FE\u3068\u30C6\u30FC\u30D6\u30EB\u3092\u6301\u3061\u3001\n\u66F4\u306B\u546A\u308F\u308C\u305F\u5263\u3092\u88C5\u5099\u3057\u305F\u5834\u5408\u3001\u6700\u5927HP\u306F\u3069\u3046\u306A\u308B\uFF1F\nA:
-    110\u6E1B\u308B\nB: 120\u6E1B\u308B"
-  choiceA: A
-  choiceB: B
+  questionText: "\u554F\u984C\uFF01\u3000\u919C\u304F\u3066\u4E89\u3044\u304C\u597D\u304D\u3067\u6B32\u6DF1\u304F\u305A\u308B\u8CE2\u3044\u751F\u304D\u7269\u3068\u8A00\u3048\u3070\uFF1F\nA:\u4EBA\u9593\nB:\u30B4\u30D6\u30EA\u30F3"
+  choiceA: "\u4EBA\u9593"
+  choiceB: "\u30B4\u30D6\u30EA\u30F3"
   correctAnswer: 0

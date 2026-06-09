@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,16 +12,16 @@ public class GameState : MonoBehaviour
 
     [Header("Talk")]
     public string pendingEventId;
-    [NonSerialized] public string talkReturnScene = null; // š’Ç‰Á: TalkI—¹Œã‚Ì–ß‚èæƒV[ƒ“
+    [NonSerialized] public string talkReturnScene = null; // â˜…è¿½åŠ : Talkçµ‚äº†å¾Œã®æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³
 
     [Header("Item Exchange")]
     [NonSerialized] public ItemData pendingItemData = null;
     [NonSerialized] public bool isRewardItem = false;
 
     /// <summary>
-    /// ‰ï˜b}ŠÓ‚©‚ç‚ÌÄ¶’†‚©‚Ç‚¤‚©B
-    /// true ‚Ìê‡ATalkRunner.Finish() ‚Å•ñVƒAƒCƒeƒ€‚ğ•t—^‚µ‚È‚¢B
-    /// Talk ƒV[ƒ“‘JˆÚ‘O‚ÉƒZƒbƒg‚µATalkRunner.Finish() ‚ÅQÆŒãƒNƒŠƒA‚³‚ê‚éB
+    /// ä¼šè©±å›³é‘‘ã‹ã‚‰ã®å†ç”Ÿä¸­ã‹ã©ã†ã‹ã€‚
+    /// true ã®å ´åˆã€TalkRunner.Finish() ã§å ±é…¬ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä»˜ä¸ã—ãªã„ã€‚
+    /// Talk ã‚·ãƒ¼ãƒ³é·ç§»å‰ã«ã‚»ãƒƒãƒˆã—ã€TalkRunner.Finish() ã§å‚ç…§å¾Œã‚¯ãƒªã‚¢ã•ã‚Œã‚‹ã€‚
     /// </summary>
     [NonSerialized] public bool isZukanReplay = false;
 
@@ -30,26 +30,26 @@ public class GameState : MonoBehaviour
     public string equippedWeaponUid = "";
 
     // =========================================================
-    // “ƒ‚Ì“’BŠKi’†ŠÔƒ|ƒCƒ“ƒg‰ğ•ú—pj
+    // å¡”ã®åˆ°é”éšï¼ˆä¸­é–“ãƒã‚¤ãƒ³ãƒˆè§£æ”¾ç”¨ï¼‰
     // =========================================================
     [Header("Tower Checkpoint")]
-    // ‚±‚ê‚Ü‚Å‚É“’B‚µ‚½Å‚ŠKB‰Šú‚Í1ŠK‚Ì‚İ‰ğ•úB
+    // ã“ã‚Œã¾ã§ã«åˆ°é”ã—ãŸæœ€é«˜éšã€‚åˆæœŸã¯1éšã®ã¿è§£æ”¾ã€‚
     public int reachedFloor = 1;
 
-    /// Œ»İ‚ÌŠK‚ª‰ß‹Å‚‚ğ’´‚¦‚Ä‚¢‚½‚çXV‚·‚éB
-    /// TowerState.Advance() ‚ÅŠK‚ª•Ï‚í‚Á‚½‚ÉŒÄ‚ÔB
+    /// ç¾åœ¨ã®éšãŒéå»æœ€é«˜ã‚’è¶…ãˆã¦ã„ãŸã‚‰æ›´æ–°ã™ã‚‹ã€‚
+    /// TowerState.Advance() ã§éšãŒå¤‰ã‚ã£ãŸæ™‚ã«å‘¼ã¶ã€‚
     public void UpdateReachedFloor(int currentFloor)
     {
         if (currentFloor > reachedFloor)
         {
             reachedFloor = currentFloor;
-            Debug.Log($"[GameState] “’BŠK‚ğXV: {reachedFloor}ŠK");
-            SaveManager.Save(); // ‘¦ƒZ[ƒu
+            Debug.Log($"[GameState] åˆ°é”éšã‚’æ›´æ–°: {reachedFloor}éš");
+            SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         }
     }
 
     // =========================================================
-    // ƒXƒe[ƒ^ƒX
+    // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
     // =========================================================
     [Header("Level / EXP")]
     public int level = 1;
@@ -57,22 +57,22 @@ public class GameState : MonoBehaviour
     public int expToNext = 100;
 
     [Header("HP / MP")]
-    // -1 = –¢‰Šú‰»ƒtƒ‰ƒOBAwake() ‚Å RecalcMaxHp/Mp ‚ğŒÄ‚ñ‚¾Û‚É
-    // u‰‰ñ‚Ì‚İ currentHp/currentMp ‚ğ maxHp/maxMp ‚É‘µ‚¦‚év”»’è‚Ég‚¤B
-    // ƒZ[ƒuƒf[ƒ^‚ª‚ ‚éê‡‚Íƒ[ƒh‚É³í‚È’l‚ªã‘‚«‚³‚ê‚é‚½‚ß‰e‹¿‚È‚µB
+    // -1 = æœªåˆæœŸåŒ–ãƒ•ãƒ©ã‚°ã€‚Awake() ã§ RecalcMaxHp/Mp ã‚’å‘¼ã‚“ã éš›ã«
+    // ã€Œåˆå›ã®ã¿ currentHp/currentMp ã‚’ maxHp/maxMp ã«æƒãˆã‚‹ã€åˆ¤å®šã«ä½¿ã†ã€‚
+    // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚‹å ´åˆã¯ãƒ­ãƒ¼ãƒ‰æ™‚ã«æ­£å¸¸ãªå€¤ãŒä¸Šæ›¸ãã•ã‚Œã‚‹ãŸã‚å½±éŸ¿ãªã—ã€‚
     public int maxHp = -1;
     public int maxMp = -1;
     public int currentHp = -1;
     public int currentMp = -1;
 
-    [Header("Base Stats Initial (‰Šú’lEƒŠƒZƒbƒgæ)")]
+    [Header("Base Stats Initial (åˆæœŸå€¤ãƒ»ãƒªã‚»ãƒƒãƒˆå…ˆ)")]
     public int initialSTR = 1;
     public int initialVIT = 1;
     public int initialINT = 1;
     public int initialDEX = 1;
     public int initialLUC = 1;
 
-    [Header("Base Stats (U‚è•ª‚¯‘ÎÛ)")]
+    [Header("Base Stats (æŒ¯ã‚Šåˆ†ã‘å¯¾è±¡)")]
     public int baseSTR = 1;
     public int baseVIT = 1;
     public int baseINT = 1;
@@ -82,97 +82,97 @@ public class GameState : MonoBehaviour
     [Header("Status Point")]
     public int statusPoint = 10;
 
-    [Header("GP (‚ª‚ñ‚Î‚èƒ|ƒCƒ“ƒg)")]
-    [Tooltip("í“¬Ÿ—˜‚Å+1B‹’“_‚ÅƒAƒCƒeƒ€ŒğŠ·‚Ég—p‚·‚éiŒğŠ·‹@”\‚ÍŒã“úÀ‘•jB")]
+    [Header("GP (ãŒã‚“ã°ã‚Šãƒã‚¤ãƒ³ãƒˆ)")]
+    [Tooltip("æˆ¦é—˜å‹åˆ©ã§+1ã€‚æ‹ ç‚¹ã§ã‚¢ã‚¤ãƒ†ãƒ äº¤æ›ã«ä½¿ç”¨ã™ã‚‹ï¼ˆäº¤æ›æ©Ÿèƒ½ã¯å¾Œæ—¥å®Ÿè£…ï¼‰ã€‚")]
     public int gp = 0;
 
     // =========================================================
-    // ƒ{ƒX‘æ“ñŒ`‘Ôƒtƒ‰ƒOi’Ç‰Áj
+    // ãƒœã‚¹ç¬¬äºŒå½¢æ…‹ãƒ•ãƒ©ã‚°ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     /// <summary>
-    /// F70ƒ{ƒX‚ÌƒtƒF[ƒYŠÇ—B
-    /// 0 = –¢“’Bi‘æˆêŒ`‘Ô‚©‚çŠJnj
-    /// 1 = ‘æˆêŒ`‘ÔŒ‚”jÏ‚İi‘æ“ñŒ`‘Ô‚©‚çŠJnj
-    /// 2 = ƒNƒŠƒAÏ‚İ
-    /// «—ˆ“I‚É‘¼‚ÌŠK‚Ìƒ{ƒX‚É‚àŠg’£‰Â”\B
+    /// F70ãƒœã‚¹ã®ãƒ•ã‚§ãƒ¼ã‚ºç®¡ç†ã€‚
+    /// 0 = æœªåˆ°é”ï¼ˆç¬¬ä¸€å½¢æ…‹ã‹ã‚‰é–‹å§‹ï¼‰
+    /// 1 = ç¬¬ä¸€å½¢æ…‹æ’ƒç ´æ¸ˆã¿ï¼ˆç¬¬äºŒå½¢æ…‹ã‹ã‚‰é–‹å§‹ï¼‰
+    /// 2 = ã‚¯ãƒªã‚¢æ¸ˆã¿
+    /// å°†æ¥çš„ã«ä»–ã®éšã®ãƒœã‚¹ã«ã‚‚æ‹¡å¼µå¯èƒ½ã€‚
     /// </summary>
     public int bossPhaseF70 = 0;
 
-    /// <summary>F90ƒ{ƒXiƒ_ƒn[ƒJ¨ƒAƒWEƒ_ƒn[ƒJj‚ÌƒtƒF[ƒYŠÇ—B</summary>
+    /// <summary>F90ãƒœã‚¹ï¼ˆãƒ€ãƒãƒ¼ã‚«â†’ã‚¢ã‚¸ãƒ»ãƒ€ãƒãƒ¼ã‚«ï¼‰ã®ãƒ•ã‚§ãƒ¼ã‚ºç®¡ç†ã€‚</summary>
     public int bossPhaseF90 = 0;
 
-    /// <summary>F100ƒ{ƒXiƒtƒFƒS[ƒ‹¨ƒoƒAƒ‹ƒtƒFƒS[ƒ‹j‚ÌƒtƒF[ƒYŠÇ—B</summary>
+    /// <summary>F100ãƒœã‚¹ï¼ˆãƒ•ã‚§ã‚´ãƒ¼ãƒ«â†’ãƒã‚¢ãƒ«ï¼ãƒ•ã‚§ã‚´ãƒ¼ãƒ«ï¼‰ã®ãƒ•ã‚§ãƒ¼ã‚ºç®¡ç†ã€‚</summary>
     public int bossPhaseF100 = 0;
 
     // =========================================================
-    // ó‘ÔˆÙí
+    // çŠ¶æ…‹ç•°å¸¸
     // =========================================================
     //
-    // y‘±Œ^ƒfƒoƒtzií“¬I—¹Œã‚àc‚éA“ƒˆÚ“®’†‚É‚àŒø‰Ê‚ ‚èAƒZ[ƒu‘ÎÛj
-    //   isPoisoned   - “Å: ƒ^[ƒ“/•às‚²‚Æ‚Éƒ_ƒ[ƒWA10%©‘R¡–ü
-    //   isParalyzed  - –ƒáƒ: 20%‚Ås“®ƒLƒƒƒ“ƒZƒ‹A“ƒˆÚ“®‚ª’x‚­‚È‚éA10%©‘R¡–ü
-    //   isBlind      - ˆÃˆÅ: –½’†/‰ñ”ğ‚É‰e‹¿A“ƒ‚Ì”wŒi‚ªˆÃ“]A10%©‘R¡–ü
-    //   isPetrified  - Î‰»: DEF/MDEF”{—¦Acƒ^[ƒ“0‚Å”s–kiContinue‰ÂjB©‘R¡–ü‚È‚µAê—p‰ğœ‚Ì‚İB
+    // ã€æŒç¶šå‹ãƒ‡ãƒãƒ•ã€‘ï¼ˆæˆ¦é—˜çµ‚äº†å¾Œã‚‚æ®‹ã‚‹ã€å¡”ç§»å‹•ä¸­ã«ã‚‚åŠ¹æœã‚ã‚Šã€ã‚»ãƒ¼ãƒ–å¯¾è±¡ï¼‰
+    //   isPoisoned   - æ¯’: ã‚¿ãƒ¼ãƒ³/æ­©è¡Œã”ã¨ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã€10%è‡ªç„¶æ²»ç™’
+    //   isParalyzed  - éº»ç—º: 20%ã§è¡Œå‹•ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã€å¡”ç§»å‹•ãŒé…ããªã‚‹ã€10%è‡ªç„¶æ²»ç™’
+    //   isBlind      - æš—é—‡: å‘½ä¸­/å›é¿ã«å½±éŸ¿ã€å¡”ã®èƒŒæ™¯ãŒæš—è»¢ã€10%è‡ªç„¶æ²»ç™’
+    //   isPetrified  - çŸ³åŒ–: DEF/MDEFå€ç‡ã€æ®‹ã‚¿ãƒ¼ãƒ³0ã§æ•—åŒ—ï¼ˆContinueå¯ï¼‰ã€‚è‡ªç„¶æ²»ç™’ãªã—ã€å°‚ç”¨è§£é™¤ã®ã¿ã€‚
     //
-    // yí“¬ŒÀ’èƒoƒtziƒZ[ƒu•s—vABattleSceneController‘¤‚ÅŠÇ—j
-    //   “{‚èiRagej: UŒ‚—ÍUP+’ÊíUŒ‚‚Ì‚İA3ƒ^[ƒ“ or í“¬I—¹‚Å‰ğœ
-    //   ¨ rageTurnRemaining ‚Í BattleSceneController ‚ÌƒtƒB[ƒ‹ƒh‚ÅŠÇ—
+    // ã€æˆ¦é—˜é™å®šãƒãƒ•ã€‘ï¼ˆã‚»ãƒ¼ãƒ–ä¸è¦ã€BattleSceneControllerå´ã§ç®¡ç†ï¼‰
+    //   æ€’ã‚Šï¼ˆRageï¼‰: æ”»æ’ƒåŠ›UP+é€šå¸¸æ”»æ’ƒã®ã¿ã€3ã‚¿ãƒ¼ãƒ³ or æˆ¦é—˜çµ‚äº†ã§è§£é™¤
+    //   â†’ rageTurnRemaining ã¯ BattleSceneController ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§ç®¡ç†
     //
-    // yí“¬ŒÀ’èƒfƒoƒtziƒZ[ƒu•s—vABattleSceneController‘¤‚ÅŠÇ—j
-    //   ‹CâiStunj: 1ƒ^[ƒ“s“®•s”\
-    //   ¨ enemyIsStunned ‚Í BattleSceneController ‚ÌƒtƒB[ƒ‹ƒh‚ÅŠÇ—
+    // ã€æˆ¦é—˜é™å®šãƒ‡ãƒãƒ•ã€‘ï¼ˆã‚»ãƒ¼ãƒ–ä¸è¦ã€BattleSceneControllerå´ã§ç®¡ç†ï¼‰
+    //   æ°—çµ¶ï¼ˆStunï¼‰: 1ã‚¿ãƒ¼ãƒ³è¡Œå‹•ä¸èƒ½
+    //   â†’ enemyIsStunned ã¯ BattleSceneController ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã§ç®¡ç†
     //
-    // šƒuƒ‰ƒbƒVƒ…ƒAƒbƒv:
-    //   ŠX‚É–ß‚é = ‘S‰ñ•œió‘ÔˆÙíŠÜ‚Şj‚Å“ˆêB
-    //   FullRecover() / ClearAllStatusEffects() ‚ÅˆêŠ‡ƒNƒŠƒA‚·‚éB
+    // â˜…ãƒ–ãƒ©ãƒƒã‚·ãƒ¥ã‚¢ãƒƒãƒ—:
+    //   è¡—ã«æˆ»ã‚‹ = å…¨å›å¾©ï¼ˆçŠ¶æ…‹ç•°å¸¸å«ã‚€ï¼‰ã§çµ±ä¸€ã€‚
+    //   FullRecover() / ClearAllStatusEffects() ã§ä¸€æ‹¬ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
     // =========================================================
 
     [Header("Status Effects")]
-    [Tooltip("ƒvƒŒƒCƒ„[‚ª“Åó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB")]
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ¯’çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚")]
     public bool isPoisoned = false;
 
-    [Tooltip("ƒvƒŒƒCƒ„[‚ª–ƒáƒó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB")]
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒéº»ç—ºçŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚")]
     public bool isParalyzed = false;
 
-    [Tooltip("ƒvƒŒƒCƒ„[‚ªˆÃˆÅó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB")]
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæš—é—‡çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚")]
     public bool isBlind = false;
 
-    [Tooltip("ƒvƒŒƒCƒ„[‚ª’¾–Ùó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB")]
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒæ²ˆé»™çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚")]
     public bool isSilenced = false;
 
-    // ---- Î‰»iPhase A: ƒtƒB[ƒ‹ƒh‚Ì‚İ’Ç‰ÁBŒø‰Ê‚Í Phase B ˆÈ~‚ÅÀ‘•j ----
+    // ---- çŸ³åŒ–ï¼ˆPhase A: ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã¿è¿½åŠ ã€‚åŠ¹æœã¯ Phase B ä»¥é™ã§å®Ÿè£…ï¼‰ ----
 
-    [Tooltip("ƒvƒŒƒCƒ„[‚ªÎ‰»ó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB©‘R¡–ü‚È‚µB")]
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒçŸ³åŒ–çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚è‡ªç„¶æ²»ç™’ãªã—ã€‚")]
     public bool isPetrified = false;
 
-    [Tooltip("Î‰»‚Ìc‚èƒ^[ƒ“”B0 ‚Å”s–kií“¬’†j/ƒƒbƒNi“ƒ“àjB‰Šú•t—^‚Í 5B")]
+    [Tooltip("çŸ³åŒ–ã®æ®‹ã‚Šã‚¿ãƒ¼ãƒ³æ•°ã€‚0 ã§æ•—åŒ—ï¼ˆæˆ¦é—˜ä¸­ï¼‰/ãƒ­ãƒƒã‚¯ï¼ˆå¡”å†…ï¼‰ã€‚åˆæœŸä»˜ä¸æ™‚ã¯ 5ã€‚")]
     public int playerPetrifyTurns = 0;
 
-    [Tooltip("Î‰»‚ÌÅ‘åƒ^[ƒ“”iDEF/MDEF”{—¦ŒvZ—pjB‰Šú•t—^‚Í 5 ŒÅ’èAis‚µ‚Ä‚à•s•ÏB")]
+    [Tooltip("çŸ³åŒ–ã®æœ€å¤§ã‚¿ãƒ¼ãƒ³æ•°ï¼ˆDEF/MDEFå€ç‡è¨ˆç®—ç”¨ï¼‰ã€‚åˆæœŸä»˜ä¸æ™‚ã¯ 5 å›ºå®šã€é€²è¡Œã—ã¦ã‚‚ä¸å¤‰ã€‚")]
     public int playerPetrifyMaxTurns = 0;
 
-    // ---- –£—¹iæs’Ç‰Á: ƒtƒ‰ƒO‚Ì‚İBí“¬Œø‰Ê‚ÍŒã“úÀ‘•j ----
-    [Tooltip("ƒvƒŒƒCƒ„[‚ª–£—¹ó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB©‘R¡–ü‚È‚µB")]
+    // ---- é­…äº†ï¼ˆå…ˆè¡Œè¿½åŠ : ãƒ•ãƒ©ã‚°ã®ã¿ã€‚æˆ¦é—˜åŠ¹æœã¯å¾Œæ—¥å®Ÿè£…ï¼‰ ----
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé­…äº†çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚è‡ªç„¶æ²»ç™’ãªã—ã€‚")]
     public bool isCharmed = false;
 
-    // ---- ô‚¢ ----
-    [Tooltip("ƒvƒŒƒCƒ„[‚ªô‚¢ó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB©‘R¡–ü‚ ‚èB\n"
-           + "‘S–‚–@‘®«i‰Î/•X/—‹/¹/ˆÅj‚Ì‘Ï«‚ª -100 ‚³‚ê‚éB")]
+    // ---- å‘ªã„ ----
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒå‘ªã„çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚è‡ªç„¶æ²»ç™’ã‚ã‚Šã€‚\n"
+           + "å…¨é­”æ³•å±æ€§ï¼ˆç«/æ°·/é›·/è–/é—‡ï¼‰ã®è€æ€§ãŒ -100 ã•ã‚Œã‚‹ã€‚")]
     public bool isCursed = false;
 
-    // ---- ƒKƒ‰ƒX ----
-    [Tooltip("ƒvƒŒƒCƒ„[‚ªƒKƒ‰ƒXó‘Ô‚©‚Ç‚¤‚©Bí“¬I—¹Œã‚à‘±‚·‚éB©‘R¡–ü‚ ‚èB\n"
-           + "‘S•¨—‘®«i‰£/a/“Ëj‚Ì‘Ï«‚ª -100 ‚³‚ê‚éB")]
+    // ---- ã‚¬ãƒ©ã‚¹ ----
+    [Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¬ãƒ©ã‚¹çŠ¶æ…‹ã‹ã©ã†ã‹ã€‚æˆ¦é—˜çµ‚äº†å¾Œã‚‚æŒç¶šã™ã‚‹ã€‚è‡ªç„¶æ²»ç™’ã‚ã‚Šã€‚\n"
+           + "å…¨ç‰©ç†å±æ€§ï¼ˆæ®´/æ–¬/çªï¼‰ã®è€æ€§ãŒ -100 ã•ã‚Œã‚‹ã€‚")]
     public bool isGlassed = false;
 
     // =========================================================
-    // ó‘ÔˆÙí‚ÌˆêŠ‡ƒNƒŠƒA
+    // çŠ¶æ…‹ç•°å¸¸ã®ä¸€æ‹¬ã‚¯ãƒªã‚¢
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì‘Só‘ÔˆÙí‚ğƒNƒŠƒA‚·‚éB
-    /// ŠX‚É–ß‚éi‹AŠÒE”s–kEƒ[ƒh•œ‹Aj‚É FullRecover() ‚©‚çŒÄ‚Î‚ê‚éB
-    /// ‘±Œ^ƒfƒoƒti“ÅE–ƒáƒEˆÃˆÅE’¾–ÙEÎ‰»j‚Ì‚İBí“¬ŒÀ’è‚Ìó‘Ô‚Í‚±‚±‚Å‚Íˆµ‚í‚È‚¢B
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¨çŠ¶æ…‹ç•°å¸¸ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
+    /// è¡—ã«æˆ»ã‚‹ï¼ˆå¸°é‚„ãƒ»æ•—åŒ—ãƒ»ãƒ­ãƒ¼ãƒ‰å¾©å¸°ï¼‰æ™‚ã« FullRecover() ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
+    /// æŒç¶šå‹ãƒ‡ãƒãƒ•ï¼ˆæ¯’ãƒ»éº»ç—ºãƒ»æš—é—‡ãƒ»æ²ˆé»™ãƒ»çŸ³åŒ–ï¼‰ã®ã¿ã€‚æˆ¦é—˜é™å®šã®çŠ¶æ…‹ã¯ã“ã“ã§ã¯æ‰±ã‚ãªã„ã€‚
     /// </summary>
     public void ClearAllStatusEffects()
     {
@@ -186,35 +186,35 @@ public class GameState : MonoBehaviour
         isCharmed = false;
         isCursed = false;
         isGlassed = false;
-        Debug.Log("[GameState] ‘Só‘ÔˆÙí‚ğƒNƒŠƒA");
+        Debug.Log("[GameState] å…¨çŠ¶æ…‹ç•°å¸¸ã‚’ã‚¯ãƒªã‚¢");
     }
 
     // =========================================================
-    // ƒŒƒxƒ‹ƒAƒbƒvƒVƒXƒeƒ€i’Ç‰Áj
+    // ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã‚·ã‚¹ãƒ†ãƒ ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // •K—vŒoŒ±’l: ƒŒƒxƒ‹ ~ 100iCalcExpToNext ‚ÅZoj
-    // ƒ{[ƒiƒXƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg: ƒŒƒxƒ‹‘Ñ‚²‚Æ‚É‘‰ÁiCalcStatusPointGain ‚ÅZoj
-    //   Lv  2`10 ¨ 1pt
-    //   Lv 11`20 ¨ 2pt
-    //   Lv 21`30 ¨ 3pt
-    //   Lv 31`40 ¨ 4pt
-    //   Lv 41`50 ¨ 5pt
-    //   ŒvZ®: (lv - 1) / 10 + 1
+    // å¿…è¦çµŒé¨“å€¤: ãƒ¬ãƒ™ãƒ« Ã— 100ï¼ˆCalcExpToNext ã§ç®—å‡ºï¼‰
+    // ãƒœãƒ¼ãƒŠã‚¹ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆ: ãƒ¬ãƒ™ãƒ«å¸¯ã”ã¨ã«å¢—åŠ ï¼ˆCalcStatusPointGain ã§ç®—å‡ºï¼‰
+    //   Lv  2ï½10 â†’ 1pt
+    //   Lv 11ï½20 â†’ 2pt
+    //   Lv 21ï½30 â†’ 3pt
+    //   Lv 31ï½40 â†’ 4pt
+    //   Lv 41ï½50 â†’ 5pt
+    //   è¨ˆç®—å¼: (lv - 1) / 10 + 1
     //
-    // ƒŒƒxƒ‹ƒhƒŒƒCƒ“:
-    //   “G‚ÌƒXƒLƒ‹‚ÅƒŒƒxƒ‹‚ğ1‰º‚°‚éB
-    //   ŒoŒ±’l‚Í0‚ÉƒŠƒZƒbƒgA•K—vŒoŒ±’l‚àÄŒvZB
-    //   statusPoint ‚Í•ÏX‚µ‚È‚¢iŒ¸‚ç‚È‚¢jB
-    //   ¨ Ä“xƒŒƒxƒ‹‚ğã‚°‚ê‚Î“¯‚¶ƒŒƒxƒ‹‚Ìƒ{[ƒiƒXƒ|ƒCƒ“ƒg‚ğ‚à‚¤ˆê“x–á‚¦‚éB
-    //   ¨ •K—vŒoŒ±’l‚ª‰º‚ª‚é•ªAƒ|ƒCƒ“ƒg‰Ò‚¬‚Ì–Ê‚Å‚Í“¾B
-    //   ƒŒƒxƒ‹1ˆÈ‰º‚É‚Í‚È‚ç‚È‚¢B
+    // ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³:
+    //   æ•µã®ã‚¹ã‚­ãƒ«ã§ãƒ¬ãƒ™ãƒ«ã‚’1ä¸‹ã’ã‚‹ã€‚
+    //   çµŒé¨“å€¤ã¯0ã«ãƒªã‚»ãƒƒãƒˆã€å¿…è¦çµŒé¨“å€¤ã‚‚å†è¨ˆç®—ã€‚
+    //   statusPoint ã¯å¤‰æ›´ã—ãªã„ï¼ˆæ¸›ã‚‰ãªã„ï¼‰ã€‚
+    //   â†’ å†åº¦ãƒ¬ãƒ™ãƒ«ã‚’ä¸Šã’ã‚Œã°åŒã˜ãƒ¬ãƒ™ãƒ«ã®ãƒœãƒ¼ãƒŠã‚¹ãƒã‚¤ãƒ³ãƒˆã‚’ã‚‚ã†ä¸€åº¦è²°ãˆã‚‹ã€‚
+    //   â†’ å¿…è¦çµŒé¨“å€¤ãŒä¸‹ãŒã‚‹åˆ†ã€ãƒã‚¤ãƒ³ãƒˆç¨¼ãã®é¢ã§ã¯å¾—ã€‚
+    //   ãƒ¬ãƒ™ãƒ«1ä»¥ä¸‹ã«ã¯ãªã‚‰ãªã„ã€‚
     // =========================================================
 
     /// <summary>
-    /// w’èƒŒƒxƒ‹‚É•K—v‚ÈŒoŒ±’l‚ğ•Ô‚·B
-    /// ŒvZ®: lv ~ 100
-    /// —á: Lv1¨2 = 100, Lv10¨11 = 1000
+    /// æŒ‡å®šãƒ¬ãƒ™ãƒ«ã«å¿…è¦ãªçµŒé¨“å€¤ã‚’è¿”ã™ã€‚
+    /// è¨ˆç®—å¼: lv Ã— 100
+    /// ä¾‹: Lv1â†’2 = 100, Lv10â†’11 = 1000
     /// </summary>
     public static int CalcExpToNext(int lv)
     {
@@ -222,29 +222,29 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// w’èƒŒƒxƒ‹‚É“’B‚µ‚½‚ÉŠl“¾‚·‚éƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg‚ğ•Ô‚·B
-    /// ŒvZ®: (lv - 1) / 10 + 1
-    ///   Lv  2`10 ¨ 1pt
-    ///   Lv 11`20 ¨ 2pt
-    ///   Lv 21`30 ¨ 3pt
-    ///   Lv 31`40 ¨ 4pt
-    ///   Lv 41`50 ¨ 5pt
+    /// æŒ‡å®šãƒ¬ãƒ™ãƒ«ã«åˆ°é”ã—ãŸæ™‚ã«ç²å¾—ã™ã‚‹ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆã‚’è¿”ã™ã€‚
+    /// è¨ˆç®—å¼: (lv - 1) / 10 + 1
+    ///   Lv  2ï½10 â†’ 1pt
+    ///   Lv 11ï½20 â†’ 2pt
+    ///   Lv 21ï½30 â†’ 3pt
+    ///   Lv 31ï½40 â†’ 4pt
+    ///   Lv 41ï½50 â†’ 5pt
     /// </summary>
     public static int CalcStatusPointGain(int lv)
     {
-        if (lv <= 1) return 0; // Lv1i‰ŠúƒŒƒxƒ‹j‚Å‚ÍŠl“¾‚È‚µ
+        if (lv <= 1) return 0; // Lv1ï¼ˆåˆæœŸãƒ¬ãƒ™ãƒ«ï¼‰ã§ã¯ç²å¾—ãªã—
         return (lv - 1) / 10 + 1;
     }
 
     /// <summary>
-    /// ŒoŒ±’l‚ğ‰ÁZ‚µAƒŒƒxƒ‹ƒAƒbƒv”»’è‚ğŒJ‚è•Ô‚·B
-    /// •¡”ƒŒƒxƒ‹ƒAƒbƒv‚É‚à‘Î‰iˆê“x‚É‘å—Ê‚ÌEXP‚ğ“¾‚½ê‡jB
-    /// –ß‚è’l: ƒŒƒxƒ‹ƒAƒbƒv‚µ‚½‰ñ”i0 = ƒŒƒxƒ‹ƒAƒbƒv‚È‚µj
+    /// çµŒé¨“å€¤ã‚’åŠ ç®—ã—ã€ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—åˆ¤å®šã‚’ç¹°ã‚Šè¿”ã™ã€‚
+    /// è¤‡æ•°ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã«ã‚‚å¯¾å¿œï¼ˆä¸€åº¦ã«å¤§é‡ã®EXPã‚’å¾—ãŸå ´åˆï¼‰ã€‚
+    /// æˆ»ã‚Šå€¤: ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã—ãŸå›æ•°ï¼ˆ0 = ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ãªã—ï¼‰
     ///
-    /// ƒŒƒxƒ‹ƒAƒbƒv:
-    ///   - statusPoint ‚É CalcStatusPointGain(VƒŒƒxƒ‹) ‚ğ‰ÁZ
-    ///   - expToNext ‚ğ CalcExpToNext(VƒŒƒxƒ‹) ‚ÉXV
-    ///   - currentExp ‚©‚ç expToNext ‚ğ·‚µˆø‚¢‚ÄŒJ‚è‰z‚µ
+    /// ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—æ™‚:
+    ///   - statusPoint ã« CalcStatusPointGain(æ–°ãƒ¬ãƒ™ãƒ«) ã‚’åŠ ç®—
+    ///   - expToNext ã‚’ CalcExpToNext(æ–°ãƒ¬ãƒ™ãƒ«) ã«æ›´æ–°
+    ///   - currentExp ã‹ã‚‰ expToNext ã‚’å·®ã—å¼•ã„ã¦ç¹°ã‚Šè¶Šã—
     /// </summary>
     public int GainExp(int amount)
     {
@@ -262,16 +262,16 @@ public class GameState : MonoBehaviour
             int pointGain = CalcStatusPointGain(level);
             statusPoint += pointGain;
 
-            Debug.Log($"[GameState] ƒŒƒxƒ‹ƒAƒbƒvI Lv{level} (+{pointGain}ƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg, ‡Œv{statusPoint})");
+            Debug.Log($"[GameState] ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ï¼ Lv{level} (+{pointGain}ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆ, åˆè¨ˆ{statusPoint})");
 
-            // Ÿ‚ÌƒŒƒxƒ‹‚É•K—v‚ÈŒoŒ±’l‚ğÄŒvZ
+            // æ¬¡ã®ãƒ¬ãƒ™ãƒ«ã«å¿…è¦ãªçµŒé¨“å€¤ã‚’å†è¨ˆç®—
             expToNext = CalcExpToNext(level);
         }
 
         if (levelUps > 0)
         {
-            // ƒŒƒxƒ‹ƒAƒbƒv‚Í maxHp/maxMp ‚ğÄŒvZ‚µ‚È‚¢
-            // iƒŒƒxƒ‹ƒAƒbƒv©‘Ì‚Í HP/MP ‚É‰e‹¿‚µ‚È‚¢BƒXƒeU‚è‚Å VIT/INT ‚ğã‚°‚½‚É”½‰f‚³‚ê‚éj
+            // ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—æ™‚ã¯ maxHp/maxMp ã‚’å†è¨ˆç®—ã—ãªã„
+            // ï¼ˆãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—è‡ªä½“ã¯ HP/MP ã«å½±éŸ¿ã—ãªã„ã€‚ã‚¹ãƒ†æŒ¯ã‚Šã§ VIT/INT ã‚’ä¸Šã’ãŸæ™‚ã«åæ˜ ã•ã‚Œã‚‹ï¼‰
             SaveManager.Save();
         }
 
@@ -279,19 +279,19 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒŒƒxƒ‹ƒhƒŒƒCƒ“‚ğ“K—p‚·‚éB
-    /// - ƒŒƒxƒ‹‚ğ1‰º‚°‚éiƒŒƒxƒ‹1ˆÈ‰º‚É‚Í‚È‚ç‚È‚¢j
-    /// - Œ»İ‚ÌŒoŒ±’l‚ğ0‚ÉƒŠƒZƒbƒg
-    /// - •K—vŒoŒ±’l‚ğÄŒvZ
-    /// - statusPoint ‚Í•ÏX‚µ‚È‚¢iŒ¸‚ç‚È‚¢j
+    /// ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// - ãƒ¬ãƒ™ãƒ«ã‚’1ä¸‹ã’ã‚‹ï¼ˆãƒ¬ãƒ™ãƒ«1ä»¥ä¸‹ã«ã¯ãªã‚‰ãªã„ï¼‰
+    /// - ç¾åœ¨ã®çµŒé¨“å€¤ã‚’0ã«ãƒªã‚»ãƒƒãƒˆ
+    /// - å¿…è¦çµŒé¨“å€¤ã‚’å†è¨ˆç®—
+    /// - statusPoint ã¯å¤‰æ›´ã—ãªã„ï¼ˆæ¸›ã‚‰ãªã„ï¼‰
     ///
-    /// –ß‚è’l: true = ƒŒƒxƒ‹‚ª‰º‚ª‚Á‚½, false = ƒŒƒxƒ‹1‚Ì‚½‚ßŒø‰Ê‚È‚µ
+    /// æˆ»ã‚Šå€¤: true = ãƒ¬ãƒ™ãƒ«ãŒä¸‹ãŒã£ãŸ, false = ãƒ¬ãƒ™ãƒ«1ã®ãŸã‚åŠ¹æœãªã—
     /// </summary>
     public bool ApplyLevelDrain()
     {
         if (level <= 1)
         {
-            Debug.Log("[GameState] ƒŒƒxƒ‹ƒhƒŒƒCƒ“: ƒŒƒxƒ‹1‚Ì‚½‚ßŒø‰Ê‚È‚µ");
+            Debug.Log("[GameState] ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³: ãƒ¬ãƒ™ãƒ«1ã®ãŸã‚åŠ¹æœãªã—");
             return false;
         }
 
@@ -299,34 +299,34 @@ public class GameState : MonoBehaviour
         level--;
         currentExp = 0;
         expToNext = CalcExpToNext(level);
-        // statusPoint ‚Í•Ï‚¦‚È‚¢iŒ¸‚ç‚È‚¢j
-        // maxHp/maxMp ‚à•Ï‚¦‚È‚¢iƒXƒeU‚è‚Í‚»‚Ì‚Ü‚Üj
+        // statusPoint ã¯å¤‰ãˆãªã„ï¼ˆæ¸›ã‚‰ãªã„ï¼‰
+        // maxHp/maxMp ã‚‚å¤‰ãˆãªã„ï¼ˆã‚¹ãƒ†æŒ¯ã‚Šã¯ãã®ã¾ã¾ï¼‰
 
-        Debug.Log($"[GameState] ƒŒƒxƒ‹ƒhƒŒƒCƒ“I Lv{oldLevel} ¨ Lv{level} (EXP=0, expToNext={expToNext}, statusPoint•ÏX‚È‚µ)");
+        Debug.Log($"[GameState] ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³ï¼ Lv{oldLevel} â†’ Lv{level} (EXP=0, expToNext={expToNext}, statusPointå¤‰æ›´ãªã—)");
         SaveManager.Save();
         return true;
     }
 
     // =========================================================
-    // ƒTƒuƒXƒe[ƒ^ƒXi‘•”õ{ƒpƒbƒVƒu‚İ‚ÌÀŒø’lj
+    // ã‚µãƒ–ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼ˆè£…å‚™ï¼‹ãƒ‘ãƒƒã‚·ãƒ–è¾¼ã¿ã®å®ŸåŠ¹å€¤ï¼‰
     // =========================================================
     //
-    // ŒvZ‚Ì\¬:
-    //   Šî‘b’libaseXxx ~ ”{—¦j
-    //   + EquipmentCalculator.GetXxx()    © ‘•”õ•i•â³i100%”½‰fj
-    //   + PassiveCalculator.CalcXxxBonus() © ƒpƒbƒVƒu•â³id•¡ƒ‹[ƒ‹“K—pj
+    // è¨ˆç®—ã®æ§‹æˆ:
+    //   åŸºç¤å€¤ï¼ˆbaseXxx Ã— å€ç‡ï¼‰
+    //   + EquipmentCalculator.GetXxx()    â† è£…å‚™å“è£œæ­£ï¼ˆ100%åæ˜ ï¼‰
+    //   + PassiveCalculator.CalcXxxBonus() â† ãƒ‘ãƒƒã‚·ãƒ–è£œæ­£ï¼ˆé‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ï¼‰
     //
-    // ƒoƒgƒ‹ƒRƒ“ƒgƒ[ƒ‰[‚Í baseSTR/baseINT ‚ğ’¼ÚQÆ‚¹‚¸A
-    // ‚±‚ÌƒvƒƒpƒeƒBŒQ‚ğg‚¤‚±‚Æ‚Å‘•”õ{ƒpƒbƒVƒu‚ª©“®“I‚É”½‰f‚³‚ê‚éB
+    // ãƒãƒˆãƒ«ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã¯ baseSTR/baseINT ã‚’ç›´æ¥å‚ç…§ã›ãšã€
+    // ã“ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ç¾¤ã‚’ä½¿ã†ã“ã¨ã§è£…å‚™ï¼‹ãƒ‘ãƒƒã‚·ãƒ–ãŒè‡ªå‹•çš„ã«åæ˜ ã•ã‚Œã‚‹ã€‚
     // =========================================================
 
     /// <summary>
-    /// UŒ‚—ÍB
-    /// ŒvZ®: baseSTR ~ 1 + EquipmentCalculator.GetAttackPower()
+    /// æ”»æ’ƒåŠ›ã€‚
+    /// è¨ˆç®—å¼: baseSTR Ã— 1 + EquipmentCalculator.GetAttackPower()
     ///                      + PassiveCalculator.CalcAttackBonus()
     ///
-    /// ‘•”õ•i‚Ì attackPower ‚Í 100% ‚»‚Ì‚Ü‚Ü‰ÁZ‚³‚ê‚éB
-    /// ƒpƒbƒVƒu‚Ì AttackBonus ‚Íd•¡ƒ‹[ƒ‹i2ŒÂ–ÚˆÈ~10%Œ¸Šj‚ğ“K—pB
+    /// è£…å‚™å“ã® attackPower ã¯ 100% ãã®ã¾ã¾åŠ ç®—ã•ã‚Œã‚‹ã€‚
+    /// ãƒ‘ãƒƒã‚·ãƒ–ã® AttackBonus ã¯é‡è¤‡ãƒ«ãƒ¼ãƒ«ï¼ˆ2å€‹ç›®ä»¥é™10%æ¸›è¡°ï¼‰ã‚’é©ç”¨ã€‚
     /// </summary>
     public int Attack
     {
@@ -341,8 +341,8 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// –‚–@UŒ‚—ÍB
-    /// ŒvZ®: baseINT ~ 1 + EquipmentCalculator.GetMagicAttack()
+    /// é­”æ³•æ”»æ’ƒåŠ›ã€‚
+    /// è¨ˆç®—å¼: baseINT Ã— 1 + EquipmentCalculator.GetMagicAttack()
     ///                      + PassiveCalculator.CalcMagicAttackBonus()
     /// </summary>
     public int MagicAttack
@@ -358,13 +358,13 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// ‰^‚Ì—Ç‚³B
-    /// ŒvZ®: baseLUC + EquipmentCalculator.GetLuck()
+    /// é‹ã®è‰¯ã•ã€‚
+    /// è¨ˆç®—å¼: baseLUC + EquipmentCalculator.GetLuck()
     ///                 + PassiveCalculator.CalcLuckBonus()
     ///
-    /// ’ˆÓ: “Gs“®‚ÌLUC”»’èiSelectEnemyActionj‚Å‚Í baseLUC ‚ğ’¼ÚQÆ‚·‚éB
-    /// ‚±‚ê‚ÍuLUC”»’è‚ÍU‚è•ª‚¯‚½¶’l‚Å”äŠr‚·‚év‚Æ‚¢‚¤İŒvˆÓ}‚Ì‚½‚ßB
-    /// UI•\¦‚â‚»‚Ì‘¼‚Ì—p“r‚Å‚Í‚±‚ÌƒvƒƒpƒeƒB‚ğg‚¤B
+    /// æ³¨æ„: æ•µè¡Œå‹•ã®LUCåˆ¤å®šï¼ˆSelectEnemyActionï¼‰ã§ã¯ baseLUC ã‚’ç›´æ¥å‚ç…§ã™ã‚‹ã€‚
+    /// ã“ã‚Œã¯ã€ŒLUCåˆ¤å®šã¯æŒ¯ã‚Šåˆ†ã‘ãŸç”Ÿå€¤ã§æ¯”è¼ƒã™ã‚‹ã€ã¨ã„ã†è¨­è¨ˆæ„å›³ã®ãŸã‚ã€‚
+    /// UIè¡¨ç¤ºã‚„ãã®ä»–ã®ç”¨é€”ã§ã¯ã“ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ä½¿ã†ã€‚
     /// </summary>
     public int Luck
     {
@@ -379,34 +379,34 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // –½’†—ÍE‰ñ”ğ—¦EƒNƒŠƒeƒBƒJƒ‹—¦iDEX/LUC ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuji’Ç‰Áj
+    // å‘½ä¸­åŠ›ãƒ»å›é¿ç‡ãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ï¼ˆDEX/LUC ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // –½’†—ÍiAccuracyj: int
-    //   ŒvZ®: DEX~10 + LUC~1 + ‘•”õ + ƒpƒbƒVƒu
-    //   BattleSceneController ‚ÅƒvƒŒƒCƒ„[UŒ‚‚Ì–½’†”»’è‚Ég—pB
+    // å‘½ä¸­åŠ›ï¼ˆAccuracyï¼‰: int
+    //   è¨ˆç®—å¼: DEXÃ—10 + LUCÃ—1 + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–
+    //   BattleSceneController ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ”»æ’ƒã®å‘½ä¸­åˆ¤å®šã«ä½¿ç”¨ã€‚
     //
-    // ‰ñ”ğ—¦iEvasionj: floati¬”“_2ˆÊ¸“xj
-    //   ŒvZ®: 5 + DEX~0.05 + LUC~0.02 + ‘•”õ + ƒpƒbƒVƒu
-    //   ‰ñ”ğ‚ÆƒNƒŠƒeƒBƒJƒ‹‚Í‘•”õ‚âƒAƒCƒeƒ€‚Åå‚É‘‚â‚·‚½‚ßA
-    //   ƒpƒ‰ƒ[ƒ^‚É‚æ‚é‘‰Á‚Í‚¨‚Ü‚¯’ö“x‚Éİ’è‚³‚ê‚Ä‚¢‚éB
-    //   BattleSceneController ‚Å“GUŒ‚‚Ì–½’†”»’è‚Ég—pB
+    // å›é¿ç‡ï¼ˆEvasionï¼‰: floatï¼ˆå°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰
+    //   è¨ˆç®—å¼: 5 + DEXÃ—0.05 + LUCÃ—0.02 + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–
+    //   å›é¿ã¨ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã¯è£…å‚™ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã§ä¸»ã«å¢—ã‚„ã™ãŸã‚ã€
+    //   ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«ã‚ˆã‚‹å¢—åŠ ã¯ãŠã¾ã‘ç¨‹åº¦ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹ã€‚
+    //   BattleSceneController ã§æ•µæ”»æ’ƒã®å‘½ä¸­åˆ¤å®šã«ä½¿ç”¨ã€‚
     //
-    // ƒNƒŠƒeƒBƒJƒ‹—¦iCriticalRatej: floati¬”“_2ˆÊ¸“xj
-    //   ŒvZ®: 5 + DEX~0.05 + LUC~0.02 + ‘•”õ + ƒpƒbƒVƒu
-    //   –½’†‚É”»’è‚µAƒNƒŠƒeƒBƒJƒ‹‚È‚ç–hŒä–³‹Eƒ_ƒ[ƒW2”{B
-    //   “G‚ÍƒNƒŠƒeƒBƒJƒ‹‚ğs‚í‚È‚¢B
+    // ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ï¼ˆCriticalRateï¼‰: floatï¼ˆå°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰
+    //   è¨ˆç®—å¼: 5 + DEXÃ—0.05 + LUCÃ—0.02 + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–
+    //   å‘½ä¸­æ™‚ã«åˆ¤å®šã—ã€ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ãªã‚‰é˜²å¾¡ç„¡è¦–ãƒ»ãƒ€ãƒ¡ãƒ¼ã‚¸2å€ã€‚
+    //   æ•µã¯ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚’è¡Œã‚ãªã„ã€‚
     // =========================================================
 
     /// <summary>
-    /// –½’†—ÍiintjB
-    /// ŒvZ®: baseDEX ~ 10 + baseLUC ~ 1
+    /// å‘½ä¸­åŠ›ï¼ˆintï¼‰ã€‚
+    /// è¨ˆç®—å¼: baseDEX Ã— 10 + baseLUC Ã— 1
     ///         + EquipmentCalculator.GetAccuracy()
     ///         + PassiveCalculator.CalcAccuracyBonus()
     ///
-    /// BattleSceneController ‚Å‚ÌƒvƒŒƒCƒ„[UŒ‚–½’†”»’è:
-    ///   ÅI–½’†—¦ = Šî‘b–½’†—¦ ~ (1 - (“G‰ñ”ğ—Í - Accuracy) / 100)
-    ///   ‚½‚¾‚µÅ’á25%•ÛØB
+    /// BattleSceneController ã§ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ”»æ’ƒå‘½ä¸­åˆ¤å®š:
+    ///   æœ€çµ‚å‘½ä¸­ç‡ = åŸºç¤å‘½ä¸­ç‡ Ã— (1 - (æ•µå›é¿åŠ› - Accuracy) / 100)
+    ///   ãŸã ã—æœ€ä½25%ä¿è¨¼ã€‚
     /// </summary>
     public int Accuracy
     {
@@ -422,17 +422,17 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// ‰ñ”ğ—¦ifloatA¬”“_2ˆÊ¸“xjB’PˆÊ‚Í %B
-    /// ŒvZ®: 5.00 + baseDEX ~ 0.05 + baseLUC ~ 0.02
-    ///         + EquipmentCalculator.GetEvasion()iint ¨ float‚É•ÏŠ·j
-    ///         + PassiveCalculator.CalcEvasionBonus()ifloatA¬”“_2ˆÊ¸“xj
+    /// å›é¿ç‡ï¼ˆfloatã€å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰ã€‚å˜ä½ã¯ %ã€‚
+    /// è¨ˆç®—å¼: 5.00 + baseDEX Ã— 0.05 + baseLUC Ã— 0.02
+    ///         + EquipmentCalculator.GetEvasion()ï¼ˆint â†’ floatã«å¤‰æ›ï¼‰
+    ///         + PassiveCalculator.CalcEvasionBonus()ï¼ˆfloatã€å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰
     ///
-    /// BattleSceneController ‚Å‚Ì“GUŒ‚–½’†”»’è:
-    ///   ÅI–½’†—¦ = “GŠî‘b–½’†—¦ ~ (1 - Evasion / 100)
-    ///   ‚½‚¾‚µÅ’á10%•ÛØB
+    /// BattleSceneController ã§ã®æ•µæ”»æ’ƒå‘½ä¸­åˆ¤å®š:
+    ///   æœ€çµ‚å‘½ä¸­ç‡ = æ•µåŸºç¤å‘½ä¸­ç‡ Ã— (1 - Evasion / 100)
+    ///   ãŸã ã—æœ€ä½10%ä¿è¨¼ã€‚
     ///
-    /// ‰ñ”ğ—¦‚Í‘•”õ‚âƒAƒCƒeƒ€‚Åå‚É‘‚â‚·‚½‚ßA
-    /// DEX/LUC ‚É‚æ‚é‘‰Á‚Í‚¨‚Ü‚¯’ö“xiDEX~0.05 + LUC~0.02jB
+    /// å›é¿ç‡ã¯è£…å‚™ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã§ä¸»ã«å¢—ã‚„ã™ãŸã‚ã€
+    /// DEX/LUC ã«ã‚ˆã‚‹å¢—åŠ ã¯ãŠã¾ã‘ç¨‹åº¦ï¼ˆDEXÃ—0.05 + LUCÃ—0.02ï¼‰ã€‚
     /// </summary>
     public float Evasion
     {
@@ -444,25 +444,25 @@ public class GameState : MonoBehaviour
                         + (float)EquipmentCalculator.GetEvasion()
                         + PassiveCalculator.CalcEvasionBonus();
             if (total < 0f) total = 0f;
-            // ¬”“_2ˆÊ‚ÉŠÛ‚ß‚é
+            // å°æ•°ç‚¹2ä½ã«ä¸¸ã‚ã‚‹
             total = Mathf.Floor(total * 100f + 0.5f) / 100f;
             return total;
         }
     }
 
     /// <summary>
-    /// ƒNƒŠƒeƒBƒJƒ‹—¦ifloatA¬”“_2ˆÊ¸“xjB’PˆÊ‚Í %B
-    /// ŒvZ®: 5.00 + baseDEX ~ 0.05 + baseLUC ~ 0.02
-    ///         + EquipmentCalculator.GetCritical()iint ¨ float‚É•ÏŠ·j
-    ///         + PassiveCalculator.CalcCriticalBonus()ifloatA¬”“_2ˆÊ¸“xj
+    /// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ï¼ˆfloatã€å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰ã€‚å˜ä½ã¯ %ã€‚
+    /// è¨ˆç®—å¼: 5.00 + baseDEX Ã— 0.05 + baseLUC Ã— 0.02
+    ///         + EquipmentCalculator.GetCritical()ï¼ˆint â†’ floatã«å¤‰æ›ï¼‰
+    ///         + PassiveCalculator.CalcCriticalBonus()ï¼ˆfloatã€å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰
     ///
-    /// BattleSceneController ‚Å‚ÌƒvƒŒƒCƒ„[UŒ‚ƒNƒŠƒeƒBƒJƒ‹”»’è:
-    ///   –½’†Œã‚É CriticalRate% ‚ÌŠm—¦‚ÅƒNƒŠƒeƒBƒJƒ‹B
-    ///   ƒNƒŠƒeƒBƒJƒ‹: –hŒä–³‹Aƒ_ƒ[ƒW2”{B
-    ///   “G‚ÍƒNƒŠƒeƒBƒJƒ‹‚ğs‚í‚È‚¢B
+    /// BattleSceneController ã§ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ”»æ’ƒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«åˆ¤å®š:
+    ///   å‘½ä¸­å¾Œã« CriticalRate% ã®ç¢ºç‡ã§ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã€‚
+    ///   ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚: é˜²å¾¡ç„¡è¦–ã€ãƒ€ãƒ¡ãƒ¼ã‚¸2å€ã€‚
+    ///   æ•µã¯ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚’è¡Œã‚ãªã„ã€‚
     ///
-    /// ƒNƒŠƒeƒBƒJƒ‹—¦‚Í‘•”õ‚âƒAƒCƒeƒ€‚Åå‚É‘‚â‚·‚½‚ßA
-    /// DEX/LUC ‚É‚æ‚é‘‰Á‚Í‚¨‚Ü‚¯’ö“xiDEX~0.05 + LUC~0.02jB
+    /// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ã¯è£…å‚™ã‚„ã‚¢ã‚¤ãƒ†ãƒ ã§ä¸»ã«å¢—ã‚„ã™ãŸã‚ã€
+    /// DEX/LUC ã«ã‚ˆã‚‹å¢—åŠ ã¯ãŠã¾ã‘ç¨‹åº¦ï¼ˆDEXÃ—0.05 + LUCÃ—0.02ï¼‰ã€‚
     /// </summary>
     public float CriticalRate
     {
@@ -474,37 +474,37 @@ public class GameState : MonoBehaviour
                         + (float)EquipmentCalculator.GetCritical()
                         + PassiveCalculator.CalcCriticalBonus();
             if (total < 0f) total = 0f;
-            // ¬”“_2ˆÊ‚ÉŠÛ‚ß‚é
+            // å°æ•°ç‚¹2ä½ã«ä¸¸ã‚ã‚‹
             total = Mathf.Floor(total * 100f + 0.5f) / 100f;
             return total;
         }
     }
 
     // =========================================================
-    // HP ŒvZiVIT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
+    // HP è¨ˆç®—ï¼ˆVIT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
     // =========================================================
 
     /// <summary>
-    /// HP ‚ÌŠî‘b‰Šú’liVIT –¢U‚èEƒpƒbƒVƒu–³‚µ‚Å‚ÌHPjB
+    /// HP ã®åŸºç¤åˆæœŸå€¤ï¼ˆVIT æœªæŒ¯ã‚Šãƒ»ãƒ‘ãƒƒã‚·ãƒ–ç„¡ã—ã§ã®HPï¼‰ã€‚
     /// </summary>
     private const int BaseHpInitial = 50;
 
     /// <summary>
-    /// VIT 1ƒ|ƒCƒ“ƒg‚ ‚½‚è‚ÌÅ‘åHPã¸—ÊB
+    /// VIT 1ãƒã‚¤ãƒ³ãƒˆã‚ãŸã‚Šã®æœ€å¤§HPä¸Šæ˜‡é‡ã€‚
     /// </summary>
     private const int HpPerVit = 5;
 
     /// <summary>
-    /// Œ»İ‚ÌƒXƒe[ƒ^ƒX‚ÆƒpƒbƒVƒuŒø‰Ê‚©‚çÅ‘åHP‚ğÄŒvZ‚µAmaxHp ‚ğXV‚·‚éB
-    /// currentHp ‚ªV‚µ‚¢ maxHp ‚ğ’´‚¦‚Ä‚¢‚éê‡‚ÍƒNƒ‰ƒ“ƒv‚·‚éi’´‰ß•ª‚ÍÁ‚¦‚éjB
-    /// currentHp ‚ªV‚µ‚¢ maxHp ˆÈ‰º‚Ìê‡‚Í‚»‚Ì‚Ü‚Üi‰ñ•œ‚µ‚È‚¢jB
-    /// currentHp ‚ª -1i–¢‰Šú‰»j‚Ìê‡‚Ì‚İ maxHp ‚É‘µ‚¦‚éiƒQ[ƒ€‰‰ñ‹N“®jB
+    /// ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã‹ã‚‰æœ€å¤§HPã‚’å†è¨ˆç®—ã—ã€maxHp ã‚’æ›´æ–°ã™ã‚‹ã€‚
+    /// currentHp ãŒæ–°ã—ã„ maxHp ã‚’è¶…ãˆã¦ã„ã‚‹å ´åˆã¯ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹ï¼ˆè¶…éåˆ†ã¯æ¶ˆãˆã‚‹ï¼‰ã€‚
+    /// currentHp ãŒæ–°ã—ã„ maxHp ä»¥ä¸‹ã®å ´åˆã¯ãã®ã¾ã¾ï¼ˆå›å¾©ã—ãªã„ï¼‰ã€‚
+    /// currentHp ãŒ -1ï¼ˆæœªåˆæœŸåŒ–ï¼‰ã®å ´åˆã®ã¿ maxHp ã«æƒãˆã‚‹ï¼ˆã‚²ãƒ¼ãƒ åˆå›èµ·å‹•æ™‚ï¼‰ã€‚
     ///
-    /// ŒÄ‚Ño‚µƒ^ƒCƒ~ƒ“ƒO:
-    ///   - Awake()i‰‰ñ‹N“® or ƒZ[ƒuƒ[ƒhŒãj
-    ///   - ƒXƒe[ƒ^ƒXU‚è•ª‚¯Œã
-    ///   - ƒAƒCƒeƒ€æ“¾/”jŠüŒã
-    ///   - ‘•”õ•ÏXŒãi‘•”õ•i‚Ì equipMaxHp ‚ª•Ï‚í‚é‚½‚ßj
+    /// å‘¼ã³å‡ºã—ã‚¿ã‚¤ãƒŸãƒ³ã‚°:
+    ///   - Awake()ï¼ˆåˆå›èµ·å‹• or ã‚»ãƒ¼ãƒ–ãƒ­ãƒ¼ãƒ‰å¾Œï¼‰
+    ///   - ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æŒ¯ã‚Šåˆ†ã‘å¾Œ
+    ///   - ã‚¢ã‚¤ãƒ†ãƒ å–å¾—/ç ´æ£„å¾Œ
+    ///   - è£…å‚™å¤‰æ›´å¾Œï¼ˆè£…å‚™å“ã® equipMaxHp ãŒå¤‰ã‚ã‚‹ãŸã‚ï¼‰
     /// </summary>
     public void RecalcMaxHp()
     {
@@ -512,26 +512,26 @@ public class GameState : MonoBehaviour
 
         if (newMaxHp != maxHp)
         {
-            Debug.Log($"[GameState] maxHp ÄŒvZ: {maxHp} ¨ {newMaxHp}");
+            Debug.Log($"[GameState] maxHp å†è¨ˆç®—: {maxHp} â†’ {newMaxHp}");
             maxHp = newMaxHp;
         }
 
         if (currentHp < 0)
         {
-            // –¢‰Šú‰»i‰‰ñ‹N“®j: maxHp ‚É‘µ‚¦‚é
+            // æœªåˆæœŸåŒ–ï¼ˆåˆå›èµ·å‹•æ™‚ï¼‰: maxHp ã«æƒãˆã‚‹
             currentHp = maxHp;
-            Debug.Log($"[GameState] currentHp ‰Šú‰»: {currentHp}");
+            Debug.Log($"[GameState] currentHp åˆæœŸåŒ–: {currentHp}");
         }
         else if (currentHp > maxHp)
         {
-            // maxHp ‚ğ‰º‰ñ‚Á‚½‚±‚Æ‚Å’´‰ß: ƒNƒ‰ƒ“ƒv
+            // maxHp ã‚’ä¸‹å›ã£ãŸã“ã¨ã§è¶…é: ã‚¯ãƒ©ãƒ³ãƒ—
             currentHp = maxHp;
         }
     }
 
     /// <summary>
-    /// Å‘åHP‚ğŒvZ‚·‚éi’l‚ğ•Ô‚·‚¾‚¯‚ÅAmaxHp ƒtƒB[ƒ‹ƒh‚Í•ÏX‚µ‚È‚¢jB
-    /// ŒvZ®: BaseHpInitial + baseVIT ~ HpPerVit
+    /// æœ€å¤§HPã‚’è¨ˆç®—ã™ã‚‹ï¼ˆå€¤ã‚’è¿”ã™ã ã‘ã§ã€maxHp ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯å¤‰æ›´ã—ãªã„ï¼‰ã€‚
+    /// è¨ˆç®—å¼: BaseHpInitial + baseVIT Ã— HpPerVit
     ///         + EquipmentCalculator.GetMaxHpBonus()
     ///         + PassiveCalculator.CalcMaxHpBonus()
     /// </summary>
@@ -546,17 +546,17 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // –hŒä—ÍiVIT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
+    // é˜²å¾¡åŠ›ï¼ˆVIT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
     // =========================================================
 
     /// <summary>
-    /// VIT 1ƒ|ƒCƒ“ƒg‚ ‚½‚è‚Ì–hŒä—ÍB
+    /// VIT 1ãƒã‚¤ãƒ³ãƒˆã‚ãŸã‚Šã®é˜²å¾¡åŠ›ã€‚
     /// </summary>
     private const int DefPerVit = 2;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌŒ»İ‚Ì–hŒä—Í‚ğ•Ô‚·B
-    /// ŒvZ®: baseVIT ~ DefPerVit + EquipmentCalculator.GetDefense()
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç¾åœ¨ã®é˜²å¾¡åŠ›ã‚’è¿”ã™ã€‚
+    /// è¨ˆç®—å¼: baseVIT Ã— DefPerVit + EquipmentCalculator.GetDefense()
     ///                              + PassiveCalculator.CalcDefenseBonus()
     /// </summary>
     public int Defense
@@ -573,24 +573,24 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // MP ŒvZiINT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
+    // MP è¨ˆç®—ï¼ˆINT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
     // =========================================================
 
     /// <summary>
-    /// MP ‚ÌŠî‘b‰Šú’liINT –¢U‚èEƒpƒbƒVƒu–³‚µ‚Å‚Ì MPjB
+    /// MP ã®åŸºç¤åˆæœŸå€¤ï¼ˆINT æœªæŒ¯ã‚Šãƒ»ãƒ‘ãƒƒã‚·ãƒ–ç„¡ã—ã§ã® MPï¼‰ã€‚
     /// </summary>
     private const int BaseMpInitial = 20;
 
     /// <summary>
-    /// INT 1ƒ|ƒCƒ“ƒg‚ ‚½‚è‚ÌÅ‘åMPã¸—ÊB
+    /// INT 1ãƒã‚¤ãƒ³ãƒˆã‚ãŸã‚Šã®æœ€å¤§MPä¸Šæ˜‡é‡ã€‚
     /// </summary>
     private const int MpPerInt = 3;
 
     /// <summary>
-    /// Œ»İ‚ÌƒXƒe[ƒ^ƒX‚ÆƒpƒbƒVƒuŒø‰Ê‚©‚çÅ‘åMP‚ğÄŒvZ‚µAmaxMp ‚ğXV‚·‚éB
-    /// currentMp ‚ªV‚µ‚¢ maxMp ‚ğ’´‚¦‚Ä‚¢‚éê‡‚ÍƒNƒ‰ƒ“ƒv‚·‚éB
-    /// currentMp ‚ªV‚µ‚¢ maxMp ˆÈ‰º‚Ìê‡‚Í‚»‚Ì‚Ü‚Üi‰ñ•œ‚µ‚È‚¢jB
-    /// currentMp ‚ª -1i–¢‰Šú‰»j‚Ìê‡‚Ì‚İ maxMp ‚É‘µ‚¦‚éiƒQ[ƒ€‰‰ñ‹N“®jB
+    /// ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¨ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã‹ã‚‰æœ€å¤§MPã‚’å†è¨ˆç®—ã—ã€maxMp ã‚’æ›´æ–°ã™ã‚‹ã€‚
+    /// currentMp ãŒæ–°ã—ã„ maxMp ã‚’è¶…ãˆã¦ã„ã‚‹å ´åˆã¯ã‚¯ãƒ©ãƒ³ãƒ—ã™ã‚‹ã€‚
+    /// currentMp ãŒæ–°ã—ã„ maxMp ä»¥ä¸‹ã®å ´åˆã¯ãã®ã¾ã¾ï¼ˆå›å¾©ã—ãªã„ï¼‰ã€‚
+    /// currentMp ãŒ -1ï¼ˆæœªåˆæœŸåŒ–ï¼‰ã®å ´åˆã®ã¿ maxMp ã«æƒãˆã‚‹ï¼ˆã‚²ãƒ¼ãƒ åˆå›èµ·å‹•æ™‚ï¼‰ã€‚
     /// </summary>
     public void RecalcMaxMp()
     {
@@ -598,26 +598,26 @@ public class GameState : MonoBehaviour
 
         if (newMaxMp != maxMp)
         {
-            Debug.Log($"[GameState] maxMp ÄŒvZ: {maxMp} ¨ {newMaxMp}");
+            Debug.Log($"[GameState] maxMp å†è¨ˆç®—: {maxMp} â†’ {newMaxMp}");
             maxMp = newMaxMp;
         }
 
         if (currentMp < 0)
         {
-            // –¢‰Šú‰»i‰‰ñ‹N“®j: maxMp ‚É‘µ‚¦‚é
+            // æœªåˆæœŸåŒ–ï¼ˆåˆå›èµ·å‹•æ™‚ï¼‰: maxMp ã«æƒãˆã‚‹
             currentMp = maxMp;
-            Debug.Log($"[GameState] currentMp ‰Šú‰»: {currentMp}");
+            Debug.Log($"[GameState] currentMp åˆæœŸåŒ–: {currentMp}");
         }
         else if (currentMp > maxMp)
         {
-            // maxMp ‚ğ‰º‰ñ‚Á‚½‚±‚Æ‚Å’´‰ß: ƒNƒ‰ƒ“ƒv
+            // maxMp ã‚’ä¸‹å›ã£ãŸã“ã¨ã§è¶…é: ã‚¯ãƒ©ãƒ³ãƒ—
             currentMp = maxMp;
         }
     }
 
     /// <summary>
-    /// Å‘åMP‚ğŒvZ‚·‚éi’l‚ğ•Ô‚·‚¾‚¯‚ÅAmaxMp ƒtƒB[ƒ‹ƒh‚Í•ÏX‚µ‚È‚¢jB
-    /// ŒvZ®: BaseMpInitial + baseINT ~ MpPerInt
+    /// æœ€å¤§MPã‚’è¨ˆç®—ã™ã‚‹ï¼ˆå€¤ã‚’è¿”ã™ã ã‘ã§ã€maxMp ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯å¤‰æ›´ã—ãªã„ï¼‰ã€‚
+    /// è¨ˆç®—å¼: BaseMpInitial + baseINT Ã— MpPerInt
     ///         + EquipmentCalculator.GetMaxMpBonus()
     ///         + PassiveCalculator.CalcMaxMpBonus()
     /// </summary>
@@ -632,17 +632,17 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // –‚–@–hŒä—ÍiINT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
+    // é­”æ³•é˜²å¾¡åŠ›ï¼ˆINT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
     // =========================================================
 
     /// <summary>
-    /// INT 1ƒ|ƒCƒ“ƒg‚ ‚½‚è‚Ì–‚–@–hŒä—ÍB
+    /// INT 1ãƒã‚¤ãƒ³ãƒˆã‚ãŸã‚Šã®é­”æ³•é˜²å¾¡åŠ›ã€‚
     /// </summary>
     private const int MagicDefPerInt = 2;
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì–‚–@–hŒä—ÍB
-    /// ŒvZ®: baseINT ~ MagicDefPerInt + EquipmentCalculator.GetMagicDefense()
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é­”æ³•é˜²å¾¡åŠ›ã€‚
+    /// è¨ˆç®—å¼: baseINT Ã— MagicDefPerInt + EquipmentCalculator.GetMagicDefense()
     ///                                   + PassiveCalculator.CalcMagicDefenseBonus()
     /// </summary>
     public int MagicDefense
@@ -659,26 +659,26 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ|ƒCƒ“ƒgU‚è•ª‚¯ / ƒŠƒZƒbƒg
+    // ãƒã‚¤ãƒ³ãƒˆæŒ¯ã‚Šåˆ†ã‘ / ãƒªã‚»ãƒƒãƒˆ
     // =========================================================
     public void TakeStatSnapshot()
     {
     }
 
     /// <summary>
-    /// ƒXƒe[ƒ^ƒX‚ğƒŠƒZƒbƒg‚·‚éB
-    /// ƒŠƒZƒbƒgŒã‚Ì—e—Ê‚ÅŒ»İ‚ÌŠ•i‚ªû‚Ü‚ç‚È‚¢ê‡‚Í false ‚ğ•Ô‚µƒŠƒZƒbƒg‚µ‚È‚¢B
+    /// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+    /// ãƒªã‚»ãƒƒãƒˆå¾Œã®å®¹é‡ã§ç¾åœ¨ã®æ‰€æŒå“ãŒåã¾ã‚‰ãªã„å ´åˆã¯ false ã‚’è¿”ã—ãƒªã‚»ãƒƒãƒˆã—ãªã„ã€‚
     /// </summary>
     public bool ResetStatAllocation()
     {
 
-        // —e—Ê’´‰ßƒ`ƒFƒbƒN
+        // å®¹é‡è¶…éãƒã‚§ãƒƒã‚¯
         if (ItemBoxManager.Instance != null)
         {
             int resetCapacity = ItemBoxManager.Instance.CalcCapacityForSTR(initialSTR);
             if (ItemBoxManager.Instance.Count > resetCapacity)
             {
-                Debug.Log($"[GameState] ƒŠƒZƒbƒg•s‰Â: Š•i{ItemBoxManager.Instance.Count}ŒÂ > ƒŠƒZƒbƒgŒã—e—Ê{resetCapacity}ŒÂ");
+                Debug.Log($"[GameState] ãƒªã‚»ãƒƒãƒˆä¸å¯: æ‰€æŒå“{ItemBoxManager.Instance.Count}å€‹ > ãƒªã‚»ãƒƒãƒˆå¾Œå®¹é‡{resetCapacity}å€‹");
                 return false;
             }
         }
@@ -697,11 +697,11 @@ public class GameState : MonoBehaviour
 
         statusPoint += usedPoints;
 
-        // VIT/INT ‚ª•Ï‚í‚é‚½‚ß maxHp/maxMp ‚ğÄŒvZ
+        // VIT/INT ãŒå¤‰ã‚ã‚‹ãŸã‚ maxHp/maxMp ã‚’å†è¨ˆç®—
         RecalcMaxHp();
         RecalcMaxMp();
 
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         return true;
     }
 
@@ -721,77 +721,84 @@ public class GameState : MonoBehaviour
 
         statusPoint--;
 
-        // VIT ‚ÉU‚Á‚½ê‡‚Í maxHp ‚ğÄŒvZ
+        // VIT ã«æŒ¯ã£ãŸå ´åˆã¯ maxHp ã‚’å†è¨ˆç®—
         if (stat == StatType.VIT)
         {
             RecalcMaxHp();
         }
 
-        // INT ‚ÉU‚Á‚½ê‡‚Í maxMp ‚ğÄŒvZ
+        // INT ã«æŒ¯ã£ãŸå ´åˆã¯ maxMp ã‚’å†è¨ˆç®—
         if (stat == StatType.INT)
         {
             RecalcMaxMp();
         }
 
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         return true;
     }
 
     // =========================================================
-    // ƒV[ƒ“‘JˆÚ‚Ì–ß‚èæ
+    // ã‚·ãƒ¼ãƒ³é·ç§»ã®æˆ»ã‚Šå…ˆ
     // =========================================================
     [Header("Scene Navigation")]
     [NonSerialized] public string previousSceneName = "";
 
+    /// <summary>
+    /// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã‹ã‚‰æˆ»ã‚‹å…ˆã®ã‚·ãƒ¼ãƒ³åã€‚
+    /// Option ã¸é·ç§»ã™ã‚‹ç›´å‰ã« OpenOptionButton ãŒã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+    /// previousSceneNameï¼ˆãƒãƒˆãƒ«â†”ã‚¢ã‚¤ãƒ†ãƒ ç”¨ï¼‰ã¨ã¯ç‹¬ç«‹ã€‚ç«¶åˆã•ã›ãªã„ã€‚
+    /// </summary>
+    [NonSerialized] public string optionReturnScene = "";
+
     // =========================================================
-    // ƒoƒgƒ‹’†ƒAƒCƒeƒ€g—p
+    // ãƒãƒˆãƒ«ä¸­ã‚¢ã‚¤ãƒ†ãƒ ä½¿ç”¨
     // =========================================================
-    /// <summary>ƒoƒgƒ‹’†‚ÉItembox‚ğŠJ‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©B</summary>
+    /// <summary>ãƒãƒˆãƒ«ä¸­ã«Itemboxã‚’é–‹ã„ã¦ã„ã‚‹ã‹ã©ã†ã‹ã€‚</summary>
     [NonSerialized] public bool isInBattle = false;
 
-    /// <summary>Itembox ‚ÅƒAƒCƒeƒ€g—p/‘•”õ•ÏX‚ğs‚¢Aƒ^[ƒ“‚ğÁ”ï‚·‚×‚«‚©‚Ç‚¤‚©B</summary>
+    /// <summary>Itembox ã§ã‚¢ã‚¤ãƒ†ãƒ ä½¿ç”¨/è£…å‚™å¤‰æ›´ã‚’è¡Œã„ã€ã‚¿ãƒ¼ãƒ³ã‚’æ¶ˆè²»ã™ã¹ãã‹ã©ã†ã‹ã€‚</summary>
     [NonSerialized] public bool battleTurnConsumed = false;
 
-    /// <summary>Itembox ‚Å‘€ì‘ÎÛ‚Æ‚È‚Á‚½ƒAƒCƒeƒ€–¼iƒƒO•\¦—pjB</summary>
+    /// <summary>Itembox ã§æ“ä½œå¯¾è±¡ã¨ãªã£ãŸã‚¢ã‚¤ãƒ†ãƒ åï¼ˆãƒ­ã‚°è¡¨ç¤ºç”¨ï¼‰ã€‚</summary>
     [NonSerialized] public string battleItemActionLog = "";
 
     // =========================================================
-    // ƒoƒgƒ‹’†UŒ‚ƒAƒCƒeƒ€: ƒ_ƒ[ƒWî•ñ‚Ìˆê•Û‘¶i’Ç‰Áj
+    // ãƒãƒˆãƒ«ä¸­æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ : ãƒ€ãƒ¡ãƒ¼ã‚¸æƒ…å ±ã®ä¸€æ™‚ä¿å­˜ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // Itembox ‚ÅUŒ‚ƒAƒCƒeƒ€‚ğg—p‚µ‚½ÛAƒ_ƒ[ƒWî•ñ‚ğˆê•Û‘¶‚·‚éB
-    // BattleSceneController ‚ªƒV[ƒ“•œ‹A‚É‚±‚ê‚ğ“Ç‚İæ‚Á‚Äƒ_ƒ[ƒWŒvZ‚ğÀs‚·‚éB
-    // ƒ_ƒ[ƒWŒvZŒã‚ÉƒŠƒZƒbƒg‚³‚ê‚éipendingBattleItemDamage = 0jB
+    // Itembox ã§æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã—ãŸéš›ã€ãƒ€ãƒ¡ãƒ¼ã‚¸æƒ…å ±ã‚’ä¸€æ™‚ä¿å­˜ã™ã‚‹ã€‚
+    // BattleSceneController ãŒã‚·ãƒ¼ãƒ³å¾©å¸°æ™‚ã«ã“ã‚Œã‚’èª­ã¿å–ã£ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+    // ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—å¾Œã«ãƒªã‚»ãƒƒãƒˆã•ã‚Œã‚‹ï¼ˆpendingBattleItemDamage = 0ï¼‰ã€‚
     //
-    // WeaponAttribute / DamageCategory ‚Í enum ‚È‚Ì‚ÅA
-    // NonSerialized + int ‚ÅƒV[ƒ“‘JˆÚ‚ğŒ×‚®B
+    // WeaponAttribute / DamageCategory ã¯ enum ãªã®ã§ã€
+    // NonSerialized + int ã§ã‚·ãƒ¼ãƒ³é·ç§»ã‚’è·¨ãã€‚
     // =========================================================
 
-    /// <summary>UŒ‚ƒAƒCƒeƒ€‚ÌŒÅ’èƒ_ƒ[ƒWB0 = UŒ‚ƒAƒCƒeƒ€–¢g—pB</summary>
+    /// <summary>æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã®å›ºå®šãƒ€ãƒ¡ãƒ¼ã‚¸ã€‚0 = æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ æœªä½¿ç”¨ã€‚</summary>
     [NonSerialized] public int pendingBattleItemDamage = 0;
 
-    /// <summary>UŒ‚ƒAƒCƒeƒ€‚Ì‘®«iWeaponAttribute ‚Ì int ’ljB</summary>
+    /// <summary>æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã®å±æ€§ï¼ˆWeaponAttribute ã® int å€¤ï¼‰ã€‚</summary>
     [NonSerialized] public int pendingBattleItemAttribute = 0;
 
-    /// <summary>UŒ‚ƒAƒCƒeƒ€‚Ì•¨—/–‚–@‹æ•ªiDamageCategory ‚Ì int ’ljB</summary>
+    /// <summary>æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã®ç‰©ç†/é­”æ³•åŒºåˆ†ï¼ˆDamageCategory ã® int å€¤ï¼‰ã€‚</summary>
     [NonSerialized] public int pendingBattleItemDamageCategory = 0;
 
-    /// <summary>UŒ‚ƒAƒCƒeƒ€‚Ì–¼‘OiƒƒO•\¦—pjB</summary>
+    /// <summary>æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã®åå‰ï¼ˆãƒ­ã‚°è¡¨ç¤ºç”¨ï¼‰ã€‚</summary>
     [NonSerialized] public string pendingBattleItemName = "";
 
     // =========================================================
-    // ƒoƒgƒ‹’†ƒ{ƒX‰a•t‚¯: ‘¦Ÿ—˜ƒtƒ‰ƒO‚Ìˆê•Û‘¶i’Ç‰Áj
+    // ãƒãƒˆãƒ«ä¸­ãƒœã‚¹é¤Œä»˜ã‘: å³å‹åˆ©ãƒ•ãƒ©ã‚°ã®ä¸€æ™‚ä¿å­˜ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒ{ƒX‰a•t‚¯ƒAƒCƒeƒ€‚ğg—p‚µ‚½ê‡ trueB
-    /// BattleSceneController ‚ªƒV[ƒ“•œ‹A‚É‚±‚ê‚ğŒ©‚Ä‘¦Ÿ—˜ˆ—‚ğs‚¤B
-    /// ˆ—Œã‚É false ‚ÉƒŠƒZƒbƒg‚³‚ê‚éB
+    /// ãƒœã‚¹é¤Œä»˜ã‘ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã—ãŸå ´åˆ trueã€‚
+    /// BattleSceneController ãŒã‚·ãƒ¼ãƒ³å¾©å¸°æ™‚ã«ã“ã‚Œã‚’è¦‹ã¦å³å‹åˆ©å‡¦ç†ã‚’è¡Œã†ã€‚
+    /// å‡¦ç†å¾Œã« false ã«ãƒªã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
     /// </summary>
     [NonSerialized] public bool pendingBattleItemInstantWin = false;
 
     // =========================================================
-    // ƒCƒxƒ“ƒgŠù“ÇŠÇ—
+    // ã‚¤ãƒ™ãƒ³ãƒˆæ—¢èª­ç®¡ç†
     // =========================================================
     private HashSet<string> played = new HashSet<string>();
 
@@ -803,12 +810,12 @@ public class GameState : MonoBehaviour
         if (!string.IsNullOrEmpty(eventId))
         {
             played.Add(eventId);
-            SaveManager.Save(); // ‘¦ƒZ[ƒu
+            SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         }
     }
 
     /// <summary>
-    /// ƒZ[ƒu—p: Šù“ÇƒCƒxƒ“ƒgIDˆê——‚ğ List ‚Å•Ô‚·B
+    /// ã‚»ãƒ¼ãƒ–ç”¨: æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆIDä¸€è¦§ã‚’ List ã§è¿”ã™ã€‚
     /// </summary>
     public List<string> GetAllPlayedIds()
     {
@@ -816,7 +823,7 @@ public class GameState : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ[ƒh—p: Šù“ÇƒCƒxƒ“ƒgIDˆê——‚ğ•œŒ³‚·‚éB
+    /// ãƒ­ãƒ¼ãƒ‰ç”¨: æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆIDä¸€è¦§ã‚’å¾©å…ƒã™ã‚‹ã€‚
     /// </summary>
     public void RestorePlayedIds(List<string> ids)
     {
@@ -832,7 +839,7 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ‚ƒ“ƒXƒ^[}ŠÓi‘˜‹ö‹L˜^j
+    // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›³é‘‘ï¼ˆé­é‡è¨˜éŒ²ï¼‰
     // =========================================================
     private HashSet<string> encounteredMonsters = new HashSet<string>();
 
@@ -843,7 +850,7 @@ public class GameState : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(monsterId) && encounteredMonsters.Add(monsterId))
         {
-            Debug.Log($"[GameState] ƒ‚ƒ“ƒXƒ^[‘˜‹ö‹L˜^: {monsterId}");
+            Debug.Log($"[GameState] ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­é‡è¨˜éŒ²: {monsterId}");
             SaveManager.Save();
         }
     }
@@ -865,11 +872,11 @@ public class GameState : MonoBehaviour
     }
 
     // =========================================================
-    // ƒAƒCƒeƒ€}ŠÓi”­Œ©‹L˜^j
+    // ã‚¢ã‚¤ãƒ†ãƒ å›³é‘‘ï¼ˆç™ºè¦‹è¨˜éŒ²ï¼‰
     // =========================================================
-    // ƒ‚ƒ“ƒXƒ^[‘˜‹öiencounteredMonstersj‚Æ“¯‚¶İŒvB
-    // ƒAƒCƒeƒ€Šl“¾ƒEƒBƒ“ƒhƒE‚ª•\¦‚³‚ê‚½“_A‚Ü‚½‚ÍŒğŠ·Š‚Å‚ÌŒğŠ·‚É
-    // MarkItemDiscovered ‚ğŒÄ‚ñ‚Å‹L˜^‚·‚éB“üèE’ú‚ß‚é‚Í–â‚í‚È‚¢B
+    // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é­é‡ï¼ˆencounteredMonstersï¼‰ã¨åŒã˜è¨­è¨ˆã€‚
+    // ã‚¢ã‚¤ãƒ†ãƒ ç²å¾—ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒè¡¨ç¤ºã•ã‚ŒãŸæ™‚ç‚¹ã€ã¾ãŸã¯äº¤æ›æ‰€ã§ã®äº¤æ›æ™‚ã«
+    // MarkItemDiscovered ã‚’å‘¼ã‚“ã§è¨˜éŒ²ã™ã‚‹ã€‚å…¥æ‰‹ãƒ»è«¦ã‚ã‚‹ã¯å•ã‚ãªã„ã€‚
     private HashSet<string> discoveredItems = new HashSet<string>();
 
     public bool IsItemDiscovered(string itemId)
@@ -879,7 +886,7 @@ public class GameState : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(itemId) && discoveredItems.Add(itemId))
         {
-            Debug.Log($"[GameState] ƒAƒCƒeƒ€”­Œ©‹L˜^: {itemId}");
+            Debug.Log($"[GameState] ã‚¢ã‚¤ãƒ†ãƒ ç™ºè¦‹è¨˜éŒ²: {itemId}");
             SaveManager.Save();
         }
     }
@@ -906,10 +913,10 @@ public class GameState : MonoBehaviour
         I = this;
         DontDestroyOnLoad(gameObject);
 
-        // ‰‰ñ‹N“®‚É VIT/INT ‚ÆƒpƒbƒVƒu‚ğ”½‰f‚µ‚½ maxHp/maxMp ‚ğŒvZ‚·‚éB
-        // currentHp/currentMp ‚ª -1i–¢‰Šú‰»j‚Ìê‡‚Ì‚İ maxHp/maxMp ‚É‘µ‚¦‚éB
-        // ƒZ[ƒuƒ[ƒhŒã‚Íƒ[ƒhˆ—‚ª currentHp/currentMp ‚ğ³í’l‚Éã‘‚«‚·‚é‚½‚ßA
-        // -1 ‚Ì‚Ü‚Ü Awake ‚ª‘–‚é‚±‚Æ‚Í‚È‚¢B
+        // åˆå›èµ·å‹•æ™‚ã« VIT/INT ã¨ãƒ‘ãƒƒã‚·ãƒ–ã‚’åæ˜ ã—ãŸ maxHp/maxMp ã‚’è¨ˆç®—ã™ã‚‹ã€‚
+        // currentHp/currentMp ãŒ -1ï¼ˆæœªåˆæœŸåŒ–ï¼‰ã®å ´åˆã®ã¿ maxHp/maxMp ã«æƒãˆã‚‹ã€‚
+        // ã‚»ãƒ¼ãƒ–ãƒ­ãƒ¼ãƒ‰å¾Œã¯ãƒ­ãƒ¼ãƒ‰å‡¦ç†ãŒ currentHp/currentMp ã‚’æ­£å¸¸å€¤ã«ä¸Šæ›¸ãã™ã‚‹ãŸã‚ã€
+        // -1 ã®ã¾ã¾ Awake ãŒèµ°ã‚‹ã“ã¨ã¯ãªã„ã€‚
         RecalcMaxHp();
         RecalcMaxMp();
     }
