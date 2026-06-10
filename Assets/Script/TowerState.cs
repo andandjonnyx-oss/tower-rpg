@@ -36,6 +36,11 @@ public class TowerState : MonoBehaviour
        + "階が変わった時に現在階のBGMへ切り替えるために参照する。")]
     [SerializeField] private SceneBgm sceneBgm;
 
+    [Header("SE")]
+    [Tooltip("進むボタンで移動した時の足音SE。\n"
+   + "未設定の場合は鳴らさない。")]
+    [SerializeField] private AudioClip advanceSe;
+
 
     // =========================================================
     // 状態異常表示用 UI（追加）
@@ -228,6 +233,10 @@ public class TowerState : MonoBehaviour
     /// </summary>
     private void AdvanceInternal()
     {
+        // 足音SE（移動が実際に発生した時だけ鳴らす）
+        if (AudioManager.I != null && advanceSe != null)
+            AudioManager.I.PlaySe(advanceSe);
+
         Step++;
 
         if (Step > maxStepPerFloor)
@@ -665,7 +674,10 @@ public class TowerState : MonoBehaviour
         {
             // ポップアップで確認
             if (storageConfirmPopup != null)
+            {
+                if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
                 storageConfirmPopup.SetActive(true);
+            }
             else
                 OnStorageConfirmYes(); // ポップアップ未設定ならそのまま広告へ
         }
@@ -743,6 +755,7 @@ public class TowerState : MonoBehaviour
 
         if (returnConfirmPopup != null)
         {
+            if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
             returnConfirmPopup.SetActive(true);
         }
         else

@@ -292,6 +292,7 @@ public class StatusView : MonoBehaviour
     {
         if (resetConfirmPopup != null)
         {
+            if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
             resetConfirmPopup.SetActive(true);
         }
         else

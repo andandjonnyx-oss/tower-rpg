@@ -136,12 +136,10 @@ public class StorageContext : MonoBehaviour, IItemContext
                 }
             case ItemCategory.Weapon:
                 {
-                    bool equipped = GameState.I != null
-                        && GameState.I.equippedWeaponUid == invItem.uid;
-                    if (equipped)
-                        list.Add(new DetailButtonDef("ŠO‚·", () => UnequipWeapon(invItem)));
-                    else
-                        list.Add(new DetailButtonDef("‘•”õ", () => EquipWeapon(invItem)));
+                    list.Add(ItemActionHelper.BuildEquipButton(
+                        invItem,
+                        () => EquipWeapon(invItem),
+                        () => UnequipWeapon(invItem)));
 
                     var eatBtn = ItemActionHelper.BuildEatWeaponButton(
                         invItem, () => EatWeaponFromInventory(invItem));

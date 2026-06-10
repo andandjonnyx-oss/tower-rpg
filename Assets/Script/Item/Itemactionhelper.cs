@@ -14,6 +14,7 @@ public static class ItemActionHelper
     /// <summary>
     /// 「捨てる」/「捨てるな」ボタンを構築する。
     /// cannotDiscard なら無効化ラベルを返す。
+    /// 捨てる実行時には破棄SEを鳴らす。
     /// </summary>
     public static DetailButtonDef BuildDiscardButton(
         InventoryItem invItem, System.Action discardAction)
@@ -21,13 +22,38 @@ public static class ItemActionHelper
         if (invItem.data.cannotDiscard)
             return new DetailButtonDef("捨てるな", null, interactable: false);
         else
-            return new DetailButtonDef("捨てる", discardAction);
+            return new DetailButtonDef("捨てる", () =>
+            {
+                if (AudioManager.I != null) AudioManager.I.PlayItemDiscardSe();
+                discardAction?.Invoke();
+            });
+    }
+
+    /// <summary>
+    /// 武器の「装備」/「外す」ボタンを構築する。
+    /// 装備状態に応じてラベルと動作を切り替え、実行時に装備SEを鳴らす。
+    /// </summary>
+    public static DetailButtonDef BuildEquipButton(
+        InventoryItem invItem, System.Action equipAction, System.Action unequipAction)
+    {
+        bool equipped = GameState.I != null
+            && GameState.I.equippedWeaponUid == invItem.uid;
+
+        string label = equipped ? "外す" : "装備";
+        System.Action action = equipped ? unequipAction : equipAction;
+
+        return new DetailButtonDef(label, () =>
+        {
+            if (AudioManager.I != null) AudioManager.I.PlayEquipSe();
+            action?.Invoke();
+        });
     }
 
     /// <summary>
     /// 消費アイテムの「使う」/「与える」ボタンを構築する。
     /// battleOnly / bossFeed チェック込み。
     /// ボタンが不要な場合は null を返す。
+    /// 使用時には種類に応じたSEを鳴らす（餌付け＞攻撃＞食べる）。
     /// </summary>
     public static DetailButtonDef BuildUseConsumableButton(
         InventoryItem invItem, bool inBattle, System.Action useAction)
@@ -43,7 +69,28 @@ public static class ItemActionHelper
                           && BattleContext.EnemyMonster.acceptsFeedItem;
 
         string label = isBossFeed ? "与える" : "使う";
-        return new DetailButtonDef(label, useAction);
+        return new DetailButtonDef(label, () =>
+        {
+            PlayConsumableSe(invItem, inBattle, isBossFeed);
+            useAction?.Invoke();
+        });
+    }
+
+    /// <summary>
+    /// 消費アイテム使用時のSEを種類に応じて鳴らす。
+    /// 優先順位: 餌付け（猫） > 戦闘中の攻撃アイテム（爆発） > その他（食べる）
+    /// </summary>
+    private static void PlayConsumableSe(
+        InventoryItem invItem, bool inBattle, bool isBossFeed)
+    {
+        if (AudioManager.I == null || invItem?.data == null) return;
+
+        if (isBossFeed)
+            AudioManager.I.PlayFeedSe();           // ③ 与える
+        else if (inBattle && invItem.data.battleDamage > 0)
+            AudioManager.I.PlayAttackItemSe();     // ② 戦闘中の攻撃アイテム
+        else
+            AudioManager.I.PlayEatItemSe();        // ① 回復・SP・その他
     }
 
     /// <summary>
@@ -56,7 +103,11 @@ public static class ItemActionHelper
         if (!invItem.data.isEdible)
             return null;
 
-        return new DetailButtonDef("食べる", eatAction);
+        return new DetailButtonDef("食べる", () =>
+        {
+            if (AudioManager.I != null) AudioManager.I.PlayEatItemSe();
+            eatAction?.Invoke();
+        });
     }
 
     // =========================================================

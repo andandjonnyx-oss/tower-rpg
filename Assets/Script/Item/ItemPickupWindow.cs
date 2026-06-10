@@ -50,8 +50,14 @@ public class ItemPickupWindow : MonoBehaviour
     bool canGet,
     bool isFull,
     Action<ItemPickupResult> resultCallback,
-    bool cannotIgnore = false)
+    bool cannotIgnore = false,
+    bool playSe = true)
     {
+        // アイテム発見SE（整理後の再表示など、鳴らしたくない場合は playSe=false）
+        if (playSe && AudioManager.I != null)
+            AudioManager.I.PlayItemFoundSe();
+
+
         onResult = resultCallback;
         this.currentIsFull = isFull;
 
@@ -118,13 +124,22 @@ public class ItemPickupWindow : MonoBehaviour
     private void OnClickGet()
     {
         if (currentIsFull)
+        {
+            // 「整理する」: まだ入手していないので鳴らさない
             Close(ItemPickupResult.Exchange);
+        }
         else
+        {
+            // 「入手する」: 道具袋に入るタイミング
+            if (AudioManager.I != null) AudioManager.I.PlayItemGetSe();
             Close(ItemPickupResult.Get);
+        }
     }
 
     private void OnClickIgnore()
     {
+        // 諦めるSE
+        if (AudioManager.I != null) AudioManager.I.PlayItemDiscardSe();
         Close(ItemPickupResult.Ignore);
     }
 

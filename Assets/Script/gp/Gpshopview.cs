@@ -260,6 +260,9 @@ public class GpShopView : MonoBehaviour
 
         if (added)
         {
+            // “üèSE
+            if (AudioManager.I != null) AudioManager.I.PlayItemGetSe();
+
             // }ŠÓ‹L˜^iŒğŠ·¬—§“_‚Å“o˜^j
             if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
 

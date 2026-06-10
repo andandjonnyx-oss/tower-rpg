@@ -176,6 +176,10 @@ public class TitleUIManager : MonoBehaviour
     {
         if (resetConfirmPopup != null)
         {
+
+            if (AudioManager.I != null) AudioManager.I.PlayPopupSe();   // ★追加
+
+
             if (resetConfirmText != null)
                 resetConfirmText.text = "セーブデータを初期化しますか？\n（元に戻せません）";
             resetConfirmPopup.SetActive(true);

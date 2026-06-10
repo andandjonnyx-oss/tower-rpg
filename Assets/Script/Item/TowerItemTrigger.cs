@@ -81,14 +81,16 @@ public class TowerItemTrigger : MonoBehaviour
             }
             else
             {
-                // 整理後の復帰: 従来メッセージ
+                // 整理後の復帰: 従来メッセージ（発見SEは発見時に鳴らし済み）
                 itemPickupWindow.Show(
                     pending.itemName,
                     pending.description + "\n\n整理が完了しました。入手できます。",
                     pending.icon,
                     canGet: true,
                     isFull: false,
-                    OnItemResult);
+                    OnItemResult,
+                    cannotIgnore: pending.cannotDiscard,
+                    playSe: false);
             }
         }
         else

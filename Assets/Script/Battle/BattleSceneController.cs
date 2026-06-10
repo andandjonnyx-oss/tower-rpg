@@ -1470,6 +1470,8 @@ public partial class BattleSceneController : MonoBehaviour
         // ボタンを無効化して操作を防ぐ
         SetButtonsInteractable(false);
 
+        if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
+
         // メッセージを設定
         if (giveUpPopupText != null)
         {

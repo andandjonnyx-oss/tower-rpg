@@ -40,6 +40,35 @@ public class AudioManager : MonoBehaviour
     [Tooltip("SE 用の AudioSource（Loop=OFF、PlayOneShot で使用）")]
     [SerializeField] private AudioSource seSource;
 
+    [Header("Common SE")]
+    [Tooltip("自分の操作でポップアップを開いた瞬間に鳴らす共通SE。\n"
+   + "（初期化確認・ポイントリセット・倉庫呼出・帰還・ギブアップ等）")]
+    [SerializeField] private AudioClip popupSe;
+
+    [Tooltip("アイテム発見ポップアップ表示時に鳴らす共通SE。\n"
+   + "（塔内部での発見・バトル勝利ドロップ・会話リワード）")]
+    [SerializeField] private AudioClip itemFoundSe;
+
+    [Tooltip("アイテムが道具袋に入った時に鳴らす共通SE。\n"
+   + "（ポップアップで入手選択時・GP交換成立時）")]
+    [SerializeField] private AudioClip itemGetSe;
+
+    [Tooltip("アイテムを手放した時に鳴らす共通SE。\n"
+   + "（ポップアップで諦める・アイテム/倉庫画面で捨てる）")]
+    [SerializeField] private AudioClip itemDiscardSe;
+
+    [Tooltip("回復・ステータスアップ等の消費アイテム使用時のSE（食べる音）")]
+    [SerializeField] private AudioClip eatItemSe;
+
+    [Tooltip("攻撃アイテムを戦闘中に使用した時のSE（爆発音)")]
+    [SerializeField] private AudioClip attackItemSe;
+
+    [Tooltip("戦闘中の餌付け（与える）時のSE（猫の鳴き声）")]
+    [SerializeField] private AudioClip feedSe;
+
+    [Tooltip("武器の装備/外す時に鳴らす共通SE")]
+    [SerializeField] private AudioClip equipSe;
+
     // PlayerPrefs キー
     private const string KeyBgmVolume = "audio_bgm_volume";
     private const string KeySeVolume = "audio_se_volume";
@@ -363,4 +392,35 @@ public class AudioManager : MonoBehaviour
         if (bgmSource != null) bgmSource.volume = v;
         if (overlaySource != null) overlaySource.volume = v;
     }
+
+    /// <summary>共通ポップアップSEを鳴らす。未設定なら何もしない。</summary>
+    public void PlayPopupSe()
+    {
+        if (popupSe != null) PlaySe(popupSe);
+    }
+
+    /// <summary>アイテム発見SEを鳴らす。未設定なら何もしない。</summary>
+    public void PlayItemFoundSe()
+    {
+        if (itemFoundSe != null) PlaySe(itemFoundSe);
+    }
+
+    /// <summary>アイテム入手SEを鳴らす。未設定なら何もしない。</summary>
+    public void PlayItemGetSe()
+    {
+        if (itemGetSe != null) PlaySe(itemGetSe);
+    }
+
+    /// <summary>アイテム破棄SEを鳴らす。未設定なら何もしない。</summary>
+    public void PlayItemDiscardSe()
+    {
+        if (itemDiscardSe != null) PlaySe(itemDiscardSe);
+    }
+
+    public void PlayEatItemSe() { if (eatItemSe != null) PlaySe(eatItemSe); }
+    public void PlayAttackItemSe() { if (attackItemSe != null) PlaySe(attackItemSe); }
+    public void PlayFeedSe() { if (feedSe != null) PlaySe(feedSe); }
+
+    public void PlayEquipSe() { if (equipSe != null) PlaySe(equipSe); }
+
 }

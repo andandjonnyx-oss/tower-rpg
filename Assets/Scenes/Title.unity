@@ -2663,6 +2663,14 @@ MonoBehaviour:
   bgmSource: {fileID: 1068459493}
   overlaySource: {fileID: 243109146}
   seSource: {fileID: 348380898}
+  popupSe: {fileID: 8300000, guid: f3bd932452b3f1a45af70ca690d9921a, type: 3}
+  itemFoundSe: {fileID: 8300000, guid: 85fef4343a42b4b4282233ea217c7e07, type: 3}
+  itemGetSe: {fileID: 8300000, guid: 548ae2084cd98e0448a07f7c5d575736, type: 3}
+  itemDiscardSe: {fileID: 8300000, guid: d0206a23b271ea247938a8d77a14033d, type: 3}
+  eatItemSe: {fileID: 8300000, guid: 8eb129e6e84f10a47a6ef22349cb33e3, type: 3}
+  attackItemSe: {fileID: 8300000, guid: e940d973a6ae80f43a45d32769bb7337, type: 3}
+  feedSe: {fileID: 8300000, guid: 4db54921854112e4c8c3fafe67c26adf, type: 3}
+  equipSe: {fileID: 8300000, guid: 95ea46cdd2093944a813c01e6f17a5e1, type: 3}
 --- !u!4 &1825170237
 Transform:
   m_ObjectHideFlags: 0
