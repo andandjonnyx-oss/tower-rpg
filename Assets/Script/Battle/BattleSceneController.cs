@@ -226,6 +226,20 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool isEnemyPreemptive = false;
 
     // =========================================================
+    // ログ表示同期SE（追加）
+    // =========================================================
+    /// <summary>ログ行に紐づくSE種別。</summary>
+    private enum BattleSeKind { None, Attack, Miss }
+
+    /// <summary>表示待ちログ1行分。テキストとSE情報を持つ。</summary>
+    private struct LogEntry
+    {
+        public string text;
+        public BattleSeKind kind;
+        public WeaponAttribute attr; // kind == Attack の時のみ使用
+    }
+
+    // =========================================================
     // 戦闘ログ（改修: 全件保持）
     // =========================================================
     // ログは戦闘開始から終了まで全件を保持する。
@@ -233,7 +247,7 @@ public partial class BattleSceneController : MonoBehaviour
     // ポップアップで全履歴を確認できる。
     // =========================================================
     private List<string> logLines = new List<string>();
-    private Queue<string> logQueue = new Queue<string>();
+    private Queue<LogEntry> logQueue = new Queue<LogEntry>();
     private const int DisplayLogLines = 5;
 
     /// <summary>ログ1行あたりの表示間隔（秒）</summary>
@@ -1325,16 +1339,32 @@ public partial class BattleSceneController : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// ログをキューに追加する（画面更新しない）。
+    /// ログをキューに追加する（画面更新しない）。SEなし。
     /// 実際の表示は FlushLogsAndThen() で行う。
-    /// ログは全件保持し、永続ストアにも同期する。
     /// </summary>
     private void AddLog(string message)
+    {
+        AddLogEntry(message, BattleSeKind.None, default);
+    }
+
+    /// <summary>ダメージ・命中行用。表示の瞬間に属性別の攻撃SEを鳴らす。</summary>
+    private void AddLogAttack(string message, WeaponAttribute attr)
+    {
+        AddLogEntry(message, BattleSeKind.Attack, attr);
+    }
+
+    /// <summary>ミス・無効行用。表示の瞬間にミスSEを鳴らす。</summary>
+    private void AddLogMiss(string message)
+    {
+        AddLogEntry(message, BattleSeKind.Miss, default);
+    }
+
+    private void AddLogEntry(string message, BattleSeKind kind, WeaponAttribute attr)
     {
         logLines.Add(message);
         // 全件を永続ストアに同期（Itemboxシーン遷移時のリロード対応）
         persistentLogLines = new List<string>(logLines);
-        logQueue.Enqueue(message);
+        logQueue.Enqueue(new LogEntry { text = message, kind = kind, attr = attr });
     }
 
     /// <summary>
@@ -1363,8 +1393,9 @@ public partial class BattleSceneController : MonoBehaviour
     {
         while (logQueue.Count > 0)
         {
-            logQueue.Dequeue(); // キューから取り出す（logLines には追加済み）
-            UpdateLogDisplay(); // 画面を更新（logLines の末尾から表示済み分まで）
+            LogEntry entry = logQueue.Dequeue(); // キューから取り出す（logLines には追加済み）
+            PlayLogSe(entry);                    // 表示の瞬間にSEを鳴らす
+            UpdateLogDisplay();                  // 画面を更新
             yield return new WaitForSeconds(LogDisplayInterval);
         }
 
@@ -1372,6 +1403,17 @@ public partial class BattleSceneController : MonoBehaviour
         yield return new WaitForSeconds(LogFlushPostDelay);
 
         callback?.Invoke();
+    }
+
+    /// <summary>ログ行に紐づくSEを再生する。</summary>
+    private void PlayLogSe(LogEntry entry)
+    {
+        if (AudioManager.I == null) return;
+        switch (entry.kind)
+        {
+            case BattleSeKind.Attack: AudioManager.I.PlayAttackSe(entry.attr); break;
+            case BattleSeKind.Miss: AudioManager.I.PlayMissSe(); break;
+        }
     }
 
     /// <summary>

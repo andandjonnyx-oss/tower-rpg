@@ -251,7 +251,7 @@ public partial class BattleSceneController
             {
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
-                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    AddLogMiss($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
                     if (skill.executeEffectsOnMiss)
                     {
                         ProcessEnemySkillEffects(skill);
@@ -279,7 +279,7 @@ public partial class BattleSceneController
             {
                 string missName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName : "先制攻撃";
-                AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                AddLogMiss($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
                 if (skill.executeEffectsOnMiss)
                 {
                     ProcessEnemySkillEffects(skill);
@@ -318,7 +318,7 @@ public partial class BattleSceneController
             ApplyDamageToPlayer(finalDmg);
 
             string blockLog = blocked > 0 ? $"（防御{blocked}軽減）" : "";
-            AddLog($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}");
+            AddLogAttack($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}", skill.skillAttribute);
 
             ProcessEnemySkillEffects(skill);
             return;
@@ -337,7 +337,7 @@ public partial class BattleSceneController
 
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
-                    AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
+                    AddLogMiss($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
                     // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
                     if (skill.executeEffectsOnMiss)
                     {
@@ -380,7 +380,7 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-                AddLog($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}");
+                AddLogAttack($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}", skill.skillAttribute);
 
                 Debug.Log($"[Battle] CurrentHpDamage(Preemptive): userHp={baseDamage} " +
                           $"resistance={resistance} afterResist={afterResist} " +
@@ -395,7 +395,7 @@ public partial class BattleSceneController
 
             if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
-                AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                AddLogMiss($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
                 if (skill.executeEffectsOnMiss)
                 {
                     ProcessEnemySkillEffects(skill);
@@ -417,7 +417,7 @@ public partial class BattleSceneController
                 case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
                 default: hpDepLog = ""; break;
             }
-            AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
+            AddLogAttack($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}", skill.skillAttribute);
 
             Debug.Log($"[Battle] HpDependent(Preemptive): type={skill.hpDependentType} " +
                       $"beforeHp={playerHp} damage={hpDamage}");
@@ -444,7 +444,7 @@ public partial class BattleSceneController
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
             if (hits > 1 && !skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
-                AddLog($"  {h + 1}撃目 …外れた！");
+                AddLogMiss($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
@@ -505,7 +505,7 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
                 string attrTag = skill.HasMultiHitEntries ? $"（{hitAttr.ToJapanese()}）" : "";
-                AddLog($"  {h + 1}撃目{attrTag} {finalDamage}ダメージ！{logSuffix}");
+                AddLogAttack($"  {h + 1}撃目{attrTag} {finalDamage}ダメージ！{logSuffix}", hitAttr);
             }
             else
             {
@@ -520,8 +520,8 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-                AddLog($"{enemyMonster.Mname} の{actionName}！（{hitAttr.ToJapanese()}属性） " +
-                       $"{finalDamage}ダメージ！{logSuffix}");
+                AddLogAttack($"{enemyMonster.Mname} の{actionName}！（{hitAttr.ToJapanese()}属性） " +
+                       $"{finalDamage}ダメージ！{logSuffix}", hitAttr);
 
                 Debug.Log($"[Battle] Preemptive: base={baseDamage} resistance={resistance} " +
                           $"afterResist={afterResist} defense={defense} blocked={blocked} final={finalDamage}");
@@ -570,7 +570,7 @@ public partial class BattleSceneController
         // Phase2: 暗闇対応の命中判定
         if (!CheckPlayerHitWithBlind(baseHit))
         {
-            AddLog($"You は {weaponName} で攻撃！ …しかし外れた！");
+            AddLogMiss($"You は {weaponName} で攻撃！ …しかし外れた！");
             FlushLogsAndThen(() => EnemyTurn());
             return;
         }
@@ -611,9 +611,9 @@ public partial class BattleSceneController
         if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
         if (isCrit)
-            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
+            AddLogAttack($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}", weaponAttribute);
         else
-            AddLog($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
+            AddLogAttack($"You は {weaponName} で攻撃！（{weaponAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}", weaponAttribute);
 
         // =========================================================
         // 武器の状態異常付与判定 — 汎用 switch 化（Phase2）
@@ -854,7 +854,7 @@ public partial class BattleSceneController
             {
                 if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
                 {
-                    AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                    AddLogMiss($"You は {skill.skillName}！ …しかし外れた！");
                     FlushLogsAndThen(() => EnemyTurn());
                     return;
                 }
@@ -879,7 +879,7 @@ public partial class BattleSceneController
             {
                 if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
                 {
-                    AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                    AddLogMiss($"You は {skill.skillName}！ …しかし外れた！");
                     FlushLogsAndThen(() => EnemyTurn());
                     return;
                 }
@@ -909,7 +909,7 @@ public partial class BattleSceneController
                 if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
                 string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
-                AddLog($"You は {skill.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog}");
+                AddLogAttack($"You は {skill.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog}", skill.skillAttribute);
 
                 Debug.Log($"[Battle] CurrentHpDamage(Player→Enemy/Skill): userHp={baseDamage} " +
                           $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
@@ -932,7 +932,7 @@ public partial class BattleSceneController
             // 単発前提: 命中判定
             if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
-                AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                AddLogMiss($"You は {skill.skillName}！ …しかし外れた！");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -940,7 +940,7 @@ public partial class BattleSceneController
             // MaxHpPercent: ボス/メタル系には無効
             if (skill.hpDependentType == HpDependentType.MaxHpPercent && IsEnemyImmuneToMaxHpPercent())
             {
-                AddLog($"You は {skill.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！");
+                AddLogMiss($"You は {skill.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -959,7 +959,7 @@ public partial class BattleSceneController
                 case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
                 default: hpDepLog = ""; break;
             }
-            AddLog($"You は {skill.skillName}！ {hpDamage}ダメージ！{hpDepLog}");
+            AddLogAttack($"You は {skill.skillName}！ {hpDamage}ダメージ！{hpDepLog}", skill.skillAttribute);
 
             Debug.Log($"[Battle] HpDependent(Player→Enemy/Skill): type={skill.hpDependentType} " +
                       $"beforeHp={enemyCurrentHp + hpDamage} damage={hpDamage}");
@@ -991,7 +991,7 @@ public partial class BattleSceneController
         {
             if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
-                AddLog($"You は {skill.skillName}！ …しかし外れた！");
+                AddLogMiss($"You は {skill.skillName}！ …しかし外れた！");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -1011,7 +1011,7 @@ public partial class BattleSceneController
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
             if (hits > 1 && !CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
             {
-                AddLog($"  {h + 1}撃目 …外れた！");
+                AddLogMiss($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
@@ -1075,16 +1075,16 @@ public partial class BattleSceneController
                 string attrTag = skill.HasMultiHitEntries ? $"（{skillAttr.ToJapanese()}）" : "";
                 string hitPrefix = $"  {h + 1}撃目{attrTag}";
                 if (isCrit)
-                    AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}", skillAttr);
                 else
-                    AddLog($"{hitPrefix} {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"{hitPrefix} {finalDamage}ダメージ！{resistLog}", skillAttr);
             }
             else
             {
                 if (isCrit)
-                    AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog}", skillAttr);
                 else
-                    AddLog($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"You は {skill.skillName}！（{skillAttr.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog}", skillAttr);
             }
 
             if (enemyCurrentHp <= 0) break;
@@ -1175,7 +1175,7 @@ public partial class BattleSceneController
             {
                 if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
                 {
-                    AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                    AddLogMiss($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                     FlushLogsAndThen(() => EnemyTurn());
                     return;
                 }
@@ -1200,7 +1200,7 @@ public partial class BattleSceneController
             {
                 if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
                 {
-                    AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                    AddLogMiss($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                     FlushLogsAndThen(() => EnemyTurn());
                     return;
                 }
@@ -1227,7 +1227,7 @@ public partial class BattleSceneController
                 if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
                 string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
-                AddLog($"You は {magic.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog} MP-{magic.mpCost}");
+                AddLogAttack($"You は {magic.skillName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{resistLog}{blockLog} MP-{magic.mpCost}", magic.skillAttribute);
 
                 Debug.Log($"[Battle] CurrentHpDamage(Player→Enemy/Magic): userHp={baseDamage} " +
                           $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
@@ -1250,7 +1250,7 @@ public partial class BattleSceneController
             // 単発前提: 命中判定
             if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
-                AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                AddLogMiss($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -1258,7 +1258,7 @@ public partial class BattleSceneController
             // MaxHpPercent: ボス/メタル系には無効
             if (magic.hpDependentType == HpDependentType.MaxHpPercent && IsEnemyImmuneToMaxHpPercent())
             {
-                AddLog($"You は {magic.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！ MP-{magic.mpCost}");
+                AddLogMiss($"You は {magic.skillName}！ …しかし{enemyMonster.Mname}には効かなかった！ MP-{magic.mpCost}");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -1277,7 +1277,7 @@ public partial class BattleSceneController
                 case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{magic.hpDependentPercent}%）"; break;
                 default: hpDepLog = ""; break;
             }
-            AddLog($"You は {magic.skillName}！ {hpDamage}ダメージ！{hpDepLog} MP-{magic.mpCost}");
+            AddLogAttack($"You は {magic.skillName}！ {hpDamage}ダメージ！{hpDepLog} MP-{magic.mpCost}", magic.skillAttribute);
 
             Debug.Log($"[Battle] HpDependent(Player→Enemy/Magic): type={magic.hpDependentType} " +
                       $"beforeHp={enemyCurrentHp + hpDamage} damage={hpDamage}");
@@ -1309,7 +1309,7 @@ public partial class BattleSceneController
         {
             if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
-                AddLog($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                AddLogMiss($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
                 FlushLogsAndThen(() => EnemyTurn());
                 return;
             }
@@ -1329,7 +1329,7 @@ public partial class BattleSceneController
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
             if (hits > 1 && !CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
             {
-                AddLog($"  {h + 1}撃目 …外れた！");
+                AddLogMiss($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
@@ -1391,16 +1391,16 @@ public partial class BattleSceneController
                 string attrTag = magic.HasMultiHitEntries ? $"（{hitAttr.ToJapanese()}）" : "";
                 string hitPrefix = $"  {h + 1}撃目{attrTag}";
                 if (isCrit)
-                    AddLog($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"{hitPrefix} クリティカル！ {finalDamage}ダメージ！{resistLog}", hitAttr);
                 else
-                    AddLog($"{hitPrefix} {finalDamage}ダメージ！{resistLog}");
+                    AddLogAttack($"{hitPrefix} {finalDamage}ダメージ！{resistLog}", hitAttr);
             }
             else
             {
                 if (isCrit)
-                    AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
+                    AddLogAttack($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） クリティカル！ {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}", hitAttr);
                 else
-                    AddLog($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}");
+                    AddLogAttack($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！{resistLog} MP-{magic.mpCost}", hitAttr);
             }
 
             if (enemyCurrentHp <= 0) break;

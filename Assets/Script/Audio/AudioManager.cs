@@ -32,6 +32,13 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager I { get; private set; }
 
+    [System.Serializable]
+    public struct AttributeSe
+    {
+        public WeaponAttribute attribute;
+        public AudioClip clip;
+    }
+
     [Header("Audio Sources")]
     [Tooltip("メインBGM 用の AudioSource（拠点/タイトル/塔）。Loop=ON 推奨。")]
     [SerializeField] private AudioSource bgmSource;
@@ -68,6 +75,17 @@ public class AudioManager : MonoBehaviour
 
     [Tooltip("武器の装備/外す時に鳴らす共通SE")]
     [SerializeField] private AudioClip equipSe;
+
+    [Header("Battle SE")]
+    [Tooltip("属性別の攻撃ヒットSE。同じクリップを複数属性に割り当ててよい。\n"
+   + "未登録の属性は defaultAttackSe にフォールバックする。")]
+    [SerializeField] private AttributeSe[] attackSeTable;
+
+    [Tooltip("attackSeTable に該当が無い属性のフォールバック攻撃SE")]
+    [SerializeField] private AudioClip defaultAttackSe;
+
+    [Tooltip("攻撃が外れた/効かなかった時のSE")]
+    [SerializeField] private AudioClip missSe;
 
     // PlayerPrefs キー
     private const string KeyBgmVolume = "audio_bgm_volume";
@@ -422,5 +440,30 @@ public class AudioManager : MonoBehaviour
     public void PlayFeedSe() { if (feedSe != null) PlaySe(feedSe); }
 
     public void PlayEquipSe() { if (equipSe != null) PlaySe(equipSe); }
+
+    /// <summary>属性に応じた攻撃ヒットSEを鳴らす。テーブルに無ければフォールバック。</summary>
+    public void PlayAttackSe(WeaponAttribute attr)
+    {
+        AudioClip clip = null;
+        if (attackSeTable != null)
+        {
+            for (int i = 0; i < attackSeTable.Length; i++)
+            {
+                if (attackSeTable[i].attribute == attr && attackSeTable[i].clip != null)
+                {
+                    clip = attackSeTable[i].clip;
+                    break;
+                }
+            }
+        }
+        if (clip == null) clip = defaultAttackSe;
+        if (clip != null) PlaySe(clip);
+    }
+
+    /// <summary>ミス/無効SEを鳴らす。未設定なら何もしない。</summary>
+    public void PlayMissSe()
+    {
+        if (missSe != null) PlaySe(missSe);
+    }
 
 }

@@ -2671,6 +2671,9 @@ MonoBehaviour:
   attackItemSe: {fileID: 8300000, guid: e940d973a6ae80f43a45d32769bb7337, type: 3}
   feedSe: {fileID: 8300000, guid: 4db54921854112e4c8c3fafe67c26adf, type: 3}
   equipSe: {fileID: 8300000, guid: 95ea46cdd2093944a813c01e6f17a5e1, type: 3}
+  attackSeTable: []
+  defaultAttackSe: {fileID: 8300000, guid: 98bae45ea84e24b4a987071614ecf5a3, type: 3}
+  missSe: {fileID: 8300000, guid: a79f1c3bc8fb83644896f773c69317c5, type: 3}
 --- !u!4 &1825170237
 Transform:
   m_ObjectHideFlags: 0

@@ -495,7 +495,7 @@ public partial class BattleSceneController
 
         if (!CheckEnemyHit(hitRate))
         {
-            AddLog($"{enemyMonster.Mname} の攻撃！ …しかし外れた！");
+            AddLogMiss($"{enemyMonster.Mname} の攻撃！ …しかし外れた！");
             return;
         }
 
@@ -524,9 +524,9 @@ public partial class BattleSceneController
         ApplyDamageToPlayer(finalDamage);
 
         if (blocked > 0)
-            AddLog($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！（{blocked}軽減）");
+            AddLogAttack($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！（{blocked}軽減）", WeaponAttribute.Strike);
         else
-            AddLog($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！");
+            AddLogAttack($"{enemyMonster.Mname} の攻撃！ {finalDamage}ダメージ！", WeaponAttribute.Strike);
     }
 
     // =========================================================
@@ -933,7 +933,7 @@ public partial class BattleSceneController
             {
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
-                    AddLog($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
+                    AddLogMiss($"{enemyMonster.Mname} の{effectSkillName}！ …しかし外れた！");
                     if (skill.executeEffectsOnMiss)
                     {
                         ProcessEnemySkillEffects(skill);
@@ -962,7 +962,7 @@ public partial class BattleSceneController
                 string missName = !string.IsNullOrEmpty(skill.skillName)
                     ? skill.skillName
                     : $"{skill.skillAttribute.ToJapanese()}攻撃";
-                AddLog($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
+                AddLogMiss($"{enemyMonster.Mname} の{missName}！ …しかし外れた！");
                 if (skill.executeEffectsOnMiss)
                 {
                     ProcessEnemySkillEffects(skill);
@@ -1006,7 +1006,7 @@ public partial class BattleSceneController
             ApplyDamageToPlayer(finalDmg);
 
             string blockLog = blocked > 0 ? $"（防御{blocked}軽減）" : "";
-            AddLog($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}");
+            AddLogAttack($"{enemyMonster.Mname} の{rndName}！ {finalDmg}ダメージ！（乱数{rndBase}）{blockLog}", skill.skillAttribute);
 
             Debug.Log($"[Battle] RandomDamage: roll={rndBase} max={skill.randomDamageMax} " +
                       $"defense={defense} blocked={blocked} final={finalDmg}");
@@ -1034,7 +1034,7 @@ public partial class BattleSceneController
 
                 if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
                 {
-                    AddLog($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
+                    AddLogMiss($"{enemyMonster.Mname} の{cdName}！ …しかし外れた！");
 
                     // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
                     if (skill.executeEffectsOnMiss)
@@ -1081,7 +1081,7 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-                AddLog($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}");
+                AddLogAttack($"{enemyMonster.Mname} の{cdName}！ {finalDamage}ダメージ！（残りHP{baseDamage}）{logSuffix}", skill.skillAttribute);
 
                 Debug.Log($"[Battle] CurrentHpDamage(Enemy→Player): userHp={baseDamage} " +
                           $"resistance={resistance} afterResist={afterResist} " +
@@ -1098,7 +1098,7 @@ public partial class BattleSceneController
             // 単発前提（多段併用不可）: 命中判定
             if (!skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
-                AddLog($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
+                AddLogMiss($"{enemyMonster.Mname} の{hpDepName}！ …しかし外れた！");
                 if (skill.executeEffectsOnMiss)
                 {
                     ProcessEnemySkillEffects(skill);
@@ -1120,7 +1120,7 @@ public partial class BattleSceneController
                 case HpDependentType.MaxHpPercent: hpDepLog = $"（最大HPの{skill.hpDependentPercent}%）"; break;
                 default: hpDepLog = ""; break;
             }
-            AddLog($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}");
+            AddLogAttack($"{enemyMonster.Mname} の{hpDepName}！ {hpDamage}ダメージ！{hpDepLog}", skill.skillAttribute);
 
             Debug.Log($"[Battle] HpDependent(Enemy→Player): type={skill.hpDependentType} " +
                       $"beforeHp={playerHp} damage={hpDamage}");
@@ -1146,7 +1146,7 @@ public partial class BattleSceneController
             // ★単発攻撃: ループ前で判定済みなのでここはスキップ
             if (hits > 1 && !skill.isGuaranteedHit && !CheckEnemyHit(effectiveHitRate))
             {
-                AddLog($"  {h + 1}撃目 …外れた！");
+                AddLogMiss($"  {h + 1}撃目 …外れた！");
                 continue;
             }
 
@@ -1207,7 +1207,7 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
                 string attrTag = skill.HasMultiHitEntries ? $"（{hitAttr.ToJapanese()}）" : "";
-                AddLog($"  {h + 1}撃目{attrTag} {finalDamage}ダメージ！{logSuffix}");
+                AddLogAttack($"  {h + 1}撃目{attrTag} {finalDamage}ダメージ！{logSuffix}", hitAttr);
             }
             else
             {
@@ -1222,8 +1222,8 @@ public partial class BattleSceneController
                 else if (resistance < 0) logSuffix = "（弱点で増加）";
                 else if (blocked > 0) logSuffix = $"（防御{blocked}軽減）";
 
-                AddLog($"{enemyMonster.Mname} の{actionName}！（{hitAttr.ToJapanese()}属性） " +
-                       $"{finalDamage}ダメージ！{logSuffix}");
+                AddLogAttack($"{enemyMonster.Mname} の{actionName}！（{hitAttr.ToJapanese()}属性） " +
+                       $"{finalDamage}ダメージ！{logSuffix}", hitAttr);
             }
 
             Debug.Log($"[Battle] SkillAttack hit {h + 1}/{hits}: base={baseDamage} resistance={resistance} " +
