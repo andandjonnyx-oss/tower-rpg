@@ -10,18 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
-  m_Name: BOSS_F100_VICTORY
+  m_Name: ED_MAIN
   m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
-  id: BOSS_F100_VICTORY
+  id: ED_MAIN
   zukanTitle: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
-  floor: 9999
-  step: 0
+  floor: 100
+  step: 9999
   backgroundImage: {fileID: 21300000, guid: e38feb1a74bdd394c991dfd6ce1a34eb, type: 3}
   lines:
   - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
     text: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0\u4EEE\u67A0"
     portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
     backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u304A\u3081\u3067\u3068\u3046\uFF01"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
   conditions: []
   randomGroup: 
   randomWeight: 0

@@ -76,4 +76,4 @@ MonoBehaviour:
   equipStatusEffectResistances: []
   magicSkill: {fileID: 11400000, guid: b71a716476ccccc43b9cd1215d1478ff, type: 2}
   passiveEffects: []
-  sortOrder: 0
+  sortOrder: 26

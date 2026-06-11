@@ -141,7 +141,8 @@ public class TalkZukanView : MonoBehaviour
         foreach (var talkEvent in sorted)
         {
             TalkZukanCell cell = Instantiate(cellPrefab, listContent);
-            bool played = GameState.I != null && GameState.I.IsPlayed(talkEvent.id);
+            bool played = GameState.I != null
+                       && (GameState.I.zukanAllUnlocked || GameState.I.IsPlayed(talkEvent.id));
             cell.Setup(talkEvent, played, OnCellClicked);
             cells.Add(cell);
 

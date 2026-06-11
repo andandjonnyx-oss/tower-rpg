@@ -26,6 +26,32 @@ public class TalkRunner : MonoBehaviour
     [SerializeField] private Image backgroundImage;
 
     // =========================================================
+    // 名前入力ポップアップ UI（追加）
+    // =========================================================
+    //
+    // TalkLine.requestNameInput == true の台詞を表示する直前に
+    // ポップアップを出し、確定までタップ進行をブロックする。
+    // 入力結果は GameState.playerName に保存され、{name} 置換に使われる。
+    // =========================================================
+
+    [Header("UI - Name Input")]
+    [Tooltip("名前入力ポップアップのルートオブジェクト。初期状態は非表示にしておく。\n"
+           + "null の場合、requestNameInput は無視される（{name} は既定名で置換）。")]
+    [SerializeField] private GameObject nameInputPanel;
+
+    [Tooltip("名前入力フィールド（TMP_InputField）。Character Limit の設定推奨（例: 8）。")]
+    [SerializeField] private TMP_InputField nameInputField;
+
+    [Tooltip("名前確定ボタン")]
+    [SerializeField] private Button nameInputConfirmButton;
+
+    [Tooltip("未入力で確定した場合・{name} 置換時に名前が無い場合の既定名")]
+    [SerializeField] private string defaultPlayerName = "あなた";
+
+    /// <summary>名前入力待機中はタップ進行を無効化する。</summary>
+    private bool isWaitingNameInput;
+
+    // =========================================================
     // タイトル表示 UI（追加）
     // =========================================================
     //
@@ -67,6 +93,12 @@ public class TalkRunner : MonoBehaviour
             SceneManager.LoadScene(towerSceneName);
             return;
         }
+
+        // 名前入力ポップアップ初期化
+        if (nameInputPanel != null)
+            nameInputPanel.SetActive(false);
+        if (nameInputConfirmButton != null)
+            nameInputConfirmButton.onClick.AddListener(OnNameInputConfirm);
 
         //待機中IDを基にイベントを取得
         current = database.FindById(gs.pendingEventId);
@@ -160,8 +192,8 @@ public class TalkRunner : MonoBehaviour
     // クリック時に次の台詞を表示させる。無ければ終了
     public void OnClickNext()
     {
-        // タイトル表示中はタップを無視
-        if (isWaitingTitle) return;
+        // タイトル表示中・名前入力中はタップを無視
+        if (isWaitingTitle || isWaitingNameInput) return;
 
         if (current == null) return;
 
@@ -182,8 +214,27 @@ public class TalkRunner : MonoBehaviour
     {
         var line = current.lines[index];
 
-        if (speakerText) speakerText.text = line.speaker ?? "";
-        if (bodyText) bodyText.text = line.text ?? "";
+        // =========================================================
+        // 名前入力リクエスト（追加）
+        // この台詞を表示する前にポップアップを出し、確定を待つ。
+        // 図鑑リプレイ時はスキップ（保存済みの名前をそのまま使う）。
+        // =========================================================
+        if (line.requestNameInput && nameInputPanel != null && !GameState.I.isZukanReplay)
+        {
+            ShowNameInputPopup();
+            return; // 確定後に OnNameInputConfirm() → RenderLine() が呼ばれる
+        }
+
+        RenderLine(line);
+    }
+
+    /// <summary>
+    /// 台詞1行分の実描画。{name} 置換を適用する。
+    /// </summary>
+    private void RenderLine(TalkEvent.TalkLine line)
+    {
+        if (speakerText) speakerText.text = ReplacePlaceholders(line.speaker ?? "");
+        if (bodyText) bodyText.text = ReplacePlaceholders(line.text ?? "");
 
         if (portraitImage)
         {
@@ -196,6 +247,57 @@ public class TalkRunner : MonoBehaviour
                   ? line.backgroundOverride
                   : current.backgroundImage;
         ApplyBackground(bg);
+    }
+
+    // =========================================================
+    // 名前入力ポップアップ（追加）
+    // =========================================================
+
+    /// <summary>
+    /// 名前入力ポップアップを表示し、タップ進行をブロックする。
+    /// 入力欄には保存済みの名前をプリフィルする（中断再開時の再入力を楽にする）。
+    /// </summary>
+    private void ShowNameInputPopup()
+    {
+        isWaitingNameInput = true;
+
+        if (nameInputField != null)
+            nameInputField.text = GameState.I.playerName ?? "";
+
+        if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
+        nameInputPanel.SetActive(true);
+    }
+
+    /// <summary>
+    /// 名前確定ボタン。入力を GameState.playerName に保存して台詞表示を再開する。
+    /// 空入力（スペースのみ含む）の場合は既定名を使う。
+    /// </summary>
+    private void OnNameInputConfirm()
+    {
+        string input = nameInputField != null ? nameInputField.text.Trim() : "";
+        if (string.IsNullOrEmpty(input)) input = defaultPlayerName;
+
+        GameState.I.playerName = input;
+        SaveManager.Save(); // 即時セーブ
+
+        nameInputPanel.SetActive(false);
+        isWaitingNameInput = false;
+
+        Debug.Log($"[TalkRunner] プレイヤー名を設定: {input}");
+
+        // 入力リクエスト元の台詞を表示（この台詞自身も {name} 置換される）
+        RenderLine(current.lines[index]);
+    }
+
+    /// <summary>
+    /// テキスト内のプレースホルダーを置換する。
+    /// {name} → プレイヤー名（未設定なら defaultPlayerName）
+    /// </summary>
+    private string ReplacePlaceholders(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return text ?? "";
+        if (!text.Contains("{name}")) return text;
+        return text.Replace("{name}", GameState.I.GetDisplayName(defaultPlayerName));
     }
 
     // =========================================================
@@ -239,8 +341,17 @@ public class TalkRunner : MonoBehaviour
             Debug.Log($"[TalkRunner] 報酬アイテムを pendingItemData にセット: {current.rewardItem.itemName}");
         }
 
-        // 図鑑リプレイフラグをクリア
+        // 図鑑リプレイフラグをクリア（判定用に値を控えてからクリア）
+        bool wasZukanReplay = gs.isZukanReplay;
         gs.isZukanReplay = false;
+
+        // =========================================================
+        // エンディング進行フック（追加）
+        // ED会話/エピローグの終了時は EndingManager が次のシーンへ遷移する。
+        // 図鑑リプレイでの再生時は通常の戻り処理を使う（エンディングを誤発火させない）。
+        // =========================================================
+        if (!wasZukanReplay && EndingManager.HandleTalkFinished(current.id))
+            return;
 
         ReturnToPreviousScene();
     }

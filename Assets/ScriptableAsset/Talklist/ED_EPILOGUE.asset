@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: ED_EPILOGUE
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: ED_EPILOGUE
+  zukanTitle: "\u30A8\u30D4\u30ED\u30FC\u30B0"
+  floor: 9999
+  step: 0
+  backgroundImage: {fileID: 21300000, guid: d620cb937c4e4b9448fc338c758a9fc7, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u30A8\u30D4\u30ED\u30FC\u30B0\u4EEE\u67A0"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u2026\u2026\u305D\u3046\u3044\u3048\u3070\u3001\u304A\u524D\u306E\u540D\u524D\u307E\u3060\u805E\u3044\u3066\u306A\u304B\u3063\u305F\u3088\u306A\u3002\n\u4F55\u3066\u540D\u524D\u306A\u3093\u3060\uFF1F"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 1
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "{name}\u304B\u3002\u3044\u3044\u540D\u524D\u3060\u306A\u3002"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
+  rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

@@ -235,6 +235,18 @@ public class TowerState : MonoBehaviour
     /// </summary>
     private void AdvanceInternal()
     {
+
+        // =========================================================
+        // 頂上キャップ（追加）
+        // 100階の20STEP（頂上）より先には進めない。
+        // SEより前に判定するので、移動できない時は足音も鳴らない。
+        // =========================================================
+        if (Floor >= 100 && Step >= maxStepPerFloor)
+        {
+            ShowFieldMagicLog("ここが塔の頂上だ。これ以上先には進めない。");
+            return;
+        }
+
         // 足音SE（移動が実際に発生した時だけ鳴らす）
         if (AudioManager.I != null && advanceSe != null)
             AudioManager.I.PlaySe(advanceSe);

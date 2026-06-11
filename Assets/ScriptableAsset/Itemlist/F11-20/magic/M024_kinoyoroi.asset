@@ -89,4 +89,4 @@ MonoBehaviour:
     targetStatusEffect: 0
     value: -100
     floatValue: 0
-  sortOrder: 0
+  sortOrder: 24

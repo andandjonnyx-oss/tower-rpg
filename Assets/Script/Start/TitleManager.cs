@@ -108,6 +108,15 @@ public class TitleUIManager : MonoBehaviour
         {
             // セーブデータあり → ロードして続きから
             SaveManager.Load();
+
+            // =========================================================
+            // エンディング中断からの再開チェック（追加）
+            // ED会話/スタッフロール/エピローグの途中で終了していた場合、
+            // 中断したフェーズの先頭から再開する。
+            // =========================================================
+            if (EndingManager.TryResumeEnding())
+                return;
+
             Debug.Log("[Title] セーブデータをロードして続きから開始");
         }
         else
@@ -239,6 +248,16 @@ public class TitleUIManager : MonoBehaviour
 
             GameState.I.statusPoint = 10;
             GameState.I.equippedWeaponUid = "";
+
+            // ボスフェーズとエンディング進行をリセット（追加）
+            GameState.I.bossPhaseF70 = 0;
+            GameState.I.bossPhaseF90 = 0;
+            GameState.I.bossPhaseF100 = 0;
+            GameState.I.endingPhase = 0;
+            GameState.I.zukanAllUnlocked = false;
+            GameState.I.staffRollReturnScene = null;
+            GameState.I.playerName = "";
+
 
             GameState.I.isInBattle = false;
             GameState.I.battleTurnConsumed = false;

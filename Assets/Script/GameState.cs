@@ -30,6 +30,20 @@ public class GameState : MonoBehaviour
     public string equippedWeaponUid = "";
 
     // =========================================================
+    // プレイヤー名（エピローグで入力）
+    // =========================================================
+    [Header("Player Name")]
+    [Tooltip("エピローグの名前入力で設定されるプレイヤー名。\n"
+           + "会話テキスト内の {name} がこれに置換される。セーブ対象。")]
+    public string playerName = "";
+
+    /// <summary>
+    /// 表示用プレイヤー名を返す。未入力の場合は fallback を返す。
+    /// </summary>
+    public string GetDisplayName(string fallback = "あなた")
+        => string.IsNullOrEmpty(playerName) ? fallback : playerName;
+
+    // =========================================================
     // 塔の到達階（中間ポイント解放用）
     // =========================================================
     [Header("Tower Checkpoint")]
@@ -103,6 +117,31 @@ public class GameState : MonoBehaviour
 
     /// <summary>F100ボス（フェゴール→バアル＝フェゴール）のフェーズ管理。</summary>
     public int bossPhaseF100 = 0;
+
+    // =========================================================
+    // エンディング進行管理（追加）
+    // =========================================================
+
+    /// <summary>
+    /// エンディングの進行フェーズ（EndingManager の Phase 定数に対応）。
+    /// 0=未開始 1=ED会話中 2=スタッフロール中 3=エピローグ中 4=クリア済み
+    /// 中断時はこのフェーズの先頭から再開する。セーブ対象。
+    /// </summary>
+    public int endingPhase = 0;
+
+    /// <summary>
+    /// クリア特典: 図鑑全開放フラグ。エピローグ終了時に true になる。セーブ対象。
+    /// IsEncountered / IsItemDiscovered がこれを参照して常に true を返すようになる。
+    /// 会話図鑑は TalkZukanView 側で参照する。
+    /// </summary>
+    public bool zukanAllUnlocked = false;
+
+    /// <summary>
+    /// スタッフロールを図鑑等から閲覧する時の戻り先シーン名。
+    /// 通常のエンディング進行では null のまま。シーン遷移前にセットし、
+    /// StaffRollController が参照後クリアする。
+    /// </summary>
+    [NonSerialized] public string staffRollReturnScene = null;
 
     // =========================================================
     // 状態異常
@@ -844,7 +883,8 @@ public class GameState : MonoBehaviour
     private HashSet<string> encounteredMonsters = new HashSet<string>();
 
     public bool IsEncountered(string monsterId)
-        => !string.IsNullOrEmpty(monsterId) && encounteredMonsters.Contains(monsterId);
+        => !string.IsNullOrEmpty(monsterId)
+        && (zukanAllUnlocked || encounteredMonsters.Contains(monsterId));
 
     public void MarkEncountered(string monsterId)
     {
@@ -880,7 +920,8 @@ public class GameState : MonoBehaviour
     private HashSet<string> discoveredItems = new HashSet<string>();
 
     public bool IsItemDiscovered(string itemId)
-        => !string.IsNullOrEmpty(itemId) && discoveredItems.Contains(itemId);
+        => !string.IsNullOrEmpty(itemId)
+        && (zukanAllUnlocked || discoveredItems.Contains(itemId));
 
     public void MarkItemDiscovered(string itemId)
     {

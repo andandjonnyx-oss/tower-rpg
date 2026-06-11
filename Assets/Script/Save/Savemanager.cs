@@ -68,6 +68,10 @@ public static class SaveManager
             data.bossPhaseF70 = GameState.I.bossPhaseF70;
             data.bossPhaseF90 = GameState.I.bossPhaseF90;
             data.bossPhaseF100 = GameState.I.bossPhaseF100;
+            data.endingPhase = GameState.I.endingPhase;
+            data.zukanAllUnlocked = GameState.I.zukanAllUnlocked;
+            data.playerName = GameState.I.playerName;
+
 
 
             data.equippedWeaponUid = GameState.I.equippedWeaponUid;
@@ -203,6 +207,9 @@ public static class SaveManager
             GameState.I.bossPhaseF70 = data.bossPhaseF70;
             GameState.I.bossPhaseF90 = data.bossPhaseF90;
             GameState.I.bossPhaseF100 = data.bossPhaseF100;
+            GameState.I.endingPhase = data.endingPhase;
+            GameState.I.zukanAllUnlocked = data.zukanAllUnlocked;
+            GameState.I.playerName = data.playerName ?? "";
 
 
             GameState.I.equippedWeaponUid = data.equippedWeaponUid ?? "";
@@ -309,6 +316,12 @@ public class SaveData
     public int bossPhaseF70 = 0;
     public int bossPhaseF90 = 0;
     public int bossPhaseF100 = 0;
+
+    // --- エンディング進行 ---
+    // 既存セーブデータとの互換性: デフォルト値（0/false）で自動対応。
+    public int endingPhase = 0;
+    public bool zukanAllUnlocked = false;
+    public string playerName = "";
 
 
     // --- 装備 ---

@@ -112,6 +112,12 @@ public class TalkEvent : ScriptableObject
         [Tooltip("この台詞で背景を変更する場合に設定。\n"
                + "null の場合は TalkEvent.backgroundImage が使われる。")]
         public Sprite backgroundOverride; // 台詞単位の背景オーバーライド
+
+        [Tooltip("この台詞を表示する前に名前入力ポップアップを出す。\n"
+       + "入力された名前は GameState.playerName に保存され、\n"
+       + "以降の台詞内の {name} が置換される（この台詞自身も含む）。\n"
+       + "図鑑リプレイ時はポップアップをスキップし、保存済みの名前を使う。")]
+        public bool requestNameInput = false;
     }
 }
 
