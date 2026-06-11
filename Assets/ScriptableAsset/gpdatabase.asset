@@ -13,7 +13,22 @@ MonoBehaviour:
   m_Name: gpdatabase
   m_EditorClassIdentifier: Assembly-CSharp::GpShopDatabase
   shopItems:
+  - {fileID: 11400000, guid: 7001b76f6a9c5a043b7af74c2e239c43, type: 2}
   - {fileID: 11400000, guid: be68e4917d5a1694890f99ae9b6c17e1, type: 2}
-  - {fileID: 11400000, guid: bf2dfcd6ea8bce148884e014664cc664, type: 2}
   - {fileID: 11400000, guid: d2bb4f7db992f9d4e9733702a24a97ec, type: 2}
+  - {fileID: 11400000, guid: a8ccbfa81e6e87440b19269e7b435b74, type: 2}
+  - {fileID: 11400000, guid: f8ef9f49b60b56e41af511cab2bd1b94, type: 2}
+  - {fileID: 11400000, guid: 7d4d93dff80af414093307a11981e826, type: 2}
   - {fileID: 11400000, guid: 44cc60d54b2345942af748ff44b54d8b, type: 2}
+  - {fileID: 11400000, guid: 73e222223aca8e14d8bd6088dd498c74, type: 2}
+  - {fileID: 11400000, guid: 57683a660aa12294e96fc98f63c7da98, type: 2}
+  - {fileID: 11400000, guid: b00221d6cdb8a974693398b5ca3137c6, type: 2}
+  - {fileID: 11400000, guid: 70587d8852f9aa747ab54b7034023f86, type: 2}
+  - {fileID: 11400000, guid: dd2870d80f8ab9642a27f528a2fb0f24, type: 2}
+  - {fileID: 11400000, guid: c85e057e5af81db448e9ad8c6445f92b, type: 2}
+  - {fileID: 11400000, guid: 7687966956c6de24bb74f765ce19232c, type: 2}
+  - {fileID: 11400000, guid: 1f00cac4704164e4b8e2f655878a15b5, type: 2}
+  - {fileID: 11400000, guid: 2b218eca7c160814fbf8861d449c4eae, type: 2}
+  - {fileID: 11400000, guid: 8179547dd67c8b442a2dcb42252f819c, type: 2}
+  - {fileID: 11400000, guid: c1f97759e778a7445bced8af28d27aa6, type: 2}
+  - {fileID: 11400000, guid: 26a2a8aca46422341b0ca8a54d12c5c3, type: 2}

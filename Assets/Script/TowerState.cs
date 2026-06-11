@@ -42,6 +42,8 @@ public class TowerState : MonoBehaviour
     [SerializeField] private AudioClip advanceSe;
 
 
+
+
     // =========================================================
     // 状態異常表示用 UI（追加）
     // =========================================================
@@ -539,6 +541,9 @@ public class TowerState : MonoBehaviour
         // 追加効果の実行（敵なし = null で呼ぶ）
         string resultLog = $"{magic.skillName} を唱えた！ MP-{magic.mpCost}";
 
+        if (AudioManager.I != null) AudioManager.I.PlayHealSe();
+
+
         if (magic.HasAdditionalEffects)
         {
             bool dummyPoisoned = false;
@@ -783,5 +788,6 @@ public class TowerState : MonoBehaviour
         SaveManager.Save();
         SceneManager.LoadScene(mainSceneName);
     }
+
 
 }

@@ -263,7 +263,10 @@ public class StatusView : MonoBehaviour
     {
         if (GameState.I == null) return;
         if (GameState.I.AllocatePoint(stat))
+        {
+            if (AudioManager.I != null) AudioManager.I.PlayStatAllocateSe();
             RefreshAll();
+        }
     }
 
     /// <summary>
@@ -283,6 +286,9 @@ public class StatusView : MonoBehaviour
             if (!GameState.I.AllocatePoint(stat))
                 break;
         }
+
+        // 一括でも鳴らすのは1回だけ
+        if (AudioManager.I != null) AudioManager.I.PlayStatAllocateSe();
 
         RefreshAll();
     }

@@ -229,7 +229,7 @@ public partial class BattleSceneController : MonoBehaviour
     // ログ表示同期SE（追加）
     // =========================================================
     /// <summary>ログ行に紐づくSE種別。</summary>
-    private enum BattleSeKind { None, Attack, Miss }
+    private enum BattleSeKind { None, Attack, Miss, Ailment, Heal, QuizCorrect, QuizWrong, Victory, LevelUp, Defeat }
 
     /// <summary>表示待ちログ1行分。テキストとSE情報を持つ。</summary>
     private struct LogEntry
@@ -611,7 +611,17 @@ public partial class BattleSceneController : MonoBehaviour
     private void OnVictoryCore()
     {
         battleEnded = true;
-        AddLog($"{enemyMonster.Mname} を倒した！");
+
+        // 第二形態への連戦時は勝利ファンファーレを鳴らさない（戦闘継続のため）
+        bool toPhase2Next = BattleContext.Phase2Monster != null
+                            && !BattleContext.IsPhase2Transition
+                            && BattleContext.IsBossBattle;
+        if (toPhase2Next)
+            AddLog($"{enemyMonster.Mname} を倒した！");
+        else
+            AddLogEntry($"{enemyMonster.Mname} を倒した！", BattleSeKind.Victory, default);
+
+
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
         ResetBattleStatics();
@@ -701,7 +711,7 @@ public partial class BattleSceneController : MonoBehaviour
                     int lv = GameState.I.level - levelUps + 1 + i;
                     pointGainTotal += GameState.CalcStatusPointGain(lv);
                 }
-                AddLog($"レベルアップ！ Lv{GameState.I.level}（+{pointGainTotal}ステータスポイント）");
+                AddLogEntry($"レベルアップ！ Lv{GameState.I.level}（+{pointGainTotal}ステータスポイント）", BattleSeKind.LevelUp, default);
             }
         }
 
@@ -938,7 +948,7 @@ public partial class BattleSceneController : MonoBehaviour
     private void OnDefeat()
     {
         battleEnded = true;
-        AddLog("You は倒れた…");
+        AddLogEntry("You は倒れた…", BattleSeKind.Defeat, default);
         SetButtonsInteractable(false);
         ResetAllWeaponCooldowns();
 
@@ -1359,6 +1369,18 @@ public partial class BattleSceneController : MonoBehaviour
         AddLogEntry(message, BattleSeKind.Miss, default);
     }
 
+    /// <summary>状態異常・デバフ行用。表示の瞬間に状態異常SEを鳴らす。</summary>
+    private void AddLogAilment(string message)
+    {
+        AddLogEntry(message, BattleSeKind.Ailment, default);
+    }
+
+    /// <summary>回復・バフ行用。表示の瞬間に回復SEを鳴らす。</summary>
+    private void AddLogHeal(string message)
+    {
+        AddLogEntry(message, BattleSeKind.Heal, default);
+    }
+
     private void AddLogEntry(string message, BattleSeKind kind, WeaponAttribute attr)
     {
         logLines.Add(message);
@@ -1413,6 +1435,13 @@ public partial class BattleSceneController : MonoBehaviour
         {
             case BattleSeKind.Attack: AudioManager.I.PlayAttackSe(entry.attr); break;
             case BattleSeKind.Miss: AudioManager.I.PlayMissSe(); break;
+            case BattleSeKind.Ailment: AudioManager.I.PlayAilmentSe(); break;
+            case BattleSeKind.Heal: AudioManager.I.PlayHealSe(); break;
+            case BattleSeKind.QuizCorrect: AudioManager.I.PlayQuizCorrectSe(); break;
+            case BattleSeKind.QuizWrong: AudioManager.I.PlayQuizWrongSe(); break;
+            case BattleSeKind.Victory: AudioManager.I.PlayVictorySe(); break;
+            case BattleSeKind.LevelUp: AudioManager.I.PlayLevelUpSe(); break;
+            case BattleSeKind.Defeat: AudioManager.I.PlayDefeatSe(); break;
         }
     }
 
@@ -1610,5 +1639,42 @@ public partial class BattleSceneController : MonoBehaviour
 
         Debug.Log($"[Battle] BattleItem: base={baseDamage} attr={attr} " +
                   $"afterResist={damage} def={enemyDef} blocked={enemyBlocked} final={finalDamage}");
+    }
+
+    /// <summary>
+    /// SkillEffectProcessor が返す追加効果ログの文言からSE種別を判定する。
+    /// ※ Processor 側のログ文言を変更した場合は、ここのパターンも必ず更新すること。
+    /// ※ 判定は上から順。「デバフが全て解除」（回復系）は「バフが全て解除」（妨害系）を
+    ///   部分文字列として含むため、回復系の判定を必ず先に行う。
+    /// </summary>
+    private BattleSeKind ClassifyEffectLog(string log)
+    {
+        if (string.IsNullOrEmpty(log)) return BattleSeKind.None;
+
+        // --- 失敗（耐性・重複・対象なしの共通文言） ---
+        if (log.Contains("効果がなかった")) return BattleSeKind.Miss;
+
+        // --- 回復系（「治った」は「石化」より先に判定） ---
+        if (log.Contains("回復した！")) return BattleSeKind.Heal;
+        if (log.Contains("が治った！")) return BattleSeKind.Heal;
+        if (log.Contains("%上昇！")) return BattleSeKind.Heal;
+        if (log.Contains("デバフが全て解除された！")) return BattleSeKind.Heal;
+
+        // --- 敵対ディスペル（妨害） ---
+        if (log.Contains("バフが全て解除された！")) return BattleSeKind.Ailment;
+        if (log.Contains("バフ/デバフが解除された！")) return BattleSeKind.Ailment;
+
+        // --- 状態異常・デバフ系 ---
+        if (log.Contains("を受けた！")) return BattleSeKind.Ailment;
+        if (log.Contains("は気絶した！")) return BattleSeKind.Ailment;
+        if (log.Contains("%低下！")) return BattleSeKind.Ailment;
+        if (log.Contains("怒りに燃えた！")) return BattleSeKind.Ailment;
+        if (log.Contains("石化")) return BattleSeKind.Ailment;
+        if (log.Contains("に下がった！")) return BattleSeKind.Ailment;          // レベルドレイン
+        if (log.Contains("MPが") && log.Contains("減った！")) return BattleSeKind.Ailment;
+
+        // --- それ以外は無音 ---
+        // 反対効果の解除行（「…上昇が解除された！」等）、自爆「力尽きた！」、反動ダメージ
+        return BattleSeKind.None;
     }
 }

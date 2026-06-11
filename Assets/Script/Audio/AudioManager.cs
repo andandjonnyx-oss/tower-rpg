@@ -47,6 +47,11 @@ public class AudioManager : MonoBehaviour
     [Tooltip("SE 用の AudioSource（Loop=OFF、PlayOneShot で使用）")]
     [SerializeField] private AudioSource seSource;
 
+    [Tooltip("バトルログSE専用 AudioSource。Loop OFF。\n"
+   + "ログ表示同期SEはこのソースで再生し、次のログSEが来たら前の音を上書きする。\n"
+   + "未アサインなら Awake で自動生成。")]
+    [SerializeField] private AudioSource battleSeSource;
+
     [Header("Common SE")]
     [Tooltip("自分の操作でポップアップを開いた瞬間に鳴らす共通SE。\n"
    + "（初期化確認・ポイントリセット・倉庫呼出・帰還・ギブアップ等）")]
@@ -63,6 +68,9 @@ public class AudioManager : MonoBehaviour
     [Tooltip("アイテムを手放した時に鳴らす共通SE。\n"
    + "（ポップアップで諦める・アイテム/倉庫画面で捨てる）")]
     [SerializeField] private AudioClip itemDiscardSe;
+
+    [Tooltip("アイテム破棄SEの再生開始位置（秒）。素材の頭をスキップしたい時に指定。0=頭から")]
+    [SerializeField] private float itemDiscardSeStartTime = 0f;
 
     [Tooltip("回復・ステータスアップ等の消費アイテム使用時のSE（食べる音）")]
     [SerializeField] private AudioClip eatItemSe;
@@ -86,6 +94,34 @@ public class AudioManager : MonoBehaviour
 
     [Tooltip("攻撃が外れた/効かなかった時のSE")]
     [SerializeField] private AudioClip missSe;
+
+    [Tooltip("状態異常・デバフ付与時のSE（バトルログ同期）")]
+    [SerializeField] private AudioClip ailmentSe;
+
+    [Tooltip("状態異常SEの再生開始位置（秒）。素材の頭をスキップしたい時に指定。0=頭から")]
+    [SerializeField] private float ailmentSeStartTime = 0f;
+
+    [Tooltip("回復・バフ時のSE（バトルログ同期。フィールド魔法でも使用）")]
+    [SerializeField] private AudioClip healSe;
+
+    [Tooltip("クイズ正解時のSE（ピンポン）")]
+    [SerializeField] private AudioClip quizCorrectSe;
+
+    [Tooltip("クイズ不正解時のSE（ブッブー）")]
+    [SerializeField] private AudioClip quizWrongSe;
+
+    [Tooltip("戦闘勝利時のファンファーレSE（無音区間で鳴り切る。上書きされない）")]
+    [SerializeField] private AudioClip victorySe;
+
+    [Tooltip("レベルアップ時のSE（勝利ファンファーレに重ねて鳴る）")]
+    [SerializeField] private AudioClip levelUpSe;
+
+    [Tooltip("戦闘敗北時のSE")]
+    [SerializeField] private AudioClip defeatSe;
+
+    [Tooltip("ステータスポイント振り分け時のSE")]
+    [SerializeField] private AudioClip statAllocateSe;
+
 
     // PlayerPrefs キー
     private const string KeyBgmVolume = "audio_bgm_volume";
@@ -146,6 +182,12 @@ public class AudioManager : MonoBehaviour
             seSource = gameObject.AddComponent<AudioSource>();
             seSource.loop = false;
             seSource.playOnAwake = false;
+        }
+        if (battleSeSource == null)
+        {
+            battleSeSource = gameObject.AddComponent<AudioSource>();
+            battleSeSource.playOnAwake = false;
+            battleSeSource.loop = false;
         }
 
         bgmVolume = PlayerPrefs.GetFloat(KeyBgmVolume, 1f);
@@ -364,6 +406,23 @@ public class AudioManager : MonoBehaviour
         seSource.PlayOneShot(clip, seVolume);
     }
 
+    /// <summary>
+    /// バトルログ用SEを再生する。
+    /// 前のログSEがまだ鳴っていれば強制的に止めて頭から再生する（上書き方式）。
+    /// startTime を指定すると素材の途中から再生できる（頭の無音・前置き部分のスキップ用）。
+    /// </summary>
+    private void PlayBattleLogSe(AudioClip clip, float startTime = 0f)
+    {
+        if (clip == null || battleSeSource == null) return;
+        if (SeMuted) return;
+
+        battleSeSource.Stop();
+        battleSeSource.clip = clip;
+        battleSeSource.volume = SeVolume;
+        battleSeSource.time = (startTime > 0f && startTime < clip.length) ? startTime : 0f;
+        battleSeSource.Play();
+    }
+
     // =========================================================
     // 音量・ミュート
     // =========================================================
@@ -432,7 +491,14 @@ public class AudioManager : MonoBehaviour
     /// <summary>アイテム破棄SEを鳴らす。未設定なら何もしない。</summary>
     public void PlayItemDiscardSe()
     {
-        if (itemDiscardSe != null) PlaySe(itemDiscardSe);
+        if (itemDiscardSe == null) return;
+
+        if (itemDiscardSeStartTime > 0f)
+            // 途中再生は clip+Play 方式が必要なため battleSeSource を流用する。
+            // （捨てる操作はアイテム系シーン、バトルログSEは Battle シーンなので競合しない）
+            PlayBattleLogSe(itemDiscardSe, itemDiscardSeStartTime);
+        else
+            PlaySe(itemDiscardSe);
     }
 
     public void PlayEatItemSe() { if (eatItemSe != null) PlaySe(eatItemSe); }
@@ -456,14 +522,37 @@ public class AudioManager : MonoBehaviour
                 }
             }
         }
+        // PlayAttackSe の末尾
         if (clip == null) clip = defaultAttackSe;
-        if (clip != null) PlaySe(clip);
+        if (clip != null) PlayBattleLogSe(clip);   // PlaySe(clip) から変更
     }
 
     /// <summary>ミス/無効SEを鳴らす。未設定なら何もしない。</summary>
     public void PlayMissSe()
     {
-        if (missSe != null) PlaySe(missSe);
+        if (missSe != null) PlayBattleLogSe(missSe);   // PlaySe(missSe) から変更
     }
 
+    /// <summary>状態異常SEを鳴らす（バトルログ上書き方式）。</summary>
+    public void PlayAilmentSe()
+    {
+        if (ailmentSe != null) PlayBattleLogSe(ailmentSe, ailmentSeStartTime);
+    }
+
+    /// <summary>回復SEを鳴らす（バトルログ上書き方式。フィールド魔法からも呼ぶ）。</summary>
+    public void PlayHealSe() { if (healSe != null) PlayBattleLogSe(healSe); }
+
+
+    public void PlayQuizCorrectSe() { if (quizCorrectSe != null) PlayBattleLogSe(quizCorrectSe); }
+    public void PlayQuizWrongSe() { if (quizWrongSe != null) PlayBattleLogSe(quizWrongSe); }
+
+    public void PlayVictorySe() { if (victorySe != null) PlaySe(victorySe); }
+    public void PlayLevelUpSe() { if (levelUpSe != null) PlaySe(levelUpSe); }
+    public void PlayDefeatSe() { if (defeatSe != null) PlaySe(defeatSe); }
+
+    /// <summary>ステータス振り分けSE。連打時は前の音を上書きして鳴らす。</summary>
+    public void PlayStatAllocateSe()
+    {
+        if (statAllocateSe != null) PlayBattleLogSe(statAllocateSe);
+    }
 }

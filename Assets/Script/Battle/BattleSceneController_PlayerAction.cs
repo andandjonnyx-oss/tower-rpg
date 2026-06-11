@@ -634,7 +634,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             enemyIsPoisoned = true;
-                            AddLog($"{eName} は毒を受けた！");
+                            AddLogAilment($"{eName} は毒を受けた！");
                         }
                     }
                     break;
@@ -646,7 +646,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             enemyIsStunned = true;
-                            AddLog($"{eName} は気絶した！");
+                            AddLogAilment($"{eName} は気絶した！");
                         }
                     }
                     break;
@@ -658,7 +658,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             enemyIsParalyzed = true;
-                            AddLog($"{eName} は麻痺した！");
+                            AddLogAilment($"{eName} は麻痺した！");
                         }
                     }
                     break;
@@ -670,7 +670,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             enemyIsBlind = true;
-                            AddLog($"{eName} は暗闇に包まれた！");
+                            AddLogAilment($"{eName} は暗闇に包まれた！");
                         }
                     }
                     break;
@@ -683,7 +683,7 @@ public partial class BattleSceneController
                         if (rageRoll < inflictChance)
                         {
                             playerRageTurn = StatusEffectSystem.RageDuration;
-                            AddLog("You は怒りに燃えた！ 攻撃力UP！");
+                            AddLogAilment("You は怒りに燃えた！ 攻撃力UP！");
                         }
                     }
                     break;
@@ -694,7 +694,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             enemyIsSilenced = true;
-                            AddLog($"{eName} は沈黙した！");
+                            AddLogAilment($"{eName} は沈黙した！");
                         }
                     }
                     break;
@@ -706,7 +706,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Charm, true);
-                            AddLog($"{eName} は魅了された！");
+                            AddLogAilment($"{eName} は魅了された！");
                         }
                     }
                     break;
@@ -718,7 +718,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Curse, true);
-                            AddLog($"{eName} は呪いを受けた！");
+                            AddLogAilment($"{eName} は呪いを受けた！");
                         }
                     }
                     break;
@@ -730,7 +730,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             SkillEffectProcessor.SetEnemyAilmentDummy(StatusEffect.Glass, true);
-                            AddLog($"{eName} はガラス状態になった！");
+                            AddLogAilment($"{eName} はガラス状態になった！");
                         }
                     }
                     break;
@@ -741,7 +741,7 @@ public partial class BattleSceneController
                         if (StatusEffectSystem.TryInflict(inflictChance, resist))
                         {
                             string petrifyMsg = InflictPetrifyToEnemy();
-                            AddLog($"{eName} は{petrifyMsg}");
+                            AddLogAilment($"{eName} は{petrifyMsg}");
                         }
                     }
                     break;
@@ -781,7 +781,7 @@ public partial class BattleSceneController
 
                         string debuffName = bdEffect.ToJapaneseEnemy();
                         string eName2 = (enemyMonster != null) ? enemyMonster.Mname : "敵";
-                        AddLog($"{eName2} の{debuffName}！ {bdRate}%低下！（{bdDuration}ターン）");
+                        AddLogAilment($"{eName2} の{debuffName}！ {bdRate}%低下！（{bdDuration}ターン）");
                     }
                     else
                     {
@@ -791,7 +791,7 @@ public partial class BattleSceneController
                         pair.buffRate = bdRate;
 
                         string buffName = bdEffect.ToJapanese();
-                        AddLog($"You の{buffName}！ {bdRate}%上昇！（{bdDuration}ターン）");
+                        AddLogHeal($"You の{buffName}！ {bdRate}%上昇！（{bdDuration}ターン）");
                     }
                 }
             }
@@ -1493,7 +1493,7 @@ public partial class BattleSceneController
 
         for (int i = 0; i < logs.Count; i++)
         {
-            AddLog(logs[i]);
+            AddLogEntry(logs[i], ClassifyEffectLog(logs[i]), default);
         }
 
         RefreshBattleStatusEffectUI(); // ★追加: 状態異常UIを更新
@@ -1523,7 +1523,7 @@ public partial class BattleSceneController
 
         for (int i = 0; i < logs.Count; i++)
         {
-            AddLog(logs[i]);
+            AddLogEntry(logs[i], ClassifyEffectLog(logs[i]), default);
         }
 
         RefreshBattleStatusEffectUI();

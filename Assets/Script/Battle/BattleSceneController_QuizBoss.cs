@@ -313,7 +313,7 @@ public partial class BattleSceneController
             enemyCurrentHp -= quizDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-            AddLog($"正解！ {enemyMonster.Mname} に {quizDamage} ダメージ！");
+            AddLogEntry($"正解！ {enemyMonster.Mname} に {quizDamage} ダメージ！", BattleSeKind.QuizCorrect, default);
             AddLog($"（正解: {quizCorrectCount}問）");
 
             Debug.Log($"[QuizBoss] 正解 {quizCorrectCount} damage={quizDamage} enemyHp={enemyCurrentHp}");
@@ -326,7 +326,7 @@ public partial class BattleSceneController
                 ? currentQuizData.choiceA
                 : currentQuizData.choiceB;
 
-            AddLog($"不正解… 正解は「{correctLabel}」！");
+            AddLogEntry($"不正解… 正解は「{correctLabel}」！", BattleSeKind.QuizWrong, default);
             AddLog($"（不正解: {quizWrongCount}/{maxWrong}）");
 
             Debug.Log($"[QuizBoss] 不正解 {quizWrongCount}/{maxWrong}");

@@ -15,5 +15,5 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: a13565384e48c3f4e9753467cc577169, type: 2}
   gpCost: 20
   requiredFloor: 11
-  maxPurchaseCount: 100
+  maxPurchaseCount: 999
   sortOrder: 3

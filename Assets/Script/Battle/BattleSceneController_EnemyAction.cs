@@ -1397,7 +1397,7 @@ public partial class BattleSceneController
 
         for (int i = 0; i < logs.Count; i++)
         {
-            AddLog(logs[i]);
+            AddLogEntry(logs[i], ClassifyEffectLog(logs[i]), default);
         }
 
         RefreshBattleStatusEffectUI();
@@ -1438,7 +1438,7 @@ public partial class BattleSceneController
         int playerPoisonDmg = StatusEffectSystem.ApplyBattlePoisonToPlayer();
         if (playerPoisonDmg > 0)
         {
-            AddLog($"You は毒のダメージで {playerPoisonDmg} 受けた！");
+            AddLogAilment($"You は毒のダメージで {playerPoisonDmg} 受けた！");
         }
 
         // --- 敵の毒ダメージ ---
@@ -1447,7 +1447,7 @@ public partial class BattleSceneController
             int enemyPoisonDmg = StatusEffectSystem.CalcBattlePoisonDamage(enemyMonster.MaxHp);
             enemyCurrentHp -= enemyPoisonDmg;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
-            AddLog($"{enemyMonster.Mname} は毒のダメージで {enemyPoisonDmg} 受けた！");
+            AddLogAilment($"{enemyMonster.Mname} は毒のダメージで {enemyPoisonDmg} 受けた！");
 
             if (enemyCurrentHp <= 0)
             {
@@ -1468,7 +1468,7 @@ public partial class BattleSceneController
             if (regenAmount > 0)
             {
                 enemyCurrentHp += regenAmount;
-                AddLog($"{enemyMonster.Mname} は {regenAmount} HP回復した！");
+                AddLogHeal($"{enemyMonster.Mname} は {regenAmount} HP回復した！");
             }
         }
 

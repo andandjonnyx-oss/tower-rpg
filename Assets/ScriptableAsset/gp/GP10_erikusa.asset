@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 320d1bf4e920b7142a53d89fbae4ee54, type: 3}
-  m_Name: GP01_MP50
+  m_Name: GP10_erikusa
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
-  item: {fileID: 11400000, guid: 23cb7d437cba5344e85762fe8874d2b6, type: 2}
-  gpCost: 20
-  requiredFloor: 1
-  maxPurchaseCount: 100
-  sortOrder: 1
+  item: {fileID: 11400000, guid: b9da1042560eb584680185b16e0b0d8d, type: 2}
+  gpCost: 15
+  requiredFloor: 46
+  maxPurchaseCount: 999
+  sortOrder: 10
