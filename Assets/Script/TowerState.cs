@@ -505,12 +505,29 @@ public class TowerState : MonoBehaviour
                 optionLabels.Add($"{fieldMagicList[i].skillName} (MP:{fieldMagicList[i].mpCost})");
             }
             magicSelector.SetOptions(optionLabels);
+
+            // 選択保持（オプションON時）: 前回選択した魔法を復元する
+            MagicSelectionMemory.Restore(magicSelector, fieldMagicList, isBattle: false);
+
+            // 選択変更の記録（多重登録防止のため一度解除してから登録）
+            magicSelector.onValueChanged -= OnFieldMagicSelectionChanged;
+            magicSelector.onValueChanged += OnFieldMagicSelectionChanged;
         }
 
         if (magicButton != null)
         {
             magicButton.gameObject.SetActive(true);
         }
+    }
+
+    /// <summary>
+    /// 塔内魔法セレクターの選択変更を記録する（選択保持オプション用）。
+    /// </summary>
+    private void OnFieldMagicSelectionChanged(int index)
+    {
+        if (fieldMagicList == null || index < 0 || index >= fieldMagicList.Count) return;
+        if (fieldMagicList[index] == null) return;
+        MagicSelectionMemory.FieldSkillId = fieldMagicList[index].skillId;
     }
 
     /// <summary>
@@ -797,6 +814,10 @@ public class TowerState : MonoBehaviour
 
     private void ExecuteReturnToMain()
     {
+        // 統計: 自発的な帰還回数を加算（直後の Save で永続化される）
+        if (GameState.I != null)
+            GameState.I.statReturnHomeCount++;
+
         SaveManager.Save();
         SceneManager.LoadScene(mainSceneName);
     }

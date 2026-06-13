@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M087_totumemori
   itemName: "\u523A\u7A81\u306E\u8B77\u308A"
-  description: "\u8702\u304F\u3089\u3044\u3057\u304B\u30E1\u30A4\u30F3\u3067\u7A81\u306A\u306E\u3044\u306A\u3044\u304B\u3082\u2026\u2026\n\u7A81\u8010\u6027+20"
+  description: "\u8702\u304F\u3089\u3044\u3057\u304B\u30E1\u30A4\u30F3\u3067\u7A81\u306A\u306E\u3044\u306A\u3044\u304B\u3082\n\u7A81\u8010\u6027+20"
   icon: {fileID: 21300000, guid: f97de5b9538117d4eaeea9a3dda3c552, type: 3}
   Minfloor: 65
   Minstep: 1

@@ -37,6 +37,27 @@ public class GameState : MonoBehaviour
            + "会話テキスト内の {name} がこれに置換される。セーブ対象。")]
     public string playerName = "";
 
+    // =========================================================
+    // プレイ統計（エンディングでの言及用）
+    // =========================================================
+    [Header("Play Statistics")]
+    [Tooltip("タイトルでスタートボタンを押した回数。セーブ対象。")]
+    public int statGameStartCount = 0;
+
+    [Tooltip("塔から自発的に帰還した回数。セーブ対象。")]
+    public int statReturnHomeCount = 0;
+
+    [Tooltip("全滅（ギブアップ含む）して街へ帰還した回数。セーブ対象。")]
+    public int statDefeatCount = 0;
+
+    /// <summary>
+    /// 経過日数。宿屋（Main）に泊まった回数として算出する。
+    /// ゲーム開始（宿で目覚める）+ 自発帰還 + 全滅帰還 の合計。
+    /// 会話テキストの {days} がこれに置換される。
+    /// </summary>
+    public int TotalDays => statGameStartCount + statReturnHomeCount + statDefeatCount;
+
+
     /// <summary>
     /// 表示用プレイヤー名を返す。未入力の場合は fallback を返す。
     /// </summary>

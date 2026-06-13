@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ceee631d66cb8040b25855261aedebc, type: 3}
+  m_Name: BOSS_F100_VICTORY
+  m_EditorClassIdentifier: Assembly-CSharp::TalkEvent
+  id: BOSS_F100_VICTORY
+  zukanTitle: "\u30A8\u30F3\u30C7\u30A3\u30F3\u30B0"
+  floor: 100
+  step: 9999
+  backgroundImage: {fileID: 21300000, guid: e38feb1a74bdd394c991dfd6ce1a34eb, type: 3}
+  lines:
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u2026\u2026\u304A\u3081\u3067\u3068\u3046\u3002"
+    portrait: {fileID: -3833558156305714257, guid: d0a1416310d325447b2072d177408040, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u304A\u524D\u3068\u51FA\u4F1A\u3063\u3066\u304B\u3089\u3001\u305D\u308C\u306A\u308A\u306B\u9577\u3044\u65C5\u306B\u306A\u3063\u305F\u306A\u3002\n\u5177\u4F53\u7684\u306B\u306F\u30B2\u30FC\u30E0\u958B\u59CB\u56DE\u6570{starts}\u3001\u5854\u304B\u3089\u306E\u5E30\u9084\u56DE\u6570{returns}\u3001\n\u5168\u6EC5\u3057\u3066\u5F37\u5236\u9001\u9084\u56DE\u6570{defeats}\u3001\u5408\u8A08\u3057\u3066{days}\u65E5\u3060\u3002\n\u3064\u307E\u308A\u5BBF\u5C4B\u306B\u884C\u3063\u305F\u56DE\u6570\u3092\u65E5\u6570\u3068\u3057\u3066\u308B\u8A33\u3060\u306A\u3002"
+    portrait: {fileID: -5075695696183938511, guid: 0a890b709db3960428ff418f7aeebe9a, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u2026\u2026\u304A\u3063\u3068\u3001\u3082\u3046\u8EAB\u4F53\u304C\u6D88\u3048\u59CB\u3081\u3066\u304D\u3061\u307E\u3063\u305F\u3002\n\u2026\u2026\u3048\u3001\u5DE6\u53F3\u304B\u3089\u6D88\u3048\u308B\u306E\uFF01\uFF1F\u3000\u666E\u901A\u4E0B\u304B\u3089\u3068\u304B\u3058\u3083\u306A\u3044\uFF1F"
+    portrait: {fileID: 4614124827514438093, guid: bb4382aab1cf1f7488aa9061354ffbd0, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3063\u305F\u304F\u3001\u6700\u5F8C\u307E\u3067\u3057\u307E\u3089\u306D\u3048\u306A\u2026\u2026\n\u3055\u3066\u3068\u3001\u79C1\u306B\u6B8B\u3063\u3066\u308B\u30D1\u30EF\u30FC\u3082\u9858\u3044\u306E\u529B\u306B\u52A0\u7B97\u3057\u3066\u2026\u2026\u3068\u3002\n\u3053\u308C\u3067\u305D\u308C\u306A\u308A\u306E\u30D1\u30EF\u30FC\u306B\u306F\u306A\u3063\u305F\u3060\u308D\u3002"
+    portrait: {fileID: 2548326776440597099, guid: d9e7b652b07bdb24f95adb9a9e0a7c1f, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u4ECA\u88C5\u5099\u3057\u3066\u308B\u4F1D\u8AAC\u306E\u6B66\u5668\u3060\u3063\u305F\u308A\u3001\u93A7\u3060\u3063\u305F\u308A\u2026\u2026\n\u3042\u3042\u3001\u305D\u3046\u3044\u3048\u3070\u732B\u304C\u3044\u305F\u306A\u3002\u65C5\u306B\u9023\u308C\u3066\u3044\u3051\u306A\u3044\u306A\u3089\n\u8857\u306B\u3067\u3082\u653E\u3057\u3068\u3051\u3070\u5468\u308A\u3068\u306A\u304B\u3088\u304F\u3084\u308B\u3060\u308D\u3046\u3055\u3002"
+    portrait: {fileID: -6485908561120143566, guid: eb9a1c265a54ba245a356c1f688e0cbd, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: "\u30D5\u30A7\u30B4\u30FC\u30EB"
+    text: "\u3068\u306B\u304B\u304F\u3001\u6298\u89D2\u9811\u5F35\u3063\u3066\u5F97\u305F\u9858\u3044\u306E\u529B\u306A\u3093\u3060\u3002\n\u5F8C\u6094\u3057\u306A\u3044\u4F7F\u3044\u9053\u306B\u3057\u308D\u3088\uFF01\u3000\u3058\u3083\u3042\u306A\uFF01"
+    portrait: {fileID: -5866882200811960904, guid: be6a87343722bb14b96a3be4ff1dacbf, type: 3}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: '-'
+    text: "\u30D5\u30A7\u30B4\u30FC\u30EB\u304C\u6D88\u3048\u308B\u3068\u540C\u6642\u306B\u3001\n\u8CB4\u65B9\u306E\u4E2D\u306B\u81A8\u5927\u306A\u30D1\u30EF\u30FC\u304C\u306A\u3060\u308C\u8FBC\u3093\u3067\u6765\u308B\u3002\n\u8CB4\u65B9\u306F\u7A7A\u306B\u624B\u3092\u4F38\u3070\u3057\u3001\u9858\u3044\u3092\u53E3\u306B\u3059\u308B\u3002"
+    portrait: {fileID: 0}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  - speaker: You
+    text: "\u4FFA\u306E\u9858\u3044\u306F\u2015\u2015\u2015\u2015"
+    portrait: {fileID: 0}
+    backgroundOverride: {fileID: 0}
+    requestNameInput: 0
+  conditions: []
+  randomGroup: 
+  randomWeight: 0
+  exclusiveIds: []
+  rewardItem: {fileID: 0}
+  requiredItem: {fileID: 0}
+  itemPossessionMode: 0

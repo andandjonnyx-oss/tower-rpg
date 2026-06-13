@@ -134,6 +134,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: odoroki_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 900
+        width: 704
+        height: 950
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7412d4b6050f3bf4aaaaa3af72455c3b
+      internalID: 1494567942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -149,6 +171,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       odoroki_0: -6269266055418861456
+      odoroki_2: 1494567942
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

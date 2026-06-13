@@ -44,8 +44,8 @@ MonoBehaviour:
   cannotDiscard: 0
   transformInto: {fileID: 0}
   transformChance: 0
-  isEdible: 0
-  eatHealAmount: 0
+  isEdible: 1
+  eatHealAmount: 500
   eatCuresPoison: 0
   eatCuresParalyze: 0
   eatCuresBlind: 0

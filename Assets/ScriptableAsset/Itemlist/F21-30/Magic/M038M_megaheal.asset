@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M038M_megaheal
   itemName: "\u30E1\u30AC\u30D2\u30FC\u30EB"
-  description: "MP20\nHP200\u56DE\u5FA9"
+  description: "\u30D2\u30FC\u30EB\u3000\u30D2\u30FC\u30EB\n\u3000\u3000\u3000\u9F3B\n\u3000\u3000\u3000\u53E3\nMP20\nHP200\u56DE\u5FA9"
   icon: {fileID: 21300000, guid: 758b73fa970e91640a4b468664d8daa9, type: 3}
   Minfloor: 26
   Minstep: 1

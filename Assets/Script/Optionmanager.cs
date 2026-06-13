@@ -48,11 +48,22 @@ public class OptionManager : MonoBehaviour
     [Tooltip("ミュートOFFのときのラベル文言")]
     [SerializeField] private string unmutedText = "ミュート: OFF";
 
+    [Header("Gameplay")]
+    [Tooltip("魔法選択保持のON/OFF切替ボタン")]
+    [SerializeField] private Button keepMagicButton;
+    [Tooltip("魔法選択保持ボタンのラベル（任意）")]
+    [SerializeField] private TMP_Text keepMagicLabel;
+
     private void Start()
     {
         // 戻るボタン（AudioManager の有無に関係なく機能させる）
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
+
+        // 魔法選択保持トグル（AudioManager 不要なのでここで登録）
+        if (keepMagicButton != null)
+            keepMagicButton.onClick.AddListener(OnKeepMagicClicked);
+        UpdateKeepMagicLabel(GameSettings.KeepMagicSelection);
 
         var am = AudioManager.I;
         if (am == null)
@@ -161,5 +172,25 @@ public class OptionManager : MonoBehaviour
     {
         if (seMuteLabel != null)
             seMuteLabel.text = muted ? mutedText : unmutedText;
+    }
+
+    // =========================================================
+    // 魔法選択保持トグル（追加）
+    // =========================================================
+
+    private void OnKeepMagicClicked()
+    {
+        bool next = !GameSettings.KeepMagicSelection;
+        GameSettings.KeepMagicSelection = next;
+        UpdateKeepMagicLabel(next);
+
+        // OFF にした場合は記憶も即クリア（次の表示から先頭に戻る）
+        if (!next) MagicSelectionMemory.ClearAll();
+    }
+
+    private void UpdateKeepMagicLabel(bool on)
+    {
+        if (keepMagicLabel != null)
+            keepMagicLabel.text = on ? "魔法選択の保持: ON" : "魔法選択の保持: OFF";
     }
 }

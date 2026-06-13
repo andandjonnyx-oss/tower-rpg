@@ -71,6 +71,9 @@ public static class SaveManager
             data.endingPhase = GameState.I.endingPhase;
             data.zukanAllUnlocked = GameState.I.zukanAllUnlocked;
             data.playerName = GameState.I.playerName;
+            data.statGameStartCount = GameState.I.statGameStartCount;
+            data.statReturnHomeCount = GameState.I.statReturnHomeCount;
+            data.statDefeatCount = GameState.I.statDefeatCount;
 
 
 
@@ -210,6 +213,9 @@ public static class SaveManager
             GameState.I.endingPhase = data.endingPhase;
             GameState.I.zukanAllUnlocked = data.zukanAllUnlocked;
             GameState.I.playerName = data.playerName ?? "";
+            GameState.I.statGameStartCount = data.statGameStartCount;
+            GameState.I.statReturnHomeCount = data.statReturnHomeCount;
+            GameState.I.statDefeatCount = data.statDefeatCount;
 
 
             GameState.I.equippedWeaponUid = data.equippedWeaponUid ?? "";
@@ -322,6 +328,10 @@ public class SaveData
     public int endingPhase = 0;
     public bool zukanAllUnlocked = false;
     public string playerName = "";
+    // --- ƒvƒŒƒC“Œv ---
+    public int statGameStartCount = 0;
+    public int statReturnHomeCount = 0;
+    public int statDefeatCount = 0;
 
 
     // --- ‘•”õ ---

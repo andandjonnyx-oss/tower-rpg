@@ -19,8 +19,9 @@ public static class EndingManager
     // =========================================================
 
     /// <summary>100階ボス勝利後に再生するED会話イベントのID。
-    /// F100 の BossEntry.victoryTalkEvent にこのIDの TalkEvent をアサインする。</summary>
-    public const string EndingTalkEventId = "ED_MAIN";
+    /// BattleSceneController が命名規則 "BOSS_F{階:D2}_VICTORY" で
+    /// pendingEventId をセットするため、ED会話イベントの id もこれに合わせる。</summary>
+    public const string EndingTalkEventId = "BOSS_F100_VICTORY";
 
     /// <summary>スタッフロール後に再生するエピローグ会話イベントのID。</summary>
     public const string EpilogueEventId = "ED_EPILOGUE";
@@ -111,7 +112,7 @@ public static class EndingManager
         var gs = GameState.I;
         if (gs == null) return false;
 
-        if (eventId == EndingTalkEventId)
+        if (eventId == EndingTalkEventId || eventId == EndingTalkEventId + "_EVENT")
         {
             gs.talkReturnScene = null; // ボス戦由来の戻り先をクリア
             gs.endingPhase = PhaseStaffRoll;

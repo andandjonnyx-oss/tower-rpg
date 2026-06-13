@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: C036_suteup77
   itemName: "\u30B9\u30C6\u30FC\u30BF\u30B9\u30A2\u30C3\u30D777"
-  description: "\u9650\u3089\u308C\u305F\u30D7\u30EC\u30A4\u30E4\u30FC\u3057\u304B\u5165\u624B\u3067\u304D\u306A\u3044\u4F1D\u8AAC\u306E\u85AC"
+  description: "\u9650\u3089\u308C\u305F\u30D7\u30EC\u30A4\u30E4\u30FC\u3057\u304B\u5165\u624B\u3067\u304D\u306A\u3044\n\u4F1D\u8AAC\u306E\u85AC"
   icon: {fileID: 21300000, guid: 6349d800ade6da249958af5f9933c004, type: 3}
   Minfloor: 0
   Minstep: 0

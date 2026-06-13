@@ -412,6 +412,11 @@ public partial class BattleSceneController : MonoBehaviour
 
             ResetQuizBossStatics();
 
+            // 魔法選択保持: 新しい戦闘の開始でリセット（一区切り）。
+            // 同時に塔側の記憶もクリアする（「戦闘に入るまでの塔内部」が一区切りのため）。
+            MagicSelectionMemory.ClearBattle();
+            MagicSelectionMemory.ClearField();
+
             // モンスター図鑑: 遭遇記録
             if (GameState.I != null && enemyMonster != null)
             {
@@ -1098,6 +1103,18 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     private void FallbackDefeat()
     {
+
+        // =========================================================
+        // 統計: 全滅帰還回数を加算（追加）
+        // コンティニュー「いいえ」・広告失敗・ギブアップ後の帰還が
+        // すべてここを通る。広告コンティニューで復活した場合は通らない。
+        // =========================================================
+        if (GameState.I != null)
+        {
+            GameState.I.statDefeatCount++;
+            SaveManager.Save();
+        }
+
         ResetBattleStatics();
         BattleContext.ItemSnapshot = null;
 
@@ -1285,12 +1302,29 @@ public partial class BattleSceneController : MonoBehaviour
             for (int i = 0; i < magicSkillList.Count; i++)
                 optionLabels.Add($"{magicSkillList[i].skillName} (MP:{magicSkillList[i].mpCost})");
             magicSelector.SetOptions(optionLabels);
+
+            // 選択保持（オプションON時）: 前回選択した魔法を復元する
+            MagicSelectionMemory.Restore(magicSelector, magicSkillList, isBattle: true);
+
+            // 選択変更の記録（多重登録防止のため一度解除してから登録）
+            magicSelector.onValueChanged -= OnMagicSelectionChanged;
+            magicSelector.onValueChanged += OnMagicSelectionChanged;
         }
         if (magicButton != null)
         {
             magicButton.gameObject.SetActive(true);
             magicButton.interactable = !battleEnded;
         }
+    }
+
+    /// <summary>
+    /// 魔法セレクターの選択変更を記録する（選択保持オプション用）。
+    /// </summary>
+    private void OnMagicSelectionChanged(int index)
+    {
+        if (magicSkillList == null || index < 0 || index >= magicSkillList.Count) return;
+        if (magicSkillList[index] == null) return;
+        MagicSelectionMemory.BattleSkillId = magicSkillList[index].skillId;
     }
 
     private SkillData GetSelectedMagicSkill()

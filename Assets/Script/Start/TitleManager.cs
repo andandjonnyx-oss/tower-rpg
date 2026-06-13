@@ -110,6 +110,13 @@ public class TitleUIManager : MonoBehaviour
             SaveManager.Load();
 
             // =========================================================
+            // 統計: ゲーム開始回数（追加）
+            // ロードの後に加算する（先に加算するとロードで上書きされる）。
+            // =========================================================
+            GameState.I.statGameStartCount++;
+            SaveManager.Save();
+
+            // =========================================================
             // エンディング中断からの再開チェック（追加）
             // ED会話/スタッフロール/エピローグの途中で終了していた場合、
             // 中断したフェーズの先頭から再開する。
@@ -128,6 +135,8 @@ public class TitleUIManager : MonoBehaviour
                 GameState.I.RecalcMaxHp();
                 GameState.I.RecalcMaxMp();
             }
+
+            GameState.I.statGameStartCount++;
 
             // 初期アイテムを付与
             GrantStartingItems();
@@ -257,6 +266,9 @@ public class TitleUIManager : MonoBehaviour
             GameState.I.zukanAllUnlocked = false;
             GameState.I.staffRollReturnScene = null;
             GameState.I.playerName = "";
+            GameState.I.statGameStartCount = 0;
+            GameState.I.statReturnHomeCount = 0;
+            GameState.I.statDefeatCount = 0;
 
 
             GameState.I.isInBattle = false;
@@ -278,6 +290,8 @@ public class TitleUIManager : MonoBehaviour
             GameState.I.currentMp = -1;
             GameState.I.RecalcMaxHp();
             GameState.I.RecalcMaxMp();
+
+
         }
 
         // 所持品をクリア

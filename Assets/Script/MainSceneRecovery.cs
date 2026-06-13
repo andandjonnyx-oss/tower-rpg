@@ -23,6 +23,9 @@ public class MainSceneRecovery : MonoBehaviour
         SaveManager.Save();
         TowerState.ResetStorageAdFlag();
 
+        // 魔法選択保持の記憶をクリア（街に戻る = 全リセット）
+        MagicSelectionMemory.ClearAll();
+
         Debug.Log($"[Main] 全回復: HP={gs.currentHp}/{gs.maxHp} MP={gs.currentMp}/{gs.maxMp} 状態異常クリア");
     }
 }

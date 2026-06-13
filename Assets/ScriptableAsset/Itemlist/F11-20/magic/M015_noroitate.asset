@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M015_noroitate
   itemName: "\u30EA\u30D3\u30F3\u30B0\u30B7\u30FC\u30EB\u30C9"
-  description: "\u751F\u304D\u305F\u76FE\u3002\u6301\u3061\u624B\u304C\u53E3\u306B\u306A\u3063\u3066\u3066\u8840\u3092\u5438\u3046\u3002\n\u9632\u5FA1\u3001\u9B54\u6CD5\u9632\u5FA1+20\u3001HP-50"
+  description: "\u751F\u304D\u305F\u76FE\u3002\n\u6301\u3061\u624B\u304C\u53E3\u306B\u306A\u3063\u3066\u3066\u8840\u3092\u5438\u3046\u3002\n\u9632\u5FA1\u3001\u9B54\u6CD5\u9632\u5FA1+20\u3001HP-50"
   icon: {fileID: 21300000, guid: 14cac6e16708ced44bcb2ae1e333e4f6, type: 3}
   Minfloor: 0
   Minstep: 0

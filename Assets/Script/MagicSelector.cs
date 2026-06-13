@@ -87,6 +87,12 @@ public class MagicSelector : MonoBehaviour
     /// <summary>選択中のインデックスを取得する。</summary>
     public int Value => selectedIndex;
 
+    /// <summary>
+    /// 選択が変更された時に発火するコールバック。引数は新しいインデックス。
+    /// 選択保持オプション（MagicSelectionMemory）の記録用。
+    /// </summary>
+    public event Action<int> onValueChanged;
+
     /// <summary>選択中のインデックスを設定する。</summary>
     public void SetValue(int index)
     {
@@ -328,6 +334,7 @@ public class MagicSelector : MonoBehaviour
         selectedIndex = index;
         RefreshSelectedLabel();
         CloseList();
+        onValueChanged?.Invoke(index);
     }
 
     private void RefreshSelectedLabel()

@@ -291,13 +291,24 @@ public class TalkRunner : MonoBehaviour
 
     /// <summary>
     /// テキスト内のプレースホルダーを置換する。
-    /// {name} → プレイヤー名（未設定なら defaultPlayerName）
+    /// {name}    → プレイヤー名（未設定なら defaultPlayerName）
+    /// {days}    → 経過日数（宿に泊まった回数）
+    /// {starts}  → ゲーム開始回数
+    /// {returns} → 塔からの帰還回数
+    /// {defeats} → 全滅して帰還した回数
     /// </summary>
     private string ReplacePlaceholders(string text)
     {
         if (string.IsNullOrEmpty(text)) return text ?? "";
-        if (!text.Contains("{name}")) return text;
-        return text.Replace("{name}", GameState.I.GetDisplayName(defaultPlayerName));
+        if (!text.Contains("{")) return text; // プレースホルダーなし: 早期リターン
+
+        var gs = GameState.I;
+        text = text.Replace("{name}", gs.GetDisplayName(defaultPlayerName));
+        text = text.Replace("{days}", gs.TotalDays.ToString());
+        text = text.Replace("{starts}", gs.statGameStartCount.ToString());
+        text = text.Replace("{returns}", gs.statReturnHomeCount.ToString());
+        text = text.Replace("{defeats}", gs.statDefeatCount.ToString());
+        return text;
     }
 
     // =========================================================

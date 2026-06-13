@@ -55,7 +55,9 @@ public class StaffRollController : MonoBehaviour
     [Tooltip("クレジットテキストを表示する TMP_Text")]
     [SerializeField] private TMP_Text creditText;
 
-    [Tooltip("閲覧モード時のみ表示する戻るボタン（任意）")]
+    [Tooltip("スキップボタン（任意）。\n"
+           + "エンディングモード: スタッフロールを省略してエピローグへ。\n"
+           + "閲覧モード: 戻り先シーン（図鑑）へ戻る。")]
     [SerializeField] private Button backButton;
 
     /// <summary>閲覧モード（図鑑等から）かどうか。</summary>
@@ -77,10 +79,12 @@ public class StaffRollController : MonoBehaviour
             gs.staffRollReturnScene = null; // 使用後クリア
         }
 
-        // 戻るボタンは閲覧モードのみ表示
+        // スキップボタン: 両モードで表示する。
+        // Finish() がモードに応じて遷移先を振り分ける
+        // （エンディングモード→エピローグ / 閲覧モード→戻り先シーン）。
         if (backButton != null)
         {
-            backButton.gameObject.SetActive(isReplayMode);
+            backButton.gameObject.SetActive(true);
             backButton.onClick.AddListener(Finish);
         }
 
@@ -91,6 +95,11 @@ public class StaffRollController : MonoBehaviour
             gs.endingPhase = EndingManager.PhaseStaffRoll;
             SaveManager.Save();
         }
+
+        // スライド画像はサイズ・縦横比がバラバラなため、
+        // 枠内に縦横比を保ったまま収める（レターボックス表示）
+        if (slideImage != null)
+            slideImage.preserveAspect = true;
 
         if (slideGroup != null) slideGroup.alpha = 0f;
         StartCoroutine(PlaySlideshow());
