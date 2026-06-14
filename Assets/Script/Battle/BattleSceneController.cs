@@ -457,10 +457,14 @@ public partial class BattleSceneController : MonoBehaviour
                 // 敵行動の抽選状態不定（pendingEnemyAction の持ち越し）を防ぐ。
                 // 表示順を通常行動と揃えるため、まずターン区切りを出してから
                 // アクションログ（装備した／アイテム使用）を出す。
-                // ※防御フラグ isDefending はここではリセットしない。
-                //   （直前ターンに張った防御はこのターン開始時点で解除済みのため）
+                // ※防御フラグ isDefending はここで必ずリセットする。
+                //   アイテム/装備は ItemBox シーンを経由するため BeginPlayerTurn() を
+                //   通らず、前ターンに張った防御が解除されないまま残ってしまう。
+                //   （防御→アイテムの順で操作すると、アイテムターンの敵攻撃に
+                //   防御2倍＋ダイス優遇が誤適用される不具合の修正）
                 // =========================================================
                 currentTurnNumber++;
+                isDefending = false; // ★前ターンの防御を解除（BeginPlayerTurn 相当）
                 AddLogImmediate($"―――（{currentTurnNumber}ターン目）―――");
 
                 if (!string.IsNullOrEmpty(GameState.I.battleItemActionLog))

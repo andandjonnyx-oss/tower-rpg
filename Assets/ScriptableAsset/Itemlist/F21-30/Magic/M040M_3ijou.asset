@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M040M_3ijou
   itemName: "\u30C8\u30EA\u30D7\u30EB\u30D0\u30C3\u30C9"
-  description: "\u6BD2\u3068\u9EBB\u75FA\u3068\u6697\u95C7\u3092\u4E00\u5EA6\u306B\u304B\u3051\u308B\nMP10"
+  description: "\u6BD2\u3068\u9EBB\u75FA\u3068\u6697\u95C7\u3092\u4E00\u5EA6\u306B\u304B\u3051\u308B\nMP20"
   icon: {fileID: 21300000, guid: 59afa9141063a0942b7ced1d8ce4859b, type: 3}
   Minfloor: 26
   Minstep: 1

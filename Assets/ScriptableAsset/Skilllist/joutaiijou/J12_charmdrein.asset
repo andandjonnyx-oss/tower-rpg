@@ -27,7 +27,7 @@ MonoBehaviour:
   defenseIgnoreRate: 0
   cooldownTurns: 0
   mpCost: 0
-  baseHitRate: 95
+  baseHitRate: 100
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 1
