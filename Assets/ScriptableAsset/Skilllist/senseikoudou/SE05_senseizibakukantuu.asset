@@ -28,6 +28,7 @@ MonoBehaviour:
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 95
+  isGuaranteedHit: 1
   executeEffectsOnMiss: 1
   hitCount: 1
   multiHitEntries: []

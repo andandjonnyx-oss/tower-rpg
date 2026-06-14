@@ -899,6 +899,12 @@ public partial class BattleSceneController : MonoBehaviour
         }
 
         // 通常戦闘
+        // 餌付け（pendingBattleItemInstantWin）即勝利は acceptsFeedItem を持つ
+        // 通常モンスターでも発火し、Start の即勝利パスで IsBossEventWin=true を立てる。
+        // ボス戦ルートと違い通常戦闘ルートはこのフラグをリセットしないため、
+        // 残留して次戦以降の通常モンスター撃破で飛散演出がスキップされる。
+        // ここで確実にクリアする。
+        BattleContext.IsBossEventWin = false;
         return () => Invoke(nameof(ReturnToTower), 1.0f);
     }
 

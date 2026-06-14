@@ -19,7 +19,7 @@ MonoBehaviour:
   actionType: 2
   skillAttribute: 3
   damageCategory: 1
-  damageMultiplier: 10
+  damageMultiplier: 8
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
