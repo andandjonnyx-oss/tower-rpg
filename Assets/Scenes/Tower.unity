@@ -1376,7 +1376,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EncounterSystem
   monsterDatabase: {fileID: 11400000, guid: f20c45ed52962084f8718f0d4e946ee1, type: 2}
-  encounterRate: 0.2
+  encounterRate: 0.25
+  encounterRateNoItem: 0.2
   battleSceneName: Battle
   towerSceneName: Tower
 --- !u!4 &355371588

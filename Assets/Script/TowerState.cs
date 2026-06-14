@@ -335,14 +335,19 @@ public class TowerState : MonoBehaviour
             if (bossStarted) return;
         }
 
-        // ③ アイテム
-        bool itemStarted = TowerItemTrigger.Instance != null &&
-                           TowerItemTrigger.Instance.TryTriggerItemEvent(Floor, Step);
+        // ③ アイテム（ノーアイテムモードならスキップ）
+        bool noItemMode = GameSettings.NoItemMode; // ★オプション参照
+        bool itemStarted = false;
+        if (!noItemMode)
+        {
+            itemStarted = TowerItemTrigger.Instance != null &&
+                          TowerItemTrigger.Instance.TryTriggerItemEvent(Floor, Step);
+        }
         if (itemStarted) return;
 
-        // ④エンカウント
+        // ④ エンカウント
         if (EncounterSystem.Instance != null)
-            EncounterSystem.Instance.TryStartEncounter(Floor, Step);
+            EncounterSystem.Instance.TryStartEncounter(Floor, Step, noItemMode); // ★モードを渡す
         else
             Debug.LogError("EncounterSystem is not assigned.");
 

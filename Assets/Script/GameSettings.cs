@@ -7,8 +7,10 @@ using UnityEngine;
 public static class GameSettings
 {
     private const string KeyKeepMagicSelection = "opt_keepMagicSelection";
+    private const string KeyNoItemMode = "opt_noItemMode";
 
     private static bool? keepMagicSelectionCache;
+    private static bool? noItemModeCache;
 
     /// <summary>
     /// 魔法セレクターの選択保持オプション。既定は OFF。
@@ -27,6 +29,28 @@ public static class GameSettings
         {
             keepMagicSelectionCache = value;
             PlayerPrefs.SetInt(KeyKeepMagicSelection, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
+    /// <summary>
+    /// 「アイテムが出ないモード」オプション。既定は OFF。
+    /// ON のとき、塔内のアイテム判定をスキップし、エンカウントのみ独立判定（実質20%）になる。
+    /// OFF のとき、アイテム判定（先）→ すり抜けた残りに対しエンカウント判定（実質20%になるよう
+    /// EncounterSystem.encounterRate を 0.25 に設定する）。
+    /// </summary>
+    public static bool NoItemMode
+    {
+        get
+        {
+            if (noItemModeCache == null)
+                noItemModeCache = PlayerPrefs.GetInt(KeyNoItemMode, 0) == 1;
+            return noItemModeCache.Value;
+        }
+        set
+        {
+            noItemModeCache = value;
+            PlayerPrefs.SetInt(KeyNoItemMode, value ? 1 : 0);
             PlayerPrefs.Save();
         }
     }

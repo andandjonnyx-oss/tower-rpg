@@ -24,7 +24,7 @@ MonoBehaviour:
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
-  defenseIgnoreRate: 1
+  defenseIgnoreRate: 0.9
   cooldownTurns: 0
   mpCost: 25
   baseHitRate: 95

@@ -24,10 +24,11 @@ MonoBehaviour:
   randomDamageMax: 0
   hpDependentType: 4
   hpDependentPercent: 100
-  defenseIgnoreRate: 0.5
+  defenseIgnoreRate: 1
   cooldownTurns: 0
   mpCost: 0
   baseHitRate: 100
+  isGuaranteedHit: 0
   executeEffectsOnMiss: 1
   hitCount: 1
   multiHitEntries: []

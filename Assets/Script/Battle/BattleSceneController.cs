@@ -206,6 +206,19 @@ public partial class BattleSceneController : MonoBehaviour
     private static bool isDefending = false;
 
     // =========================================================
+    // 行動受付ガード（多重入力防止）
+    // =========================================================
+    //
+    // プレイヤー行動ボタン（攻撃/スキル/魔法/防御）の押下から、
+    // 敵ターンが完了してプレイヤーターンに戻るまでの間 true にする。
+    // SetButtonsInteractable(false) はボタンの interactable を切るだけで、
+    // 同一フレーム内に既にキューされた押下や連打の二度目を取りこぼすことが
+    // あるため、コード側でも明示的にガードする。
+    // OnXxxClicked の冒頭で true をチェックして二度目以降を弾き、
+    // プレイヤーターン復帰時（AfterEnemyAction 末尾）に false へ戻す。
+    private bool isPlayerActing = false;
+
+    // =========================================================
     // 先制攻撃システム（追加）
     // =========================================================
     //
@@ -434,6 +447,22 @@ public partial class BattleSceneController : MonoBehaviour
             if (GameState.I != null && GameState.I.battleTurnConsumed)
             {
                 GameState.I.battleTurnConsumed = false;
+
+                // =========================================================
+                // ターン消費行動（アイテム使用・装備変更）の共通ターン処理
+                // 通常のプレイヤー行動は OnXxxClicked → BeginPlayerTurn() で
+                // ターンカウンタ加算・ターン区切りログ・敵行動の事前抽選を行うが、
+                // アイテム/装備は ItemBox シーンを経由するためそれを通らない。
+                // ここで同等の処理を行い、ログのターン数ズレと
+                // 敵行動の抽選状態不定（pendingEnemyAction の持ち越し）を防ぐ。
+                // 表示順を通常行動と揃えるため、まずターン区切りを出してから
+                // アクションログ（装備した／アイテム使用）を出す。
+                // ※防御フラグ isDefending はここではリセットしない。
+                //   （直前ターンに張った防御はこのターン開始時点で解除済みのため）
+                // =========================================================
+                currentTurnNumber++;
+                AddLogImmediate($"―――（{currentTurnNumber}ターン目）―――");
+
                 if (!string.IsNullOrEmpty(GameState.I.battleItemActionLog))
                 {
                     AddLogImmediate(GameState.I.battleItemActionLog);
@@ -485,10 +514,21 @@ public partial class BattleSceneController : MonoBehaviour
                     return;
                 }
 
-                Invoke(nameof(EnemyTurn), 0.5f);
+                // ターン消費行動でも敵の行動を事前抽選してから敵ターンへ。
+                PreRollEnemyAction();
+
+                // 敵ターンが Invoke で 0.5 秒後に走るまでの間、プレイヤー入力を
+                // 受け付けないようにする。RefreshSkillButton / RefreshMagicSelector は
+                // スキル・魔法ボタンを再有効化してしまうため、先に呼んでから
+                // 最後に SetButtonsInteractable(false) で確実に無効化する。
+                // さらに isPlayerActing を立てて、待機中の入力をコード側でも弾く。
+                isPlayerActing = true;
                 RefreshSkillButton();
                 RefreshMagicSelector();
-                RefreshBattleStatusEffectUI();  // ★追加: ここでも呼ぶ
+                RefreshBattleStatusEffectUI();
+                SetButtonsInteractable(false);
+
+                Invoke(nameof(EnemyTurn), 0.5f);
                 return;
             }
         }
@@ -496,6 +536,7 @@ public partial class BattleSceneController : MonoBehaviour
         RefreshSkillButton();
         RefreshMagicSelector();
         RefreshBattleStatusEffectUI();
+        isPlayerActing = false; // プレイヤーターン開始: 行動ガードを解除
     }
 
     // =========================================================
@@ -1607,6 +1648,7 @@ public partial class BattleSceneController : MonoBehaviour
         if (giveUpPopup != null) giveUpPopup.SetActive(false);
 
         // ボタンを再有効化
+        isPlayerActing = false;
         SetButtonsInteractable(true);
         RefreshSkillButton();
         RefreshMagicSelector();

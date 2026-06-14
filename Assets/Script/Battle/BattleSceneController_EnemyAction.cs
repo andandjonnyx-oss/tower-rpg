@@ -285,17 +285,6 @@ public partial class BattleSceneController
 
 
 
-        // =========================================================
-        // 次ターン強制行動チェック（力をためる等）
-        // 強制行動は1ターン全消費（複数回行動しない）
-        // =========================================================
-        if (enemyForcedNextSkill != null)
-        {
-            SkillData forced = enemyForcedNextSkill;
-            enemyForcedNextSkill = forced.enemyNextForceSkill; // 次の予約をセット（nullなら解除）
-            ExecuteEnemySkillAttack(forced);
-            return;
-        }
 
 
         // =========================================================
@@ -312,6 +301,32 @@ public partial class BattleSceneController
                 ExecuteEnemyAction(rageTable[0]);
                 return;
             }
+        }
+
+        // =========================================================
+        // 強制予約（力溜め等）がある場合
+        // 予約スキルを「1回目の行動」として消化し、
+        // 複数回行動なら残り回数も通常抽選で続行する。
+        // ・力溜めが途中の行動だった場合 → 同じターンの次の行動枠で消化される。
+        // ・力溜めが最後の行動だった場合 → 予約が立った状態でターン終了し、
+        //   次ターンの最初の行動でこのブロックに入って消化される（持ち越し）。
+        // 予約消化後の残り行動でさらに力溜めが出れば再度予約される。
+        // =========================================================
+        if (enemyForcedNextSkill != null)
+        {
+            // pending（先制抽選）は予約を優先するため破棄
+            pendingEnemyAction = null;
+
+            SkillData forced = enemyForcedNextSkill;
+            enemyForcedNextSkill = forced.enemyNextForceSkill; // 次の予約（通常はnull）
+
+            // 1回目: 予約スキルを実行
+            ExecuteEnemyForcedSingle(forced);
+            if (IsBattleEndedOrDead()) { AfterEnemyAction(); return; }
+
+            // 残り行動（2回目以降）は通常ループへ
+            ExecuteRemainingActions(turnActionCount, 1);
+            return;
         }
 
         // =========================================================
@@ -412,6 +427,52 @@ public partial class BattleSceneController
     }
 
     /// <summary>
+    /// 強制予約スキル（力溜め後の必殺等）を1アクションとして実行する。
+    /// AfterEnemyAction は呼ばない。複数回行動ループの一部として使う。
+    /// 沈黙・actionType 分岐は ExecuteEnemySingleAction と同等。
+    /// 実行したスキルがさらに enemyNextForceSkill を持つ場合は再予約する。
+    /// </summary>
+    private void ExecuteEnemyForcedSingle(SkillData forced)
+    {
+        if (forced == null)
+        {
+            Debug.LogWarning("[Battle] ExecuteEnemyForcedSingle: forced が null。通常攻撃で代替。");
+            ExecuteLegacyAttackCore();
+            return;
+        }
+
+        // 沈黙判定: 魔法系スキルなら70%で失敗
+        if (enemyIsSilenced && forced.skillSource == SkillSource.Magic)
+        {
+            if (StatusEffectSystem.CheckSilenceFail())
+            {
+                string silenceName = !string.IsNullOrEmpty(forced.skillName)
+                    ? forced.skillName : "魔法";
+                AddLog($"{enemyMonster.Mname} は{silenceName}を唱えようとした…しかし沈黙で失敗した！");
+                return;
+            }
+        }
+
+        switch (forced.actionType)
+        {
+#pragma warning disable 0618
+            case MonsterActionType.NormalAttack: ExecuteEnemySkillAttackCore(forced); break;
+#pragma warning restore 0618
+            case MonsterActionType.SkillAttack: ExecuteEnemySkillAttackCore(forced); break;
+            case MonsterActionType.Preemptive: ExecuteEnemySkillAttackCore(forced); break;
+            case MonsterActionType.FoodRaid: ExecuteEnemyFoodRaidCore(forced); break;
+            case MonsterActionType.Idle: ExecuteEnemyIdleCore(forced); break;
+            default: ExecuteEnemyIdleCore(forced); break;
+        }
+
+        // 予約スキルがさらに次を予約する場合（多段予約）
+        if (forced.enemyNextForceSkill != null)
+        {
+            enemyForcedNextSkill = forced.enemyNextForceSkill;
+        }
+    }
+
+    /// <summary>
     /// 残りの行動を FlushLogsAndThen 経由で順次実行する。
     /// completedCount は既に実行済みの行動数。
     /// 全行動完了後に AfterEnemyAction を呼ぶ。
@@ -436,17 +497,20 @@ public partial class BattleSceneController
                 return;
             }
 
-            // 強制行動が設定された場合（直前の行動で enemyNextForceSkill が入った）
-            // → 強制行動は1ターン全消費なので、残り行動をスキップして終了
+            // 直前の行動で強制予約（力溜め等）が入った場合は、
+            // この行動枠で予約スキルを消化する（ターンは打ち切らない）。
             if (enemyForcedNextSkill != null)
             {
-                Debug.Log($"[Battle] Multi-action: forced skill set during action {nextIndex}, ending turn");
-                AfterEnemyAction();
-                return;
+                SkillData forced = enemyForcedNextSkill;
+                enemyForcedNextSkill = forced.enemyNextForceSkill; // 次の予約（通常null）
+                Debug.Log($"[Battle] Multi-action: consuming forced skill at action {nextIndex}");
+                ExecuteEnemyForcedSingle(forced);
             }
-
-            EnemyActionEntry nextAction = SelectEnemyAction();
-            ExecuteEnemySingleAction(nextAction);
+            else
+            {
+                EnemyActionEntry nextAction = SelectEnemyAction();
+                ExecuteEnemySingleAction(nextAction);
+            }
 
             if (IsBattleEndedOrDead())
             {
@@ -1549,6 +1613,7 @@ public partial class BattleSceneController
             }
 
             // プレイヤーターンに戻す
+            isPlayerActing = false; // 行動ガード解除（次のプレイヤー入力を受付）
             SetButtonsInteractable(true);
             RefreshSkillButton();
             RefreshMagicSelector();

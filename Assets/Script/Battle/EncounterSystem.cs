@@ -8,7 +8,13 @@ public class EncounterSystem : MonoBehaviour
     [SerializeField] private MonsterDatabase monsterDatabase;
 
     [Header("Encounter")]
-    [Range(0f, 1f)] public float encounterRate = 0.20f;
+    [Tooltip("通常時のエンカウント率。アイテム判定をすり抜けた残りに対して判定するため、\n" +
+             "実質エンカウント率は概ね 0.8×この値 になる。実質20%にしたい場合は 0.25。")]
+    [Range(0f, 1f)] public float encounterRate = 0.25f; // ★0.20→0.25
+
+    [Tooltip("ノーアイテムモード時のエンカウント率。アイテム判定がスキップされ独立判定になるため、\n" +
+         "実質エンカウント率はこの値そのものになる。")]
+    [Range(0f, 1f)] public float encounterRateNoItem = 0.20f; // ★追加
 
     [Header("Scene Names")]
     public string battleSceneName = "Battle";
@@ -58,5 +64,25 @@ public class EncounterSystem : MonoBehaviour
         SceneManager.LoadScene(battleSceneName, LoadSceneMode.Single);
 
         Debug.Log("[Encounter] START BATTLE!");
+    }
+
+    /// <param name="noItemMode">アイテムが出ないモードか（true なら独立した20%判定）</param>
+    public void TryStartEncounter(int floor, int step, bool noItemMode = false)
+    {
+        // STEP1は無効
+        if (step == 1) return;
+
+        float rate = noItemMode ? encounterRateNoItem : encounterRate; // ★モードで切替
+
+        float roll = Random.value;
+        if (roll > rate) return;
+
+        Monster picked = monsterDatabase.GetRandomCandidate(floor, step);
+        if (picked == null) return;
+
+        BattleContext.EnemyMonster = picked;
+        SceneManager.LoadScene(battleSceneName, LoadSceneMode.Single);
+
+        Debug.Log($"[Encounter] START BATTLE! (rate={rate}, noItemMode={noItemMode})");
     }
 }

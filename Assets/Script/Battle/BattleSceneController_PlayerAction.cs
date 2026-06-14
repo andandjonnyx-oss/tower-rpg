@@ -341,7 +341,7 @@ public partial class BattleSceneController
                     // executeEffectsOnMiss: 外しても追加効果（SelfDestruct 等）を実行するか
                     if (skill.executeEffectsOnMiss)
                     {
-                    ProcessEnemySkillEffects(skill);
+                        ProcessEnemySkillEffects(skill);
                     }
                     return;
                 }
@@ -553,8 +553,10 @@ public partial class BattleSceneController
     private void OnAttackClicked()
     {
         if (battleEnded) return;
+        if (isPlayerActing) return; // 多重入力ガード（連打・同フレーム二度押し対策）
+        isPlayerActing = true;
+        SetButtonsInteractable(false); // 先にボタンを無効化してから処理に入る
         BeginPlayerTurn(); // ターン開始ログ（防御フラグリセット + 敵行動事前抽選）
-        SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
         // Phase2: 麻痺チェック
@@ -833,8 +835,10 @@ public partial class BattleSceneController
             return;
         }
 
+        if (isPlayerActing) return; // 多重入力ガード
+        isPlayerActing = true;
+        SetButtonsInteractable(false); // 先にボタンを無効化
         BeginPlayerTurn(); // ターン開始ログ（防御フラグリセット + 敵行動事前抽選）
-        SetButtonsInteractable(false);
         string weaponName; WeaponAttribute weaponAttribute; int weaponPower;
         GetEquippedWeaponInfo(out weaponName, out weaponAttribute, out weaponPower);
         equippedWeaponItem.UseSkill(skill);
@@ -1155,8 +1159,10 @@ public partial class BattleSceneController
             return;
         }
 
+        if (isPlayerActing) return; // 多重入力ガード
+        isPlayerActing = true;
+        SetButtonsInteractable(false); // 先にボタンを無効化
         BeginPlayerTurn(); // ターン開始ログ（防御フラグリセット + 敵行動事前抽選）
-        SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
         if (GameState.I != null) GameState.I.currentMp -= magic.mpCost;
 
@@ -1451,8 +1457,10 @@ public partial class BattleSceneController
             return;
         }
 
+        if (isPlayerActing) return; // 多重入力ガード
+        isPlayerActing = true;
+        SetButtonsInteractable(false); // 先にボタンを無効化
         BeginPlayerTurn(); // ターン開始ログ（前ターンの防御はここでリセット）
-        SetButtonsInteractable(false);
         TickAllWeaponCooldowns();
 
         // Phase2: 麻痺チェック
@@ -1486,7 +1494,7 @@ public partial class BattleSceneController
             0,
             ref enemyIsParalyzed,
             ref enemyIsBlind,
-            ref enemyIsSilenced, 
+            ref enemyIsSilenced,
             ref enemyRageTurn,
             ref playerRageTurn,
             ref buffState);

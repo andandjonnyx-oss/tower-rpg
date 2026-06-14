@@ -54,6 +54,11 @@ public class OptionManager : MonoBehaviour
     [Tooltip("魔法選択保持ボタンのラベル（任意）")]
     [SerializeField] private TMP_Text keepMagicLabel;
 
+    [Tooltip("アイテムが出ないモードのON/OFF切替ボタン")]
+    [SerializeField] private Button noItemModeButton;
+    [Tooltip("アイテムが出ないモードボタンのラベル（任意）")]
+    [SerializeField] private TMP_Text noItemModeLabel;
+
     private void Start()
     {
         // 戻るボタン（AudioManager の有無に関係なく機能させる）
@@ -64,6 +69,10 @@ public class OptionManager : MonoBehaviour
         if (keepMagicButton != null)
             keepMagicButton.onClick.AddListener(OnKeepMagicClicked);
         UpdateKeepMagicLabel(GameSettings.KeepMagicSelection);
+
+        if (noItemModeButton != null)
+            noItemModeButton.onClick.AddListener(OnNoItemModeClicked);
+        UpdateNoItemModeLabel(GameSettings.NoItemMode);
 
         var am = AudioManager.I;
         if (am == null)
@@ -192,5 +201,22 @@ public class OptionManager : MonoBehaviour
     {
         if (keepMagicLabel != null)
             keepMagicLabel.text = on ? "魔法選択の保持: ON" : "魔法選択の保持: OFF";
+    }
+
+    // =========================================================
+    // アイテムが出ないモードトグル（追加）
+    // =========================================================
+
+    private void OnNoItemModeClicked()
+    {
+        bool next = !GameSettings.NoItemMode;
+        GameSettings.NoItemMode = next;
+        UpdateNoItemModeLabel(next);
+    }
+
+    private void UpdateNoItemModeLabel(bool on)
+    {
+        if (noItemModeLabel != null)
+            noItemModeLabel.text = on ? "経験値稼ぎたいからアイテムなんていらんのじゃモード: ON" : "経験値稼ぎたいからアイテムなんていらんのじゃモード: OFF";
     }
 }
