@@ -26,17 +26,17 @@ MonoBehaviour:
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 80
+  mpCost: 150
   baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0
   hitCount: 2
   multiHitEntries:
   - attribute: 6
-    damageMultiplier: 15
+    damageMultiplier: 8
     bonusDamage: 0
   - attribute: 7
-    damageMultiplier: 15
+    damageMultiplier: 8
     bonusDamage: 0
   noBattleOk: 0
   additionalEffects: []

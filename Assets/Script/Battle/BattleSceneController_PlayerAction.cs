@@ -982,6 +982,62 @@ public partial class BattleSceneController
             return;
         }
 
+        // =========================================================
+        // 乱数ダメージスキル（追加）
+        // randomDamageMax > 0 の場合、1〜maxの乱数がベースダメージ。
+        // クリティカル無効、防御ダイス有効。multiplier/bonus は無視。
+        // 多段攻撃とは併用しない（hitCount=1前提）。
+        // =========================================================
+        if (skill.randomDamageMax > 0)
+        {
+            // 単発前提: 命中判定
+            if (!CheckPlayerHitWithBlind(skill.baseHitRate, skill.isGuaranteedHit))
+            {
+                AddLogMiss($"You は {skill.skillName}！ …しかし外れた！");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int rndBase = Random.Range(1, skill.randomDamageMax + 1);
+
+            string resistLog;
+            int afterResist = ApplyEnemyAttributeResistance(rndBase, skill.skillAttribute, out resistLog);
+
+            int enemyDef = GetEnemyDefense(skill.damageCategory);
+            if (skill.defenseIgnoreRate > 0f)
+            {
+                enemyDef = Mathf.FloorToInt(enemyDef * (1f - skill.defenseIgnoreRate) + 0.5f);
+            }
+            int enemyBlocked = RollDefenseDice(enemyDef);
+            int finalDamage = afterResist - enemyBlocked;
+            if (finalDamage < 0) finalDamage = 0;
+            if (afterResist <= 0) finalDamage = 0;
+
+            finalDamage = ApplyCharmDamageReduction(finalDamage);
+
+            enemyCurrentHp -= finalDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+            string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
+            AddLogAttack($"You は {skill.skillName}！（{skill.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（乱数{rndBase}）{resistLog}{blockLog}", skill.skillAttribute);
+
+            Debug.Log($"[Battle] RandomDamage(Player→Enemy/Skill): roll={rndBase} max={skill.randomDamageMax} " +
+                      $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
+
+            ProcessPlayerSkillEffects(skill, finalDamage);
+
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                else { FlushLogsAndThen(() => OnDefeat()); }
+                return;
+            }
+
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
 
         // =========================================================
         // 多段攻撃対応
@@ -1289,6 +1345,65 @@ public partial class BattleSceneController
                       $"beforeHp={enemyCurrentHp + hpDamage} damage={hpDamage}");
 
             ProcessPlayerSkillEffects(magic, hpDamage);
+
+            if (GameState.I != null && GameState.I.currentHp <= 0)
+            {
+                if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); }
+                else { FlushLogsAndThen(() => OnDefeat()); }
+                return;
+            }
+
+            if (enemyCurrentHp <= 0) { FlushLogsAndThen(() => OnVictory()); return; }
+            FlushLogsAndThen(() => EnemyTurn());
+            return;
+        }
+
+
+        // =========================================================
+        // 乱数ダメージスキル（追加）
+        // randomDamageMax > 0 の場合、1〜maxの乱数がベースダメージ。
+        // クリティカル無効、防御ダイス有効。multiplier/bonus は無視。
+        // 多段攻撃とは併用しない（hitCount=1前提）。
+        // =========================================================
+        if (magic.randomDamageMax > 0)
+        {
+            // 単発前提: 命中判定
+            if (!CheckPlayerHitWithBlind(magic.baseHitRate, magic.isGuaranteedHit))
+            {
+                AddLogMiss($"You は {magic.skillName}！ …しかし外れた！ MP-{magic.mpCost}");
+                FlushLogsAndThen(() => EnemyTurn());
+                return;
+            }
+
+            int rndBase = Random.Range(1, magic.randomDamageMax + 1);
+
+            // 属性耐性によるダメージ軽減
+            string resistLog;
+            int afterResist = ApplyEnemyAttributeResistance(rndBase, magic.skillAttribute, out resistLog);
+
+            // 防御ダイス（defenseIgnoreRate 対応、クリティカルなし）
+            int enemyDef = GetEnemyDefense(magic.damageCategory);
+            if (magic.defenseIgnoreRate > 0f)
+            {
+                enemyDef = Mathf.FloorToInt(enemyDef * (1f - magic.defenseIgnoreRate) + 0.5f);
+            }
+            int enemyBlocked = RollDefenseDice(enemyDef);
+            int finalDamage = afterResist - enemyBlocked;
+            if (finalDamage < 0) finalDamage = 0;
+            if (afterResist <= 0) finalDamage = 0;
+
+            finalDamage = ApplyCharmDamageReduction(finalDamage);
+
+            enemyCurrentHp -= finalDamage;
+            if (enemyCurrentHp < 0) enemyCurrentHp = 0;
+
+            string blockLog = enemyBlocked > 0 ? $"（防御{enemyBlocked}軽減）" : "";
+            AddLogAttack($"You は {magic.skillName}！（{magic.skillAttribute.ToJapanese()}属性） {finalDamage}ダメージ！（乱数{rndBase}）{resistLog}{blockLog} MP-{magic.mpCost}", magic.skillAttribute);
+
+            Debug.Log($"[Battle] RandomDamage(Player→Enemy/Magic): roll={rndBase} max={magic.randomDamageMax} " +
+                      $"afterResist={afterResist} blocked={enemyBlocked} final={finalDamage}");
+
+            ProcessPlayerSkillEffects(magic, finalDamage);
 
             if (GameState.I != null && GameState.I.currentHp <= 0)
             {

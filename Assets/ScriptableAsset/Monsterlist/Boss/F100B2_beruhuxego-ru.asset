@@ -45,7 +45,13 @@ MonoBehaviour:
   immuneToAllAilments: 1
   isGirl: 1
   acceptsFeedItem: 0
-  attributeResistances: []
+  attributeResistances:
+  - attribute: 3
+    value: 50
+  - attribute: 4
+    value: 50
+  - attribute: 5
+    value: 50
   Exp: 0
   Gold: 0
   dropItem: {fileID: 0}

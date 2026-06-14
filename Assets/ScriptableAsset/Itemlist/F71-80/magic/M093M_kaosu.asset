@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M093M_kaosu
   itemName: "\u30AB\u30AA\u30B9"
-  description: "MP80\n\u9B54\u6CD5\u653B\u6483\xD715\n\u8056\u5C5E\u6027\u3068\u95C7\u5C5E\u6027\u30921\u767A\u305A\u3064"
+  description: "MP150\n\u9B54\u6CD5\u653B\u6483\xD78\n\u8056\u5C5E\u6027\u3068\u95C7\u5C5E\u6027\u30921\u767A\u305A\u3064"
   icon: {fileID: 21300000, guid: 8b7178c6afe25b943b9fdd63171dd556, type: 3}
   Minfloor: 76
   Minstep: 1

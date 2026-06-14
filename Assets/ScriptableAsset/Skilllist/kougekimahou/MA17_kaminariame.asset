@@ -19,14 +19,14 @@ MonoBehaviour:
   actionType: 2
   skillAttribute: 5
   damageCategory: 1
-  damageMultiplier: 5
+  damageMultiplier: 3
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 60
+  mpCost: 100
   baseHitRate: 95
   isGuaranteedHit: 0
   executeEffectsOnMiss: 0

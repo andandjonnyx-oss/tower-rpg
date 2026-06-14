@@ -14,19 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: MA07_magiFire
   skillName: "\u30DE\u30B8\u30AB\u30EB\u30D5\u30EC\u30A4\u30E0"
-  description: "\u9B54\u529B\u3092\u708E\u306B\u5909\u63DB\u3057\u653E\u3064\n\u9B54\u6CD5\u653B\u6483\xD715\u3000\u708E\u9B54\u6CD5"
+  description: "\u9B54\u529B\u3092\u708E\u306B\u5909\u63DB\u3057\u653E\u3064\n\u9B54\u6CD5\u653B\u6483\xD710\u3000\u708E\u9B54\u6CD5"
   skillSource: 1
   actionType: 2
   skillAttribute: 3
   damageCategory: 1
-  damageMultiplier: 15
+  damageMultiplier: 10
   bonusDamage: 0
   randomDamageMax: 0
+  hpDependentType: 0
+  hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 30
+  mpCost: 40
   baseHitRate: 95
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 0
   hitCount: 1
+  multiHitEntries: []
   noBattleOk: 0
   additionalEffects: []
   enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5

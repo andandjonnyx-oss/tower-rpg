@@ -14,21 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillId: MA13_mice
   skillName: "\u30DE\u30B8\u30AB\u30EB\u30A2\u30A4\u30B9"
-  description: "\u9B54\u6CD5\u653B\u6483\xD720"
+  description: "\u9B54\u6CD5\u653B\u6483\xD712"
   skillSource: 1
   actionType: 2
   skillAttribute: 4
   damageCategory: 1
-  damageMultiplier: 20
+  damageMultiplier: 12
   bonusDamage: 0
   randomDamageMax: 0
   hpDependentType: 0
   hpDependentPercent: 20
   defenseIgnoreRate: 0
   cooldownTurns: 0
-  mpCost: 50
+  mpCost: 80
   baseHitRate: 95
+  isGuaranteedHit: 0
+  executeEffectsOnMiss: 0
   hitCount: 1
+  multiHitEntries: []
   noBattleOk: 0
   additionalEffects: []
   enemyNextForceSkill: {fileID: 0}
+  rerollCondition: 0
+  rerollHpThreshold: 0.5
