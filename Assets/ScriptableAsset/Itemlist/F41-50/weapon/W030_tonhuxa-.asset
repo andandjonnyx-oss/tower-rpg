@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: W030_tonhuxa-
   itemName: "\u30C8\u30F3\u30D5\u30A1\u30FC"
-  description: "\u6728\u3067\u51FA\u6765\u305F\u30C0\u30A6\u30B8\u30F3\u30B0\u30DE\u30B7\u30F3\u3060\u305C\uFF01\n\u653B\u6483\u529B+120
+  description: "\u6728\u3067\u51FA\u6765\u305F\u30C0\u30A6\u30B8\u30F3\u30B0\u30DE\u30B7\u30F3\u3060\u305C\uFF01\n\u653B\u6483+120
     \u7A81\u5C5E\u6027\n\u30B9\u30AD\u30EB\uFF1A\u30C8\u30F3\u30D5\u30A1\u30FC\u30AD\u30C3\u30AF\n\uFF08CT3\u30012\u500D\u3001\u6BB4\u5C5E\u6027\uFF09"
   icon: {fileID: 21300000, guid: 80dfdf19de28e294aa55e34aec334808, type: 3}
   Minfloor: 44

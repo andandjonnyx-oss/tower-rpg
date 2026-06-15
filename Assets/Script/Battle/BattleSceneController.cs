@@ -578,6 +578,10 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     public void BeginPlayerTurn()
     {
+        // ★再追加: 魔法選択リストが開いていれば閉じる（攻撃/防御/魔法/スキル共通）
+        if (magicSelector != null) magicSelector.ForceClose();
+
+
         currentTurnNumber++;
         isDefending = false; // 前ターンの防御を解除
         AddLogImmediate($"―――（{currentTurnNumber}ターン目）―――");
