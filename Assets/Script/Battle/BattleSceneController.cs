@@ -397,6 +397,13 @@ public partial class BattleSceneController : MonoBehaviour
                 BattleContext.ItemSnapshot = ItemBoxManager.Instance.CreateSnapshot();
                 Debug.Log($"[Battle] ボス戦アイテムスナップショット保存: {BattleContext.ItemSnapshot.Count} 個");
             }
+
+            // ★SP スナップショット（コンティニューで巻き戻す用。消さないこと）
+            if (GameState.I != null)
+            {
+                BattleContext.StatusPointSnapshot = GameState.I.statusPoint;
+                Debug.Log($"[Battle] ボス戦SPスナップショット保存: {BattleContext.StatusPointSnapshot}");
+            }
         }
 
         if (!battleInitialized)
@@ -730,6 +737,21 @@ public partial class BattleSceneController : MonoBehaviour
             }
             SaveManager.Save();
 
+            // ★第一形態撃破は中間セーブポイント（次回は第二形態スタート）。
+            //   アイテム・SPスナップショットを取り直し、第一形態での獲得・消費を確定する。
+            //   第二形態でコンティニューした場合の巻き戻し先は「第二形態開始時点」になる。
+            //   ※消さないこと。
+            if (ItemBoxManager.Instance != null)
+            {
+                BattleContext.ItemSnapshot = ItemBoxManager.Instance.CreateSnapshot();
+                Debug.Log($"[Battle] 第二形態へ: アイテムスナップ更新 {BattleContext.ItemSnapshot.Count} 個");
+            }
+            if (GameState.I != null)
+            {
+                BattleContext.StatusPointSnapshot = GameState.I.statusPoint;
+                Debug.Log($"[Battle] 第二形態へ: SPスナップ更新 {BattleContext.StatusPointSnapshot}（第一形態獲得分を確定）");
+            }
+
             // 第二形態の戦闘を開始（HP/MPそのまま）
             BattleContext.EnemyMonster = BattleContext.Phase2Monster;
             BattleContext.Phase2Monster = null;
@@ -753,6 +775,7 @@ public partial class BattleSceneController : MonoBehaviour
 
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
+        BattleContext.StatusPointSnapshot = -1; // ★勝利でSP確定（巻き戻さずクリア・消さないこと）
 
         // =========================================================
         // GP（がんばりポイント）加算（追加）
@@ -1063,6 +1086,21 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     // =========================================================
+    // 広告不要コンティニュー対象ボス判定（再追加）
+    //   ※全文差し替えで消えやすい。消さないこと。
+    //   F50・F100（第一/第二形態とも BossFloor は維持される）が対象。
+    // =========================================================
+    /// <summary>
+    /// 現在の戦闘が「広告不要でコンティニュー可能なボス戦」かどうか。
+    /// </summary>
+    private bool IsFreeContinueBoss()
+    {
+        if (!BattleContext.IsBossBattle) return false;
+        int f = BattleContext.BossFloor;
+        return f == 50 || f == 100;
+    }
+
+    // =========================================================
     // コンティニューポップアップ処理（追加）
     // =========================================================
 
@@ -1083,7 +1121,12 @@ public partial class BattleSceneController : MonoBehaviour
         // メッセージを設定
         if (continuePopupText != null)
         {
-            if (BattleContext.IsBossBattle)
+            if (IsFreeContinueBoss())
+            {
+                // ★F50/F100 は広告不要コンティニュー（消さないこと）
+                continuePopupText.text = "広告なんて見なくていいから\nかかって来いよ！";
+            }
+            else if (BattleContext.IsBossBattle)
             {
                 continuePopupText.text = "広告を視聴して戦闘をやり直しますか？\n（全回復、アイテム復活）";
             }
@@ -1135,6 +1178,15 @@ public partial class BattleSceneController : MonoBehaviour
                 Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
             }
 
+            // ★SP を巻き戻し（この戦闘中に獲得したSPを無効化。消さないこと）
+            //   第二形態の場合は第一形態撃破時に取り直したスナップ＝第二形態開始時点へ戻る。
+            if (BattleContext.StatusPointSnapshot >= 0 && GameState.I != null)
+            {
+                GameState.I.statusPoint = BattleContext.StatusPointSnapshot;
+                SaveManager.Save(); // 巻き戻し後の値を保存
+                Debug.Log($"[Battle] ボス戦コンティニュー: SPを {BattleContext.StatusPointSnapshot} へ巻き戻し");
+            }
+
             BattleContext.Phase2Monster = null;
             BattleContext.IsPhase2Transition = false;
 
@@ -1146,6 +1198,7 @@ public partial class BattleSceneController : MonoBehaviour
             FullRecover();
             ResetBattleStatics();
             BattleContext.ItemSnapshot = null;
+            BattleContext.StatusPointSnapshot = -1; // ★通常コンティニューはSP確定（巻き戻さない）
             SceneManager.LoadScene(towerSceneName);
         }
     }
@@ -1155,6 +1208,14 @@ public partial class BattleSceneController : MonoBehaviour
         if (continuePopup != null) continuePopup.SetActive(false);
 
         adResultHandled = false;
+
+        // ★F50/F100 は広告不要で即コンティニュー（消さないこと）
+        if (IsFreeContinueBoss())
+        {
+            Debug.Log("[Battle] 広告不要コンティニュー対象ボス → 広告スキップで復活");
+            OnAdResult(true);
+            return;
+        }
 
         if (AdManager.Instance != null)
         {
@@ -1209,6 +1270,8 @@ public partial class BattleSceneController : MonoBehaviour
 
         ResetBattleStatics();
         BattleContext.ItemSnapshot = null;
+        BattleContext.StatusPointSnapshot = -1; // ★敗北帰還でSP確定（巻き戻さずクリア・消さないこと）
+
 
         // ボス戦敗北処理（STEP を維持）
         if (BattleContext.IsBossBattle)
