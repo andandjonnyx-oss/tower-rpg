@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -6,9 +7,15 @@ using UnityEngine;
 /// 現在はダミー実装（即成功を返す）。
 /// 将来 Unity Ads / AdMob 等の SDK を導入したら
 /// ShowRewardedAd() の中身だけ差し替えればよい。
+///
+/// 【方針A】
+///   リワード広告の結果は「復活してよいか(bool)」で返す。
+///   - 報酬獲得         → true（復活）
+///   - ユーザー途中スキップ → true（復活）※方針Aのため見た扱い
+///   - ロード失敗/表示失敗/オフライン/在庫切れ → true（復活）
+///   実質、コールバックが返ってくる限り常に true。
+///   コールバックが返らないフリーズ対策として呼び出し側でタイムアウト救済する。
 /// </summary>
-/// 
-// AdManager も自動生成したい場合（GameStateAutoCreate と同じパターン）
 public static class AdManagerAutoCreate
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -19,10 +26,10 @@ public static class AdManagerAutoCreate
         go.AddComponent<AdManager>();
     }
 }
+
 public class AdManager : MonoBehaviour
 {
     public static AdManager Instance { get; private set; }
-
 
     private void Awake()
     {
@@ -34,35 +41,56 @@ public class AdManager : MonoBehaviour
     // =========================================================
     // リワード広告を表示する
     // =========================================================
-    // onResult: true = 広告視聴完了（報酬付与OK）, false = 失敗/スキップ
+    // onResult: true = 復活してよい
     //
-    // 【将来の差し替え例 (Unity Ads)】
-    // Advertisement.Show(placementId, new ShowOptions {
-    //     resultCallback = result => {
-    //         onResult?.Invoke(result == ShowResult.Finished);
-    //     }
-    // });
+    // 【方針A】報酬獲得・スキップ・各種失敗のいずれでも true を返す。
+    //   呼び出し側はこの bool が true なら復活処理を行う。
     // =========================================================
 
     /// <summary>
     /// リワード広告を表示し、結果をコールバックで返す。
     /// </summary>
-    /// <param name="onResult">true = 視聴完了, false = 失敗/キャンセル</param>
+    /// <param name="onResult">true = 復活OK</param>
     public void ShowRewardedAd(Action<bool> onResult)
     {
         // --- ダミー実装: 広告SDK未導入のため即成功を返す ---
         Debug.Log("[AdManager] (ダミー) リワード広告を表示 → 即成功");
         onResult?.Invoke(true);
 
-        // --- 将来の実装イメージ ---
-        // if (!Advertisement.IsReady(rewardedPlacementId))
+        // =========================================================
+        // 【将来の AdMob 実装イメージ（方針A）】
+        //
+        // bool rewardEarned = false;
+        //
+        // // 広告がロードできていない（オフライン/在庫切れ/ネットワークエラー）
+        // if (rewardedAd == null)
         // {
-        //     Debug.LogWarning("[AdManager] 広告の準備ができていません");
-        //     onResult?.Invoke(false);
+        //     Debug.LogWarning("[AdManager] 広告未ロード → 見た扱いで復活(true)");
+        //     onResult?.Invoke(true);   // 方針A: 失敗でも復活
+        //     LoadRewardedAd();         // 次回のために再ロードを試みる
         //     return;
         // }
-        // Advertisement.Show(rewardedPlacementId, new ShowOptions {
-        //     resultCallback = result => onResult?.Invoke(result == ShowResult.Finished)
-        // });
+        //
+        // // 報酬獲得イベント
+        // rewardedAd.OnUserEarnedReward += (s, e) => { rewardEarned = true; };
+        //
+        // // 広告が閉じられた時（報酬獲得・スキップ問わずここに来る）
+        // rewardedAd.OnAdFullScreenContentClosed += () =>
+        // {
+        //     // 方針A: rewardEarned に関わらず常に復活
+        //     onResult?.Invoke(true);
+        //     LoadRewardedAd(); // 次回分を再ロード
+        // };
+        //
+        // // 表示失敗（再生中のエラー等）
+        // rewardedAd.OnAdFullScreenContentFailed += (error) =>
+        // {
+        //     Debug.LogWarning($"[AdManager] 表示失敗 → 見た扱いで復活(true): {error}");
+        //     onResult?.Invoke(true); // 方針A: 失敗でも復活
+        //     LoadRewardedAd();
+        // };
+        //
+        // rewardedAd.Show(...);
+        // =========================================================
     }
 }

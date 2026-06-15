@@ -290,6 +290,9 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>ドロップ判定で選ばれたアイテム。ポップアップ結果のコールバックで使用。</summary>
     private ItemData droppedItemData = null;
 
+    private Coroutine adTimeoutCoroutine;
+    private bool adResultHandled = false;
+
     private void Start()
     {
         enemyMonster = BattleContext.EnemyMonster;
@@ -520,6 +523,26 @@ public partial class BattleSceneController : MonoBehaviour
 
                 // ターン消費行動でも敵の行動を事前抽選してから敵ターンへ。
                 PreRollEnemyAction();
+
+                // =========================================================
+                // 先制攻撃の割り込み実行（アイテム/装備フロー用）
+                // 通常行動は OnXxxClicked 内で ExecutePreemptiveIfNeeded() を
+                // 呼ぶが、アイテム/装備は ItemBox シーンを経由するためそこを
+                // 通らない。ここで明示的に先制を実行しないと、EnemyTurn() が
+                // isEnemyPreemptive==true を「先制済み」と誤判定して敵の行動を
+                // 丸ごとスキップしてしまう（全行動が先制技の敵で発生）。
+                //
+                // ※方針B: アイテム効果は ItemBox で適用済みのため、
+                //   「アイテム使用 → 敵の先制」の順になる。先制で敗北しても
+                //   アイテムは消費される。
+                // =========================================================
+                if (ExecutePreemptiveIfNeeded())
+                {
+                    // 先制でプレイヤーが倒された（or 敵が自爆で倒れた）→
+                    // ExecutePreemptiveIfNeeded 内で OnDefeat/OnVictory が
+                    // 予約済みなので、ここでは何もせず終了する。
+                    return;
+                }
 
                 // 敵ターンが Invoke で 0.5 秒後に走るまでの間、プレイヤー入力を
                 // 受け付けないようにする。RefreshSkillButton / RefreshMagicSelector は
@@ -1069,16 +1092,70 @@ public partial class BattleSceneController : MonoBehaviour
         continuePopup.SetActive(true);
     }
 
+
     /// <summary>
-    /// コンティニュー「はい」ボタン押下時の処理。
-    /// AdManager でリワード広告を表示し、成功なら復活する。
+    /// 広告視聴結果のコールバック。
     /// </summary>
+    /// <param name="success">true = 視聴完了, false = 失敗/キャンセル</param>
+    private void OnAdResult(bool success)
+    {
+
+        if (adResultHandled) return;   // タイムアウトと本来のコールバックの二重発火防止
+        adResultHandled = true;
+        if (adTimeoutCoroutine != null) { StopCoroutine(adTimeoutCoroutine); adTimeoutCoroutine = null; }
+
+
+        // =========================================================
+        // 方針A: success は常に true 想定（報酬獲得・スキップ・各種失敗の
+        // いずれでも復活）。万一 false が来た場合も、ここでは復活させる。
+        // 「いいえ」を選んだ場合は OnContinueNo → FallbackDefeat を通るため、
+        // この OnAdResult には来ない。
+        // =========================================================
+        if (!success)
+        {
+            Debug.Log("[Battle] 広告結果 false だが方針Aのため復活扱いとする");
+        }
+        else
+        {
+            Debug.Log("[Battle] 広告視聴完了 → コンティニュー");
+        }
+
+        // --- 以下、復活処理（従来の success==true ブロックをそのまま） ---
+        if (BattleContext.IsBossBattle)
+        {
+            FullRecover();
+
+            if (BattleContext.ItemSnapshot != null && ItemBoxManager.Instance != null)
+            {
+                ItemBoxManager.Instance.RestoreFromSnapshot(BattleContext.ItemSnapshot);
+                Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
+            }
+
+            BattleContext.Phase2Monster = null;
+            BattleContext.IsPhase2Transition = false;
+
+            ResetBattleStatics();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        else
+        {
+            FullRecover();
+            ResetBattleStatics();
+            BattleContext.ItemSnapshot = null;
+            SceneManager.LoadScene(towerSceneName);
+        }
+    }
+
     private void OnContinueYes()
     {
         if (continuePopup != null) continuePopup.SetActive(false);
 
+        adResultHandled = false;
+
         if (AdManager.Instance != null)
         {
+            // タイムアウト保険（10秒返ってこなければ見た扱いで復活）
+            adTimeoutCoroutine = StartCoroutine(AdTimeoutFallback(10f));
             AdManager.Instance.ShowRewardedAd(OnAdResult);
         }
         else
@@ -1088,53 +1165,13 @@ public partial class BattleSceneController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 広告視聴結果のコールバック。
-    /// </summary>
-    /// <param name="success">true = 視聴完了, false = 失敗/キャンセル</param>
-    private void OnAdResult(bool success)
+    private IEnumerator AdTimeoutFallback(float seconds)
     {
-        if (!success)
+        yield return new WaitForSecondsRealtime(seconds);
+        if (!adResultHandled)
         {
-            // 広告失敗 → 街に帰還（いいえと同じ扱い）
-            Debug.Log("[Battle] 広告視聴失敗/キャンセル → 街に帰還");
-            FallbackDefeat();
-            return;
-        }
-
-        // 広告視聴成功 → 復活処理
-        Debug.Log("[Battle] 広告視聴完了 → コンティニュー");
-
-        if (BattleContext.IsBossBattle)
-        {
-            // ボス戦: 全回復 + アイテム復元 → 戦闘を最初からやり直し
-            FullRecover();
-
-            // アイテムスナップショットから復元
-            if (BattleContext.ItemSnapshot != null && ItemBoxManager.Instance != null)
-            {
-                ItemBoxManager.Instance.RestoreFromSnapshot(BattleContext.ItemSnapshot);
-                Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
-            }
-
-            // 第二形態で敗北した場合: Phase2Monsterをクリアして
-            // 第二形態のモンスターで再戦（BossEncounterSystemが判定する）
-            BattleContext.Phase2Monster = null;
-            BattleContext.IsPhase2Transition = false;
-
-
-            // 戦闘ステートをリセットして Battle シーンを再読込（再戦）
-            ResetBattleStatics();
-            // IsBossBattle と BossFloor はそのまま維持（再戦なので）
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        else
-        {
-            // 通常戦闘: 全回復 → 現STEPから Tower シーンに戻る（戦闘回避扱い）
-            FullRecover();
-            ResetBattleStatics();
-            BattleContext.ItemSnapshot = null;
-            SceneManager.LoadScene(towerSceneName);
+            Debug.LogWarning("[Battle] 広告コールバックがタイムアウト → 方針Aで復活");
+            OnAdResult(true);
         }
     }
 

@@ -5283,6 +5283,7 @@ MonoBehaviour:
   itemImage: {fileID: 809692332}
   getButton: {fileID: 1040452284}
   ignoreButton: {fileID: 657800077}
+  inputLockSeconds: 0.4
 --- !u!1 &1273728560
 GameObject:
   m_ObjectHideFlags: 0
@@ -5520,6 +5521,7 @@ RectTransform:
   - {fileID: 1744094145}
   - {fileID: 1718918726}
   - {fileID: 2070002108}
+  - {fileID: 808794632}
   - {fileID: 844703893}
   - {fileID: 951638133}
   - {fileID: 703090065}
@@ -5533,7 +5535,6 @@ RectTransform:
   - {fileID: 501873114}
   - {fileID: 601706507}
   - {fileID: 1014337504}
-  - {fileID: 808794632}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

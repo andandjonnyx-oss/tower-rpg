@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,11 @@ public class ItemPickupWindow : MonoBehaviour
     [SerializeField] private Button getButton;
     [SerializeField] private Button ignoreButton;
 
+    [Header("Input Lock")]
+    [SerializeField] private float inputLockSeconds = 0.4f; // ★追加：表示直後にボタンを無効化する時間
+
     private bool currentIsFull;
+    private Coroutine unlockCoroutine; // ★追加
 
     //ItemPickupResult を受け取る関数を保存する変数
     //ポップアップを表示して後で結果（入手or廃棄）を返すUIに向いている
@@ -80,19 +85,20 @@ public class ItemPickupWindow : MonoBehaviour
             itemImage.enabled = sprite != null;
         }
 
-        // ボタン設定
+        // ボタン設定（本来の有効/無効状態を決める）
+        bool getButtonDesired = false; // ★追加：ロック解除後に復帰させる値を保持
         if (getButton != null)
         {
             if (isFull)
             {
                 // 満杯 → 「交換する」ボタンとして有効化
-                getButton.interactable = true;
+                getButtonDesired = true; // ★変更
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
                 if (txt != null) txt.text = "整理する";
             }
             else
             {
-                getButton.interactable = canGet;
+                getButtonDesired = canGet; // ★変更
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
                 if (txt != null) txt.text = "入手する";
             }
@@ -108,11 +114,43 @@ public class ItemPickupWindow : MonoBehaviour
             windowRoot.SetActive(true);
         else
             gameObject.SetActive(true);
+
+        // ★追加：表示直後の連打貫通を防ぐ入力ロック
+        BeginInputLock(getButtonDesired, !cannotIgnore);
+    }
+
+    // ★追加：一定時間ボタンを無効化し、その後 desired 値へ復帰させる
+    private void BeginInputLock(bool getButtonDesired, bool ignoreButtonActive)
+    {
+        // 一旦すべて無効化
+        if (getButton != null) getButton.interactable = false;
+        if (ignoreButton != null) ignoreButton.interactable = false;
+
+        if (unlockCoroutine != null) StopCoroutine(unlockCoroutine);
+        unlockCoroutine = StartCoroutine(UnlockAfterDelay(getButtonDesired, ignoreButtonActive));
+    }
+
+    // ★追加
+    private IEnumerator UnlockAfterDelay(bool getButtonDesired, bool ignoreButtonActive)
+    {
+        // Time.timeScale の影響を受けない実時間待ち
+        yield return new WaitForSecondsRealtime(inputLockSeconds);
+
+        if (getButton != null) getButton.interactable = getButtonDesired;
+        if (ignoreButton != null) ignoreButton.interactable = ignoreButtonActive;
+        unlockCoroutine = null;
     }
 
 
     public void HideImmediate()
     {
+        // ★追加：閉じる際にロックコルーチンを停止（次表示への持ち越し防止）
+        if (unlockCoroutine != null)
+        {
+            StopCoroutine(unlockCoroutine);
+            unlockCoroutine = null;
+        }
+
         if (windowRoot != null)
             windowRoot.SetActive(false);
         else
