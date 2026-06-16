@@ -29,7 +29,7 @@ MonoBehaviour:
   MagicDefense: 400
   Speed: 0
   Luck: 250
-  Evasion: 1500
+  Evasion: 1300
   BaseHitRate: 90
   PoisonResistance: 0
   StunResistance: 0

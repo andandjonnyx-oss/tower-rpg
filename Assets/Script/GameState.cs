@@ -140,6 +140,21 @@ public class GameState : MonoBehaviour
     public int bossPhaseF100 = 0;
 
     // =========================================================
+    // F100第二形態 HP引き継ぎ救済オプション（追加）
+    // =========================================================
+    /// <summary>
+    /// F100第二形態と一度でも戦うと true になる解放フラグ。セーブ対象。
+    /// true のときだけオプション画面に項目が表示される。初期化で false に戻る。
+    /// </summary>
+    public bool finalBossCarryUnlocked = false;
+
+    /// <summary>
+    /// F100第二形態コンティニュー時に敵HPを引き継ぐ設定。セーブ対象。
+    /// finalBossCarryUnlocked が true のときのみ意味を持つ。
+    /// </summary>
+    public bool finalBossCarryEnabled = false;
+
+    // =========================================================
     // エンディング進行管理（追加）
     // =========================================================
 

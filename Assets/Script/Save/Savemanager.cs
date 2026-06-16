@@ -68,6 +68,9 @@ public static class SaveManager
             data.bossPhaseF70 = GameState.I.bossPhaseF70;
             data.bossPhaseF90 = GameState.I.bossPhaseF90;
             data.bossPhaseF100 = GameState.I.bossPhaseF100;
+            data.finalBossCarryUnlocked = GameState.I.finalBossCarryUnlocked;
+            data.finalBossCarryEnabled = GameState.I.finalBossCarryEnabled;
+
             data.endingPhase = GameState.I.endingPhase;
             data.zukanAllUnlocked = GameState.I.zukanAllUnlocked;
             data.playerName = GameState.I.playerName;
@@ -210,6 +213,9 @@ public static class SaveManager
             GameState.I.bossPhaseF70 = data.bossPhaseF70;
             GameState.I.bossPhaseF90 = data.bossPhaseF90;
             GameState.I.bossPhaseF100 = data.bossPhaseF100;
+            GameState.I.finalBossCarryUnlocked = data.finalBossCarryUnlocked;
+            GameState.I.finalBossCarryEnabled = data.finalBossCarryEnabled;
+
             GameState.I.endingPhase = data.endingPhase;
             GameState.I.zukanAllUnlocked = data.zukanAllUnlocked;
             GameState.I.playerName = data.playerName ?? "";
@@ -322,6 +328,11 @@ public class SaveData
     public int bossPhaseF70 = 0;
     public int bossPhaseF90 = 0;
     public int bossPhaseF100 = 0;
+
+    // --- F100第二形態 HP引き継ぎ救済（追加） ---
+    // 既存セーブとの互換: デフォルト false で自動対応。
+    public bool finalBossCarryUnlocked = false;
+    public bool finalBossCarryEnabled = false;
 
     // --- エンディング進行 ---
     // 既存セーブデータとの互換性: デフォルト値（0/false）で自動対応。

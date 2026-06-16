@@ -64,7 +64,7 @@ MonoBehaviour:
     chance: 100
     intValue: 1200
     duration: 0
-  - effectData: {fileID: 11400000, guid: 5a29acd96447ed84ab1e842a2716bb63, type: 2}
+  - effectData: {fileID: 11400000, guid: 801813023105c9d42b08c6f5a09c9d72, type: 2}
     ailmentMode: 1
     targetStatusEffect: 20
     chance: 100

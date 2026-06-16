@@ -409,7 +409,37 @@ public partial class BattleSceneController : MonoBehaviour
         if (!battleInitialized)
         {
             SkillEffectProcessor.ResetEnemyAilmentDummies();
-            enemyCurrentHp = enemyMonster.MaxHp;
+
+            // ★F100第二形態 HP引き継ぎ救済
+            //   この戦闘がF100第二形態かどうかを判定。
+            //   ・連戦移行直後: IsPhase2Transition == true
+            //   ・最初から第二形態スタート: bossPhaseF100 >= 1
+            bool isFinalBossPhase2 =
+                BattleContext.IsBossBattle && BattleContext.BossFloor == 100
+                && (BattleContext.IsPhase2Transition
+                    || (GameState.I != null && GameState.I.bossPhaseF100 >= 1));
+
+            // 最初から第二形態スタートのケースでも解放フラグを立てる
+            if (isFinalBossPhase2 && GameState.I != null && !GameState.I.finalBossCarryUnlocked)
+            {
+                GameState.I.finalBossCarryUnlocked = true;
+                SaveManager.Save();
+                Debug.Log("[Battle] F100第二形態開始 → HP引き継ぎ救済オプション解放");
+            }
+
+            // 敵HP初期化: 救済引き継ぎがあればその値、なければ満タン
+            if (isFinalBossPhase2 && BattleContext.FinalBossCarryEnemyHp >= 0)
+            {
+                enemyCurrentHp = Mathf.Clamp(BattleContext.FinalBossCarryEnemyHp, 1, enemyMonster.MaxHp);
+                Debug.Log($"[Battle] F100第二形態: 敵HPを引き継ぎ {enemyCurrentHp}/{enemyMonster.MaxHp}");
+                BattleContext.FinalBossCarryEnemyHp = -1; // 適用後はクリア（次の退避を待つ）
+            }
+            else
+            {
+                enemyCurrentHp = enemyMonster.MaxHp;
+            }
+
+
             battleInitialized = true;
             persistentLogLines.Clear();
             currentTurnNumber = 0; // ターンカウンターリセット
@@ -734,7 +764,15 @@ public partial class BattleSceneController : MonoBehaviour
             else if (BattleContext.BossFloor == 100)
             {
                 GameState.I.bossPhaseF100 = 1;
+
+                // ★F100第二形態に突入 → HP引き継ぎ救済オプションを解放
+                if (!GameState.I.finalBossCarryUnlocked)
+                {
+                    GameState.I.finalBossCarryUnlocked = true;
+                    Debug.Log("[Battle] F100第二形態突入 → HP引き継ぎ救済オプション解放");
+                }
             }
+
             SaveManager.Save();
 
             // ★第一形態撃破は中間セーブポイント（次回は第二形態スタート）。
@@ -776,6 +814,8 @@ public partial class BattleSceneController : MonoBehaviour
         // ボス戦アイテムスナップショットをクリア（勝利したので不要）
         BattleContext.ItemSnapshot = null;
         BattleContext.StatusPointSnapshot = -1; // ★勝利でSP確定（巻き戻さずクリア・消さないこと）
+        BattleContext.FinalBossCarryEnemyHp = -1; // ★勝利でHP引き継ぎ退避を破棄（消さないこと）
+
 
         // =========================================================
         // GP（がんばりポイント）加算（追加）
@@ -1171,6 +1211,24 @@ public partial class BattleSceneController : MonoBehaviour
         {
             FullRecover();
 
+            // ★F100第二形態 HP引き継ぎ救済: 設定ON時、敗北時の敵HPを退避。
+            //   復活後の Start でこの値が敵HPに適用される（満タンリセットを上書き）。
+            //   第二形態以外・設定OFFのときは退避しない（＝満タンで再開）。
+            bool isFinalBossPhase2 =
+                BattleContext.BossFloor == 100
+                && (BattleContext.IsPhase2Transition
+                    || (GameState.I != null && GameState.I.bossPhaseF100 >= 1));
+            if (isFinalBossPhase2 && GameState.I != null
+                && GameState.I.finalBossCarryUnlocked && GameState.I.finalBossCarryEnabled)
+            {
+                BattleContext.FinalBossCarryEnemyHp = enemyCurrentHp;
+                Debug.Log($"[Battle] F100第二形態コンティニュー: 敵HP {enemyCurrentHp} を引き継ぎ退避");
+            }
+            else
+            {
+                BattleContext.FinalBossCarryEnemyHp = -1;
+            }
+
             if (BattleContext.ItemSnapshot != null && ItemBoxManager.Instance != null)
             {
                 ItemBoxManager.Instance.RestoreFromSnapshot(BattleContext.ItemSnapshot);
@@ -1203,6 +1261,8 @@ public partial class BattleSceneController : MonoBehaviour
             ResetBattleStatics();
             BattleContext.ItemSnapshot = null;
             BattleContext.StatusPointSnapshot = -1; // ★通常コンティニューはSP確定（巻き戻さない）
+            BattleContext.FinalBossCarryEnemyHp = -1; // ★通常戦闘では引き継ぎ無効
+
             SceneManager.LoadScene(towerSceneName);
         }
     }
@@ -1275,6 +1335,8 @@ public partial class BattleSceneController : MonoBehaviour
         ResetBattleStatics();
         BattleContext.ItemSnapshot = null;
         BattleContext.StatusPointSnapshot = -1; // ★敗北帰還でSP確定（巻き戻さずクリア・消さないこと）
+        BattleContext.FinalBossCarryEnemyHp = -1; // ★敗北帰還でHP引き継ぎ退避を破棄（消さないこと）
+
 
 
         // ボス戦敗北処理（STEP を維持）

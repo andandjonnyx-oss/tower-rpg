@@ -651,7 +651,9 @@ public partial class BattleSceneController
             Debug.Log($"[Battle] LowHP mode: hpRatio={hpRatio:F2} <= {enemyMonster.lowHpThreshold} -> using lowHpActions");
         }
 
-        int playerLuc = (GameState.I != null) ? GameState.I.baseLUC : 1;
+        // ★baseLUC（生値）ではなく Luck（装備・アイテム補正込みの実効値）を使う。
+        //   ステータス画面の「運の良さ」表示（gs.Luck）と一致させる。
+        int playerLuc = (GameState.I != null) ? GameState.I.Luck : 1;
         playerLuc = ApplyPlayerLucBuffDebuff(playerLuc);
 
         int enemyLuc = enemyMonster.Luck;

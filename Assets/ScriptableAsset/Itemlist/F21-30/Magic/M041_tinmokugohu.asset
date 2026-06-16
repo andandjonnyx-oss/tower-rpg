@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemId: M041_tinmokugohu
   itemName: "\u6C88\u9ED9\u306E\u8B77\u7B26"
-  description: "\u6C88\u9ED9\u8010\u6027+50"
+  description: "\u6C88\u9ED9\u306F\u81F4\u547D\u7684\u3060\u304B\u3089\u8010\u6027\u304A\u307E\u3051\u3057\u3068\u3044\u305F\u305C\uFF01\n\u6C88\u9ED9\u8010\u6027+80"
   icon: {fileID: 21300000, guid: d928d290d1172df4f916a2c8b8358c5a, type: 3}
   Minfloor: 24
   Minstep: 1
@@ -80,6 +80,6 @@ MonoBehaviour:
     targetAttribute: 0
     targetStat: 0
     targetStatusEffect: 5
-    value: 50
+    value: 80
     floatValue: 0
   sortOrder: 41

@@ -24,12 +24,12 @@ MonoBehaviour:
   IsBoss: 1
   IsUnique: 0
   MaxHp: 20000
-  Attack: 450
+  Attack: 350
   Defense: 500
   MagicDefense: 500
   Speed: 0
   Luck: 300
-  Evasion: 2000
+  Evasion: 1800
   BaseHitRate: 90
   PoisonResistance: 100
   StunResistance: 50
@@ -63,19 +63,21 @@ MonoBehaviour:
   Help: "\u30A2\u30F3\u30EA\u30DE\u30E6\u306B\u3088\u3063\u3066\u4F5C\u3089\u308C\u305F\u4E09\u3064\u9996\u306E\u9F8D\u3002\n\u51F6\u60AA\u306A\u95C7\u3068\u708E\u3092\u6271\u3046\u305C\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 5f16bb4b365c9cd4d92cefae0b354b1e, type: 2}
-    threshold: 20
+    threshold: 25
   - skill: {fileID: 11400000, guid: 71254bc1cf1027045bb272c6e7ae8c7e, type: 2}
-    threshold: 40
+    threshold: 50
   - skill: {fileID: 11400000, guid: f494afd97a90b044b87e6318d409b49f, type: 2}
-    threshold: 60
-  - skill: {fileID: 11400000, guid: 1a6bfcc1bacbdeb48b0dd28dbe1b7c6b, type: 2}
-    threshold: 70
+    threshold: 65
   - skill: {fileID: 11400000, guid: 62f641cd4fc10b94eb4ce0f3a8d273b1, type: 2}
     threshold: 80
   - skill: {fileID: 11400000, guid: 982349841084bf241a3270b15f528844, type: 2}
-    threshold: 90
+    threshold: 95
+  - skill: {fileID: 11400000, guid: e528d802abbc74140ad2c2c21ffd2d89, type: 2}
+    threshold: 110
+  - skill: {fileID: 11400000, guid: 1a6bfcc1bacbdeb48b0dd28dbe1b7c6b, type: 2}
+    threshold: 115
   - skill: {fileID: 11400000, guid: f9fb058b9296cb4418bd3c41fd2b3fca, type: 2}
-    threshold: 100
+    threshold: 120
   baseActionRange: 100
   actionCount: 3
   lowHpThreshold: 0

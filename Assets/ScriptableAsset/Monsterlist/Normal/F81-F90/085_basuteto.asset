@@ -24,7 +24,7 @@ MonoBehaviour:
   IsBoss: 0
   IsUnique: 0
   MaxHp: 2500
-  Attack: 400
+  Attack: 300
   Defense: 350
   MagicDefense: 350
   Speed: 0

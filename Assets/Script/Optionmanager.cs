@@ -59,6 +59,14 @@ public class OptionManager : MonoBehaviour
     [Tooltip("アイテムが出ないモードボタンのラベル（任意）")]
     [SerializeField] private TMP_Text noItemModeLabel;
 
+    [Tooltip("F100第二形態 敵HP引き継ぎ救済のON/OFF切替ボタン")]
+    [SerializeField] private Button finalBossCarryButton;
+    [Tooltip("敵HP引き継ぎ救済ボタンのラベル（任意）")]
+    [SerializeField] private TMP_Text finalBossCarryLabel;
+    [Tooltip("敵HP引き継ぎ救済の項目ルート（解放前は非表示にする親オブジェクト）")]
+    [SerializeField] private GameObject finalBossCarryRoot;
+
+
     private void Start()
     {
         // 戻るボタン（AudioManager の有無に関係なく機能させる）
@@ -73,6 +81,18 @@ public class OptionManager : MonoBehaviour
         if (noItemModeButton != null)
             noItemModeButton.onClick.AddListener(OnNoItemModeClicked);
         UpdateNoItemModeLabel(GameSettings.NoItemMode);
+
+        // F100第二形態 敵HP引き継ぎ救済トグル（解放済みのときのみ表示）
+        bool carryUnlocked = GameState.I != null && GameState.I.finalBossCarryUnlocked;
+        if (finalBossCarryRoot != null)
+            finalBossCarryRoot.SetActive(carryUnlocked);
+        if (carryUnlocked)
+        {
+            if (finalBossCarryButton != null)
+                finalBossCarryButton.onClick.AddListener(OnFinalBossCarryClicked);
+            UpdateFinalBossCarryLabel(GameState.I.finalBossCarryEnabled);
+        }
+
 
         var am = AudioManager.I;
         if (am == null)
@@ -218,5 +238,25 @@ public class OptionManager : MonoBehaviour
     {
         if (noItemModeLabel != null)
             noItemModeLabel.text = on ? "経験値稼ぎたいからアイテムなんていらんのじゃモード: ON" : "経験値稼ぎたいからアイテムなんていらんのじゃモード: OFF";
+    }
+
+    // =========================================================
+    // F100第二形態 敵HP引き継ぎ救済トグル（追加）
+    // =========================================================
+    private void OnFinalBossCarryClicked()
+    {
+        if (GameState.I == null) return;
+        bool next = !GameState.I.finalBossCarryEnabled;
+        GameState.I.finalBossCarryEnabled = next;
+        SaveManager.Save();
+        UpdateFinalBossCarryLabel(next);
+    }
+
+    private void UpdateFinalBossCarryLabel(bool on)
+    {
+        if (finalBossCarryLabel != null)
+            finalBossCarryLabel.text = on
+                ? "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: ON"
+                : "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: OFF";
     }
 }
