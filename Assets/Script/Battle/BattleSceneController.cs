@@ -1167,7 +1167,6 @@ public partial class BattleSceneController : MonoBehaviour
             Debug.Log("[Battle] 広告視聴完了 → コンティニュー");
         }
 
-        // --- 以下、復活処理（従来の success==true ブロックをそのまま） ---
         if (BattleContext.IsBossBattle)
         {
             FullRecover();
@@ -1178,17 +1177,22 @@ public partial class BattleSceneController : MonoBehaviour
                 Debug.Log("[Battle] ボス戦コンティニュー: アイテムスナップショットから復元完了");
             }
 
-            // ★SP を巻き戻し（この戦闘中に獲得したSPを無効化。消さないこと）
-            //   第二形態の場合は第一形態撃破時に取り直したスナップ＝第二形態開始時点へ戻る。
+            // ★SP を巻き戻し（...）
             if (BattleContext.StatusPointSnapshot >= 0 && GameState.I != null)
             {
                 GameState.I.statusPoint = BattleContext.StatusPointSnapshot;
-                SaveManager.Save(); // 巻き戻し後の値を保存
+                SaveManager.Save();
                 Debug.Log($"[Battle] ボス戦コンティニュー: SPを {BattleContext.StatusPointSnapshot} へ巻き戻し");
             }
 
-            BattleContext.Phase2Monster = null;
-            BattleContext.IsPhase2Transition = false;
+            // ★Phase2Monster / IsPhase2Transition はここでクリアしない（消さないこと）。
+            //   第一形態戦でコンティニューした場合、Phase2Monster をクリアすると
+            //   第二形態への連戦が消滅してしまう（第一形態を倒しても第二形態に
+            //   移行せず撃破完了になるバグ）。
+            //   第一形態戦のコンティニュー: Phase2Monster 保持 / IsPhase2Transition=false の維持が正しい。
+            //   第二形態戦のコンティニュー: Phase2Monster は移行時に既に null、
+            //                              IsPhase2Transition=true のままが正しい。
+            //   よってどちらの局面でも、この2値は触らず現状維持するのが正しい。
 
             ResetBattleStatics();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);

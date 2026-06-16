@@ -447,7 +447,7 @@ public class GameState : MonoBehaviour
     //   BattleSceneController でプレイヤー攻撃の命中判定に使用。
     //
     // 回避率（Evasion）: float（小数点2位精度）
-    //   計算式: 5 + DEX×0.05 + LUC×0.02 + 装備 + パッシブ
+    //   計算式: 5 + DEX×0.03 + LUC×0.01 + 装備 + パッシブ
     //   回避とクリティカルは装備やアイテムで主に増やすため、
     //   パラメータによる増加はおまけ程度に設定されている。
     //   BattleSceneController で敵攻撃の命中判定に使用。
@@ -483,7 +483,7 @@ public class GameState : MonoBehaviour
 
     /// <summary>
     /// 回避率（float、小数点2位精度）。単位は %。
-    /// 計算式: 5.00 + baseDEX × 0.05 + baseLUC × 0.02
+    /// 計算式: 5.00 + baseDEX × 0.03 + baseLUC × 0.01
     ///         + EquipmentCalculator.GetEvasion()（int → floatに変換）
     ///         + PassiveCalculator.CalcEvasionBonus()（float、小数点2位精度）
     ///
@@ -492,15 +492,15 @@ public class GameState : MonoBehaviour
     ///   ただし最低10%保証。
     ///
     /// 回避率は装備やアイテムで主に増やすため、
-    /// DEX/LUC による増加はおまけ程度（DEX×0.05 + LUC×0.02）。
+    /// DEX/LUC による増加はおまけ程度（DEX×0.03 + LUC×0.01）。
     /// </summary>
     public float Evasion
     {
         get
         {
             float total = 5.00f
-                        + baseDEX * 0.05f
-                        + baseLUC * 0.02f
+                        + baseDEX * 0.03f
+                        + baseLUC * 0.01f
                         + (float)EquipmentCalculator.GetEvasion()
                         + PassiveCalculator.CalcEvasionBonus();
             if (total < 0f) total = 0f;
