@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP05_suteup5
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: 6dc1d67129ce4f04b94fa6d0e819f9e0, type: 2}
-  gpCost: 30
+  gpCost: 50
   requiredFloor: 21
   maxPurchaseCount: 999
   sortOrder: 5

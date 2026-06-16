@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP09_iroiro
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: 4d45a73392002584d95ef23a7a818768, type: 2}
-  gpCost: 5
+  gpCost: 10
   requiredFloor: 34
   maxPurchaseCount: 999
   sortOrder: 9

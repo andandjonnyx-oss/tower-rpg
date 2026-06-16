@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320d1bf4e920b7142a53d89fbae4ee54, type: 3}
   m_Name: GP16_semifinal
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
-  item: {fileID: 11400000, guid: e7bbac50c6c0e82468735a87e313eebb, type: 2}
-  gpCost: 30
+  item: {fileID: 11400000, guid: 681148978c69e5d488ac1149f1d87dd2, type: 2}
+  gpCost: 80
   requiredFloor: 81
   maxPurchaseCount: 999
   sortOrder: 16

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP13_neoeri
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: eb0ac4ca3fdf54e439545ca7823b6580, type: 2}
-  gpCost: 20
+  gpCost: 70
   requiredFloor: 66
   maxPurchaseCount: 999
   sortOrder: 13

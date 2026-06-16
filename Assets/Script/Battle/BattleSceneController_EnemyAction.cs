@@ -242,6 +242,17 @@ public partial class BattleSceneController
         {
             isEnemyPreemptive = false; // フラグをリセット
             pendingEnemyAction = null; // 念のためクリア
+
+            // ★複数回行動対応: 先制で消化したのは「1回目」のみ。
+            //   2回行動以上の敵は残りの行動をここで実行する。
+            //   先制で敵/プレイヤーが倒れている場合は残りをスキップ。
+            if (turnActionCount > 1 && !IsBattleEndedOrDead())
+            {
+                ExecuteRemainingActions(turnActionCount, 1);
+                return;
+            }
+
+            // 1回行動（従来通り）: ターン終了処理のみ
             AfterEnemyAction();
             return;
         }

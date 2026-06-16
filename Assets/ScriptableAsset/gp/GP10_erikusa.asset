@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP10_erikusa
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: b9da1042560eb584680185b16e0b0d8d, type: 2}
-  gpCost: 15
+  gpCost: 40
   requiredFloor: 46
   maxPurchaseCount: 999
   sortOrder: 10

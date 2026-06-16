@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP12_mp150
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: a9e664d1c8ffd0e4bb266881039c8ed9, type: 2}
-  gpCost: 10
+  gpCost: 50
   requiredFloor: 51
   maxPurchaseCount: 999
   sortOrder: 12

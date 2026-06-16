@@ -3105,8 +3105,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5779,6 +5779,7 @@ MonoBehaviour:
   itemImage: {fileID: 2083413835}
   getButton: {fileID: 1041679457}
   ignoreButton: {fileID: 1306025740}
+  inputLockSeconds: 0.4
 --- !u!224 &936005569
 RectTransform:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GP17_kyua
   m_EditorClassIdentifier: Assembly-CSharp::GpShopData
   item: {fileID: 11400000, guid: fa9895408bd3092439bfe83ed7a74be2, type: 2}
-  gpCost: 50
+  gpCost: 100
   requiredFloor: 91
   maxPurchaseCount: 999
   sortOrder: 17

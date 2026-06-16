@@ -59,7 +59,7 @@ MonoBehaviour:
   Help: "\u7B2C\u4E00\u5F62\u614B\u304F\u3089\u3044\u8EFD\u304F\u637B\u3063\u3066\u8CB0\u308F\u306A\u3044\u3068\u306A\uFF01"
   actions:
   - skill: {fileID: 11400000, guid: 35cb4332f75d8e04fa6e796e60a807b2, type: 2}
-    threshold: 60
+    threshold: 50
   - skill: {fileID: 11400000, guid: 71254bc1cf1027045bb272c6e7ae8c7e, type: 2}
     threshold: 75
   - skill: {fileID: 11400000, guid: 70d5f0edb37231a48a0cf08034c6824b, type: 2}
