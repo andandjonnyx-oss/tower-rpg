@@ -256,7 +256,7 @@ public class OptionManager : MonoBehaviour
     {
         if (finalBossCarryLabel != null)
             finalBossCarryLabel.text = on
-                ? "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: ON"
-                : "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: OFF";
+                ? "ラスボスのHPがコンテし続ける限り回復しないゆとりモード\nタイトル画面経由では表示されません: ON"
+                : "ラスボスのHPがコンテし続ける限り回復しないゆとりモード\nタイトル画面経由では表示されません: OFF";
     }
 }
