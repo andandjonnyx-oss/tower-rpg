@@ -15,7 +15,7 @@ MonoBehaviour:
   skillId: MA34_g9999
   skillName: "\u30AE\u30E3\u30F3\u30D6\u30EB\u7832"
   description: 
-  skillSource: 0
+  skillSource: 1
   actionType: 2
   skillAttribute: 8
   damageCategory: 1

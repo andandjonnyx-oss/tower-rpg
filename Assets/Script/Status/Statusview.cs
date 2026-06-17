@@ -70,7 +70,7 @@ public class StatusView : MonoBehaviour
     [SerializeField] private TMP_Text resStrikeText;    // 殴耐性
     [SerializeField] private TMP_Text resSlashText;     // 斬耐性
     [SerializeField] private TMP_Text resPierceText;    // 突耐性
-    [SerializeField] private TMP_Text resFireText;      // 火耐性
+    [SerializeField] private TMP_Text resFireText;      // 炎耐性
     [SerializeField] private TMP_Text resIceText;       // 氷耐性
     [SerializeField] private TMP_Text resThunderText;   // 雷耐性
     [SerializeField] private TMP_Text resHolyText;      // 聖耐性
@@ -215,7 +215,7 @@ public class StatusView : MonoBehaviour
         if (resStrikeText != null) resStrikeText.text = $"殴耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Strike)}";
         if (resSlashText != null) resSlashText.text = $"斬耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Slash)}";
         if (resPierceText != null) resPierceText.text = $"突耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Pierce)}";
-        if (resFireText != null) resFireText.text = $"火耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire)}";
+        if (resFireText != null) resFireText.text = $"炎耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire)}";
         if (resIceText != null) resIceText.text = $"氷耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Ice)}";
         if (resThunderText != null) resThunderText.text = $"雷耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Thunder)}";
         if (resHolyText != null) resHolyText.text = $"聖耐性：{PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Holy)}";

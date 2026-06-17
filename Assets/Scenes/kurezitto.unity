@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 440, y: -57.275635}
+  m_AnchoredPosition: {x: 470, y: -57.275635}
   m_SizeDelta: {x: -1200, y: -314.5513}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &154936770
@@ -178,8 +178,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3084\u3055\u3057\u3055\u30B4\u30B7\u30C3\u30AF\u30DC\u30FC\u30EB\u30C9V2\u69D8\nhttps://flopdesign.booth.pm/items/1833993\n\n\u7A7A\u60F3\u66F2\u7DDA\u69D8\nhttps://kopacurve.blog.fc2.com/\n\n\u9B54\u738B\u9B42\u69D8\nhttps://maou.audio/\n\nDOVA\u69D8\nhttps://dova-s.jp/\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
-  m_sharedMaterial: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
+  m_sharedMaterial: {fileID: -556364764664763906, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -290,7 +290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -400, y: 0}
+  m_AnchoredPosition: {x: -346, y: 0}
   m_SizeDelta: {x: -1200, y: -200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &173420228
@@ -313,12 +313,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u304A\u501F\u308A\u3057\u305F\u7D20\u6750\n\n\n\u6CBC\u304B\u3089\u73FE\u308C\u305F\u69D8\n\u300E\u6CBC\u304B\u3089\u30E2\u30F3\u30B9\u30BF\u30FC\u300F\nhttp://kb147.web.fc2.com/\n\n\u4E03\u4E09\u3086\u304D
+  m_text: "\n\u304A\u501F\u308A\u3057\u305F\u7D20\u6750\n\n\u6CBC\u304B\u3089\u73FE\u308C\u305F\u69D8\n\u300E\u6CBC\u304B\u3089\u30E2\u30F3\u30B9\u30BF\u30FC\u300F\nhttp://kb147.web.fc2.com/\n\n\u4E03\u4E09\u3086\u304D
     / Yuki Nanami \u69D8\n\u300E\u30B2\u30FC\u30E0\u5236\u4F5C\u5411\u3051\u30A2\u30A4\u30B3\u30F3\u7D20\u6750\u96C6\u300F\nhttps://nanamiyuki73.booth.pm/items/4059928\n\n\u306D\u304F\u3089\u69D8\n\u300E\u30D5\u30A1\u30F3\u30BF\u30B8\u30FC\u30B2\u30FC\u30E0UI\u753B\u50CF\u7D20\u6750\u96C6\u300F\nhttps://nekuramap.booth.pm/items/965940\n\nAI
     Art Stock\u69D8\nhttps://aiartstock.booth.pm/items/6747435\n\nGame Material Store\u69D8\nhttps://gms.booth.pm/items/4322266\n\r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
-  m_sharedMaterial: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
+  m_sharedMaterial: {fileID: -556364764664763906, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -601,8 +601,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u623B\u308B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
-  m_sharedMaterial: {fileID: -1052240181569481501, guid: ff8386cc5f45b3649bd8ae8d0ced930c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
+  m_sharedMaterial: {fileID: -556364764664763906, guid: 67630c5a39681e7468c13c8e2aa8c716, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -765,6 +765,7 @@ GameObject:
   - component: {fileID: 1075560189}
   - component: {fileID: 1075560188}
   - component: {fileID: 1075560187}
+  - component: {fileID: 1075560190}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -789,8 +790,8 @@ Camera:
   m_GameObject: {fileID: 1075560186}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -846,6 +847,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1075560190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075560186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &1591341016
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,7 +944,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

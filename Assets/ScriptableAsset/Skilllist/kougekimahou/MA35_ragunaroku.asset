@@ -33,19 +33,19 @@ MonoBehaviour:
   hitCount: 5
   multiHitEntries:
   - attribute: 3
-    damageMultiplier: 5
+    damageMultiplier: 8
     bonusDamage: 0
   - attribute: 4
-    damageMultiplier: 5
+    damageMultiplier: 8
     bonusDamage: 0
   - attribute: 5
-    damageMultiplier: 5
+    damageMultiplier: 8
     bonusDamage: 0
   - attribute: 6
-    damageMultiplier: 5
+    damageMultiplier: 8
     bonusDamage: 0
   - attribute: 7
-    damageMultiplier: 5
+    damageMultiplier: 8
     bonusDamage: 0
   noBattleOk: 0
   additionalEffects: []

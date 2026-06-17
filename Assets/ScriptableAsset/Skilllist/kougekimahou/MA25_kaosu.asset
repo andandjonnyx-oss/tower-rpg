@@ -33,10 +33,10 @@ MonoBehaviour:
   hitCount: 2
   multiHitEntries:
   - attribute: 6
-    damageMultiplier: 8
+    damageMultiplier: 10
     bonusDamage: 0
   - attribute: 7
-    damageMultiplier: 8
+    damageMultiplier: 10
     bonusDamage: 0
   noBattleOk: 0
   additionalEffects: []

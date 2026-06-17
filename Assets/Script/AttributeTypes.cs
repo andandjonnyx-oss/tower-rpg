@@ -7,7 +7,7 @@ public enum WeaponAttribute
     Strike,   // 殴（素手）
     Slash,    // 斬
     Pierce,   // 突
-    Fire,     // 火
+    Fire,     // 炎
     Ice,      // 氷
     Thunder,  // 雷
     Holy,     // 聖
@@ -95,7 +95,7 @@ public static class AttributeExtensions
             case WeaponAttribute.Strike: return "殴";
             case WeaponAttribute.Slash: return "斬";
             case WeaponAttribute.Pierce: return "突";
-            case WeaponAttribute.Fire: return "火";
+            case WeaponAttribute.Fire: return "炎";
             case WeaponAttribute.Ice: return "氷";
             case WeaponAttribute.Thunder: return "雷";
             case WeaponAttribute.Holy: return "聖";

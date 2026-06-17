@@ -14,7 +14,7 @@
 ///   Monster.actionCount（デフォルト1）で1ターンの行動回数を指定。
 ///   低HP時は Monster.lowHpActionCount（0=通常値使用）で上書き可能。
 ///   - スタン/麻痺は全行動キャンセル
-///   - 強制行動(enemyForcedNextSkill)は1ターン全消費（2回目なし）
+///   - 強制行動(enemyForcedNextSkill)は1回目の行動枠として消化し、複数回行動なら残り回数も通常抽選で続行
 ///   - 1回目で敵orプレイヤー死亡時は残りスキップ
 ///   - AfterEnemyAction は全行動完了後に1回だけ実行
 ///   各行動間は FlushLogsAndThen で待機する。
@@ -670,7 +670,7 @@ public partial class BattleSceneController
         // =========================================================
         // 再抽選ループ（スマート抽選）
         // 選ばれたスキルの rerollCondition を確認し、条件を満たしていたら再抽選。
-        // 最大5回まで。超えたら元の結果をそのまま使用する。
+        // 最大10回まで。超えたら元の結果をそのまま使用する。
         // =========================================================
         const int maxReroll = 10;
         for (int r = 0; r < maxReroll; r++)

@@ -52,6 +52,10 @@ MonoBehaviour:
     value: 50
   - attribute: 5
     value: 50
+  - attribute: 6
+    value: 50
+  - attribute: 7
+    value: 50
   Exp: 0
   Gold: 0
   dropItem: {fileID: 0}
