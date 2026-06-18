@@ -509,7 +509,7 @@ public class TowerState : MonoBehaviour
             {
                 optionLabels.Add($"{fieldMagicList[i].skillName} (MP:{fieldMagicList[i].mpCost})");
             }
-            magicSelector.SetOptions(optionLabels);
+            magicSelector.SetItems(fieldMagicList);
 
             // 選択保持（オプションON時）: 前回選択した魔法を復元する
             MagicSelectionMemory.Restore(magicSelector, fieldMagicList, isBattle: false);

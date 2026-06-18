@@ -6,20 +6,20 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒAƒCƒeƒ€}ŠÓiZukanI ƒV[ƒ“j‚ÌƒƒCƒ“ƒrƒ…[B
-/// ‘åƒWƒƒƒ“ƒ‹4ƒ{ƒ^ƒ“‚ÅØ‘ÖA‘I‘ğ’†ƒWƒƒƒ“ƒ‹‚Ì¬ƒWƒƒƒ“ƒ‹‚ğ
-/// uŒ©o‚µ‘Ñ ¨ ƒAƒCƒeƒ€5—ñƒOƒŠƒbƒhv‚Ì‡‚É VerticalLayoutGroup ‚Ö“®“I¶¬‚·‚éB
+/// ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½}ï¿½ÓiZukanI ï¿½Vï¿½[ï¿½ï¿½ï¿½jï¿½Ìƒï¿½ï¿½Cï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½B
+/// ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½4ï¿½{ï¿½^ï¿½ï¿½ï¿½ÅØ‘ÖAï¿½Iï¿½ğ’†ƒWï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+/// ï¿½uï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Aï¿½Cï¿½eï¿½ï¿½5ï¿½ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½vï¿½Ìï¿½ï¿½ï¿½ VerticalLayoutGroup ï¿½Ö“ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
 ///
-/// ƒV[ƒ“\¬i‘z’èj:
+/// ï¿½Vï¿½[ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½iï¿½zï¿½ï¿½j:
 ///   Canvas
-///     „¥ GoZukan(Á”ï)/weapon(•Ší)/magic(–‚“±‘)/hojo(ƒpƒbƒVƒu) c ‘åƒWƒƒƒ“ƒ‹ƒ{ƒ^ƒ“
-///     „¥ Scroll View
-///     „    „¤ Viewport
-///     „        „¤ Content (VerticalLayoutGroup + ContentSizeFitter)
-///     „            „¤ (Œ©o‚µ‘Ñ^ƒOƒŠƒbƒhƒuƒƒbƒN‚ğ“®“I¶¬)
-///     „¤ –ß‚é Button
+///     ï¿½ï¿½ GoZukan(ï¿½ï¿½ï¿½ï¿½)/weapon(ï¿½ï¿½ï¿½ï¿½)/magic(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)/hojo(ï¿½pï¿½bï¿½Vï¿½u) ï¿½c ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½
+///     ï¿½ï¿½ Scroll View
+///     ï¿½ï¿½   ï¿½ï¿½ Viewport
+///     ï¿½ï¿½       ï¿½ï¿½ Content (VerticalLayoutGroup + ContentSizeFitter)
+///     ï¿½ï¿½           ï¿½ï¿½ (ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ñ^ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½ğ“®“Iï¿½ï¿½ï¿½ï¿½)
+///     ï¿½ï¿½ ï¿½ß‚ï¿½ Button
 ///
-/// ”­Œ©ó‘Ô‚Í GameState.IsItemDiscovered ‚Å”»’èB–¢”­Œ©‚ÍuHv•\¦B
+/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ GameState.IsItemDiscovered ï¿½Å”ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Íuï¿½Hï¿½vï¿½\ï¿½ï¿½ï¿½B
 /// </summary>
 public class ItemZukanView : MonoBehaviour
 {
@@ -27,52 +27,57 @@ public class ItemZukanView : MonoBehaviour
     [SerializeField] private ItemZukanCategoryDatabase database;
 
     [Header("Major Category Buttons")]
-    [Tooltip("‘åƒWƒƒƒ“ƒ‹ƒ{ƒ^ƒ“Bdatabase.majorCategories ‚Æ“¯‚¶•À‚Ñ‡‚Å4‚ÂƒAƒTƒCƒ“‚·‚éB\n"
-           + "[0]Á”ï [1]•Ší [2]–‚“±‘ [3]ƒpƒbƒVƒu")]
+    [Tooltip("ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½Bdatabase.majorCategories ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñï¿½ï¿½ï¿½4ï¿½ÂƒAï¿½Tï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B\n"
+           + "[0]ï¿½ï¿½ï¿½ï¿½ [1]ï¿½ï¿½ï¿½ï¿½ [2]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [3]ï¿½pï¿½bï¿½Vï¿½u")]
     [SerializeField] private Button[] majorButtons;
 
     [Header("Scroll")]
-    [Tooltip("ˆê——‚Ì ScrollRectiÚ×‚©‚ç–ß‚Á‚½Û‚ÌƒXƒNƒ[ƒ‹ˆÊ’u•œŒ³‚Ég—pj")]
+    [Tooltip("ï¿½ê——ï¿½ï¿½ ScrollRectï¿½iï¿½Ú×‚ï¿½ï¿½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½Û‚ÌƒXï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½Égï¿½pï¿½j")]
     [SerializeField] private ScrollRect scrollRect;
 
-    [Tooltip("VerticalLayoutGroup ‚ğ‚Â ContentBŒ©o‚µ‘Ñ‚ÆƒOƒŠƒbƒhƒuƒƒbƒN‚ÌeB")]
+    [Tooltip("VerticalLayoutGroup ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Contentï¿½Bï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ñ‚ÆƒOï¿½ï¿½ï¿½bï¿½hï¿½uï¿½ï¿½ï¿½bï¿½Nï¿½Ìeï¿½B")]
     [SerializeField] private RectTransform content;
 
     [Header("Prefabs")]
-    [Tooltip("Œ©o‚µ‘Ñ PrefabiItemSectionHeaderCell •t‚«j")]
+    [Tooltip("ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ Prefabï¿½iItemSectionHeaderCell ï¿½tï¿½ï¿½ï¿½j")]
     [SerializeField] private ItemSectionHeaderCell headerPrefab;
 
-    [Tooltip("ƒAƒCƒeƒ€ƒZƒ‹ PrefabiItemIconCell •t‚«j")]
+    [Tooltip("ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Zï¿½ï¿½ Prefabï¿½iItemIconCell ï¿½tï¿½ï¿½ï¿½j")]
     [SerializeField] private ItemIconCell itemCellPrefab;
 
     [Header("Grid Settings")]
-    [Tooltip("Še¬ƒWƒƒƒ“ƒ‹ƒOƒŠƒbƒh‚Ì—ñ”")]
+    [Tooltip("ï¿½eï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½Ì—ï¿½")]
     [SerializeField] private int columns = 5;
 
-    [Tooltip("ƒZƒ‹ƒTƒCƒYiMonsterZukan ‚É‡‚í‚¹‚éê‡ 250~300j")]
+    [Tooltip("ï¿½Zï¿½ï¿½ï¿½Tï¿½Cï¿½Yï¿½iMonsterZukan ï¿½Éï¿½ï¿½í‚¹ï¿½ï¿½ê‡ 250ï¿½~300ï¿½j")]
     [SerializeField] private Vector2 cellSize = new Vector2(250f, 300f);
 
-    [Tooltip("ƒZƒ‹ŠÔŠu")]
+    [Tooltip("ï¿½Zï¿½ï¿½ï¿½ÔŠu")]
     [SerializeField] private Vector2 spacing = new Vector2(40f, 40f);
 
     [Header("Back")]
     [SerializeField] private Button backButton;
 
-    [Tooltip("–ß‚éæƒV[ƒ“–¼i}ŠÓƒgƒbƒvj")]
+    [Tooltip("ï¿½ß‚ï¿½ï¿½Vï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½}ï¿½Óƒgï¿½bï¿½vï¿½j")]
     [SerializeField] private string zukanTopSceneName = "Zukan";
 
-    // “à•”ó‘Ô
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private int currentMajorIndex = 0;
     private readonly List<GameObject> spawned = new List<GameObject>();
 
+    // CanvasGroup on Content: hidden (alpha 0) during tab switch until layout settles.
+    private CanvasGroup contentCanvasGroup;
+    // Tracks the reveal coroutine so rapid tab taps don't reveal mid-rebuild.
+    private Coroutine revealRoutine;
+
     private void Start()
     {
-        // ‘åƒWƒƒƒ“ƒ‹ƒ{ƒ^ƒ“‚ÉƒŠƒXƒi[“o˜^
+        // ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½Éƒï¿½ï¿½Xï¿½iï¿½[ï¿½oï¿½^
         if (majorButtons != null)
         {
             for (int i = 0; i < majorButtons.Length; i++)
             {
-                int idx = i; // ƒNƒ[ƒWƒƒ‘Îô
+                int idx = i; // ï¿½Nï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½Îï¿½
                 if (majorButtons[i] != null)
                     majorButtons[i].onClick.AddListener(() => OnMajorClicked(idx));
             }
@@ -81,7 +86,15 @@ public class ItemZukanView : MonoBehaviour
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
 
-        // Ú×‚©‚ç–ß‚Á‚½‚©‚Ç‚¤‚©‚Å‰Šú•\¦‚ğ•ªŠò
+        // Get/add a CanvasGroup on Content to hide layout reshuffle during tab switches.
+        if (content != null)
+        {
+            contentCanvasGroup = content.GetComponent<CanvasGroup>();
+            if (contentCanvasGroup == null)
+                contentCanvasGroup = content.gameObject.AddComponent<CanvasGroup>();
+        }
+
+        // ï¿½Ú×‚ï¿½ï¿½ï¿½ß‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ğ•ªŠï¿½
         if (ItemZukanContext.ReturningFromDetail)
         {
             currentMajorIndex = ItemZukanContext.ReturnMajorIndex;
@@ -93,13 +106,13 @@ public class ItemZukanView : MonoBehaviour
             if (target != null)
                 StartCoroutine(ScrollToTargetNextFrame(target));
 
-            // ƒtƒ‰ƒO‚Íg‚¢Ø‚è
+            // ï¿½tï¿½ï¿½ï¿½Oï¿½Ígï¿½ï¿½ï¿½Ø‚ï¿½
             ItemZukanContext.ReturningFromDetail = false;
             ItemZukanContext.ReturnTargetItem = null;
         }
         else
         {
-            // ƒgƒbƒv‚©‚ç—ˆ‚½ê‡: æ“ª‚Ì‘åƒWƒƒƒ“ƒ‹Eæ“ª•\¦
+            // ï¿½gï¿½bï¿½vï¿½ï¿½ï¿½ç—ˆï¿½ï¿½ï¿½ê‡: ï¿½æ“ªï¿½Ì‘ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Eï¿½æ“ªï¿½\ï¿½ï¿½
             currentMajorIndex = 0;
             BuildCategory(currentMajorIndex);
             UpdateButtonVisual();
@@ -107,21 +120,49 @@ public class ItemZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ‘åƒWƒƒƒ“ƒ‹Ø‘Ö
+    // ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø‘ï¿½
     // =========================================================
 
     private void OnMajorClicked(int majorIndex)
     {
         currentMajorIndex = majorIndex;
+
+        // Hide content while the new layout settles (avoids 1-frame flicker).
+        if (contentCanvasGroup != null)
+            contentCanvasGroup.alpha = 0f;
+
         BuildCategory(majorIndex);
         UpdateButtonVisual();
 
-        // ƒ^ƒuØ‘Ö‚Íæ“ª‚Ö
+        // ï¿½^ï¿½uï¿½Ø‘Öï¿½ï¿½Íæ“ªï¿½ï¿½
         if (scrollRect != null)
             scrollRect.verticalNormalizedPosition = 1f;
+
+        // Reveal once the nested layout has settled (same idiom as ScrollToTargetNextFrame).
+        if (revealRoutine != null) StopCoroutine(revealRoutine);
+        revealRoutine = StartCoroutine(RevealAfterLayout());
     }
 
-    /// <summary>‘I‘ğ’†ƒ{ƒ^ƒ“‚ÌŒ©‚½–Ú‚ğXViŠÈˆÕ: interactable ‚Å•\Œ»jB</summary>
+    /// <summary>
+    /// After a tab switch, wait for the layout to settle, then reset scroll to top
+    /// and restore the content CanvasGroup. Same wait idiom as ScrollToTargetNextFrame.
+    /// </summary>
+    private IEnumerator RevealAfterLayout()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        yield return null;
+
+        if (scrollRect != null)
+            scrollRect.verticalNormalizedPosition = 1f;
+
+        if (contentCanvasGroup != null)
+            contentCanvasGroup.alpha = 1f;
+
+        revealRoutine = null;
+    }
+
+    /// <summary>ï¿½Iï¿½ğ’†ƒ{ï¿½^ï¿½ï¿½ï¿½ÌŒï¿½ï¿½ï¿½ï¿½Ú‚ï¿½ï¿½Xï¿½Vï¿½iï¿½Èˆï¿½: interactable ï¿½Å•\ï¿½ï¿½ï¿½jï¿½B</summary>
     private void UpdateButtonVisual()
     {
         if (majorButtons == null) return;
@@ -133,19 +174,23 @@ public class ItemZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒOƒŠƒbƒh\’z
+    // ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½\ï¿½z
     // =========================================================
 
     /// <summary>
-    /// w’è‘åƒWƒƒƒ“ƒ‹‚Ì“à—e‚ğ Content ‚ÉÄ\’z‚·‚éB
-    /// ¬ƒWƒƒƒ“ƒ‹‚²‚Æ‚ÉuŒ©o‚µ‘Ñ ¨ ƒAƒCƒeƒ€5—ñƒOƒŠƒbƒhv‚ğc‚ÉÏ‚ŞB
+    /// ï¿½wï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì“ï¿½ï¿½eï¿½ï¿½ Content ï¿½ÉÄ\ï¿½zï¿½ï¿½ï¿½ï¿½B
+    /// ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Éuï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Aï¿½Cï¿½eï¿½ï¿½5ï¿½ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½vï¿½ï¿½ï¿½cï¿½ÉÏ‚ŞB
     /// </summary>
     private void BuildCategory(int majorIndex)
     {
-        // Šù‘¶‚ğ”jŠü
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jï¿½ï¿½
         foreach (var go in spawned)
         {
-            if (go != null) Destroy(go);
+            if (go != null)
+            {
+                go.SetActive(false); // exclude old cells from layout immediately (deferred Destroy)
+                Destroy(go);
+            }
         }
         spawned.Clear();
 
@@ -159,7 +204,7 @@ public class ItemZukanView : MonoBehaviour
         {
             if (sub == null) continue;
 
-            // --- Œ©o‚µ‘Ñ ---
+            // --- ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½ï¿½ ---
             if (headerPrefab != null)
             {
                 var header = Instantiate(headerPrefab, content);
@@ -167,7 +212,7 @@ public class ItemZukanView : MonoBehaviour
                 spawned.Add(header.gameObject);
             }
 
-            // --- ƒAƒCƒeƒ€ƒOƒŠƒbƒhi‚±‚Ì¬ƒWƒƒƒ“ƒ‹ê—p‚Ì“ü‚ê•¨‚ğ“®“I¶¬j ---
+            // --- ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½iï¿½ï¿½ï¿½Ìï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Ì“ï¿½ï¿½ê•¨ï¿½ğ“®“Iï¿½ï¿½ï¿½ï¿½ï¿½j ---
             var gridGo = CreateGridBlock();
             spawned.Add(gridGo);
 
@@ -185,8 +230,8 @@ public class ItemZukanView : MonoBehaviour
     }
 
     /// <summary>
-    /// ¬ƒWƒƒƒ“ƒ‹1‚Â•ª‚ÌƒAƒCƒeƒ€‚ğ•À‚×‚éA5—ñ GridLayoutGroup ‚Ì“ü‚ê•¨‚ğ¶¬‚·‚éB
-    /// ‚‚³‚ÍƒAƒCƒeƒ€”‚É‰‚¶‚Ä ContentSizeFitter ‚Å©“®’²®B
+    /// ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½Â•ï¿½ï¿½ÌƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½A5ï¿½ï¿½ GridLayoutGroup ï¿½Ì“ï¿½ï¿½ê•¨ï¿½ğ¶ï¿½ï¿½ï¿½ï¿½ï¿½B
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ÍƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½ï¿½É‰ï¿½ï¿½ï¿½ï¿½ï¿½ ContentSizeFitter ï¿½Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
     /// </summary>
     private GameObject CreateGridBlock()
     {
@@ -203,7 +248,7 @@ public class ItemZukanView : MonoBehaviour
         grid.startAxis = GridLayoutGroup.Axis.Horizontal;
         grid.childAlignment = TextAnchor.UpperLeft;
 
-        // ƒOƒŠƒbƒh©g‚Ì‚‚³‚ğ’†g‚É‡‚í‚¹‚ÄL‚Î‚·icÏ‚İ‚Å³‚µ‚­Šm•Û‚·‚é‚½‚ßj
+        // ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½ï¿½ï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ğ’†gï¿½Éï¿½ï¿½í‚¹ï¿½ÄLï¿½Î‚ï¿½ï¿½iï¿½cï¿½Ï‚İ‚Åï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½Û‚ï¿½ï¿½é‚½ï¿½ßj
         var fitter = go.GetComponent<ContentSizeFitter>();
         fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -212,14 +257,14 @@ public class ItemZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒAƒCƒeƒ€ƒ^ƒbƒv ¨ Ú×‚Ö
+    // ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½^ï¿½bï¿½v ï¿½ï¿½ ï¿½Ú×‚ï¿½
     // =========================================================
 
     private void OnItemClicked(ItemData item)
     {
         if (item == null) return;
 
-        // ª«ˆÚ“®—p: Œ»İ‚Ì‘åƒWƒƒƒ“ƒ‹“à‚Ì”­Œ©Ï‚İƒAƒCƒeƒ€‚ğ1—ñ‰»
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ú“ï¿½ï¿½p: ï¿½ï¿½ï¿½İ‚Ì‘ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½ï¿½ï¿½ï¿½Ï‚İƒAï¿½Cï¿½eï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½
         var flat = database.GetFlatItems(currentMajorIndex);
         var discoveredList = new List<ItemData>();
         foreach (var it in flat)
@@ -240,12 +285,12 @@ public class ItemZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒXƒNƒ[ƒ‹•œŒ³
+    // ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     // =========================================================
 
     /// <summary>
-    /// 1ƒtƒŒ[ƒ€‘Ò‚Á‚ÄƒŒƒCƒAƒEƒgŠm’èŒãA‘ÎÛƒAƒCƒeƒ€‚ÌƒZƒ‹‚ª‰æ–Ê“à‚Éû‚Ü‚é‚æ‚¤
-    /// ƒXƒNƒ[ƒ‹ˆÊ’u‚ğ’²®‚·‚éBŒ©o‚µ‘Ñ‚âƒOƒŠƒbƒh‚Ì‚‚³‚ğÀ‘ª‚µ‚Ä‘ÎÛƒZƒ‹‚ÌYˆÊ’u‚ğ‹‚ß‚éB
+    /// 1ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ò‚ï¿½ï¿½Äƒï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½mï¿½ï¿½ï¿½Aï¿½ÎÛƒAï¿½Cï¿½eï¿½ï¿½ï¿½ÌƒZï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê“ï¿½ï¿½Éï¿½ï¿½Ü‚ï¿½æ‚¤
+    /// ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Ê’uï¿½ğ’²ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Ñ‚ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‘ÎÛƒZï¿½ï¿½ï¿½ï¿½Yï¿½Ê’uï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½B
     /// </summary>
     private IEnumerator ScrollToTargetNextFrame(ItemData target)
     {
@@ -256,7 +301,7 @@ public class ItemZukanView : MonoBehaviour
         if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null)
             yield break;
 
-        // ‘ÎÛƒZƒ‹‚Ì RectTransform ‚ğ’T‚·
+        // ï¿½ÎÛƒZï¿½ï¿½ï¿½ï¿½ RectTransform ï¿½ï¿½Tï¿½ï¿½
         RectTransform targetCell = FindCellOf(target);
         if (targetCell == null)
         {
@@ -272,23 +317,23 @@ public class ItemZukanView : MonoBehaviour
             yield break;
         }
 
-        // ‘ÎÛƒZƒ‹‚Ì’†S‚ÌAContent ã’[‚©‚ç‚Ì‹——£‚ğ‹‚ß‚é
-        // iContent ‚Í Pivot Y=1 / ã‹l‚ß‚ğ‘z’èj
+        // ï¿½ÎÛƒZï¿½ï¿½ï¿½Ì’ï¿½ï¿½Sï¿½ÌAContent ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½
+        // ï¿½iContent ï¿½ï¿½ Pivot Y=1 / ï¿½ï¿½lï¿½ß‚ï¿½zï¿½ï¿½j
         Vector3[] contentCorners = new Vector3[4];
         Vector3[] cellCorners = new Vector3[4];
         scrollRect.content.GetWorldCorners(contentCorners);
         targetCell.GetWorldCorners(cellCorners);
 
-        float contentTopY = contentCorners[1].y; // ¶ã
-        float cellCenterY = (cellCorners[1].y + cellCorners[0].y) * 0.5f; // ¶ã‚Æ¶‰º‚Ì’†“_
+        float contentTopY = contentCorners[1].y; // ï¿½ï¿½ï¿½ï¿½
+        float cellCenterY = (cellCorners[1].y + cellCorners[0].y) * 0.5f; // ï¿½ï¿½ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½Ì’ï¿½ï¿½_
 
-        // ƒ[ƒ‹ƒhY ¨ Content ã’[‚©‚ç‚Ì‹——£iƒsƒNƒZƒ‹Š·Z‚Í Canvas scale ‚ğl—¶j
+        // ï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½hY ï¿½ï¿½ Content ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½iï¿½sï¿½Nï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½ Canvas scale ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½j
         float canvasScale = scrollRect.content.lossyScale.y;
         if (Mathf.Approximately(canvasScale, 0f)) canvasScale = 1f;
 
         float distanceFromTop = (contentTopY - cellCenterY) / canvasScale;
 
-        // ƒZƒ‹’†S‚ğƒrƒ…[ƒ|[ƒg’†‰›‚É’u‚«‚½‚¢
+        // ï¿½Zï¿½ï¿½ï¿½ï¿½ï¿½Sï¿½ï¿½ï¿½rï¿½ï¿½ï¿½[ï¿½|ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½ï¿½É’uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         float targetTop = distanceFromTop - viewportHeight * 0.5f;
         float maxScroll = contentHeight - viewportHeight;
         float normalizedFromTop = Mathf.Clamp01(targetTop / maxScroll);
@@ -296,7 +341,7 @@ public class ItemZukanView : MonoBehaviour
         scrollRect.verticalNormalizedPosition = 1f - normalizedFromTop;
     }
 
-    /// <summary>¶¬Ï‚İƒZƒ‹‚Ì’†‚©‚çAw’èƒAƒCƒeƒ€‚ÌƒZƒ‹‚Ì RectTransform ‚ğ’T‚·B</summary>
+    /// <summary>ï¿½ï¿½ï¿½ï¿½ï¿½Ï‚İƒZï¿½ï¿½ï¿½Ì’ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½wï¿½ï¿½Aï¿½Cï¿½eï¿½ï¿½ï¿½ÌƒZï¿½ï¿½ï¿½ï¿½ RectTransform ï¿½ï¿½Tï¿½ï¿½ï¿½B</summary>
     private RectTransform FindCellOf(ItemData target)
     {
         foreach (var go in spawned)
@@ -313,7 +358,7 @@ public class ItemZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // –ß‚é
+    // ï¿½ß‚ï¿½
     // =========================================================
 
     private void OnBackClicked()

@@ -1522,7 +1522,7 @@ public partial class BattleSceneController : MonoBehaviour
             var optionLabels = new List<string>();
             for (int i = 0; i < magicSkillList.Count; i++)
                 optionLabels.Add($"{magicSkillList[i].skillName} (MP:{magicSkillList[i].mpCost})");
-            magicSelector.SetOptions(optionLabels);
+            magicSelector.SetItems(magicSkillList);
 
             // 選択保持（オプションON時）: 前回選択した魔法を復元する
             MagicSelectionMemory.Restore(magicSelector, magicSkillList, isBattle: true);

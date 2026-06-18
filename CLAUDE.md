@@ -61,3 +61,59 @@ Inspector のドロップダウンをバフ/デバフ系＋None に限定して�
   属性表記を一括確認するときはデコードして走査すること。
 - `WeaponAttribute` enum の値自体は不変に保つこと（アセットは数値インデックスで保存しており、
   途中挿入すると既存スキル/アイテム設定が壊れる）。表示文字列だけ変えるのは安全。
+
+## 5. UI スケーリング/シーン設計の規約（全シーン統一）
+
+実機は **2400×1080（20:9）**。全シーンの CanvasScaler は
+**Scale With Screen Size / Reference 1920×1080 / Match=1（高さ基準）** で統一。
+Match=1 なので論理幅は端末アスペクトで変わる（2400×1080 では論理幅2400・高さ1080）。
+
+- **背景は固定1920×1080・中央**（anchorMin/Max=(0.5,0.5), sizeDelta=(1920,1080),
+  anchoredPosition=(0,0)）。ストレッチ背景は使わない。→ 20:9 では左右に各240pxの
+  余白（ピラーボックス）が出るが、これは仕様。
+- **コンテンツ/HUD は必ず中央アンカー基準で配置する。** 中央基準なら中央配置の背景と
+  一致し、論理幅が変わっても位置がずれない。
+- ⚠️ **横ストレッチ（anchorMin.x=0 / anchorMax.x=1）のコンテンツ枠を作らないこと。**
+  論理幅が変わると枠幅が変わり、左/右揃えテキストやマージン付き枠の中身の開始位置が
+  ずれる（例: 旧 kurezitto の左揃えテキストが2400で左へずれた）。コンテンツは
+  中央アンカー＋固定幅にする。
+- ⚠️ **端アンカー（anchor.x=0 または 1 の点アンカー）で HUD を画面端に固定しないこと。**
+  Match1＠2400 では画面端＝中央1920背景の外（240px余白側）へ寄り、背景に対して位置がずれる。
+- **例外（ストレッチ維持が正しいもの）**: 全画面オーバーレイ・ポップアップ・入力ブロッカー・
+  全画面背景。画面全体を覆うべきなので 0,0–1,1 ストレッチのまま（中身は中央配置）。
+  例: Tower の BlindOverlay/各Popup、Talk の Panel/Button、各 Itempickuproot/Blocker。
+- **Option シーンは意図的な例外**: Match=0.5 のまま＋背景2枚（部屋背景＋SD立ち絵）を
+  ストレッチ維持。現状で問題なしと確認済み（2026-06-17）。他シーンの規約を Option に
+  機械的に適用しないこと。
+- 注意: シーンのレイアウトを確認・一括変更するときは `.unity` の RectTransform
+  （`m_AnchorMin`/`m_AnchorMax`/`m_SizeDelta`）を直接走査する。CanvasScaler の Match は
+  `m_MatchWidthOrHeight`。
+
+## 6. 魔法選択UIの接続点（MagicSelector を別UIに差し替えるとき）
+
+魔法選択は `MagicSelector`（`MagicSelector.cs`）が UI、`MagicSelectionMemory`（static,
+skillId 保持）が記憶、`PassiveCalculator.CollectMagicSkills()/CollectNoBattleMagicSkills()`
+が絞り込み、を担う。消費側は Battle=`BattleSceneController`（`magicSkillList`）、
+Tower=`TowerState`（`fieldMagicList`）。2026-06-17 にリスト形式→中央ポップアップ形式へ
+作り替えたが、消費側は実質1行（`SetOptions`→`SetItems`）だけで済んだ。その理由＝守るべき不変条件:
+
+- **接続点は `MagicSelector` の公開APIだけ**:
+  `SetVisible / SetOptions / SetItems(List<SkillData>) / SetValue / Value /
+  onValueChanged(event) / ForceClose / OptionCount / ClearOptions`。
+  これらのシグネチャを保てば、記憶・右上表示・発動・絞り込みは無改修で流用できる。
+- ⚠️ **最重要の不変条件**: 「selector の `Value`（index）＝ 消費側 `magicSkillList` /
+  `fieldMagicList` の同じ index」。発動は `GetSelectedMagicSkill()`（Battle）/
+  `OnFieldMagicClicked()`（Tower）が `Value` でこの並列リストを引く。記憶は
+  `onValueChanged(index)` → 消費側が `list[index].skillId` を `MagicSelectionMemory` に保存。
+  この index 対応を崩すと全経路が壊れる。UI を再度差し替えても**この対応だけは維持**すること。
+- `onValueChanged` は **`event`**（消費側は `+=`/`-=` で登録）。`event` を外して
+  フィールド化したり直接 Invoke させる設計に変えると消費側が壊れる。
+- **アイコンは `SkillData` ではなく魔導書 `Item.icon` 側**にある。`SetItems(List<SkillData>)`
+  のままアイコンを出すには `PassiveCalculator.GetMagicIcon(skill)`（skillId で所持 Item を
+  引いて `Item.icon` を返す）で解決する。SkillData にアイコンを足す前提で組まないこと。
+- ポップアップ枠は中央固定・ブロッカー（外タップ閉じ）は全画面ストレッチをコード生成
+  （第5節の規約に整合）。`MagicSelector.SetVisible(false)` は孤立ポップアップ防止のため
+  `ForceClose()` を内包している（ポップアップが Canvas 直下の別オブジェクトのため）。
+- 注意: `MagicSelector.cs` / `PassiveCalculator.cs` は **Shift-JIS 保存**。全置換・追記する
+  ときは追加コメントを ASCII にして文字化けを防ぐ（第4節「.asset は \uXXXX」とは別問題で、
+  こちらは .cs のエンコーディング）。

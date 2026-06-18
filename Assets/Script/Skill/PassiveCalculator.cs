@@ -295,6 +295,32 @@ public static class PassiveCalculator
         return result;
     }
 
+    /// <summary>
+    /// Resolve the icon Sprite for a magic skill from the owned spellbook Item.
+    /// SkillData has no icon; the icon lives on the magic-book Item (Item.icon).
+    /// Returns null if no owned magic item matches this skillId.
+    /// </summary>
+    public static Sprite GetMagicIcon(SkillData skill)
+    {
+        if (skill == null || string.IsNullOrEmpty(skill.skillId)) return null;
+
+        var items = GetInventoryItems();
+        if (items == null) return null;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            var invItem = items[i];
+            if (invItem?.data == null) continue;
+            if (invItem.data.category != ItemCategory.Magic) continue;
+            if (invItem.data.magicSkill == null) continue;
+
+            if (invItem.data.magicSkill.skillId == skill.skillId)
+                return invItem.data.icon;
+        }
+
+        return null;
+    }
+
     // =========================================================
     // “à•”: Œø‰Ê’l‚ÌŽûW
     // =========================================================
