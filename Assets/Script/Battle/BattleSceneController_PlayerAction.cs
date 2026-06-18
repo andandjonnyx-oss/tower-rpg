@@ -1671,6 +1671,14 @@ public partial class BattleSceneController
             return;
         }
 
+        // ★多重入力ガード（攻撃等と同フレーム同時押し対策）
+        //   他の行動（攻撃/スキル/魔法/防御）が既に走っている場合は弾く。
+        //   これを入れないと、攻撃→敵ターン処理中に同フレームのアイテム押下が
+        //   素通りして Itembox へ遷移し、進行中の戦闘を破棄してしまう。
+        //   ※解除は通常行動と同じく Start()（ItemBox復帰/ターン開始）で行う。
+        if (isPlayerActing) return;
+        isPlayerActing = true;
+
         if (GameState.I != null)
         {
             GameState.I.isInBattle = true;

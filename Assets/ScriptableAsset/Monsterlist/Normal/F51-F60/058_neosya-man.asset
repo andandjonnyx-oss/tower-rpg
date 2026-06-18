@@ -54,7 +54,7 @@ MonoBehaviour:
     value: 50
   Exp: 1700
   Gold: 0
-  dropItem: {fileID: 0}
+  dropItem: {fileID: 11400000, guid: a9e664d1c8ffd0e4bb266881039c8ed9, type: 2}
   dropRate: 0
   autoRegenEnabled: 0
   autoRegenAmount: 0

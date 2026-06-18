@@ -50,8 +50,8 @@ MonoBehaviour:
     value: 100
   Exp: 2630
   Gold: 0
-  dropItem: {fileID: 0}
-  dropRate: 0
+  dropItem: {fileID: 11400000, guid: 342245a0d0d66774bb0dbf0b85d47a07, type: 2}
+  dropRate: 0.1
   autoRegenEnabled: 0
   autoRegenAmount: 0
   isQuizBoss: 0

@@ -82,10 +82,8 @@ public class TitleUIManager : MonoBehaviour
     {
         if (startButton != null)
             startButton.onClick.AddListener(OnStart);
-
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetClicked);
-
         // 初期化確認ポップアップ
         if (resetConfirmYes != null)
             resetConfirmYes.onClick.AddListener(OnResetConfirmYes);
@@ -93,10 +91,18 @@ public class TitleUIManager : MonoBehaviour
             resetConfirmNo.onClick.AddListener(OnResetConfirmNo);
         if (resetConfirmPopup != null)
             resetConfirmPopup.SetActive(false);
-
         if (openingButton != null)
             openingButton.onClick.AddListener(OnOpening);
 
+        // ★追加: Analytics を裏で初期化（完了を待たないのでタイトル操作は遅延しない）
+        InitAnalytics();
+    }
+
+    // ★追加: Analytics 初期化（投げっぱなし）
+    private async void InitAnalytics()
+    {
+        await AnalyticsManager.InitializeAsync();
+        AnalyticsManager.GrantConsent();
     }
 
     /// <summary>

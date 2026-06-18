@@ -246,11 +246,18 @@ public class GpShopView : MonoBehaviour
 
     private void OnExchangeClicked()
     {
+        // ★多重押下ガード（同フレーム2連打によるGP二重課金・アイテム二重付与対策）
+        //   selectedShopData を副作用の前にローカル退避して即 null 化することで、
+        //   2回目以降の呼び出しは冒頭の null チェックで弾かれる。
+        //   （OnAdResult の adResultHandled と同じ「一度きり」保証の考え方）
         if (selectedShopData == null) return;
         if (!CanExchange(selectedShopData)) return;
 
-        var item = selectedShopData.item;
-        int cost = selectedShopData.gpCost;
+        var shopData = selectedShopData;
+        selectedShopData = null; // ★以降の再入を即遮断
+
+        var item = shopData.item;
+        int cost = shopData.gpCost;
 
         // GP消費
         GameState.I.gp -= cost;

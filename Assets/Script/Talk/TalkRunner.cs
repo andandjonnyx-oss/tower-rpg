@@ -82,6 +82,11 @@ public class TalkRunner : MonoBehaviour
     /// <summary>タイトル表示待機中はタップを無効化する。</summary>
     private bool isWaitingTitle;
 
+    // 連打ガード（複数同時タップ対策）: 直前の進行から AdvanceCooldown 秒
+    // 以内の再入力を無視する。Time.unscaledTime を使用（timeScale 非依存）。
+    private float lastAdvanceTime = -1f;
+    private const float AdvanceCooldown = 0.25f;
+
     //シーンに入ると実行
     private void Start()
     {
@@ -196,6 +201,11 @@ public class TalkRunner : MonoBehaviour
         if (isWaitingTitle || isWaitingNameInput) return;
 
         if (current == null) return;
+
+        // 連打ガード: 直前の進行から AdvanceCooldown 秒以内のタップは無視
+        if (lastAdvanceTime >= 0f && Time.unscaledTime - lastAdvanceTime < AdvanceCooldown)
+            return;
+        lastAdvanceTime = Time.unscaledTime;
 
         index++;
         if (index >= current.lines.Count)

@@ -1,17 +1,33 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Itembox �V�[���p�R���g���[���[�B
-/// �ʏ펞: �g��/����/�̂Ă�B�߂��Main�ցB
-/// �o�g���� (GameState.isInBattle): �g��/�����ύX�̂݁B�̂Ă�s�B
-///   �A�C�e�������͎����Ńo�g���V�[���֖߂�1�^�[������B
-///   �߂�{�^���̓^�[������Ȃ��Ńo�g���V�[���ցB
+/// Itembox シーン用コントローラー。
+/// 通常時: 使う/装備/捨てる。戻るでMainへ。
+/// バトル中 (GameState.isInBattle): 使う/装備変更のみ。捨てる不可。
+///   アイテム操作後は自動でバトルシーンへ戻り1ターン消費。
+///   戻るボタンはターン消費なしでバトルシーンへ。
 ///
-/// �{�^���\�z�ƌ��ʓK�p�� ItemActionHelper ���o�R���A
-/// StorageContext �Ǝd�l�𓝈ꂷ��B
+/// ボタン構築と効果適用は ItemActionHelper を経由し、
+/// StorageContext と仕様を統一する。
+///
+/// 【多重入力ガード（busy）— 設計メモ】
+///   ・遷移パス（バトル復帰の AfterAction / 戻るボタン）の同フレーム二重発火は
+///     busy フラグが確実に防ぐ。busy=true のまま LoadScene するため、
+///     同フレームの2発目は if (busy) return で弾かれ、二重 LoadScene や
+///     ターン二重消費が起きない。← これが busy の本来の役割。
+///   ・画面内操作（非バトル時の使う/捨てる等）の同フレーム同時押しを実際に
+///     止めているのは busy ではなく ItemDetailPanel.Hide() の
+///     detailRoot.SetActive(false)。1発目の AfterAction → Hide() でボタンが
+///     非アクティブ化され、Unity が2発目クリックを isActiveAndEnabled==false で
+///     抑止する。※この防壁は「操作ボタンが detailRoot の子であること」に依存する。
+///     Hide() をやめたり階層を変えると静かに穴が開くので注意。
+///   ・例外時のソフトロック対策として、各オペレーションは try/finally で囲い、
+///     同シーンに留まる場合（AfterAction が遷移しなかった場合）は必ず busy を
+///     解除する。これにより副作用中に NRE 等が出ても画面から出られなくなる
+///     退行を防ぐ。
 /// </summary>
 public class ItemboxContext : MonoBehaviour, IItemContext
 {
@@ -25,14 +41,21 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     [SerializeField] private Button backButton;
     [SerializeField] private string mainSceneName = "Main";
 
-    /// <summary>�o�g�������ǂ����̃L���b�V���B</summary>
+    /// <summary>バトル中かどうかのキャッシュ。</summary>
     private bool inBattle;
+
+    /// <summary>
+    /// 操作実行中ガード。オペレーション or 戻るが走っている間 true。
+    /// 同フレームの多重入力（2連打・別ボタン同時押し）を遷移パスで弾く。
+    /// 同シーンに留まる操作では try/finally で必ず解除する（ソフトロック防止）。
+    /// </summary>
+    private bool busy;
 
     private void Start()
     {
         inBattle = GameState.I != null && GameState.I.isInBattle;
 
-        // �X���b�g�ɃR�[���o�b�N�o�^
+        // スロットにコールバック登録
         if (slots != null)
         {
             foreach (var slot in slots)
@@ -42,7 +65,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
             }
         }
 
-        // �߂�{�^��
+        // 戻るボタン
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
 
@@ -52,9 +75,14 @@ public class ItemboxContext : MonoBehaviour, IItemContext
 
     private void OnBackClicked()
     {
+        // 操作中なら戻るを無視（操作との同時押し対策）。
+        // 戻る自体は必ずシーン遷移するため、busy を立てたら解除しない。
+        if (busy) return;
+        busy = true;
+
         if (inBattle)
         {
-            // �^�[������Ȃ��Ńo�g���֖߂�
+            // ターン消費なしでバトルへ戻る
             if (GameState.I != null)
             {
                 GameState.I.battleTurnConsumed = false;
@@ -113,11 +141,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
                 }
 
             case ItemCategory.Magic:
-                // Magic �ɂ̓{�^���Ȃ�
+                // Magic にはボタンなし
                 break;
         }
 
-        // �o�g�����͎̂Ă�s��
+        // バトル中は捨てる不可
         if (!inBattle)
         {
             list.Add(ItemActionHelper.BuildDiscardButton(
@@ -140,7 +168,7 @@ public class ItemboxContext : MonoBehaviour, IItemContext
 
             if (i >= cap)
             {
-                // �e�ʊO�̃X���b�g�͔�\��
+                // 容量外のスロットは非表示
                 slots[i].gameObject.SetActive(false);
                 continue;
             }
@@ -158,89 +186,101 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     {
         if (invItem?.data == null) return;
 
-        // RemoveItem ��� invItem.data ���Q�Ƃł��Ȃ��Ȃ�\�������邽�߁A
-        // �K�v�Ȓl�����O�Ɏ擾���Ă���
-        string itemName = invItem.data.itemName;
-        int healAmount = invItem.data.healAmount;
-        bool isBossFeedItem = invItem.data.bossFeedItem;
-        int spGain = invItem.data.statusPointGain;
-        ItemData transformInto = invItem.data.transformInto;
-        int transformChanceValue = invItem.data.transformChance;
-
-        // �U���A�C�e��: �_���[�W���̎��O�擾
-        int battleDmg = invItem.data.battleDamage;
-        WeaponAttribute battleAttr = invItem.data.battleAttribute;
-        DamageCategory battleDmgCat = invItem.data.battleDamageCategory;
-
-        // �w���p�[�o�R�Ō��ʓK�p�iHP/MP/��Ԉُ�/SP ���ׂĊ܂ށj
-        ItemActionHelper.ApplyConsumableEffects(invItem);
-
-        // �U���A�C�e��: �_���[�W���� GameState �Ɉꎞ�ۑ�
-        if (battleDmg > 0 && inBattle && GameState.I != null)
+        // ★多重入力ガード（副作用の前）。
+        if (busy) return;
+        busy = true;
+        bool transitioned = false;
+        try
         {
-            GameState.I.pendingBattleItemDamage = battleDmg;
-            GameState.I.pendingBattleItemAttribute = (int)battleAttr;
-            GameState.I.pendingBattleItemDamageCategory = (int)battleDmgCat;
-            GameState.I.pendingBattleItemName = itemName;
-            Debug.Log($"[Itembox] �U���A�C�e���g�p: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
-        }
+            // RemoveItem 後は invItem.data が参照できなくなる可能性があるため、
+            // 必要な値を事前に取得しておく
+            string itemName = invItem.data.itemName;
+            int healAmount = invItem.data.healAmount;
+            bool isBossFeedItem = invItem.data.bossFeedItem;
+            int spGain = invItem.data.statusPointGain;
+            ItemData transformInto = invItem.data.transformInto;
+            int transformChanceValue = invItem.data.transformChance;
 
-        // �{�X�a�t���A�C�e��: �������t���O�� GameState �ɕۑ�
-        if (isBossFeedItem && inBattle
-            && BattleContext.EnemyMonster != null
-            && BattleContext.EnemyMonster.acceptsFeedItem
-            && GameState.I != null)
-        {
-            GameState.I.pendingBattleItemInstantWin = true;
-            GameState.I.pendingBattleItemName = itemName;
-            Debug.Log($"[Itembox] �{�X�a�t���A�C�e���g�p: {itemName} �� �������t���OON");
-        }
+            // 攻撃アイテム: ダメージ情報の事前取得
+            int battleDmg = invItem.data.battleDamage;
+            WeaponAttribute battleAttr = invItem.data.battleAttribute;
+            DamageCategory battleDmgCat = invItem.data.battleDamageCategory;
 
-        // ���A�C�e��������
-        ItemBoxManager.Instance?.RemoveItem(invItem);
+            // ヘルパー経由で効果適用（HP/MP/状態異常/SP すべて含む）
+            ItemActionHelper.ApplyConsumableEffects(invItem);
 
-        // �g�p��ɃA�C�e���ω��i�m������Ή��j
-        bool transformed = false;
-        if (transformInto != null && ItemBoxManager.Instance != null)
-        {
-            // transformChance �� 0 �Ȃ��ɕω��i�]���݊��j
-            // 1�ȏ�Ȃ�m������
-            bool success = (transformChanceValue <= 0)
-                || Random.Range(1, 101) <= transformChanceValue;
-
-            if (success)
+            // 攻撃アイテム: ダメージ情報を GameState に一時保存
+            if (battleDmg > 0 && inBattle && GameState.I != null)
             {
-                ItemBoxManager.Instance.AddItem(transformInto);
-                Debug.Log($"[Itembox] �A�C�e���ω�: {itemName} �� {transformInto.itemName}");
-                transformed = true;
+                GameState.I.pendingBattleItemDamage = battleDmg;
+                GameState.I.pendingBattleItemAttribute = (int)battleAttr;
+                GameState.I.pendingBattleItemDamageCategory = (int)battleDmgCat;
+                GameState.I.pendingBattleItemName = itemName;
+                Debug.Log($"[Itembox] 攻撃アイテム使用: {itemName} dmg={battleDmg} attr={battleAttr} cat={battleDmgCat}");
             }
-            else
+
+            // ボス餌付けアイテム: 即勝利フラグを GameState に保存
+            if (isBossFeedItem && inBattle
+                && BattleContext.EnemyMonster != null
+                && BattleContext.EnemyMonster.acceptsFeedItem
+                && GameState.I != null)
             {
-                Debug.Log($"[Itembox] �A�C�e���ω����s: {itemName}�i�m��{transformChanceValue}%�j");
+                GameState.I.pendingBattleItemInstantWin = true;
+                GameState.I.pendingBattleItemName = itemName;
+                Debug.Log($"[Itembox] ボス餌付けアイテム使用: {itemName} → 即勝利フラグON");
             }
-        }
 
-        // ���O���b�Z�[�W�̑g�ݗ���
-        string logMsg = $"You �� {itemName} ���g�����I";
-        if (spGain > 0)
-        {
-            logMsg += $" �X�e�[�^�X�|�C���g +{spGain}�I";
-        }
-        if (transformed)
-        {
-            logMsg += $" {transformInto.itemName} ����ɓ��ꂽ�I";
-        }
-        else if (transformInto != null)
-        {
-            // �͂���itransformInto ���ݒ肳��Ă������m���Ŏ��s�j
-            logMsg += " �c�͂���I";
-        }
+            // 元アイテムを消す
+            ItemBoxManager.Instance?.RemoveItem(invItem);
 
-        AfterAction(logMsg);
+            // 使用後にアイテム変化（確率判定対応）
+            bool transformed = false;
+            if (transformInto != null && ItemBoxManager.Instance != null)
+            {
+                // transformChance が 0 なら常に変化（従来互換）
+                // 1以上なら確率判定
+                bool success = (transformChanceValue <= 0)
+                    || Random.Range(1, 101) <= transformChanceValue;
+
+                if (success)
+                {
+                    ItemBoxManager.Instance.AddItem(transformInto);
+                    Debug.Log($"[Itembox] アイテム変化: {itemName} → {transformInto.itemName}");
+                    transformed = true;
+                }
+                else
+                {
+                    Debug.Log($"[Itembox] アイテム変化失敗: {itemName}（確率{transformChanceValue}%）");
+                }
+            }
+
+            // ログメッセージの組み立て
+            string logMsg = $"You は {itemName} を使った！";
+            if (spGain > 0)
+            {
+                logMsg += $" ステータスポイント +{spGain}！";
+            }
+            if (transformed)
+            {
+                logMsg += $" {transformInto.itemName} を手に入れた！";
+            }
+            else if (transformInto != null)
+            {
+                // はずれ（transformInto が設定されていたが確率で失敗）
+                logMsg += " …はずれ！";
+            }
+
+            transitioned = AfterAction(logMsg);
+        }
+        finally
+        {
+            // 同シーンに留まる場合のみ解除（遷移時は次シーンで新インスタンス）
+            if (!transitioned) busy = false;
+        }
     }
 
     // =========================================================
-    // �����H�ׂ�
+    // 武器を食べる
     // =========================================================
 
     private void EatWeapon(InventoryItem invItem)
@@ -248,81 +288,135 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (invItem?.data == null) return;
         if (!invItem.data.isEdible) return;
 
-        // ���O�擾�iRemoveItem ��ɎQ�Ƃł��Ȃ��Ȃ邽�߁j
-        string itemName = invItem.data.itemName;
-        int healAmount = invItem.data.eatHealAmount;
-        ItemData transformInto = invItem.data.transformInto;
-        int transformChanceValue = invItem.data.transformChance;
-
-        // �w���p�[�o�R�ő������� + ���ʓK�p
-        ItemActionHelper.UnequipIfNeeded(invItem);
-        ItemActionHelper.ApplyEatWeaponEffects(invItem);
-
-        // ���A�C�e��������
-        ItemBoxManager.Instance?.RemoveItem(invItem);
-
-        // �ω���A�C�e����ǉ��i�m������Ή��j
-        bool transformed = false;
-        if (transformInto != null && ItemBoxManager.Instance != null)
+        // ★多重入力ガード（副作用の前）。
+        if (busy) return;
+        busy = true;
+        bool transitioned = false;
+        try
         {
-            bool success = (transformChanceValue <= 0)
-                || Random.Range(1, 101) <= transformChanceValue;
+            // 事前取得（RemoveItem 後に参照できなくなるため）
+            string itemName = invItem.data.itemName;
+            int healAmount = invItem.data.eatHealAmount;
+            ItemData transformInto = invItem.data.transformInto;
+            int transformChanceValue = invItem.data.transformChance;
 
-            if (success)
+            // ヘルパー経由で装備解除 + 効果適用
+            ItemActionHelper.UnequipIfNeeded(invItem);
+            ItemActionHelper.ApplyEatWeaponEffects(invItem);
+
+            // 元アイテムを消す
+            ItemBoxManager.Instance?.RemoveItem(invItem);
+
+            // 変化先アイテムを追加（確率判定対応）
+            bool transformed = false;
+            if (transformInto != null && ItemBoxManager.Instance != null)
             {
-                ItemBoxManager.Instance.AddItem(transformInto);
-                Debug.Log($"[Itembox] �H�ׂĕω�: {itemName} �� {transformInto.itemName}");
-                transformed = true;
+                bool success = (transformChanceValue <= 0)
+                    || Random.Range(1, 101) <= transformChanceValue;
+
+                if (success)
+                {
+                    ItemBoxManager.Instance.AddItem(transformInto);
+                    Debug.Log($"[Itembox] 食べて変化: {itemName} → {transformInto.itemName}");
+                    transformed = true;
+                }
+                else
+                {
+                    Debug.Log($"[Itembox] 食べて変化失敗: {itemName}（確率{transformChanceValue}%）");
+                }
             }
-            else
-            {
-                Debug.Log($"[Itembox] �H�ׂĕω����s: {itemName}�i�m��{transformChanceValue}%�j");
-            }
+
+            // ログ
+            string logMsg = $"You は {itemName} を食べた！";
+            if (healAmount > 0) logMsg += $" HP が {healAmount} 回復した！";
+            if (transformed) logMsg += $" {transformInto.itemName} を手に入れた！";
+            else if (transformInto != null) logMsg += " …はずれ！";
+            transitioned = AfterAction(logMsg);
         }
-
-        // ���O
-        string logMsg = $"You �� {itemName} ��H�ׂ��I";
-        if (healAmount > 0) logMsg += $" HP �� {healAmount} �񕜂����I";
-        if (transformed) logMsg += $" {transformInto.itemName} ����ɓ��ꂽ�I";
-        else if (transformInto != null) logMsg += " �c�͂���I";
-        AfterAction(logMsg);
+        finally
+        {
+            if (!transitioned) busy = false;
+        }
     }
 
     private void EquipWeapon(InventoryItem invItem)
     {
-        ItemBoxManager.Instance?.EquipItem(invItem);
-        AfterAction($"You �� {invItem.data.itemName} �𑕔������I");
+        // ★多重入力ガード（副作用の前）。装備と捨て/食べの同時押し対策。
+        if (busy) return;
+        busy = true;
+        bool transitioned = false;
+        try
+        {
+            ItemBoxManager.Instance?.EquipItem(invItem);
+            string name = (invItem != null && invItem.data != null) ? invItem.data.itemName : "武器";
+            transitioned = AfterAction($"You は {name} を装備した！");
+        }
+        finally
+        {
+            if (!transitioned) busy = false;
+        }
     }
 
     private void UnequipWeapon(InventoryItem invItem)
     {
-        ItemBoxManager.Instance?.UnequipItem(invItem);
-        AfterAction($"You �� {invItem.data.itemName} ���O�����I");
+        // ★多重入力ガード（副作用の前）。
+        if (busy) return;
+        busy = true;
+        bool transitioned = false;
+        try
+        {
+            ItemBoxManager.Instance?.UnequipItem(invItem);
+            string name = (invItem != null && invItem.data != null) ? invItem.data.itemName : "武器";
+            transitioned = AfterAction($"You は {name} を外した！");
+        }
+        finally
+        {
+            if (!transitioned) busy = false;
+        }
     }
 
     private void DiscardItem(InventoryItem invItem)
     {
-        ItemBoxManager.Instance?.DiscardItem(invItem);
-        AfterAction("");
+        // ★多重入力ガード（副作用の前）。捨てと使う/装備の同時押し対策。
+        if (busy) return;
+        busy = true;
+        bool transitioned = false;
+        try
+        {
+            ItemBoxManager.Instance?.DiscardItem(invItem);
+            transitioned = AfterAction("");
+        }
+        finally
+        {
+            if (!transitioned) busy = false;
+        }
     }
 
-    private void AfterAction(string logMessage)
+    /// <summary>
+    /// 操作後の共通処理。
+    /// バトル中はバトルシーンへ遷移して true を返す（呼び出し側は busy を解除しない）。
+    /// 非バトル時はセーブして false を返す（呼び出し側の finally で busy を解除）。
+    /// </summary>
+    /// <returns>シーン遷移したら true。</returns>
+    private bool AfterAction(string logMessage)
     {
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
 
-        // �o�g�����Ȃ瑦���Ƀo�g���V�[���֖߂�i1�^�[������j
+        // バトル中なら即座にバトルシーンへ戻る（1ターン消費）
         if (inBattle && GameState.I != null)
         {
             GameState.I.battleTurnConsumed = true;
             GameState.I.battleItemActionLog = logMessage;
             GameState.I.isInBattle = false;
             SceneManager.LoadScene(GameState.I.previousSceneName ?? "Battle");
+            return true; // 遷移した → busy は保持
         }
         else
         {
-            // ��o�g����: �A�C�e���g�p�E�����ύX�̌��ʂ𑦎��Z�[�u
+            // 非バトル時: アイテム使用・装備変更の結果を即時セーブ
             SaveManager.Save();
+            return false; // 同シーン継続 → 呼び出し側で busy 解除
         }
     }
 }

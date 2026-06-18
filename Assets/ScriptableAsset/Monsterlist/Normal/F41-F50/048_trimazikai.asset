@@ -48,8 +48,8 @@ MonoBehaviour:
   attributeResistances: []
   Exp: 1250
   Gold: 0
-  dropItem: {fileID: 0}
-  dropRate: 0
+  dropItem: {fileID: 11400000, guid: 60eea5f6106f0d24e968ac24a78ee33f, type: 2}
+  dropRate: 0.1
   autoRegenEnabled: 0
   autoRegenAmount: 0
   isQuizBoss: 0

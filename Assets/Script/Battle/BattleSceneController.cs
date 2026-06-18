@@ -679,7 +679,6 @@ public partial class BattleSceneController : MonoBehaviour
         if (battleEnded) return;
         battleEnded = true;
         SetButtonsInteractable(false);
-
         // =========================================================
         // 撃破演出の出し分け（BattleContext の状態は OnVictoryCore で
         // 書き換わる前にここで確定させる）
@@ -688,11 +687,22 @@ public partial class BattleSceneController : MonoBehaviour
         bool toPhase2 = BattleContext.Phase2Monster != null          // 第二形態への連戦 → 既存ロジックで差し替え
                         && !BattleContext.IsPhase2Transition
                         && BattleContext.IsBossBattle;
-
         // ボス撃破（沈降演出）。本番ボス戦、またはモンスター自身が IsBoss フラグを
         // 持つ場合（デバッグ戦闘で IsBoss モンスターを呼んだ時もこれで沈降演出になる）。
         bool isBoss = BattleContext.IsBossBattle
                       || (enemyMonster != null && enemyMonster.IsBoss);
+
+        // ★追加: ボス撃破ステータスを Analytics に記録
+        //   条件: ボス戦であり、第二形態への連戦移行でない場合に記録。
+        //         餌付け勝利も正規の撃破手段なので対象に含める。
+        //         （= 通常戦闘・第一形態撃破のみ対象外。決着した本番ボス撃破を記録）
+        if (isBoss && !toPhase2)
+        {
+            int bossFloor = BattleContext.BossFloor > 0
+                            ? BattleContext.BossFloor
+                            : (GameState.I != null ? GameState.I.floor : 0);
+            AnalyticsManager.SendBossDefeated(bossFloor);
+        }
 
         // 餌付け勝利は演出なしで即本体処理（画像不変）
         if (feedWin)
@@ -702,7 +712,6 @@ public partial class BattleSceneController : MonoBehaviour
             OnVictoryCore();
             return;
         }
-
         // 連戦（第二形態へ移行）: 第一形態を消してから本体処理（→ 再読込で第二形態出現）
         // ※ ここでは BGM を止めない。第二形態の Start() で次の BGM が鳴る（同じなら継続）。
         if (toPhase2)
@@ -710,11 +719,8 @@ public partial class BattleSceneController : MonoBehaviour
             StartCoroutine(Phase1VanishThenContinue());
             return;
         }
-
         // 勝敗確定 → BGM 停止（連戦でない通常勝利／ボス撃破）
         if (AudioManager.I != null) AudioManager.I.StopOverlayKeepSilent();
-
-
         // 通常モンスター（飛散）/ ボス（点滅→沈降）の演出を再生してから本体処理
         StartCoroutine(PlayDefeatThenVictory(isBoss));
     }
@@ -1320,7 +1326,6 @@ public partial class BattleSceneController : MonoBehaviour
     /// </summary>
     private void FallbackDefeat()
     {
-
         // =========================================================
         // 統計: 全滅帰還回数を加算（追加）
         // コンティニュー「いいえ」・広告失敗・ギブアップ後の帰還が
@@ -1330,23 +1335,21 @@ public partial class BattleSceneController : MonoBehaviour
         {
             GameState.I.statDefeatCount++;
             SaveManager.Save();
-        }
 
+            // ★追加: ゲームオーバー地点を Analytics に記録（floor/step/level を自動取得）
+            AnalyticsManager.SendGameOver();
+        }
         ResetBattleStatics();
         BattleContext.ItemSnapshot = null;
         BattleContext.StatusPointSnapshot = -1; // ★敗北帰還でSP確定（巻き戻さずクリア・消さないこと）
         BattleContext.FinalBossCarryEnemyHp = -1; // ★敗北帰還でHP引き継ぎ退避を破棄（消さないこと）
-
-
-
-        // ボス戦敗北処理（STEP を維持）
+                                                  // ボス戦敗北処理（STEP を維持）
         if (BattleContext.IsBossBattle)
         {
             Debug.Log($"[Battle] ボス戦敗北。STEP={GameState.I?.step} を維持して街へ帰還。");
             BattleContext.IsBossBattle = false;
             BattleContext.BossFloor = 0;
         }
-
         Invoke(nameof(ReturnToMainWithFullRecover), 1.5f);
     }
 
