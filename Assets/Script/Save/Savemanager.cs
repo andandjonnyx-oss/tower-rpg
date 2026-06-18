@@ -70,6 +70,8 @@ public static class SaveManager
             data.bossPhaseF100 = GameState.I.bossPhaseF100;
             data.finalBossCarryUnlocked = GameState.I.finalBossCarryUnlocked;
             data.finalBossCarryEnabled = GameState.I.finalBossCarryEnabled;
+            data.hasGrantedStartingItems = GameState.I.hasGrantedStartingItems;
+
 
             data.endingPhase = GameState.I.endingPhase;
             data.zukanAllUnlocked = GameState.I.zukanAllUnlocked;
@@ -216,6 +218,14 @@ public static class SaveManager
             GameState.I.finalBossCarryUnlocked = data.finalBossCarryUnlocked;
             GameState.I.finalBossCarryEnabled = data.finalBossCarryEnabled;
 
+            // --- 初期アイテム付与フラグの復元＋移行処理（追加） ---
+            // セーブが存在した時点で「既にゲームを開始した既存プレイヤー」とみなす。
+            // 旧セーブ（このフィールドを持たない）はデフォルト false で来るが、
+            // ここで true に矯正することで、アップデート後に初期アイテムを
+            // 二重付与してしまう事故を防ぐ。
+            // （新規開始経由のセーブは既に true が保存されているので影響なし）
+            GameState.I.hasGrantedStartingItems = true;
+
             GameState.I.endingPhase = data.endingPhase;
             GameState.I.zukanAllUnlocked = data.zukanAllUnlocked;
             GameState.I.playerName = data.playerName ?? "";
@@ -333,6 +343,12 @@ public class SaveData
     // 既存セーブとの互換: デフォルト false で自動対応。
     public bool finalBossCarryUnlocked = false;
     public bool finalBossCarryEnabled = false;
+
+    // --- 初期アイテム付与済みフラグ（追加） ---
+    // 既存セーブとの互換: 旧データはデフォルト false でロードされるが、
+    // SaveManager.Load() の移行処理で「セーブが存在した＝既存プレイヤー」とみなし
+    // true に矯正する（二重付与防止）。
+    public bool hasGrantedStartingItems = false;
 
     // --- エンディング進行 ---
     // 既存セーブデータとの互換性: デフォルト値（0/false）で自動対応。

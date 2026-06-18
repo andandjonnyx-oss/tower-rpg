@@ -21,17 +21,32 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
 
     private GpShopData shopData;
 
+    // プレハブで設定された元の文字色を保持する（白で上書きしないため）
+    private Color defaultNameColor = Color.black;
+    private Color defaultCostColor = Color.black;
+    private bool colorsInitialized = false;
+
     /// <summary>
     /// セルがタップされた時のコールバック。
     /// GpShopView が設定する。
     /// </summary>
     public System.Action<GpShopData> onClicked;
 
+    private void CacheDefaultColors()
+    {
+        if (colorsInitialized) return;
+        if (nameText != null) defaultNameColor = nameText.color;
+        if (costText != null) defaultCostColor = costText.color;
+        colorsInitialized = true;
+    }
+
     /// <summary>
     /// セルに商品データをセットして表示を更新する。
     /// </summary>
     public void Setup(GpShopData data)
     {
+        CacheDefaultColors();
+
         shopData = data;
 
         if (data == null || data.item == null)
@@ -63,15 +78,18 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void SetInteractable(bool interactable)
     {
+        CacheDefaultColors();
+
         // アイコンの色をグレーアウトで表現
         if (iconImage != null)
             iconImage.color = interactable ? Color.white : new Color(0.4f, 0.4f, 0.4f, 1f);
 
+        // 文字色：有効時はプレハブの元色を維持、無効時のみグレーアウト
         if (nameText != null)
-            nameText.color = interactable ? Color.white : new Color(0.5f, 0.5f, 0.5f, 1f);
+            nameText.color = interactable ? defaultNameColor : new Color(0.5f, 0.5f, 0.5f, 1f);
 
         if (costText != null)
-            costText.color = interactable ? Color.white : new Color(0.5f, 0.5f, 0.5f, 1f);
+            costText.color = interactable ? defaultCostColor : new Color(0.5f, 0.5f, 0.5f, 1f);
     }
 
     public void OnPointerClick(PointerEventData eventData)

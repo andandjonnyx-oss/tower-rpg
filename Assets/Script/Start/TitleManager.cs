@@ -138,8 +138,8 @@ public class TitleUIManager : MonoBehaviour
 
             GameState.I.statGameStartCount++;
 
-            // 初期アイテムを付与
-            GrantStartingItems();
+            // 初期アイテムを付与（冪等: 未付与のときだけ実行）
+            EnsureStartingItems();
 
             Debug.Log("[Title] セーブデータなし。新規で開始");
         }
@@ -176,6 +176,15 @@ public class TitleUIManager : MonoBehaviour
         {
             SaveManager.Load();
             Debug.Log("[Title] オープニング前にセーブデータをロード");
+        }
+        else
+        {
+            // ★修正: 新規プレイヤーがスタートより先にオープニングを押した場合、
+            // この後 Talk シーンで MarkPlayed() → Save() が走り「初期アイテム無しの
+            // 空セーブ」が作られてしまう。それを防ぐため、ここで初期アイテムを
+            // 付与しておく（EnsureStartingItems は冪等なので二重付与しない）。
+            EnsureStartingItems();
+            Debug.Log("[Title] オープニング前に初期アイテムを保証（新規プレイヤー）");
         }
 
         // Talk シーンへ渡すパラメータをセット
@@ -302,8 +311,19 @@ public class TitleUIManager : MonoBehaviour
         if (StorageManager.Instance != null)
             StorageManager.Instance.ClearAll();
 
-        // 初期アイテムを付与
+        // 初期アイテム付与フラグをリセット（初期化なので再付与を許可する）
+        GameState.I.hasGrantedStartingItems = false;
+
+        // 初期アイテムを付与（初期化は強制再付与なので直接呼ぶ）
         GrantStartingItems();
+
+        // 付与済みフラグを立てる（次回以降の冪等判定のため）
+        GameState.I.hasGrantedStartingItems = true;
+
+        // フラグ true を確実に保存する。
+        // GrantStartingItems 内の自動セーブはフラグを立てる前に走るため、
+        // ここで明示的に保存し直してコメントと実挙動を一致させる。
+        SaveManager.Save();
 
         Debug.Log("[Title] セーブデータを初期化しました");
     }
@@ -313,8 +333,47 @@ public class TitleUIManager : MonoBehaviour
     // =========================================================
 
     /// <summary>
+    /// 初期アイテムを「まだ付与していなければ」付与する冪等メソッド。
+    /// hasGrantedStartingItems フラグで管理し、何度呼んでも二重付与しない。
+    ///
+    /// 呼び出し箇所:
+    ///   - OnStart() の新規開始分岐
+    ///   - OnOpening() の新規プレイヤー分岐（空セーブ対策）
+    ///
+    /// GrantStartingItems() 内の AddItem / MarkItemDiscovered が自動セーブするため、
+    /// 付与後はフラグも含めて確実に永続化される（末尾の Save() で念のため再保存）。
+    /// </summary>
+    private void EnsureStartingItems()
+    {
+        if (GameState.I == null)
+        {
+            Debug.LogWarning("[Title] GameState が見つかりません。初期アイテムを付与できません。");
+            return;
+        }
+
+        // 既に付与済みなら何もしない（冪等）
+        if (GameState.I.hasGrantedStartingItems)
+        {
+            Debug.Log("[Title] 初期アイテムは付与済み。スキップします。");
+            return;
+        }
+
+        GrantStartingItems();
+
+        // 付与済みフラグを立てて保存（二度と再付与されない）
+        GameState.I.hasGrantedStartingItems = true;
+        SaveManager.Save();
+        Debug.Log("[Title] 初期アイテム付与フラグを ON にしました");
+    }
+
+    /// <summary>
     /// startingItems 配列に設定されたアイテムを ItemBoxManager に追加する。
     /// Weapon カテゴリのアイテムが含まれている場合、最初の1つを自動装備する。
+    /// 付与したアイテムは図鑑にも登録する。
+    ///
+    /// 注意: このメソッドは無条件に付与する。冪等性が必要な通常フローでは
+    /// EnsureStartingItems() 経由で呼ぶこと。
+    /// OnReset() からは「初期化＝強制再付与」のため直接呼んでよい。
     /// </summary>
     private void GrantStartingItems()
     {
@@ -339,6 +398,11 @@ public class TitleUIManager : MonoBehaviour
             }
 
             Debug.Log($"[Title] 初期アイテム付与: {startingItems[i].itemName}");
+
+            // 図鑑登録（初期アイテムも図鑑に載せる）。MarkItemDiscovered は内部で
+            // 重複チェック＋自動セーブするため、同一アイテムを複数付与しても安全。
+            if (GameState.I != null)
+                GameState.I.MarkItemDiscovered(startingItems[i].itemId);
 
             // 最初の Weapon を自動装備
             if (!weaponEquipped && startingItems[i].category == ItemCategory.Weapon)
