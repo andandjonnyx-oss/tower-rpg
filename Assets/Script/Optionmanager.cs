@@ -66,6 +66,11 @@ public class OptionManager : MonoBehaviour
     [Tooltip("敵HP引き継ぎ救済の項目ルート（解放前は非表示にする親オブジェクト）")]
     [SerializeField] private GameObject finalBossCarryRoot;
 
+    [Tooltip("利き手切替ボタン（右利き/左利き）")]
+    [SerializeField] private Button handednessButton;
+    [Tooltip("利き手ボタンのラベル（任意）")]
+    [SerializeField] private TMP_Text handednessLabel;
+
 
     private void Start()
     {
@@ -81,6 +86,10 @@ public class OptionManager : MonoBehaviour
         if (noItemModeButton != null)
             noItemModeButton.onClick.AddListener(OnNoItemModeClicked);
         UpdateNoItemModeLabel(GameSettings.NoItemMode);
+
+        if (handednessButton != null)
+            handednessButton.onClick.AddListener(OnHandednessClicked);
+        UpdateHandednessLabel(GameSettings.Handedness);
 
         // F100第二形態 敵HP引き継ぎ救済トグル（解放済みのときのみ表示）
         bool carryUnlocked = GameState.I != null && GameState.I.finalBossCarryUnlocked;
@@ -239,6 +248,26 @@ public class OptionManager : MonoBehaviour
         if (noItemModeLabel != null)
             noItemModeLabel.text = on ? "経験値稼ぎたいからアイテムなんていらんのじゃモード: ON" : "経験値稼ぎたいからアイテムなんていらんのじゃモード: OFF";
     }
+
+    // =========================================================
+    // 利き手トグル（追加）
+    // =========================================================
+
+    private void OnHandednessClicked()
+    {
+        var next = GameSettings.Handedness == Handedness.Right
+            ? Handedness.Left
+            : Handedness.Right;
+        GameSettings.Handedness = next;
+        UpdateHandednessLabel(next);
+    }
+
+    private void UpdateHandednessLabel(Handedness h)
+    {
+        if (handednessLabel != null)
+            handednessLabel.text = h == Handedness.Left ? "利き手: 左" : "利き手: 右";
+    }
+
 
     // =========================================================
     // F100第二形態 敵HP引き継ぎ救済トグル（追加）

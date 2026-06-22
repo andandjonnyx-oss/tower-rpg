@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ‰¹—ÊˆÈŠO‚ÌƒQ[ƒ€ƒvƒŒƒCİ’èBPlayerPrefs ‚Å‰i‘±‰»‚·‚éB
-/// i‰¹—Êİ’è‚Í AudioManager ‚ªŠÇ—‚µ‚Ä‚¢‚é‚½‚ßA‚±‚±‚Å‚Íˆµ‚í‚È‚¢j
+/// éŸ³é‡ä»¥å¤–ã®ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤è¨­å®šã€‚PlayerPrefs ã§æ°¸ç¶šåŒ–ã™ã‚‹ã€‚
+/// ï¼ˆéŸ³é‡è¨­å®šã¯ AudioManager ãŒç®¡ç†ã—ã¦ã„ã‚‹ãŸã‚ã€ã“ã“ã§ã¯æ‰±ã‚ãªã„ï¼‰
 /// </summary>
 public static class GameSettings
 {
@@ -13,9 +13,9 @@ public static class GameSettings
     private static bool? noItemModeCache;
 
     /// <summary>
-    /// –‚–@ƒZƒŒƒNƒ^[‚Ì‘I‘ğ•ÛƒIƒvƒVƒ‡ƒ“BŠù’è‚Í OFFB
-    /// ON ‚Ì‚Æ‚«Aí“¬’†i‚»‚Ìí“¬‚ÌŠÔj/ “ƒ“àií“¬‚É“ü‚é‚Ü‚Å‚ÌŠÔj‚Å
-    /// ‘O‰ñ‘I‘ğ‚µ‚½–‚–@‚ğ•Û‚·‚éB
+    /// é­”æ³•ã‚»ãƒ¬ã‚¯ã‚¿ãƒ¼ã®é¸æŠä¿æŒã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€‚æ—¢å®šã¯ OFFã€‚
+    /// ON ã®ã¨ãã€æˆ¦é—˜ä¸­ï¼ˆãã®æˆ¦é—˜ã®é–“ï¼‰/ å¡”å†…ï¼ˆæˆ¦é—˜ã«å…¥ã‚‹ã¾ã§ã®é–“ï¼‰ã§
+    /// å‰å›é¸æŠã—ãŸé­”æ³•ã‚’ä¿æŒã™ã‚‹ã€‚
     /// </summary>
     public static bool KeepMagicSelection
     {
@@ -34,10 +34,10 @@ public static class GameSettings
     }
 
     /// <summary>
-    /// uƒAƒCƒeƒ€‚ªo‚È‚¢ƒ‚[ƒhvƒIƒvƒVƒ‡ƒ“BŠù’è‚Í OFFB
-    /// ON ‚Ì‚Æ‚«A“ƒ“à‚ÌƒAƒCƒeƒ€”»’è‚ğƒXƒLƒbƒv‚µAƒGƒ“ƒJƒEƒ“ƒg‚Ì‚İ“Æ—§”»’èiÀ¿20%j‚É‚È‚éB
-    /// OFF ‚Ì‚Æ‚«AƒAƒCƒeƒ€”»’èiæj¨ ‚·‚è”²‚¯‚½c‚è‚É‘Î‚µƒGƒ“ƒJƒEƒ“ƒg”»’èiÀ¿20%‚É‚È‚é‚æ‚¤
-    /// EncounterSystem.encounterRate ‚ğ 0.25 ‚Éİ’è‚·‚éjB
+    /// ã€Œã‚¢ã‚¤ãƒ†ãƒ ãŒå‡ºãªã„ãƒ¢ãƒ¼ãƒ‰ã€ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã€‚æ—¢å®šã¯ OFFã€‚
+    /// ON ã®ã¨ãã€å¡”å†…ã®ã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã€ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®ã¿ç‹¬ç«‹åˆ¤å®šï¼ˆå®Ÿè³ª20%ï¼‰ã«ãªã‚‹ã€‚
+    /// OFF ã®ã¨ãã€ã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šï¼ˆå…ˆï¼‰â†’ ã™ã‚ŠæŠœã‘ãŸæ®‹ã‚Šã«å¯¾ã—ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆåˆ¤å®šï¼ˆå®Ÿè³ª20%ã«ãªã‚‹ã‚ˆã†
+    /// EncounterSystem.encounterRate ã‚’ 0.25 ã«è¨­å®šã™ã‚‹ï¼‰ã€‚
     /// </summary>
     public static bool NoItemMode
     {
@@ -54,4 +54,31 @@ public static class GameSettings
             PlayerPrefs.Save();
         }
     }
+
+    private const string KeyHandedness = "opt_handedness";
+    private static int? handednessCache;
+
+    /// <summary>
+    /// åˆ©ãæ‰‹è¨­å®šã€‚æ—¢å®šã¯ Rightï¼ˆå³åˆ©ãï¼‰ã€‚
+    /// Left ã®ã¨ãã€Tower ã®æ“ä½œç³»UIã‚’å€‹åˆ¥ã‚ªãƒ•ã‚»ãƒƒãƒˆã§ãšã‚‰ã™ã€‚
+    /// </summary>
+    public static Handedness Handedness
+    {
+        get
+        {
+            if (handednessCache == null)
+                handednessCache = PlayerPrefs.GetInt(KeyHandedness, (int)Handedness.Right);
+            return (Handedness)handednessCache.Value;
+        }
+        set
+        {
+            handednessCache = (int)value;
+            PlayerPrefs.SetInt(KeyHandedness, (int)value);
+            PlayerPrefs.Save();
+        }
+    }
+
+    /// <summary>å·¦åˆ©ãè¨­å®šã‹ã©ã†ã‹ã®ç°¡æ˜“åˆ¤å®šã€‚</summary>
+    public static bool IsLeftHanded => Handedness == Handedness.Left;
+
 }

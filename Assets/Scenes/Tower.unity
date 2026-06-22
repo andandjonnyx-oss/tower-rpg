@@ -3184,6 +3184,87 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &710802541
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 710802543}
+  - component: {fileID: 710802542}
+  m_Layer: 0
+  m_Name: hanten
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &710802542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710802541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fce9746922c8c5a409afc7e4b9002533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHandednessLayout
+  targets:
+  - target: {fileID: 951638133}
+    leftHandedOffset: {x: -1534, y: 0}
+    note: "\u5009\u5EAB"
+  - target: {fileID: 844703893}
+    leftHandedOffset: {x: -942, y: 0}
+    note: "\u30A2\u30A4\u30C6\u30E0"
+  - target: {fileID: 2070002108}
+    leftHandedOffset: {x: -340, y: 0}
+    note: "\u9032\u3080"
+  - target: {fileID: 808794632}
+    leftHandedOffset: {x: 1352, y: 0}
+    note: 
+  - target: {fileID: 1744094145}
+    leftHandedOffset: {x: -1400, y: 0}
+    note: "\u5E30\u9084"
+  - target: {fileID: 1718918726}
+    leftHandedOffset: {x: -1400, y: 0}
+    note: "\u30B9\u30C6\u30FC\u30BF\u30B9"
+  - target: {fileID: 1228192324}
+    leftHandedOffset: {x: -1340, y: 0}
+    note: 
+  - target: {fileID: 703090065}
+    leftHandedOffset: {x: 1500, y: 0}
+    note: 
+  - target: {fileID: 2084898510}
+    leftHandedOffset: {x: 1500, y: 0}
+    note: 
+  - target: {fileID: 283461465}
+    leftHandedOffset: {x: 1444, y: 0}
+    note: 
+  - target: {fileID: 1505575227}
+    leftHandedOffset: {x: 150, y: 0}
+    note: 
+  - target: {fileID: 1187357864}
+    leftHandedOffset: {x: 150, y: 0}
+    note: 
+--- !u!4 &710802543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710802541}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 886.6372, y: 562.4669, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &794010869
 GameObject:
   m_ObjectHideFlags: 0
@@ -3436,7 +3517,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -676, y: 117}
+  m_AnchoredPosition: {x: -676, y: 120}
   m_SizeDelta: {x: 500, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &808794633
@@ -7048,8 +7129,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566450892
 MonoBehaviour:
@@ -8288,8 +8369,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1776631744
 MonoBehaviour:
@@ -9585,3 +9666,4 @@ SceneRoots:
   - {fileID: 1371446202}
   - {fileID: 355371588}
   - {fileID: 232016729}
+  - {fileID: 710802543}
