@@ -1,0 +1,9 @@
+root = true
+
+# C# source: UTF-8 with BOM so the Unity/MSVC toolchain reads Japanese
+# correctly regardless of OS code page. Matches Unity's auto-generated scripts.
+# New files save as UTF-8+BOM automatically; existing Shift-JIS files convert
+# only when opened and saved (convert-on-touch). See CLAUDE.md section 7.
+[*.cs]
+charset = utf-8-bom
+end_of_line = crlf
