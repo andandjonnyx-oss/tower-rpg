@@ -4917,7 +4917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4e041207f5839489da56b66f2b2c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpenUrlButton
-  url: https://discord.gg/YuA3GzQY
+  url: https://discord.gg/Xwppv89Rsa
 --- !u!1 &2097467065
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒAƒCƒeƒ€Ú×ƒpƒlƒ‹i‘SƒV[ƒ“‹¤’ÊjB
-/// ƒAƒCƒeƒ€î•ñ‚ğ•\¦‚µAIItemContext ‚©‚çó‚¯æ‚Á‚½ƒ{ƒ^ƒ“’è‹`‚É]‚Á‚Äƒ{ƒ^ƒ“‚ğ“®“I‚É\¬‚·‚éB
-/// ƒoƒgƒ‹’†‚É•Ší‚ğ‘I‘ğ‚µ‚½ê‡AƒXƒLƒ‹‚ÌƒN[ƒ‹ƒ^ƒCƒ€î•ñ‚ğ•\¦‚·‚éB
+/// ã‚¢ã‚¤ãƒ†ãƒ è©³ç´°ãƒ‘ãƒãƒ«ï¼ˆå…¨ã‚·ãƒ¼ãƒ³å…±é€šï¼‰ã€‚
+/// ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±ã‚’è¡¨ç¤ºã—ã€IItemContext ã‹ã‚‰å—ã‘å–ã£ãŸãƒœã‚¿ãƒ³å®šç¾©ã«å¾“ã£ã¦ãƒœã‚¿ãƒ³ã‚’å‹•çš„ã«æ§‹æˆã™ã‚‹ã€‚
+/// ãƒãƒˆãƒ«ä¸­ã«æ­¦å™¨ã‚’é¸æŠã—ãŸå ´åˆã€ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ æƒ…å ±ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 /// </summary>
 public class ItemDetailPanel : MonoBehaviour
 {
-    [Header("Root (SetActive ‚Å•\¦/”ñ•\¦)")]
+    [Header("Root (SetActive ã§è¡¨ç¤º/éè¡¨ç¤º)")]
     [SerializeField] private GameObject detailRoot;
 
     [Header("Item Info")]
@@ -18,10 +18,10 @@ public class ItemDetailPanel : MonoBehaviour
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private Image itemImage;
 
-    [Header("Skill Cooldown (ƒoƒgƒ‹’†‚Ì‚İ•\¦)")]
+    [Header("Skill Cooldown (ãƒãƒˆãƒ«ä¸­ã®ã¿è¡¨ç¤º)")]
     [SerializeField] private TMP_Text skillCooldownText;
 
-    [Header("Buttons (Inspector ‚ÅƒAƒTƒCƒ“AÅ‘å”•ª—pˆÓ)")]
+    [Header("Buttons (Inspector ã§ã‚¢ã‚µã‚¤ãƒ³ã€æœ€å¤§æ•°åˆ†ç”¨æ„)")]
     [SerializeField] private Button[] buttons;
     [SerializeField] private TMP_Text[] buttonTexts;
 
@@ -35,7 +35,7 @@ public class ItemDetailPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Ú×ƒpƒlƒ‹‚ğ•\¦‚·‚éB
+    /// è©³ç´°ãƒ‘ãƒãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
     /// </summary>
     public void Show(InventoryItem invItem, IItemContext context, bool fromInventory)
     {
@@ -43,7 +43,7 @@ public class ItemDetailPanel : MonoBehaviour
 
         var data = invItem.data;
 
-        // ƒAƒCƒeƒ€î•ñ
+        // ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±
         if (itemNameText != null) itemNameText.text = data.itemName;
         if (descriptionText != null) descriptionText.text = data.description;
         if (itemImage != null)
@@ -52,10 +52,10 @@ public class ItemDetailPanel : MonoBehaviour
             itemImage.enabled = data.icon != null;
         }
 
-        // ƒXƒLƒ‹ƒN[ƒ‹ƒ^ƒCƒ€•\¦iƒoƒgƒ‹’† + •Ší‚Ì‚İj
+        // ã‚¹ã‚­ãƒ«ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ è¡¨ç¤ºï¼ˆãƒãƒˆãƒ«ä¸­ + æ­¦å™¨ã®ã¿ï¼‰
         UpdateSkillCooldownDisplay(invItem);
 
-        // ƒ{ƒ^ƒ“\¬
+        // ãƒœã‚¿ãƒ³æ§‹æˆ
         var buttonDefs = context.GetButtons(invItem, fromInventory);
         SetupButtons(buttonDefs);
 
@@ -63,7 +63,7 @@ public class ItemDetailPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// Ú×ƒpƒlƒ‹‚ğ”ñ•\¦‚É‚·‚éB
+    /// è©³ç´°ãƒ‘ãƒãƒ«ã‚’éè¡¨ç¤ºã«ã™ã‚‹ã€‚
     /// </summary>
     public void Hide()
     {
@@ -71,14 +71,14 @@ public class ItemDetailPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒoƒgƒ‹’†‚©‚Â•Ší‚Ìê‡AƒXƒLƒ‹‚ÌƒN[ƒ‹ƒ^ƒCƒ€î•ñ‚ğ•\¦‚·‚éB
-    /// ‚»‚êˆÈŠO‚Å‚Í”ñ•\¦B
+    /// ãƒãƒˆãƒ«ä¸­ã‹ã¤æ­¦å™¨ã®å ´åˆã€ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ æƒ…å ±ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+    /// ãã‚Œä»¥å¤–ã§ã¯éè¡¨ç¤ºã€‚
     /// </summary>
     private void UpdateSkillCooldownDisplay(InventoryItem invItem)
     {
         if (skillCooldownText == null) return;
 
-        // ƒoƒgƒ‹’†‚Å‚È‚¯‚ê‚Î”ñ•\¦
+        // ãƒãƒˆãƒ«ä¸­ã§ãªã‘ã‚Œã°éè¡¨ç¤º
         bool inBattle = GameState.I != null && GameState.I.isInBattle;
         if (!inBattle || invItem?.data == null || invItem.data.category != ItemCategory.Weapon)
         {
@@ -86,14 +86,14 @@ public class ItemDetailPanel : MonoBehaviour
             return;
         }
 
-        // •Ší‚ÉƒXƒLƒ‹‚ª‚È‚¯‚ê‚Î”ñ•\¦
+        // æ­¦å™¨ã«ã‚¹ã‚­ãƒ«ãŒãªã‘ã‚Œã°éè¡¨ç¤º
         if (invItem.data.skills == null || invItem.data.skills.Length == 0)
         {
             skillCooldownText.gameObject.SetActive(false);
             return;
         }
 
-        // ƒXƒLƒ‹‚²‚Æ‚ÌCTî•ñ‚ğ‘g‚İ—§‚Ä‚é
+        // ã‚¹ã‚­ãƒ«ã”ã¨ã®CTæƒ…å ±ã‚’çµ„ã¿ç«‹ã¦ã‚‹
         var lines = new List<string>();
         for (int i = 0; i < invItem.data.skills.Length; i++)
         {
@@ -105,9 +105,9 @@ public class ItemDetailPanel : MonoBehaviour
                 remaining = invItem.skillCooldowns[skill.skillId];
 
             if (remaining > 0)
-                lines.Add($"{skill.skillName}FCT{remaining}");
+                lines.Add($"{skill.skillName}ï¼šCT{remaining}");
             else
-                lines.Add($"{skill.skillName}Fg—p‰Â”\");
+                lines.Add($"{skill.skillName}ï¼šä½¿ç”¨å¯èƒ½");
         }
 
         if (lines.Count > 0)
@@ -122,33 +122,54 @@ public class ItemDetailPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ{ƒ^ƒ“”z—ñ‚ğ DetailButtonDef ƒŠƒXƒg‚É‡‚í‚¹‚Äİ’è‚·‚éB
+    /// ãƒœã‚¿ãƒ³ã‚’å½¹å‰²(role)ã”ã¨ã®å›ºå®šã‚¹ãƒ­ãƒƒãƒˆã«é…ç½®ã™ã‚‹ã€‚
+    /// ã‚¹ãƒ­ãƒƒãƒˆ: 0=å·¦ä¸Š(Primary), 1=å³ä¸Š(Secondary), 2=å·¦ä¸‹(Discard), 3=å³ä¸‹(Transfer)
+    /// è©²å½“ãƒ­ãƒ¼ãƒ«ã®ãƒœã‚¿ãƒ³ãŒç„¡ã„ã‚¹ãƒ­ãƒƒãƒˆã¯éè¡¨ç¤ºï¼ˆä½ç½®ã¯è©°ã‚ãªã„ï¼‰ã€‚
+    /// åŒä¸€ãƒ­ãƒ¼ãƒ«ãŒè¤‡æ•°æ¥ãŸå ´åˆã¯æœ€åˆã®1ã¤ã‚’æ¡ç”¨ã—ã€ä»¥é™ã¯ç„¡è¦–ã™ã‚‹ã€‚
     /// </summary>
     private void SetupButtons(List<DetailButtonDef> defs)
     {
         if (buttons == null) return;
 
+        // role â†’ ã‚¹ãƒ­ãƒƒãƒˆindex ã®å¯¾å¿œ
+        // ButtonRole ã®å€¤ï¼ˆPrimary=0,Secondary=1,Discard=2,Transfer=3ï¼‰ãŒ
+        // ãã®ã¾ã¾ã‚¹ãƒ­ãƒƒãƒˆindexã¨ä¸€è‡´ã™ã‚‹è¨­è¨ˆã€‚
+        // å„ã‚¹ãƒ­ãƒƒãƒˆã«å…¥ã‚Œã‚‹ def ã‚’æ±ºã‚ã‚‹ï¼ˆç„¡ã‘ã‚Œã° nullï¼‰ã€‚
+        DetailButtonDef[] slotDefs = new DetailButtonDef[buttons.Length];
+
+        if (defs != null)
+        {
+            foreach (var def in defs)
+            {
+                if (def == null) continue;
+                int slot = (int)def.role;
+                if (slot < 0 || slot >= slotDefs.Length) continue; // å®‰å…¨
+                if (slotDefs[slot] == null)        // æ—¢ã«åŸ‹ã¾ã£ã¦ã„ã‚Œã°ç„¡è¦–
+                    slotDefs[slot] = def;
+            }
+        }
+
+        // å„ã‚¹ãƒ­ãƒƒãƒˆã‚’è¨­å®š
         for (int i = 0; i < buttons.Length; i++)
         {
             if (buttons[i] == null) continue;
 
-            if (i < defs.Count)
+            var def = slotDefs[i];
+            if (def != null)
             {
-                var def = defs[i];
                 buttons[i].gameObject.SetActive(true);
                 buttons[i].interactable = def.interactable;
 
-                // ƒ‰ƒxƒ‹İ’è
                 if (buttonTexts != null && i < buttonTexts.Length && buttonTexts[i] != null)
                     buttonTexts[i].text = def.label;
 
-                // ƒŠƒXƒi[‚ğƒNƒŠƒA‚µ‚ÄÄ“o˜^
                 buttons[i].onClick.RemoveAllListeners();
                 var action = def.onClick;
                 buttons[i].onClick.AddListener(() => action?.Invoke());
             }
             else
             {
+                // è©²å½“ãƒ­ãƒ¼ãƒ«ã®ãƒœã‚¿ãƒ³ãŒç„¡ã„ã‚¹ãƒ­ãƒƒãƒˆã¯éè¡¨ç¤ºï¼ˆä½ç½®ã¯ç¶­æŒï¼‰
                 buttons[i].gameObject.SetActive(false);
             }
         }

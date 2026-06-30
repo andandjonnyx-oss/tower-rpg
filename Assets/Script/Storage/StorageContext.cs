@@ -187,7 +187,8 @@ public class StorageContext : MonoBehaviour, IItemContext
 
         // 預けるボタン
         bool canDeposit = StorageManager.Instance != null && !StorageManager.Instance.IsFull;
-        list.Add(new DetailButtonDef("預ける", () => DepositItem(invItem), canDeposit));
+        list.Add(new DetailButtonDef("預ける", () => DepositItem(invItem),
+            canDeposit, role: ButtonRole.Transfer));
     }
 
     private void BuildStorageButtons(InventoryItem invItem, List<DetailButtonDef> list)
@@ -213,7 +214,8 @@ public class StorageContext : MonoBehaviour, IItemContext
 
         // 引き出すボタン
         bool canWithdraw = ItemBoxManager.Instance != null && !ItemBoxManager.Instance.IsFull;
-        list.Add(new DetailButtonDef("引き出す", () => WithdrawItem(invItem), canWithdraw));
+        list.Add(new DetailButtonDef("引き出す", () => WithdrawItem(invItem),
+            canWithdraw, role: ButtonRole.Transfer));
     }
 
     public void RefreshSlots()

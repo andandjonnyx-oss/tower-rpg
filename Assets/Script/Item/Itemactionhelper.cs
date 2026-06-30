@@ -1,37 +1,38 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ItemboxContext / StorageContext ‹¤’Ê‚ÌƒAƒCƒeƒ€‘€ìƒwƒ‹ƒp[B
-/// ƒ{ƒ^ƒ“\’zƒƒWƒbƒN‚ÆƒAƒCƒeƒ€Œø‰Ê“K—p‚ğˆêŒ³ŠÇ—‚µA
-/// Vƒtƒ‰ƒO’Ç‰Á‚É•Ğ•û‚¾‚¯XV˜R‚ê‚ª‹N‚«‚é–ŒÌ‚ğ–h‚®B
+/// ItemboxContext / StorageContext å…±é€šã®ã‚¢ã‚¤ãƒ†ãƒ æ“ä½œãƒ˜ãƒ«ãƒ‘ãƒ¼ã€‚
+/// ãƒœã‚¿ãƒ³æ§‹ç¯‰ãƒ­ã‚¸ãƒƒã‚¯ã¨ã‚¢ã‚¤ãƒ†ãƒ åŠ¹æœé©ç”¨ã‚’ä¸€å…ƒç®¡ç†ã—ã€
+/// æ–°ãƒ•ãƒ©ã‚°è¿½åŠ æ™‚ã«ç‰‡æ–¹ã ã‘æ›´æ–°æ¼ã‚ŒãŒèµ·ãã‚‹äº‹æ•…ã‚’é˜²ãã€‚
 /// </summary>
 public static class ItemActionHelper
 {
     // =========================================================
-    // ƒ{ƒ^ƒ“\’zƒwƒ‹ƒp[
+    // ãƒœã‚¿ãƒ³æ§‹ç¯‰ãƒ˜ãƒ«ãƒ‘ãƒ¼
     // =========================================================
 
     /// <summary>
-    /// uÌ‚Ä‚év/uÌ‚Ä‚é‚Èvƒ{ƒ^ƒ“‚ğ\’z‚·‚éB
-    /// cannotDiscard ‚È‚ç–³Œø‰»ƒ‰ƒxƒ‹‚ğ•Ô‚·B
-    /// Ì‚Ä‚éÀs‚É‚Í”jŠüSE‚ğ–Â‚ç‚·B
+    /// ã€Œæ¨ã¦ã‚‹ã€/ã€Œæ¨ã¦ã‚‹ãªã€ãƒœã‚¿ãƒ³ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚
+    /// cannotDiscard ãªã‚‰ç„¡åŠ¹åŒ–ãƒ©ãƒ™ãƒ«ã‚’è¿”ã™ã€‚
+    /// æ¨ã¦ã‚‹å®Ÿè¡Œæ™‚ã«ã¯ç ´æ£„SEã‚’é³´ã‚‰ã™ã€‚
     /// </summary>
     public static DetailButtonDef BuildDiscardButton(
         InventoryItem invItem, System.Action discardAction)
     {
         if (invItem.data.cannotDiscard)
-            return new DetailButtonDef("Ì‚Ä‚é‚È", null, interactable: false);
+            return new DetailButtonDef("æ¨ã¦ã‚‹ãª", null,
+                interactable: false, role: ButtonRole.Discard);
         else
-            return new DetailButtonDef("Ì‚Ä‚é", () =>
+            return new DetailButtonDef("æ¨ã¦ã‚‹", () =>
             {
                 if (AudioManager.I != null) AudioManager.I.PlayItemDiscardSe();
                 discardAction?.Invoke();
-            });
+            }, role: ButtonRole.Discard);
     }
 
     /// <summary>
-    /// •Ší‚Ìu‘•”õv/uŠO‚·vƒ{ƒ^ƒ“‚ğ\’z‚·‚éB
-    /// ‘•”õó‘Ô‚É‰‚¶‚Äƒ‰ƒxƒ‹‚Æ“®ì‚ğØ‚è‘Ö‚¦AÀs‚É‘•”õSE‚ğ–Â‚ç‚·B
+    /// æ­¦å™¨ã®ã€Œè£…å‚™ã€/ã€Œå¤–ã™ã€ãƒœã‚¿ãƒ³ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚
+    /// è£…å‚™çŠ¶æ…‹ã«å¿œã˜ã¦ãƒ©ãƒ™ãƒ«ã¨å‹•ä½œã‚’åˆ‡ã‚Šæ›¿ãˆã€å®Ÿè¡Œæ™‚ã«è£…å‚™SEã‚’é³´ã‚‰ã™ã€‚
     /// </summary>
     public static DetailButtonDef BuildEquipButton(
         InventoryItem invItem, System.Action equipAction, System.Action unequipAction)
@@ -39,46 +40,46 @@ public static class ItemActionHelper
         bool equipped = GameState.I != null
             && GameState.I.equippedWeaponUid == invItem.uid;
 
-        string label = equipped ? "ŠO‚·" : "‘•”õ";
+        string label = equipped ? "å¤–ã™" : "è£…å‚™";
         System.Action action = equipped ? unequipAction : equipAction;
 
         return new DetailButtonDef(label, () =>
         {
             if (AudioManager.I != null) AudioManager.I.PlayEquipSe();
             action?.Invoke();
-        });
+        }, role: ButtonRole.Primary);
     }
 
     /// <summary>
-    /// Á”ïƒAƒCƒeƒ€‚Ìug‚¤v/u—^‚¦‚évƒ{ƒ^ƒ“‚ğ\’z‚·‚éB
-    /// battleOnly / bossFeed ƒ`ƒFƒbƒN‚İB
-    /// ƒ{ƒ^ƒ“‚ª•s—v‚Èê‡‚Í null ‚ğ•Ô‚·B
-    /// g—p‚É‚Íí—Ş‚É‰‚¶‚½SE‚ğ–Â‚ç‚·i‰a•t‚¯„UŒ‚„H‚×‚éjB
+    /// æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ ã®ã€Œä½¿ã†ã€/ã€Œä¸ãˆã‚‹ã€ãƒœã‚¿ãƒ³ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚
+    /// battleOnly / bossFeed ãƒã‚§ãƒƒã‚¯è¾¼ã¿ã€‚
+    /// ãƒœã‚¿ãƒ³ãŒä¸è¦ãªå ´åˆã¯ null ã‚’è¿”ã™ã€‚
+    /// ä½¿ç”¨æ™‚ã«ã¯ç¨®é¡ã«å¿œã˜ãŸSEã‚’é³´ã‚‰ã™ï¼ˆé¤Œä»˜ã‘ï¼æ”»æ’ƒï¼é£Ÿã¹ã‚‹ï¼‰ã€‚
     /// </summary>
     public static DetailButtonDef BuildUseConsumableButton(
         InventoryItem invItem, bool inBattle, System.Action useAction)
     {
-        // battleOnly ‚ÌƒAƒCƒeƒ€‚Í”ñƒoƒgƒ‹‚Ég‚¦‚È‚¢
+        // battleOnly ã®ã‚¢ã‚¤ãƒ†ãƒ ã¯éãƒãƒˆãƒ«æ™‚ã«ä½¿ãˆãªã„
         if (invItem.data.battleOnly && !inBattle)
             return null;
 
-        // ‰a•t‚¯”»’è
+        // é¤Œä»˜ã‘åˆ¤å®š
         bool isBossFeed = inBattle
                           && invItem.data.bossFeedItem
                           && BattleContext.EnemyMonster != null
                           && BattleContext.EnemyMonster.acceptsFeedItem;
 
-        string label = isBossFeed ? "—^‚¦‚é" : "g‚¤";
+        string label = isBossFeed ? "ä¸ãˆã‚‹" : "ä½¿ã†";
         return new DetailButtonDef(label, () =>
         {
             PlayConsumableSe(invItem, inBattle, isBossFeed);
             useAction?.Invoke();
-        });
+        }, role: ButtonRole.Primary);
     }
 
     /// <summary>
-    /// Á”ïƒAƒCƒeƒ€g—p‚ÌSE‚ğí—Ş‚É‰‚¶‚Ä–Â‚ç‚·B
-    /// —Dæ‡ˆÊ: ‰a•t‚¯i”Lj > í“¬’†‚ÌUŒ‚ƒAƒCƒeƒ€i”š”­j > ‚»‚Ì‘¼iH‚×‚éj
+    /// æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ ä½¿ç”¨æ™‚ã®SEã‚’ç¨®é¡ã«å¿œã˜ã¦é³´ã‚‰ã™ã€‚
+    /// å„ªå…ˆé †ä½: é¤Œä»˜ã‘ï¼ˆçŒ«ï¼‰ > æˆ¦é—˜ä¸­ã®æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ï¼ˆçˆ†ç™ºï¼‰ > ãã®ä»–ï¼ˆé£Ÿã¹ã‚‹ï¼‰
     /// </summary>
     private static void PlayConsumableSe(
         InventoryItem invItem, bool inBattle, bool isBossFeed)
@@ -86,16 +87,16 @@ public static class ItemActionHelper
         if (AudioManager.I == null || invItem?.data == null) return;
 
         if (isBossFeed)
-            AudioManager.I.PlayFeedSe();           // ‡B —^‚¦‚é
+            AudioManager.I.PlayFeedSe();           // â‘¢ ä¸ãˆã‚‹
         else if (inBattle && invItem.data.battleDamage > 0)
-            AudioManager.I.PlayAttackItemSe();     // ‡A í“¬’†‚ÌUŒ‚ƒAƒCƒeƒ€
+            AudioManager.I.PlayAttackItemSe();     // â‘¡ æˆ¦é—˜ä¸­ã®æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ 
         else
-            AudioManager.I.PlayEatItemSe();        // ‡@ ‰ñ•œESPE‚»‚Ì‘¼
+            AudioManager.I.PlayEatItemSe();        // â‘  å›å¾©ãƒ»SPãƒ»ãã®ä»–
     }
 
     /// <summary>
-    /// •Ší‚ÌuH‚×‚évƒ{ƒ^ƒ“‚ğ\’z‚·‚éB
-    /// isEdible ‚Å‚È‚¯‚ê‚Î null ‚ğ•Ô‚·B
+    /// æ­¦å™¨ã®ã€Œé£Ÿã¹ã‚‹ã€ãƒœã‚¿ãƒ³ã‚’æ§‹ç¯‰ã™ã‚‹ã€‚
+    /// isEdible ã§ãªã‘ã‚Œã° null ã‚’è¿”ã™ã€‚
     /// </summary>
     public static DetailButtonDef BuildEatWeaponButton(
         InventoryItem invItem, System.Action eatAction)
@@ -103,26 +104,26 @@ public static class ItemActionHelper
         if (!invItem.data.isEdible)
             return null;
 
-        return new DetailButtonDef("H‚×‚é", () =>
+        return new DetailButtonDef("é£Ÿã¹ã‚‹", () =>
         {
             if (AudioManager.I != null) AudioManager.I.PlayEatItemSe();
             eatAction?.Invoke();
-        });
+        }, role: ButtonRole.Secondary);
     }
 
     // =========================================================
-    // Œø‰Ê“K—pƒwƒ‹ƒp[
+    // åŠ¹æœé©ç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼
     // =========================================================
 
     /// <summary>
-    /// Á”ïƒAƒCƒeƒ€‚ÌŒø‰Ê‚ğ“K—p‚·‚éiHP/MP‰ñ•œAó‘ÔˆÙí¡—ÃASP•t—^jB
-    /// RemoveItem ‚Ì‘O‚ÉŒÄ‚Ô‚±‚ÆB
+    /// æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ ã®åŠ¹æœã‚’é©ç”¨ã™ã‚‹ï¼ˆHP/MPå›å¾©ã€çŠ¶æ…‹ç•°å¸¸æ²»ç™‚ã€SPä»˜ä¸ï¼‰ã€‚
+    /// RemoveItem ã®å‰ã«å‘¼ã¶ã“ã¨ã€‚
     /// </summary>
     public static void ApplyConsumableEffects(InventoryItem invItem)
     {
         if (invItem?.data == null || GameState.I == null) return;
 
-        // HP‰ñ•œ
+        // HPå›å¾©
         if (invItem.data.healAmount > 0)
         {
             GameState.I.currentHp += invItem.data.healAmount;
@@ -130,7 +131,7 @@ public static class ItemActionHelper
                 GameState.I.currentHp = GameState.I.maxHp;
         }
 
-        // MP‰ñ•œ
+        // MPå›å¾©
         if (invItem.data.mpHealAmount > 0)
         {
             GameState.I.currentMp += invItem.data.mpHealAmount;
@@ -138,42 +139,42 @@ public static class ItemActionHelper
                 GameState.I.currentMp = GameState.I.maxMp;
         }
 
-        // ó‘ÔˆÙí‰ñ•œ
+        // çŠ¶æ…‹ç•°å¸¸å›å¾©
         ApplyCureEffects(
             invItem.data.curesPoison,
             invItem.data.curesParalyze,
             invItem.data.curesBlind,
             invItem.data.curesSilence,
             invItem.data.curesPetrify,
-            invItem.data.curesCharm,    // © ’Ç‰Á
-            invItem.data.curesCurse,    // © ’Ç‰Á
+            invItem.data.curesCharm,    // â† è¿½åŠ 
+            invItem.data.curesCurse,    // â† è¿½åŠ 
             invItem.data.curesGlass);
 
-        // ¥¥¥ ‚±‚±‚©‚çV‹K‘}“ü ¥¥¥
-        // ƒoƒt/ƒfƒoƒt‰ñ•œiƒvƒŒƒCƒ„[‘¤‚Ìƒfƒoƒt‚ğˆêŠ‡‰ğœj
+        // â–¼â–¼â–¼ ã“ã“ã‹ã‚‰æ–°è¦æŒ¿å…¥ â–¼â–¼â–¼
+        // ãƒãƒ•/ãƒ‡ãƒãƒ•å›å¾©ï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ã®ãƒ‡ãƒãƒ•ã‚’ä¸€æ‹¬è§£é™¤ï¼‰
         if (invItem.data.curesAllDebuffs)
         {
             BattleSceneController.CurePlayerAllDebuffs();
         }
-        // £££ ‚±‚±‚Ü‚ÅV‹K‘}“ü £££
+        // â–²â–²â–² ã“ã“ã¾ã§æ–°è¦æŒ¿å…¥ â–²â–²â–²
 
-        // ƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg•t—^
+        // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆä»˜ä¸
         if (invItem.data.statusPointGain > 0)
         {
             GameState.I.statusPoint += invItem.data.statusPointGain;
-            Debug.Log($"[ItemAction] ƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg +{invItem.data.statusPointGain} (‡Œv: {GameState.I.statusPoint})");
+            Debug.Log($"[ItemAction] ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆ +{invItem.data.statusPointGain} (åˆè¨ˆ: {GameState.I.statusPoint})");
         }
     }
 
     /// <summary>
-    /// •Ší‚ğH‚×‚½‚Æ‚«‚ÌŒø‰Ê‚ğ“K—p‚·‚éiHP‰ñ•œA‘S eatCures ¡—ÃjB
-    /// RemoveItem ‚Ì‘O‚ÉŒÄ‚Ô‚±‚ÆB
+    /// æ­¦å™¨ã‚’é£Ÿã¹ãŸã¨ãã®åŠ¹æœã‚’é©ç”¨ã™ã‚‹ï¼ˆHPå›å¾©ã€å…¨ eatCures æ²»ç™‚ï¼‰ã€‚
+    /// RemoveItem ã®å‰ã«å‘¼ã¶ã“ã¨ã€‚
     /// </summary>
     public static void ApplyEatWeaponEffects(InventoryItem invItem)
     {
         if (invItem?.data == null || GameState.I == null) return;
 
-        // HP‰ñ•œ
+        // HPå›å¾©
         if (invItem.data.eatHealAmount > 0)
         {
             GameState.I.currentHp += invItem.data.eatHealAmount;
@@ -181,36 +182,36 @@ public static class ItemActionHelper
                 GameState.I.currentHp = GameState.I.maxHp;
         }
 
-        // ó‘ÔˆÙí‰ñ•œ
+        // çŠ¶æ…‹ç•°å¸¸å›å¾©
         ApplyCureEffects(
             invItem.data.eatCuresPoison,
             invItem.data.eatCuresParalyze,
             invItem.data.eatCuresBlind,
             invItem.data.eatCuresSilence,
             invItem.data.eatCuresPetrify,
-            invItem.data.eatCuresCharm,    // © ’Ç‰Á
-            invItem.data.eatCuresCurse,    // © ’Ç‰Á
+            invItem.data.eatCuresCharm,    // â† è¿½åŠ 
+            invItem.data.eatCuresCurse,    // â† è¿½åŠ 
             invItem.data.eatCuresGlass);
     }
 
     /// <summary>
-    /// ‘•”õ’†‚Ì•Ší‚ğH‚×‚éê‡‚Ì‘•”õ‰ğœB
+    /// è£…å‚™ä¸­ã®æ­¦å™¨ã‚’é£Ÿã¹ã‚‹å ´åˆã®è£…å‚™è§£é™¤ã€‚
     /// </summary>
     public static void UnequipIfNeeded(InventoryItem invItem)
     {
         if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
         {
             GameState.I.equippedWeaponUid = "";
-            Debug.Log($"[ItemAction] H‚×‚é‘O‚É‘•”õ‚ğŠO‚µ‚½: {invItem.data.itemName}");
+            Debug.Log($"[ItemAction] é£Ÿã¹ã‚‹å‰ã«è£…å‚™ã‚’å¤–ã—ãŸ: {invItem.data.itemName}");
         }
     }
 
     // =========================================================
-    // “à•”ƒwƒ‹ƒp[
+    // å†…éƒ¨ãƒ˜ãƒ«ãƒ‘ãƒ¼
     // =========================================================
 
     /// <summary>
-    /// ó‘ÔˆÙí‰ñ•œ‚Ì‹¤’Êˆ—BUseConsumable / EatWeapon —¼•û‚©‚çŒÄ‚Î‚ê‚éB
+    /// çŠ¶æ…‹ç•°å¸¸å›å¾©ã®å…±é€šå‡¦ç†ã€‚UseConsumable / EatWeapon ä¸¡æ–¹ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
     /// </summary>
     private static void ApplyCureEffects(
         bool poison, bool paralyze, bool blind, bool silence, bool petrify,

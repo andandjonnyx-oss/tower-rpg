@@ -1,37 +1,53 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// ƒ{ƒ^ƒ“1ŒÂ•ª‚Ì’è‹`Bƒ‰ƒxƒ‹‚ÆA‰Ÿ‚³‚ê‚½‚Ìˆ—‚ğ‚ÂB
+/// ãƒœã‚¿ãƒ³ã®å½¹å‰²ã€‚å›ºå®šã‚¹ãƒ­ãƒƒãƒˆé…ç½®ã«ä½¿ã†ã€‚
+/// Primary=ä½¿ã†/è£…å‚™/ä¸ãˆã‚‹ç­‰, Secondary=é£Ÿã¹ã‚‹ç­‰,
+/// Discard=æ¨ã¦ã‚‹, Transfer=é ã‘ã‚‹/å¼•ãå‡ºã™ã€‚
+/// </summary>
+public enum ButtonRole
+{
+    Primary = 0,
+    Secondary = 1,
+    Discard = 2,
+    Transfer = 3,
+}
+
+/// <summary>
+/// ãƒœã‚¿ãƒ³1å€‹åˆ†ã®å®šç¾©ã€‚ãƒ©ãƒ™ãƒ«ã¨ã€æŠ¼ã•ã‚ŒãŸæ™‚ã®å‡¦ç†ã‚’æŒã¤ã€‚
 /// </summary>
 public class DetailButtonDef
 {
     public string label;
     public bool interactable;
     public Action onClick;
+    public ButtonRole role;
 
-    public DetailButtonDef(string label, Action onClick, bool interactable = true)
+    public DetailButtonDef(string label, Action onClick,
+        bool interactable = true, ButtonRole role = ButtonRole.Primary)
     {
         this.label = label;
         this.onClick = onClick;
         this.interactable = interactable;
+        this.role = role;
     }
 }
 
 /// <summary>
-/// ƒV[ƒ“‚²‚Æ‚ÌƒAƒCƒeƒ€UI§ŒäƒCƒ“ƒ^[ƒtƒF[ƒXB
-/// ŠeƒV[ƒ“‚ÌƒRƒ“ƒgƒ[ƒ‰[‚ª‚±‚ê‚ğÀ‘•‚µAItemDetailPanel ‚É“n‚·B
+/// ã‚·ãƒ¼ãƒ³ã”ã¨ã®ã‚¢ã‚¤ãƒ†ãƒ UIåˆ¶å¾¡ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã€‚
+/// å„ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ãŒã“ã‚Œã‚’å®Ÿè£…ã—ã€ItemDetailPanel ã«æ¸¡ã™ã€‚
 /// </summary>
 public interface IItemContext
 {
     /// <summary>
-    /// ‘I‘ğ‚³‚ê‚½ƒAƒCƒeƒ€‚É‘Î‚µ‚Ä•\¦‚·‚éƒ{ƒ^ƒ“ˆê——‚ğ•Ô‚·B
-    /// fromInventory: true=Š•i‘¤, false=‘qŒÉ‘¤‚È‚ÇiƒV[ƒ“‚É‚æ‚Á‚ÄˆÓ–¡‚ª•Ï‚í‚éj
+    /// é¸æŠã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã«å¯¾ã—ã¦è¡¨ç¤ºã™ã‚‹ãƒœã‚¿ãƒ³ä¸€è¦§ã‚’è¿”ã™ã€‚
+    /// fromInventory: true=æ‰€æŒå“å´, false=å€‰åº«å´ãªã©ï¼ˆã‚·ãƒ¼ãƒ³ã«ã‚ˆã£ã¦æ„å‘³ãŒå¤‰ã‚ã‚‹ï¼‰
     /// </summary>
     List<DetailButtonDef> GetButtons(InventoryItem invItem, bool fromInventory);
 
     /// <summary>
-    /// ƒ{ƒ^ƒ“‘€ìŒã‚ÉƒXƒƒbƒg•\¦‚ğXV‚·‚éB
+    /// ãƒœã‚¿ãƒ³æ“ä½œå¾Œã«ã‚¹ãƒ­ãƒƒãƒˆè¡¨ç¤ºã‚’æ›´æ–°ã™ã‚‹ã€‚
     /// </summary>
     void RefreshSlots();
 }
