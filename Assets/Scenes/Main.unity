@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Godebug
       objectReference: {fileID: 0}
+    - target: {fileID: 1388268136931869623, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1844478735119512597, guid: 051b290a803a3f042afaca159ea82fc3, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
