@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Monster
   ID: F100B2_beruhuxego-ru
   Mname: "\u30D0\u30A2\u30EB\uFF1D\u30D5\u30A7\u30B4\u30FC\u30EB"
-  Image: {fileID: 6525793280227508212, guid: 575995cf47c32d8428021c2f9ea8a4fa, type: 3}
+  Image: {fileID: 21300000, guid: f556df7709f753a4b80da461d83b7fc3, type: 3}
   battleBgm: {fileID: 8300000, guid: 4cc8781a4d519244bbe95d60ba91f363, type: 3}
   Minfloor: 0
   Minstep: 0
