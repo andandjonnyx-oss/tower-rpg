@@ -81,4 +81,33 @@ public static class GameSettings
     /// <summary>左利き設定かどうかの簡易判定。</summary>
     public static bool IsLeftHanded => Handedness == Handedness.Left;
 
+    private const string KeyAnalyticsOptOut = "opt_analyticsOptOut";
+    private static bool? analyticsOptOutCache;
+
+    /// <summary>
+    /// プレイ統計（UGS Analytics）の送信を拒否するオプション。既定は OFF（＝送信する）。
+    ///
+    /// ON にすると地域に関わらず収集を停止する。OFF のときは
+    /// UMP の同意状態で判断される（<see cref="AnalyticsManager.ApplyConsent"/> 参照）。
+    /// つまり「同意が必要な地域で未同意」なら、この設定が OFF でも収集はされない。
+    ///
+    /// Option シーンにトグルを置く場合は、この値を読み書きしたうえで
+    /// <see cref="AnalyticsManager.ApplyConsent"/> を呼べば即座に反映される。
+    /// </summary>
+    public static bool AnalyticsOptOut
+    {
+        get
+        {
+            if (analyticsOptOutCache == null)
+                analyticsOptOutCache = PlayerPrefs.GetInt(KeyAnalyticsOptOut, 0) == 1;
+            return analyticsOptOutCache.Value;
+        }
+        set
+        {
+            analyticsOptOutCache = value;
+            PlayerPrefs.SetInt(KeyAnalyticsOptOut, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+    }
+
 }

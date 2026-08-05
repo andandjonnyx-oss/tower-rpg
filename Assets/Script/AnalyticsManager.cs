@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using Unity.Services.Analytics;
 using Unity.Services.Core;
 using Unity.Services.Core.Analytics;
@@ -6,37 +6,37 @@ using UnityEngine;
 using UnityEngine.UnityConsent;
 
 /// <summary>
-/// Unity Gaming Services (UGS) Analytics ‚Ö‚ÌƒCƒxƒ“ƒg‘—M‚ğˆêŒ³‰»‚·‚éÃ“IƒNƒ‰ƒXB
+/// Unity Gaming Services (UGS) Analytics ã¸ã®ã‚¤ãƒ™ãƒ³ãƒˆé€ä¿¡ã‚’ä¸€å…ƒåŒ–ã™ã‚‹é™çš„ã‚¯ãƒ©ã‚¹ã€‚
 ///
-/// yİŒv•ûjz
-///   - ŠÏ‘ª“_iBattleSceneController ‚ÌŸ”s”»’è‚È‚Çj‚É‚Í Send Œnƒƒ\ƒbƒh‚ğ 1 s·‚µ‚Ş‚¾‚¯B
-///   - ‰Šú‰»E“¯ˆÓ‚Ì—L–³E—áŠO‚Í‚·‚×‚Ä‚±‚ÌƒNƒ‰ƒX‚ª‹zû‚·‚éB
-///     –¢‰Šú‰»^ƒIƒtƒ‰ƒCƒ“^SDK–¢“±“ü‚Å‚àAŒÄ‚Ño‚µ‘¤‚Í—áŠO‚ğ‹C‚É‚¹‚¸ŒÄ‚×‚é
-///     i“à•”‚Å try-catch ‚µA¸”s‚µ‚Ä‚àƒQ[ƒ€is‚ğ~‚ß‚È‚¢jB
-///   - ƒCƒxƒ“ƒg–¼Eƒpƒ‰ƒ[ƒ^–¼‚Í Unity Dashboard ‚Ì Event Manager ‚Å
-///     “¯–¼E“¯Œ^‚Å’è‹`‚µ‚Ä‚¨‚­‚±‚Æi–¢’è‹`‚¾‚ÆƒT[ƒo‘¤‚Å”jŠü‚³‚ê‚éjB
+/// ã€è¨­è¨ˆæ–¹é‡ã€‘
+///   - è¦³æ¸¬ç‚¹ï¼ˆBattleSceneController ã®å‹æ•—åˆ¤å®šãªã©ï¼‰ã«ã¯ Send ç³»ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ 1 è¡Œå·®ã—è¾¼ã‚€ã ã‘ã€‚
+///   - åˆæœŸåŒ–ãƒ»åŒæ„ã®æœ‰ç„¡ãƒ»ä¾‹å¤–ã¯ã™ã¹ã¦ã“ã®ã‚¯ãƒ©ã‚¹ãŒå¸åã™ã‚‹ã€‚
+///     æœªåˆæœŸåŒ–ï¼ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ï¼SDKæœªå°å…¥ã§ã‚‚ã€å‘¼ã³å‡ºã—å´ã¯ä¾‹å¤–ã‚’æ°—ã«ã›ãšå‘¼ã¹ã‚‹
+///     ï¼ˆå†…éƒ¨ã§ try-catch ã—ã€å¤±æ•—ã—ã¦ã‚‚ã‚²ãƒ¼ãƒ é€²è¡Œã‚’æ­¢ã‚ãªã„ï¼‰ã€‚
+///   - ã‚¤ãƒ™ãƒ³ãƒˆåãƒ»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã¯ Unity Dashboard ã® Event Manager ã§
+///     åŒåãƒ»åŒå‹ã§å®šç¾©ã—ã¦ãŠãã“ã¨ï¼ˆæœªå®šç¾©ã ã¨ã‚µãƒ¼ãƒå´ã§ç ´æ£„ã•ã‚Œã‚‹ï¼‰ã€‚
 ///
-/// yƒCƒxƒ“ƒg’è‹`iDashboard ‘¤‚Å“o˜^‚ª•K—vjz
+/// ã€ã‚¤ãƒ™ãƒ³ãƒˆå®šç¾©ï¼ˆDashboard å´ã§ç™»éŒ²ãŒå¿…è¦ï¼‰ã€‘
 ///   game_over:
 ///     floor (INT), step (INT), level (INT)
 ///   boss_defeated:
 ///     boss_floor (INT), level (INT),
 ///     str (INT), vit (INT), int_stat (INT), dex (INT), luc (INT)
-///   ¦ "int" ‚Í—\–ñŒê“I‚É•´‚ç‚í‚µ‚¢‚½‚ßAƒpƒ‰ƒ[ƒ^–¼‚Í int_stat ‚Æ‚µ‚Ä‚¢‚éB
+///   â€» "int" ã¯äºˆç´„èªçš„ã«ç´›ã‚‰ã‚ã—ã„ãŸã‚ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿åã¯ int_stat ã¨ã—ã¦ã„ã‚‹ã€‚
 ///
-/// y‰Šú‰»z
-///   ƒ^ƒCƒgƒ‹“™‚Ì‹N“®ƒV[ƒ“‚Åˆê“x‚¾‚¯ AnalyticsManager.InitializeAsync() ‚ğ await ‚·‚éB
-///   “¯ˆÓƒtƒ[‚Í©‘O UI ‚ÌƒIƒ“/ƒIƒt‚É‡‚í‚¹‚Ä GrantConsent()/RevokeConsent() ‚ğŒÄ‚ÔB
+/// ã€åˆæœŸåŒ–ã€‘
+///   ã‚¿ã‚¤ãƒˆãƒ«ç­‰ã®èµ·å‹•ã‚·ãƒ¼ãƒ³ã§ä¸€åº¦ã ã‘ AnalyticsManager.InitializeAsync() ã‚’ await ã™ã‚‹ã€‚
+///   åŒæ„ãƒ•ãƒ­ãƒ¼ã¯è‡ªå‰ UI ã®ã‚ªãƒ³/ã‚ªãƒ•ã«åˆã‚ã›ã¦ GrantConsent()/RevokeConsent() ã‚’å‘¼ã¶ã€‚
 /// </summary>
 public static class AnalyticsManager
 {
-    /// <summary>UGS ‰Šú‰»‚ªŠ®—¹‚µ‚½‚©‚Ç‚¤‚©BSend Œn‚Í false ‚ÌŠÔ‚Í–Ù‚Á‚Ä‰½‚à‚µ‚È‚¢B</summary>
+    /// <summary>UGS åˆæœŸåŒ–ãŒå®Œäº†ã—ãŸã‹ã©ã†ã‹ã€‚Send ç³»ã¯ false ã®é–“ã¯é»™ã£ã¦ä½•ã‚‚ã—ãªã„ã€‚</summary>
     public static bool IsReady { get; private set; } = false;
 
     /// <summary>
-    /// UGS ‚ğ‰Šú‰»‚·‚éB‹N“®ƒV[ƒ“‚Ì‹N“®ˆ—‚Åˆê“x‚¾‚¯ await ‚µ‚ÄŒÄ‚ÔB
-    /// ‘½dŒÄ‚Ño‚µ‚Í–³ŠQiIsReady ‚Å’e‚­jB
-    /// ƒIƒtƒ‰ƒCƒ“‚Å‚à—áŠO‚ğ“Š‚°‚¸AIsReady ‚Í false ‚Ì‚Ü‚Ü‚É‚È‚éB
+    /// UGS ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚èµ·å‹•ã‚·ãƒ¼ãƒ³ã®èµ·å‹•å‡¦ç†ã§ä¸€åº¦ã ã‘ await ã—ã¦å‘¼ã¶ã€‚
+    /// å¤šé‡å‘¼ã³å‡ºã—ã¯ç„¡å®³ï¼ˆIsReady ã§å¼¾ãï¼‰ã€‚
+    /// ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ã§ã‚‚ä¾‹å¤–ã‚’æŠ•ã’ãšã€IsReady ã¯ false ã®ã¾ã¾ã«ãªã‚‹ã€‚
     /// </summary>
     public static async System.Threading.Tasks.Task InitializeAsync()
     {
@@ -46,20 +46,20 @@ public static class AnalyticsManager
         {
             await UnityServices.InitializeAsync();
             IsReady = true;
-            Debug.Log("[AnalyticsManager] UGS ‰Šú‰»Š®—¹");
+            Debug.Log("[AnalyticsManager] UGS åˆæœŸåŒ–å®Œäº†");
         }
         catch (System.Exception e)
         {
-            // ƒIƒtƒ‰ƒCƒ“Eİ’è–¢Ï‚È‚Ç‚Å‚àA‚±‚±‚Åˆ¬‚è‚Â‚Ô‚µ‚ÄƒQ[ƒ€is‚ğ—Dæ‚·‚éB
-            Debug.LogWarning($"[AnalyticsManager] UGS ‰Šú‰»¸”si‰ğÍ‚Í–³Œø‚Ì‚Ü‚ÜŒp‘±j: {e.Message}");
+            // ã‚ªãƒ•ãƒ©ã‚¤ãƒ³ãƒ»è¨­å®šæœªæ¸ˆãªã©ã§ã‚‚ã€ã“ã“ã§æ¡ã‚Šã¤ã¶ã—ã¦ã‚²ãƒ¼ãƒ é€²è¡Œã‚’å„ªå…ˆã™ã‚‹ã€‚
+            Debug.LogWarning($"[AnalyticsManager] UGS åˆæœŸåŒ–å¤±æ•—ï¼ˆè§£æã¯ç„¡åŠ¹ã®ã¾ã¾ç¶™ç¶šï¼‰: {e.Message}");
             IsReady = false;
         }
     }
 
     /// <summary>
-    /// ƒ†[ƒU[‚ªƒf[ƒ^ûW‚É“¯ˆÓ‚µ‚½‚ÉŒÄ‚ÔB
-    /// “¯ˆÓÏ‚İ‚È‚ç InitializeAsync Š®—¹“_‚Å©“®“I‚ÉûW‚ªn‚Ü‚é‚½‚ßA
-    /// ©‘O“¯ˆÓ UI ‚ğo‚·‚È‚çuƒIƒ“v‘€ì‚Å‚±‚ê‚ğŒÄ‚ÔB
+    /// ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒãƒ‡ãƒ¼ã‚¿åé›†ã«åŒæ„ã—ãŸæ™‚ã«å‘¼ã¶ã€‚
+    /// åŒæ„æ¸ˆã¿ãªã‚‰ InitializeAsync å®Œäº†æ™‚ç‚¹ã§è‡ªå‹•çš„ã«åé›†ãŒå§‹ã¾ã‚‹ãŸã‚ã€
+    /// è‡ªå‰åŒæ„ UI ã‚’å‡ºã™ãªã‚‰ã€Œã‚ªãƒ³ã€æ“ä½œã§ã“ã‚Œã‚’å‘¼ã¶ã€‚
     /// </summary>
     public static void GrantConsent()
     {
@@ -69,16 +69,40 @@ public static class AnalyticsManager
             {
                 AnalyticsIntent = ConsentStatus.Granted,
             });
-            Debug.Log("[AnalyticsManager] ƒf[ƒ^ûW‚É“¯ˆÓiûWŠJnj");
+            Debug.Log("[AnalyticsManager] ãƒ‡ãƒ¼ã‚¿åé›†ã«åŒæ„ï¼ˆåé›†é–‹å§‹ï¼‰");
         }
         catch (System.Exception e)
         {
-            Debug.LogWarning($"[AnalyticsManager] “¯ˆÓİ’è‚É¸”s: {e.Message}");
+            Debug.LogWarning($"[AnalyticsManager] åŒæ„è¨­å®šã«å¤±æ•—: {e.Message}");
         }
     }
 
     /// <summary>
-    /// ƒ†[ƒU[‚ª“¯ˆÓ‚ğ“P‰ñ‚µ‚½‚ÉŒÄ‚ÔBˆÈŒã‚ÌûW‚ğ’â~‚·‚éB
+    /// ç¾åœ¨ã®åŒæ„çŠ¶æ…‹ã‚’ UMPï¼ˆGoogle User Messaging Platformï¼‰ã‹ã‚‰åˆ¤å®šã—ã¦åæ˜ ã™ã‚‹ã€‚
+    ///
+    /// ã€ãªãœ UMP ã‚’ä½¿ã†ã‹ã€‘
+    ///   åŒæ„ãŒå¿…è¦ãªåœ°åŸŸï¼ˆEEA/UK/ã‚¹ã‚¤ã‚¹ï¼‰ã‹ã©ã†ã‹ã®åˆ¤å®šã¨åŒæ„ UI ã¯ã€åºƒå‘Šç”¨ã«å°å…¥æ¸ˆã¿ã®
+    ///   UMP ãŒæ—¢ã«è¡Œã£ã¦ã„ã‚‹ã€‚è§£æç”¨ã«ã‚‚ã†ä¸€ã¤åˆ¥ã®åŒæ„ UI ã‚’ä½œã‚‹ã¨ãƒ¦ãƒ¼ã‚¶ãƒ¼ã«äºŒé‡ã«å°‹ã­ã‚‹
+    ///   ã“ã¨ã«ãªã‚‹ãŸã‚ã€UMP ã®åˆ¤å®šçµæœã‚’å˜ä¸€ã®åŒæ„ã‚²ãƒ¼ãƒˆã¨ã—ã¦æµç”¨ã™ã‚‹ã€‚
+    ///
+    /// ã€åˆ¤å®šã€‘
+    ///   - åŒæ„ä¸è¦ãªåœ°åŸŸï¼ˆæ—¥æœ¬ãªã©ï¼‰  â†’ åé›†ã™ã‚‹
+    ///   - åŒæ„å–å¾—æ¸ˆã¿                â†’ åé›†ã™ã‚‹
+    ///   - åŒæ„ãŒå¿…è¦ã ãŒæœªå–å¾—        â†’ åé›†ã—ãªã„
+    ///   - ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒè¨­å®šã§æ˜ç¤ºçš„ã«ã‚ªãƒ• â†’ åé›†ã—ãªã„ï¼ˆåœ°åŸŸã«é–¢ã‚ã‚‰ãšå„ªå…ˆï¼‰
+    ///
+    /// å‘¼ã¶ã‚¿ã‚¤ãƒŸãƒ³ã‚°: InitializeAsync å®Œäº†å¾Œã¨ã€UMP ã®åŒæ„çŠ¶æ…‹ãŒç¢ºå®š/å¤‰æ›´ã•ã‚ŒãŸã¨ãã€‚
+    /// </summary>
+    public static void ApplyConsent()
+    {
+        if (AdManager.IsAnalyticsConsentGranted)
+            GrantConsent();
+        else
+            RevokeConsent();
+    }
+
+    /// <summary>
+    /// ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒåŒæ„ã‚’æ’¤å›ã—ãŸæ™‚ã«å‘¼ã¶ã€‚ä»¥å¾Œã®åé›†ã‚’åœæ­¢ã™ã‚‹ã€‚
     /// </summary>
     public static void RevokeConsent()
     {
@@ -88,23 +112,23 @@ public static class AnalyticsManager
             {
                 AnalyticsIntent = ConsentStatus.Denied,
             });
-            Debug.Log("[AnalyticsManager] ƒf[ƒ^ûW‚Ì“¯ˆÓ‚ğ“P‰ñiûW’â~j");
+            Debug.Log("[AnalyticsManager] ãƒ‡ãƒ¼ã‚¿åé›†ã®åŒæ„ã‚’æ’¤å›ï¼ˆåé›†åœæ­¢ï¼‰");
         }
         catch (System.Exception e)
         {
-            Debug.LogWarning($"[AnalyticsManager] “¯ˆÓ“P‰ñ‚É¸”s: {e.Message}");
+            Debug.LogWarning($"[AnalyticsManager] åŒæ„æ’¤å›ã«å¤±æ•—: {e.Message}");
         }
     }
 
     // =========================================================
-    // ŠÏ‘ª“_‚©‚çŒÄ‚Ô Send Œnƒƒ\ƒbƒh
+    // è¦³æ¸¬ç‚¹ã‹ã‚‰å‘¼ã¶ Send ç³»ãƒ¡ã‚½ãƒƒãƒ‰
     // =========================================================
 
     /// <summary>
-    /// ƒQ[ƒ€ƒI[ƒo[i‘S–Å/ƒMƒuƒAƒbƒvj’n“_‚ğ‹L˜^‚·‚éB
-    /// ŒÄ‚Ño‚µ—ái”s–kŠm’è‰ÓŠj:
+    /// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ï¼ˆå…¨æ»…/ã‚®ãƒ–ã‚¢ãƒƒãƒ—ï¼‰åœ°ç‚¹ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
+    /// å‘¼ã³å‡ºã—ä¾‹ï¼ˆæ•—åŒ—ç¢ºå®šç®‡æ‰€ï¼‰:
     ///   AnalyticsManager.SendGameOver(GameState.I.floor, GameState.I.step, GameState.I.level);
-    /// ˆø”‚ğ“n‚³‚¸ GameState.I ‚©‚ç©“®æ“¾‚µ‚½‚¢ê‡‚Í SendGameOver() ‚ğg‚¤B
+    /// å¼•æ•°ã‚’æ¸¡ã•ãš GameState.I ã‹ã‚‰è‡ªå‹•å–å¾—ã—ãŸã„å ´åˆã¯ SendGameOver() ã‚’ä½¿ã†ã€‚
     /// </summary>
     public static void SendGameOver(int floor, int step, int level)
     {
@@ -119,17 +143,17 @@ public static class AnalyticsManager
                 { "level", level },
             };
             AnalyticsService.Instance.RecordEvent(e);
-            Debug.Log($"[AnalyticsManager] game_over ‹L˜^: floor={floor}, step={step}, level={level}");
+            Debug.Log($"[AnalyticsManager] game_over è¨˜éŒ²: floor={floor}, step={step}, level={level}");
         }
         catch (System.Exception ex)
         {
-            Debug.LogWarning($"[AnalyticsManager] game_over ‘—M¸”s: {ex.Message}");
+            Debug.LogWarning($"[AnalyticsManager] game_over é€ä¿¡å¤±æ•—: {ex.Message}");
         }
     }
 
     /// <summary>
-    /// GameState.I ‚©‚ç floor/step/level ‚ğ©“®æ“¾‚µ‚ÄƒQ[ƒ€ƒI[ƒo[‚ğ‹L˜^‚·‚éŠÈˆÕ”ÅB
-    /// ”s–kŠm’è‰ÓŠiDetermineVictoryTransition ‚Ì”s–kƒ‹[ƒg“™j‚É 1 s·‚µ‚Ş—p“rB
+    /// GameState.I ã‹ã‚‰ floor/step/level ã‚’è‡ªå‹•å–å¾—ã—ã¦ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã‚’è¨˜éŒ²ã™ã‚‹ç°¡æ˜“ç‰ˆã€‚
+    /// æ•—åŒ—ç¢ºå®šç®‡æ‰€ï¼ˆDetermineVictoryTransition ã®æ•—åŒ—ãƒ«ãƒ¼ãƒˆç­‰ï¼‰ã« 1 è¡Œå·®ã—è¾¼ã‚€ç”¨é€”ã€‚
     /// </summary>
     public static void SendGameOver()
     {
@@ -139,13 +163,13 @@ public static class AnalyticsManager
     }
 
     /// <summary>
-    /// ƒ{ƒXŒ‚”j‚ÌƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒXiSTR`LUCj‚ğ‹L˜^‚·‚éB
-    /// bossFloor ‚É‚ÍŒ‚”j‚µ‚½ƒ{ƒX‚ÌŠKi70 / 90 / 100 ‚È‚Çj‚ğ“n‚·B
-    /// ƒXƒe[ƒ^ƒX‚ÍuU‚è•ª‚¯‚½¶’libaseXxxjv‚ğ‹L˜^‚·‚éB
-    /// ‘•”õEƒpƒbƒVƒu‚İ‚ÌÀŒø’l‚ğŒ©‚½‚¢ê‡‚ÍŒÄ‚Ño‚µ‘¤‚Å
-    ///   GameState.I.Attack / MagicAttack / Luck “™‚ğ•Ê“r“n‚·İŒv‚É•ÏX‚·‚é‚±‚ÆB
+    /// ãƒœã‚¹æ’ƒç ´æ™‚ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼ˆSTRï½LUCï¼‰ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
+    /// bossFloor ã«ã¯æ’ƒç ´ã—ãŸãƒœã‚¹ã®éšï¼ˆ70 / 90 / 100 ãªã©ï¼‰ã‚’æ¸¡ã™ã€‚
+    /// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã¯ã€ŒæŒ¯ã‚Šåˆ†ã‘ãŸç”Ÿå€¤ï¼ˆbaseXxxï¼‰ã€ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
+    /// è£…å‚™ãƒ»ãƒ‘ãƒƒã‚·ãƒ–è¾¼ã¿ã®å®ŸåŠ¹å€¤ã‚’è¦‹ãŸã„å ´åˆã¯å‘¼ã³å‡ºã—å´ã§
+    ///   GameState.I.Attack / MagicAttack / Luck ç­‰ã‚’åˆ¥é€”æ¸¡ã™è¨­è¨ˆã«å¤‰æ›´ã™ã‚‹ã“ã¨ã€‚
     ///
-    /// ŒÄ‚Ño‚µ—áiƒ{ƒXŸ—˜Šm’è‰ÓŠj:
+    /// å‘¼ã³å‡ºã—ä¾‹ï¼ˆãƒœã‚¹å‹åˆ©ç¢ºå®šç®‡æ‰€ï¼‰:
     ///   AnalyticsManager.SendBossDefeated(70);
     /// </summary>
     public static void SendBossDefeated(int bossFloor, int level, int str, int vit, int intStat, int dex, int luc)
@@ -165,18 +189,18 @@ public static class AnalyticsManager
                 { "luc",        luc       },
             };
             AnalyticsService.Instance.RecordEvent(e);
-            Debug.Log($"[AnalyticsManager] boss_defeated ‹L˜^: F{bossFloor}, Lv{level}, "
+            Debug.Log($"[AnalyticsManager] boss_defeated è¨˜éŒ²: F{bossFloor}, Lv{level}, "
                     + $"STR={str}, VIT={vit}, INT={intStat}, DEX={dex}, LUC={luc}");
         }
         catch (System.Exception ex)
         {
-            Debug.LogWarning($"[AnalyticsManager] boss_defeated ‘—M¸”s: {ex.Message}");
+            Debug.LogWarning($"[AnalyticsManager] boss_defeated é€ä¿¡å¤±æ•—: {ex.Message}");
         }
     }
 
     /// <summary>
-    /// GameState.I ‚©‚ç level / baseSTR`baseLUC ‚ğ©“®æ“¾‚µ‚Äƒ{ƒXŒ‚”j‚ğ‹L˜^‚·‚éŠÈˆÕ”ÅB
-    /// ƒ{ƒXŸ—˜Šm’è‰ÓŠ‚É 1 s·‚µ‚Ş—p“rB
+    /// GameState.I ã‹ã‚‰ level / baseSTRï½baseLUC ã‚’è‡ªå‹•å–å¾—ã—ã¦ãƒœã‚¹æ’ƒç ´ã‚’è¨˜éŒ²ã™ã‚‹ç°¡æ˜“ç‰ˆã€‚
+    /// ãƒœã‚¹å‹åˆ©ç¢ºå®šç®‡æ‰€ã« 1 è¡Œå·®ã—è¾¼ã‚€ç”¨é€”ã€‚
     ///   AnalyticsManager.SendBossDefeated(70);
     /// </summary>
     public static void SendBossDefeated(int bossFloor)

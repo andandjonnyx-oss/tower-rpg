@@ -96,6 +96,7 @@ public class AdManager : MonoBehaviour
 
     private RewardedAd rewardedAd;
     private bool adsInitialized;
+    private bool isLoading;
 
     // 表示中の1回分の状態
     private bool isShowing;
@@ -143,6 +144,7 @@ public class AdManager : MonoBehaviour
                         Debug.LogWarning($"[AdManager] 同意フォームの表示に失敗: {formError.Message}");
 
                     InitializeAdsIfAllowed();
+                    NotifyConsentResolved();
                 });
             });
 
@@ -153,6 +155,54 @@ public class AdManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogWarning($"[AdManager] 同意フローで例外（広告なしで継続）: {e.Message}");
+        }
+    }
+
+    // =========================================================
+    // 同意状態の共有（解析データ収集の可否判定に使う）
+    // =========================================================
+
+    /// <summary>
+    /// UMP の同意状態が確定／変更されたときに発火する。
+    /// AnalyticsManager.ApplyConsent() を繋いでおくと、同意結果に追従できる。
+    /// static なので購読側も static メソッドを使うこと（シーン跨ぎのリーク防止）。
+    /// </summary>
+    public static event Action OnConsentResolved;
+
+    private static void NotifyConsentResolved()
+    {
+        try
+        {
+            OnConsentResolved?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[AdManager] 同意確定通知で例外: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// 解析データ（UGS Analytics）を収集してよいか。
+    /// 同意が必要な地域かどうかの判定は UMP に一本化している（同意 UI を二重に出さないため）。
+    /// </summary>
+    public static bool IsAnalyticsConsentGranted
+    {
+        get
+        {
+            // ユーザーが設定で明示的に拒否していれば、地域に関わらず収集しない。
+            if (GameSettings.AnalyticsOptOut) return false;
+
+            try
+            {
+                var status = ConsentInformation.ConsentStatus;
+                // NotRequired = 同意不要な地域（日本など） / Obtained = 同意取得済み
+                return status == ConsentStatus.NotRequired || status == ConsentStatus.Obtained;
+            }
+            catch (Exception)
+            {
+                // UMP 未初期化などで判定できないときは、安全側（収集しない）に倒す。
+                return false;
+            }
         }
     }
 
@@ -216,9 +266,13 @@ public class AdManager : MonoBehaviour
         ConsentForm.ShowPrivacyOptionsForm(showError =>
         {
             if (showError != null)
+            {
                 Debug.LogWarning($"[AdManager] プライバシー選択フォームの表示に失敗: {showError.Message}");
-            else
-                InitializeAdsIfAllowed(); // 同意に変わった可能性があるため再試行
+                return;
+            }
+
+            InitializeAdsIfAllowed();  // 同意に変わった可能性があるため再試行
+            NotifyConsentResolved();   // 解析側の同意状態も追従させる
         });
     }
 
@@ -228,11 +282,20 @@ public class AdManager : MonoBehaviour
 
     private void LoadRewardedAd()
     {
+        // ロード中の重複要求を弾く。
+        // これが無いと、ロード完了前にユーザーが再度広告を要求したときに
+        // Load が二重に走り、後から完了した方が rewardedAd を上書きして
+        // 先に完了した広告が Destroy されないまま漏れる。
+        if (isLoading) return;
+
         DestroyRewardedAd();
+        isLoading = true;
 
         Debug.Log("[AdManager] リワード広告のロード開始");
         RewardedAd.Load(RewardedAdUnitId, new AdRequest(), (RewardedAd ad, LoadAdError error) =>
         {
+            isLoading = false;
+
             if (error != null || ad == null)
             {
                 Debug.LogWarning($"[AdManager] リワード広告のロード失敗: {error}");
@@ -240,6 +303,7 @@ public class AdManager : MonoBehaviour
             }
 
             Debug.Log("[AdManager] リワード広告のロード完了");
+            DestroyRewardedAd(); // 念のため、保持中の広告があれば先に破棄する
             rewardedAd = ad;
             RegisterEventHandlers(ad);
         });

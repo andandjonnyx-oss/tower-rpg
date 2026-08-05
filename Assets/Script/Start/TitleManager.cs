@@ -1,81 +1,81 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒ^ƒCƒgƒ‹‰æ–Ê‚ÌUIƒRƒ“ƒgƒ[ƒ‰[B
-/// uƒXƒ^[ƒgvƒ{ƒ^ƒ“: ƒZ[ƒuƒf[ƒ^‚ª‚ ‚ê‚Î‘±‚«‚©‚çA‚È‚¯‚ê‚Î‰Šúó‘Ô‚Å Main ‚Ö‘JˆÚB
-/// u‰Šú‰»vƒ{ƒ^ƒ“: ƒZ[ƒuƒf[ƒ^‚ğíœ‚µ‚Ä GameStateEŠ•iE‘qŒÉ‚ğ‰Šú‰»‚·‚éB
-/// uƒI[ƒvƒjƒ“ƒOvƒ{ƒ^ƒ“: ƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚ğ Talk ƒV[ƒ“‚ÅÄ¶‚·‚éB
+/// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã®UIã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// ã€Œã‚¹ã‚¿ãƒ¼ãƒˆã€ãƒœã‚¿ãƒ³: ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°ç¶šãã‹ã‚‰ã€ãªã‘ã‚Œã°åˆæœŸçŠ¶æ…‹ã§ Main ã¸é·ç§»ã€‚
+/// ã€ŒåˆæœŸåŒ–ã€ãƒœã‚¿ãƒ³: ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã¦ GameStateãƒ»æ‰€æŒå“ãƒ»å€‰åº«ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
+/// ã€Œã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã€ãƒœã‚¿ãƒ³: ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã‚’ Talk ã‚·ãƒ¼ãƒ³ã§å†ç”Ÿã™ã‚‹ã€‚
 /// </summary>
 public class TitleUIManager : MonoBehaviour
 {
     [Header("Buttons")]
-    [Tooltip("ƒZ[ƒuƒf[ƒ^‚ª‚ ‚ê‚Î‘±‚«‚©‚çA‚È‚¯‚ê‚ÎV‹K‚ÅƒXƒ^[ƒg")]
+    [Tooltip("ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°ç¶šãã‹ã‚‰ã€ãªã‘ã‚Œã°æ–°è¦ã§ã‚¹ã‚¿ãƒ¼ãƒˆ")]
     [SerializeField] private Button startButton;
-    [Tooltip("ƒZ[ƒuƒf[ƒ^‚ğíœ‚µ‚Ä‰Šúó‘Ô‚É–ß‚·")]
+    [Tooltip("ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã¦åˆæœŸçŠ¶æ…‹ã«æˆ»ã™")]
     [SerializeField] private Button resetButton;
 
     [Header("Reset Confirm Popup")]
-    [Tooltip("‰Šú‰»Šm”Fƒ|ƒbƒvƒAƒbƒv‚Ìƒ‹[ƒgƒIƒuƒWƒFƒNƒg")]
+    [Tooltip("åˆæœŸåŒ–ç¢ºèªãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
     [SerializeField] private GameObject resetConfirmPopup;
-    [Tooltip("‰Šú‰»Šm”FƒƒbƒZ[ƒWƒeƒLƒXƒg")]
+    [Tooltip("åˆæœŸåŒ–ç¢ºèªãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ†ã‚­ã‚¹ãƒˆ")]
     [SerializeField] private TMP_Text resetConfirmText;
-    [Tooltip("‚Í‚¢ƒ{ƒ^ƒ“")]
+    [Tooltip("ã¯ã„ãƒœã‚¿ãƒ³")]
     [SerializeField] private Button resetConfirmYes;
-    [Tooltip("‚¢‚¢‚¦ƒ{ƒ^ƒ“")]
+    [Tooltip("ã„ã„ãˆãƒœã‚¿ãƒ³")]
     [SerializeField] private Button resetConfirmNo;
 
 
     // =========================================================
-    // ƒI[ƒvƒjƒ“ƒOƒ{ƒ^ƒ“i’Ç‰Áj
+    // ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ãƒœã‚¿ãƒ³ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // ƒ^ƒCƒgƒ‹‰æ–Ê‚ÉuƒI[ƒvƒjƒ“ƒOvƒ{ƒ^ƒ“‚ğ’Ç‰ÁB
-    // ‰Ÿ‚·‚Æ Talk ƒV[ƒ“‚É‘JˆÚ‚µAƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚ğÄ¶‚·‚éB
-    // Talk I—¹Œã‚Íƒ^ƒCƒgƒ‹‰æ–ÊiTitle ƒV[ƒ“j‚É–ß‚éB
+    // ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã«ã€Œã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã€ãƒœã‚¿ãƒ³ã‚’è¿½åŠ ã€‚
+    // æŠ¼ã™ã¨ Talk ã‚·ãƒ¼ãƒ³ã«é·ç§»ã—ã€ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã‚’å†ç”Ÿã™ã‚‹ã€‚
+    // Talk çµ‚äº†å¾Œã¯ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ï¼ˆTitle ã‚·ãƒ¼ãƒ³ï¼‰ã«æˆ»ã‚‹ã€‚
     //
-    // ƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚Í‰½“x‚Å‚àŒJ‚è•Ô‚µ‹’®‰Â”\B
-    // MarkPlayed() ‚Í’Êí’Ê‚èŒÄ‚Î‚ê‚é‚ªA
-    // ƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚Í“ƒ“à‚ÌƒtƒƒA/ƒXƒeƒbƒvğŒ‚ğ‚½‚È‚¢‚½‚ß
-    // Šù“Ç‚Å‚àÄ¶‚É‰e‹¿‚µ‚È‚¢B
+    // ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã¯ä½•åº¦ã§ã‚‚ç¹°ã‚Šè¿”ã—è¦–è´å¯èƒ½ã€‚
+    // MarkPlayed() ã¯é€šå¸¸é€šã‚Šå‘¼ã°ã‚Œã‚‹ãŒã€
+    // ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã¯å¡”å†…ã®ãƒ•ãƒ­ã‚¢/ã‚¹ãƒ†ãƒƒãƒ—æ¡ä»¶ã‚’æŒãŸãªã„ãŸã‚
+    // æ—¢èª­ã§ã‚‚å†ç”Ÿã«å½±éŸ¿ã—ãªã„ã€‚
     // =========================================================
 
-    [Tooltip("ƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚ğ Talk ƒV[ƒ“‚ÅÄ¶‚·‚é")]
+    [Tooltip("ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã‚’ Talk ã‚·ãƒ¼ãƒ³ã§å†ç”Ÿã™ã‚‹")]
     [SerializeField] private Button openingButton;
 
     [Header("Opening Event")]
-    [Tooltip("ƒI[ƒvƒjƒ“ƒO‚ÅÄ¶‚·‚é TalkEvent ‚Ì IDi—á: \"OP_Opening\"j")]
+    [Tooltip("ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã§å†ç”Ÿã™ã‚‹ TalkEvent ã® IDï¼ˆä¾‹: \"OP_Opening\"ï¼‰")]
     [SerializeField] private string openingEventId = "OP_Opening";
-    [Tooltip("Talk ƒV[ƒ“‚Ì–¼‘O")]
+    [Tooltip("Talk ã‚·ãƒ¼ãƒ³ã®åå‰")]
     [SerializeField] private string talkSceneName = "Talk";
-    [Tooltip("ƒ^ƒCƒgƒ‹ƒV[ƒ“‚Ì–¼‘OiTalk I—¹Œã‚Ì–ß‚èæj")]
+    [Tooltip("ã‚¿ã‚¤ãƒˆãƒ«ã‚·ãƒ¼ãƒ³ã®åå‰ï¼ˆTalk çµ‚äº†å¾Œã®æˆ»ã‚Šå…ˆï¼‰")]
     [SerializeField] private string titleSceneName = "Title";
 
     // =========================================================
-    // ‰ŠúƒAƒCƒeƒ€ƒZƒbƒgi’Ç‰Áj
+    // åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚»ãƒƒãƒˆï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // V‹KŠJnE‰Šú‰»‚ÉƒvƒŒƒCƒ„[‚É•t—^‚·‚éƒAƒCƒeƒ€B
-    // ƒCƒ“ƒXƒyƒNƒ^[‚Åİ’è‚·‚éB
+    // æ–°è¦é–‹å§‹æ™‚ãƒ»åˆæœŸåŒ–æ™‚ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ä»˜ä¸ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã€‚
+    // ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§è¨­å®šã™ã‚‹ã€‚
     //
-    // İ’è—á:
-    //   startingItems[0] = W001_Bokutoui–Ø“j    ¨ ©“®‘•”õ
-    //   startingItems[1] = C001_Yakusoui–ò‘j
-    //   startingItems[2] = C001_Yakusoui–ò‘j
-    //   startingItems[3] = C001_Yakusoui–ò‘j
-    //   startingItems[4] = M001_Fireiƒtƒ@ƒCƒAƒ{[ƒ‹j
+    // è¨­å®šä¾‹:
+    //   startingItems[0] = W001_Bokutouï¼ˆæœ¨åˆ€ï¼‰    â†’ è‡ªå‹•è£…å‚™
+    //   startingItems[1] = C001_Yakusouï¼ˆè–¬è‰ï¼‰
+    //   startingItems[2] = C001_Yakusouï¼ˆè–¬è‰ï¼‰
+    //   startingItems[3] = C001_Yakusouï¼ˆè–¬è‰ï¼‰
+    //   startingItems[4] = M001_Fireï¼ˆãƒ•ã‚¡ã‚¤ã‚¢ãƒœãƒ¼ãƒ«ï¼‰
     //
-    // ’ˆÓ:
-    //   “¯‚¶ƒAƒCƒeƒ€‚ğ•¡”ŒÂ•t—^‚·‚éê‡‚ÍA”z—ñ‚É•¡”‰ñİ’è‚·‚éB
-    //   Weapon ƒJƒeƒSƒŠ‚ÌƒAƒCƒeƒ€‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡A
-    //   Å‰‚ÉŒ©‚Â‚©‚Á‚½ Weapon ‚ğ©“®‘•”õ‚·‚éB
+    // æ³¨æ„:
+    //   åŒã˜ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¤‡æ•°å€‹ä»˜ä¸ã™ã‚‹å ´åˆã¯ã€é…åˆ—ã«è¤‡æ•°å›è¨­å®šã™ã‚‹ã€‚
+    //   Weapon ã‚«ãƒ†ã‚´ãƒªã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã€
+    //   æœ€åˆã«è¦‹ã¤ã‹ã£ãŸ Weapon ã‚’è‡ªå‹•è£…å‚™ã™ã‚‹ã€‚
     // =========================================================
 
     [Header("Starting Items")]
-    [Tooltip("V‹KŠJn‚ÉƒvƒŒƒCƒ„[‚É•t—^‚·‚éƒAƒCƒeƒ€B\n"
-           + "Weapon ƒJƒeƒSƒŠ‚ÌƒAƒCƒeƒ€‚ÍÅ‰‚Ì1‚Â‚ğ©“®‘•”õ‚·‚éB")]
+    [Tooltip("æ–°è¦é–‹å§‹æ™‚ã«ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ä»˜ä¸ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã€‚\n"
+           + "Weapon ã‚«ãƒ†ã‚´ãƒªã®ã‚¢ã‚¤ãƒ†ãƒ ã¯æœ€åˆã®1ã¤ã‚’è‡ªå‹•è£…å‚™ã™ã‚‹ã€‚")]
     [SerializeField] private ItemData[] startingItems;
 
     private void Start()
@@ -84,7 +84,7 @@ public class TitleUIManager : MonoBehaviour
             startButton.onClick.AddListener(OnStart);
         if (resetButton != null)
             resetButton.onClick.AddListener(OnResetClicked);
-        // ‰Šú‰»Šm”Fƒ|ƒbƒvƒAƒbƒv
+        // åˆæœŸåŒ–ç¢ºèªãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—
         if (resetConfirmYes != null)
             resetConfirmYes.onClick.AddListener(OnResetConfirmYes);
         if (resetConfirmNo != null)
@@ -94,48 +94,57 @@ public class TitleUIManager : MonoBehaviour
         if (openingButton != null)
             openingButton.onClick.AddListener(OnOpening);
 
-        // š’Ç‰Á: Analytics ‚ğ— ‚Å‰Šú‰»iŠ®—¹‚ğ‘Ò‚½‚È‚¢‚Ì‚Åƒ^ƒCƒgƒ‹‘€ì‚Í’x‰„‚µ‚È‚¢j
+        // â˜…è¿½åŠ : Analytics ã‚’è£ã§åˆæœŸåŒ–ï¼ˆå®Œäº†ã‚’å¾…ãŸãªã„ã®ã§ã‚¿ã‚¤ãƒˆãƒ«æ“ä½œã¯é…å»¶ã—ãªã„ï¼‰
         InitAnalytics();
     }
 
-    // š’Ç‰Á: Analytics ‰Šú‰»i“Š‚°‚Á‚Ï‚È‚µj
+    // â˜…è¿½åŠ : Analytics åˆæœŸåŒ–ï¼ˆæŠ•ã’ã£ã±ãªã—ï¼‰
     private async void InitAnalytics()
     {
         await AnalyticsManager.InitializeAsync();
-        AnalyticsManager.GrantConsent();
+
+        // ç„¡æ¡ä»¶ã«åŒæ„ã—ãŸã“ã¨ã«ã¯ã›ãšã€UMP ã®åˆ¤å®šã«å¾“ã†ã€‚
+        // ï¼ˆåŒæ„ä¸è¦ãªåœ°åŸŸãªã‚‰åé›†ã€åŒæ„ãŒå¿…è¦ã§æœªå–å¾—ãªã‚‰åé›†ã—ãªã„ï¼‰
+        AnalyticsManager.ApplyConsent();
+
+        // UMP ã®åŒæ„ãƒ•ãƒ­ãƒ¼ã¯ AdManager å´ã§éåŒæœŸã«èµ°ã£ã¦ãŠã‚Šã€ã“ã“ã‚ˆã‚Šå¾Œã«
+        // ç¢ºå®šã™ã‚‹ã“ã¨ãŒã‚ã‚‹ã€‚ç¢ºå®š/å¤‰æ›´æ™‚ã«å†è©•ä¾¡ã•ã‚Œã‚‹ã‚ˆã†è³¼èª­ã—ã¦ãŠãã€‚
+        // äºŒé‡è³¼èª­ã‚’é¿ã‘ã‚‹ãŸã‚ã€å¿…ãš -= ã—ã¦ã‹ã‚‰ += ã™ã‚‹ã€‚
+        AdManager.OnConsentResolved -= AnalyticsManager.ApplyConsent;
+        AdManager.OnConsentResolved += AnalyticsManager.ApplyConsent;
     }
 
     /// <summary>
-    /// ƒXƒ^[ƒgƒ{ƒ^ƒ“: ƒZ[ƒuƒf[ƒ^‚ª‚ ‚ê‚Îƒ[ƒh‚µ‚Ä‘±‚«‚©‚çA‚È‚¯‚ê‚Î‰Šúó‘Ô‚Å Main ‚ÖB
+    /// ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³: ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°ãƒ­ãƒ¼ãƒ‰ã—ã¦ç¶šãã‹ã‚‰ã€ãªã‘ã‚Œã°åˆæœŸçŠ¶æ…‹ã§ Main ã¸ã€‚
     /// </summary>
     private void OnStart()
     {
         if (SaveManager.HasSaveData())
         {
-            // ƒZ[ƒuƒf[ƒ^‚ ‚è ¨ ƒ[ƒh‚µ‚Ä‘±‚«‚©‚ç
+            // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚ã‚Š â†’ ãƒ­ãƒ¼ãƒ‰ã—ã¦ç¶šãã‹ã‚‰
             SaveManager.Load();
 
             // =========================================================
-            // “Œv: ƒQ[ƒ€ŠJn‰ñ”i’Ç‰Áj
-            // ƒ[ƒh‚ÌŒã‚É‰ÁZ‚·‚éiæ‚É‰ÁZ‚·‚é‚Æƒ[ƒh‚Åã‘‚«‚³‚ê‚éjB
+            // çµ±è¨ˆ: ã‚²ãƒ¼ãƒ é–‹å§‹å›æ•°ï¼ˆè¿½åŠ ï¼‰
+            // ãƒ­ãƒ¼ãƒ‰ã®å¾Œã«åŠ ç®—ã™ã‚‹ï¼ˆå…ˆã«åŠ ç®—ã™ã‚‹ã¨ãƒ­ãƒ¼ãƒ‰ã§ä¸Šæ›¸ãã•ã‚Œã‚‹ï¼‰ã€‚
             // =========================================================
             GameState.I.statGameStartCount++;
             SaveManager.Save();
 
             // =========================================================
-            // ƒGƒ“ƒfƒBƒ“ƒO’†’f‚©‚ç‚ÌÄŠJƒ`ƒFƒbƒNi’Ç‰Áj
-            // ED‰ï˜b/ƒXƒ^ƒbƒtƒ[ƒ‹/ƒGƒsƒ[ƒO‚Ì“r’†‚ÅI—¹‚µ‚Ä‚¢‚½ê‡A
-            // ’†’f‚µ‚½ƒtƒF[ƒY‚Ìæ“ª‚©‚çÄŠJ‚·‚éB
+            // ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ä¸­æ–­ã‹ã‚‰ã®å†é–‹ãƒã‚§ãƒƒã‚¯ï¼ˆè¿½åŠ ï¼‰
+            // EDä¼šè©±/ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«/ã‚¨ãƒ”ãƒ­ãƒ¼ã‚°ã®é€”ä¸­ã§çµ‚äº†ã—ã¦ã„ãŸå ´åˆã€
+            // ä¸­æ–­ã—ãŸãƒ•ã‚§ãƒ¼ã‚ºã®å…ˆé ­ã‹ã‚‰å†é–‹ã™ã‚‹ã€‚
             // =========================================================
             if (EndingManager.TryResumeEnding())
                 return;
 
-            Debug.Log("[Title] ƒZ[ƒuƒf[ƒ^‚ğƒ[ƒh‚µ‚Ä‘±‚«‚©‚çŠJn");
+            Debug.Log("[Title] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦ç¶šãã‹ã‚‰é–‹å§‹");
         }
         else
         {
-            // ƒZ[ƒuƒf[ƒ^‚È‚µ ¨ ‰Šúó‘Ô‚Ì‚Ü‚Ü
-            // maxHp/maxMp ‚ğ VIT/INT ‚©‚çÄŒvZ‚µ‚Ä³‚µ‚¢’l‚É‚·‚é
+            // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãªã— â†’ åˆæœŸçŠ¶æ…‹ã®ã¾ã¾
+            // maxHp/maxMp ã‚’ VIT/INT ã‹ã‚‰å†è¨ˆç®—ã—ã¦æ­£ã—ã„å€¤ã«ã™ã‚‹
             if (GameState.I != null)
             {
                 GameState.I.RecalcMaxHp();
@@ -144,82 +153,82 @@ public class TitleUIManager : MonoBehaviour
 
             GameState.I.statGameStartCount++;
 
-            // ‰ŠúƒAƒCƒeƒ€‚ğ•t—^i™p“™: –¢•t—^‚Ì‚Æ‚«‚¾‚¯Àsj
+            // åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä»˜ä¸ï¼ˆå†ªç­‰: æœªä»˜ä¸ã®ã¨ãã ã‘å®Ÿè¡Œï¼‰
             EnsureStartingItems();
 
-            Debug.Log("[Title] ƒZ[ƒuƒf[ƒ^‚È‚µBV‹K‚ÅŠJn");
+            Debug.Log("[Title] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãªã—ã€‚æ–°è¦ã§é–‹å§‹");
         }
 
         SceneManager.LoadScene("Main");
     }
 
     // =========================================================
-    // ƒI[ƒvƒjƒ“ƒOƒ{ƒ^ƒ“i’Ç‰Áj
+    // ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ãƒœã‚¿ãƒ³ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒI[ƒvƒjƒ“ƒOƒ{ƒ^ƒ“: Talk ƒV[ƒ“‚É‘JˆÚ‚µ‚ÄƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒg‚ğÄ¶‚·‚éB
-    /// Talk I—¹Œã‚Íƒ^ƒCƒgƒ‹‰æ–Ê‚É–ß‚éB
-    /// ‰½“x‚Å‚àŒJ‚è•Ô‚µ‹’®‰Â”\B
+    /// ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ãƒœã‚¿ãƒ³: Talk ã‚·ãƒ¼ãƒ³ã«é·ç§»ã—ã¦ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆã‚’å†ç”Ÿã™ã‚‹ã€‚
+    /// Talk çµ‚äº†å¾Œã¯ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢ã«æˆ»ã‚‹ã€‚
+    /// ä½•åº¦ã§ã‚‚ç¹°ã‚Šè¿”ã—è¦–è´å¯èƒ½ã€‚
     ///
-    /// šC³: Talk ƒV[ƒ““à‚Å MarkPlayed() ¨ SaveManager.Save() ‚ª‘–‚é‚½‚ßA
-    /// ƒZ[ƒuƒf[ƒ^‚ª‚ ‚éê‡‚Í–‘O‚Éƒ[ƒh‚µ‚Ä‚¨‚­B
-    /// ‚±‚ê‚É‚æ‚èA‰Šúó‘Ô‚Ìƒf[ƒ^‚ÅƒZ[ƒu‚ªã‘‚«‚³‚ê‚é‚Ì‚ğ–h‚®B
+    /// â˜…ä¿®æ­£: Talk ã‚·ãƒ¼ãƒ³å†…ã§ MarkPlayed() â†’ SaveManager.Save() ãŒèµ°ã‚‹ãŸã‚ã€
+    /// ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚‹å ´åˆã¯äº‹å‰ã«ãƒ­ãƒ¼ãƒ‰ã—ã¦ãŠãã€‚
+    /// ã“ã‚Œã«ã‚ˆã‚Šã€åˆæœŸçŠ¶æ…‹ã®ãƒ‡ãƒ¼ã‚¿ã§ã‚»ãƒ¼ãƒ–ãŒä¸Šæ›¸ãã•ã‚Œã‚‹ã®ã‚’é˜²ãã€‚
     /// </summary>
     private void OnOpening()
     {
         var gs = GameState.I;
         if (gs == null)
         {
-            Debug.LogError("[Title] GameState ‚ª‘¶İ‚µ‚Ü‚¹‚ñBƒI[ƒvƒjƒ“ƒO‚ğŠJn‚Å‚«‚Ü‚¹‚ñB");
+            Debug.LogError("[Title] GameState ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚’é–‹å§‹ã§ãã¾ã›ã‚“ã€‚");
             return;
         }
 
-        // šC³: ƒZ[ƒuƒf[ƒ^‚ª‚ ‚ê‚Î–‘O‚Éƒ[ƒh‚µ‚Ä‚¨‚­
-        // Talk ƒV[ƒ““à‚Å MarkPlayed() ¨ SaveManager.Save() ‚ªŒÄ‚Î‚ê‚½Û‚É
-        // ‰Šú’l‚Åã‘‚«‚³‚ê‚é‚Ì‚ğ–h~‚·‚éB
+        // â˜…ä¿®æ­£: ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒã‚ã‚Œã°äº‹å‰ã«ãƒ­ãƒ¼ãƒ‰ã—ã¦ãŠã
+        // Talk ã‚·ãƒ¼ãƒ³å†…ã§ MarkPlayed() â†’ SaveManager.Save() ãŒå‘¼ã°ã‚ŒãŸéš›ã«
+        // åˆæœŸå€¤ã§ä¸Šæ›¸ãã•ã‚Œã‚‹ã®ã‚’é˜²æ­¢ã™ã‚‹ã€‚
         if (SaveManager.HasSaveData())
         {
             SaveManager.Load();
-            Debug.Log("[Title] ƒI[ƒvƒjƒ“ƒO‘O‚ÉƒZ[ƒuƒf[ƒ^‚ğƒ[ƒh");
+            Debug.Log("[Title] ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°å‰ã«ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰");
         }
         else
         {
-            // šC³: V‹KƒvƒŒƒCƒ„[‚ªƒXƒ^[ƒg‚æ‚èæ‚ÉƒI[ƒvƒjƒ“ƒO‚ğ‰Ÿ‚µ‚½ê‡A
-            // ‚±‚ÌŒã Talk ƒV[ƒ“‚Å MarkPlayed() ¨ Save() ‚ª‘–‚èu‰ŠúƒAƒCƒeƒ€–³‚µ‚Ì
-            // ‹óƒZ[ƒuv‚ªì‚ç‚ê‚Ä‚µ‚Ü‚¤B‚»‚ê‚ğ–h‚®‚½‚ßA‚±‚±‚Å‰ŠúƒAƒCƒeƒ€‚ğ
-            // •t—^‚µ‚Ä‚¨‚­iEnsureStartingItems ‚Í™p“™‚È‚Ì‚Å“ñd•t—^‚µ‚È‚¢jB
+            // â˜…ä¿®æ­£: æ–°è¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¹ã‚¿ãƒ¼ãƒˆã‚ˆã‚Šå…ˆã«ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚’æŠ¼ã—ãŸå ´åˆã€
+            // ã“ã®å¾Œ Talk ã‚·ãƒ¼ãƒ³ã§ MarkPlayed() â†’ Save() ãŒèµ°ã‚Šã€ŒåˆæœŸã‚¢ã‚¤ãƒ†ãƒ ç„¡ã—ã®
+            // ç©ºã‚»ãƒ¼ãƒ–ã€ãŒä½œã‚‰ã‚Œã¦ã—ã¾ã†ã€‚ãã‚Œã‚’é˜²ããŸã‚ã€ã“ã“ã§åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’
+            // ä»˜ä¸ã—ã¦ãŠãï¼ˆEnsureStartingItems ã¯å†ªç­‰ãªã®ã§äºŒé‡ä»˜ä¸ã—ãªã„ï¼‰ã€‚
             EnsureStartingItems();
-            Debug.Log("[Title] ƒI[ƒvƒjƒ“ƒO‘O‚É‰ŠúƒAƒCƒeƒ€‚ğ•ÛØiV‹KƒvƒŒƒCƒ„[j");
+            Debug.Log("[Title] ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°å‰ã«åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä¿è¨¼ï¼ˆæ–°è¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ï¼‰");
         }
 
-        // Talk ƒV[ƒ“‚Ö“n‚·ƒpƒ‰ƒ[ƒ^‚ğƒZƒbƒg
+        // Talk ã‚·ãƒ¼ãƒ³ã¸æ¸¡ã™ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆ
         gs.pendingEventId = openingEventId;
-        gs.talkReturnScene = titleSceneName; // Talk I—¹Œã‚Éƒ^ƒCƒgƒ‹‚Ö–ß‚é
+        gs.talkReturnScene = titleSceneName; // Talk çµ‚äº†å¾Œã«ã‚¿ã‚¤ãƒˆãƒ«ã¸æˆ»ã‚‹
 
-        Debug.Log($"[Title] ƒI[ƒvƒjƒ“ƒOƒCƒxƒ“ƒgŠJn: {openingEventId}");
+        Debug.Log($"[Title] ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°ã‚¤ãƒ™ãƒ³ãƒˆé–‹å§‹: {openingEventId}");
         SceneManager.LoadScene(talkSceneName);
     }
 
     /// <summary>
-    /// ‰Šú‰»ƒ{ƒ^ƒ“‰Ÿ‰º ¨ ƒ|ƒbƒvƒAƒbƒv•\¦B
-    /// ƒ|ƒbƒvƒAƒbƒv‚ª–¢İ’è‚Ìê‡‚Í]—ˆ’Ê‚è‘¦ÀsB
+    /// åˆæœŸåŒ–ãƒœã‚¿ãƒ³æŠ¼ä¸‹ â†’ ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—è¡¨ç¤ºã€‚
+    /// ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ãŒæœªè¨­å®šã®å ´åˆã¯å¾“æ¥é€šã‚Šå³å®Ÿè¡Œã€‚
     /// </summary>
     private void OnResetClicked()
     {
         if (resetConfirmPopup != null)
         {
 
-            if (AudioManager.I != null) AudioManager.I.PlayPopupSe();   // š’Ç‰Á
+            if (AudioManager.I != null) AudioManager.I.PlayPopupSe();   // â˜…è¿½åŠ 
 
 
             if (resetConfirmText != null)
-                resetConfirmText.text = "ƒZ[ƒuƒf[ƒ^‚ğ‰Šú‰»‚µ‚Ü‚·‚©H\niŒ³‚É–ß‚¹‚Ü‚¹‚ñj";
+                resetConfirmText.text = "ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’åˆæœŸåŒ–ã—ã¾ã™ã‹ï¼Ÿ\nï¼ˆå…ƒã«æˆ»ã›ã¾ã›ã‚“ï¼‰";
             resetConfirmPopup.SetActive(true);
         }
         else
         {
-            // ƒ|ƒbƒvƒAƒbƒv–¢İ’è: ]—ˆ’Ê‚è‘¦Às
+            // ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—æœªè¨­å®š: å¾“æ¥é€šã‚Šå³å®Ÿè¡Œ
             OnReset();
         }
     }
@@ -239,15 +248,15 @@ public class TitleUIManager : MonoBehaviour
 
 
     /// <summary>
-    /// ‰Šú‰»ƒ{ƒ^ƒ“: ƒZ[ƒuƒf[ƒ^‚ğíœ‚µAGameStateEŠ•iE‘qŒÉ‚ğƒŠƒZƒbƒg‚·‚éB
-    /// Main ‚É‚Í‘JˆÚ‚µ‚È‚¢iƒ^ƒCƒgƒ‹‚É—¯‚Ü‚éjB
+    /// åˆæœŸåŒ–ãƒœã‚¿ãƒ³: ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã€GameStateãƒ»æ‰€æŒå“ãƒ»å€‰åº«ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+    /// Main ã«ã¯é·ç§»ã—ãªã„ï¼ˆã‚¿ã‚¤ãƒˆãƒ«ã«ç•™ã¾ã‚‹ï¼‰ã€‚
     /// </summary>
     private void OnReset()
     {
-        // ƒZ[ƒuƒtƒ@ƒCƒ‹‚ğíœ
+        // ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
         SaveManager.DeleteSave();
 
-        // GameState ‚ğ‰Šú’l‚É–ß‚·
+        // GameState ã‚’åˆæœŸå€¤ã«æˆ»ã™
         if (GameState.I != null)
         {
             GameState.I.floor = 1;
@@ -273,7 +282,7 @@ public class TitleUIManager : MonoBehaviour
             GameState.I.statusPoint = 10;
             GameState.I.equippedWeaponUid = "";
 
-            // ƒ{ƒXƒtƒF[ƒY‚ÆƒGƒ“ƒfƒBƒ“ƒOis‚ğƒŠƒZƒbƒgi’Ç‰Áj
+            // ãƒœã‚¹ãƒ•ã‚§ãƒ¼ã‚ºã¨ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°é€²è¡Œã‚’ãƒªã‚»ãƒƒãƒˆï¼ˆè¿½åŠ ï¼‰
             GameState.I.bossPhaseF70 = 0;
             GameState.I.bossPhaseF90 = 0;
             GameState.I.bossPhaseF100 = 0;
@@ -292,13 +301,13 @@ public class TitleUIManager : MonoBehaviour
             GameState.I.pendingItemData = null;
             GameState.I.pendingEventId = "";
 
-            // Šù“ÇƒCƒxƒ“ƒg‚ğƒNƒŠƒA
+            // æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã‚¯ãƒªã‚¢
             GameState.I.RestorePlayedIds(null);
 
-            // maxHp/maxMp ‚ğ VIT/INT ‚©‚çÄŒvZiƒn[ƒhƒR[ƒh 50/20 ‚Å‚Í‚È‚­³‚µ‚¢’l‚ğg‚¤j
-            // RecalcMaxHp/RecalcMaxMp “à‚Å currentHp/currentMp ‚à maxHp/maxMp ‚ÉƒNƒ‰ƒ“ƒv‚³‚ê‚éB
-            // ‚½‚¾‚µ currentHp ‚ª maxHp ˆÈ‰º‚Ìê‡‚Í‚»‚Ì‚Ü‚ÜˆÛ‚³‚ê‚éİŒv‚È‚Ì‚ÅA
-            // ‚Ü‚¸ -1 ‚ÉƒŠƒZƒbƒg‚µ‚Äu–¢‰Šú‰»vó‘Ô‚É‚µARecalc “à‚Å maxHp ‚É‘µ‚¦‚éB
+            // maxHp/maxMp ã‚’ VIT/INT ã‹ã‚‰å†è¨ˆç®—ï¼ˆãƒãƒ¼ãƒ‰ã‚³ãƒ¼ãƒ‰ 50/20 ã§ã¯ãªãæ­£ã—ã„å€¤ã‚’ä½¿ã†ï¼‰
+            // RecalcMaxHp/RecalcMaxMp å†…ã§ currentHp/currentMp ã‚‚ maxHp/maxMp ã«ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œã‚‹ã€‚
+            // ãŸã ã— currentHp ãŒ maxHp ä»¥ä¸‹ã®å ´åˆã¯ãã®ã¾ã¾ç¶­æŒã•ã‚Œã‚‹è¨­è¨ˆãªã®ã§ã€
+            // ã¾ãš -1 ã«ãƒªã‚»ãƒƒãƒˆã—ã¦ã€ŒæœªåˆæœŸåŒ–ã€çŠ¶æ…‹ã«ã—ã€Recalc å†…ã§ maxHp ã«æƒãˆã‚‹ã€‚
             GameState.I.maxHp = -1;
             GameState.I.currentHp = -1;
             GameState.I.maxMp = -1;
@@ -309,84 +318,84 @@ public class TitleUIManager : MonoBehaviour
 
         }
 
-        // Š•i‚ğƒNƒŠƒA
+        // æ‰€æŒå“ã‚’ã‚¯ãƒªã‚¢
         if (ItemBoxManager.Instance != null)
             ItemBoxManager.Instance.ClearAll();
 
-        // ‘qŒÉ‚ğƒNƒŠƒA
+        // å€‰åº«ã‚’ã‚¯ãƒªã‚¢
         if (StorageManager.Instance != null)
             StorageManager.Instance.ClearAll();
 
-        // ‰ŠúƒAƒCƒeƒ€•t—^ƒtƒ‰ƒO‚ğƒŠƒZƒbƒgi‰Šú‰»‚È‚Ì‚ÅÄ•t—^‚ğ‹–‰Â‚·‚éj
+        // åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆï¼ˆåˆæœŸåŒ–ãªã®ã§å†ä»˜ä¸ã‚’è¨±å¯ã™ã‚‹ï¼‰
         GameState.I.hasGrantedStartingItems = false;
 
-        // ‰ŠúƒAƒCƒeƒ€‚ğ•t—^i‰Šú‰»‚Í‹­§Ä•t—^‚È‚Ì‚Å’¼ÚŒÄ‚Ôj
+        // åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä»˜ä¸ï¼ˆåˆæœŸåŒ–ã¯å¼·åˆ¶å†ä»˜ä¸ãªã®ã§ç›´æ¥å‘¼ã¶ï¼‰
         GrantStartingItems();
 
-        // •t—^Ï‚İƒtƒ‰ƒO‚ğ—§‚Ä‚éiŸ‰ñˆÈ~‚Ì™p“™”»’è‚Ì‚½‚ßj
+        // ä»˜ä¸æ¸ˆã¿ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹ï¼ˆæ¬¡å›ä»¥é™ã®å†ªç­‰åˆ¤å®šã®ãŸã‚ï¼‰
         GameState.I.hasGrantedStartingItems = true;
 
-        // ƒtƒ‰ƒO true ‚ğŠmÀ‚É•Û‘¶‚·‚éB
-        // GrantStartingItems “à‚Ì©“®ƒZ[ƒu‚Íƒtƒ‰ƒO‚ğ—§‚Ä‚é‘O‚É‘–‚é‚½‚ßA
-        // ‚±‚±‚Å–¾¦“I‚É•Û‘¶‚µ’¼‚µ‚ÄƒRƒƒ“ƒg‚ÆÀ‹““®‚ğˆê’v‚³‚¹‚éB
+        // ãƒ•ãƒ©ã‚° true ã‚’ç¢ºå®Ÿã«ä¿å­˜ã™ã‚‹ã€‚
+        // GrantStartingItems å†…ã®è‡ªå‹•ã‚»ãƒ¼ãƒ–ã¯ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã‚‹å‰ã«èµ°ã‚‹ãŸã‚ã€
+        // ã“ã“ã§æ˜ç¤ºçš„ã«ä¿å­˜ã—ç›´ã—ã¦ã‚³ãƒ¡ãƒ³ãƒˆã¨å®ŸæŒ™å‹•ã‚’ä¸€è‡´ã•ã›ã‚‹ã€‚
         SaveManager.Save();
 
-        Debug.Log("[Title] ƒZ[ƒuƒf[ƒ^‚ğ‰Šú‰»‚µ‚Ü‚µ‚½");
+        Debug.Log("[Title] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’åˆæœŸåŒ–ã—ã¾ã—ãŸ");
     }
 
     // =========================================================
-    // ‰ŠúƒAƒCƒeƒ€•t—^i’Ç‰Áj
+    // åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ‰ŠúƒAƒCƒeƒ€‚ğu‚Ü‚¾•t—^‚µ‚Ä‚¢‚È‚¯‚ê‚Îv•t—^‚·‚é™p“™ƒƒ\ƒbƒhB
-    /// hasGrantedStartingItems ƒtƒ‰ƒO‚ÅŠÇ—‚µA‰½“xŒÄ‚ñ‚Å‚à“ñd•t—^‚µ‚È‚¢B
+    /// åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ã€Œã¾ã ä»˜ä¸ã—ã¦ã„ãªã‘ã‚Œã°ã€ä»˜ä¸ã™ã‚‹å†ªç­‰ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
+    /// hasGrantedStartingItems ãƒ•ãƒ©ã‚°ã§ç®¡ç†ã—ã€ä½•åº¦å‘¼ã‚“ã§ã‚‚äºŒé‡ä»˜ä¸ã—ãªã„ã€‚
     ///
-    /// ŒÄ‚Ño‚µ‰ÓŠ:
-    ///   - OnStart() ‚ÌV‹KŠJn•ªŠò
-    ///   - OnOpening() ‚ÌV‹KƒvƒŒƒCƒ„[•ªŠòi‹óƒZ[ƒu‘Îôj
+    /// å‘¼ã³å‡ºã—ç®‡æ‰€:
+    ///   - OnStart() ã®æ–°è¦é–‹å§‹åˆ†å²
+    ///   - OnOpening() ã®æ–°è¦ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åˆ†å²ï¼ˆç©ºã‚»ãƒ¼ãƒ–å¯¾ç­–ï¼‰
     ///
-    /// GrantStartingItems() “à‚Ì AddItem / MarkItemDiscovered ‚ª©“®ƒZ[ƒu‚·‚é‚½‚ßA
-    /// •t—^Œã‚Íƒtƒ‰ƒO‚àŠÜ‚ß‚ÄŠmÀ‚É‰i‘±‰»‚³‚ê‚éi––”ö‚Ì Save() ‚Å”O‚Ì‚½‚ßÄ•Û‘¶jB
+    /// GrantStartingItems() å†…ã® AddItem / MarkItemDiscovered ãŒè‡ªå‹•ã‚»ãƒ¼ãƒ–ã™ã‚‹ãŸã‚ã€
+    /// ä»˜ä¸å¾Œã¯ãƒ•ãƒ©ã‚°ã‚‚å«ã‚ã¦ç¢ºå®Ÿã«æ°¸ç¶šåŒ–ã•ã‚Œã‚‹ï¼ˆæœ«å°¾ã® Save() ã§å¿µã®ãŸã‚å†ä¿å­˜ï¼‰ã€‚
     /// </summary>
     private void EnsureStartingItems()
     {
         if (GameState.I == null)
         {
-            Debug.LogWarning("[Title] GameState ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‰ŠúƒAƒCƒeƒ€‚ğ•t—^‚Å‚«‚Ü‚¹‚ñB");
+            Debug.LogWarning("[Title] GameState ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä»˜ä¸ã§ãã¾ã›ã‚“ã€‚");
             return;
         }
 
-        // Šù‚É•t—^Ï‚İ‚È‚ç‰½‚à‚µ‚È‚¢i™p“™j
+        // æ—¢ã«ä»˜ä¸æ¸ˆã¿ãªã‚‰ä½•ã‚‚ã—ãªã„ï¼ˆå†ªç­‰ï¼‰
         if (GameState.I.hasGrantedStartingItems)
         {
-            Debug.Log("[Title] ‰ŠúƒAƒCƒeƒ€‚Í•t—^Ï‚İBƒXƒLƒbƒv‚µ‚Ü‚·B");
+            Debug.Log("[Title] åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã¯ä»˜ä¸æ¸ˆã¿ã€‚ã‚¹ã‚­ãƒƒãƒ—ã—ã¾ã™ã€‚");
             return;
         }
 
         GrantStartingItems();
 
-        // •t—^Ï‚İƒtƒ‰ƒO‚ğ—§‚Ä‚Ä•Û‘¶i“ñ“x‚ÆÄ•t—^‚³‚ê‚È‚¢j
+        // ä»˜ä¸æ¸ˆã¿ãƒ•ãƒ©ã‚°ã‚’ç«‹ã¦ã¦ä¿å­˜ï¼ˆäºŒåº¦ã¨å†ä»˜ä¸ã•ã‚Œãªã„ï¼‰
         GameState.I.hasGrantedStartingItems = true;
         SaveManager.Save();
-        Debug.Log("[Title] ‰ŠúƒAƒCƒeƒ€•t—^ƒtƒ‰ƒO‚ğ ON ‚É‚µ‚Ü‚µ‚½");
+        Debug.Log("[Title] åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸ãƒ•ãƒ©ã‚°ã‚’ ON ã«ã—ã¾ã—ãŸ");
     }
 
     /// <summary>
-    /// startingItems ”z—ñ‚Éİ’è‚³‚ê‚½ƒAƒCƒeƒ€‚ğ ItemBoxManager ‚É’Ç‰Á‚·‚éB
-    /// Weapon ƒJƒeƒSƒŠ‚ÌƒAƒCƒeƒ€‚ªŠÜ‚Ü‚ê‚Ä‚¢‚éê‡AÅ‰‚Ì1‚Â‚ğ©“®‘•”õ‚·‚éB
-    /// •t—^‚µ‚½ƒAƒCƒeƒ€‚Í}ŠÓ‚É‚à“o˜^‚·‚éB
+    /// startingItems é…åˆ—ã«è¨­å®šã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ ItemBoxManager ã«è¿½åŠ ã™ã‚‹ã€‚
+    /// Weapon ã‚«ãƒ†ã‚´ãƒªã®ã‚¢ã‚¤ãƒ†ãƒ ãŒå«ã¾ã‚Œã¦ã„ã‚‹å ´åˆã€æœ€åˆã®1ã¤ã‚’è‡ªå‹•è£…å‚™ã™ã‚‹ã€‚
+    /// ä»˜ä¸ã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã¯å›³é‘‘ã«ã‚‚ç™»éŒ²ã™ã‚‹ã€‚
     ///
-    /// ’ˆÓ: ‚±‚Ìƒƒ\ƒbƒh‚Í–³ğŒ‚É•t—^‚·‚éB™p“™«‚ª•K—v‚È’Êíƒtƒ[‚Å‚Í
-    /// EnsureStartingItems() Œo—R‚ÅŒÄ‚Ô‚±‚ÆB
-    /// OnReset() ‚©‚ç‚Íu‰Šú‰»‹­§Ä•t—^v‚Ì‚½‚ß’¼ÚŒÄ‚ñ‚Å‚æ‚¢B
+    /// æ³¨æ„: ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã¯ç„¡æ¡ä»¶ã«ä»˜ä¸ã™ã‚‹ã€‚å†ªç­‰æ€§ãŒå¿…è¦ãªé€šå¸¸ãƒ•ãƒ­ãƒ¼ã§ã¯
+    /// EnsureStartingItems() çµŒç”±ã§å‘¼ã¶ã“ã¨ã€‚
+    /// OnReset() ã‹ã‚‰ã¯ã€ŒåˆæœŸåŒ–ï¼å¼·åˆ¶å†ä»˜ä¸ã€ã®ãŸã‚ç›´æ¥å‘¼ã‚“ã§ã‚ˆã„ã€‚
     /// </summary>
     private void GrantStartingItems()
     {
         if (startingItems == null || startingItems.Length == 0) return;
         if (ItemBoxManager.Instance == null)
         {
-            Debug.LogWarning("[Title] ItemBoxManager ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB‰ŠúƒAƒCƒeƒ€‚ğ•t—^‚Å‚«‚Ü‚¹‚ñB");
+            Debug.LogWarning("[Title] ItemBoxManager ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’ä»˜ä¸ã§ãã¾ã›ã‚“ã€‚");
             return;
         }
 
@@ -399,28 +408,28 @@ public class TitleUIManager : MonoBehaviour
             bool added = ItemBoxManager.Instance.AddItem(startingItems[i]);
             if (!added)
             {
-                Debug.LogWarning($"[Title] ‰ŠúƒAƒCƒeƒ€’Ç‰Á¸”si—e—Ê•s‘«?j: {startingItems[i].itemName}");
+                Debug.LogWarning($"[Title] åˆæœŸã‚¢ã‚¤ãƒ†ãƒ è¿½åŠ å¤±æ•—ï¼ˆå®¹é‡ä¸è¶³?ï¼‰: {startingItems[i].itemName}");
                 continue;
             }
 
-            Debug.Log($"[Title] ‰ŠúƒAƒCƒeƒ€•t—^: {startingItems[i].itemName}");
+            Debug.Log($"[Title] åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸: {startingItems[i].itemName}");
 
-            // }ŠÓ“o˜^i‰ŠúƒAƒCƒeƒ€‚à}ŠÓ‚ÉÚ‚¹‚éjBMarkItemDiscovered ‚Í“à•”‚Å
-            // d•¡ƒ`ƒFƒbƒN{©“®ƒZ[ƒu‚·‚é‚½‚ßA“¯ˆêƒAƒCƒeƒ€‚ğ•¡”•t—^‚µ‚Ä‚àˆÀ‘SB
+            // å›³é‘‘ç™»éŒ²ï¼ˆåˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚‚å›³é‘‘ã«è¼‰ã›ã‚‹ï¼‰ã€‚MarkItemDiscovered ã¯å†…éƒ¨ã§
+            // é‡è¤‡ãƒã‚§ãƒƒã‚¯ï¼‹è‡ªå‹•ã‚»ãƒ¼ãƒ–ã™ã‚‹ãŸã‚ã€åŒä¸€ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¤‡æ•°ä»˜ä¸ã—ã¦ã‚‚å®‰å…¨ã€‚
             if (GameState.I != null)
                 GameState.I.MarkItemDiscovered(startingItems[i].itemId);
 
-            // Å‰‚Ì Weapon ‚ğ©“®‘•”õ
+            // æœ€åˆã® Weapon ã‚’è‡ªå‹•è£…å‚™
             if (!weaponEquipped && startingItems[i].category == ItemCategory.Weapon)
             {
                 var items = ItemBoxManager.Instance.GetItems();
-                // ’Ç‰Á’¼Œã‚È‚Ì‚ÅAÅŒã‚É’Ç‰Á‚³‚ê‚½ƒAƒCƒeƒ€ or ƒ\[ƒgŒã‚ÌˆÊ’u‚ğŒŸõ
+                // è¿½åŠ ç›´å¾Œãªã®ã§ã€æœ€å¾Œã«è¿½åŠ ã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ  or ã‚½ãƒ¼ãƒˆå¾Œã®ä½ç½®ã‚’æ¤œç´¢
                 for (int j = items.Count - 1; j >= 0; j--)
                 {
                     if (items[j] != null && items[j].data == startingItems[i])
                     {
                         ItemBoxManager.Instance.EquipItem(items[j]);
-                        Debug.Log($"[Title] ‰Šú‘•”õ: {startingItems[i].itemName}");
+                        Debug.Log($"[Title] åˆæœŸè£…å‚™: {startingItems[i].itemName}");
                         weaponEquipped = true;
                         break;
                     }
