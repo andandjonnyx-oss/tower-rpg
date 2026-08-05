@@ -75,7 +75,7 @@ public class AdManager : MonoBehaviour
     /// </summary>
     private static readonly List<string> TestDeviceIds = new List<string>
     {
-        // "33BE2250B43518CCDA7DE426D04EE231",
+        "51CE05C781594046217C163F2B82FBB2", // Pixel 7a（開発機）
     };
 
     private static string RewardedAdUnitId
