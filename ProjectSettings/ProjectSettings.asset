@@ -175,7 +175,7 @@ PlayerSettings:
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 1
+  AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 25
   AndroidTargetSdkVersion: 36
   AndroidPreferredInstallLocation: 1
@@ -300,7 +300,9 @@ PlayerSettings:
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
     m_Icons:
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: a65ed1e97dbf660418aa3e5f8044acc1, type: 3}
+      - {fileID: 2800000, guid: ef86d7eeef7a0d343a33876d290edab3, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2
@@ -330,7 +332,8 @@ PlayerSettings:
       m_Height: 81
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: 9665c59ea35533b43bf41baac85c5759, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 1
@@ -360,7 +363,8 @@ PlayerSettings:
       m_Height: 36
       m_Kind: 1
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: ed432e452d45c004d93c5aee788df2f1, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 0

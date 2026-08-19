@@ -97,3 +97,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# F12 で撮影したスクリーンショット（ScreenshotCapture.cs）。ストア掲載用の作業ファイルなので追跡しない。
+/[Ss]creenshots/
