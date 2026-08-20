@@ -100,3 +100,9 @@ InitTestScene*.unity*
 
 # F12 で撮影したスクリーンショット（ScreenshotCapture.cs）。ストア掲載用の作業ファイルなので追跡しない。
 /[Ss]creenshots/
+
+# iOS シミュレータ向けビルド出力（Device 用 build/ とは別ディレクトリに出しているため）
+/build-sim/
+
+# macOS が自動生成するフォルダ表示設定。Windows 側には不要
+.DS_Store

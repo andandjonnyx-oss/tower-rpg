@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
@@ -64,7 +65,7 @@ public class AdManager : MonoBehaviour
     //      iOS     : ca-app-pub-3940256099942544/1712485313
     // =========================================================
     private const string AndroidRewardedAdUnitId = "ca-app-pub-7063976043351494/7011853210";
-    private const string IosRewardedAdUnitId = "";
+    private const string IosRewardedAdUnitId = "ca-app-pub-7063976043351494/3825356010";
 
     /// <summary>
     /// テスト広告を配信する端末のID。
@@ -97,6 +98,10 @@ public class AdManager : MonoBehaviour
     private RewardedAd rewardedAd;
     private bool adsInitialized;
     private bool isLoading;
+
+    // UMP のコールバックはバックグラウンドスレッドで来ることがあり、
+    // そこから StartCoroutine は呼べない。フラグを立てて Update() で拾う。
+    private volatile bool pendingAdsInitialize;
 
     // 表示中の1回分の状態
     private bool isShowing;
@@ -217,6 +222,31 @@ public class AdManager : MonoBehaviour
         }
 
         adsInitialized = true;
+
+        // 実際の初期化は ATT ダイアログを挟む必要があり、コルーチン＝メインスレッド
+        // でしか回せない。ここは UMP のコールバック（別スレッド）から呼ばれ得るので、
+        // フラグだけ立てて Update() に引き渡す。
+        pendingAdsInitialize = true;
+    }
+
+    private void Update()
+    {
+        if (!pendingAdsInitialize) return;
+        pendingAdsInitialize = false;
+        StartCoroutine(RequestAttThenInitialize());
+    }
+
+    /// <summary>
+    /// ATT（iOS）の許諾を取ってから Google Mobile Ads を初期化する。
+    ///
+    /// 順序は UMP 同意フォーム → ATT → MobileAds.Initialize() の3段。
+    /// GDPR 側（UMP）を先に処理したうえで、広告 SDK が IDFA を掴む前に
+    /// ATT を確定させる必要があるため、この順番を崩さないこと。
+    /// iOS 実機以外では ATT の待機は即座に抜ける。
+    /// </summary>
+    private IEnumerator RequestAttThenInitialize()
+    {
+        yield return AppTrackingTransparency.RequestIfNeeded();
 
         // テスト端末を登録しておくと、本番ユニットIDのままテスト広告が配信される。
         if (TestDeviceIds.Count > 0)

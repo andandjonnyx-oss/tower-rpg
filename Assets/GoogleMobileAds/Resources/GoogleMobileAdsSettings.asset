@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GoogleMobileAdsSettings
   m_EditorClassIdentifier: GoogleMobileAds.Editor::GoogleMobileAds.Editor.GoogleMobileAdsSettings
   adMobAndroidAppId: ca-app-pub-7063976043351494~6692023081
-  adMobIOSAppId: 
+  adMobIOSAppId: ca-app-pub-7063976043351494~7919679548
   enableKotlinXCoroutinesPackagingOption: 1
   enableGradleBuildPreProcessor: 1
   disableOptimizeInitialization: 0
   disableOptimizeAdLoading: 0
-  userTrackingUsageDescription: 
+  userTrackingUsageDescription: あなたの興味に合わせた広告を表示するために、デバイスの識別子を使用します。許可しない場合も広告は表示されますが、内容が最適化されません。
   userLanguage: en
   overrideDefaultGmaAndroidSdk: 0
   selectedGmaAndroidSdk: 0
