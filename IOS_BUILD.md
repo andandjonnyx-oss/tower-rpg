@@ -12,9 +12,11 @@ Windows 側で作業する場合、**iOS 関連のビルドは Mac でしかで�
 - ✅ iOS シミュレータで **起動・プレイ・ATT・AdMob テスト広告（報酬獲得まで）を実動作確認済み**
 - ✅ Device SDK で **Archive 成功**（`build/TowerRPG.xcarchive`）
 - ⏸ `.ipa` 書き出しは **Apple Distribution 証明書が未作成**のため停止中
-- ⏸ TestFlight 配布・App プライバシー申告・Beta App Review は未着手
+- ✅ **App プライバシー申告（ASC のニュートリションラベル）は入力済み**（第7節）
+- ✅ **`NSPrivacyTracking` の扱いは調査完了し、「対応不要」で確定**（第7節）
+- ⏸ TestFlight 配布・Beta App Review は未着手
 
-配布方式は **TestFlight（外部テスト）** を選択済み。理由は第6節。
+配布方式は **TestFlight（外部テスト・パブリックリンク）** を選択済み。理由は第6節。
 
 ---
 
@@ -265,6 +267,13 @@ Target Device / Bundle ID / 対応 OS バージョンなど**プロジェクト�
   このゲームは横向き固定で `CLAUDE.md` 第5節のとおり 1920×1080 中央固定の設計なので、
   iPad の 4:3 では余白配分が想定外になる。**後から Universal へ変更は可能**なので、
   まず iPhone で公開する。iPad ユーザーは iPhone 互換モードでインストールできる。
+- **外部テスターへはパブリックリンクで配布**（2026-08-21 決定）
+  テスターは知人で、App Store Connect のチームメンバーではない。
+  **内部テストは相手を ASC ユーザーに登録する必要があり**（Account Holder / Admin /
+  App Manager / Developer / Marketing のいずれかの役割）、アカウントの中身への
+  アクセスを与えてしまうので不採用。外部テストのパブリックリンクなら
+  **URL を渡すだけ**で済み、相手のメールアドレスすら不要。上限は 10,000 人、
+  テスター1人あたり 30 台まで。ビルドの有効期限は 90 日。
 - **配布は TestFlight（Ad Hoc ではない）**
   Ad Hoc は審査不要だが**テスターの UDID 入手**と **HTTPS ホスティング**が要る。
   TestFlight は初回に Beta App Review（1日程度）が要るが、以後の差し替えは審査なしで
@@ -275,23 +284,64 @@ Target Device / Bundle ID / 対応 OS バージョンなど**プロジェクト�
 
 ## 7. 残作業
 
+### Mac 側でしかできないもの
+
 1. **Apple Distribution 証明書の作成** — アカウントに Admin 以上の権限が必要。
    ⚠️ 作成後は**キーチェーンアクセスから `.p12` で書き出してバックアップすること。**
    秘密鍵はこの Mac にしか無く、失うと同じ証明書で署名できなくなる。
-2. `.ipa` 書き出し → App Store Connect へアップロード
-3. **App プライバシー情報の入力**（Beta App Review の提出条件）
-   - AdMob（IDFA・広告データ）と UGS Analytics（利用状況）の両方を申告する
-   - Unity が生成する `PrivacyInfo.xcprivacy` の内容と整合させること
-   - ⚠️ 申告内容は Google と Unity の公式ドキュメントで**必ず裏取りすること**
-4. **`NSPrivacyTracking` の不整合解消（公開前）**
-   生成されるマニフェストは `NSPrivacyTracking = false` / トラッキングドメイン 0 件だが、
-   実際には ATT を要求し IDFA でパーソナライズ広告を配信している。
-   Google の SDK は `NSPrivacyTracking` キー自体を持たず、アプリ側の宣言に委ねている。
-   ⚠️ **単純に true にしてはいけない。** `NSPrivacyTrackingDomains` にドメインを列挙すると、
-   ATT 拒否時に iOS がそれらへの通信を実際にブロックする。Google の公開ドメイン一覧を
-   確認してから決めること。TestFlight のブロッカーではない。
-5. **iOS テストデバイス ID の登録**（第2-1節）
-6. ストア掲載素材（スクリーンショット・説明文）— TestFlight には不要、公開申請時に必要
+2. `.ipa` 書き出し → App Store Connect へアップロード（Transporter に Windows 版は無い）。
+
+### Windows 側（Apple のサイト・ストア関連は基本 Windows で管理）
+
+3. **TestFlight「ベータ版App情報」の入力** — 外部テストは Beta App Review が必要。
+   ベータ版の説明 / フィードバックメール / レビュー連絡先（姓名・電話・メール）/
+   プライバシーポリシーURL。ログイン機能が無いのでデモアカウントは不要。
+   ⚠️ 審査メモに**リワード広告の出し方（どの画面のどのボタンか）**を書いておくと差し戻しが減る。
+4. 価格および配信状況（無料 / 配信地域）、年齢制限指定、カテゴリ（ゲーム > ロールプレイング）。
+5. ストア掲載素材（スクリーンショット・説明文）— TestFlight には不要、公開申請時に必要。
+   Target Device = iPhone Only なので **iPhone 6.9インチの横向きのみ**でよい（iPad 分は不要）。
+6. AdMob 管理画面：`app-ads.txt` を自社サイトに設置（未設置なら）。
+   公開後に「アプリストアにリンク」する作業も残る。
+7. ⚠️ **公開前に `AdManager.UseIosTestAdUnitId` を `false` へ戻す**（下記「完了」4 を参照）。
+
+### ✅ 完了・決着した項目（2026-08-21）
+
+1. **App プライバシー情報の入力** — 完了。Google / Unity の公式ドキュメントで裏取り済み。
+   申告内容は 識別子（ユーザID / デバイスID）、使用状況データ（製品の操作 / 広告データ）、
+   診断（クラッシュ / パフォーマンス / その他の診断データ）。
+   **「トラッキングに使用＝はい」はデバイスIDと広告データのみ。**
+   購入履歴は IAP が存在しないので申告しない。
+   - 出典: [AdMob Unity 版 データ開示](https://developers.google.com/admob/unity/privacy/data-disclosure) /
+     [UGS Analytics Apple privacy manifest](https://docs.unity.com/ugs/manual/analytics/manual/apple-privacy-survey)
+   - `PrivacyInfo.xcprivacy` は GMA 11.3.0（11.2.0 以降が対応）と
+     UGS Analytics 6.3.0（5.1.1 以降が対応）が同梱済みで、追加作業は不要。
+
+2. **Target Device = iPhone Only** — `targetDevice: 0` に変更済み。iPad 用素材が不要になった。
+
+3. **`NSPrivacyTracking` の不整合 — 調査完了。「対応不要（現状維持）」で確定。**
+   `NSPrivacyTracking = false` / トラッキングドメイン 0 件のまま提出する。理由:
+   - `true` にすると `NSPrivacyTrackingDomains` に**最低1ドメインの列挙が必須**になる
+     （Google Mobile Ads SDK チームの公式回答）。「true だがドメインは空」という逃げ道は無い。
+   - Google は**トラッキングドメインの一覧を公開しておらず、推奨もしていない**。
+     SDK 自身の `PrivacyInfo.xcprivacy` にも `NSPrivacyTracking` キーを置いていない。
+     つまり**正確に列挙する手段が存在しない。**
+   - 列挙したドメインは ATT 未許諾時に **iOS が実際に通信を遮断する**。GMA SDK は
+     ATT 未許諾時に rotating SDK instance ID / SKAdNetwork へフォールバックして
+     **配信自体は継続する**設計なので、列挙するとこのフォールバックごと壊れ、
+     ATT 拒否ユーザー（実際には多数派）への広告配信が止まる。
+   - Apple が実際に強制しているのは ① ATT ダイアログの提示 ② ASC の
+     「トラッキングに使用＝はい」の2点で、**どちらも充足済み**。審査ブロッカーではない。
+   - ⚠️ 監視項目: Apple が将来この扱いを厳格化する可能性はある。現時点で取れる行動は無い。
+   - 出典: [Google Mobile Ads SDK 公式回答](https://groups.google.com/g/google-admob-ads-sdk/c/bXq0Ex-o06w) /
+     [NSPrivacyTrackingDomains の遮断挙動](https://developer.apple.com/forums/thread/738723)
+
+4. **iOS テストデバイスID の登録 → TestFlight 期間中は不要になった。**
+   外部テスターの iPhone は **TestFlight 経由では端末IDがコンソールに出ず取得できない**ため、
+   第2-1節の TestDeviceIds 方式が使えない。代わりに **iOS のリワード広告ユニットIDを
+   Google のテスト用IDに差し替える**方式を採用した（`AdManager.UseIosTestAdUnitId = true`）。
+   AdMob アプリIDは本番のまま（空にすると起動時クラッシュするため）。Android は対象外。
+   ⚠️ **App Store 公開前に `false` へ戻すこと。戻し忘れると iOS の広告収益がゼロになる。**
+   公開後、自分の端末で本番広告を確認する段階で TestDeviceIds 方式が再浮上する。
 
 ### 検討事項（必須ではない）
 

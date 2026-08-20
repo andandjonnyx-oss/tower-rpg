@@ -67,6 +67,21 @@ public class AdManager : MonoBehaviour
     private const string AndroidRewardedAdUnitId = "ca-app-pub-7063976043351494/7011853210";
     private const string IosRewardedAdUnitId = "ca-app-pub-7063976043351494/3825356010";
 
+    // =========================================================
+    // ⚠ TestFlight 配布用の一時設定（2026-08-21 追加）
+    //
+    // 外部テスターの iPhone は TestDeviceIds に登録できない。TestFlight 経由では
+    // 端末ID がコンソールに出ず取得手段が無いため、本番ID のまま配布すると
+    // 無効トラフィック判定 → AdMob アカウント停止のリスクがある。
+    // そのため TestFlight 配布中は iOS だけテスト用ユニットID に差し替える。
+    //
+    // ⚠ App Store 公開前に必ず false へ戻すこと。true のままだと iOS の
+    //    広告収益がゼロになる（テスト広告は収益が発生しない）。
+    // ⚠ Android は本番稼働中のため、このフラグの対象外にしてある。
+    // =========================================================
+    private const bool UseIosTestAdUnitId = true;
+    private const string IosTestRewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
+
     /// <summary>
     /// テスト広告を配信する端末のID。
     /// 実機を1度起動すると logcat / Unity Console に
@@ -86,7 +101,7 @@ public class AdManager : MonoBehaviour
 #if UNITY_ANDROID
             return AndroidRewardedAdUnitId;
 #elif UNITY_IPHONE
-            return IosRewardedAdUnitId;
+            return UseIosTestAdUnitId ? IosTestRewardedAdUnitId : IosRewardedAdUnitId;
 #else
             return string.Empty;
 #endif
