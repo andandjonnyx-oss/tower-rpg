@@ -1,29 +1,29 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// Main ƒV[ƒ“‚É”z’u‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒgB
-/// ƒV[ƒ“ŠJn‚É HP/MP ‚ğ‘S‰ñ•œ‚µAƒI[ƒgƒZ[ƒu‚ğÀs‚·‚éB
-/// ‘¦ƒZ[ƒu‚Æ•¹—p: ’Êí‚Ì‘€ì‚ÍŠeƒ}ƒl[ƒWƒƒ[‚ª‘¦ƒZ[ƒu‚·‚é‚ªA
-/// Main “’…‚Í‘S‰ñ•œ‚ğ”½‰f‚µ‚ÄƒZ[ƒu‚µ’¼‚·–ğŠ„‚ğ’S‚¤B
+/// Main ã‚·ãƒ¼ãƒ³ã«é…ç½®ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã€‚
+/// ã‚·ãƒ¼ãƒ³é–‹å§‹æ™‚ã« HP/MP ã‚’å…¨å›å¾©ã—ã€ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+/// å³æ™‚ã‚»ãƒ¼ãƒ–ã¨ä½µç”¨: é€šå¸¸ã®æ“ä½œã¯å„ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ãŒå³æ™‚ã‚»ãƒ¼ãƒ–ã™ã‚‹ãŒã€
+/// Main åˆ°ç€æ™‚ã¯å…¨å›å¾©ã‚’åæ˜ ã—ã¦ã‚»ãƒ¼ãƒ–ã—ç›´ã™å½¹å‰²ã‚’æ‹…ã†ã€‚
 /// </summary>
 public class MainSceneAutoSave : MonoBehaviour
 {
     private void Start()
     {
-        // HP/MP ‘S‰ñ•œiMain ƒV[ƒ“ = ˆÀ‘S’n‘Ñj
+        // HP/MP å…¨å›å¾©ï¼ˆMain ã‚·ãƒ¼ãƒ³ = å®‰å…¨åœ°å¸¯ï¼‰
         if (GameState.I != null)
         {
             GameState.I.currentHp = GameState.I.maxHp;
             GameState.I.currentMp = GameState.I.maxMp;
 
-            // ƒoƒgƒ‹’†ƒtƒ‰ƒO‚ğƒNƒŠƒAií“¬’†‚É’†’f‚µ‚Ä–ß‚Á‚Ä‚«‚½ê‡‚Ì‚½‚ßj
+            // ãƒãƒˆãƒ«ä¸­ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ï¼ˆæˆ¦é—˜ä¸­ã«ä¸­æ–­ã—ã¦æˆ»ã£ã¦ããŸå ´åˆã®ãŸã‚ï¼‰
             GameState.I.isInBattle = false;
             GameState.I.battleTurnConsumed = false;
             GameState.I.battleItemActionLog = "";
         }
 
-        // ƒI[ƒgƒZ[ƒuÀsi‘S‰ñ•œó‘Ô‚ğ•Û‘¶j
+        // ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–å®Ÿè¡Œï¼ˆå…¨å›å¾©çŠ¶æ…‹ã‚’ä¿å­˜ï¼‰
         SaveManager.Save();
-        Debug.Log("[MainSceneAutoSave] Main“’…: ‘S‰ñ•œ + ƒI[ƒgƒZ[ƒuŠ®—¹");
+        Debug.Log("[MainSceneAutoSave] Mainåˆ°ç€: å…¨å›å¾© + ã‚ªãƒ¼ãƒˆã‚»ãƒ¼ãƒ–å®Œäº†");
     }
 }

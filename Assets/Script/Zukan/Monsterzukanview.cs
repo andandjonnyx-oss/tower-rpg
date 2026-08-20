@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
@@ -7,44 +7,44 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ZukanMƒV[ƒ“iƒ‚ƒ“ƒXƒ^[ˆê——j‚ÌƒRƒ“ƒgƒ[ƒ‰[B
-/// MonsterDatabase ‚©‚ç‘Sƒ‚ƒ“ƒXƒ^[‚ğæ“¾‚µA
-/// ’Êí/ƒ{ƒXØ‘Öƒ{ƒ^ƒ“‚Å•\¦ƒŠƒXƒg‚ğØ‚è‘Ö‚¦‚éB
-/// –¢‘˜‹öƒ‚ƒ“ƒXƒ^[‚ÍuHv•\¦‚Åƒ^ƒbƒv–³ŒøB
-/// ‘˜‹öÏ‚İƒ‚ƒ“ƒXƒ^[‚ğƒ^ƒbƒv‚·‚é‚Æ Mstatus ƒV[ƒ“‚Ö‘JˆÚB
+/// ZukanMã‚·ãƒ¼ãƒ³ï¼ˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§ï¼‰ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// MonsterDatabase ã‹ã‚‰å…¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’å–å¾—ã—ã€
+/// é€šå¸¸/ãƒœã‚¹åˆ‡æ›¿ãƒœã‚¿ãƒ³ã§è¡¨ç¤ºãƒªã‚¹ãƒˆã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+/// æœªé­é‡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯ã€Œï¼Ÿã€è¡¨ç¤ºã§ã‚¿ãƒƒãƒ—ç„¡åŠ¹ã€‚
+/// é­é‡æ¸ˆã¿ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ã‚¿ãƒƒãƒ—ã™ã‚‹ã¨ Mstatus ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã€‚
 ///
-/// ƒŒƒCƒAƒEƒg:
-///   ¶‘¤: ’Êí/ƒ{ƒXØ‘Öƒ{ƒ^ƒ“ + –ß‚éƒ{ƒ^ƒ“
-///   ‰E‘¤: ScrollView + GridLayoutGroup ‚ÅƒAƒCƒRƒ“ƒOƒŠƒbƒh
+/// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ:
+///   å·¦å´: é€šå¸¸/ãƒœã‚¹åˆ‡æ›¿ãƒœã‚¿ãƒ³ + æˆ»ã‚‹ãƒœã‚¿ãƒ³
+///   å³å´: ScrollView + GridLayoutGroup ã§ã‚¢ã‚¤ã‚³ãƒ³ã‚°ãƒªãƒƒãƒ‰
 /// </summary>
 public class MonsterZukanView : MonoBehaviour
 {
     // =========================================================
-    // Inspector QÆ
+    // Inspector å‚ç…§
     // =========================================================
 
     [Header("Data")]
-    [Tooltip("ƒ‚ƒ“ƒXƒ^[ƒf[ƒ^ƒx[ƒXiSOƒAƒZƒbƒg‚ğƒAƒTƒCƒ“j")]
+    [Tooltip("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ï¼ˆSOã‚¢ã‚»ãƒƒãƒˆã‚’ã‚¢ã‚µã‚¤ãƒ³ï¼‰")]
     [SerializeField] private MonsterDatabase monsterDatabase;
 
     [Header("Grid")]
-    [Tooltip("ƒAƒCƒRƒ“ƒZƒ‹‚Ì PrefabiMonsterIconCellj")]
+    [Tooltip("ã‚¢ã‚¤ã‚³ãƒ³ã‚»ãƒ«ã® Prefabï¼ˆMonsterIconCellï¼‰")]
     [SerializeField] private MonsterIconCell cellPrefab;
 
-    [Tooltip("GridLayoutGroup ‚ªƒAƒ^ƒbƒ`‚³‚ê‚½ Content Transform")]
+    [Tooltip("GridLayoutGroup ãŒã‚¢ã‚¿ãƒƒãƒã•ã‚ŒãŸ Content Transform")]
     [SerializeField] private Transform gridContent;
 
     [Header("Buttons")]
-    [Tooltip("’Êíƒ‚ƒ“ƒXƒ^[•\¦ƒ{ƒ^ƒ“")]
+    [Tooltip("é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è¡¨ç¤ºãƒœã‚¿ãƒ³")]
     [SerializeField] private Button normalButton;
 
-    [Tooltip("ƒ{ƒXƒ‚ƒ“ƒXƒ^[•\¦ƒ{ƒ^ƒ“")]
+    [Tooltip("ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è¡¨ç¤ºãƒœã‚¿ãƒ³")]
     [SerializeField] private Button bossButton;
 
-    [Tooltip("–ß‚éƒ{ƒ^ƒ“iZukan ƒV[ƒ“‚Öj")]
+    [Tooltip("æˆ»ã‚‹ãƒœã‚¿ãƒ³ï¼ˆZukan ã‚·ãƒ¼ãƒ³ã¸ï¼‰")]
     [SerializeField] private Button backButton;
 
-    [Tooltip("ƒOƒŠƒbƒh‚Ì ScrollRectiÚ×‚©‚ç–ß‚Á‚½Û‚ÌƒXƒNƒ[ƒ‹ˆÊ’u•œŒ³‚Ég—pj")]
+    [Tooltip("ã‚°ãƒªãƒƒãƒ‰ã® ScrollRectï¼ˆè©³ç´°ã‹ã‚‰æˆ»ã£ãŸéš›ã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®å¾©å…ƒã«ä½¿ç”¨ï¼‰")]
     [SerializeField] private ScrollRect scrollRect;
 
     [Header("Scene Names")]
@@ -52,55 +52,55 @@ public class MonsterZukanView : MonoBehaviour
     [SerializeField] private string mstatusSceneName = "Mstatus";
 
     // =========================================================
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     // =========================================================
 
-    /// <summary>’Êíƒ‚ƒ“ƒXƒ^[ƒŠƒXƒgiIDƒ\[ƒgÏ‚İj</summary>
+    /// <summary>é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒªã‚¹ãƒˆï¼ˆIDã‚½ãƒ¼ãƒˆæ¸ˆã¿ï¼‰</summary>
     private List<Monster> normalMonsters = new List<Monster>();
 
-    /// <summary>ƒ{ƒXƒ‚ƒ“ƒXƒ^[ƒŠƒXƒgiIDƒ\[ƒgÏ‚İj</summary>
+    /// <summary>ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒªã‚¹ãƒˆï¼ˆIDã‚½ãƒ¼ãƒˆæ¸ˆã¿ï¼‰</summary>
     private List<Monster> bossMonsters = new List<Monster>();
 
-    /// <summary>Œ»İ•\¦’†‚ªƒ{ƒXƒŠƒXƒg‚©‚Ç‚¤‚©</summary>
+    /// <summary>ç¾åœ¨è¡¨ç¤ºä¸­ãŒãƒœã‚¹ãƒªã‚¹ãƒˆã‹ã©ã†ã‹</summary>
     private bool showingBoss = false;
 
-    /// <summary>¶¬Ï‚İƒZƒ‹ˆê——</summary>
+    /// <summary>ç”Ÿæˆæ¸ˆã¿ã‚»ãƒ«ä¸€è¦§</summary>
     private List<MonsterIconCell> cells = new List<MonsterIconCell>();
 
     // =========================================================
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
     // =========================================================
 
     private void Start()
     {
-        // ƒf[ƒ^ƒx[ƒX‚©‚ç•ª—£Eƒ\[ƒg
+        // ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰åˆ†é›¢ãƒ»ã‚½ãƒ¼ãƒˆ
         BuildMonsterLists();
 
-        // ƒ{ƒ^ƒ““o˜^
+        // ãƒœã‚¿ãƒ³ç™»éŒ²
         if (normalButton != null) normalButton.onClick.AddListener(OnNormalClicked);
         if (bossButton != null) bossButton.onClick.AddListener(OnBossClicked);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
 
-        // Ú×‚©‚ç–ß‚Á‚½‚©‚Ç‚¤‚©‚Å‰Šú•\¦‚ğ•ªŠò
+        // è©³ç´°ã‹ã‚‰æˆ»ã£ãŸã‹ã©ã†ã‹ã§åˆæœŸè¡¨ç¤ºã‚’åˆ†å²
         if (ZukanContext.ReturningFromDetail && ZukanContext.ReturnTargetMonster != null)
         {
             Monster target = ZukanContext.ReturnTargetMonster;
 
-            // –ß‚è‘ÎÛ‚ªƒ{ƒX‚È‚çƒ{ƒXƒ^ƒu‚ÅŠJ‚­i’Êíƒ^ƒu‚É–ß‚Á‚Ä‚µ‚Ü‚¤ƒoƒO‚ÌC³j
+            // æˆ»ã‚Šå¯¾è±¡ãŒãƒœã‚¹ãªã‚‰ãƒœã‚¹ã‚¿ãƒ–ã§é–‹ãï¼ˆé€šå¸¸ã‚¿ãƒ–ã«æˆ»ã£ã¦ã—ã¾ã†ãƒã‚°ã®ä¿®æ­£ï¼‰
             showingBoss = target.IsBoss;
             RefreshGrid();
             UpdateButtonVisual();
 
-            // ƒOƒŠƒbƒh‚ÌƒŒƒCƒAƒEƒgŠm’èŒã‚É‘ÎÛ‚ğ‰æ–Ê“à‚ÖƒXƒNƒ[ƒ‹
+            // ã‚°ãƒªãƒƒãƒ‰ã®ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆç¢ºå®šå¾Œã«å¯¾è±¡ã‚’ç”»é¢å†…ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«
             StartCoroutine(ScrollToTargetNextFrame(target));
 
-            // ƒtƒ‰ƒO‚Íg‚¢Ø‚è
+            // ãƒ•ãƒ©ã‚°ã¯ä½¿ã„åˆ‡ã‚Š
             ZukanContext.ReturningFromDetail = false;
             ZukanContext.ReturnTargetMonster = null;
         }
         else
         {
-            // ƒgƒbƒv(Zukan)‚©‚ç—ˆ‚½ê‡: ’Êíƒ^ƒuEæ“ª•\¦
+            // ãƒˆãƒƒãƒ—(Zukan)ã‹ã‚‰æ¥ãŸå ´åˆ: é€šå¸¸ã‚¿ãƒ–ãƒ»å…ˆé ­è¡¨ç¤º
             showingBoss = false;
             RefreshGrid();
             UpdateButtonVisual();
@@ -108,11 +108,11 @@ public class MonsterZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒf[ƒ^€”õ
+    // ãƒ‡ãƒ¼ã‚¿æº–å‚™
     // =========================================================
 
     /// <summary>
-    /// MonsterDatabase.monsters ‚ğ’ÊíEƒ{ƒX‚É•ª—£‚µAID¸‡‚Åƒ\[ƒg‚·‚éB
+    /// MonsterDatabase.monsters ã‚’é€šå¸¸ãƒ»ãƒœã‚¹ã«åˆ†é›¢ã—ã€IDæ˜‡é †ã§ã‚½ãƒ¼ãƒˆã™ã‚‹ã€‚
     /// </summary>
     private void BuildMonsterLists()
     {
@@ -130,24 +130,24 @@ public class MonsterZukanView : MonoBehaviour
                 normalMonsters.Add(m);
         }
 
-        // ID•¶š—ñ‚Ì©‘R‡ƒ\[ƒgi”’l•”‚ğ”’l‚Æ‚µ‚Ä”äŠrA'_' ‚Í 'Z' ‚æ‚èæˆµ‚¢j
+        // IDæ–‡å­—åˆ—ã®è‡ªç„¶é †ã‚½ãƒ¼ãƒˆï¼ˆæ•°å€¤éƒ¨ã‚’æ•°å€¤ã¨ã—ã¦æ¯”è¼ƒã€'_' ã¯ 'Z' ã‚ˆã‚Šå…ˆæ‰±ã„ï¼‰
         normalMonsters.Sort((a, b) => NaturalCompare(a.ID, b.ID));
         bossMonsters.Sort((a, b) => NaturalCompare(a.ID, b.ID));
 
-        Debug.Log($"[MonsterZukan] ’Êí:{normalMonsters.Count}‘Ì / ƒ{ƒX:{bossMonsters.Count}‘Ì");
+        Debug.Log($"[MonsterZukan] é€šå¸¸:{normalMonsters.Count}ä½“ / ãƒœã‚¹:{bossMonsters.Count}ä½“");
     }
 
     // =========================================================
-    // ƒOƒŠƒbƒh•\¦
+    // ã‚°ãƒªãƒƒãƒ‰è¡¨ç¤º
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‚ÌƒŠƒXƒgi’Êí or ƒ{ƒXj‚ÅƒOƒŠƒbƒh‚ğÄ\’z‚·‚éB
-    /// Šù‘¶ƒZƒ‹‚ğ‘Síœ‚µ‚ÄÄ¶¬‚·‚éB
+    /// ç¾åœ¨ã®ãƒªã‚¹ãƒˆï¼ˆé€šå¸¸ or ãƒœã‚¹ï¼‰ã§ã‚°ãƒªãƒƒãƒ‰ã‚’å†æ§‹ç¯‰ã™ã‚‹ã€‚
+    /// æ—¢å­˜ã‚»ãƒ«ã‚’å…¨å‰Šé™¤ã—ã¦å†ç”Ÿæˆã™ã‚‹ã€‚
     /// </summary>
     private void RefreshGrid()
     {
-        // Šù‘¶ƒZƒ‹‚ğ”jŠü
+        // æ—¢å­˜ã‚»ãƒ«ã‚’ç ´æ£„
         foreach (var cell in cells)
         {
             if (cell != null) Destroy(cell.gameObject);
@@ -168,18 +168,18 @@ public class MonsterZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒZƒ‹ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒN
+    // ã‚»ãƒ«ã‚¿ãƒƒãƒ—ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
     // =========================================================
 
     /// <summary>
-    /// ‘˜‹öÏ‚İƒ‚ƒ“ƒXƒ^[‚ÌƒZƒ‹‚ğƒ^ƒbƒv‚µ‚½‚ÌƒR[ƒ‹ƒoƒbƒNB
-    /// ZukanContext ‚Éƒ‚ƒ“ƒXƒ^[‚Æ‰{——‰Â”\ƒŠƒXƒg‚ğƒZƒbƒg‚µ‚Ä Mstatus ƒV[ƒ“‚Ö‘JˆÚB
+    /// é­é‡æ¸ˆã¿ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚»ãƒ«ã‚’ã‚¿ãƒƒãƒ—ã—ãŸæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚
+    /// ZukanContext ã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¨é–²è¦§å¯èƒ½ãƒªã‚¹ãƒˆã‚’ã‚»ãƒƒãƒˆã—ã¦ Mstatus ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã€‚
     /// </summary>
     private void OnCellClicked(Monster monster)
     {
         if (monster == null) return;
 
-        // Œ»İ•\¦’†‚ÌƒŠƒXƒg‚©‚ç‘˜‹öÏ‚İ‚¾‚¯‚ğ’Šoiª«Ø‘Ö—pj
+        // ç¾åœ¨è¡¨ç¤ºä¸­ã®ãƒªã‚¹ãƒˆã‹ã‚‰é­é‡æ¸ˆã¿ã ã‘ã‚’æŠ½å‡ºï¼ˆâ†‘â†“åˆ‡æ›¿ç”¨ï¼‰
         List<Monster> fullList = showingBoss ? bossMonsters : normalMonsters;
         var encounteredList = new List<Monster>();
         foreach (var m in fullList)
@@ -196,7 +196,7 @@ public class MonsterZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰
+    // ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©
     // =========================================================
 
     private void OnNormalClicked()
@@ -225,8 +225,8 @@ public class MonsterZukanView : MonoBehaviour
     }
 
     /// <summary>
-    /// ’Êí/ƒ{ƒXƒ{ƒ^ƒ“‚ÌŒ©‚½–Ú‚ğXV‚·‚éB
-    /// ‘I‘ğ’†‚Ìƒ{ƒ^ƒ“‚ğ”ñƒCƒ“ƒ^ƒ‰ƒNƒeƒBƒu‚É‚·‚é‚±‚Æ‚Åu‘I‘ğ’†v‚ğ•\Œ»B
+    /// é€šå¸¸/ãƒœã‚¹ãƒœã‚¿ãƒ³ã®è¦‹ãŸç›®ã‚’æ›´æ–°ã™ã‚‹ã€‚
+    /// é¸æŠä¸­ã®ãƒœã‚¿ãƒ³ã‚’éã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹ã“ã¨ã§ã€Œé¸æŠä¸­ã€ã‚’è¡¨ç¾ã€‚
     /// </summary>
     private void UpdateButtonVisual()
     {
@@ -235,20 +235,20 @@ public class MonsterZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ©‘R‡”äŠri’Ç‰Áj
+    // è‡ªç„¶é †æ¯”è¼ƒï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // •¶š—ñ‚ğu”šƒuƒƒbƒNv‚Æu”ñ”šƒuƒƒbƒNv‚É•ª‰ğ‚µA
-    //   - ”šƒuƒƒbƒN‚Í”’l‚Æ‚µ‚Ä”äŠri"010" < "020" < "100"j
-    //   - ”ñ”šƒuƒƒbƒN‚Í ASCII ”äŠr
-    // ‚·‚é‚±‚Æ‚ÅAƒtƒ@ƒCƒ‹–¼‚Ì©‘R‚È•À‚Ñ‡‚ğÄŒ»‚·‚éB
+    // æ–‡å­—åˆ—ã‚’ã€Œæ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã€ã¨ã€Œéæ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã€ã«åˆ†è§£ã—ã€
+    //   - æ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã¯æ•°å€¤ã¨ã—ã¦æ¯”è¼ƒï¼ˆ"010" < "020" < "100"ï¼‰
+    //   - éæ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã¯ ASCII æ¯”è¼ƒ
+    // ã™ã‚‹ã“ã¨ã§ã€ãƒ•ã‚¡ã‚¤ãƒ«åã®è‡ªç„¶ãªä¸¦ã³é †ã‚’å†ç¾ã™ã‚‹ã€‚
     //
-    // ‰Á‚¦‚ÄA‘æ“ñŒ`‘Ô‚Ì 'Z' ƒTƒtƒBƒbƒNƒXi—á: F070BZ_kyuubij‚ª
-    // ‘æˆêŒ`‘ÔiF070B_dakkij‚æ‚èŒã‚É—ˆ‚é‚æ‚¤A'_' ‚ğ ASCII ’l 1 ‚Æ‚µ‚Ä
-    // ˆµ‚¢A'Z'(90) ‚æ‚è¬‚³‚­‚·‚é“Áêˆ—‚ğ“ü‚ê‚éB
-    // ‚±‚ê‚É‚æ‚è F070B_dakki < F070BZ_kyuubi ‚Ì‡‚É‚È‚éB
+    // åŠ ãˆã¦ã€ç¬¬äºŒå½¢æ…‹ã® 'Z' ã‚µãƒ•ã‚£ãƒƒã‚¯ã‚¹ï¼ˆä¾‹: F070BZ_kyuubiï¼‰ãŒ
+    // ç¬¬ä¸€å½¢æ…‹ï¼ˆF070B_dakkiï¼‰ã‚ˆã‚Šå¾Œã«æ¥ã‚‹ã‚ˆã†ã€'_' ã‚’ ASCII å€¤ 1 ã¨ã—ã¦
+    // æ‰±ã„ã€'Z'(90) ã‚ˆã‚Šå°ã•ãã™ã‚‹ç‰¹æ®Šå‡¦ç†ã‚’å…¥ã‚Œã‚‹ã€‚
+    // ã“ã‚Œã«ã‚ˆã‚Š F070B_dakki < F070BZ_kyuubi ã®é †ã«ãªã‚‹ã€‚
     //
-    // “ü—Í‚ª null ‚Ìê‡‚Í‹ó•¶šˆµ‚¢B
+    // å…¥åŠ›ãŒ null ã®å ´åˆã¯ç©ºæ–‡å­—æ‰±ã„ã€‚
     // =========================================================
     private static int NaturalCompare(string a, string b)
     {
@@ -263,13 +263,13 @@ public class MonsterZukanView : MonoBehaviour
 
             if (aIsDigit && bIsDigit)
             {
-                // ”šƒuƒƒbƒN‚ğØ‚èo‚µ‚Ä”’l”äŠr
+                // æ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã‚’åˆ‡ã‚Šå‡ºã—ã¦æ•°å€¤æ¯”è¼ƒ
                 int aStart = i;
                 while (i < a.Length && char.IsDigit(a[i])) i++;
                 int bStart = j;
                 while (j < b.Length && char.IsDigit(b[j])) j++;
 
-                // æ“ªƒ[ƒ‚ğœ‚¢‚½’·‚³‚Å‘å¬”äŠriŒ…”—Dæj
+                // å…ˆé ­ã‚¼ãƒ­ã‚’é™¤ã„ãŸé•·ã•ã§å¤§å°æ¯”è¼ƒï¼ˆæ¡æ•°å„ªå…ˆï¼‰
                 string aNum = a.Substring(aStart, i - aStart).TrimStart('0');
                 string bNum = b.Substring(bStart, j - bStart).TrimStart('0');
                 if (aNum.Length == 0) aNum = "0";
@@ -281,19 +281,19 @@ public class MonsterZukanView : MonoBehaviour
                 int numCmp = string.CompareOrdinal(aNum, bNum);
                 if (numCmp != 0) return numCmp;
 
-                // ”’l‚ª“¯‚¶ê‡‚ÍŒ³‚ÌŒ…”iæ“ªƒ[ƒ‚Ì”j‚Å‚à‘µ‚¦‚é: "010" vs "10" ¨ "010" ‚ğæ‚É
+                // æ•°å€¤ãŒåŒã˜å ´åˆã¯å…ƒã®æ¡æ•°ï¼ˆå…ˆé ­ã‚¼ãƒ­ã®æ•°ï¼‰ã§ã‚‚æƒãˆã‚‹: "010" vs "10" â†’ "010" ã‚’å…ˆã«
                 int aRawLen = i - aStart;
                 int bRawLen = j - bStart;
                 if (aRawLen != bRawLen) return bRawLen - aRawLen;
             }
             else if (aIsDigit != bIsDigit)
             {
-                // •Ğ•û‚¾‚¯”š: ”š‚ğæ‚É
+                // ç‰‡æ–¹ã ã‘æ•°å­—: æ•°å­—ã‚’å…ˆã«
                 return aIsDigit ? -1 : 1;
             }
             else
             {
-                // ”ñ”šƒuƒƒbƒN‚ğ1•¶š‚¸‚Â”äŠri'_' ‚ğ ASCII 1 ‚Æ‚µ‚Äˆµ‚¤j
+                // éæ•°å­—ãƒ–ãƒ­ãƒƒã‚¯ã‚’1æ–‡å­—ãšã¤æ¯”è¼ƒï¼ˆ'_' ã‚’ ASCII 1 ã¨ã—ã¦æ‰±ã†ï¼‰
                 int ca = a[i] == '_' ? 1 : a[i];
                 int cb = b[j] == '_' ? 1 : b[j];
                 if (ca != cb) return ca - cb;
@@ -302,19 +302,19 @@ public class MonsterZukanView : MonoBehaviour
             }
         }
 
-        // c‚è’·‚³‚Å”äŠri’Z‚¢•û‚ªæj
+        // æ®‹ã‚Šé•·ã•ã§æ¯”è¼ƒï¼ˆçŸ­ã„æ–¹ãŒå…ˆï¼‰
         return (a.Length - i) - (b.Length - j);
     }
 
     /// <summary>
-    /// 1ƒtƒŒ[ƒ€‘Ò‚Á‚ÄƒŒƒCƒAƒEƒgŠm’èŒãA‘ÎÛƒ‚ƒ“ƒXƒ^[‚ÌƒZƒ‹‚ª
-    /// ‰æ–Ê“à‚Éû‚Ü‚é‚æ‚¤ƒXƒNƒ[ƒ‹ˆÊ’u‚ğ’²®‚·‚éB
-    /// Content ‚ÌÀ‚‚³‚ÆƒZƒ‹‚ÌsˆÊ’u‚©‚ç³‹K‰»ƒXƒNƒ[ƒ‹ˆÊ’u‚ğZo‚·‚éB
-    /// ’[•t‹ß‚Í 0/1 ‚ÉƒNƒ‰ƒ“ƒv‚³‚ê©‘R‚É’[•\¦‚É‚È‚éB
+    /// 1ãƒ•ãƒ¬ãƒ¼ãƒ å¾…ã£ã¦ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆç¢ºå®šå¾Œã€å¯¾è±¡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚»ãƒ«ãŒ
+    /// ç”»é¢å†…ã«åã¾ã‚‹ã‚ˆã†ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’èª¿æ•´ã™ã‚‹ã€‚
+    /// Content ã®å®Ÿé«˜ã•ã¨ã‚»ãƒ«ã®è¡Œä½ç½®ã‹ã‚‰æ­£è¦åŒ–ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’ç®—å‡ºã™ã‚‹ã€‚
+    /// ç«¯ä»˜è¿‘ã¯ 0/1 ã«ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œè‡ªç„¶ã«ç«¯è¡¨ç¤ºã«ãªã‚‹ã€‚
     /// </summary>
     private System.Collections.IEnumerator ScrollToTargetNextFrame(Monster target)
     {
-        // ƒOƒŠƒbƒh¶¬’¼Œã‚ÍƒŒƒCƒAƒEƒg–¢Šm’è‚È‚Ì‚Å‘Ò‚Á‚Ä‚©‚çŠm’è‚³‚¹‚é
+        // ã‚°ãƒªãƒƒãƒ‰ç”Ÿæˆç›´å¾Œã¯ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆæœªç¢ºå®šãªã®ã§å¾…ã£ã¦ã‹ã‚‰ç¢ºå®šã•ã›ã‚‹
         yield return null;
         Canvas.ForceUpdateCanvases();
         yield return null;
@@ -329,34 +329,34 @@ public class MonsterZukanView : MonoBehaviour
         var grid = gridContent != null ? gridContent.GetComponent<GridLayoutGroup>() : null;
         if (grid == null) yield break;
 
-        // ŒÅ’è5—ñ‘O’ñiFixedColumnCountjB”O‚Ì‚½‚ßæ“¾‚µ‚Äg‚¤B
+        // å›ºå®š5åˆ—å‰æï¼ˆFixedColumnCountï¼‰ã€‚å¿µã®ãŸã‚å–å¾—ã—ã¦ä½¿ã†ã€‚
         int columns = (grid.constraint == GridLayoutGroup.Constraint.FixedColumnCount)
             ? Mathf.Max(1, grid.constraintCount)
             : 5;
 
-        int row = index / columns;  // ‘ÎÛ‚ª‰½s–Ú‚©i0n‚Ü‚èj
+        int row = index / columns;  // å¯¾è±¡ãŒä½•è¡Œç›®ã‹ï¼ˆ0å§‹ã¾ã‚Šï¼‰
 
-        // ‘ÎÛs‚Ìã’[YiContentÀ•WŒnBã•ûŒü‚ÉÏ‚İã‚ª‚éj
+        // å¯¾è±¡è¡Œã®ä¸Šç«¯Yï¼ˆContentåº§æ¨™ç³»ã€‚ä¸Šæ–¹å‘ã«ç©ã¿ä¸ŠãŒã‚‹ï¼‰
         float rowTop = grid.padding.top + row * (grid.cellSize.y + grid.spacing.y);
-        // ‘ÎÛƒZƒ‹‚Ì’†S‚ğ‘_‚¤
+        // å¯¾è±¡ã‚»ãƒ«ã®ä¸­å¿ƒã‚’ç‹™ã†
         float rowCenter = rowTop + grid.cellSize.y * 0.5f;
 
         float contentHeight = scrollRect.content.rect.height;
         float viewportHeight = scrollRect.viewport.rect.height;
 
-        // ƒXƒNƒ[ƒ‹‰Â”\—Ê‚ª‚È‚¯‚ê‚Îæ“ª‚Å‚æ‚¢
+        // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¯èƒ½é‡ãŒãªã‘ã‚Œã°å…ˆé ­ã§ã‚ˆã„
         if (contentHeight <= viewportHeight)
         {
             scrollRect.verticalNormalizedPosition = 1f;
             yield break;
         }
 
-        // ‘ÎÛƒZƒ‹’†S‚ªƒrƒ…[ƒ|[ƒg’†‰›‚É—ˆ‚é‚æ‚¤‚Èã’[‚©‚ç‚Ì‹——£
+        // å¯¾è±¡ã‚»ãƒ«ä¸­å¿ƒãŒãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆä¸­å¤®ã«æ¥ã‚‹ã‚ˆã†ãªä¸Šç«¯ã‹ã‚‰ã®è·é›¢
         float targetTop = rowCenter - viewportHeight * 0.5f;
         float maxScroll = contentHeight - viewportHeight;
         float normalizedFromTop = Mathf.Clamp01(targetTop / maxScroll);
 
-        // verticalNormalizedPosition ‚Í 1=Åã / 0=Å‰º ‚È‚Ì‚Å”½“]
+        // verticalNormalizedPosition ã¯ 1=æœ€ä¸Š / 0=æœ€ä¸‹ ãªã®ã§åè»¢
         scrollRect.verticalNormalizedPosition = 1f - normalizedFromTop;
     }
 }

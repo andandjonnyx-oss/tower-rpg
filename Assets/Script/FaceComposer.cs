@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 [ExecuteAlways]
@@ -7,10 +7,10 @@ public class FaceComposer : MonoBehaviour
     [System.Serializable]
     public class FacePart
     {
-        public string label;      // "Œû" "–Ú" ‚È‚Ç•\¦—p
-        public Image image;       // d‚Ë‚é‘ÎÛ
-        public Sprite[] sprites;  // ˜A”Ô(00,01,02... or a/bŠÜ‚Ş‘S•”)
-        public int index;         // Œ»İ‚Ì”Ô†
+        public string label;      // "å£" "ç›®" ãªã©è¡¨ç¤ºç”¨
+        public Image image;       // é‡ã­ã‚‹å¯¾è±¡
+        public Sprite[] sprites;  // é€£ç•ª(00,01,02... or a/bå«ã‚€å…¨éƒ¨)
+        public int index;         // ç¾åœ¨ã®ç•ªå·
 
         public void Apply()
         {
@@ -33,7 +33,7 @@ public class FaceComposer : MonoBehaviour
         }
     }
 
-    [Header("‰œ¨è‘O‚Ì‡")]
+    [Header("å¥¥â†’æ‰‹å‰ã®é †")]
     public FacePart body;   // karada
     public FacePart hair;   // kami
     public FacePart brow;   // mayu
@@ -50,7 +50,7 @@ public class FaceComposer : MonoBehaviour
         foreach (var p in All) p?.Apply();
     }
 
-    // }ŠÓ‚È‚Ç‚©‚ç‚ÌˆêŠ‡w’è
+    // å›³é‘‘ãªã©ã‹ã‚‰ã®ä¸€æ‹¬æŒ‡å®š
     public void Compose(int bodyIdx, int hairIdx, int browIdx, int eyeIdx, int mouthIdx)
     {
         body.SetIndex(bodyIdx);

@@ -1,20 +1,20 @@
-// ItemIconComposer.cs
-// ”z’uêŠ: Assets/Editor/ItemIconComposer.cs
-// —p“r    : ”wŒi‰æ‘œ{ƒAƒCƒeƒ€‘fŞ{Lv•\‹L‚ğ‡¬‚µ‚ÄPNGo—Í‚·‚éEditorŠg’£
-// g‚¢•û  : Unityƒƒjƒ…[‚©‚ç [Tools] > [Item Icon Composer] ‚ğŠJ‚­
+ï»¿// ItemIconComposer.cs
+// é…ç½®å ´æ‰€: Assets/Editor/ItemIconComposer.cs
+// ç”¨é€”    : èƒŒæ™¯ç”»åƒï¼‹ã‚¢ã‚¤ãƒ†ãƒ ç´ æï¼‹Lvè¡¨è¨˜ã‚’åˆæˆã—ã¦PNGå‡ºåŠ›ã™ã‚‹Editoræ‹¡å¼µ
+// ä½¿ã„æ–¹  : Unityãƒ¡ãƒ‹ãƒ¥ãƒ¼ã‹ã‚‰ [Tools] > [Item Icon Composer] ã‚’é–‹ã
 //
-// İ’è•ÏX‰Â”\‰ÓŠiŒã“ú‚ÌƒtƒHƒ“ƒgEF•ÏX‚Í‚±‚Ìƒtƒ@ƒCƒ‹–`“ª‚ğ•ÒWj:
-//   - FONT_ASSET_PATH    : g—p‚·‚éTTF/OTF‚ÌƒvƒƒWƒFƒNƒg“àƒpƒX
-//   - FONT_SIZE          : •¶šƒTƒCƒYipxj
-//   - TEXT_COLOR         : •¶šF
-//   - OUTLINE_COLOR      : ‰æ‚èF
-//   - OUTLINE_WIDTH      : ‰æ‚è‘¾‚³ipxA0‚Å–³Œøj
-//   - LABEL_MARGIN       : ‰E‰º‚©‚ç‚Ìƒ}[ƒWƒ“ipxj
-//   - LABEL_FORMAT       : ƒeƒLƒXƒg‘®i"Lv{0}", "+{0}" “™j
-//   - OUTPUT_SIZE        : o—Í‰æ‘œƒTƒCƒYi³•ûŒ`j
-//   - ITEM_SCALE         : ”wŒi‚É‘Î‚·‚é‘fŞ‚ÌÅ‘åè—L—¦
-//   - ITEM_OFFSET_Y      : ‘fŞ‚ÌcˆÊ’uƒIƒtƒZƒbƒg
-//   - DEFAULT_OUTPUT_DIR : ƒfƒtƒHƒ‹ƒg‚Ìo—ÍƒtƒHƒ‹ƒ_
+// è¨­å®šå¤‰æ›´å¯èƒ½ç®‡æ‰€ï¼ˆå¾Œæ—¥ã®ãƒ•ã‚©ãƒ³ãƒˆãƒ»è‰²å¤‰æ›´ã¯ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«å†’é ­ã‚’ç·¨é›†ï¼‰:
+//   - FONT_ASSET_PATH    : ä½¿ç”¨ã™ã‚‹TTF/OTFã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ãƒ‘ã‚¹
+//   - FONT_SIZE          : æ–‡å­—ã‚µã‚¤ã‚ºï¼ˆpxï¼‰
+//   - TEXT_COLOR         : æ–‡å­—è‰²
+//   - OUTLINE_COLOR      : ç¸å–ã‚Šè‰²
+//   - OUTLINE_WIDTH      : ç¸å–ã‚Šå¤ªã•ï¼ˆpxã€0ã§ç„¡åŠ¹ï¼‰
+//   - LABEL_MARGIN       : å³ä¸‹ã‹ã‚‰ã®ãƒãƒ¼ã‚¸ãƒ³ï¼ˆpxï¼‰
+//   - LABEL_FORMAT       : ãƒ†ã‚­ã‚¹ãƒˆæ›¸å¼ï¼ˆ"Lv{0}", "+{0}" ç­‰ï¼‰
+//   - OUTPUT_SIZE        : å‡ºåŠ›ç”»åƒã‚µã‚¤ã‚ºï¼ˆæ­£æ–¹å½¢ï¼‰
+//   - ITEM_SCALE         : èƒŒæ™¯ã«å¯¾ã™ã‚‹ç´ æã®æœ€å¤§å æœ‰ç‡
+//   - ITEM_OFFSET_Y      : ç´ æã®ç¸¦ä½ç½®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+//   - DEFAULT_OUTPUT_DIR : ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®å‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€
 
 using System.IO;
 using UnityEditor;
@@ -24,12 +24,12 @@ using UnityEngine;
 public class ItemIconComposer : EditorWindow
 {
     // ============================================================
-    // İ’èƒZƒNƒVƒ‡ƒ“iŒã“ú•ÏX‚·‚é‰ÓŠ‚Í‚±‚±j
+    // è¨­å®šã‚»ã‚¯ã‚·ãƒ§ãƒ³ï¼ˆå¾Œæ—¥å¤‰æ›´ã™ã‚‹ç®‡æ‰€ã¯ã“ã“ï¼‰
     // ============================================================
 
-    // ƒtƒHƒ“ƒgiƒvƒƒWƒFƒNƒg“à‚ÌTTF/OTFƒtƒ@ƒCƒ‹ƒpƒXBAssets/‚©‚ç‚Ì‘Š‘ÎƒpƒXj
-    // —á: "Assets/Fonts/NotoSansJP-Bold.ttf"
-    // ‹ó•¶š—ñ‚È‚çUnity•W€‚ÌArial‚ğg—p
+    // ãƒ•ã‚©ãƒ³ãƒˆï¼ˆãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã®TTF/OTFãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã€‚Assets/ã‹ã‚‰ã®ç›¸å¯¾ãƒ‘ã‚¹ï¼‰
+    // ä¾‹: "Assets/Fonts/NotoSansJP-Bold.ttf"
+    // ç©ºæ–‡å­—åˆ—ãªã‚‰Unityæ¨™æº–ã®Arialã‚’ä½¿ç”¨
     private const string FONT_ASSET_PATH = "";
 
     private const int FONT_SIZE = 48;
@@ -46,18 +46,18 @@ public class ItemIconComposer : EditorWindow
     private const string DEFAULT_OUTPUT_DIR = "Assets/Sprites/items/composed";
 
     // ============================================================
-    // ƒEƒBƒ“ƒhƒEó‘Ô
+    // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦çŠ¶æ…‹
     // ============================================================
     private Texture2D _bgTexture;
     private Texture2D _itemTexture;
-    private int _level = 0;          // 0 ‚È‚çLv•\‹L‚È‚µ
+    private int _level = 0;          // 0 ãªã‚‰Lvè¡¨è¨˜ãªã—
     private string _outputDir = DEFAULT_OUTPUT_DIR;
     private string _outputFileName = "item_icon_composed.png";
     private string _statusMessage = "";
     private MessageType _statusType = MessageType.None;
 
     // ============================================================
-    // ƒƒjƒ…[
+    // ãƒ¡ãƒ‹ãƒ¥ãƒ¼
     // ============================================================
     [MenuItem("Tools/Item Icon Composer")]
     public static void ShowWindow()
@@ -71,32 +71,32 @@ public class ItemIconComposer : EditorWindow
     // ============================================================
     private void OnGUI()
     {
-        EditorGUILayout.LabelField("ƒAƒCƒeƒ€ƒAƒCƒRƒ“‡¬", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¢ã‚¤ãƒ†ãƒ ã‚¢ã‚¤ã‚³ãƒ³åˆæˆ", EditorStyles.boldLabel);
         EditorGUILayout.Space(4);
 
-        // ”wŒiE‘fŞ‘I‘ğ
-        _bgTexture = (Texture2D)EditorGUILayout.ObjectField("”wŒi‰æ‘œ (—r”ç†“™)", _bgTexture, typeof(Texture2D), false);
-        _itemTexture = (Texture2D)EditorGUILayout.ObjectField("ƒAƒCƒeƒ€‘fŞ", _itemTexture, typeof(Texture2D), false);
+        // èƒŒæ™¯ãƒ»ç´ æé¸æŠ
+        _bgTexture = (Texture2D)EditorGUILayout.ObjectField("èƒŒæ™¯ç”»åƒ (ç¾Šçš®ç´™ç­‰)", _bgTexture, typeof(Texture2D), false);
+        _itemTexture = (Texture2D)EditorGUILayout.ObjectField("ã‚¢ã‚¤ãƒ†ãƒ ç´ æ", _itemTexture, typeof(Texture2D), false);
 
         EditorGUILayout.Space(8);
 
-        // Lv•\‹L
-        EditorGUILayout.LabelField("Lv•\‹Li0‚Ü‚½‚Í‹ó—“‚È‚ç•\‹L‚È‚µj");
+        // Lvè¡¨è¨˜
+        EditorGUILayout.LabelField("Lvè¡¨è¨˜ï¼ˆ0ã¾ãŸã¯ç©ºæ¬„ãªã‚‰è¡¨è¨˜ãªã—ï¼‰");
         _level = EditorGUILayout.IntField("Level", _level);
         if (_level < 0) _level = 0;
 
         EditorGUILayout.Space(8);
 
-        // o—Íæ
-        EditorGUILayout.LabelField("o—Íİ’è", EditorStyles.boldLabel);
+        // å‡ºåŠ›å…ˆ
+        EditorGUILayout.LabelField("å‡ºåŠ›è¨­å®š", EditorStyles.boldLabel);
         EditorGUILayout.BeginHorizontal();
-        _outputDir = EditorGUILayout.TextField("o—ÍƒtƒHƒ‹ƒ_", _outputDir);
+        _outputDir = EditorGUILayout.TextField("å‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€", _outputDir);
         if (GUILayout.Button("...", GUILayout.Width(28)))
         {
-            string sel = EditorUtility.OpenFolderPanel("o—ÍƒtƒHƒ‹ƒ_‚ğ‘I‘ğ", Application.dataPath, "");
+            string sel = EditorUtility.OpenFolderPanel("å‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠ", Application.dataPath, "");
             if (!string.IsNullOrEmpty(sel))
             {
-                // ƒvƒƒWƒFƒNƒg“àƒpƒX‚É•ÏŠ·
+                // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ãƒ‘ã‚¹ã«å¤‰æ›
                 if (sel.StartsWith(Application.dataPath))
                 {
                     _outputDir = "Assets" + sel.Substring(Application.dataPath.Length);
@@ -109,42 +109,42 @@ public class ItemIconComposer : EditorWindow
         }
         EditorGUILayout.EndHorizontal();
 
-        _outputFileName = EditorGUILayout.TextField("ƒtƒ@ƒCƒ‹–¼ (.png)", _outputFileName);
+        _outputFileName = EditorGUILayout.TextField("ãƒ•ã‚¡ã‚¤ãƒ«å (.png)", _outputFileName);
 
         EditorGUILayout.Space(12);
 
-        // Àsƒ{ƒ^ƒ“
+        // å®Ÿè¡Œãƒœã‚¿ãƒ³
         using (new EditorGUI.DisabledScope(_bgTexture == null || _itemTexture == null || string.IsNullOrEmpty(_outputFileName)))
         {
-            if (GUILayout.Button("‡¬‚µ‚Ä‘‚«o‚·", GUILayout.Height(32)))
+            if (GUILayout.Button("åˆæˆã—ã¦æ›¸ãå‡ºã™", GUILayout.Height(32)))
             {
                 ExecuteCompose();
             }
         }
 
-        // ƒXƒe[ƒ^ƒX•\¦
+        // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡¨ç¤º
         if (!string.IsNullOrEmpty(_statusMessage))
         {
             EditorGUILayout.Space(8);
             EditorGUILayout.HelpBox(_statusMessage, _statusType);
         }
 
-        // İ’èŠm”F—p‚Ìî•ñ•\¦
+        // è¨­å®šç¢ºèªç”¨ã®æƒ…å ±è¡¨ç¤º
         EditorGUILayout.Space(8);
-        EditorGUILayout.LabelField("Œ»İ‚Ì‡¬İ’èi•ÏX‚ÍƒXƒNƒŠƒvƒg‚ğ•ÒWj", EditorStyles.miniBoldLabel);
-        EditorGUILayout.LabelField($"  o—ÍƒTƒCƒY: {OUTPUT_SIZE}px / ‘fŞè—L—¦: {ITEM_SCALE:F2}");
-        EditorGUILayout.LabelField($"  ƒtƒHƒ“ƒg: {(string.IsNullOrEmpty(FONT_ASSET_PATH) ? "LegacyRuntime(•W€)" : FONT_ASSET_PATH)}");
-        EditorGUILayout.LabelField($"  LvƒTƒCƒY: {FONT_SIZE}px / ‰æ‚è: {OUTLINE_WIDTH}px");
+        EditorGUILayout.LabelField("ç¾åœ¨ã®åˆæˆè¨­å®šï¼ˆå¤‰æ›´ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç·¨é›†ï¼‰", EditorStyles.miniBoldLabel);
+        EditorGUILayout.LabelField($"  å‡ºåŠ›ã‚µã‚¤ã‚º: {OUTPUT_SIZE}px / ç´ æå æœ‰ç‡: {ITEM_SCALE:F2}");
+        EditorGUILayout.LabelField($"  ãƒ•ã‚©ãƒ³ãƒˆ: {(string.IsNullOrEmpty(FONT_ASSET_PATH) ? "LegacyRuntime(æ¨™æº–)" : FONT_ASSET_PATH)}");
+        EditorGUILayout.LabelField($"  Lvã‚µã‚¤ã‚º: {FONT_SIZE}px / ç¸å–ã‚Š: {OUTLINE_WIDTH}px");
     }
 
     // ============================================================
-    // Às–{‘Ì
+    // å®Ÿè¡Œæœ¬ä½“
     // ============================================================
     private void ExecuteCompose()
     {
         try
         {
-            // o—ÍƒtƒHƒ‹ƒ_‚ğ•ÛØiAssets“à‚Ì‚Æ‚«‚ÍAssetDatabase‚Ì®‡«‚à•Û‚Âj
+            // å‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä¿è¨¼ï¼ˆAssetså†…ã®ã¨ãã¯AssetDatabaseã®æ•´åˆæ€§ã‚‚ä¿ã¤ï¼‰
             if (!Directory.Exists(_outputDir))
             {
                 Directory.CreateDirectory(_outputDir);
@@ -154,53 +154,53 @@ public class ItemIconComposer : EditorWindow
             if (!fileName.ToLower().EndsWith(".png")) fileName += ".png";
             string outputPath = Path.Combine(_outputDir, fileName).Replace("\\", "/");
 
-            // ƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İæ‚è‰Â”\‚Èó‘Ô‚Åæ“¾
+            // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿å–ã‚Šå¯èƒ½ãªçŠ¶æ…‹ã§å–å¾—
             Texture2D bgReadable = GetReadableCopy(_bgTexture);
             Texture2D itemReadable = GetReadableCopy(_itemTexture);
 
-            // ‡¬ˆ—
+            // åˆæˆå‡¦ç†
             Texture2D result = ComposeIcon(bgReadable, itemReadable);
 
-            // Lv•\‹L
+            // Lvè¡¨è¨˜
             if (_level > 0)
             {
                 DrawLevelLabel(result, _level);
             }
 
-            // PNG‘‚«o‚µ
+            // PNGæ›¸ãå‡ºã—
             byte[] png = result.EncodeToPNG();
             File.WriteAllBytes(outputPath, png);
 
-            // ˆêƒeƒNƒXƒ`ƒƒ”jŠü
+            // ä¸€æ™‚ãƒ†ã‚¯ã‚¹ãƒãƒ£ç ´æ£„
             DestroyImmediate(bgReadable);
             DestroyImmediate(itemReadable);
             DestroyImmediate(result);
 
-            // AssetDatabaseXViAssets”z‰º‚È‚çj
+            // AssetDatabaseæ›´æ–°ï¼ˆAssetsé…ä¸‹ãªã‚‰ï¼‰
             if (outputPath.StartsWith("Assets/"))
             {
                 AssetDatabase.ImportAsset(outputPath, ImportAssetOptions.ForceUpdate);
-                // š’Ç‰ÁFSprite Importerİ’è‚ğ“ˆêiƒgƒŠƒ~ƒ“ƒO–h~j
+                // â˜…è¿½åŠ ï¼šSprite Importerè¨­å®šã‚’çµ±ä¸€ï¼ˆãƒˆãƒªãƒŸãƒ³ã‚°é˜²æ­¢ï¼‰
                 ApplySpriteImportSettings(outputPath);
             }
             AssetDatabase.Refresh();
 
-            _statusMessage = $"o—ÍŠ®—¹: {outputPath}";
+            _statusMessage = $"å‡ºåŠ›å®Œäº†: {outputPath}";
             _statusType = MessageType.Info;
             Debug.Log($"[ItemIconComposer] {_statusMessage}");
         }
         catch (System.Exception e)
         {
-            _statusMessage = $"ƒGƒ‰[: {e.Message}";
+            _statusMessage = $"ã‚¨ãƒ©ãƒ¼: {e.Message}";
             _statusType = MessageType.Error;
             Debug.LogError($"[ItemIconComposer] {e}");
         }
     }
 
     // ============================================================
-    // ƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İæ‚è‰Â”\‚Èó‘Ô‚Åæ“¾
-    //   Œ³‚ÌƒCƒ“ƒ|[ƒgİ’è‚ğ•Ï‚¦‚¸‚ÉÏ‚Ş‚æ‚¤AAssetDatabase‚©‚çˆê“I‚ÉRead/Write‚ğ—LŒø‰»¨
-    //   ƒsƒNƒZƒ‹‚ğƒRƒs[‚µ‚½V‹KTexture2D‚ğ•Ô‚·¨Œ³‚Ìİ’è‚É–ß‚·
+    // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿å–ã‚Šå¯èƒ½ãªçŠ¶æ…‹ã§å–å¾—
+    //   å…ƒã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆè¨­å®šã‚’å¤‰ãˆãšã«æ¸ˆã‚€ã‚ˆã†ã€AssetDatabaseã‹ã‚‰ä¸€æ™‚çš„ã«Read/Writeã‚’æœ‰åŠ¹åŒ–â†’
+    //   ãƒ”ã‚¯ã‚»ãƒ«ã‚’ã‚³ãƒ”ãƒ¼ã—ãŸæ–°è¦Texture2Dã‚’è¿”ã™â†’å…ƒã®è¨­å®šã«æˆ»ã™
     // ============================================================
     private static Texture2D GetReadableCopy(Texture2D source)
     {
@@ -227,12 +227,12 @@ public class ItemIconComposer : EditorWindow
             }
         }
 
-        // GetPixels‚Å“Ç‚İæ‚èAV‹KTexture2D‚ÉƒRƒs[
+        // GetPixelsã§èª­ã¿å–ã‚Šã€æ–°è¦Texture2Dã«ã‚³ãƒ”ãƒ¼
         Texture2D copy = new Texture2D(source.width, source.height, TextureFormat.RGBA32, false);
         copy.SetPixels(source.GetPixels());
         copy.Apply();
 
-        // Œ³‚ÌƒCƒ“ƒ|[ƒgİ’è‚É–ß‚·
+        // å…ƒã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆè¨­å®šã«æˆ»ã™
         if (importerModified && importer != null)
         {
             importer.isReadable = originalReadable;
@@ -244,34 +244,34 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // ‡¬–{‘ÌF”wŒi‚ğo—ÍƒTƒCƒY‚ÉƒŠƒTƒCƒY ¨ ’†‰›‚É‘fŞ‚ğc‰¡”ä•Û‚ÅƒŠƒTƒCƒY‚µ‚Äd‚Ë‚é
+    // åˆæˆæœ¬ä½“ï¼šèƒŒæ™¯ã‚’å‡ºåŠ›ã‚µã‚¤ã‚ºã«ãƒªã‚µã‚¤ã‚º â†’ ä¸­å¤®ã«ç´ æã‚’ç¸¦æ¨ªæ¯”ä¿æŒã§ãƒªã‚µã‚¤ã‚ºã—ã¦é‡ã­ã‚‹
     // ============================================================
     private static Texture2D ComposeIcon(Texture2D bg, Texture2D item)
     {
-        // o—ÍƒLƒƒƒ“ƒoƒXi“§–¾j
+        // å‡ºåŠ›ã‚­ãƒ£ãƒ³ãƒã‚¹ï¼ˆé€æ˜ï¼‰
         Texture2D canvas = new Texture2D(OUTPUT_SIZE, OUTPUT_SIZE, TextureFormat.RGBA32, false);
         Color32[] empty = new Color32[OUTPUT_SIZE * OUTPUT_SIZE];
         canvas.SetPixels32(empty);
 
-        // ”wŒi‚ğƒŠƒTƒCƒY‚µ‚ÄƒLƒƒƒ“ƒoƒX‚É•`‰æ
+        // èƒŒæ™¯ã‚’ãƒªã‚µã‚¤ã‚ºã—ã¦ã‚­ãƒ£ãƒ³ãƒã‚¹ã«æç”»
         Texture2D bgResized = ResizeBilinear(bg, OUTPUT_SIZE, OUTPUT_SIZE);
         BlitAlphaComposite(canvas, bgResized, 0, 0);
 
-        // ‘fŞ‚ğ ITEM_SCALE “à‚Éû‚Ü‚é‚æ‚¤‚Éc‰¡”ä•ÛƒŠƒTƒCƒY
+        // ç´ æã‚’ ITEM_SCALE å†…ã«åã¾ã‚‹ã‚ˆã†ã«ç¸¦æ¨ªæ¯”ä¿æŒãƒªã‚µã‚¤ã‚º
         int target = Mathf.RoundToInt(OUTPUT_SIZE * ITEM_SCALE);
         float scale = Mathf.Min((float)target / item.width, (float)target / item.height);
         int newW = Mathf.Max(1, Mathf.RoundToInt(item.width * scale));
         int newH = Mathf.Max(1, Mathf.RoundToInt(item.height * scale));
         Texture2D itemResized = ResizeBilinear(item, newW, newH);
 
-        // ’†‰›”z’uiƒIƒtƒZƒbƒg“K—pj
+        // ä¸­å¤®é…ç½®ï¼ˆã‚ªãƒ•ã‚»ãƒƒãƒˆé©ç”¨ï¼‰
         int px = (OUTPUT_SIZE - newW) / 2;
         int py = (OUTPUT_SIZE - newH) / 2 + ITEM_OFFSET_Y;
         BlitAlphaComposite(canvas, itemResized, px, py);
 
         canvas.Apply();
 
-        // ˆê”jŠü
+        // ä¸€æ™‚ç ´æ£„
         Object.DestroyImmediate(bgResized);
         Object.DestroyImmediate(itemResized);
 
@@ -279,11 +279,11 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // ƒoƒCƒŠƒjƒAƒŠƒTƒCƒYiTexture2D”Ä—pj
+    // ãƒã‚¤ãƒªãƒ‹ã‚¢ãƒªã‚µã‚¤ã‚ºï¼ˆTexture2Dæ±ç”¨ï¼‰
     // ============================================================
     private static Texture2D ResizeBilinear(Texture2D src, int targetW, int targetH)
     {
-        // RenderTextureŒo—R‚ª‚‘¬‚¾‚ªA‚±‚±‚Å‚ÍˆË‘¶‚ğŒ¸‚ç‚·‚½‚ßTexture2D‚ÌGetPixelBilinear‚ÅÀ‘•
+        // RenderTextureçµŒç”±ãŒé«˜é€Ÿã ãŒã€ã“ã“ã§ã¯ä¾å­˜ã‚’æ¸›ã‚‰ã™ãŸã‚Texture2Dã®GetPixelBilinearã§å®Ÿè£…
         Texture2D result = new Texture2D(targetW, targetH, TextureFormat.RGBA32, false);
         Color[] pixels = new Color[targetW * targetH];
         for (int y = 0; y < targetH; y++)
@@ -301,12 +301,12 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // “§–¾‡¬isrc ‚ğ dst ‚Ì (offsetX, offsetY) ‚Éd‚Ë‚éAƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒhj
-    //   Y²‚ÍUnity‚ÌŠµ—á‚Ç‚¨‚è‰ºŒü‚«i‰æ‘œ•`‰æ‚È‚Ì‚Åy‚ªã‚Ì•û‚ª¬‚³‚¢j
-    //   = ‚±‚±‚Å‚Í Texture2D ‚ÌÀ•WŒni¶‰ºŒ´“_j‚ğŠˆ‚©‚µ‚Ä’¼Ú‡¬
+    // é€æ˜åˆæˆï¼ˆsrc ã‚’ dst ã® (offsetX, offsetY) ã«é‡ã­ã‚‹ã€ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰ï¼‰
+    //   Yè»¸ã¯Unityã®æ…£ä¾‹ã©ãŠã‚Šä¸‹å‘ãï¼ˆç”»åƒæç”»ãªã®ã§yãŒä¸Šã®æ–¹ãŒå°ã•ã„ï¼‰
+    //   = ã“ã“ã§ã¯ Texture2D ã®åº§æ¨™ç³»ï¼ˆå·¦ä¸‹åŸç‚¹ï¼‰ã‚’æ´»ã‹ã—ã¦ç›´æ¥åˆæˆ
     //
-    //   ŠO•”‚©‚çÀ•W‚ğ“n‚·‚Æ‚«A‰æ‘œ¶ã‚ğ (0,0) ‚Ål‚¦‚½•û‚ª’¼Š´“I‚È‚Ì‚Å
-    //   ŒÄ‚Ño‚µ‘¤‚Åu¶ãŒ´“_ ¨ ¶‰ºŒ´“_v‚É•â³‚µ‚Ä‚©‚ç“n‚·
+    //   å¤–éƒ¨ã‹ã‚‰åº§æ¨™ã‚’æ¸¡ã™ã¨ãã€ç”»åƒå·¦ä¸Šã‚’ (0,0) ã§è€ƒãˆãŸæ–¹ãŒç›´æ„Ÿçš„ãªã®ã§
+    //   å‘¼ã³å‡ºã—å´ã§ã€Œå·¦ä¸ŠåŸç‚¹ â†’ å·¦ä¸‹åŸç‚¹ã€ã«è£œæ­£ã—ã¦ã‹ã‚‰æ¸¡ã™
     // ============================================================
     private static void BlitAlphaComposite(Texture2D dst, Texture2D src, int offsetX_topLeft, int offsetY_topLeft)
     {
@@ -315,8 +315,8 @@ public class ItemIconComposer : EditorWindow
         int dw = dst.width;
         int dh = dst.height;
 
-        // ¶ãŒ´“_¨¶‰ºŒ´“_ •ÏŠ·: src ‚Ìã’[‚ª dst ‚Ìã‚©‚ç offsetY_topLeft px ‚ÌˆÊ’u‚É—ˆ‚é‚æ‚¤‚É‚·‚é
-        int dstYBottomOfSrc = dh - (offsetY_topLeft + sh); // src ‚Ì¶‰º‚ª dst ‚Ì‚Ç‚±‚É—ˆ‚é‚©i¶‰ºŒ´“_j
+        // å·¦ä¸ŠåŸç‚¹â†’å·¦ä¸‹åŸç‚¹ å¤‰æ›: src ã®ä¸Šç«¯ãŒ dst ã®ä¸Šã‹ã‚‰ offsetY_topLeft px ã®ä½ç½®ã«æ¥ã‚‹ã‚ˆã†ã«ã™ã‚‹
+        int dstYBottomOfSrc = dh - (offsetY_topLeft + sh); // src ã®å·¦ä¸‹ãŒ dst ã®ã©ã“ã«æ¥ã‚‹ã‹ï¼ˆå·¦ä¸‹åŸç‚¹ï¼‰
 
         Color[] srcPx = src.GetPixels();
         Color[] dstPx = dst.GetPixels();
@@ -348,28 +348,28 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // Lv•\‹L•`‰æ
-    //   Font.RequestCharactersInTexture ‚ÅƒtƒHƒ“ƒg‚ÌƒOƒŠƒtƒeƒNƒXƒ`ƒƒ‚ğ¶¬‚µA
-    //   ‚»‚Ìã‚ÅCharacterInfo‚ğg‚Á‚ÄƒsƒNƒZƒ‹’PˆÊ‚Å•`‰æ‚·‚éB
-    //   Unity Editor‚Å‚à“®‚­ƒ_ƒCƒiƒ~ƒbƒNƒtƒHƒ“ƒg•û®B
+    // Lvè¡¨è¨˜æç”»
+    //   Font.RequestCharactersInTexture ã§ãƒ•ã‚©ãƒ³ãƒˆã®ã‚°ãƒªãƒ•ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ç”Ÿæˆã—ã€
+    //   ãã®ä¸Šã§CharacterInfoã‚’ä½¿ã£ã¦ãƒ”ã‚¯ã‚»ãƒ«å˜ä½ã§æç”»ã™ã‚‹ã€‚
+    //   Unity Editorã§ã‚‚å‹•ããƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ•ã‚©ãƒ³ãƒˆæ–¹å¼ã€‚
     // ============================================================
     private static void DrawLevelLabel(Texture2D target, int level)
     {
         string text = string.Format(LABEL_FORMAT, level);
 
-        // ƒtƒHƒ“ƒgæ“¾
+        // ãƒ•ã‚©ãƒ³ãƒˆå–å¾—
         Font font = LoadFont();
         if (font == null)
         {
-            Debug.LogWarning("[ItemIconComposer] ƒtƒHƒ“ƒg‚ª“Ç‚İ‚ß‚È‚©‚Á‚½‚½‚ßALv•\‹L‚ğÈ—ª‚µ‚Ü‚µ‚½");
+            Debug.LogWarning("[ItemIconComposer] ãƒ•ã‚©ãƒ³ãƒˆãŒèª­ã¿è¾¼ã‚ãªã‹ã£ãŸãŸã‚ã€Lvè¡¨è¨˜ã‚’çœç•¥ã—ã¾ã—ãŸ");
             return;
         }
 
-        // ƒ_ƒCƒiƒ~ƒbƒNƒtƒHƒ“ƒg‚ÌƒeƒNƒXƒ`ƒƒ¶¬
+        // ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”Ÿæˆ
         font.RequestCharactersInTexture(text, FONT_SIZE, FontStyle.Bold);
         Texture2D fontTex = font.material.mainTexture as Texture2D;
 
-        // ƒeƒLƒXƒg•E‚‚³ŒvZ
+        // ãƒ†ã‚­ã‚¹ãƒˆå¹…ãƒ»é«˜ã•è¨ˆç®—
         int totalWidth = 0;
         int maxHeight = 0;
         int maxAscent = 0;
@@ -383,14 +383,14 @@ public class ItemIconComposer : EditorWindow
             }
         }
 
-        // ƒtƒHƒ“ƒgƒeƒNƒXƒ`ƒƒ‚ğCPU‚©‚ç“Ç‚ß‚é‚æ‚¤‚É‚·‚é
+        // ãƒ•ã‚©ãƒ³ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’CPUã‹ã‚‰èª­ã‚ã‚‹ã‚ˆã†ã«ã™ã‚‹
         Texture2D fontTexReadable = GetReadableCopyOfTexture(fontTex);
 
-        // ‰E‰º”z’ui¶ãŒ´“_À•Wj
+        // å³ä¸‹é…ç½®ï¼ˆå·¦ä¸ŠåŸç‚¹åº§æ¨™ï¼‰
         int dstX = target.width - totalWidth - LABEL_MARGIN;
         int dstY = target.height - maxHeight - LABEL_MARGIN;
 
-        // ‰æ‚è‚ğæ‚É•`‰æiƒeƒLƒXƒg‚ğã‰º¶‰E‚É‚¸‚ç‚µ‚ÄOUTLINE_COLOR‚Å•`‚­j
+        // ç¸å–ã‚Šã‚’å…ˆã«æç”»ï¼ˆãƒ†ã‚­ã‚¹ãƒˆã‚’ä¸Šä¸‹å·¦å³ã«ãšã‚‰ã—ã¦OUTLINE_COLORã§æãï¼‰
         if (OUTLINE_WIDTH > 0)
         {
             for (int dx = -OUTLINE_WIDTH; dx <= OUTLINE_WIDTH; dx++)
@@ -403,7 +403,7 @@ public class ItemIconComposer : EditorWindow
             }
         }
 
-        // –{‘ÌƒeƒLƒXƒg‚ğ•`‰æ
+        // æœ¬ä½“ãƒ†ã‚­ã‚¹ãƒˆã‚’æç”»
         DrawTextRun(target, fontTexReadable, font, text, dstX, dstY, maxAscent, TEXT_COLOR);
 
         target.Apply();
@@ -411,20 +411,20 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // 1sƒeƒLƒXƒg‚ğ target ‚É•`‰æ
-    //   textOriginX, textOriginY ‚Í¶ãŒ´“_‚Ì•`‰æŠJnˆÊ’uiƒeƒLƒXƒg‘S‘Ì‚Ìbbox¶ãj
-    //   ascent ‚Íƒx[ƒXƒ‰ƒCƒ“‚ÌˆÊ’u•â³—p
+    // 1è¡Œãƒ†ã‚­ã‚¹ãƒˆã‚’ target ã«æç”»
+    //   textOriginX, textOriginY ã¯å·¦ä¸ŠåŸç‚¹ã®æç”»é–‹å§‹ä½ç½®ï¼ˆãƒ†ã‚­ã‚¹ãƒˆå…¨ä½“ã®bboxå·¦ä¸Šï¼‰
+    //   ascent ã¯ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã®ä½ç½®è£œæ­£ç”¨
     //
-    // yUV•â³‚É‚Â‚¢‚Äz
-    //   CharacterInfo ‚Ì uvTopLeft / uvTopRight / uvBottomLeft / uvBottomRight ‚Í
-    //   Unity ‚Ìƒ_ƒCƒiƒ~ƒbƒNƒtƒHƒ“ƒgƒeƒNƒXƒ`ƒƒã‚Å‚ÌuƒOƒŠƒt‚Ì4Špv‚ÌUVÀ•W‚ğ‚ÂB
-    //   ƒtƒHƒ“ƒgƒAƒgƒ‰ƒX‚ÌÀ‘•‚É‚æ‚Á‚Ä‚Í:
-    //     - ƒOƒŠƒt‚ª90“x‰ñ“]‚µ‚ÄŠi”[‚³‚ê‚éi‰¡Œü‚«‚É•~‚«‹l‚ß‚éÅ“K‰»j
-    //     - Y²‚ª”½“]‚µ‚Ä‚¢‚éiƒeƒNƒXƒ`ƒƒ‚Ìã‰º‚ª‹tj
-    //   ‚Æ‚¢‚Á‚½ƒP[ƒX‚ª‚ ‚é‚½‚ßAMathf.Min/Max ‚Å”ÍˆÍ‚¾‚¯æ‚é‚ÆŒü‚«‚Ìî•ñ‚ª¸‚í‚êA
-    //   Œ‹‰Ê‚Æ‚µ‚Ä•¶š‚ª”½“]E‰ñ“]‚µ‚Ä‚µ‚Ü‚¤B
-    //   ‚±‚±‚Å‚ÍƒOƒŠƒt“à‚Ì³‹K‰»À•W (u_norm, v_norm) ¸ [0,1] ‚ğA
-    //   4ŠpUV‚ÌuƒoƒCƒŠƒjƒA•âŠÔv‚ÅÀUV‚É•ÏŠ·‚·‚é‚±‚Æ‚ÅAŒü‚«‚ğ³‚µ‚­•Û‚ÂB
+    // ã€UVè£œæ­£ã«ã¤ã„ã¦ã€‘
+    //   CharacterInfo ã® uvTopLeft / uvTopRight / uvBottomLeft / uvBottomRight ã¯
+    //   Unity ã®ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ•ã‚©ãƒ³ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ä¸Šã§ã®ã€Œã‚°ãƒªãƒ•ã®4è§’ã€ã®UVåº§æ¨™ã‚’æŒã¤ã€‚
+    //   ãƒ•ã‚©ãƒ³ãƒˆã‚¢ãƒˆãƒ©ã‚¹ã®å®Ÿè£…ã«ã‚ˆã£ã¦ã¯:
+    //     - ã‚°ãƒªãƒ•ãŒ90åº¦å›è»¢ã—ã¦æ ¼ç´ã•ã‚Œã‚‹ï¼ˆæ¨ªå‘ãã«æ•·ãè©°ã‚ã‚‹æœ€é©åŒ–ï¼‰
+    //     - Yè»¸ãŒåè»¢ã—ã¦ã„ã‚‹ï¼ˆãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ä¸Šä¸‹ãŒé€†ï¼‰
+    //   ã¨ã„ã£ãŸã‚±ãƒ¼ã‚¹ãŒã‚ã‚‹ãŸã‚ã€Mathf.Min/Max ã§ç¯„å›²ã ã‘å–ã‚‹ã¨å‘ãã®æƒ…å ±ãŒå¤±ã‚ã‚Œã€
+    //   çµæœã¨ã—ã¦æ–‡å­—ãŒåè»¢ãƒ»å›è»¢ã—ã¦ã—ã¾ã†ã€‚
+    //   ã“ã“ã§ã¯ã‚°ãƒªãƒ•å†…ã®æ­£è¦åŒ–åº§æ¨™ (u_norm, v_norm) âˆˆ [0,1] ã‚’ã€
+    //   4è§’UVã®ã€Œãƒã‚¤ãƒªãƒ‹ã‚¢è£œé–“ã€ã§å®ŸUVã«å¤‰æ›ã™ã‚‹ã“ã¨ã§ã€å‘ãã‚’æ­£ã—ãä¿ã¤ã€‚
     // ============================================================
     private static void DrawTextRun(Texture2D target, Texture2D fontTex, Font font, string text,
                                     int textOriginX, int textOriginY, int ascent, Color32 color)
@@ -437,29 +437,29 @@ public class ItemIconComposer : EditorWindow
             int glyphW = Mathf.Abs(ci.maxX - ci.minX);
             int glyphH = Mathf.Abs(ci.maxY - ci.minY);
 
-            // •`‰æˆÊ’ui¶ãŒ´“_j
+            // æç”»ä½ç½®ï¼ˆå·¦ä¸ŠåŸç‚¹ï¼‰
             int glyphOriginX = penX + ci.minX;
             int glyphOriginY = textOriginY + (ascent - ci.maxY);
 
-            // ƒtƒHƒ“ƒgƒAƒgƒ‰ƒXã‚ÌƒOƒŠƒt4ŠpUV
-            //   uvTopLeft     : ƒOƒŠƒt‚Ì¶ã
-            //   uvTopRight    : ƒOƒŠƒt‚Ì‰Eã
-            //   uvBottomLeft  : ƒOƒŠƒt‚Ì¶‰º
-            //   uvBottomRight : ƒOƒŠƒt‚Ì‰E‰º
-            // ‚±‚ê‚ç4“_‚ğƒoƒCƒŠƒjƒA•âŠÔ‚µ‚ÄƒOƒŠƒt“àƒsƒNƒZƒ‹‚ÌUV‚ğ‹‚ß‚éB
+            // ãƒ•ã‚©ãƒ³ãƒˆã‚¢ãƒˆãƒ©ã‚¹ä¸Šã®ã‚°ãƒªãƒ•4è§’UV
+            //   uvTopLeft     : ã‚°ãƒªãƒ•ã®å·¦ä¸Š
+            //   uvTopRight    : ã‚°ãƒªãƒ•ã®å³ä¸Š
+            //   uvBottomLeft  : ã‚°ãƒªãƒ•ã®å·¦ä¸‹
+            //   uvBottomRight : ã‚°ãƒªãƒ•ã®å³ä¸‹
+            // ã“ã‚Œã‚‰4ç‚¹ã‚’ãƒã‚¤ãƒªãƒ‹ã‚¢è£œé–“ã—ã¦ã‚°ãƒªãƒ•å†…ãƒ”ã‚¯ã‚»ãƒ«ã®UVã‚’æ±‚ã‚ã‚‹ã€‚
             Vector2 uvTL = ci.uvTopLeft;
             Vector2 uvTR = ci.uvTopRight;
             Vector2 uvBL = ci.uvBottomLeft;
             Vector2 uvBR = ci.uvBottomRight;
 
-            // ƒsƒNƒZƒ‹’PˆÊƒRƒs[iƒtƒHƒ“ƒgƒeƒNƒXƒ`ƒƒ‚ÍƒAƒ‹ƒtƒ@ƒ`ƒƒƒ“ƒlƒ‹‚ÉƒOƒŠƒtî•ñj
+            // ãƒ”ã‚¯ã‚»ãƒ«å˜ä½ã‚³ãƒ”ãƒ¼ï¼ˆãƒ•ã‚©ãƒ³ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯ã‚¢ãƒ«ãƒ•ã‚¡ãƒãƒ£ãƒ³ãƒãƒ«ã«ã‚°ãƒªãƒ•æƒ…å ±ï¼‰
             for (int gy = 0; gy < glyphH; gy++)
             {
-                int dstY = target.height - 1 - (glyphOriginY + gy); // ¶‰ºŒ´“_‚Ö
+                int dstY = target.height - 1 - (glyphOriginY + gy); // å·¦ä¸‹åŸç‚¹ã¸
                 if (dstY < 0 || dstY >= target.height) continue;
 
-                // ƒOƒŠƒt“à‚Ìc•ûŒü³‹K‰»À•WB
-                // gy=0 ‚ªƒOƒŠƒt‚Ìuã’[v‚È‚Ì‚ÅAã’[¨‰º’[‚Öi‚Ş = Top‚©‚çBottom‚Ö•âŠÔ = v_norm 0¨1
+                // ã‚°ãƒªãƒ•å†…ã®ç¸¦æ–¹å‘æ­£è¦åŒ–åº§æ¨™ã€‚
+                // gy=0 ãŒã‚°ãƒªãƒ•ã®ã€Œä¸Šç«¯ã€ãªã®ã§ã€ä¸Šç«¯â†’ä¸‹ç«¯ã¸é€²ã‚€ = Topã‹ã‚‰Bottomã¸è£œé–“ = v_norm 0â†’1
                 float v_norm = (gy + 0.5f) / glyphH;
 
                 for (int gx = 0; gx < glyphW; gx++)
@@ -467,17 +467,17 @@ public class ItemIconComposer : EditorWindow
                     int dstX = glyphOriginX + gx;
                     if (dstX < 0 || dstX >= target.width) continue;
 
-                    // ƒOƒŠƒt“à‚Ì‰¡•ûŒü³‹K‰»À•WB
-                    // gx=0 ‚ªƒOƒŠƒt‚Ìu¶’[v‚È‚Ì‚ÅA¶’[¨‰E’[‚Öi‚Ş = Left‚©‚çRight‚Ö•âŠÔ = u_norm 0¨1
+                    // ã‚°ãƒªãƒ•å†…ã®æ¨ªæ–¹å‘æ­£è¦åŒ–åº§æ¨™ã€‚
+                    // gx=0 ãŒã‚°ãƒªãƒ•ã®ã€Œå·¦ç«¯ã€ãªã®ã§ã€å·¦ç«¯â†’å³ç«¯ã¸é€²ã‚€ = Leftã‹ã‚‰Rightã¸è£œé–“ = u_norm 0â†’1
                     float u_norm = (gx + 0.5f) / glyphW;
 
-                    // ƒoƒCƒŠƒjƒA•âŠÔ‚Å4ŠpUV‚©‚çÀUV‚ğZoi‰ñ“]E”½“]‚ÉŠÖŒW‚È‚­³‚µ‚¢j
+                    // ãƒã‚¤ãƒªãƒ‹ã‚¢è£œé–“ã§4è§’UVã‹ã‚‰å®ŸUVã‚’ç®—å‡ºï¼ˆå›è»¢ãƒ»åè»¢ã«é–¢ä¿‚ãªãæ­£ã—ã„ï¼‰
                     Vector2 uvTop = Vector2.Lerp(uvTL, uvTR, u_norm);
                     Vector2 uvBottom = Vector2.Lerp(uvBL, uvBR, u_norm);
                     Vector2 uv = Vector2.Lerp(uvTop, uvBottom, v_norm);
 
                     Color fontPx = fontTex.GetPixelBilinear(uv.x, uv.y);
-                    // ƒ_ƒCƒiƒ~ƒbƒNƒtƒHƒ“ƒgƒeƒNƒXƒ`ƒƒ‚ÍƒAƒ‹ƒtƒ@‚É”Z“x
+                    // ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ãƒ•ã‚©ãƒ³ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ã¯ã‚¢ãƒ«ãƒ•ã‚¡ã«æ¿ƒåº¦
                     float coverage = fontPx.a;
                     if (coverage <= 0.01f) continue;
 
@@ -500,10 +500,10 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // ƒtƒHƒ“ƒg“Ç‚İ‚İ
+    // ãƒ•ã‚©ãƒ³ãƒˆèª­ã¿è¾¼ã¿
     //
-    // Unity 2022 ˆÈ~‚Í‘g‚İ‚İƒtƒHƒ“ƒg‚ª Arial.ttf ‚©‚ç LegacyRuntime.ttf ‚É
-    // •ÏX‚³‚ê‚Ä‚¢‚é‚½‚ßALegacyRuntime.ttf ‚ğ—Dæ“I‚É“Ç‚İ‚ŞB
+    // Unity 2022 ä»¥é™ã¯çµ„ã¿è¾¼ã¿ãƒ•ã‚©ãƒ³ãƒˆãŒ Arial.ttf ã‹ã‚‰ LegacyRuntime.ttf ã«
+    // å¤‰æ›´ã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€LegacyRuntime.ttf ã‚’å„ªå…ˆçš„ã«èª­ã¿è¾¼ã‚€ã€‚
     // ============================================================
     private static Font LoadFont()
     {
@@ -511,21 +511,21 @@ public class ItemIconComposer : EditorWindow
         {
             Font f = AssetDatabase.LoadAssetAtPath<Font>(FONT_ASSET_PATH);
             if (f != null) return f;
-            Debug.LogWarning($"[ItemIconComposer] w’èƒtƒHƒ“ƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: {FONT_ASSET_PATH} ¨ •W€ƒtƒHƒ“ƒg‚ğg—p");
+            Debug.LogWarning($"[ItemIconComposer] æŒ‡å®šãƒ•ã‚©ãƒ³ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: {FONT_ASSET_PATH} â†’ æ¨™æº–ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½¿ç”¨");
         }
-        // Unity 2022ˆÈ~: Arial.ttf ¨ LegacyRuntime.ttf ‚É•ÏX
+        // Unity 2022ä»¥é™: Arial.ttf â†’ LegacyRuntime.ttf ã«å¤‰æ›´
         Font legacy = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         if (legacy != null) return legacy;
-        // ŒÃ‚¢UnityŒü‚¯ƒtƒH[ƒ‹ƒoƒbƒN
+        // å¤ã„Unityå‘ã‘ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
         Font arial = Resources.GetBuiltinResource<Font>("Arial.ttf");
         if (arial != null) return arial;
-        // ÅIƒtƒH[ƒ‹ƒoƒbƒN: OS’ñ‹Ÿ‚ÌƒtƒHƒ“ƒg
+        // æœ€çµ‚ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯: OSæä¾›ã®ãƒ•ã‚©ãƒ³ãƒˆ
         return Font.CreateDynamicFontFromOSFont("Arial", FONT_SIZE);
     }
 
     // ============================================================
-    // ƒtƒHƒ“ƒgƒeƒNƒXƒ`ƒƒ‚ğ“Ç‚İæ‚è‰Â”\‚É‚·‚é
-    //   RenderTextureŒo—R‚Å•¡»
+    // ãƒ•ã‚©ãƒ³ãƒˆãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’èª­ã¿å–ã‚Šå¯èƒ½ã«ã™ã‚‹
+    //   RenderTextureçµŒç”±ã§è¤‡è£½
     // ============================================================
     private static Texture2D GetReadableCopyOfTexture(Texture2D source)
     {
@@ -543,9 +543,9 @@ public class ItemIconComposer : EditorWindow
     }
 
     // ============================================================
-    // o—Í‚µ‚½PNG‚ÌSprite Importerİ’è‚ğ“ˆê
+    // å‡ºåŠ›ã—ãŸPNGã®Sprite Importerè¨­å®šã‚’çµ±ä¸€
     //   - TextureType: Sprite
-    //   - MeshType: FullRect (“§‰ß—Ìˆæ‚ÌƒgƒŠƒ~ƒ“ƒO–h~)
+    //   - MeshType: FullRect (é€éé ˜åŸŸã®ãƒˆãƒªãƒŸãƒ³ã‚°é˜²æ­¢)
     //   - SpriteMode: Single
     //   - Alpha Is Transparency: ON
     //   - Filter Mode: Bilinear
@@ -562,7 +562,7 @@ public class ItemIconComposer : EditorWindow
         importer.mipmapEnabled = false;
         importer.filterMode = FilterMode.Bilinear;
 
-        // šÅd—vFMeshType ‚ğ FullRect ‚Éi“§‰ß—Ìˆæ‚àƒƒbƒVƒ…‚ÉŠÜ‚ß‚éj
+        // â˜…æœ€é‡è¦ï¼šMeshType ã‚’ FullRect ã«ï¼ˆé€éé ˜åŸŸã‚‚ãƒ¡ãƒƒã‚·ãƒ¥ã«å«ã‚ã‚‹ï¼‰
         TextureImporterSettings settings = new TextureImporterSettings();
         importer.ReadTextureSettings(settings);
         settings.spriteMeshType = SpriteMeshType.FullRect;

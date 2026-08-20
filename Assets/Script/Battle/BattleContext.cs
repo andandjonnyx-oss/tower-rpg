@@ -1,115 +1,115 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-//�󂯓n���p�̔�
+//受け渡し用の箱
 public static class BattleContext
 {
-    // �I�΂ꂽ�G
+    // 選ばれた敵
     public static Monster EnemyMonster;
 
-    //���ݒn�B�����I��
+    //現在地。将来的に
     public static int Floor;
     public static int Step;
 
     // =========================================================
-    // �{�X��t���O�i�ǉ��j
+    // ボス戦フラグ（追加）
     // =========================================================
 
     /// <summary>
-    /// ���݂̐퓬���{�X�킩�ǂ����B
-    /// BossEncounterSystem �� true �ɃZ�b�g���A
-    /// BattleSceneController ������/�s�k�����ŎQ�Ƃ��ă��Z�b�g����B
+    /// 現在の戦闘がボス戦かどうか。
+    /// BossEncounterSystem が true にセットし、
+    /// BattleSceneController が勝利/敗北処理で参照してリセットする。
     /// </summary>
     public static bool IsBossBattle;
 
     /// <summary>
-    /// �{�X���z�u����Ă���K�B�������̌��j�t���O�����Ɏg���B
+    /// ボスが配置されている階。勝利時の撃破フラグ生成に使う。
     /// </summary>
     public static int BossFloor;
 
     /// <summary>
-    /// �{�X��ŃC�x���g�����i�a�t�����j�������ǂ����B
-    /// true �̏ꍇ�AOnVictory �Œʏ폟���Ƃ͈قȂ��b�ɕ��򂷂�B
-    /// BattleSceneController ���������������ɃZ�b�g���A
-    /// ��b�J�ڌ�Ƀ��Z�b�g�����B
+    /// ボス戦でイベント勝利（餌付け等）したかどうか。
+    /// true の場合、OnVictory で通常勝利とは異なる会話に分岐する。
+    /// BattleSceneController が即勝利処理時にセットし、
+    /// 会話遷移後にリセットされる。
     /// </summary>
     public static bool IsBossEventWin;
 
     /// <summary>
-    /// �f�o�b�O�V�[������J�n�����퓬���ǂ����B
-    /// true �̏ꍇ�A����/�s�k��� Tower �ł͂Ȃ� DebugReturnScene �ɖ߂�B
+    /// デバッグシーンから開始した戦闘かどうか。
+    /// true の場合、勝利/敗北後に Tower ではなく DebugReturnScene に戻る。
     /// </summary>
     public static bool IsDebugBattle;
 
     /// <summary>
-    /// �f�o�b�O�퓬�I����ɖ߂�V�[�����B
-    /// IsDebugBattle == true �̎��̂ݎg�p�B
+    /// デバッグ戦闘終了後に戻るシーン名。
+    /// IsDebugBattle == true の時のみ使用。
     /// </summary>
     public static string DebugReturnScene = "Debug";
 
     // =========================================================
-    // �{�X���`�� �A��t���O�i�ǉ��j
+    // ボス第二形態 連戦フラグ（追加）
     // =========================================================
 
     /// <summary>
-    /// ���`�Ԃ�|��������̘A��t���O�B
-    /// true �̏ꍇ�AOnVictory �ŃN���A�t���O�𗧂Ă���
-    /// ���`�Ԃ̐퓬���J�n����B
+    /// 第一形態を倒した直後の連戦フラグ。
+    /// true の場合、OnVictory でクリアフラグを立てずに
+    /// 第二形態の戦闘を開始する。
     /// </summary>
     public static bool IsPhase2Transition;
 
     /// <summary>
-    /// ���`�Ԃ̃����X�^�[�f�[�^�B
-    /// BossEncounterSystem �����`�ԊJ�n���ɃZ�b�g����B
+    /// 第二形態のモンスターデータ。
+    /// BossEncounterSystem が第一形態開始時にセットする。
     /// </summary>
     public static Monster Phase2Monster;
 
     // =========================================================
-    // �{�X��R���e�B�j���[�p�A�C�e���X�i�b�v�V���b�g�i�ǉ��j
+    // ボス戦コンティニュー用アイテムスナップショット（追加）
     // =========================================================
 
     /// <summary>
-    /// �{�X��J�n���� ItemBoxManager �̃X�i�b�v�V���b�g�B
-    /// �R���e�B�j���[���ɃA�C�e����퓬�J�n���̏�Ԃɕ������邽�߂Ɏg�p�B
-    /// �e�v�f�� (uid, itemId) �̃y�A�B
-    /// �퓬�I�����i����/�s�k�A�ҁj�� null �ɃN���A����B
+    /// ボス戦開始時の ItemBoxManager のスナップショット。
+    /// コンティニュー時にアイテムを戦闘開始時の状態に復元するために使用。
+    /// 各要素は (uid, itemId) のペア。
+    /// 戦闘終了時（勝利/敗北帰還）に null にクリアする。
     /// </summary>
     public static List<ItemSnapshotEntry> ItemSnapshot;
 
     /// <summary>
-    /// �{�X��J�n���̑�������uid�B�R���e�B�j���[���ɕ�������B
+    /// ボス戦開始時の装備武器uid。コンティニュー時に復元する。
     /// </summary>
     public static string SnapshotEquippedWeaponUid;
 
     // =========================================================
-    // �{�X��R���e�B�j���[�p �X�e�[�^�X�|�C���g�E�X�i�b�v�V���b�g�i�ǉ��j
-    //   ���S�������ւ��ŏ����₷���B�����Ȃ����ƁB
+    // ボス戦コンティニュー用 ステータスポイント・スナップショット（追加）
+    //   ※全文差し替えで消えやすい。消さないこと。
     // =========================================================
     /// <summary>
-    /// �{�X��J�n���i����ё��`�Ԍ��j���j�� statusPoint �X�i�b�v�V���b�g�B
-    /// �{�X��R���e�B�j���[�i��蒼���j���ɂ��̒l�֖߂��A
-    /// ���̐퓬���Ɋl������ SP �𖳌�������B
-    /// �퓬���I���E�ʏ폟���E�ʏ�s�k���ł͊����߂��Ȃ��i���m��j�B
-    /// -1 = ���ۑ��B�퓬�I������ -1 �փN���A����B
+    /// ボス戦開始時（および第一形態撃破時）の statusPoint スナップショット。
+    /// ボス戦コンティニュー（やり直し）時にこの値へ戻し、
+    /// その戦闘中に獲得した SP を無効化する。
+    /// 戦闘中終了・通常勝利・通常敗北等では巻き戻さない（＝確定）。
+    /// -1 = 未保存。戦闘終了時に -1 へクリアする。
     /// </summary>
     public static int StatusPointSnapshot = -1;
 
     // =========================================================
-    // F100���`�� HP�����p���~�ϗp�i�ǉ��j
-    //   ���S�������ւ��ŏ����₷���B�����Ȃ����ƁB
+    // F100第二形態 HP引き継ぎ救済用（追加）
+    //   ※全文差し替えで消えやすい。消さないこと。
     // =========================================================
     /// <summary>
-    /// F100���`�ԃR���e�B�j���[�~�ς̈����p���GHP�B
-    /// �s�k���̓GHP��ޔ����A�R���e�B�j���[������ɂ���HP�ōĊJ����B
-    /// -1 = �����p���Ȃ��i���^���ŊJ�n�j�B
-    /// �{�X�헣�E�i�����E�A�ҁE�Q�[���I���j�ŃN���A����A����͖��^���ɖ߂�B
+    /// F100第二形態コンティニュー救済の引き継ぎ敵HP。
+    /// 敗北時の敵HPを退避し、コンティニュー復活後にこのHPで再開する。
+    /// -1 = 引き継ぎなし（満タンで開始）。
+    /// ボス戦離脱（勝利・帰還・ゲーム終了）でクリアされ、次回は満タンに戻る。
     /// </summary>
     public static int FinalBossCarryEnemyHp = -1;
 }
 
 /// <summary>
-/// �A�C�e���X�i�b�v�V���b�g��1�G���g���B
-/// uid �� itemId �̃y�A��ێ�����B
+/// アイテムスナップショットの1エントリ。
+/// uid と itemId のペアを保持する。
 /// </summary>
 [System.Serializable]
 public class ItemSnapshotEntry

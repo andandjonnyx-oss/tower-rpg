@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -9,7 +9,7 @@ public class MonsterDatabaseViewer : EditorWindow
     private Vector2 scrollPos;
     private string searchText = "";
 
-    // Boss ƒtƒHƒ‹ƒ_‚©‚ç“Ç‚İ‚ñ‚¾ƒ‚ƒ“ƒXƒ^[ˆê——iƒLƒƒƒbƒVƒ…j
+    // Boss ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰èª­ã¿è¾¼ã‚“ã ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§ï¼ˆã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼‰
     private List<Monster> cachedBossMonsters = new();
     private bool showBossSection = true;
 
@@ -21,7 +21,7 @@ public class MonsterDatabaseViewer : EditorWindow
 
     private void OnEnable()
     {
-        // ƒEƒBƒ“ƒhƒE‚ğŠJ‚¢‚½‚ÉBossƒŠƒXƒg‚ğ“Ç‚İ‚Ş
+        // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‹ã„ãŸæ™‚ã«Bossãƒªã‚¹ãƒˆã‚’èª­ã¿è¾¼ã‚€
         RefreshBossList();
     }
 
@@ -43,26 +43,26 @@ public class MonsterDatabaseViewer : EditorWindow
 
         if (targetDatabase == null)
         {
-            EditorGUILayout.HelpBox("MonsterDatabase ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B", MessageType.Info);
+            EditorGUILayout.HelpBox("MonsterDatabase ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚", MessageType.Info);
             return;
         }
 
         // =========================================================
-        // ©“®“o˜^Eƒ\[ƒgƒ{ƒ^ƒ“
+        // è‡ªå‹•ç™»éŒ²ãƒ»ã‚½ãƒ¼ãƒˆãƒœã‚¿ãƒ³
         // =========================================================
         EditorGUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Normal ƒtƒHƒ‹ƒ_‚©‚ç©“®“o˜^", GUILayout.Height(28)))
+        if (GUILayout.Button("Normal ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰è‡ªå‹•ç™»éŒ²", GUILayout.Height(28)))
         {
             AutoRegisterFromNormalFolder();
         }
 
-        if (GUILayout.Button("ID ‚Åƒ\[ƒg", GUILayout.Height(28)))
+        if (GUILayout.Button("ID ã§ã‚½ãƒ¼ãƒˆ", GUILayout.Height(28)))
         {
             SortByMonsterId();
         }
 
-        if (GUILayout.Button("Boss ƒŠƒXƒgXV", GUILayout.Height(28)))
+        if (GUILayout.Button("Boss ãƒªã‚¹ãƒˆæ›´æ–°", GUILayout.Height(28)))
         {
             RefreshBossList();
         }
@@ -74,9 +74,9 @@ public class MonsterDatabaseViewer : EditorWindow
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
         // =========================================================
-        // ’Êíƒ‚ƒ“ƒXƒ^[ˆê——iƒf[ƒ^ƒx[ƒX“o˜^Ï‚İj
+        // é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§ï¼ˆãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ç™»éŒ²æ¸ˆã¿ï¼‰
         // =========================================================
-        EditorGUILayout.LabelField("¡ ’Êíƒ‚ƒ“ƒXƒ^[iDatabase “o˜^j", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("â–  é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ï¼ˆDatabase ç™»éŒ²ï¼‰", EditorStyles.boldLabel);
         DrawHeader();
 
         foreach (var monster in targetDatabase.monsters)
@@ -91,17 +91,17 @@ public class MonsterDatabaseViewer : EditorWindow
         EditorGUILayout.Space();
 
         // =========================================================
-        // ƒ{ƒXƒ‚ƒ“ƒXƒ^[ˆê——iƒtƒHƒ‹ƒ_’¼Ú“Ç‚İ‚İj
+        // ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§ï¼ˆãƒ•ã‚©ãƒ«ãƒ€ç›´æ¥èª­ã¿è¾¼ã¿ï¼‰
         // =========================================================
-        showBossSection = EditorGUILayout.Foldout(showBossSection, "¡ ƒ{ƒXƒ‚ƒ“ƒXƒ^[iBoss ƒtƒHƒ‹ƒ_j", true, EditorStyles.foldoutHeader);
+        showBossSection = EditorGUILayout.Foldout(showBossSection, "â–  ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ï¼ˆBoss ãƒ•ã‚©ãƒ«ãƒ€ï¼‰", true, EditorStyles.foldoutHeader);
 
         if (showBossSection)
         {
             if (cachedBossMonsters.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    "Boss ƒtƒHƒ‹ƒ_“à‚Éƒ‚ƒ“ƒXƒ^[‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB\n" +
-                    "ƒpƒX: Assets/ScriptableAsset/Monsterlist/Boss/",
+                    "Boss ãƒ•ã‚©ãƒ«ãƒ€å†…ã«ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚\n" +
+                    "ãƒ‘ã‚¹: Assets/ScriptableAsset/Monsterlist/Boss/",
                     MessageType.Info
                 );
             }
@@ -123,7 +123,7 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // Boss ƒtƒHƒ‹ƒ_‚©‚çƒ‚ƒ“ƒXƒ^[‚ğ“Ç‚İ‚İiƒLƒƒƒbƒVƒ…XVj
+    // Boss ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’èª­ã¿è¾¼ã¿ï¼ˆã‚­ãƒ£ãƒƒã‚·ãƒ¥æ›´æ–°ï¼‰
     // =========================================================
     private void RefreshBossList()
     {
@@ -141,7 +141,7 @@ public class MonsterDatabaseViewer : EditorWindow
             }
         }
 
-        // ID ‚Åƒ\[ƒg
+        // ID ã§ã‚½ãƒ¼ãƒˆ
         cachedBossMonsters.Sort((a, b) =>
         {
             string idA = a.ID ?? "";
@@ -151,28 +151,28 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // Normal ƒtƒHƒ‹ƒ_“à‚Ì Monster ‚ğ©“®“o˜^
-    // Assets/ScriptableAsset/Monsterlist/Normal/ ˆÈ‰º‚ğÄ‹AŒŸõ‚µA
-    // ‚Ü‚¾ monsters ƒŠƒXƒg‚É“ü‚Á‚Ä‚¢‚È‚¢ Monster ‚ğ’Ç‰Á‚·‚éB
-    // Boss ƒtƒHƒ‹ƒ_“à‚Ìƒ‚ƒ“ƒXƒ^[‚Í‘ÎÛŠOB
-    // ’Ç‰ÁŒã‚Í©“®‚ÅIDƒ\[ƒg‚àÀs‚·‚éB
+    // Normal ãƒ•ã‚©ãƒ«ãƒ€å†…ã® Monster ã‚’è‡ªå‹•ç™»éŒ²
+    // Assets/ScriptableAsset/Monsterlist/Normal/ ä»¥ä¸‹ã‚’å†å¸°æ¤œç´¢ã—ã€
+    // ã¾ã  monsters ãƒªã‚¹ãƒˆã«å…¥ã£ã¦ã„ãªã„ Monster ã‚’è¿½åŠ ã™ã‚‹ã€‚
+    // Boss ãƒ•ã‚©ãƒ«ãƒ€å†…ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯å¯¾è±¡å¤–ã€‚
+    // è¿½åŠ å¾Œã¯è‡ªå‹•ã§IDã‚½ãƒ¼ãƒˆã‚‚å®Ÿè¡Œã™ã‚‹ã€‚
     // =========================================================
     private void AutoRegisterFromNormalFolder()
     {
-        // Normal ƒtƒHƒ‹ƒ_“à‚Ì‘S Monster ƒAƒZƒbƒg‚ğŒŸõ
+        // Normal ãƒ•ã‚©ãƒ«ãƒ€å†…ã®å…¨ Monster ã‚¢ã‚»ãƒƒãƒˆã‚’æ¤œç´¢
         string[] guids = AssetDatabase.FindAssets("t:Monster", new[] { "Assets/ScriptableAsset/Monsterlist/Normal" });
 
         if (guids.Length == 0)
         {
             EditorUtility.DisplayDialog(
-                "©“®“o˜^",
-                "Assets/ScriptableAsset/Monsterlist/Normal/ “à‚É Monster ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",
+                "è‡ªå‹•ç™»éŒ²",
+                "Assets/ScriptableAsset/Monsterlist/Normal/ å†…ã« Monster ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",
                 "OK"
             );
             return;
         }
 
-        // Šù‘¶ƒ‚ƒ“ƒXƒ^[‚ÌƒZƒbƒg‚ğì¬id•¡ƒ`ƒFƒbƒN—pj
+        // æ—¢å­˜ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®ã‚»ãƒƒãƒˆã‚’ä½œæˆï¼ˆé‡è¤‡ãƒã‚§ãƒƒã‚¯ç”¨ï¼‰
         var existingSet = new HashSet<Monster>(targetDatabase.monsters.Where(m => m != null));
 
         int addedCount = 0;
@@ -190,32 +190,32 @@ public class MonsterDatabaseViewer : EditorWindow
             }
         }
 
-        // null ƒGƒ“ƒgƒŠ‚ª‚ ‚ê‚Îœ‹
+        // null ã‚¨ãƒ³ãƒˆãƒªãŒã‚ã‚Œã°é™¤å»
         targetDatabase.monsters.RemoveAll(m => m == null);
 
-        // ƒ\[ƒgÀs
+        // ã‚½ãƒ¼ãƒˆå®Ÿè¡Œ
         SortByMonsterIdInternal();
 
-        // õˆø‚ğÄ\’z
+        // ç´¢å¼•ã‚’å†æ§‹ç¯‰
         targetDatabase.InvalidateIndex();
 
-        // •ÏX‚ğ•Û‘¶
+        // å¤‰æ›´ã‚’ä¿å­˜
         EditorUtility.SetDirty(targetDatabase);
         AssetDatabase.SaveAssets();
 
         EditorUtility.DisplayDialog(
-            "©“®“o˜^Š®—¹",
-            $"ŒŸo: {guids.Length} Œ\nV‹K’Ç‰Á: {addedCount} Œ\n‡Œv: {targetDatabase.monsters.Count} Œ",
+            "è‡ªå‹•ç™»éŒ²å®Œäº†",
+            $"æ¤œå‡º: {guids.Length} ä»¶\næ–°è¦è¿½åŠ : {addedCount} ä»¶\nåˆè¨ˆ: {targetDatabase.monsters.Count} ä»¶",
             "OK"
         );
     }
 
     // =========================================================
-    // ID ‚Åƒ\[ƒgiƒ{ƒ^ƒ“—pj
+    // ID ã§ã‚½ãƒ¼ãƒˆï¼ˆãƒœã‚¿ãƒ³ç”¨ï¼‰
     // =========================================================
     private void SortByMonsterId()
     {
-        // null ƒGƒ“ƒgƒŠ‚ª‚ ‚ê‚Îœ‹
+        // null ã‚¨ãƒ³ãƒˆãƒªãŒã‚ã‚Œã°é™¤å»
         targetDatabase.monsters.RemoveAll(m => m == null);
 
         SortByMonsterIdInternal();
@@ -226,8 +226,8 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒ\[ƒg“à•”ˆ—
-    // ID ‚Ì•¶š—ñ”äŠr‚Åƒ\[ƒgi001, 002, ... ‚Ì”Ô†‡‚É‚È‚éj
+    // ã‚½ãƒ¼ãƒˆå†…éƒ¨å‡¦ç†
+    // ID ã®æ–‡å­—åˆ—æ¯”è¼ƒã§ã‚½ãƒ¼ãƒˆï¼ˆ001, 002, ... ã®ç•ªå·é †ã«ãªã‚‹ï¼‰
     // =========================================================
     private void SortByMonsterIdInternal()
     {
@@ -240,16 +240,16 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ’Êíƒ‚ƒ“ƒXƒ^[—pƒwƒbƒ_[Es
+    // é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ»è¡Œ
     // =========================================================
     private void DrawHeader()
     {
         EditorGUILayout.BeginHorizontal("box");
         GUILayout.Label("ID", EditorStyles.boldLabel, GUILayout.Width(140));
-        GUILayout.Label("–¼‘O", EditorStyles.boldLabel, GUILayout.Width(160));
-        GUILayout.Label("oŒ»”ÍˆÍ", EditorStyles.boldLabel, GUILayout.Width(260));
+        GUILayout.Label("åå‰", EditorStyles.boldLabel, GUILayout.Width(160));
+        GUILayout.Label("å‡ºç¾ç¯„å›²", EditorStyles.boldLabel, GUILayout.Width(260));
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Ú×", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("è©³ç´°", EditorStyles.boldLabel, GUILayout.Width(60));
         EditorGUILayout.EndHorizontal();
     }
 
@@ -263,7 +263,7 @@ public class MonsterDatabaseViewer : EditorWindow
 
         GUILayout.FlexibleSpace();
 
-        if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+        if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
         {
             MonsterDetailWindow.Open(monster);
         }
@@ -272,17 +272,17 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒ{ƒXƒ‚ƒ“ƒXƒ^[—pƒwƒbƒ_[Es
+    // ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ»è¡Œ
     // =========================================================
     private void DrawBossHeader()
     {
         EditorGUILayout.BeginHorizontal("box");
         GUILayout.Label("ID", EditorStyles.boldLabel, GUILayout.Width(160));
-        GUILayout.Label("–¼‘O", EditorStyles.boldLabel, GUILayout.Width(160));
+        GUILayout.Label("åå‰", EditorStyles.boldLabel, GUILayout.Width(160));
         GUILayout.Label("HP", EditorStyles.boldLabel, GUILayout.Width(80));
         GUILayout.Label("ATK", EditorStyles.boldLabel, GUILayout.Width(80));
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Ú×", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("è©³ç´°", EditorStyles.boldLabel, GUILayout.Width(60));
         EditorGUILayout.EndHorizontal();
     }
 
@@ -297,7 +297,7 @@ public class MonsterDatabaseViewer : EditorWindow
 
         GUILayout.FlexibleSpace();
 
-        if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+        if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
         {
             MonsterDetailWindow.Open(boss);
         }
@@ -306,11 +306,11 @@ public class MonsterDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ‹¤’Êƒ†[ƒeƒBƒŠƒeƒB
+    // å…±é€šãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
     // =========================================================
     private string FormatRange(Monster monster)
     {
-        return $"{monster.Minfloor}F {monster.Minstep}STEP ` {monster.Maxfloor}F {monster.Maxstep}STEP";
+        return $"{monster.Minfloor}F {monster.Minstep}STEP ï½ {monster.Maxfloor}F {monster.Maxstep}STEP";
     }
 
     private bool IsMatch(Monster monster, string keyword)

@@ -1,30 +1,30 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// ƒ{ƒXƒGƒ“ƒJƒEƒ“ƒg‚ÌŠÇ—ƒVƒXƒeƒ€B
-/// ŠeŠK‚Ìƒ{ƒX”z’uî•ñ‚ğ•Û‚µA“Á’èSTEP‚É“’B‚µ‚½‚É
-/// ƒ{ƒXí‚ğŠJn‚·‚éB
+/// ãƒœã‚¹ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆã®ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ã€‚
+/// å„éšã®ãƒœã‚¹é…ç½®æƒ…å ±ã‚’ä¿æŒã—ã€ç‰¹å®šSTEPã«åˆ°é”ã—ãŸæ™‚ã«
+/// ãƒœã‚¹æˆ¦ã‚’é–‹å§‹ã™ã‚‹ã€‚
 ///
-/// g‚¢•û:
-///   1. Tower ƒV[ƒ“‚Ì“K“–‚È GameObject ‚ÉƒAƒ^ƒbƒ`
-///   2. ƒCƒ“ƒXƒyƒNƒ^[‚Å bossEntries ‚Éƒ{ƒX”z’u‚ğ“o˜^
-///   3. MonsterDatabase ‚Éƒ{ƒXƒ‚ƒ“ƒXƒ^[‚ğ“o˜^iIsBoss=truej
-///   4. TowerState.Advance() ‚©‚ç TryStartBossBattle() ‚ªŒÄ‚Î‚ê‚é
+/// ä½¿ã„æ–¹:
+///   1. Tower ã‚·ãƒ¼ãƒ³ã®é©å½“ãª GameObject ã«ã‚¢ã‚¿ãƒƒãƒ
+///   2. ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§ bossEntries ã«ãƒœã‚¹é…ç½®ã‚’ç™»éŒ²
+///   3. MonsterDatabase ã«ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ç™»éŒ²ï¼ˆIsBoss=trueï¼‰
+///   4. TowerState.Advance() ã‹ã‚‰ TryStartBossBattle() ãŒå‘¼ã°ã‚Œã‚‹
 ///
-/// Œ‚”jƒtƒ‰ƒO:
-///   GameState.IsPlayed("BOSS_F{ŠK}") ‚Å”»’èB
-///   BattleSceneController.OnVictory() ‚Å MarkPlayed() ‚·‚éB
-///   Šù‘¶‚ÌƒCƒxƒ“ƒgŠù“ÇŠÇ—‚ğ‚»‚Ì‚Ü‚Ü—¬—p‚·‚éB
+/// æ’ƒç ´ãƒ•ãƒ©ã‚°:
+///   GameState.IsPlayed("BOSS_F{éš}") ã§åˆ¤å®šã€‚
+///   BattleSceneController.OnVictory() ã§ MarkPlayed() ã™ã‚‹ã€‚
+///   æ—¢å­˜ã®ã‚¤ãƒ™ãƒ³ãƒˆæ—¢èª­ç®¡ç†ã‚’ãã®ã¾ã¾æµç”¨ã™ã‚‹ã€‚
 /// </summary>
 public class BossEncounterSystem : MonoBehaviour
 {
     public static BossEncounterSystem Instance { get; private set; }
 
     [Header("Boss Entries")]
-    [Tooltip("ƒ{ƒX‚Ì”z’uƒŠƒXƒgBŠKESTEPE‘ÎÛƒ‚ƒ“ƒXƒ^[‚ğİ’è‚·‚éB")]
+    [Tooltip("ãƒœã‚¹ã®é…ç½®ãƒªã‚¹ãƒˆã€‚éšãƒ»STEPãƒ»å¯¾è±¡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’è¨­å®šã™ã‚‹ã€‚")]
     [SerializeField] private List<BossEntry> bossEntries = new List<BossEntry>();
 
     [Header("Scene Names")]
@@ -41,12 +41,12 @@ public class BossEncounterSystem : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ{ƒXŒ‚”jƒtƒ‰ƒOID¶¬
+    // ãƒœã‚¹æ’ƒç ´ãƒ•ãƒ©ã‚°IDç”Ÿæˆ
     // =========================================================
 
     /// <summary>
-    /// ƒ{ƒXŒ‚”jƒtƒ‰ƒO‚ÌID‚ğ¶¬‚·‚éB
-    /// —á: floor=3 ¨ "BOSS_F03"
+    /// ãƒœã‚¹æ’ƒç ´ãƒ•ãƒ©ã‚°ã®IDã‚’ç”Ÿæˆã™ã‚‹ã€‚
+    /// ä¾‹: floor=3 â†’ "BOSS_F03"
     /// </summary>
     public static string GetBossDefeatedId(int floor)
     {
@@ -54,8 +54,8 @@ public class BossEncounterSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ{ƒXŸ—˜‰ï˜b‚ÌƒCƒxƒ“ƒgID‚ğ¶¬‚·‚éB
-    /// —á: floor=3 ¨ "BOSS_F03_VICTORY"
+    /// ãƒœã‚¹å‹åˆ©ä¼šè©±ã®ã‚¤ãƒ™ãƒ³ãƒˆIDã‚’ç”Ÿæˆã™ã‚‹ã€‚
+    /// ä¾‹: floor=3 â†’ "BOSS_F03_VICTORY"
     /// </summary>
     public static string GetBossVictoryTalkId(int floor)
     {
@@ -63,7 +63,7 @@ public class BossEncounterSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// w’èŠK‚Ìƒ{ƒX‚ªŒ‚”jÏ‚İ‚©‚Ç‚¤‚©B
+    /// æŒ‡å®šéšã®ãƒœã‚¹ãŒæ’ƒç ´æ¸ˆã¿ã‹ã©ã†ã‹ã€‚
     /// </summary>
     public static bool IsBossDefeated(int floor)
     {
@@ -72,37 +72,37 @@ public class BossEncounterSystem : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ{ƒXƒGƒ“ƒJƒEƒ“ƒg”»’è
+    // ãƒœã‚¹ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆåˆ¤å®š
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‚ÌŠKESTEP‚Åƒ{ƒX‚Æ‘˜‹ö‚·‚é‚©”»’è‚µAŠY“–‚·‚ê‚Îí“¬‚ğŠJn‚·‚éB
-    /// TowerState.Advance() ‚©‚çŒÄ‚Î‚ê‚éB
+    /// ç¾åœ¨ã®éšãƒ»STEPã§ãƒœã‚¹ã¨é­é‡ã™ã‚‹ã‹åˆ¤å®šã—ã€è©²å½“ã™ã‚Œã°æˆ¦é—˜ã‚’é–‹å§‹ã™ã‚‹ã€‚
+    /// TowerState.Advance() ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
     ///
-    /// –ß‚è’l: true = ƒ{ƒXí‚ğŠJn‚µ‚½iˆÈ~‚Ìˆ—‚ğƒXƒLƒbƒv‚·‚×‚«j
+    /// æˆ»ã‚Šå€¤: true = ãƒœã‚¹æˆ¦ã‚’é–‹å§‹ã—ãŸï¼ˆä»¥é™ã®å‡¦ç†ã‚’ã‚¹ã‚­ãƒƒãƒ—ã™ã¹ãï¼‰
     /// </summary>
     public bool TryStartBossBattle(int floor, int step)
     {
-        // ‚±‚ÌSTEP‚Éƒ{ƒX‚ª”z’u‚³‚ê‚Ä‚¢‚é‚©ŒŸõ
+        // ã“ã®STEPã«ãƒœã‚¹ãŒé…ç½®ã•ã‚Œã¦ã„ã‚‹ã‹æ¤œç´¢
         BossEntry entry = FindBossEntry(floor, step);
         if (entry == null) return false;
 
-        // Œ‚”jÏ‚İ‚È‚ç‰½‚à‚µ‚È‚¢
+        // æ’ƒç ´æ¸ˆã¿ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (IsBossDefeated(floor))
         {
-            Debug.Log($"[BossEncounter] ƒ{ƒXŒ‚”jÏ‚İ (floor={floor})B’ÊíisB");
+            Debug.Log($"[BossEncounter] ãƒœã‚¹æ’ƒç ´æ¸ˆã¿ (floor={floor})ã€‚é€šå¸¸é€²è¡Œã€‚");
             return false;
         }
 
-        // ƒ{ƒXƒ‚ƒ“ƒXƒ^[‚ªİ’è‚³‚ê‚Ä‚¢‚é‚©Šm”F
+        // ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ç¢ºèª
         if (entry.bossMonster == null)
         {
-            Debug.LogError($"[BossEncounter] ƒ{ƒXƒ‚ƒ“ƒXƒ^[‚ª–¢İ’è (floor={floor}, step={step})");
+            Debug.LogError($"[BossEncounter] ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒæœªè¨­å®š (floor={floor}, step={step})");
             return false;
         }
 
         // =========================================================
-        // ‘æ“ñŒ`‘Ô‘Î‰: ƒtƒF[ƒY‚É‰‚¶‚Äo‚·ƒ‚ƒ“ƒXƒ^[‚ğØ‚è‘Ö‚¦
+        // ç¬¬äºŒå½¢æ…‹å¯¾å¿œ: ãƒ•ã‚§ãƒ¼ã‚ºã«å¿œã˜ã¦å‡ºã™ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’åˆ‡ã‚Šæ›¿ãˆ
         // =========================================================
         Monster targetMonster = entry.bossMonster;
 
@@ -111,21 +111,21 @@ public class BossEncounterSystem : MonoBehaviour
             int currentPhase = GetBossPhase(entry.phase2StateField);
             if (currentPhase >= 1)
             {
-                // ‘æˆêŒ`‘ÔŒ‚”jÏ‚İ ¨ ‘æ“ñŒ`‘Ô‚©‚çŠJn
+                // ç¬¬ä¸€å½¢æ…‹æ’ƒç ´æ¸ˆã¿ â†’ ç¬¬äºŒå½¢æ…‹ã‹ã‚‰é–‹å§‹
                 targetMonster = entry.phase2Monster;
-                Debug.Log($"[BossEncounter] ‘æ“ñŒ`‘Ô‚©‚çŠJn (floor={floor}, phase={currentPhase})");
+                Debug.Log($"[BossEncounter] ç¬¬äºŒå½¢æ…‹ã‹ã‚‰é–‹å§‹ (floor={floor}, phase={currentPhase})");
             }
             else
             {
-                // ‘æˆêŒ`‘Ô‚©‚çŠJn ¨ ‘æ“ñŒ`‘Ô‚Ìƒ‚ƒ“ƒXƒ^[‚ğƒRƒ“ƒeƒLƒXƒg‚É•Û
+                // ç¬¬ä¸€å½¢æ…‹ã‹ã‚‰é–‹å§‹ â†’ ç¬¬äºŒå½¢æ…‹ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã‚’ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã«ä¿æŒ
                 BattleContext.Phase2Monster = entry.phase2Monster;
                 BattleContext.IsPhase2Transition = false;
-                Debug.Log($"[BossEncounter] ‘æˆêŒ`‘Ô‚©‚çŠJn (floor={floor})");
+                Debug.Log($"[BossEncounter] ç¬¬ä¸€å½¢æ…‹ã‹ã‚‰é–‹å§‹ (floor={floor})");
             }
         }
 
-        // ƒ{ƒXíŠJn
-        Debug.Log($"[BossEncounter] ƒ{ƒXíŠJnI {targetMonster.Mname} (floor={floor}, step={step})");
+        // ãƒœã‚¹æˆ¦é–‹å§‹
+        Debug.Log($"[BossEncounter] ãƒœã‚¹æˆ¦é–‹å§‹ï¼ {targetMonster.Mname} (floor={floor}, step={step})");
 
         BattleContext.EnemyMonster = targetMonster;
         BattleContext.IsBossBattle = true;
@@ -136,8 +136,8 @@ public class BossEncounterSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// GameState ‚©‚çƒ{ƒXƒtƒF[ƒY‚Ì’l‚ğæ“¾‚·‚éB
-    /// ƒtƒB[ƒ‹ƒh–¼‚ÅƒŠƒtƒŒƒNƒVƒ‡ƒ“‚·‚éB
+    /// GameState ã‹ã‚‰ãƒœã‚¹ãƒ•ã‚§ãƒ¼ã‚ºã®å€¤ã‚’å–å¾—ã™ã‚‹ã€‚
+    /// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã§ãƒªãƒ•ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã™ã‚‹ã€‚
     /// </summary>
     private int GetBossPhase(string fieldName)
     {
@@ -145,14 +145,14 @@ public class BossEncounterSystem : MonoBehaviour
         var field = typeof(GameState).GetField(fieldName);
         if (field == null)
         {
-            Debug.LogError($"[BossEncounter] GameState ‚É {fieldName} ƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            Debug.LogError($"[BossEncounter] GameState ã« {fieldName} ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
             return 0;
         }
         return (int)field.GetValue(GameState.I);
     }
 
     /// <summary>
-    /// GameState ‚Ìƒ{ƒXƒtƒF[ƒY‚Ì’l‚ğİ’è‚·‚éB
+    /// GameState ã®ãƒœã‚¹ãƒ•ã‚§ãƒ¼ã‚ºã®å€¤ã‚’è¨­å®šã™ã‚‹ã€‚
     /// </summary>
     public static void SetBossPhase(string fieldName, int value)
     {
@@ -160,14 +160,14 @@ public class BossEncounterSystem : MonoBehaviour
         var field = typeof(GameState).GetField(fieldName);
         if (field == null)
         {
-            Debug.LogError($"[BossEncounter] GameState ‚É {fieldName} ƒtƒB[ƒ‹ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            Debug.LogError($"[BossEncounter] GameState ã« {fieldName} ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
             return;
         }
         field.SetValue(GameState.I, value);
     }
 
     /// <summary>
-    /// w’èŠKESTEP‚É”z’u‚³‚ê‚½ƒ{ƒXƒGƒ“ƒgƒŠ‚ğŒŸõ‚·‚éB
+    /// æŒ‡å®šéšãƒ»STEPã«é…ç½®ã•ã‚ŒãŸãƒœã‚¹ã‚¨ãƒ³ãƒˆãƒªã‚’æ¤œç´¢ã™ã‚‹ã€‚
     /// </summary>
     private BossEntry FindBossEntry(int floor, int step)
     {
@@ -185,35 +185,35 @@ public class BossEncounterSystem : MonoBehaviour
 }
 
 // =========================================================
-// ƒ{ƒX”z’uƒf[ƒ^
+// ãƒœã‚¹é…ç½®ãƒ‡ãƒ¼ã‚¿
 // =========================================================
 
 /// <summary>
-/// ƒ{ƒX1‘Ì•ª‚Ì”z’uî•ñB
-/// BossEncounterSystem ‚ÌƒCƒ“ƒXƒyƒNƒ^[‚Åİ’è‚·‚éB
+/// ãƒœã‚¹1ä½“åˆ†ã®é…ç½®æƒ…å ±ã€‚
+/// BossEncounterSystem ã®ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§è¨­å®šã™ã‚‹ã€‚
 /// </summary>
 [Serializable]
 public class BossEntry
 {
-    [Tooltip("ƒ{ƒX‚ªoŒ»‚·‚éŠK")]
+    [Tooltip("ãƒœã‚¹ãŒå‡ºç¾ã™ã‚‹éš")]
     public int floor;
 
-    [Tooltip("ƒ{ƒX‚ªoŒ»‚·‚éSTEP")]
+    [Tooltip("ãƒœã‚¹ãŒå‡ºç¾ã™ã‚‹STEP")]
     public int step;
 
-    [Tooltip("ƒ{ƒXƒ‚ƒ“ƒXƒ^[‚Ì ScriptableObject")]
+    [Tooltip("ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã® ScriptableObject")]
     public Monster bossMonster;
 
-    [Tooltip("ƒ{ƒXŸ—˜Œã‚Ì‰ï˜bƒCƒxƒ“ƒgi”CˆÓjB\n" +
-             "İ’è‚·‚é‚ÆŸ—˜Œã‚É Talk ƒV[ƒ“‚Ö‘JˆÚ‚·‚éB\n" +
-             "–¢İ’è‚È‚çŸ—˜Œã‚Í’¼Ú Tower ‚É–ß‚éB")]
+    [Tooltip("ãƒœã‚¹å‹åˆ©å¾Œã®ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆï¼ˆä»»æ„ï¼‰ã€‚\n" +
+             "è¨­å®šã™ã‚‹ã¨å‹åˆ©å¾Œã« Talk ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã™ã‚‹ã€‚\n" +
+             "æœªè¨­å®šãªã‚‰å‹åˆ©å¾Œã¯ç›´æ¥ Tower ã«æˆ»ã‚‹ã€‚")]
     public TalkEvent victoryTalkEvent;
 
-    [Tooltip("‘æ“ñŒ`‘Ô‚Ìƒ‚ƒ“ƒXƒ^[Bİ’è‚·‚é‚Æ‘æˆêŒ`‘ÔŒ‚”jŒã‚É˜Aí‚Å‘æ“ñŒ`‘Ô‚ªŠJn‚³‚ê‚éB")]
+    [Tooltip("ç¬¬äºŒå½¢æ…‹ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã€‚è¨­å®šã™ã‚‹ã¨ç¬¬ä¸€å½¢æ…‹æ’ƒç ´å¾Œã«é€£æˆ¦ã§ç¬¬äºŒå½¢æ…‹ãŒé–‹å§‹ã•ã‚Œã‚‹ã€‚")]
     public Monster phase2Monster;
 
-    [Tooltip("‘æ“ñŒ`‘Ô‚ÌƒtƒF[ƒYŠÇ——pGameStateƒtƒB[ƒ‹ƒh–¼B\n" +
-             "‹ó‚Ìê‡‚Í‘æ“ñŒ`‘Ô‚È‚µi]—ˆ“®ìjB")]
+    [Tooltip("ç¬¬äºŒå½¢æ…‹ã®ãƒ•ã‚§ãƒ¼ã‚ºç®¡ç†ç”¨GameStateãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åã€‚\n" +
+             "ç©ºã®å ´åˆã¯ç¬¬äºŒå½¢æ…‹ãªã—ï¼ˆå¾“æ¥å‹•ä½œï¼‰ã€‚")]
     public string phase2StateField;
 
 }

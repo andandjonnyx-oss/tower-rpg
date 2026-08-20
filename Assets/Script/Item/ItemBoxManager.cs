@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,16 +11,16 @@ public class ItemBoxManager : MonoBehaviour
     private const int MaxCapacity = 30;
     private const int StrPerSlot = 50;
 
-    [Header("Item Database (ƒZ[ƒu•œŒ³—p)")]
-    [Tooltip("ƒZ[ƒuƒf[ƒ^‚©‚ç itemId ‚ÅƒAƒCƒeƒ€‚ğ•œŒ³‚·‚é‚½‚ß‚É•K—v")]
+    [Header("Item Database (ã‚»ãƒ¼ãƒ–å¾©å…ƒç”¨)")]
+    [Tooltip("ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ itemId ã§ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¾©å…ƒã™ã‚‹ãŸã‚ã«å¿…è¦")]
     [SerializeField] private ItemDatabase itemDatabase;
 
-    // Š•iƒŠƒXƒgBItemData ‚Å‚Í‚È‚­ InventoryItem ‚ÅŠÇ—‚·‚éB
+    // æ‰€æŒå“ãƒªã‚¹ãƒˆã€‚ItemData ã§ã¯ãªã InventoryItem ã§ç®¡ç†ã™ã‚‹ã€‚
     [SerializeField] private List<InventoryItem> items = new();
 
     /// <summary>
-    /// STR˜A“®‚ÌŒ»İ‚ÌÅ‘å—e—Ê‚ğ•Ô‚·B
-    /// baseCapacity + baseSTR / StrPerSlotiãŒÀ MaxCapacityjB
+    /// STRé€£å‹•ã®ç¾åœ¨ã®æœ€å¤§å®¹é‡ã‚’è¿”ã™ã€‚
+    /// baseCapacity + baseSTR / StrPerSlotï¼ˆä¸Šé™ MaxCapacityï¼‰ã€‚
     /// </summary>
     public int Capacity
     {
@@ -38,7 +38,7 @@ public class ItemBoxManager : MonoBehaviour
     public bool IsFull => items.Count >= Capacity;
 
     /// <summary>
-    /// w’è‚µ‚½ baseSTR ‚Å‚Ì—e—Ê‚ğŒvZ‚·‚éiƒŠƒZƒbƒg‘Oƒ`ƒFƒbƒN—pjB
+    /// æŒ‡å®šã—ãŸ baseSTR ã§ã®å®¹é‡ã‚’è¨ˆç®—ã™ã‚‹ï¼ˆãƒªã‚»ãƒƒãƒˆå‰ãƒã‚§ãƒƒã‚¯ç”¨ï¼‰ã€‚
     /// </summary>
     public int CalcCapacityForSTR(int str)
     {
@@ -66,9 +66,9 @@ public class ItemBoxManager : MonoBehaviour
         items.Add(new InventoryItem(data));
         SortItems();
         Debug.Log($"[ItemBoxManager] AddItem: {data.itemName} (Count={items.Count})");
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
 
-        // MaxHpBonus / DefenseBonus ‚ğ‚ÂƒAƒCƒeƒ€‚Ì’Ç‰Á‚É”õ‚¦‚Ä maxHp ‚ğÄŒvZ
+        // MaxHpBonus / DefenseBonus ã‚’æŒã¤ã‚¢ã‚¤ãƒ†ãƒ ã®è¿½åŠ ã«å‚™ãˆã¦ maxHp ã‚’å†è¨ˆç®—
         if (GameState.I != null)
         {
             GameState.I.RecalcMaxHp();
@@ -82,7 +82,7 @@ public class ItemBoxManager : MonoBehaviour
     {
         if (invItem == null) return false;
 
-        // ‘•”õ’†‚È‚ç‰ğœ
+        // è£…å‚™ä¸­ãªã‚‰è§£é™¤
         if (GameState.I != null && GameState.I.equippedWeaponUid == invItem.uid)
             GameState.I.equippedWeaponUid = "";
 
@@ -90,10 +90,10 @@ public class ItemBoxManager : MonoBehaviour
         if (removed)
         {
             SortItems();
-            SaveManager.Save(); // ‘¦ƒZ[ƒu
+            SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
 
-            // MaxHpBonus ‚ğ‚ÂƒAƒCƒeƒ€‚Ì”jŠü‚Å maxHp ‚ª‰º‚ª‚éê‡‚É”õ‚¦‚ÄÄŒvZ
-            // RecalcMaxHp “à‚Å currentHp > maxHp ‚È‚çƒNƒ‰ƒ“ƒv‚³‚ê‚é
+            // MaxHpBonus ã‚’æŒã¤ã‚¢ã‚¤ãƒ†ãƒ ã®ç ´æ£„ã§ maxHp ãŒä¸‹ãŒã‚‹å ´åˆã«å‚™ãˆã¦å†è¨ˆç®—
+            // RecalcMaxHp å†…ã§ currentHp > maxHp ãªã‚‰ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œã‚‹
             if (GameState.I != null)
             {
                 GameState.I.RecalcMaxHp();
@@ -111,14 +111,14 @@ public class ItemBoxManager : MonoBehaviour
             GameState.I.equippedWeaponUid = invItem.uid;
         Debug.Log($"[ItemBoxManager] Equip: {invItem.data.itemName} uid={invItem.uid}");
 
-        // ‘•”õ‚Ì equipMaxHp / equipMaxMp ‚ğ‘¦À‚É”½‰f‚·‚é‚½‚ßÄŒvZ
+        // è£…å‚™ã® equipMaxHp / equipMaxMp ã‚’å³åº§ã«åæ˜ ã™ã‚‹ãŸã‚å†è¨ˆç®—
         if (GameState.I != null)
         {
             GameState.I.RecalcMaxHp();
             GameState.I.RecalcMaxMp();
         }
 
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
     }
 
     public void UnequipItem(InventoryItem invItem)
@@ -128,17 +128,17 @@ public class ItemBoxManager : MonoBehaviour
         {
             GameState.I.equippedWeaponUid = "";
 
-            // ‘•”õ‰ğœ‚Å equipMaxHp / equipMaxMp ‚ª–³‚­‚È‚é‚½‚ßÄŒvZ
-            // RecalcMaxHp “à‚Å currentHp > VmaxHp ‚È‚çƒNƒ‰ƒ“ƒv‚³‚ê‚é
+            // è£…å‚™è§£é™¤ã§ equipMaxHp / equipMaxMp ãŒç„¡ããªã‚‹ãŸã‚å†è¨ˆç®—
+            // RecalcMaxHp å†…ã§ currentHp > æ–°maxHp ãªã‚‰ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œã‚‹
             GameState.I.RecalcMaxHp();
             GameState.I.RecalcMaxMp();
 
-            SaveManager.Save(); // ‘¦ƒZ[ƒu
+            SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         }
     }
 
-    //remove‚Í“à•”“I‚ÉƒCƒ“ƒxƒ“ƒgƒŠ‚©‚çíœ‚·‚é‘€ì
-    //discard‚ÍƒvƒŒƒCƒ„[‚ªUI‚©‚çíœ‚·‚é‘€ì@‚»‚Ì‚½‚ß¡Œã‚ğl—¶‚µ‚ÄİŒvã•ª‚¯‚Ä‚¢‚é
+    //removeã¯å†…éƒ¨çš„ã«ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªã‹ã‚‰å‰Šé™¤ã™ã‚‹æ“ä½œ
+    //discardã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒUIã‹ã‚‰å‰Šé™¤ã™ã‚‹æ“ä½œã€€ãã®ãŸã‚ä»Šå¾Œã‚’è€ƒæ…®ã—ã¦è¨­è¨ˆä¸Šåˆ†ã‘ã¦ã„ã‚‹
     public bool DiscardItem(InventoryItem invItem) => RemoveItem(invItem);
 
     public void ClearAll()
@@ -148,13 +148,13 @@ public class ItemBoxManager : MonoBehaviour
     }
 
     // =========================================================
-    // ƒZ[ƒuƒf[ƒ^‚©‚ç‚Ì•œŒ³
+    // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã®å¾©å…ƒ
     // =========================================================
 
     /// <summary>
-    /// ƒZ[ƒuƒf[ƒ^‚©‚çŠ•iƒŠƒXƒg‚ğ•œŒ³‚·‚éB
-    /// itemId ‚ğg‚Á‚Ä ItemDatabase ‚©‚çƒ}ƒXƒ^[ƒf[ƒ^‚ğŒŸõ‚µA
-    /// uid ‚ğˆø‚«Œp‚¢‚Å InventoryItem ‚ğÄ\’z‚·‚éB
+    /// ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æ‰€æŒå“ãƒªã‚¹ãƒˆã‚’å¾©å…ƒã™ã‚‹ã€‚
+    /// itemId ã‚’ä½¿ã£ã¦ ItemDatabase ã‹ã‚‰ãƒã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’æ¤œç´¢ã—ã€
+    /// uid ã‚’å¼•ãç¶™ã„ã§ InventoryItem ã‚’å†æ§‹ç¯‰ã™ã‚‹ã€‚
     /// </summary>
     public void RestoreFromSave(List<SavedItem> savedItems)
     {
@@ -162,7 +162,7 @@ public class ItemBoxManager : MonoBehaviour
 
         if (savedItems == null || itemDatabase == null)
         {
-            Debug.LogWarning("[ItemBoxManager] •œŒ³ƒf[ƒ^‚Ü‚½‚Í ItemDatabase ‚ª null");
+            Debug.LogWarning("[ItemBoxManager] å¾©å…ƒãƒ‡ãƒ¼ã‚¿ã¾ãŸã¯ ItemDatabase ãŒ null");
             return;
         }
 
@@ -170,24 +170,24 @@ public class ItemBoxManager : MonoBehaviour
         {
             if (string.IsNullOrEmpty(saved.itemId)) continue;
 
-            // ItemDatabase ‚©‚çƒ}ƒXƒ^[ƒf[ƒ^‚ğŒŸõ
+            // ItemDatabase ã‹ã‚‰ãƒã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’æ¤œç´¢
             ItemData data = FindItemDataById(saved.itemId);
             if (data == null)
             {
-                Debug.LogWarning($"[ItemBoxManager] •œŒ³¸”s: itemId={saved.itemId} ‚ª ItemDatabase ‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+                Debug.LogWarning($"[ItemBoxManager] å¾©å…ƒå¤±æ•—: itemId={saved.itemId} ãŒ ItemDatabase ã«è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
                 continue;
             }
 
-            // InventoryItem ‚ğÄ\’ziuid ‚ğˆø‚«Œp‚®j
+            // InventoryItem ã‚’å†æ§‹ç¯‰ï¼ˆuid ã‚’å¼•ãç¶™ãï¼‰
             var invItem = new InventoryItem(data);
-            invItem.uid = saved.uid; // ƒZ[ƒu‚Ì uid ‚ğã‘‚«‚Å•œŒ³
+            invItem.uid = saved.uid; // ã‚»ãƒ¼ãƒ–æ™‚ã® uid ã‚’ä¸Šæ›¸ãã§å¾©å…ƒ
             items.Add(invItem);
         }
 
         SortItems();
-        Debug.Log($"[ItemBoxManager] •œŒ³Š®—¹: {items.Count} ŒÂ‚ÌƒAƒCƒeƒ€");
+        Debug.Log($"[ItemBoxManager] å¾©å…ƒå®Œäº†: {items.Count} å€‹ã®ã‚¢ã‚¤ãƒ†ãƒ ");
 
-        // •œŒ³Œã‚É maxHp ‚ğÄŒvZiMaxHpBonus ‚ğ‚ÂƒAƒCƒeƒ€‚Ì•œŒ³‚É‘Î‰j
+        // å¾©å…ƒå¾Œã« maxHp ã‚’å†è¨ˆç®—ï¼ˆMaxHpBonus ã‚’æŒã¤ã‚¢ã‚¤ãƒ†ãƒ ã®å¾©å…ƒã«å¯¾å¿œï¼‰
         if (GameState.I != null)
         {
             GameState.I.RecalcMaxHp();
@@ -196,13 +196,13 @@ public class ItemBoxManager : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ{ƒXíƒRƒ“ƒeƒBƒjƒ…[—pƒXƒiƒbƒvƒVƒ‡ƒbƒgi’Ç‰Áj
+    // ãƒœã‚¹æˆ¦ã‚³ãƒ³ãƒ†ã‚£ãƒ‹ãƒ¥ãƒ¼ç”¨ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‚ÌŠ•iƒŠƒXƒg‚ÌƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ğì¬‚·‚éB
-    /// ŠeƒAƒCƒeƒ€‚Ì uid ‚Æ itemId ‚ÌƒyƒA‚ğ‹L˜^‚·‚éB
-    /// ƒ{ƒXíŠJn‚É BattleContext.ItemSnapshot ‚É•Û‘¶‚·‚éB
+    /// ç¾åœ¨ã®æ‰€æŒå“ãƒªã‚¹ãƒˆã®ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ã€‚
+    /// å„ã‚¢ã‚¤ãƒ†ãƒ ã® uid ã¨ itemId ã®ãƒšã‚¢ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
+    /// ãƒœã‚¹æˆ¦é–‹å§‹æ™‚ã« BattleContext.ItemSnapshot ã«ä¿å­˜ã™ã‚‹ã€‚
     /// </summary>
     public List<ItemSnapshotEntry> CreateSnapshot()
     {
@@ -212,20 +212,20 @@ public class ItemBoxManager : MonoBehaviour
             if (items[i] == null || items[i].data == null) continue;
             snapshot.Add(new ItemSnapshotEntry(items[i].uid, items[i].data.itemId));
         }
-        Debug.Log($"[ItemBoxManager] ƒXƒiƒbƒvƒVƒ‡ƒbƒgì¬: {snapshot.Count} ŒÂ");
+        Debug.Log($"[ItemBoxManager] ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆä½œæˆ: {snapshot.Count} å€‹");
         return snapshot;
     }
 
     /// <summary>
-    /// ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚©‚çŠ•iƒŠƒXƒg‚ğ•œŒ³‚·‚éB
-    /// í“¬’†‚ÉÁ”ï‚³‚ê‚½ƒAƒCƒeƒ€‚ğŒ³‚É–ß‚·B
-    /// uid ‚ğˆø‚«Œp‚®‚Ì‚Å‘•”õó‘Ô‚àˆÛ‚³‚ê‚éB
+    /// ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‹ã‚‰æ‰€æŒå“ãƒªã‚¹ãƒˆã‚’å¾©å…ƒã™ã‚‹ã€‚
+    /// æˆ¦é—˜ä¸­ã«æ¶ˆè²»ã•ã‚ŒãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’å…ƒã«æˆ»ã™ã€‚
+    /// uid ã‚’å¼•ãç¶™ãã®ã§è£…å‚™çŠ¶æ…‹ã‚‚ç¶­æŒã•ã‚Œã‚‹ã€‚
     /// </summary>
     public void RestoreFromSnapshot(List<ItemSnapshotEntry> snapshot)
     {
         if (snapshot == null || itemDatabase == null)
         {
-            Debug.LogWarning("[ItemBoxManager] ƒXƒiƒbƒvƒVƒ‡ƒbƒg‚Ü‚½‚Í ItemDatabase ‚ª null");
+            Debug.LogWarning("[ItemBoxManager] ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã¾ãŸã¯ ItemDatabase ãŒ null");
             return;
         }
 
@@ -238,19 +238,19 @@ public class ItemBoxManager : MonoBehaviour
             ItemData data = FindItemDataById(entry.itemId);
             if (data == null)
             {
-                Debug.LogWarning($"[ItemBoxManager] ƒXƒiƒbƒvƒVƒ‡ƒbƒg•œŒ³¸”s: itemId={entry.itemId} ‚ª ItemDatabase ‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+                Debug.LogWarning($"[ItemBoxManager] ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆå¾©å…ƒå¤±æ•—: itemId={entry.itemId} ãŒ ItemDatabase ã«è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
                 continue;
             }
 
             var invItem = new InventoryItem(data);
-            invItem.uid = entry.uid; // Œ³‚Ì uid ‚ğ•œŒ³i‘•”õó‘Ô‚ğˆÛj
+            invItem.uid = entry.uid; // å…ƒã® uid ã‚’å¾©å…ƒï¼ˆè£…å‚™çŠ¶æ…‹ã‚’ç¶­æŒï¼‰
             items.Add(invItem);
         }
 
         SortItems();
-        Debug.Log($"[ItemBoxManager] ƒXƒiƒbƒvƒVƒ‡ƒbƒg•œŒ³Š®—¹: {items.Count} ŒÂ‚ÌƒAƒCƒeƒ€");
+        Debug.Log($"[ItemBoxManager] ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆå¾©å…ƒå®Œäº†: {items.Count} å€‹ã®ã‚¢ã‚¤ãƒ†ãƒ ");
 
-        // •œŒ³Œã‚É maxHp ‚ğÄŒvZ
+        // å¾©å…ƒå¾Œã« maxHp ã‚’å†è¨ˆç®—
         if (GameState.I != null)
         {
             GameState.I.RecalcMaxHp();
@@ -259,7 +259,7 @@ public class ItemBoxManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ItemDatabase.items ‚©‚ç itemId ‚ÅŒŸõ‚µ‚Äƒ}ƒXƒ^[ƒf[ƒ^‚ğ•Ô‚·B
+    /// ItemDatabase.items ã‹ã‚‰ itemId ã§æ¤œç´¢ã—ã¦ãƒã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚’è¿”ã™ã€‚
     /// </summary>
     private ItemData FindItemDataById(string itemId)
     {
@@ -274,7 +274,7 @@ public class ItemBoxManager : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ\[ƒg
+    // ã‚½ãƒ¼ãƒˆ
     // =========================================================
 
     private void SortItems() => items.Sort(CompareItems);

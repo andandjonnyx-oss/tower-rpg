@@ -1,27 +1,27 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ƒXƒLƒ‹•ƒGƒtƒFƒNƒg‚Ìƒrƒ…[ƒA[ƒEƒBƒ“ƒhƒEB
-/// MonsterDatabaseViewer ‚Æ“¯‚¶ƒXƒ^ƒCƒ‹‚ÅA
-/// ƒXƒLƒ‹ˆê——iSkilllist ƒtƒHƒ‹ƒ_j‚ÆƒGƒtƒFƒNƒgˆê——iSkilleffect ƒtƒHƒ‹ƒ_j‚ğ•\¦‚·‚éB
+/// ã‚¹ã‚­ãƒ«ï¼†ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ãƒ“ãƒ¥ãƒ¼ã‚¢ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€‚
+/// MonsterDatabaseViewer ã¨åŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ã§ã€
+/// ã‚¹ã‚­ãƒ«ä¸€è¦§ï¼ˆSkilllist ãƒ•ã‚©ãƒ«ãƒ€ï¼‰ã¨ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ï¼ˆSkilleffect ãƒ•ã‚©ãƒ«ãƒ€ï¼‰ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 ///
-/// ƒXƒLƒ‹‚Íƒf[ƒ^ƒx[ƒX‚ğ‰î‚³‚¸AƒtƒHƒ‹ƒ_‚ğ’¼ÚƒXƒLƒƒƒ“‚µ‚Ä•\¦‚·‚éB
-/// ——R: ƒXƒLƒ‹‚Í•ŠíE–‚–@Eƒ‚ƒ“ƒXƒ^[s“®‚©‚çQÆ‚³‚ê‚é‚½‚ßA
-///       “Æ—§‚µ‚½ƒf[ƒ^ƒx[ƒXSO‚ğ‚Â•K—v‚ª‚È‚¢B
+/// ã‚¹ã‚­ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’ä»‹ã•ãšã€ãƒ•ã‚©ãƒ«ãƒ€ã‚’ç›´æ¥ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦è¡¨ç¤ºã™ã‚‹ã€‚
+/// ç†ç”±: ã‚¹ã‚­ãƒ«ã¯æ­¦å™¨ãƒ»é­”æ³•ãƒ»ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è¡Œå‹•ã‹ã‚‰å‚ç…§ã•ã‚Œã‚‹ãŸã‚ã€
+///       ç‹¬ç«‹ã—ãŸãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹SOã‚’æŒã¤å¿…è¦ãŒãªã„ã€‚
 /// </summary>
 public class SkillDatabaseViewer : EditorWindow
 {
     private Vector2 scrollPos;
     private string searchText = "";
 
-    // ƒXƒLƒ‹ˆê——iƒLƒƒƒbƒVƒ…j
+    // ã‚¹ã‚­ãƒ«ä¸€è¦§ï¼ˆã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼‰
     private List<SkillData> cachedSkills = new();
     private bool showSkillSection = true;
 
-    // ƒGƒtƒFƒNƒgˆê——iƒLƒƒƒbƒVƒ…j
+    // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ï¼ˆã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼‰
     private List<SkillEffectData> cachedEffects = new();
     private bool showEffectSection = true;
 
@@ -50,16 +50,16 @@ public class SkillDatabaseViewer : EditorWindow
         EditorGUILayout.Space();
 
         // =========================================================
-        // XVƒ{ƒ^ƒ“
+        // æ›´æ–°ãƒœã‚¿ãƒ³
         // =========================================================
         EditorGUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("ƒXƒLƒ‹ƒŠƒXƒgXV", GUILayout.Height(28)))
+        if (GUILayout.Button("ã‚¹ã‚­ãƒ«ãƒªã‚¹ãƒˆæ›´æ–°", GUILayout.Height(28)))
         {
             RefreshSkillList();
         }
 
-        if (GUILayout.Button("ƒGƒtƒFƒNƒgƒŠƒXƒgXV", GUILayout.Height(28)))
+        if (GUILayout.Button("ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆæ›´æ–°", GUILayout.Height(28)))
         {
             RefreshEffectList();
         }
@@ -71,18 +71,18 @@ public class SkillDatabaseViewer : EditorWindow
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
         // =========================================================
-        // ƒXƒLƒ‹ˆê——
+        // ã‚¹ã‚­ãƒ«ä¸€è¦§
         // =========================================================
         showSkillSection = EditorGUILayout.Foldout(showSkillSection,
-            $"¡ ƒXƒLƒ‹ˆê——i{cachedSkills.Count} Œj", true, EditorStyles.foldoutHeader);
+            $"â–  ã‚¹ã‚­ãƒ«ä¸€è¦§ï¼ˆ{cachedSkills.Count} ä»¶ï¼‰", true, EditorStyles.foldoutHeader);
 
         if (showSkillSection)
         {
             if (cachedSkills.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    "ƒXƒLƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB\n" +
-                    $"ƒpƒX: {SkillFolderPath}/",
+                    "ã‚¹ã‚­ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚\n" +
+                    $"ãƒ‘ã‚¹: {SkillFolderPath}/",
                     MessageType.Info);
             }
             else
@@ -103,18 +103,18 @@ public class SkillDatabaseViewer : EditorWindow
         EditorGUILayout.Space();
 
         // =========================================================
-        // ƒGƒtƒFƒNƒgˆê——
+        // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§
         // =========================================================
         showEffectSection = EditorGUILayout.Foldout(showEffectSection,
-            $"¡ ƒGƒtƒFƒNƒgˆê——i{cachedEffects.Count} Œj", true, EditorStyles.foldoutHeader);
+            $"â–  ã‚¨ãƒ•ã‚§ã‚¯ãƒˆä¸€è¦§ï¼ˆ{cachedEffects.Count} ä»¶ï¼‰", true, EditorStyles.foldoutHeader);
 
         if (showEffectSection)
         {
             if (cachedEffects.Count == 0)
             {
                 EditorGUILayout.HelpBox(
-                    "ƒGƒtƒFƒNƒg‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB\n" +
-                    $"ƒpƒX: {EffectFolderPath}/",
+                    "ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚\n" +
+                    $"ãƒ‘ã‚¹: {EffectFolderPath}/",
                     MessageType.Info);
             }
             else
@@ -135,7 +135,7 @@ public class SkillDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒXƒLƒ‹ƒŠƒXƒg“Ç‚İ‚İ
+    // ã‚¹ã‚­ãƒ«ãƒªã‚¹ãƒˆèª­ã¿è¾¼ã¿
     // =========================================================
     private void RefreshSkillList()
     {
@@ -154,7 +154,7 @@ public class SkillDatabaseViewer : EditorWindow
             }
         }
 
-        // ID ‚Åƒ\[ƒg
+        // ID ã§ã‚½ãƒ¼ãƒˆ
         cachedSkills.Sort((a, b) =>
         {
             string idA = a.skillId ?? "";
@@ -164,7 +164,7 @@ public class SkillDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒGƒtƒFƒNƒgƒŠƒXƒg“Ç‚İ‚İ
+    // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãƒªã‚¹ãƒˆèª­ã¿è¾¼ã¿
     // =========================================================
     private void RefreshEffectList()
     {
@@ -183,7 +183,7 @@ public class SkillDatabaseViewer : EditorWindow
             }
         }
 
-        // effectName ‚Åƒ\[ƒg
+        // effectName ã§ã‚½ãƒ¼ãƒˆ
         cachedEffects.Sort((a, b) =>
         {
             string nameA = a.effectName ?? a.name ?? "";
@@ -193,19 +193,19 @@ public class SkillDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒXƒLƒ‹—pƒwƒbƒ_[Es
+    // ã‚¹ã‚­ãƒ«ç”¨ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ»è¡Œ
     // =========================================================
     private void DrawSkillHeader()
     {
         EditorGUILayout.BeginHorizontal("box");
         GUILayout.Label("ID", EditorStyles.boldLabel, GUILayout.Width(140));
-        GUILayout.Label("–¼‘O", EditorStyles.boldLabel, GUILayout.Width(140));
-        GUILayout.Label("ƒ\[ƒX", EditorStyles.boldLabel, GUILayout.Width(70));
-        GUILayout.Label("‘®«", EditorStyles.boldLabel, GUILayout.Width(60));
-        GUILayout.Label("ƒ_ƒ[ƒW", EditorStyles.boldLabel, GUILayout.Width(100));
-        GUILayout.Label("’Ç‰ÁŒø‰Ê", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("åå‰", EditorStyles.boldLabel, GUILayout.Width(140));
+        GUILayout.Label("ã‚½ãƒ¼ã‚¹", EditorStyles.boldLabel, GUILayout.Width(70));
+        GUILayout.Label("å±æ€§", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("ãƒ€ãƒ¡ãƒ¼ã‚¸", EditorStyles.boldLabel, GUILayout.Width(100));
+        GUILayout.Label("è¿½åŠ åŠ¹æœ", EditorStyles.boldLabel, GUILayout.Width(60));
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Ú×", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("è©³ç´°", EditorStyles.boldLabel, GUILayout.Width(60));
         EditorGUILayout.EndHorizontal();
     }
 
@@ -218,25 +218,25 @@ public class SkillDatabaseViewer : EditorWindow
         GUILayout.Label(skill.skillSource.ToString(), GUILayout.Width(70));
         GUILayout.Label(skill.skillAttribute.ToJapanese(), GUILayout.Width(60));
 
-        // ƒ_ƒ[ƒW•\¦ibonusDamage “‡‘Î‰j
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸è¡¨ç¤ºï¼ˆbonusDamage çµ±åˆå¯¾å¿œï¼‰
         string dmgStr;
         if (skill.IsNonDamage)
-            dmgStr = "Œø‰Ê‚Ì‚İ";
+            dmgStr = "åŠ¹æœã®ã¿";
         else if (skill.damageMultiplier > 0f && skill.bonusDamage > 0)
             dmgStr = $"x{skill.damageMultiplier}+{skill.bonusDamage}";
         else if (skill.damageMultiplier > 0f)
             dmgStr = $"x{skill.damageMultiplier}";
         else
-            dmgStr = $"ŒÅ’è{skill.bonusDamage}";
+            dmgStr = $"å›ºå®š{skill.bonusDamage}";
         GUILayout.Label(dmgStr, GUILayout.Width(100));
 
-        // ’Ç‰ÁŒø‰Ê‚Ì”
+        // è¿½åŠ åŠ¹æœã®æ•°
         int effectCount = (skill.additionalEffects != null) ? skill.additionalEffects.Count : 0;
         GUILayout.Label(effectCount > 0 ? effectCount.ToString() : "-", GUILayout.Width(60));
 
         GUILayout.FlexibleSpace();
 
-        if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+        if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
         {
             SkillDetailWindow.Open(skill);
         }
@@ -245,16 +245,16 @@ public class SkillDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒGƒtƒFƒNƒg—pƒwƒbƒ_[Es
+    // ã‚¨ãƒ•ã‚§ã‚¯ãƒˆç”¨ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ»è¡Œ
     // =========================================================
     private void DrawEffectHeader()
     {
         EditorGUILayout.BeginHorizontal("box");
-        GUILayout.Label("ƒAƒZƒbƒg–¼", EditorStyles.boldLabel, GUILayout.Width(180));
-        GUILayout.Label("Œø‰Ê–¼", EditorStyles.boldLabel, GUILayout.Width(140));
-        GUILayout.Label("ƒWƒƒƒ“ƒ‹", EditorStyles.boldLabel, GUILayout.Width(180));
+        GUILayout.Label("ã‚¢ã‚»ãƒƒãƒˆå", EditorStyles.boldLabel, GUILayout.Width(180));
+        GUILayout.Label("åŠ¹æœå", EditorStyles.boldLabel, GUILayout.Width(140));
+        GUILayout.Label("ã‚¸ãƒ£ãƒ³ãƒ«", EditorStyles.boldLabel, GUILayout.Width(180));
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Ú×", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("è©³ç´°", EditorStyles.boldLabel, GUILayout.Width(60));
         EditorGUILayout.EndHorizontal();
     }
 
@@ -268,7 +268,7 @@ public class SkillDatabaseViewer : EditorWindow
 
         GUILayout.FlexibleSpace();
 
-        if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+        if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
         {
             SkillEffectDetailWindow.Open(effect);
         }
@@ -277,13 +277,13 @@ public class SkillDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒ†[ƒeƒBƒŠƒeƒB
+    // ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
     // =========================================================
     private string GetEffectGenreName(SkillEffectData effect)
     {
-        if (effect is StatusAilmentEffectData) return "ó‘ÔˆÙíi•t—^/‰ñ•œj";
-        if (effect is HealEffectData healData) return $"HP‰ñ•œi{healData.formulaType}j";
-        if (effect is LevelDrainEffectData) return "ƒŒƒxƒ‹ƒhƒŒƒCƒ“";
+        if (effect is StatusAilmentEffectData) return "çŠ¶æ…‹ç•°å¸¸ï¼ˆä»˜ä¸/å›å¾©ï¼‰";
+        if (effect is HealEffectData healData) return $"HPå›å¾©ï¼ˆ{healData.formulaType}ï¼‰";
+        if (effect is LevelDrainEffectData) return "ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³";
         return effect.GetType().Name;
     }
 

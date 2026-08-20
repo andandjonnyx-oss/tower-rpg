@@ -1,28 +1,28 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ”½“®ƒ_ƒ[ƒWŒø‰Êƒf[ƒ^iScriptableObjectjB
-/// ƒXƒLƒ‹–½’†A—^‚¦‚½ƒ_ƒ[ƒW‚Ìˆê’èŠ„‡‚ğg—pÒ©g‚ªó‚¯‚éB
+/// åå‹•ãƒ€ãƒ¡ãƒ¼ã‚¸åŠ¹æœãƒ‡ãƒ¼ã‚¿ï¼ˆScriptableObjectï¼‰ã€‚
+/// ã‚¹ã‚­ãƒ«å‘½ä¸­æ™‚ã€ä¸ãˆãŸãƒ€ãƒ¡ãƒ¼ã‚¸ã®ä¸€å®šå‰²åˆã‚’ä½¿ç”¨è€…è‡ªèº«ãŒå—ã‘ã‚‹ã€‚
 ///
-/// yg—p•û–@z
-///   1. Unity ‚Å CreateAssetMenu ¨ Skills/Effects/Recoil Effect ‚ğì¬
-///   2. ƒXƒLƒ‹ƒAƒZƒbƒg‚Ì additionalEffects ‚É’Ç‰Á
-///   3. SkillEffectEntry.intValue ‚É”½Ë—¦i%j‚ğİ’è
-///      —á: intValue=30 ¨ —^ƒ_ƒ[ƒW‚Ì30%‚ğ©•ª‚ªó‚¯‚é
+/// ã€ä½¿ç”¨æ–¹æ³•ã€‘
+///   1. Unity ã§ CreateAssetMenu â†’ Skills/Effects/Recoil Effect ã‚’ä½œæˆ
+///   2. ã‚¹ã‚­ãƒ«ã‚¢ã‚»ãƒƒãƒˆã® additionalEffects ã«è¿½åŠ 
+///   3. SkillEffectEntry.intValue ã«åå°„ç‡ï¼ˆ%ï¼‰ã‚’è¨­å®š
+///      ä¾‹: intValue=30 â†’ ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸ã®30%ã‚’è‡ªåˆ†ãŒå—ã‘ã‚‹
 ///
-/// yŒvZ®z
-///   recoilDamage = floor(lastDamageDealt ~ intValue / 100)
-///   ¦ intValue > 0 ‚©‚Âƒ_ƒ[ƒW”­¶AÅ’á1ƒ_ƒ[ƒW•ÛØ
-///   ¦ —^ƒ_ƒ[ƒW‚ª0‚Ìê‡‚Í”½“®‚È‚µ
+/// ã€è¨ˆç®—å¼ã€‘
+///   recoilDamage = floor(lastDamageDealt Ã— intValue / 100)
+///   â€» intValue > 0 ã‹ã¤ãƒ€ãƒ¡ãƒ¼ã‚¸ç™ºç”Ÿæ™‚ã€æœ€ä½1ãƒ€ãƒ¡ãƒ¼ã‚¸ä¿è¨¼
+///   â€» ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒ0ã®å ´åˆã¯åå‹•ãªã—
 ///
-/// y‘Î‰”ÍˆÍz
-///   ƒvƒŒƒCƒ„[g—p‚Ì‚İiisPlayerAttack == truejB
-///   “Gg—p‚ÍŒ»ó–¢‘Î‰iƒƒOo—Í‚Ì‚İjB
+/// ã€å¯¾å¿œç¯„å›²ã€‘
+///   ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ä½¿ç”¨æ™‚ã®ã¿ï¼ˆisPlayerAttack == trueï¼‰ã€‚
+///   æ•µä½¿ç”¨ã¯ç¾çŠ¶æœªå¯¾å¿œï¼ˆãƒ­ã‚°å‡ºåŠ›ã®ã¿ï¼‰ã€‚
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Effects/Recoil Effect")]
 public class RecoilEffectData : SkillEffectData
 {
-    // ƒpƒ‰ƒ[ƒ^‚Í SkillEffectEntry ‘¤‚Å‚Â:
-    //   intValue = ”½Ë—¦i%j
-    //   chance   = ”­“®—¦i%j
+    // ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã¯ SkillEffectEntry å´ã§æŒã¤:
+    //   intValue = åå°„ç‡ï¼ˆ%ï¼‰
+    //   chance   = ç™ºå‹•ç‡ï¼ˆ%ï¼‰
 }

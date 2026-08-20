@@ -1,27 +1,27 @@
-// SlotImageAlphaCleaner.cs
-// ”z’uêŠ: Assets/Editor/SlotImageAlphaCleaner.cs
-// —p“r    : Hierarchy‚Å‘I‘ğ’†‚ÌGameObject”z‰º‚É‚ ‚é‘S‚Ä‚Ì ItemSlotView ‚Ì
-//           Frame Image ‚Æ Icon Image ‚Ìƒ¿’l‚ğ0‚ÉˆêŠ‡İ’è‚·‚éB
-//           ƒvƒŒƒnƒu‰»‚³‚ê‚Ä‚¢‚È‚¢ƒXƒƒbƒgŒQ‚Ì®”õ—pB
+ï»¿// SlotImageAlphaCleaner.cs
+// é…ç½®å ´æ‰€: Assets/Editor/SlotImageAlphaCleaner.cs
+// ç”¨é€”    : Hierarchyã§é¸æŠä¸­ã®GameObjecté…ä¸‹ã«ã‚ã‚‹å…¨ã¦ã® ItemSlotView ã®
+//           Frame Image ã¨ Icon Image ã®Î±å€¤ã‚’0ã«ä¸€æ‹¬è¨­å®šã™ã‚‹ã€‚
+//           ãƒ—ãƒ¬ãƒãƒ–åŒ–ã•ã‚Œã¦ã„ãªã„ã‚¹ãƒ­ãƒƒãƒˆç¾¤ã®æ•´å‚™ç”¨ã€‚
 //
-// g‚¢•û:
-//   1. Hierarchy‚ÅA•¡”ƒXƒƒbƒg‚ğq‚É‚ÂeGameObjecti—á: Contentj‚ğ‘I‘ğ
-//   2. ƒƒjƒ…[ Tools > Slot Image Alpha Cleaner ‚ğŠJ‚­
-//   3. u‘I‘ğ’†‚Ì”z‰º‚ğˆêŠ‡ƒ¿0‰»vƒ{ƒ^ƒ“‚ğ‰Ÿ‚·
-//   4. Šm”Fƒ_ƒCƒAƒƒO‚Å OK
+// ä½¿ã„æ–¹:
+//   1. Hierarchyã§ã€è¤‡æ•°ã‚¹ãƒ­ãƒƒãƒˆã‚’å­ã«æŒã¤è¦ªGameObjectï¼ˆä¾‹: Contentï¼‰ã‚’é¸æŠ
+//   2. ãƒ¡ãƒ‹ãƒ¥ãƒ¼ Tools > Slot Image Alpha Cleaner ã‚’é–‹ã
+//   3. ã€Œé¸æŠä¸­ã®é…ä¸‹ã‚’ä¸€æ‹¬Î±0åŒ–ã€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã™
+//   4. ç¢ºèªãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã§ OK
 //
-// d—l:
-//   - ‘I‘ğGameObject‚Ìq‘·‚ğÄ‹A“I‚É‘–¸
-//   - ItemSlotView ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ‚ÂGameObject‚ğŒŸo
-//   - ‚»‚Ì frameImage ‚Æ iconImage ƒtƒB[ƒ‹ƒhiprivate SerializeFieldj‚ğ
-//     SerializedObject Œo—R‚Åæ“¾
-//   - æ“¾‚µ‚½ImageƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì color.a ‚ğ 0 ‚Éİ’è
-//   - Undo‘Î‰iCtrl+Z ‚ÅŒ³‚É–ß‚¹‚éj
+// ä»•æ§˜:
+//   - é¸æŠGameObjectã®å­å­«ã‚’å†å¸°çš„ã«èµ°æŸ»
+//   - ItemSlotView ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æŒã¤GameObjectã‚’æ¤œå‡º
+//   - ãã® frameImage ã¨ iconImage ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼ˆprivate SerializeFieldï¼‰ã‚’
+//     SerializedObject çµŒç”±ã§å–å¾—
+//   - å–å¾—ã—ãŸImageã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã® color.a ã‚’ 0 ã«è¨­å®š
+//   - Undoå¯¾å¿œï¼ˆCtrl+Z ã§å…ƒã«æˆ»ã›ã‚‹ï¼‰
 //
-// ’ˆÓ:
-//   - Às‚É‚Í iconImage.color ‚ª ItemSlotView.RefreshEquipColor() ‚Å
-//     Color.white ‚Éã‘‚«‚³‚ê‚é‚½‚ßAƒ¿0‰»‚µ‚Ä‚àÀ‹@‚ÅƒAƒCƒeƒ€‰æ‘œ‚Í•\¦‚³‚ê‚éB
-//   - ‚±‚ê‚ÍƒvƒŒƒnƒu‘¤‚ÅŠù‚ÉÀØÏ‚İ‚Ì‹““®B
+// æ³¨æ„:
+//   - å®Ÿè¡Œæ™‚ã«ã¯ iconImage.color ãŒ ItemSlotView.RefreshEquipColor() ã§
+//     Color.white ã«ä¸Šæ›¸ãã•ã‚Œã‚‹ãŸã‚ã€Î±0åŒ–ã—ã¦ã‚‚å®Ÿæ©Ÿã§ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒã¯è¡¨ç¤ºã•ã‚Œã‚‹ã€‚
+//   - ã“ã‚Œã¯ãƒ—ãƒ¬ãƒãƒ–å´ã§æ—¢ã«å®Ÿè¨¼æ¸ˆã¿ã®æŒ™å‹•ã€‚
 
 using System.Collections.Generic;
 using UnityEditor;
@@ -32,15 +32,15 @@ using UnityEngine.UI;
 public class SlotImageAlphaCleaner : EditorWindow
 {
     // ============================================================
-    // İ’èƒZƒNƒVƒ‡ƒ“
+    // è¨­å®šã‚»ã‚¯ã‚·ãƒ§ãƒ³
     // ============================================================
 
-    // ˆ—‘ÎÛ‚ÌƒtƒB[ƒ‹ƒh–¼iItemSlotView ‚Ì private SerializeField –¼j
+    // å‡¦ç†å¯¾è±¡ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰åï¼ˆItemSlotView ã® private SerializeField åï¼‰
     private const string FIELD_FRAME_IMAGE = "frameImage";
     private const string FIELD_ICON_IMAGE = "iconImage";
 
     // ============================================================
-    // ó‘Ô
+    // çŠ¶æ…‹
     // ============================================================
     private bool _processFrameImage = true;
     private bool _processIconImage = true;
@@ -48,7 +48,7 @@ public class SlotImageAlphaCleaner : EditorWindow
     private MessageType _statusType = MessageType.None;
 
     // ============================================================
-    // ƒƒjƒ…[
+    // ãƒ¡ãƒ‹ãƒ¥ãƒ¼
     // ============================================================
     [MenuItem("Tools/Slot Image Alpha Cleaner")]
     public static void ShowWindow()
@@ -62,33 +62,33 @@ public class SlotImageAlphaCleaner : EditorWindow
     // ============================================================
     private void OnGUI()
     {
-        EditorGUILayout.LabelField("ƒXƒƒbƒg‰æ‘œ ˆêŠ‡ƒ¿0‰»", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¹ãƒ­ãƒƒãƒˆç”»åƒ ä¸€æ‹¬Î±0åŒ–", EditorStyles.boldLabel);
         EditorGUILayout.Space(4);
 
         EditorGUILayout.HelpBox(
-            "Hierarchy‚Å‘I‘ğ’†‚ÌGameObject‚Æ‚»‚Ìq‘·‚ğ‘–¸‚µA\n" +
-            "Œ©‚Â‚©‚Á‚½ ItemSlotView ‚Ì Frame/Icon Image ‚ğˆêŠ‡‚Åƒ¿0‚É‚µ‚Ü‚·B\n" +
-            "UndoiCtrl+Zj‚ÅŒ³‚É–ß‚¹‚Ü‚·B",
+            "Hierarchyã§é¸æŠä¸­ã®GameObjectã¨ãã®å­å­«ã‚’èµ°æŸ»ã—ã€\n" +
+            "è¦‹ã¤ã‹ã£ãŸ ItemSlotView ã® Frame/Icon Image ã‚’ä¸€æ‹¬ã§Î±0ã«ã—ã¾ã™ã€‚\n" +
+            "Undoï¼ˆCtrl+Zï¼‰ã§å…ƒã«æˆ»ã›ã¾ã™ã€‚",
             MessageType.Info);
 
         EditorGUILayout.Space(4);
 
-        _processFrameImage = EditorGUILayout.Toggle("Frame Image ‚ğƒ¿0‰»", _processFrameImage);
-        _processIconImage = EditorGUILayout.Toggle("Icon Image ‚ğƒ¿0‰»", _processIconImage);
+        _processFrameImage = EditorGUILayout.Toggle("Frame Image ã‚’Î±0åŒ–", _processFrameImage);
+        _processIconImage = EditorGUILayout.Toggle("Icon Image ã‚’Î±0åŒ–", _processIconImage);
 
         EditorGUILayout.Space(8);
 
-        // ‘I‘ğ’†‚Ìî•ñ‚ğ•\¦
+        // é¸æŠä¸­ã®æƒ…å ±ã‚’è¡¨ç¤º
         var selected = Selection.activeGameObject;
         if (selected != null)
         {
-            EditorGUILayout.LabelField($"‘I‘ğ’†: {selected.name}", EditorStyles.miniBoldLabel);
+            EditorGUILayout.LabelField($"é¸æŠä¸­: {selected.name}", EditorStyles.miniBoldLabel);
             int countBelow = CountSlotsInChildren(selected);
-            EditorGUILayout.LabelField($"”z‰º‚Ì ItemSlotView ”: {countBelow}");
+            EditorGUILayout.LabelField($"é…ä¸‹ã® ItemSlotView æ•°: {countBelow}");
         }
         else
         {
-            EditorGUILayout.LabelField("‘I‘ğ’†: (‚È‚µ)", EditorStyles.miniBoldLabel);
+            EditorGUILayout.LabelField("é¸æŠä¸­: (ãªã—)", EditorStyles.miniBoldLabel);
         }
 
         EditorGUILayout.Space(8);
@@ -96,22 +96,22 @@ public class SlotImageAlphaCleaner : EditorWindow
         using (new EditorGUI.DisabledScope(selected == null ||
                                            (!_processFrameImage && !_processIconImage)))
         {
-            if (GUILayout.Button("‘I‘ğ’†‚Ì”z‰º‚ğˆêŠ‡ƒ¿0‰»", GUILayout.Height(32)))
+            if (GUILayout.Button("é¸æŠä¸­ã®é…ä¸‹ã‚’ä¸€æ‹¬Î±0åŒ–", GUILayout.Height(32)))
             {
                 if (EditorUtility.DisplayDialog(
-                    "Šm”F",
-                    $"u{selected.name}v”z‰º‚Ì‘S ItemSlotView ‚ğˆêŠ‡ˆ—‚µ‚Ü‚·B\n" +
+                    "ç¢ºèª",
+                    $"ã€Œ{selected.name}ã€é…ä¸‹ã®å…¨ ItemSlotView ã‚’ä¸€æ‹¬å‡¦ç†ã—ã¾ã™ã€‚\n" +
                     $"  Frame: {_processFrameImage}\n" +
                     $"  Icon:  {_processIconImage}\n\n" +
-                    "Às‚µ‚Ü‚·‚©HiUndo‰Â”\j",
-                    "Às", "ƒLƒƒƒ“ƒZƒ‹"))
+                    "å®Ÿè¡Œã—ã¾ã™ã‹ï¼Ÿï¼ˆUndoå¯èƒ½ï¼‰",
+                    "å®Ÿè¡Œ", "ã‚­ãƒ£ãƒ³ã‚»ãƒ«"))
                 {
                     ProcessSelection(selected);
                 }
             }
         }
 
-        // ƒXƒe[ƒ^ƒX•\¦
+        // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡¨ç¤º
         if (!string.IsNullOrEmpty(_statusMessage))
         {
             EditorGUILayout.Space(8);
@@ -120,18 +120,18 @@ public class SlotImageAlphaCleaner : EditorWindow
     }
 
     // ============================================================
-    // ItemSlotView ‚ğq‘·‚©‚ç”‚¦‚éi•\¦—pj
+    // ItemSlotView ã‚’å­å­«ã‹ã‚‰æ•°ãˆã‚‹ï¼ˆè¡¨ç¤ºç”¨ï¼‰
     // ============================================================
     private static int CountSlotsInChildren(GameObject root)
     {
         if (root == null) return 0;
-        // GetComponentsInChildren(true) ‚Å”ñƒAƒNƒeƒBƒu‚àŠÜ‚ß‚é
+        // GetComponentsInChildren(true) ã§éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã‚‚å«ã‚ã‚‹
         var slots = root.GetComponentsInChildren<ItemSlotView>(true);
         return slots.Length;
     }
 
     // ============================================================
-    // Às–{‘Ì
+    // å®Ÿè¡Œæœ¬ä½“
     // ============================================================
     private void ProcessSelection(GameObject root)
     {
@@ -140,12 +140,12 @@ public class SlotImageAlphaCleaner : EditorWindow
         var slots = root.GetComponentsInChildren<ItemSlotView>(true);
         if (slots.Length == 0)
         {
-            _statusMessage = "”z‰º‚É ItemSlotView ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+            _statusMessage = "é…ä¸‹ã« ItemSlotView ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
             _statusType = MessageType.Warning;
             return;
         }
 
-        // Undo ƒOƒ‹[ƒvŠJn
+        // Undo ã‚°ãƒ«ãƒ¼ãƒ—é–‹å§‹
         int undoGroup = Undo.GetCurrentGroup();
         Undo.SetCurrentGroupName("Slot Image Alpha Clean");
 
@@ -157,7 +157,7 @@ public class SlotImageAlphaCleaner : EditorWindow
         {
             if (slot == null) { skipped++; continue; }
 
-            // SerializedObject Œo—R‚Å private SerializeField ‚ÌImage‚ğæ“¾
+            // SerializedObject çµŒç”±ã§ private SerializeField ã®Imageã‚’å–å¾—
             var so = new SerializedObject(slot);
 
             if (_processFrameImage)
@@ -183,19 +183,19 @@ public class SlotImageAlphaCleaner : EditorWindow
 
         Undo.CollapseUndoOperations(undoGroup);
 
-        _statusMessage = $"ˆ—Š®—¹: {slots.Length}ŒÂ‚Ì ItemSlotView ‚ğ‘–¸\n" +
-                         $"  Frame Image ƒ¿0‰»: {frameProcessed} Œ\n" +
-                         $"  Icon Image ƒ¿0‰»:  {iconProcessed} Œ\n" +
-                         (skipped > 0 ? $"  ƒXƒLƒbƒv(null): {skipped} Œ\n" : "") +
-                         "Ctrl+Z ‚ÅŒ³‚É–ß‚¹‚Ü‚·B";
+        _statusMessage = $"å‡¦ç†å®Œäº†: {slots.Length}å€‹ã® ItemSlotView ã‚’èµ°æŸ»\n" +
+                         $"  Frame Image Î±0åŒ–: {frameProcessed} ä»¶\n" +
+                         $"  Icon Image Î±0åŒ–:  {iconProcessed} ä»¶\n" +
+                         (skipped > 0 ? $"  ã‚¹ã‚­ãƒƒãƒ—(null): {skipped} ä»¶\n" : "") +
+                         "Ctrl+Z ã§å…ƒã«æˆ»ã›ã¾ã™ã€‚";
         _statusType = MessageType.Info;
 
-        // Sceneƒrƒ…[Ä•`‰æ
+        // Sceneãƒ“ãƒ¥ãƒ¼å†æç”»
         SceneView.RepaintAll();
     }
 
     // ============================================================
-    // SerializedObject ‚©‚ç Image Œ^ƒtƒB[ƒ‹ƒh‚ğæ“¾
+    // SerializedObject ã‹ã‚‰ Image å‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å–å¾—
     // ============================================================
     private static Image GetImageField(SerializedObject so, string fieldName)
     {
@@ -206,7 +206,7 @@ public class SlotImageAlphaCleaner : EditorWindow
     }
 
     // ============================================================
-    // Image ‚Ì color.a ‚ğ•ÏXiUndo‘Î‰j
+    // Image ã® color.a ã‚’å¤‰æ›´ï¼ˆUndoå¯¾å¿œï¼‰
     // ============================================================
     private static void SetAlphaWithUndo(Image img, float alpha)
     {

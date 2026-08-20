@@ -1,31 +1,31 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 
 [Serializable]
 public class InventoryItem
 {
-    // Š•i1ŒÂ‚²‚Æ‚ÌŒÅ—LIDBæ“¾‚É GUID ‚Å”­s‚·‚éB
+    // æ‰€æŒå“1å€‹ã”ã¨ã®å›ºæœ‰IDã€‚å–å¾—æ™‚ã« GUID ã§ç™ºè¡Œã™ã‚‹ã€‚
     public string uid;
-    // ƒ}ƒXƒ^[ƒf[ƒ^‚Ö‚ÌQÆB
+    // ãƒã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ã¸ã®å‚ç…§ã€‚
     public ItemData data;
 
     public InventoryItem(ItemData data)
     {
-        //GUID ƒ‰ƒ“ƒ_ƒ€‚È•¶š—ñ@—áF"7c9ec9ed-c93a-4d4c-83f3-4a93cc8c767d"
+        //GUID ãƒ©ãƒ³ãƒ€ãƒ ãªæ–‡å­—åˆ—ã€€ä¾‹ï¼š"7c9ec9ed-c93a-4d4c-83f3-4a93cc8c767d"
         this.uid = Guid.NewGuid().ToString();
         this.data = data;
     }
 
-    // key = skillId, value = c‚èƒN[ƒ‹ƒ^ƒCƒ€ƒ^[ƒ“”
+    // key = skillId, value = æ®‹ã‚Šã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ã‚¿ãƒ¼ãƒ³æ•°
     public Dictionary<string, int> skillCooldowns = new();
 
     // =========================================================
-    // ƒXƒLƒ‹ ƒN[ƒ‹ƒ^ƒCƒ€ ƒwƒ‹ƒp[
+    // ã‚¹ã‚­ãƒ« ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ  ãƒ˜ãƒ«ãƒ‘ãƒ¼
     // =========================================================
 
     /// <summary>
-    /// w’èƒXƒLƒ‹‚ªg—p‰Â”\‚©‚Ç‚¤‚©B
-    /// ƒN[ƒ‹ƒ_ƒEƒ“‚ª 0 ˆÈ‰ºA‚Ü‚½‚Í‚Ü‚¾«‘‚É“o˜^‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Îg—p‰Â”\B
+    /// æŒ‡å®šã‚¹ã‚­ãƒ«ãŒä½¿ç”¨å¯èƒ½ã‹ã©ã†ã‹ã€‚
+    /// ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ãŒ 0 ä»¥ä¸‹ã€ã¾ãŸã¯ã¾ã è¾æ›¸ã«ç™»éŒ²ã•ã‚Œã¦ã„ãªã‘ã‚Œã°ä½¿ç”¨å¯èƒ½ã€‚
     /// </summary>
     public bool CanUseSkill(string skillId)
     {
@@ -35,8 +35,8 @@ public class InventoryItem
     }
 
     /// <summary>
-    /// ƒXƒLƒ‹‚ğg—p‚µAƒN[ƒ‹ƒ_ƒEƒ“‚ğƒZƒbƒg‚·‚éB
-    /// SkillData ‚Ì cooldownTurns ‚ğ‚»‚Ì‚Ü‚Ü“o˜^‚·‚éB
+    /// ã‚¹ã‚­ãƒ«ã‚’ä½¿ç”¨ã—ã€ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+    /// SkillData ã® cooldownTurns ã‚’ãã®ã¾ã¾ç™»éŒ²ã™ã‚‹ã€‚
     /// </summary>
     public void UseSkill(SkillData skill)
     {
@@ -45,7 +45,7 @@ public class InventoryItem
     }
 
     /// <summary>
-    /// –ˆƒ^[ƒ“ŒÄ‚Ño‚µB‘SƒXƒLƒ‹‚ÌƒN[ƒ‹ƒ_ƒEƒ“‚ğ 1 Œ¸Z‚·‚éB
+    /// æ¯ã‚¿ãƒ¼ãƒ³å‘¼ã³å‡ºã—ã€‚å…¨ã‚¹ã‚­ãƒ«ã®ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚’ 1 æ¸›ç®—ã™ã‚‹ã€‚
     /// </summary>
     public void TickCooldowns()
     {
@@ -59,7 +59,7 @@ public class InventoryItem
     }
 
     /// <summary>
-    /// í“¬I—¹‚ÉŒÄ‚Ño‚µB‘SƒN[ƒ‹ƒ_ƒEƒ“‚ğƒŠƒZƒbƒg‚·‚éB
+    /// æˆ¦é—˜çµ‚äº†æ™‚ã«å‘¼ã³å‡ºã—ã€‚å…¨ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
     /// </summary>
     public void ResetAllCooldowns()
     {

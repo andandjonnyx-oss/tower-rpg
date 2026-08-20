@@ -1,37 +1,37 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// SDƒLƒƒƒ‰‚ğ‘ÎŠp”z’u‚Å•~‚«‹l‚ßAs‚²‚Æ‚É‹t•ûŒü‚Ö‰¡ƒXƒNƒ[ƒ‹‚³‚¹‚é”¼“§–¾”wŒiB
+/// SDã‚­ãƒ£ãƒ©ã‚’å¯¾è§’é…ç½®ã§æ•·ãè©°ã‚ã€è¡Œã”ã¨ã«é€†æ–¹å‘ã¸æ¨ªã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã•ã›ã‚‹åŠé€æ˜èƒŒæ™¯ã€‚
 ///   1 2 3 4 5 6
-///   2 3 4 5 6 1   © ‚±‚Ìs‚Í‹tŒü‚«‚É—¬‚·
+///   2 3 4 5 6 1   â† ã“ã®è¡Œã¯é€†å‘ãã«æµã™
 ///   3 4 5 6 1 2
-/// Šes‚ğê—pƒRƒ“ƒeƒi‚É“ü‚êAs’PˆÊ‚Å¶‰E‹t‚Éƒ‹[ƒv‚³‚¹‚éB
+/// å„è¡Œã‚’å°‚ç”¨ã‚³ãƒ³ãƒ†ãƒŠã«å…¥ã‚Œã€è¡Œå˜ä½ã§å·¦å³é€†ã«ãƒ«ãƒ¼ãƒ—ã•ã›ã‚‹ã€‚
 /// </summary>
 public class SdTileBackground : MonoBehaviour
 {
-    [Header("‘fŞi6‘Ì‚Ô‚ñj")]
+    [Header("ç´ æï¼ˆ6ä½“ã¶ã‚“ï¼‰")]
     public Sprite[] sprites;
 
-    [Header("”z’u")]
-    public RectTransform root;            // ‘Ss‚ğ‚Ô‚ç‰º‚°‚éei–¢w’è‚È‚ç©•ª©gj
+    [Header("é…ç½®")]
+    public RectTransform root;            // å…¨è¡Œã‚’ã¶ã‚‰ä¸‹ã’ã‚‹è¦ªï¼ˆæœªæŒ‡å®šãªã‚‰è‡ªåˆ†è‡ªèº«ï¼‰
     public Vector2 cellSize = new Vector2(180, 200);
     public int rows = 5;
-    [Tooltip("‰æ–Ê‚ÉŒ©‚¹‚½‚¢—ñ”BÀÛ‚É‚Í‚±‚ê{1ü‚Ô‚ñ‘½‚­¶¬‚·‚éB")]
+    [Tooltip("ç”»é¢ã«è¦‹ã›ãŸã„åˆ—æ•°ã€‚å®Ÿéš›ã«ã¯ã“ã‚Œï¼‹1å‘¨ã¶ã‚“å¤šãç”Ÿæˆã™ã‚‹ã€‚")]
     public int visibleCols = 8;
 
-    [Header("ƒXƒNƒ[ƒ‹")]
-    public float scrollSpeed = 40f;       // px/•b
-    [Tooltip("0s–Ú‚Ìis•ûŒüBtrue‚Å¶‚ÖBs‚²‚Æ‚É”½“]‚·‚éB")]
+    [Header("ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«")]
+    public float scrollSpeed = 40f;       // px/ç§’
+    [Tooltip("0è¡Œç›®ã®é€²è¡Œæ–¹å‘ã€‚trueã§å·¦ã¸ã€‚è¡Œã”ã¨ã«åè»¢ã™ã‚‹ã€‚")]
     public bool firstRowGoesLeft = true;
 
-    [Header("Œ©‚½–Ú")]
-    [Range(0f, 1f)] public float alpha = 0.5f;  // ”¼“§–¾“x
+    [Header("è¦‹ãŸç›®")]
+    [Range(0f, 1f)] public float alpha = 0.5f;  // åŠé€æ˜åº¦
 
     int _period;
     float _loopWidth;
-    int _genCols;                          // ÀÛ‚É¶¬‚·‚é—ñ”
+    int _genCols;                          // å®Ÿéš›ã«ç”Ÿæˆã™ã‚‹åˆ—æ•°
 
     class RowInfo
     {
@@ -47,8 +47,8 @@ public class SdTileBackground : MonoBehaviour
         if (sprites == null || sprites.Length == 0) return;
 
         _period = sprites.Length;                 // = 6
-        _loopWidth = cellSize.x * _period;        // 6‘Ì‚Ô‚ñ‚Ì•
-        // ‰æ–Ê‚Ô‚ñ + 1ü‚Ô‚ñ + —\”õ1—ñB‚±‚ê‚ÅuÅŒã‚É“Ë‘RoŒ»v‚ğ–h‚®
+        _loopWidth = cellSize.x * _period;        // 6ä½“ã¶ã‚“ã®å¹…
+        // ç”»é¢ã¶ã‚“ + 1å‘¨ã¶ã‚“ + äºˆå‚™1åˆ—ã€‚ã“ã‚Œã§ã€Œæœ€å¾Œã«çªç„¶å‡ºç¾ã€ã‚’é˜²ã
         _genCols = visibleCols + _period + 1;
 
         BuildRows();
@@ -62,7 +62,7 @@ public class SdTileBackground : MonoBehaviour
 
         for (int row = 0; row < rows; row++)
         {
-            // s‚²‚Æ‚ÌƒRƒ“ƒeƒi
+            // è¡Œã”ã¨ã®ã‚³ãƒ³ãƒ†ãƒŠ
             var go = new GameObject($"row_{row}", typeof(RectTransform));
             var rt = (RectTransform)go.transform;
             rt.SetParent(root, false);
@@ -71,7 +71,7 @@ public class SdTileBackground : MonoBehaviour
 
             bool goesLeft = (row % 2 == 0) ? firstRowGoesLeft : !firstRowGoesLeft;
 
-            // ‰E‚Ö—¬‚·s‚ÍA¶‚É1ü‚Ô‚ñ—]•ª‚ğ’u‚­‚½‚ßŠJnX‚ğ‚¸‚ç‚·
+            // å³ã¸æµã™è¡Œã¯ã€å·¦ã«1å‘¨ã¶ã‚“ä½™åˆ†ã‚’ç½®ããŸã‚é–‹å§‹Xã‚’ãšã‚‰ã™
             float startX = goesLeft ? 0f : -_loopWidth;
             rt.anchoredPosition = new Vector2(startX, -row * cellSize.y);
 
@@ -98,7 +98,7 @@ public class SdTileBackground : MonoBehaviour
         var img = go.GetComponent<Image>();
         img.sprite = sprite;
         img.raycastTarget = false;
-        img.color = new Color(1f, 1f, 1f, alpha);   // ”¼“§–¾
+        img.color = new Color(1f, 1f, 1f, alpha);   // åŠé€æ˜
         img.preserveAspect = true;
     }
 

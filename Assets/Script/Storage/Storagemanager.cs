@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒAƒCƒeƒ€‘qŒÉ‚ğŠÇ—‚·‚éƒVƒ“ƒOƒ‹ƒgƒ“B
-/// ItemBoxManageriŠ•ij‚Æ“¯‚¶ƒpƒ^[ƒ“‚ÅADontDestroyOnLoad ‚Å‰i‘±‰»‚·‚éB
+/// ã‚¢ã‚¤ãƒ†ãƒ å€‰åº«ã‚’ç®¡ç†ã™ã‚‹ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã€‚
+/// ItemBoxManagerï¼ˆæ‰€æŒå“ï¼‰ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã§ã€DontDestroyOnLoad ã§æ°¸ç¶šåŒ–ã™ã‚‹ã€‚
 /// </summary>
 public class StorageManager : MonoBehaviour
 {
@@ -13,8 +13,8 @@ public class StorageManager : MonoBehaviour
     [Header("Capacity")]
     [SerializeField] private int capacity = 100;
 
-    [Header("Item Database (ƒZ[ƒu•œŒ³—p)")]
-    [Tooltip("ƒZ[ƒuƒf[ƒ^‚©‚ç itemId ‚ÅƒAƒCƒeƒ€‚ğ•œŒ³‚·‚é‚½‚ß‚É•K—v")]
+    [Header("Item Database (ã‚»ãƒ¼ãƒ–å¾©å…ƒç”¨)")]
+    [Tooltip("ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ itemId ã§ã‚¢ã‚¤ãƒ†ãƒ ã‚’å¾©å…ƒã™ã‚‹ãŸã‚ã«å¿…è¦")]
     [SerializeField] private ItemDatabase itemDatabase;
 
     [SerializeField] private List<InventoryItem> items = new();
@@ -31,7 +31,7 @@ public class StorageManager : MonoBehaviour
     }
 
     /// <summary>
-    /// —e—Ê‚ğŠO•”‚©‚çİ’è‚·‚éBStorageContext ‚ÌƒXƒƒbƒg©“®¶¬‚ÉŒÄ‚Î‚ê‚éB
+    /// å®¹é‡ã‚’å¤–éƒ¨ã‹ã‚‰è¨­å®šã™ã‚‹ã€‚StorageContext ã®ã‚¹ãƒ­ãƒƒãƒˆè‡ªå‹•ç”Ÿæˆæ™‚ã«å‘¼ã°ã‚Œã‚‹ã€‚
     /// </summary>
     public void SetCapacity(int newCapacity)
     {
@@ -42,18 +42,18 @@ public class StorageManager : MonoBehaviour
 
     public bool CanAddItem(ItemData data) => data != null && items.Count < capacity;
 
-    /// ‘qŒÉ‚ÉƒAƒCƒeƒ€‚ğ’Ç‰Á‚·‚éi—a‚¯‚é‚Ég‚¤j
+    /// å€‰åº«ã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿½åŠ ã™ã‚‹ï¼ˆé ã‘ã‚‹æ™‚ã«ä½¿ã†ï¼‰
     public bool AddItem(ItemData data)
     {
         if (!CanAddItem(data)) return false;
         items.Add(new InventoryItem(data));
         SortItems();
         Debug.Log($"[StorageManager] AddItem: {data.itemName} (Count={items.Count})");
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         return true;
     }
 
-    /// InventoryItem ‚ğ‚»‚Ì‚Ü‚Ü‘qŒÉ‚ÉˆÚ‚·iuid ‚ğˆÛ‚µ‚½‚¢ê‡j
+    /// InventoryItem ã‚’ãã®ã¾ã¾å€‰åº«ã«ç§»ã™ï¼ˆuid ã‚’ç¶­æŒã—ãŸã„å ´åˆï¼‰
     public bool AddInventoryItem(InventoryItem invItem)
     {
         if (invItem == null || invItem.data == null) return false;
@@ -61,11 +61,11 @@ public class StorageManager : MonoBehaviour
         items.Add(invItem);
         SortItems();
         Debug.Log($"[StorageManager] AddInventoryItem: {invItem.data.itemName} (Count={items.Count})");
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         return true;
     }
 
-    /// ‘qŒÉ‚©‚çƒAƒCƒeƒ€‚ğíœ‚·‚éiˆø‚«o‚·‚Ég‚¤j
+    /// å€‰åº«ã‹ã‚‰ã‚¢ã‚¤ãƒ†ãƒ ã‚’å‰Šé™¤ã™ã‚‹ï¼ˆå¼•ãå‡ºã™æ™‚ã«ä½¿ã†ï¼‰
     public bool RemoveItem(InventoryItem invItem)
     {
         if (invItem == null) return false;
@@ -73,7 +73,7 @@ public class StorageManager : MonoBehaviour
         if (removed)
         {
             SortItems();
-            SaveManager.Save(); // ‘¦ƒZ[ƒu
+            SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
         }
         return removed;
     }
@@ -84,12 +84,12 @@ public class StorageManager : MonoBehaviour
     }
 
     // =========================================================
-    // ƒZ[ƒuƒf[ƒ^‚©‚ç‚Ì•œŒ³
+    // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã®å¾©å…ƒ
     // =========================================================
 
     /// <summary>
-    /// ƒZ[ƒuƒf[ƒ^‚©‚ç‘qŒÉƒAƒCƒeƒ€ƒŠƒXƒg‚ğ•œŒ³‚·‚éB
-    /// ItemBoxManager.RestoreFromSave ‚Æ“¯‚¶ƒpƒ^[ƒ“B
+    /// ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å€‰åº«ã‚¢ã‚¤ãƒ†ãƒ ãƒªã‚¹ãƒˆã‚’å¾©å…ƒã™ã‚‹ã€‚
+    /// ItemBoxManager.RestoreFromSave ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã€‚
     /// </summary>
     public void RestoreFromSave(List<SavedItem> savedItems)
     {
@@ -97,7 +97,7 @@ public class StorageManager : MonoBehaviour
 
         if (savedItems == null || itemDatabase == null)
         {
-            Debug.LogWarning("[StorageManager] •œŒ³ƒf[ƒ^‚Ü‚½‚Í ItemDatabase ‚ª null");
+            Debug.LogWarning("[StorageManager] å¾©å…ƒãƒ‡ãƒ¼ã‚¿ã¾ãŸã¯ ItemDatabase ãŒ null");
             return;
         }
 
@@ -108,7 +108,7 @@ public class StorageManager : MonoBehaviour
             ItemData data = FindItemDataById(saved.itemId);
             if (data == null)
             {
-                Debug.LogWarning($"[StorageManager] •œŒ³¸”s: itemId={saved.itemId} ‚ª ItemDatabase ‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+                Debug.LogWarning($"[StorageManager] å¾©å…ƒå¤±æ•—: itemId={saved.itemId} ãŒ ItemDatabase ã«è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
                 continue;
             }
 
@@ -118,7 +118,7 @@ public class StorageManager : MonoBehaviour
         }
 
         SortItems();
-        Debug.Log($"[StorageManager] •œŒ³Š®—¹: {items.Count} ŒÂ‚ÌƒAƒCƒeƒ€");
+        Debug.Log($"[StorageManager] å¾©å…ƒå®Œäº†: {items.Count} å€‹ã®ã‚¢ã‚¤ãƒ†ãƒ ");
     }
 
     private ItemData FindItemDataById(string itemId)
@@ -134,7 +134,7 @@ public class StorageManager : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ\[ƒg
+    // ã‚½ãƒ¼ãƒˆ
     // =========================================================
 
     private void SortItems() => items.Sort(CompareItems);

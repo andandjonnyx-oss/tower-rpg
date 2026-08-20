@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
@@ -17,80 +17,80 @@ public class TalkRunner : MonoBehaviour
     [SerializeField] private Image portraitImage;
 
     // =========================================================
-    // ”wŒi‰æ‘œ UI
+    // èƒŒæ™¯ç”»åƒ UI
     // =========================================================
 
     [Header("UI - Background")]
-    [Tooltip("”wŒi‰æ‘œ‚ğ•\¦‚·‚é ImageBCanvas Å”w–Ê‚É”z’u‚·‚éB\n"
-           + "null –¢İ’è‚Ìê‡A”wŒiØ‘Ö‹@”\‚Í–³Œø‚É‚È‚éB")]
+    [Tooltip("èƒŒæ™¯ç”»åƒã‚’è¡¨ç¤ºã™ã‚‹ Imageã€‚Canvas æœ€èƒŒé¢ã«é…ç½®ã™ã‚‹ã€‚\n"
+           + "null æœªè¨­å®šã®å ´åˆã€èƒŒæ™¯åˆ‡æ›¿æ©Ÿèƒ½ã¯ç„¡åŠ¹ã«ãªã‚‹ã€‚")]
     [SerializeField] private Image backgroundImage;
 
     // =========================================================
-    // –¼‘O“ü—Íƒ|ƒbƒvƒAƒbƒv UIi’Ç‰Áj
+    // åå‰å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ— UIï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // TalkLine.requestNameInput == true ‚Ì‘äŒ‚ğ•\¦‚·‚é’¼‘O‚É
-    // ƒ|ƒbƒvƒAƒbƒv‚ğo‚µAŠm’è‚Ü‚Åƒ^ƒbƒvis‚ğƒuƒƒbƒN‚·‚éB
-    // “ü—ÍŒ‹‰Ê‚Í GameState.playerName ‚É•Û‘¶‚³‚êA{name} ’uŠ·‚Ég‚í‚ê‚éB
+    // TalkLine.requestNameInput == true ã®å°è©ã‚’è¡¨ç¤ºã™ã‚‹ç›´å‰ã«
+    // ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’å‡ºã—ã€ç¢ºå®šã¾ã§ã‚¿ãƒƒãƒ—é€²è¡Œã‚’ãƒ–ãƒ­ãƒƒã‚¯ã™ã‚‹ã€‚
+    // å…¥åŠ›çµæœã¯ GameState.playerName ã«ä¿å­˜ã•ã‚Œã€{name} ç½®æ›ã«ä½¿ã‚ã‚Œã‚‹ã€‚
     // =========================================================
 
     [Header("UI - Name Input")]
-    [Tooltip("–¼‘O“ü—Íƒ|ƒbƒvƒAƒbƒv‚Ìƒ‹[ƒgƒIƒuƒWƒFƒNƒgB‰Šúó‘Ô‚Í”ñ•\¦‚É‚µ‚Ä‚¨‚­B\n"
-           + "null ‚Ìê‡ArequestNameInput ‚Í–³‹‚³‚ê‚éi{name} ‚ÍŠù’è–¼‚Å’uŠ·jB")]
+    [Tooltip("åå‰å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚åˆæœŸçŠ¶æ…‹ã¯éè¡¨ç¤ºã«ã—ã¦ãŠãã€‚\n"
+           + "null ã®å ´åˆã€requestNameInput ã¯ç„¡è¦–ã•ã‚Œã‚‹ï¼ˆ{name} ã¯æ—¢å®šåã§ç½®æ›ï¼‰ã€‚")]
     [SerializeField] private GameObject nameInputPanel;
 
-    [Tooltip("–¼‘O“ü—ÍƒtƒB[ƒ‹ƒhiTMP_InputFieldjBCharacter Limit ‚Ìİ’è„§i—á: 8jB")]
+    [Tooltip("åå‰å…¥åŠ›ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼ˆTMP_InputFieldï¼‰ã€‚Character Limit ã®è¨­å®šæ¨å¥¨ï¼ˆä¾‹: 8ï¼‰ã€‚")]
     [SerializeField] private TMP_InputField nameInputField;
 
-    [Tooltip("–¼‘OŠm’èƒ{ƒ^ƒ“")]
+    [Tooltip("åå‰ç¢ºå®šãƒœã‚¿ãƒ³")]
     [SerializeField] private Button nameInputConfirmButton;
 
-    [Tooltip("–¢“ü—Í‚ÅŠm’è‚µ‚½ê‡E{name} ’uŠ·‚É–¼‘O‚ª–³‚¢ê‡‚ÌŠù’è–¼")]
-    [SerializeField] private string defaultPlayerName = "‚ ‚È‚½";
+    [Tooltip("æœªå…¥åŠ›ã§ç¢ºå®šã—ãŸå ´åˆãƒ»{name} ç½®æ›æ™‚ã«åå‰ãŒç„¡ã„å ´åˆã®æ—¢å®šå")]
+    [SerializeField] private string defaultPlayerName = "ã‚ãªãŸ";
 
-    /// <summary>–¼‘O“ü—Í‘Ò‹@’†‚Íƒ^ƒbƒvis‚ğ–³Œø‰»‚·‚éB</summary>
+    /// <summary>åå‰å…¥åŠ›å¾…æ©Ÿä¸­ã¯ã‚¿ãƒƒãƒ—é€²è¡Œã‚’ç„¡åŠ¹åŒ–ã™ã‚‹ã€‚</summary>
     private bool isWaitingNameInput;
 
     // =========================================================
-    // ƒ^ƒCƒgƒ‹•\¦ UIi’Ç‰Áj
+    // ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤º UIï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     //
-    // ‰ï˜bŠJn‘O‚É2•bŠÔA”wŒi‚Æƒ^ƒCƒgƒ‹‚ğ•\¦‚·‚éB
-    // titleText: ‰æ–Ê’†‰›‚É”z’u‚·‚é TMP_TextiInspector ‚ÅƒAƒTƒCƒ“j
-    // titlePanel: ƒ^ƒCƒgƒ‹•\¦’†‚É—LŒø‰»‚·‚éƒpƒlƒ‹i”wŒi‚Ìã‚Éd‚Ë‚é”¼“§–¾ƒpƒlƒ‹“™B”CˆÓj
-    // talkPanel: ‰ï˜bUI‘S‘Ì‚ÌeƒIƒuƒWƒFƒNƒgiƒ^ƒCƒgƒ‹•\¦’†‚Í”ñ•\¦‚É‚·‚éj
-    // titleDisplayDuration: ƒ^ƒCƒgƒ‹•\¦ŠÔi•bj
+    // ä¼šè©±é–‹å§‹å‰ã«2ç§’é–“ã€èƒŒæ™¯ã¨ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+    // titleText: ç”»é¢ä¸­å¤®ã«é…ç½®ã™ã‚‹ TMP_Textï¼ˆInspector ã§ã‚¢ã‚µã‚¤ãƒ³ï¼‰
+    // titlePanel: ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºä¸­ã«æœ‰åŠ¹åŒ–ã™ã‚‹ãƒ‘ãƒãƒ«ï¼ˆèƒŒæ™¯ã®ä¸Šã«é‡ã­ã‚‹åŠé€æ˜ãƒ‘ãƒãƒ«ç­‰ã€‚ä»»æ„ï¼‰
+    // talkPanel: ä¼šè©±UIå…¨ä½“ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºä¸­ã¯éè¡¨ç¤ºã«ã™ã‚‹ï¼‰
+    // titleDisplayDuration: ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºæ™‚é–“ï¼ˆç§’ï¼‰
     // =========================================================
 
     [Header("UI - Title Display")]
-    [Tooltip("‰ï˜bŠJn‘O‚É•\¦‚·‚éƒ^ƒCƒgƒ‹—pƒeƒLƒXƒgB‰æ–Ê’†‰›‚É”z’u‚·‚éB\n"
-           + "null ‚Ìê‡Aƒ^ƒCƒgƒ‹•\¦‚ğƒXƒLƒbƒv‚µ‚Ä‘¦À‚É‰ï˜b‚ğŠJn‚·‚éB")]
+    [Tooltip("ä¼šè©±é–‹å§‹å‰ã«è¡¨ç¤ºã™ã‚‹ã‚¿ã‚¤ãƒˆãƒ«ç”¨ãƒ†ã‚­ã‚¹ãƒˆã€‚ç”»é¢ä¸­å¤®ã«é…ç½®ã™ã‚‹ã€‚\n"
+           + "null ã®å ´åˆã€ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã¦å³åº§ã«ä¼šè©±ã‚’é–‹å§‹ã™ã‚‹ã€‚")]
     [SerializeField] private TMP_Text titleText;
 
-    [Tooltip("ƒ^ƒCƒgƒ‹•\¦’†‚É—LŒø‰»‚·‚éƒpƒlƒ‹i”¼“§–¾ƒI[ƒo[ƒŒƒC“™jB”CˆÓB")]
+    [Tooltip("ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºä¸­ã«æœ‰åŠ¹åŒ–ã™ã‚‹ãƒ‘ãƒãƒ«ï¼ˆåŠé€æ˜ã‚ªãƒ¼ãƒãƒ¼ãƒ¬ã‚¤ç­‰ï¼‰ã€‚ä»»æ„ã€‚")]
     [SerializeField] private GameObject titlePanel;
 
-    [Tooltip("‰ï˜bUI‚ÌeƒIƒuƒWƒFƒNƒgBƒ^ƒCƒgƒ‹•\¦’†‚Í”ñ•\¦‚É‚·‚éB")]
+    [Tooltip("ä¼šè©±UIã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºä¸­ã¯éè¡¨ç¤ºã«ã™ã‚‹ã€‚")]
     [SerializeField] private GameObject talkPanel;
 
-    [Tooltip("ƒ^ƒCƒgƒ‹‚Ì•\¦ŠÔi•bj")]
+    [Tooltip("ã‚¿ã‚¤ãƒˆãƒ«ã®è¡¨ç¤ºæ™‚é–“ï¼ˆç§’ï¼‰")]
     [SerializeField] private float titleDisplayDuration = 2f;
 
     private TalkEvent current;
     private int index;
 
-    /// <summary>ƒ^ƒCƒgƒ‹•\¦‘Ò‹@’†‚Íƒ^ƒbƒv‚ğ–³Œø‰»‚·‚éB</summary>
+    /// <summary>ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºå¾…æ©Ÿä¸­ã¯ã‚¿ãƒƒãƒ—ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹ã€‚</summary>
     private bool isWaitingTitle;
 
-    // ˜A‘ÅƒK[ƒhi•¡”“¯ƒ^ƒbƒv‘Îôj: ’¼‘O‚Ìis‚©‚ç AdvanceCooldown •b
-    // ˆÈ“à‚ÌÄ“ü—Í‚ğ–³‹‚·‚éBTime.unscaledTime ‚ğg—pitimeScale ”ñˆË‘¶jB
+    // é€£æ‰“ã‚¬ãƒ¼ãƒ‰ï¼ˆè¤‡æ•°åŒæ™‚ã‚¿ãƒƒãƒ—å¯¾ç­–ï¼‰: ç›´å‰ã®é€²è¡Œã‹ã‚‰ AdvanceCooldown ç§’
+    // ä»¥å†…ã®å†å…¥åŠ›ã‚’ç„¡è¦–ã™ã‚‹ã€‚Time.unscaledTime ã‚’ä½¿ç”¨ï¼ˆtimeScale éä¾å­˜ï¼‰ã€‚
     private float lastAdvanceTime = -1f;
     private const float AdvanceCooldown = 0.25f;
 
-    //ƒV[ƒ“‚É“ü‚é‚ÆÀs
+    //ã‚·ãƒ¼ãƒ³ã«å…¥ã‚‹ã¨å®Ÿè¡Œ
     private void Start()
     {
-        //ƒQ[ƒ€ƒf[ƒ^‹y‚Ñƒf[ƒ^ƒx[ƒX‚ª³í‚©Šm”F
+        //ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿åŠã³ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒæ­£å¸¸ã‹ç¢ºèª
         var gs = GameState.I;
         if (gs == null || database == null)
         {
@@ -99,13 +99,13 @@ public class TalkRunner : MonoBehaviour
             return;
         }
 
-        // –¼‘O“ü—Íƒ|ƒbƒvƒAƒbƒv‰Šú‰»
+        // åå‰å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—åˆæœŸåŒ–
         if (nameInputPanel != null)
             nameInputPanel.SetActive(false);
         if (nameInputConfirmButton != null)
             nameInputConfirmButton.onClick.AddListener(OnNameInputConfirm);
 
-        //‘Ò‹@’†ID‚ğŠî‚ÉƒCƒxƒ“ƒg‚ğæ“¾
+        //å¾…æ©Ÿä¸­IDã‚’åŸºã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’å–å¾—
         current = database.FindById(gs.pendingEventId);
         if (current == null || current.lines == null || current.lines.Count == 0)
         {
@@ -115,17 +115,17 @@ public class TalkRunner : MonoBehaviour
             return;
         }
 
-        // ƒCƒxƒ“ƒg‚ÌƒfƒtƒHƒ‹ƒg”wŒi‚ğ“K—p
+        // ã‚¤ãƒ™ãƒ³ãƒˆã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆèƒŒæ™¯ã‚’é©ç”¨
         ApplyBackground(current.backgroundImage);
 
-        // ƒ^ƒCƒgƒ‹•\¦‚ª‰Â”\‚È‚çƒRƒ‹[ƒ`ƒ“‚Å‘Ò‹@A•s‰Â”\‚È‚ç‘¦À‚É‰ï˜bŠJn
+        // ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºãŒå¯èƒ½ãªã‚‰ã‚³ãƒ«ãƒ¼ãƒãƒ³ã§å¾…æ©Ÿã€ä¸å¯èƒ½ãªã‚‰å³åº§ã«ä¼šè©±é–‹å§‹
         if (titleText != null && !string.IsNullOrEmpty(GetDisplayTitle()))
         {
             StartCoroutine(ShowTitleThenStart());
         }
         else
         {
-            // ƒ^ƒCƒgƒ‹•\¦‚È‚µ: ]—ˆ‚Ç‚¨‚è‘¦À‚ÉŠJn
+            // ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºãªã—: å¾“æ¥ã©ãŠã‚Šå³åº§ã«é–‹å§‹
             SetTitleUIVisible(false);
             SetTalkUIVisible(true);
             index = 0;
@@ -134,32 +134,32 @@ public class TalkRunner : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ^ƒCƒgƒ‹•\¦ƒRƒ‹[ƒ`ƒ“i’Ç‰Áj
+    // ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºã‚³ãƒ«ãƒ¼ãƒãƒ³ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ”wŒi + ƒ^ƒCƒgƒ‹‚ğ•\¦‚µAtitleDisplayDuration •b‘Ò‹@Œã‚É‰ï˜b‚ğŠJn‚·‚éB
-    /// ‘Ò‹@’†‚Íƒ^ƒbƒviOnClickNextj‚ğ–³Œø‰»‚·‚éB
+    /// èƒŒæ™¯ + ã‚¿ã‚¤ãƒˆãƒ«ã‚’è¡¨ç¤ºã—ã€titleDisplayDuration ç§’å¾…æ©Ÿå¾Œã«ä¼šè©±ã‚’é–‹å§‹ã™ã‚‹ã€‚
+    /// å¾…æ©Ÿä¸­ã¯ã‚¿ãƒƒãƒ—ï¼ˆOnClickNextï¼‰ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹ã€‚
     /// </summary>
     private IEnumerator ShowTitleThenStart()
     {
         isWaitingTitle = true;
 
-        // ‰ï˜bUI‚ğ”ñ•\¦Aƒ^ƒCƒgƒ‹UI‚ğ•\¦
+        // ä¼šè©±UIã‚’éè¡¨ç¤ºã€ã‚¿ã‚¤ãƒˆãƒ«UIã‚’è¡¨ç¤º
         SetTalkUIVisible(false);
         SetTitleUIVisible(true);
 
-        // ƒ^ƒCƒgƒ‹ƒeƒLƒXƒgİ’è
+        // ã‚¿ã‚¤ãƒˆãƒ«ãƒ†ã‚­ã‚¹ãƒˆè¨­å®š
         titleText.text = GetDisplayTitle();
 
-        // ‘Ò‹@
+        // å¾…æ©Ÿ
         yield return new WaitForSeconds(titleDisplayDuration);
 
-        // ƒ^ƒCƒgƒ‹UI‚ğ”ñ•\¦A‰ï˜bUI‚ğ•\¦
+        // ã‚¿ã‚¤ãƒˆãƒ«UIã‚’éè¡¨ç¤ºã€ä¼šè©±UIã‚’è¡¨ç¤º
         SetTitleUIVisible(false);
         SetTalkUIVisible(true);
 
-        // ‰ï˜bŠJn
+        // ä¼šè©±é–‹å§‹
         index = 0;
         Render();
 
@@ -167,8 +167,8 @@ public class TalkRunner : MonoBehaviour
     }
 
     /// <summary>
-    /// •\¦—pƒ^ƒCƒgƒ‹‚ğæ“¾‚·‚éB
-    /// zukanTitle ‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚Î‚»‚¿‚ç‚ğg‚¢A‚È‚¯‚ê‚Î id ‚ğƒtƒH[ƒ‹ƒoƒbƒNB
+    /// è¡¨ç¤ºç”¨ã‚¿ã‚¤ãƒˆãƒ«ã‚’å–å¾—ã™ã‚‹ã€‚
+    /// zukanTitle ãŒè¨­å®šã•ã‚Œã¦ã„ã‚Œã°ãã¡ã‚‰ã‚’ä½¿ã„ã€ãªã‘ã‚Œã° id ã‚’ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚
     /// </summary>
     private string GetDisplayTitle()
     {
@@ -178,7 +178,7 @@ public class TalkRunner : MonoBehaviour
         return current.id ?? "";
     }
 
-    /// <summary>ƒ^ƒCƒgƒ‹UI‚Ì•\¦/”ñ•\¦‚ğØ‚è‘Ö‚¦‚éB</summary>
+    /// <summary>ã‚¿ã‚¤ãƒˆãƒ«UIã®è¡¨ç¤º/éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚</summary>
     private void SetTitleUIVisible(bool visible)
     {
         if (titleText != null)
@@ -187,22 +187,22 @@ public class TalkRunner : MonoBehaviour
             titlePanel.SetActive(visible);
     }
 
-    /// <summary>‰ï˜bUI‚Ì•\¦/”ñ•\¦‚ğØ‚è‘Ö‚¦‚éB</summary>
+    /// <summary>ä¼šè©±UIã®è¡¨ç¤º/éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚</summary>
     private void SetTalkUIVisible(bool visible)
     {
         if (talkPanel != null)
             talkPanel.SetActive(visible);
     }
 
-    // ƒNƒŠƒbƒN‚ÉŸ‚Ì‘äŒ‚ğ•\¦‚³‚¹‚éB–³‚¯‚ê‚ÎI—¹
+    // ã‚¯ãƒªãƒƒã‚¯æ™‚ã«æ¬¡ã®å°è©ã‚’è¡¨ç¤ºã•ã›ã‚‹ã€‚ç„¡ã‘ã‚Œã°çµ‚äº†
     public void OnClickNext()
     {
-        // ƒ^ƒCƒgƒ‹•\¦’†E–¼‘O“ü—Í’†‚Íƒ^ƒbƒv‚ğ–³‹
+        // ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºä¸­ãƒ»åå‰å…¥åŠ›ä¸­ã¯ã‚¿ãƒƒãƒ—ã‚’ç„¡è¦–
         if (isWaitingTitle || isWaitingNameInput) return;
 
         if (current == null) return;
 
-        // ˜A‘ÅƒK[ƒh: ’¼‘O‚Ìis‚©‚ç AdvanceCooldown •bˆÈ“à‚Ìƒ^ƒbƒv‚Í–³‹
+        // é€£æ‰“ã‚¬ãƒ¼ãƒ‰: ç›´å‰ã®é€²è¡Œã‹ã‚‰ AdvanceCooldown ç§’ä»¥å†…ã®ã‚¿ãƒƒãƒ—ã¯ç„¡è¦–
         if (lastAdvanceTime >= 0f && Time.unscaledTime - lastAdvanceTime < AdvanceCooldown)
             return;
         lastAdvanceTime = Time.unscaledTime;
@@ -218,28 +218,28 @@ public class TalkRunner : MonoBehaviour
 
 
 
-    //‰æ–Ê•\¦
-    //‘Î‰‚µ‚½ƒLƒƒƒ‰–¼‚Æ‘äŒA—§‚¿ŠG‚ğ•\¦‚³‚¹‚é
+    //ç”»é¢è¡¨ç¤º
+    //å¯¾å¿œã—ãŸã‚­ãƒ£ãƒ©åã¨å°è©ã€ç«‹ã¡çµµã‚’è¡¨ç¤ºã•ã›ã‚‹
     private void Render()
     {
         var line = current.lines[index];
 
         // =========================================================
-        // –¼‘O“ü—ÍƒŠƒNƒGƒXƒgi’Ç‰Áj
-        // ‚±‚Ì‘äŒ‚ğ•\¦‚·‚é‘O‚Éƒ|ƒbƒvƒAƒbƒv‚ğo‚µAŠm’è‚ğ‘Ò‚ÂB
-        // }ŠÓƒŠƒvƒŒƒC‚ÍƒXƒLƒbƒvi•Û‘¶Ï‚İ‚Ì–¼‘O‚ğ‚»‚Ì‚Ü‚Üg‚¤jB
+        // åå‰å…¥åŠ›ãƒªã‚¯ã‚¨ã‚¹ãƒˆï¼ˆè¿½åŠ ï¼‰
+        // ã“ã®å°è©ã‚’è¡¨ç¤ºã™ã‚‹å‰ã«ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’å‡ºã—ã€ç¢ºå®šã‚’å¾…ã¤ã€‚
+        // å›³é‘‘ãƒªãƒ—ãƒ¬ã‚¤æ™‚ã¯ã‚¹ã‚­ãƒƒãƒ—ï¼ˆä¿å­˜æ¸ˆã¿ã®åå‰ã‚’ãã®ã¾ã¾ä½¿ã†ï¼‰ã€‚
         // =========================================================
         if (line.requestNameInput && nameInputPanel != null && !GameState.I.isZukanReplay)
         {
             ShowNameInputPopup();
-            return; // Šm’èŒã‚É OnNameInputConfirm() ¨ RenderLine() ‚ªŒÄ‚Î‚ê‚é
+            return; // ç¢ºå®šå¾Œã« OnNameInputConfirm() â†’ RenderLine() ãŒå‘¼ã°ã‚Œã‚‹
         }
 
         RenderLine(line);
     }
 
     /// <summary>
-    /// ‘äŒ1s•ª‚ÌÀ•`‰æB{name} ’uŠ·‚ğ“K—p‚·‚éB
+    /// å°è©1è¡Œåˆ†ã®å®Ÿæç”»ã€‚{name} ç½®æ›ã‚’é©ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private void RenderLine(TalkEvent.TalkLine line)
     {
@@ -252,7 +252,7 @@ public class TalkRunner : MonoBehaviour
             portraitImage.enabled = (line.portrait != null);
         }
 
-        // ”wŒi‚ÌØ‘Ö: ‘äŒ‚ÉƒI[ƒo[ƒ‰ƒCƒh‚ª‚ ‚ê‚Î‚»‚¿‚çA‚È‚¯‚ê‚ÎƒCƒxƒ“ƒg‚ÌƒfƒtƒHƒ‹ƒg
+        // èƒŒæ™¯ã®åˆ‡æ›¿: å°è©ã«ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ãŒã‚ã‚Œã°ãã¡ã‚‰ã€ãªã‘ã‚Œã°ã‚¤ãƒ™ãƒ³ãƒˆã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ
         Sprite bg = line.backgroundOverride != null
                   ? line.backgroundOverride
                   : current.backgroundImage;
@@ -260,12 +260,12 @@ public class TalkRunner : MonoBehaviour
     }
 
     // =========================================================
-    // –¼‘O“ü—Íƒ|ƒbƒvƒAƒbƒvi’Ç‰Áj
+    // åå‰å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// –¼‘O“ü—Íƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚µAƒ^ƒbƒvis‚ğƒuƒƒbƒN‚·‚éB
-    /// “ü—Í—“‚É‚Í•Û‘¶Ï‚İ‚Ì–¼‘O‚ğƒvƒŠƒtƒBƒ‹‚·‚éi’†’fÄŠJ‚ÌÄ“ü—Í‚ğŠy‚É‚·‚éjB
+    /// åå‰å…¥åŠ›ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã—ã€ã‚¿ãƒƒãƒ—é€²è¡Œã‚’ãƒ–ãƒ­ãƒƒã‚¯ã™ã‚‹ã€‚
+    /// å…¥åŠ›æ¬„ã«ã¯ä¿å­˜æ¸ˆã¿ã®åå‰ã‚’ãƒ—ãƒªãƒ•ã‚£ãƒ«ã™ã‚‹ï¼ˆä¸­æ–­å†é–‹æ™‚ã®å†å…¥åŠ›ã‚’æ¥½ã«ã™ã‚‹ï¼‰ã€‚
     /// </summary>
     private void ShowNameInputPopup()
     {
@@ -279,8 +279,8 @@ public class TalkRunner : MonoBehaviour
     }
 
     /// <summary>
-    /// –¼‘OŠm’èƒ{ƒ^ƒ“B“ü—Í‚ğ GameState.playerName ‚É•Û‘¶‚µ‚Ä‘äŒ•\¦‚ğÄŠJ‚·‚éB
-    /// ‹ó“ü—ÍiƒXƒy[ƒX‚Ì‚İŠÜ‚Şj‚Ìê‡‚ÍŠù’è–¼‚ğg‚¤B
+    /// åå‰ç¢ºå®šãƒœã‚¿ãƒ³ã€‚å…¥åŠ›ã‚’ GameState.playerName ã«ä¿å­˜ã—ã¦å°è©è¡¨ç¤ºã‚’å†é–‹ã™ã‚‹ã€‚
+    /// ç©ºå…¥åŠ›ï¼ˆã‚¹ãƒšãƒ¼ã‚¹ã®ã¿å«ã‚€ï¼‰ã®å ´åˆã¯æ—¢å®šåã‚’ä½¿ã†ã€‚
     /// </summary>
     private void OnNameInputConfirm()
     {
@@ -288,29 +288,29 @@ public class TalkRunner : MonoBehaviour
         if (string.IsNullOrEmpty(input)) input = defaultPlayerName;
 
         GameState.I.playerName = input;
-        SaveManager.Save(); // ‘¦ƒZ[ƒu
+        SaveManager.Save(); // å³æ™‚ã‚»ãƒ¼ãƒ–
 
         nameInputPanel.SetActive(false);
         isWaitingNameInput = false;
 
-        Debug.Log($"[TalkRunner] ƒvƒŒƒCƒ„[–¼‚ğİ’è: {input}");
+        Debug.Log($"[TalkRunner] ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åã‚’è¨­å®š: {input}");
 
-        // “ü—ÍƒŠƒNƒGƒXƒgŒ³‚Ì‘äŒ‚ğ•\¦i‚±‚Ì‘äŒ©g‚à {name} ’uŠ·‚³‚ê‚éj
+        // å…¥åŠ›ãƒªã‚¯ã‚¨ã‚¹ãƒˆå…ƒã®å°è©ã‚’è¡¨ç¤ºï¼ˆã“ã®å°è©è‡ªèº«ã‚‚ {name} ç½®æ›ã•ã‚Œã‚‹ï¼‰
         RenderLine(current.lines[index]);
     }
 
     /// <summary>
-    /// ƒeƒLƒXƒg“à‚ÌƒvƒŒ[ƒXƒzƒ‹ƒ_[‚ğ’uŠ·‚·‚éB
-    /// {name}    ¨ ƒvƒŒƒCƒ„[–¼i–¢İ’è‚È‚ç defaultPlayerNamej
-    /// {days}    ¨ Œo‰ß“ú”ih‚É”‘‚Ü‚Á‚½‰ñ”j
-    /// {starts}  ¨ ƒQ[ƒ€ŠJn‰ñ”
-    /// {returns} ¨ “ƒ‚©‚ç‚Ì‹AŠÒ‰ñ”
-    /// {defeats} ¨ ‘S–Å‚µ‚Ä‹AŠÒ‚µ‚½‰ñ”
+    /// ãƒ†ã‚­ã‚¹ãƒˆå†…ã®ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€ãƒ¼ã‚’ç½®æ›ã™ã‚‹ã€‚
+    /// {name}    â†’ ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åï¼ˆæœªè¨­å®šãªã‚‰ defaultPlayerNameï¼‰
+    /// {days}    â†’ çµŒéæ—¥æ•°ï¼ˆå®¿ã«æ³Šã¾ã£ãŸå›æ•°ï¼‰
+    /// {starts}  â†’ ã‚²ãƒ¼ãƒ é–‹å§‹å›æ•°
+    /// {returns} â†’ å¡”ã‹ã‚‰ã®å¸°é‚„å›æ•°
+    /// {defeats} â†’ å…¨æ»…ã—ã¦å¸°é‚„ã—ãŸå›æ•°
     /// </summary>
     private string ReplacePlaceholders(string text)
     {
         if (string.IsNullOrEmpty(text)) return text ?? "";
-        if (!text.Contains("{")) return text; // ƒvƒŒ[ƒXƒzƒ‹ƒ_[‚È‚µ: ‘ŠúƒŠƒ^[ƒ“
+        if (!text.Contains("{")) return text; // ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€ãƒ¼ãªã—: æ—©æœŸãƒªã‚¿ãƒ¼ãƒ³
 
         var gs = GameState.I;
         text = text.Replace("{name}", gs.GetDisplayName(defaultPlayerName));
@@ -322,12 +322,12 @@ public class TalkRunner : MonoBehaviour
     }
 
     // =========================================================
-    // ”wŒi‰æ‘œ‚Ì“K—p
+    // èƒŒæ™¯ç”»åƒã®é©ç”¨
     // =========================================================
 
     /// <summary>
-    /// ”wŒiImage ‚É Sprite ‚ğ“K—p‚·‚éB
-    /// sprite ‚ª null ‚Ìê‡‚Í”wŒi Image ‚ğ”ñ•\¦‚É‚·‚éiƒV[ƒ“‚ÌƒfƒtƒHƒ‹ƒg”wŒi‚ªŒ©‚¦‚éjB
+    /// èƒŒæ™¯Image ã« Sprite ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// sprite ãŒ null ã®å ´åˆã¯èƒŒæ™¯ Image ã‚’éè¡¨ç¤ºã«ã™ã‚‹ï¼ˆã‚·ãƒ¼ãƒ³ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆèƒŒæ™¯ãŒè¦‹ãˆã‚‹ï¼‰ã€‚
     /// </summary>
     private void ApplyBackground(Sprite sprite)
     {
@@ -344,7 +344,7 @@ public class TalkRunner : MonoBehaviour
         }
     }
 
-    //ƒCƒxƒ“ƒgI—¹AÄ¶ÏƒCƒxƒ“ƒg‚Æ‚µ‚Ä“o˜^‚µA‘Ò‹@ƒCƒxƒ“ƒg‚ğ‹ó‚É
+    //ã‚¤ãƒ™ãƒ³ãƒˆçµ‚äº†æ™‚ã€å†ç”Ÿæ¸ˆã‚¤ãƒ™ãƒ³ãƒˆã¨ã—ã¦ç™»éŒ²ã—ã€å¾…æ©Ÿã‚¤ãƒ™ãƒ³ãƒˆã‚’ç©ºã«
     private void Finish()
     {
         var gs = GameState.I;
@@ -352,24 +352,24 @@ public class TalkRunner : MonoBehaviour
         gs.pendingEventId = null;
 
         // =========================================================
-        // •ñVƒAƒCƒeƒ€•t—^
+        // å ±é…¬ã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸
         // =========================================================
-        // }ŠÓƒŠƒvƒŒƒC‚Í•ñV‚ğ•t—^‚µ‚È‚¢i“ñd•t—^–h~j
+        // å›³é‘‘ãƒªãƒ—ãƒ¬ã‚¤æ™‚ã¯å ±é…¬ã‚’ä»˜ä¸ã—ãªã„ï¼ˆäºŒé‡ä»˜ä¸é˜²æ­¢ï¼‰
         if (current.rewardItem != null && !gs.isZukanReplay)
         {
             gs.pendingItemData = current.rewardItem;
             gs.isRewardItem = true;
-            Debug.Log($"[TalkRunner] •ñVƒAƒCƒeƒ€‚ğ pendingItemData ‚ÉƒZƒbƒg: {current.rewardItem.itemName}");
+            Debug.Log($"[TalkRunner] å ±é…¬ã‚¢ã‚¤ãƒ†ãƒ ã‚’ pendingItemData ã«ã‚»ãƒƒãƒˆ: {current.rewardItem.itemName}");
         }
 
-        // }ŠÓƒŠƒvƒŒƒCƒtƒ‰ƒO‚ğƒNƒŠƒAi”»’è—p‚É’l‚ğT‚¦‚Ä‚©‚çƒNƒŠƒAj
+        // å›³é‘‘ãƒªãƒ—ãƒ¬ã‚¤ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ï¼ˆåˆ¤å®šç”¨ã«å€¤ã‚’æ§ãˆã¦ã‹ã‚‰ã‚¯ãƒªã‚¢ï¼‰
         bool wasZukanReplay = gs.isZukanReplay;
         gs.isZukanReplay = false;
 
         // =========================================================
-        // ƒGƒ“ƒfƒBƒ“ƒOisƒtƒbƒNi’Ç‰Áj
-        // ED‰ï˜b/ƒGƒsƒ[ƒO‚ÌI—¹‚Í EndingManager ‚ªŸ‚ÌƒV[ƒ“‚Ö‘JˆÚ‚·‚éB
-        // }ŠÓƒŠƒvƒŒƒC‚Å‚ÌÄ¶‚Í’Êí‚Ì–ß‚èˆ—‚ğg‚¤iƒGƒ“ƒfƒBƒ“ƒO‚ğŒë”­‰Î‚³‚¹‚È‚¢jB
+        // ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°é€²è¡Œãƒ•ãƒƒã‚¯ï¼ˆè¿½åŠ ï¼‰
+        // EDä¼šè©±/ã‚¨ãƒ”ãƒ­ãƒ¼ã‚°ã®çµ‚äº†æ™‚ã¯ EndingManager ãŒæ¬¡ã®ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã™ã‚‹ã€‚
+        // å›³é‘‘ãƒªãƒ—ãƒ¬ã‚¤ã§ã®å†ç”Ÿæ™‚ã¯é€šå¸¸ã®æˆ»ã‚Šå‡¦ç†ã‚’ä½¿ã†ï¼ˆã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’èª¤ç™ºç«ã•ã›ãªã„ï¼‰ã€‚
         // =========================================================
         if (!wasZukanReplay && EndingManager.HandleTalkFinished(current.id))
             return;
@@ -378,13 +378,13 @@ public class TalkRunner : MonoBehaviour
     }
 
     // =========================================================
-    // –ß‚èæƒV[ƒ“‚ÌŒˆ’è
+    // æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ã®æ±ºå®š
     // =========================================================
 
     /// <summary>
-    /// Talk I—¹Œã‚Ì–ß‚èæƒV[ƒ“‚ğƒ[ƒh‚·‚éB
-    /// GameState.talkReturnScene ‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚Î‚»‚¿‚ç‚Ö‘JˆÚ‚µA
-    /// İ’è‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î towerSceneNameiƒfƒtƒHƒ‹ƒg: "Tower"j‚Ö‘JˆÚ‚·‚éB
+    /// Talk çµ‚äº†å¾Œã®æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
+    /// GameState.talkReturnScene ãŒè¨­å®šã•ã‚Œã¦ã„ã‚Œã°ãã¡ã‚‰ã¸é·ç§»ã—ã€
+    /// è¨­å®šã•ã‚Œã¦ã„ãªã‘ã‚Œã° towerSceneNameï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ: "Tower"ï¼‰ã¸é·ç§»ã™ã‚‹ã€‚
     /// </summary>
     private void ReturnToPreviousScene()
     {
@@ -394,7 +394,7 @@ public class TalkRunner : MonoBehaviour
         if (gs != null && !string.IsNullOrEmpty(gs.talkReturnScene))
         {
             returnScene = gs.talkReturnScene;
-            gs.talkReturnScene = null; // g—pŒãƒNƒŠƒA
+            gs.talkReturnScene = null; // ä½¿ç”¨å¾Œã‚¯ãƒªã‚¢
         }
 
         SceneManager.LoadScene(returnScene);

@@ -1,27 +1,27 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// ƒIƒvƒVƒ‡ƒ“‰æ–Ê‚ğŠJ‚­ƒ{ƒ^ƒ“B
-/// u–ß‚èæƒV[ƒ“–¼v‚ğ GameState.optionReturnScene ‚É‹L‰¯‚µ‚Ä‚©‚ç Option ‚Ö‘JˆÚ‚·‚éB
-/// ƒ^ƒCƒgƒ‹ / ƒƒCƒ“ / “ƒ“à•” ‚È‚Ç•¡”ƒV[ƒ“‚Éİ’u‚µA‚»‚ê‚¼‚ê returnSceneName ‚ğİ’è‚·‚éB
+/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ç”»é¢ã‚’é–‹ããƒœã‚¿ãƒ³ã€‚
+/// ã€Œæˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³åã€ã‚’ GameState.optionReturnScene ã«è¨˜æ†¶ã—ã¦ã‹ã‚‰ Option ã¸é·ç§»ã™ã‚‹ã€‚
+/// ã‚¿ã‚¤ãƒˆãƒ« / ãƒ¡ã‚¤ãƒ³ / å¡”å†…éƒ¨ ãªã©è¤‡æ•°ã‚·ãƒ¼ãƒ³ã«è¨­ç½®ã—ã€ãã‚Œãã‚Œ returnSceneName ã‚’è¨­å®šã™ã‚‹ã€‚
 ///
-/// Inspector İ’è:
-///   optionSceneName : ŠJ‚­ƒIƒvƒVƒ‡ƒ“ƒV[ƒ“–¼iŠù’è "Option"j
-///   returnSceneName : –ß‚éæƒV[ƒ“–¼i‚±‚Ìƒ{ƒ^ƒ“‚ğ’u‚¢‚½ƒV[ƒ“–¼‚ğ“ü‚ê‚éB
-///                     —á: ƒ^ƒCƒgƒ‹‚È‚ç "Title"AƒƒCƒ“‚È‚ç "Main"A“ƒ“à•”‚È‚ç“ƒƒV[ƒ“–¼j
+/// Inspector è¨­å®š:
+///   optionSceneName : é–‹ãã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚·ãƒ¼ãƒ³åï¼ˆæ—¢å®š "Option"ï¼‰
+///   returnSceneName : æˆ»ã‚‹å…ˆã‚·ãƒ¼ãƒ³åï¼ˆã“ã®ãƒœã‚¿ãƒ³ã‚’ç½®ã„ãŸã‚·ãƒ¼ãƒ³åã‚’å…¥ã‚Œã‚‹ã€‚
+///                     ä¾‹: ã‚¿ã‚¤ãƒˆãƒ«ãªã‚‰ "Title"ã€ãƒ¡ã‚¤ãƒ³ãªã‚‰ "Main"ã€å¡”å†…éƒ¨ãªã‚‰å¡”ã‚·ãƒ¼ãƒ³åï¼‰
 ///
-/// ƒ{ƒ^ƒ“‚Ì OnClick ‚É OnClickOpenOption() ‚ğ“o˜^‚·‚éB
+/// ãƒœã‚¿ãƒ³ã® OnClick ã« OnClickOpenOption() ã‚’ç™»éŒ²ã™ã‚‹ã€‚
 /// </summary>
 public class OpenOptionButton : MonoBehaviour
 {
     [SerializeField] private string optionSceneName = "Option";
-    [Tooltip("ƒIƒvƒVƒ‡ƒ“‚©‚ç–ß‚éæ‚ÌƒV[ƒ“–¼i‚±‚Ìƒ{ƒ^ƒ“‚ğ’u‚¢‚½ƒV[ƒ“‚Ì–¼‘Oj")]
+    [Tooltip("ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‹ã‚‰æˆ»ã‚‹å…ˆã®ã‚·ãƒ¼ãƒ³åï¼ˆã“ã®ãƒœã‚¿ãƒ³ã‚’ç½®ã„ãŸã‚·ãƒ¼ãƒ³ã®åå‰ï¼‰")]
     [SerializeField] private string returnSceneName = "Title";
 
     public void OnClickOpenOption()
     {
-        // –ß‚èæ‚ğ‹L‰¯iGameState ‚Í DontDestroyOnLoad ‚Åí’“j
+        // æˆ»ã‚Šå…ˆã‚’è¨˜æ†¶ï¼ˆGameState ã¯ DontDestroyOnLoad ã§å¸¸é§ï¼‰
         if (GameState.I != null)
             GameState.I.optionReturnScene = returnSceneName;
 

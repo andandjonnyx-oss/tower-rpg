@@ -1,47 +1,47 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒAƒCƒeƒ€}ŠÓ‚ÌƒAƒCƒRƒ“ƒZƒ‹i1ŒÂ•ªjB
-/// ItemZukanView ‚ª¬ƒWƒƒƒ“ƒ‹‚²‚Æ‚Ì GridLayoutGroup ”z‰º‚É Prefab ‚©‚ç“®“I¶¬‚·‚éB
-/// MonsterIconCell ‚Æ“¯‚¶İŒvB
+/// ã‚¢ã‚¤ãƒ†ãƒ å›³é‘‘ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚»ãƒ«ï¼ˆ1å€‹åˆ†ï¼‰ã€‚
+/// ItemZukanView ãŒå°ã‚¸ãƒ£ãƒ³ãƒ«ã”ã¨ã® GridLayoutGroup é…ä¸‹ã« Prefab ã‹ã‚‰å‹•çš„ç”Ÿæˆã™ã‚‹ã€‚
+/// MonsterIconCell ã¨åŒã˜è¨­è¨ˆã€‚
 ///
-/// \‘¢:
+/// æ§‹é€ :
 ///   ItemIconCell (Button + Image + TMP_Text)
-///     „¥„Ÿ iconImage   c ƒAƒCƒeƒ€‰æ‘œ or ”ñ•\¦
-///     „¥„Ÿ nameText    c ƒAƒCƒeƒ€–¼ or u???v
-///     „¤„Ÿ unknownText c –¢”­Œ©‚ÌuHv
+///     â”œâ”€ iconImage   â€¦ ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒ or éè¡¨ç¤º
+///     â”œâ”€ nameText    â€¦ ã‚¢ã‚¤ãƒ†ãƒ å or ã€Œ???ã€
+///     â””â”€ unknownText â€¦ æœªç™ºè¦‹æ™‚ã®ã€Œï¼Ÿã€
 ///
-/// –¢”­Œ©: ƒAƒCƒRƒ“”ñ•\¦A–¼‘Ou???vAuHv•\¦Aƒ{ƒ^ƒ“–³Œø
-/// ”­Œ©Ï‚İ: ƒAƒCƒRƒ“•\¦A–¼‘O•\¦Aƒ^ƒbƒv‚ÅƒR[ƒ‹ƒoƒbƒN
+/// æœªç™ºè¦‹æ™‚: ã‚¢ã‚¤ã‚³ãƒ³éè¡¨ç¤ºã€åå‰ã€Œ???ã€ã€ã€Œï¼Ÿã€è¡¨ç¤ºã€ãƒœã‚¿ãƒ³ç„¡åŠ¹
+/// ç™ºè¦‹æ¸ˆã¿: ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºã€åå‰è¡¨ç¤ºã€ã‚¿ãƒƒãƒ—ã§ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 /// </summary>
 public class ItemIconCell : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("ƒAƒCƒeƒ€‰æ‘œ•\¦—p Image")]
+    [Tooltip("ã‚¢ã‚¤ãƒ†ãƒ ç”»åƒè¡¨ç¤ºç”¨ Image")]
     [SerializeField] private Image iconImage;
 
-    [Tooltip("ƒAƒCƒeƒ€–¼•\¦—p TMP_Text")]
+    [Tooltip("ã‚¢ã‚¤ãƒ†ãƒ åè¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text nameText;
 
-    [Tooltip("–¢”­Œ©‚É•\¦‚·‚éuHvƒeƒLƒXƒgiƒAƒCƒRƒ“‚Ìã‚Éd‚Ë‚Ä”z’uj")]
+    [Tooltip("æœªç™ºè¦‹æ™‚ã«è¡¨ç¤ºã™ã‚‹ã€Œï¼Ÿã€ãƒ†ã‚­ã‚¹ãƒˆï¼ˆã‚¢ã‚¤ã‚³ãƒ³ã®ä¸Šã«é‡ã­ã¦é…ç½®ï¼‰")]
     [SerializeField] private TMP_Text unknownText;
 
-    [Tooltip("ƒZƒ‹‘S‘Ì‚Ì Button ƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    [Tooltip("ã‚»ãƒ«å…¨ä½“ã® Button ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     [SerializeField] private Button cellButton;
 
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     private ItemData item;
     private Action<ItemData> onClickCallback;
 
     /// <summary>
-    /// ƒZƒ‹‚ğ‰Šú‰»‚·‚éB
+    /// ã‚»ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
     /// </summary>
-    /// <param name="data">ƒAƒCƒeƒ€ƒf[ƒ^</param>
-    /// <param name="discovered">”­Œ©Ï‚İ‚©‚Ç‚¤‚©</param>
-    /// <param name="onClick">ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒNi”­Œ©Ï‚İ‚Ì‚İ”­‰Îj</param>
+    /// <param name="data">ã‚¢ã‚¤ãƒ†ãƒ ãƒ‡ãƒ¼ã‚¿</param>
+    /// <param name="discovered">ç™ºè¦‹æ¸ˆã¿ã‹ã©ã†ã‹</param>
+    /// <param name="onClick">ã‚¿ãƒƒãƒ—æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼ˆç™ºè¦‹æ¸ˆã¿ã®ã¿ç™ºç«ï¼‰</param>
     public void Setup(ItemData data, bool discovered, Action<ItemData> onClick)
     {
         item = data;
@@ -49,7 +49,7 @@ public class ItemIconCell : MonoBehaviour
 
         if (discovered)
         {
-            // ”­Œ©Ï‚İ: ƒAƒCƒRƒ“‚Æ–¼‘O‚ğ•\¦
+            // ç™ºè¦‹æ¸ˆã¿: ã‚¢ã‚¤ã‚³ãƒ³ã¨åå‰ã‚’è¡¨ç¤º
             if (iconImage != null)
             {
                 iconImage.enabled = true;
@@ -67,19 +67,19 @@ public class ItemIconCell : MonoBehaviour
         }
         else
         {
-            // –¢”­Œ©: uHv•\¦Aƒ^ƒbƒv–³Œø
+            // æœªç™ºè¦‹: ã€Œï¼Ÿã€è¡¨ç¤ºã€ã‚¿ãƒƒãƒ—ç„¡åŠ¹
             if (iconImage != null) iconImage.enabled = false;
             if (nameText != null) nameText.text = "???";
             if (unknownText != null)
             {
                 unknownText.gameObject.SetActive(true);
-                unknownText.text = "H";
+                unknownText.text = "ï¼Ÿ";
             }
             if (cellButton != null) cellButton.interactable = false;
         }
     }
 
-    /// <summary>‚±‚ÌƒZƒ‹‚ªw’èƒAƒCƒeƒ€‚ğ•\¦‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©iƒXƒNƒ[ƒ‹•œŒ³—pjB</summary>
+    /// <summary>ã“ã®ã‚»ãƒ«ãŒæŒ‡å®šã‚¢ã‚¤ãƒ†ãƒ ã‚’è¡¨ç¤ºã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ï¼ˆã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¾©å…ƒç”¨ï¼‰ã€‚</summary>
     public bool RepresentsItem(ItemData target)
     {
         return item != null && item == target;

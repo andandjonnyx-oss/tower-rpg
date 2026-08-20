@@ -1,14 +1,14 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ƒƒCƒ“ƒV[ƒ“iŠXj‚É”z’u‚·‚éB
-/// ƒV[ƒ“ŠJn‚É HP/MP ‘S‰ñ•œ + ó‘ÔˆÙíƒNƒŠƒA‚ğs‚¤B
+/// ãƒ¡ã‚¤ãƒ³ã‚·ãƒ¼ãƒ³ï¼ˆè¡—ï¼‰ã«é…ç½®ã™ã‚‹ã€‚
+/// ã‚·ãƒ¼ãƒ³é–‹å§‹æ™‚ã« HP/MP å…¨å›å¾© + çŠ¶æ…‹ç•°å¸¸ã‚¯ãƒªã‚¢ã‚’è¡Œã†ã€‚
 ///
-/// ‚±‚ê‚É‚æ‚èuŠX‚É–ß‚é = ‘S‰ñ•œv‚Ìƒ‹[ƒ‹‚ªA
-/// ‚Ç‚ÌŒo˜H‚ÅƒƒCƒ“‚É–ß‚Á‚Ä‚ài‹AŠÒ/”s–k/ƒfƒoƒbƒO/‘qŒÉj“ˆê‚³‚ê‚éB
+/// ã“ã‚Œã«ã‚ˆã‚Šã€Œè¡—ã«æˆ»ã‚‹ = å…¨å›å¾©ã€ã®ãƒ«ãƒ¼ãƒ«ãŒã€
+/// ã©ã®çµŒè·¯ã§ãƒ¡ã‚¤ãƒ³ã«æˆ»ã£ã¦ã‚‚ï¼ˆå¸°é‚„/æ•—åŒ—/ãƒ‡ãƒãƒƒã‚°/å€‰åº«ï¼‰çµ±ä¸€ã•ã‚Œã‚‹ã€‚
 ///
-/// ¡ ”z’uè‡:
-///   Main ƒV[ƒ“‚Ì“K“–‚È GameObjecti—á: Canvas ‚â‹óƒIƒuƒWƒFƒNƒgj‚ÉƒAƒ^ƒbƒ`‚·‚éB
+/// â–  é…ç½®æ‰‹é †:
+///   Main ã‚·ãƒ¼ãƒ³ã®é©å½“ãª GameObjectï¼ˆä¾‹: Canvas ã‚„ç©ºã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‰ã«ã‚¢ã‚¿ãƒƒãƒã™ã‚‹ã€‚
 /// </summary>
 public class MainSceneRecovery : MonoBehaviour
 {
@@ -23,9 +23,9 @@ public class MainSceneRecovery : MonoBehaviour
         SaveManager.Save();
         TowerState.ResetStorageAdFlag();
 
-        // –‚–@‘I‘ğ•Û‚Ì‹L‰¯‚ğƒNƒŠƒAiŠX‚É–ß‚é = ‘SƒŠƒZƒbƒgj
+        // é­”æ³•é¸æŠä¿æŒã®è¨˜æ†¶ã‚’ã‚¯ãƒªã‚¢ï¼ˆè¡—ã«æˆ»ã‚‹ = å…¨ãƒªã‚»ãƒƒãƒˆï¼‰
         MagicSelectionMemory.ClearAll();
 
-        Debug.Log($"[Main] ‘S‰ñ•œ: HP={gs.currentHp}/{gs.maxHp} MP={gs.currentMp}/{gs.maxMp} ó‘ÔˆÙíƒNƒŠƒA");
+        Debug.Log($"[Main] å…¨å›å¾©: HP={gs.currentHp}/{gs.maxHp} MP={gs.currentMp}/{gs.maxMp} çŠ¶æ…‹ç•°å¸¸ã‚¯ãƒªã‚¢");
     }
 }

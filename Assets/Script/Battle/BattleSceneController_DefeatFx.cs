@@ -1,56 +1,56 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// BattleSceneController ‚ÌŒ‚”j‰‰oƒp[ƒgB
+/// BattleSceneController ã®æ’ƒç ´æ¼”å‡ºãƒ‘ãƒ¼ãƒˆã€‚
 ///
-/// Ÿ—˜Šm’èiOnVictory “üŒûj‚©‚çA“G‰æ‘œienemyImagej‚Ì‘Şê‰‰o‚ğÄ¶‚µA
-/// Š®—¹Œã‚ÉŠù‘¶‚ÌŸ—˜–{‘Ìˆ—iOnVictoryCorej‚Ö‡—¬‚³‚¹‚éB
+/// å‹åˆ©ç¢ºå®šï¼ˆOnVictory å…¥å£ï¼‰ã‹ã‚‰ã€æ•µç”»åƒï¼ˆenemyImageï¼‰ã®é€€å ´æ¼”å‡ºã‚’å†ç”Ÿã—ã€
+/// å®Œäº†å¾Œã«æ—¢å­˜ã®å‹åˆ©æœ¬ä½“å‡¦ç†ï¼ˆOnVictoryCoreï¼‰ã¸åˆæµã•ã›ã‚‹ã€‚
 ///
-/// ‰‰o‚Ìo‚µ•ª‚¯i”»’è‚Í OnVictory “üŒû‚ÅŠm’èÏ‚İ‚Ìˆø”‚Åó‚¯æ‚éj:
-///   ’Êíƒ‚ƒ“ƒXƒ^[ c ‰ñ“]‚µ‚È‚ª‚çƒ‰ƒ“ƒ_ƒ€‚È360“x•ûŒü‚Ö”ò‚ñ‚Å‚¢‚­
-///   ƒ{ƒXƒ‚ƒ“ƒXƒ^[ c ”‰ñ“_–Å ¨ k‚¦‚È‚ª‚ç‰º‚Ö’¾‚Ş‚æ‚¤‚ÉÁ‚¦‚é
-///   ‰a•t‚¯Ÿ—˜     c ‰‰o‚È‚µi‰æ‘œ•s•Ïj¨ OnVictory ‘¤‚Å‘¦ Core ŒÄ‚Ño‚µ
-///   ‘æ“ñŒ`‘Ô˜Aí   c ‰‰o‚È‚µiOnVictoryCore “à‚ÌŠù‘¶ƒƒWƒbƒN‚Å‰æ‘œ·‚µ‘Ö‚¦j
+/// æ¼”å‡ºã®å‡ºã—åˆ†ã‘ï¼ˆåˆ¤å®šã¯ OnVictory å…¥å£ã§ç¢ºå®šæ¸ˆã¿ã®å¼•æ•°ã§å—ã‘å–ã‚‹ï¼‰:
+///   é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ â€¦ å›è»¢ã—ãªãŒã‚‰ãƒ©ãƒ³ãƒ€ãƒ ãª360åº¦æ–¹å‘ã¸é£›ã‚“ã§ã„ã
+///   ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ â€¦ æ•°å›ç‚¹æ»… â†’ éœ‡ãˆãªãŒã‚‰ä¸‹ã¸æ²ˆã‚€ã‚ˆã†ã«æ¶ˆãˆã‚‹
+///   é¤Œä»˜ã‘å‹åˆ©     â€¦ æ¼”å‡ºãªã—ï¼ˆç”»åƒä¸å¤‰ï¼‰â†’ OnVictory å´ã§å³ Core å‘¼ã³å‡ºã—
+///   ç¬¬äºŒå½¢æ…‹é€£æˆ¦   â€¦ æ¼”å‡ºãªã—ï¼ˆOnVictoryCore å†…ã®æ—¢å­˜ãƒ­ã‚¸ãƒƒã‚¯ã§ç”»åƒå·®ã—æ›¿ãˆï¼‰
 /// </summary>
 public partial class BattleSceneController : MonoBehaviour
 {
     // =========================================================
-    // Œ‚”j‰‰oƒpƒ‰ƒ[ƒ^i’²®—pj
+    // æ’ƒç ´æ¼”å‡ºãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆèª¿æ•´ç”¨ï¼‰
     // =========================================================
 
-    /// <summary>’Êíƒ‚ƒ“ƒXƒ^[: ”òU‰‰o‚ÌŠ—vŠÔi•bjB</summary>
+    /// <summary>é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼: é£›æ•£æ¼”å‡ºã®æ‰€è¦æ™‚é–“ï¼ˆç§’ï¼‰ã€‚</summary>
     private const float NormalDefeatDuration = 0.7f;
-    /// <summary>’Êíƒ‚ƒ“ƒXƒ^[: ”ò‚ñ‚Å‚¢‚­‹——£ipxjB‰æ–ÊŠO‚Ü‚Å”ò‚Î‚·‘z’èB</summary>
+    /// <summary>é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼: é£›ã‚“ã§ã„ãè·é›¢ï¼ˆpxï¼‰ã€‚ç”»é¢å¤–ã¾ã§é£›ã°ã™æƒ³å®šã€‚</summary>
     private const float NormalDefeatFlyDistance = 1400f;
-    /// <summary>’Êíƒ‚ƒ“ƒXƒ^[: ‰ñ“]‚Ì‘‰ñ“]—Êi“xjB</summary>
+    /// <summary>é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼: å›è»¢ã®ç·å›è»¢é‡ï¼ˆåº¦ï¼‰ã€‚</summary>
     private const float NormalDefeatSpin = 720f;
 
-    /// <summary>ƒ{ƒX: 1‰ñ‚Ì“_–ÅiÁ“”¨“_“”j‚É‚©‚¯‚éŠÔi•bjB</summary>
+    /// <summary>ãƒœã‚¹: 1å›ã®ç‚¹æ»…ï¼ˆæ¶ˆç¯â†’ç‚¹ç¯ï¼‰ã«ã‹ã‘ã‚‹æ™‚é–“ï¼ˆç§’ï¼‰ã€‚</summary>
     private const float BossDefeatBlinkDuration = 0.12f;
-    /// <summary>ƒ{ƒX: 1‰ñ–Ú‚Ì“_–ÅŒã‚Ì‘Ò‹@i•bjB</summary>
+    /// <summary>ãƒœã‚¹: 1å›ç›®ã®ç‚¹æ»…å¾Œã®å¾…æ©Ÿï¼ˆç§’ï¼‰ã€‚</summary>
     private const float BossDefeatWait1 = 1.0f;
-    /// <summary>ƒ{ƒX: 2‰ñ–Ú‚Ì“_–ÅŒã‚Ì‘Ò‹@i•bjB</summary>
+    /// <summary>ãƒœã‚¹: 2å›ç›®ã®ç‚¹æ»…å¾Œã®å¾…æ©Ÿï¼ˆç§’ï¼‰ã€‚</summary>
     private const float BossDefeatWait2 = 0.5f;
-    /// <summary>ƒ{ƒX: 3‰ñ–Ú‚Ì“_–ÅŒã‚Ì‘Ò‹@i•bjB</summary>
+    /// <summary>ãƒœã‚¹: 3å›ç›®ã®ç‚¹æ»…å¾Œã®å¾…æ©Ÿï¼ˆç§’ï¼‰ã€‚</summary>
     private const float BossDefeatWait3 = 0.5f;
-    /// <summary>ƒ{ƒX: k‚¦‚È‚ª‚ç’¾‚ŞƒtƒF[ƒhƒAƒEƒg‚ÌŠ—vŠÔi•bjB</summary>
+    /// <summary>ãƒœã‚¹: éœ‡ãˆãªãŒã‚‰æ²ˆã‚€ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã®æ‰€è¦æ™‚é–“ï¼ˆç§’ï¼‰ã€‚</summary>
     private const float BossDefeatSinkDuration = 1.2f;
-    /// <summary>ƒ{ƒX: k‚¦‚Ì‰¡—h‚ê•ipxjBˆÊ’u‚ÌŠî€‚ÍŒÅ’èB</summary>
+    /// <summary>ãƒœã‚¹: éœ‡ãˆã®æ¨ªæºã‚Œå¹…ï¼ˆpxï¼‰ã€‚ä½ç½®ã®åŸºæº–ã¯å›ºå®šã€‚</summary>
     private const float BossDefeatShakeAmplitude = 14f;
-    /// <summary>ƒ{ƒX: k‚¦‚Ì‘¬‚³i‘å‚«‚¢‚Ù‚Ç×‚©‚­U“®jB</summary>
+    /// <summary>ãƒœã‚¹: éœ‡ãˆã®é€Ÿã•ï¼ˆå¤§ãã„ã»ã©ç´°ã‹ãæŒ¯å‹•ï¼‰ã€‚</summary>
     private const float BossDefeatShakeSpeed = 50f;
-    /// <summary>ƒ{ƒX: ‰æ‘œ‚‚³‚ªæ“¾‚Å‚«‚È‚¢ê‡‚Ì’¾~‹——£ƒtƒH[ƒ‹ƒoƒbƒNipxjB</summary>
+    /// <summary>ãƒœã‚¹: ç”»åƒé«˜ã•ãŒå–å¾—ã§ããªã„å ´åˆã®æ²ˆé™è·é›¢ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼ˆpxï¼‰ã€‚</summary>
     private const float BossDefeatSinkFallback = 600f;
 
-    /// <summary>˜Aí: ‘æˆêŒ`‘Ô‚ªÁ‚¦‚éiƒtƒF[ƒhƒAƒEƒgjŠÔi•bjB</summary>
+    /// <summary>é€£æˆ¦: ç¬¬ä¸€å½¢æ…‹ãŒæ¶ˆãˆã‚‹ï¼ˆãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆï¼‰æ™‚é–“ï¼ˆç§’ï¼‰ã€‚</summary>
     private const float Phase1VanishDuration = 0.4f;
 
     /// <summary>
-    /// Œ‚”j‰‰o‚ğÄ¶‚µ‚Ä‚©‚ç OnVictoryCore() ‚ğŒÄ‚ÔB
+    /// æ’ƒç ´æ¼”å‡ºã‚’å†ç”Ÿã—ã¦ã‹ã‚‰ OnVictoryCore() ã‚’å‘¼ã¶ã€‚
     /// </summary>
-    /// <param name="isBoss">true ‚È‚çƒ{ƒX‰‰oAfalse ‚È‚ç’Êíƒ‚ƒ“ƒXƒ^[‰‰oB</param>
+    /// <param name="isBoss">true ãªã‚‰ãƒœã‚¹æ¼”å‡ºã€false ãªã‚‰é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ¼”å‡ºã€‚</param>
     private IEnumerator PlayDefeatThenVictory(bool isBoss)
     {
         if (enemyImage != null)
@@ -58,7 +58,7 @@ public partial class BattleSceneController : MonoBehaviour
             if (isBoss) yield return StartCoroutine(BossDefeatRoutine());
             else yield return StartCoroutine(NormalDefeatRoutine());
 
-            // ‰‰oŒã‚Í‰æ‘œ‚ğ‰B‚·i”òUE’¾~‚ÌÅIó‘Ô‚ğŒÅ’èj
+            // æ¼”å‡ºå¾Œã¯ç”»åƒã‚’éš ã™ï¼ˆé£›æ•£ãƒ»æ²ˆé™ã®æœ€çµ‚çŠ¶æ…‹ã‚’å›ºå®šï¼‰
             enemyImage.enabled = false;
         }
 
@@ -66,9 +66,9 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// ˜Aíi‘æ“ñŒ`‘Ô‚ÖˆÚsj‚Ì‰‰oB
-    /// ‘æˆêŒ`‘Ô‚Ì‰æ‘œ‚ğƒtƒF[ƒhƒAƒEƒg‚µ‚ÄÁ‚µ‚½ŒãAOnVictoryCore() ‚ğŒÄ‚ÔB
-    /// OnVictoryCore “à‚ÅƒV[ƒ“‚ªÄ“Ç‚³‚êA‘æ“ñŒ`‘Ô‚ª Start() ‚Å•\¦‚³‚ê‚éB
+    /// é€£æˆ¦ï¼ˆç¬¬äºŒå½¢æ…‹ã¸ç§»è¡Œï¼‰æ™‚ã®æ¼”å‡ºã€‚
+    /// ç¬¬ä¸€å½¢æ…‹ã®ç”»åƒã‚’ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã—ã¦æ¶ˆã—ãŸå¾Œã€OnVictoryCore() ã‚’å‘¼ã¶ã€‚
+    /// OnVictoryCore å†…ã§ã‚·ãƒ¼ãƒ³ãŒå†èª­è¾¼ã•ã‚Œã€ç¬¬äºŒå½¢æ…‹ãŒ Start() ã§è¡¨ç¤ºã•ã‚Œã‚‹ã€‚
     /// </summary>
     private IEnumerator Phase1VanishThenContinue()
     {
@@ -89,7 +89,7 @@ public partial class BattleSceneController : MonoBehaviour
                 yield return null;
             }
 
-            // ‘æˆêŒ`‘Ô‚ğ”ñ•\¦‚É‚µAF‚ğ–ß‚µ‚Ä‚¨‚­iŸŒ`‘Ô‚Í Start() ‚ÅÄİ’è‚³‚ê‚éj
+            // ç¬¬ä¸€å½¢æ…‹ã‚’éè¡¨ç¤ºã«ã—ã€è‰²ã‚’æˆ»ã—ã¦ãŠãï¼ˆæ¬¡å½¢æ…‹ã¯ Start() ã§å†è¨­å®šã•ã‚Œã‚‹ï¼‰
             enemyImage.enabled = false;
             enemyImage.color = baseColor;
         }
@@ -99,8 +99,8 @@ public partial class BattleSceneController : MonoBehaviour
 
 
     /// <summary>
-    /// ’Êíƒ‚ƒ“ƒXƒ^[Œ‚”j‰‰oB
-    /// ‰æ‘œ‚ª‰ñ“]‚µ‚È‚ª‚çAƒ‰ƒ“ƒ_ƒ€‚È360“x•ûŒü‚Ö”ò‚ñ‚Å‚¢‚­iƒC[ƒYƒAƒEƒgjB
+    /// é€šå¸¸ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ¼”å‡ºã€‚
+    /// ç”»åƒãŒå›è»¢ã—ãªãŒã‚‰ã€ãƒ©ãƒ³ãƒ€ãƒ ãª360åº¦æ–¹å‘ã¸é£›ã‚“ã§ã„ãï¼ˆã‚¤ãƒ¼ã‚ºã‚¢ã‚¦ãƒˆï¼‰ã€‚
     /// </summary>
     private IEnumerator NormalDefeatRoutine()
     {
@@ -109,12 +109,12 @@ public partial class BattleSceneController : MonoBehaviour
         Vector2 startPos = rt.anchoredPosition;
         Quaternion startRot = rt.localRotation;
 
-        // ƒ‰ƒ“ƒ_ƒ€‚È360“x•ûŒü‚Ì’PˆÊƒxƒNƒgƒ‹
+        // ãƒ©ãƒ³ãƒ€ãƒ ãª360åº¦æ–¹å‘ã®å˜ä½ãƒ™ã‚¯ãƒˆãƒ«
         float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
         Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         Vector2 endPos = startPos + dir * NormalDefeatFlyDistance;
 
-        // ‰ñ“]•ûŒü‚àƒ‰ƒ“ƒ_ƒ€iŒv‰ñ‚è / ”½Œv‰ñ‚èj
+        // å›è»¢æ–¹å‘ã‚‚ãƒ©ãƒ³ãƒ€ãƒ ï¼ˆæ™‚è¨ˆå›ã‚Š / åæ™‚è¨ˆå›ã‚Šï¼‰
         float spin = NormalDefeatSpin * (UnityEngine.Random.value < 0.5f ? 1f : -1f);
 
         float t = 0f;
@@ -122,7 +122,7 @@ public partial class BattleSceneController : MonoBehaviour
         {
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / NormalDefeatDuration);
-            // ƒC[ƒYƒAƒEƒgiÅ‰‘¬‚­A™X‚ÉŒ¸‘¬j
+            // ã‚¤ãƒ¼ã‚ºã‚¢ã‚¦ãƒˆï¼ˆæœ€åˆé€Ÿãã€å¾ã€…ã«æ¸›é€Ÿï¼‰
             float ease = 1f - (1f - k) * (1f - k);
 
             rt.anchoredPosition = Vector2.Lerp(startPos, endPos, ease);
@@ -135,13 +135,13 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒ{ƒXƒ‚ƒ“ƒXƒ^[Œ‚”j‰‰oB
-    /// “_–Å¨1•b¨“_–Å¨0.5•b¨“_–Å¨0.5•b¨
-    /// ¶‰E‚Ék‚¦‚È‚ª‚ç‰º‚Ö’¾‚Ş‚æ‚¤‚ÉƒtƒF[ƒhƒAƒEƒgiˆÊ’u‚ÌŠî€‚ÍŒÅ’èjB
+    /// ãƒœã‚¹ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼æ’ƒç ´æ¼”å‡ºã€‚
+    /// ç‚¹æ»…â†’1ç§’â†’ç‚¹æ»…â†’0.5ç§’â†’ç‚¹æ»…â†’0.5ç§’â†’
+    /// å·¦å³ã«éœ‡ãˆãªãŒã‚‰ä¸‹ã¸æ²ˆã‚€ã‚ˆã†ã«ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆï¼ˆä½ç½®ã®åŸºæº–ã¯å›ºå®šï¼‰ã€‚
     /// </summary>
     private IEnumerator BossDefeatRoutine()
     {
-        // --- ‡@ “_–Å ¨ ‘Ò‹@ ‚ğ3‰ñi‘Ò‹@ŠÔ‚Í 1.0s / 0.5s / 0.5sj ---
+        // --- â‘  ç‚¹æ»… â†’ å¾…æ©Ÿ ã‚’3å›ï¼ˆå¾…æ©Ÿæ™‚é–“ã¯ 1.0s / 0.5s / 0.5sï¼‰ ---
         yield return StartCoroutine(BossBlinkOnce());
         yield return new WaitForSeconds(BossDefeatWait1);
 
@@ -151,14 +151,14 @@ public partial class BattleSceneController : MonoBehaviour
         yield return StartCoroutine(BossBlinkOnce());
         yield return new WaitForSeconds(BossDefeatWait3);
 
-        // --- ‡A k‚¦‚È‚ª‚ç‰º‚ÖˆÚ“®‚µ‚ÄƒtƒF[ƒhƒAƒEƒgBŒ³‰æ‘œ‚Ì’ê‚æ‚è‰º‚Íƒ}ƒXƒN‚Å‰B‚· ---
-        // e‚ª’Êí Canvas ‚Åƒ}ƒXƒN‚ª–³‚¢‚½‚ßAÀs‚É RectMask2D ‚ğ“®“I¶¬‚µ‚Ä
-        // enemyImage ‚ğ‚»‚Ìq‚É“ü‚êAƒ}ƒXƒN‹éŒ`i= Œ³‰æ‘œ‚Æ“¯‚¶—Ìˆæj‚ÌŠOi’ê‚æ‚è‰ºj‚ğ
-        // ƒNƒŠƒbƒv‚·‚éB‚±‚ê‚É‚æ‚èu’n–Ê‚Éö‚Á‚Ä‚¢‚­v•\Œ»‚É‚È‚éB
+        // --- â‘¡ éœ‡ãˆãªãŒã‚‰ä¸‹ã¸ç§»å‹•ã—ã¦ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆã€‚å…ƒç”»åƒã®åº•ã‚ˆã‚Šä¸‹ã¯ãƒã‚¹ã‚¯ã§éš ã™ ---
+        // è¦ªãŒé€šå¸¸ Canvas ã§ãƒã‚¹ã‚¯ãŒç„¡ã„ãŸã‚ã€å®Ÿè¡Œæ™‚ã« RectMask2D ã‚’å‹•çš„ç”Ÿæˆã—ã¦
+        // enemyImage ã‚’ãã®å­ã«å…¥ã‚Œã€ãƒã‚¹ã‚¯çŸ©å½¢ï¼ˆ= å…ƒç”»åƒã¨åŒã˜é ˜åŸŸï¼‰ã®å¤–ï¼ˆåº•ã‚ˆã‚Šä¸‹ï¼‰ã‚’
+        // ã‚¯ãƒªãƒƒãƒ—ã™ã‚‹ã€‚ã“ã‚Œã«ã‚ˆã‚Šã€Œåœ°é¢ã«æ½œã£ã¦ã„ãã€è¡¨ç¾ã«ãªã‚‹ã€‚
 
         RectTransform imgRt = enemyImage.rectTransform;
 
-        // Œ³‚Ìeqî•ñ‚ğ•Û‘¶i‰‰oŒã‚ÉŠ®‘S•œŒ³‚·‚éj
+        // å…ƒã®è¦ªå­æƒ…å ±ã‚’ä¿å­˜ï¼ˆæ¼”å‡ºå¾Œã«å®Œå…¨å¾©å…ƒã™ã‚‹ï¼‰
         Transform origParent = imgRt.parent;
         int origSiblingIndex = imgRt.GetSiblingIndex();
         Vector3 origWorldPos = imgRt.position;
@@ -169,7 +169,7 @@ public partial class BattleSceneController : MonoBehaviour
         Vector2 origSizeDelta = imgRt.sizeDelta;
         Color baseColor2 = enemyImage.color;
 
-        // ƒ}ƒXƒN—pƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µAŒ³‰æ‘œ‚Æ“¯‚¶ˆÊ’uEƒTƒCƒYEe‚É”z’u
+        // ãƒã‚¹ã‚¯ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã€å…ƒç”»åƒã¨åŒã˜ä½ç½®ãƒ»ã‚µã‚¤ã‚ºãƒ»è¦ªã«é…ç½®
         GameObject maskGo = new GameObject("BossDefeatMask", typeof(RectTransform));
         RectTransform maskRt = maskGo.GetComponent<RectTransform>();
         maskRt.SetParent(origParent, false);
@@ -181,13 +181,13 @@ public partial class BattleSceneController : MonoBehaviour
         maskRt.SetSiblingIndex(origSiblingIndex);
         maskGo.AddComponent<RectMask2D>();
 
-        // enemyImage ‚ğƒ}ƒXƒN‚Ìq‚ÉˆÚ“®iƒ[ƒ‹ƒhˆÊ’uˆÛj
+        // enemyImage ã‚’ãƒã‚¹ã‚¯ã®å­ã«ç§»å‹•ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰ä½ç½®ç¶­æŒï¼‰
         imgRt.SetParent(maskRt, true);
 
-        // ƒ}ƒXƒNŠî€‚Å‚Ìƒ[ƒJƒ‹ŠJnˆÊ’u‚ğ‹L˜^
+        // ãƒã‚¹ã‚¯åŸºæº–ã§ã®ãƒ­ãƒ¼ã‚«ãƒ«é–‹å§‹ä½ç½®ã‚’è¨˜éŒ²
         Vector2 startLocal = imgRt.anchoredPosition;
 
-        // ’¾‚Ş‹——£iŒ³‰æ‘œ‚Ì‚‚³•ª‚¾‚¯‰º‚°‚ê‚ÎA’êƒ‰ƒCƒ“‚©‚çŠ®‘S‚Éö‚Á‚ÄŒ©‚¦‚È‚­‚È‚éj
+        // æ²ˆã‚€è·é›¢ï¼ˆå…ƒç”»åƒã®é«˜ã•åˆ†ã ã‘ä¸‹ã’ã‚Œã°ã€åº•ãƒ©ã‚¤ãƒ³ã‹ã‚‰å®Œå…¨ã«æ½œã£ã¦è¦‹ãˆãªããªã‚‹ï¼‰
         float imgHeight = origSizeDelta.y != 0f ? Mathf.Abs(origSizeDelta.y) : imgRt.rect.height;
         float sinkDistance = imgHeight > 0f ? imgHeight : BossDefeatSinkFallback;
 
@@ -197,14 +197,14 @@ public partial class BattleSceneController : MonoBehaviour
             t += Time.deltaTime;
             float k = Mathf.Clamp01(t / BossDefeatSinkDuration);
 
-            // ‰º‚ÖˆÚ“®i’ê‚æ‚è‰º‚Íƒ}ƒXƒN‚Å‰B‚ê‚éj
+            // ä¸‹ã¸ç§»å‹•ï¼ˆåº•ã‚ˆã‚Šä¸‹ã¯ãƒã‚¹ã‚¯ã§éš ã‚Œã‚‹ï¼‰
             float sinkY = -sinkDistance * k;
-            // ‰¡•ûŒü‚Ìk‚¦iÁ‚¦‚é‚É‚Â‚ê‚Äã‚ß‚éj
+            // æ¨ªæ–¹å‘ã®éœ‡ãˆï¼ˆæ¶ˆãˆã‚‹ã«ã¤ã‚Œã¦å¼±ã‚ã‚‹ï¼‰
             float shakeX = Mathf.Sin(t * BossDefeatShakeSpeed) * BossDefeatShakeAmplitude * (1f - k);
 
             imgRt.anchoredPosition = startLocal + new Vector2(shakeX, sinkY);
 
-            // ‘S‘Ì‚ğ’Ê‚µ‚Ä™X‚ÉƒtƒF[ƒhƒAƒEƒg
+            // å…¨ä½“ã‚’é€šã—ã¦å¾ã€…ã«ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
             Color c = baseColor2;
             c.a = Mathf.Lerp(1f, 0f, k);
             enemyImage.color = c;
@@ -212,7 +212,7 @@ public partial class BattleSceneController : MonoBehaviour
             yield return null;
         }
 
-        // --- •œŒ³: enemyImage ‚ğŒ³‚ÌeEˆÊ’uEF‚É–ß‚µAƒ}ƒXƒN‚ğ”jŠü ---
+        // --- å¾©å…ƒ: enemyImage ã‚’å…ƒã®è¦ªãƒ»ä½ç½®ãƒ»è‰²ã«æˆ»ã—ã€ãƒã‚¹ã‚¯ã‚’ç ´æ£„ ---
         imgRt.SetParent(origParent, false);
         imgRt.SetSiblingIndex(origSiblingIndex);
         imgRt.anchorMin = origAnchorMin;
@@ -226,7 +226,7 @@ public partial class BattleSceneController : MonoBehaviour
     }
 
     /// <summary>
-    /// 1‰ñ“_–Å‚·‚éiÁ“”¨“_“”jB
+    /// 1å›ç‚¹æ»…ã™ã‚‹ï¼ˆæ¶ˆç¯â†’ç‚¹ç¯ï¼‰ã€‚
     /// </summary>
     private IEnumerator BossBlinkOnce()
     {

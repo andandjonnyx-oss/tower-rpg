@@ -1,7 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public abstract class EventCondition : ScriptableObject
 {
-    // ğŒ‚ª¬—§‚·‚é‚È‚ç true
+    // æ¡ä»¶ãŒæˆç«‹ã™ã‚‹ãªã‚‰ true
     public abstract bool Evaluate(GameState gs);
 }

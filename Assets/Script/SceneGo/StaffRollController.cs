@@ -1,103 +1,103 @@
-using System.Collections;
+ï»¿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒXƒ^ƒbƒtƒ[ƒ‹ƒV[ƒ“‚ÌƒRƒ“ƒgƒ[ƒ‰[B
-/// ƒXƒ‰ƒCƒhi‰æ‘œ{ƒNƒŒƒWƒbƒgƒeƒLƒXƒgj‚ğˆê’èŠÔŠu‚ÅƒtƒF[ƒhØ‘Ö‚µ‚È‚ª‚ç•\¦‚·‚éB
-/// BGM ‚Í‚±‚ÌƒV[ƒ“‚É’u‚¢‚½ SceneBgm ‚É”C‚¹‚éi‚±‚ÌƒXƒNƒŠƒvƒg‚Å‚Íˆµ‚í‚È‚¢jB
+/// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// ã‚¹ãƒ©ã‚¤ãƒ‰ï¼ˆç”»åƒï¼‹ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆãƒ†ã‚­ã‚¹ãƒˆï¼‰ã‚’ä¸€å®šé–“éš”ã§ãƒ•ã‚§ãƒ¼ãƒ‰åˆ‡æ›¿ã—ãªãŒã‚‰è¡¨ç¤ºã™ã‚‹ã€‚
+/// BGM ã¯ã“ã®ã‚·ãƒ¼ãƒ³ã«ç½®ã„ãŸ SceneBgm ã«ä»»ã›ã‚‹ï¼ˆã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã§ã¯æ‰±ã‚ãªã„ï¼‰ã€‚
 ///
-/// 2‚Â‚Ìƒ‚[ƒh‚Å“®‚­:
-///   1) ƒGƒ“ƒfƒBƒ“ƒOƒ‚[ƒhi’Êíj: ‘SƒXƒ‰ƒCƒh•\¦ŒãAƒGƒsƒ[ƒO‰ï˜b‚Ö‘JˆÚB
-///   2) ‰{——ƒ‚[ƒh: GameState.staffRollReturnScene ‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡
-///      i‰ï˜b}ŠÓ‚ÌƒXƒ^ƒbƒtƒ[ƒ‹ƒ{ƒ^ƒ“Œo—RjB
-///      I—¹Œãi‚Ü‚½‚Í–ß‚éƒ{ƒ^ƒ“j‚Å‚»‚Ì–ß‚èæƒV[ƒ“‚Ö‘JˆÚ‚·‚éB
-///      endingPhase ‚Í•ÏX‚µ‚È‚¢B
+/// 2ã¤ã®ãƒ¢ãƒ¼ãƒ‰ã§å‹•ã:
+///   1) ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ï¼ˆé€šå¸¸ï¼‰: å…¨ã‚¹ãƒ©ã‚¤ãƒ‰è¡¨ç¤ºå¾Œã€ã‚¨ãƒ”ãƒ­ãƒ¼ã‚°ä¼šè©±ã¸é·ç§»ã€‚
+///   2) é–²è¦§ãƒ¢ãƒ¼ãƒ‰: GameState.staffRollReturnScene ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆ
+///      ï¼ˆä¼šè©±å›³é‘‘ã®ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«ãƒœã‚¿ãƒ³çµŒç”±ï¼‰ã€‚
+///      çµ‚äº†å¾Œï¼ˆã¾ãŸã¯æˆ»ã‚‹ãƒœã‚¿ãƒ³ï¼‰ã§ãã®æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ã¸é·ç§»ã™ã‚‹ã€‚
+///      endingPhase ã¯å¤‰æ›´ã—ãªã„ã€‚
 /// </summary>
 public class StaffRollController : MonoBehaviour
 {
     [System.Serializable]
     public class StaffRollSlide
     {
-        [Tooltip("•\¦‚·‚é‰æ‘œinull‰Â: ƒeƒLƒXƒg‚Ì‚İ‚ÌƒXƒ‰ƒCƒhj")]
+        [Tooltip("è¡¨ç¤ºã™ã‚‹ç”»åƒï¼ˆnullå¯: ãƒ†ã‚­ã‚¹ãƒˆã®ã¿ã®ã‚¹ãƒ©ã‚¤ãƒ‰ï¼‰")]
         public Sprite image;
 
-        [Tooltip("ƒNƒŒƒWƒbƒgƒeƒLƒXƒgi‹ó‰Â: ‰æ‘œ‚Ì‚İ‚ÌƒXƒ‰ƒCƒhj")]
+        [Tooltip("ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆãƒ†ã‚­ã‚¹ãƒˆï¼ˆç©ºå¯: ç”»åƒã®ã¿ã®ã‚¹ãƒ©ã‚¤ãƒ‰ï¼‰")]
         [TextArea(2, 6)]
         public string creditText;
 
-        [Tooltip("‚±‚ÌƒXƒ‰ƒCƒh‚Ì•\¦•b”B0ˆÈ‰º‚È‚ç defaultSlideDuration ‚ğg‚¤")]
+        [Tooltip("ã“ã®ã‚¹ãƒ©ã‚¤ãƒ‰ã®è¡¨ç¤ºç§’æ•°ã€‚0ä»¥ä¸‹ãªã‚‰ defaultSlideDuration ã‚’ä½¿ã†")]
         public float durationOverride = 0f;
     }
 
     [Header("Slides")]
-    [Tooltip("•\¦‡‚ÉƒXƒ‰ƒCƒh‚ğ“o˜^‚·‚é")]
+    [Tooltip("è¡¨ç¤ºé †ã«ã‚¹ãƒ©ã‚¤ãƒ‰ã‚’ç™»éŒ²ã™ã‚‹")]
     [SerializeField] private StaffRollSlide[] slides;
 
-    [Tooltip("1ƒXƒ‰ƒCƒh‚Ì•\¦ŠÔi•bjBƒtƒF[ƒhŠÔ‚ÍŠÜ‚Ü‚È‚¢")]
+    [Tooltip("1ã‚¹ãƒ©ã‚¤ãƒ‰ã®è¡¨ç¤ºæ™‚é–“ï¼ˆç§’ï¼‰ã€‚ãƒ•ã‚§ãƒ¼ãƒ‰æ™‚é–“ã¯å«ã¾ãªã„")]
     [SerializeField] private float defaultSlideDuration = 4f;
 
-    [Tooltip("ƒtƒF[ƒhƒCƒ“/ƒAƒEƒg‚ÌŠÔi•bj")]
+    [Tooltip("ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³/ã‚¢ã‚¦ãƒˆã®æ™‚é–“ï¼ˆç§’ï¼‰")]
     [SerializeField] private float fadeDuration = 0.5f;
 
-    [Tooltip("ÅIƒXƒ‰ƒCƒhŒãA‘JˆÚ‚Ü‚Å‚Ì‘Ò‹@•b”")]
+    [Tooltip("æœ€çµ‚ã‚¹ãƒ©ã‚¤ãƒ‰å¾Œã€é·ç§»ã¾ã§ã®å¾…æ©Ÿç§’æ•°")]
     [SerializeField] private float endWaitSeconds = 1.5f;
 
     [Header("UI")]
-    [Tooltip("ƒXƒ‰ƒCƒh‘S‘Ìi‰æ‘œ+ƒeƒLƒXƒgj‚ğ“ü‚ê‚½ CanvasGroupBƒtƒF[ƒh‚Ég—p")]
+    [Tooltip("ã‚¹ãƒ©ã‚¤ãƒ‰å…¨ä½“ï¼ˆç”»åƒ+ãƒ†ã‚­ã‚¹ãƒˆï¼‰ã‚’å…¥ã‚ŒãŸ CanvasGroupã€‚ãƒ•ã‚§ãƒ¼ãƒ‰ã«ä½¿ç”¨")]
     [SerializeField] private CanvasGroup slideGroup;
 
-    [Tooltip("ƒXƒ‰ƒCƒh‰æ‘œ‚ğ•\¦‚·‚é Image")]
+    [Tooltip("ã‚¹ãƒ©ã‚¤ãƒ‰ç”»åƒã‚’è¡¨ç¤ºã™ã‚‹ Image")]
     [SerializeField] private Image slideImage;
 
-    [Tooltip("ƒNƒŒƒWƒbƒgƒeƒLƒXƒg‚ğ•\¦‚·‚é TMP_Text")]
+    [Tooltip("ã‚¯ãƒ¬ã‚¸ãƒƒãƒˆãƒ†ã‚­ã‚¹ãƒˆã‚’è¡¨ç¤ºã™ã‚‹ TMP_Text")]
     [SerializeField] private TMP_Text creditText;
 
-    [Tooltip("ƒXƒLƒbƒvƒ{ƒ^ƒ“i”CˆÓjB\n"
-           + "ƒGƒ“ƒfƒBƒ“ƒOƒ‚[ƒh: ƒXƒ^ƒbƒtƒ[ƒ‹‚ğÈ—ª‚µ‚ÄƒGƒsƒ[ƒO‚ÖB\n"
-           + "‰{——ƒ‚[ƒh: –ß‚èæƒV[ƒ“i}ŠÓj‚Ö–ß‚éB")]
+    [Tooltip("ã‚¹ã‚­ãƒƒãƒ—ãƒœã‚¿ãƒ³ï¼ˆä»»æ„ï¼‰ã€‚\n"
+           + "ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰: ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«ã‚’çœç•¥ã—ã¦ã‚¨ãƒ”ãƒ­ãƒ¼ã‚°ã¸ã€‚\n"
+           + "é–²è¦§ãƒ¢ãƒ¼ãƒ‰: æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ï¼ˆå›³é‘‘ï¼‰ã¸æˆ»ã‚‹ã€‚")]
     [SerializeField] private Button backButton;
 
-    /// <summary>‰{——ƒ‚[ƒhi}ŠÓ“™‚©‚çj‚©‚Ç‚¤‚©B</summary>
+    /// <summary>é–²è¦§ãƒ¢ãƒ¼ãƒ‰ï¼ˆå›³é‘‘ç­‰ã‹ã‚‰ï¼‰ã‹ã©ã†ã‹ã€‚</summary>
     private bool isReplayMode;
     private string replayReturnScene;
 
-    /// <summary>“ñd‘JˆÚ–h~B</summary>
+    /// <summary>äºŒé‡é·ç§»é˜²æ­¢ã€‚</summary>
     private bool finished;
 
     private void Start()
     {
         var gs = GameState.I;
 
-        // ‰{——ƒ‚[ƒh”»’èi}ŠÓ‘¤‚Å staffRollReturnScene ‚ğƒZƒbƒg‚µ‚Ä‘JˆÚ‚µ‚Ä‚­‚éj
+        // é–²è¦§ãƒ¢ãƒ¼ãƒ‰åˆ¤å®šï¼ˆå›³é‘‘å´ã§ staffRollReturnScene ã‚’ã‚»ãƒƒãƒˆã—ã¦é·ç§»ã—ã¦ãã‚‹ï¼‰
         if (gs != null && !string.IsNullOrEmpty(gs.staffRollReturnScene))
         {
             isReplayMode = true;
             replayReturnScene = gs.staffRollReturnScene;
-            gs.staffRollReturnScene = null; // g—pŒãƒNƒŠƒA
+            gs.staffRollReturnScene = null; // ä½¿ç”¨å¾Œã‚¯ãƒªã‚¢
         }
 
-        // ƒXƒLƒbƒvƒ{ƒ^ƒ“: —¼ƒ‚[ƒh‚Å•\¦‚·‚éB
-        // Finish() ‚ªƒ‚[ƒh‚É‰‚¶‚Ä‘JˆÚæ‚ğU‚è•ª‚¯‚é
-        // iƒGƒ“ƒfƒBƒ“ƒOƒ‚[ƒh¨ƒGƒsƒ[ƒO / ‰{——ƒ‚[ƒh¨–ß‚èæƒV[ƒ“jB
+        // ã‚¹ã‚­ãƒƒãƒ—ãƒœã‚¿ãƒ³: ä¸¡ãƒ¢ãƒ¼ãƒ‰ã§è¡¨ç¤ºã™ã‚‹ã€‚
+        // Finish() ãŒãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ã¦é·ç§»å…ˆã‚’æŒ¯ã‚Šåˆ†ã‘ã‚‹
+        // ï¼ˆã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰â†’ã‚¨ãƒ”ãƒ­ãƒ¼ã‚° / é–²è¦§ãƒ¢ãƒ¼ãƒ‰â†’æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ï¼‰ã€‚
         if (backButton != null)
         {
             backButton.gameObject.SetActive(true);
             backButton.onClick.AddListener(Finish);
         }
 
-        // ƒGƒ“ƒfƒBƒ“ƒOƒ‚[ƒh: ƒtƒF[ƒY‚ğ‹L˜^
-        // i‚±‚±‚Å’†’f‚µ‚½ê‡AƒXƒ^ƒbƒtƒ[ƒ‹æ“ª‚©‚çÄŠJ‚³‚ê‚éj
+        // ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰: ãƒ•ã‚§ãƒ¼ã‚ºã‚’è¨˜éŒ²
+        // ï¼ˆã“ã“ã§ä¸­æ–­ã—ãŸå ´åˆã€ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«å…ˆé ­ã‹ã‚‰å†é–‹ã•ã‚Œã‚‹ï¼‰
         if (!isReplayMode && gs != null && gs.endingPhase < EndingManager.PhaseStaffRoll)
         {
             gs.endingPhase = EndingManager.PhaseStaffRoll;
             SaveManager.Save();
         }
 
-        // ƒXƒ‰ƒCƒh‰æ‘œ‚ÍƒTƒCƒYEc‰¡”ä‚ªƒoƒ‰ƒoƒ‰‚È‚½‚ßA
-        // ˜g“à‚Éc‰¡”ä‚ğ•Û‚Á‚½‚Ü‚Üû‚ß‚éiƒŒƒ^[ƒ{ƒbƒNƒX•\¦j
+        // ã‚¹ãƒ©ã‚¤ãƒ‰ç”»åƒã¯ã‚µã‚¤ã‚ºãƒ»ç¸¦æ¨ªæ¯”ãŒãƒãƒ©ãƒãƒ©ãªãŸã‚ã€
+        // æ å†…ã«ç¸¦æ¨ªæ¯”ã‚’ä¿ã£ãŸã¾ã¾åã‚ã‚‹ï¼ˆãƒ¬ã‚¿ãƒ¼ãƒœãƒƒã‚¯ã‚¹è¡¨ç¤ºï¼‰
         if (slideImage != null)
             slideImage.preserveAspect = true;
 
@@ -114,7 +114,7 @@ public class StaffRollController : MonoBehaviour
                 var s = slides[i];
                 if (s == null) continue;
 
-                // ƒXƒ‰ƒCƒh“à—e‚ğƒZƒbƒg
+                // ã‚¹ãƒ©ã‚¤ãƒ‰å†…å®¹ã‚’ã‚»ãƒƒãƒˆ
                 if (slideImage != null)
                 {
                     slideImage.sprite = s.image;
@@ -123,7 +123,7 @@ public class StaffRollController : MonoBehaviour
                 if (creditText != null)
                     creditText.text = s.creditText ?? "";
 
-                // ƒtƒF[ƒhƒCƒ“ ¨ •\¦ ¨ ƒtƒF[ƒhƒAƒEƒg
+                // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ â†’ è¡¨ç¤º â†’ ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
                 yield return Fade(0f, 1f);
                 float dur = (s.durationOverride > 0f) ? s.durationOverride : defaultSlideDuration;
                 yield return new WaitForSeconds(dur);
@@ -150,8 +150,8 @@ public class StaffRollController : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒXƒ^ƒbƒtƒ[ƒ‹I—¹ˆ—B
-    /// ‰{——ƒ‚[ƒh: –ß‚èæƒV[ƒ“‚ÖBƒGƒ“ƒfƒBƒ“ƒOƒ‚[ƒh: ƒGƒsƒ[ƒO‰ï˜b‚ÖB
+    /// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«çµ‚äº†å‡¦ç†ã€‚
+    /// é–²è¦§ãƒ¢ãƒ¼ãƒ‰: æˆ»ã‚Šå…ˆã‚·ãƒ¼ãƒ³ã¸ã€‚ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰: ã‚¨ãƒ”ãƒ­ãƒ¼ã‚°ä¼šè©±ã¸ã€‚
     /// </summary>
     private void Finish()
     {

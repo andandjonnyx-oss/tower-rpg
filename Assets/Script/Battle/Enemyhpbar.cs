@@ -1,47 +1,47 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// “G‚ÌHPƒo[‚ğ•\¦‚·‚éƒRƒ“ƒ|[ƒlƒ“ƒgB
-/// ƒ}ƒWƒbƒNƒAƒCƒeƒ€uƒ‹[ƒyv‚ğŠ‚µ‚Ä‚¢‚éê‡‚Ì‚İ•\¦‚·‚éB
-/// ƒ‹[ƒy‚ğ•¡”Š‚µ‚Ä‚¢‚éê‡‚Íƒo[‚Ì‰¡•‚Éƒ{[ƒiƒX‚ğ•t‚¯‚éi‚¨—V‚Ñ—v‘fjB
-///   ”{—¦ = 1 + 0.1 ~ (Š” - 1)
-///   —á: 1ŒÂ=1.0”{, 2ŒÂ=1.1”{, 5ŒÂ=1.4”{, 10ŒÂ=1.9”{
+/// æ•µã®HPãƒãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã€‚
+/// ãƒã‚¸ãƒƒã‚¯ã‚¢ã‚¤ãƒ†ãƒ ã€Œãƒ«ãƒ¼ãƒšã€ã‚’æ‰€æŒã—ã¦ã„ã‚‹å ´åˆã®ã¿è¡¨ç¤ºã™ã‚‹ã€‚
+/// ãƒ«ãƒ¼ãƒšã‚’è¤‡æ•°æ‰€æŒã—ã¦ã„ã‚‹å ´åˆã¯ãƒãƒ¼ã®æ¨ªå¹…ã«ãƒœãƒ¼ãƒŠã‚¹ã‚’ä»˜ã‘ã‚‹ï¼ˆãŠéŠã³è¦ç´ ï¼‰ã€‚
+///   å€ç‡ = 1 + 0.1 Ã— (æ‰€æŒæ•° - 1)
+///   ä¾‹: 1å€‹=1.0å€, 2å€‹=1.1å€, 5å€‹=1.4å€, 10å€‹=1.9å€
 ///
-/// g‚¢•û:
-///   1. “G‰æ‘œ‚Ìã‚É SlideriHPƒo[j‚ğ”z’u
-///   2. ‚±‚ÌƒXƒNƒŠƒvƒg‚ğ Slider ‚ÉƒAƒ^ƒbƒ`
-///   3. hpSlider ‚É©g‚Ì Slider ‚ğƒAƒTƒCƒ“
-///   4. fillImage ‚É Slider ‚Ì Fill Area > Fill ‚Ì Image ‚ğƒAƒTƒCƒ“
-///   5. backgroundImage ‚É Slider ‚Ì Background ‚Ì Image ‚ğƒAƒTƒCƒ“
-///   6. loupeItemId ‚Éƒ‹[ƒy‚Ì itemId ‚ğİ’èi—á: "M001_Loupe"j
+/// ä½¿ã„æ–¹:
+///   1. æ•µç”»åƒã®ä¸Šã« Sliderï¼ˆHPãƒãƒ¼ï¼‰ã‚’é…ç½®
+///   2. ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ Slider ã«ã‚¢ã‚¿ãƒƒãƒ
+///   3. hpSlider ã«è‡ªèº«ã® Slider ã‚’ã‚¢ã‚µã‚¤ãƒ³
+///   4. fillImage ã« Slider ã® Fill Area > Fill ã® Image ã‚’ã‚¢ã‚µã‚¤ãƒ³
+///   5. backgroundImage ã« Slider ã® Background ã® Image ã‚’ã‚¢ã‚µã‚¤ãƒ³
+///   6. loupeItemId ã«ãƒ«ãƒ¼ãƒšã® itemId ã‚’è¨­å®šï¼ˆä¾‹: "M001_Loupe"ï¼‰
 ///
-/// HPƒo[‚Í–ˆƒtƒŒ[ƒ€ BattleSceneController ‚Ì“GHP ‚ğŠÄ‹‚µ‚ÄXV‚·‚éB
-/// iHpMpDisplay.cs ‚Æ“¯‚¶ƒpƒ^[ƒ“j
+/// HPãƒãƒ¼ã¯æ¯ãƒ•ãƒ¬ãƒ¼ãƒ  BattleSceneController ã®æ•µHP ã‚’ç›£è¦–ã—ã¦æ›´æ–°ã™ã‚‹ã€‚
+/// ï¼ˆHpMpDisplay.cs ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼‰
 /// </summary>
 public class EnemyHpBar : MonoBehaviour
 {
     [Header("UI")]
-    [Tooltip("HPƒo[—p‚Ì Slider ƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    [Tooltip("HPãƒãƒ¼ç”¨ã® Slider ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     [SerializeField] private Slider hpSlider;
 
-    [Tooltip("Slider ‚Ì Fill ImageiHP=0 ‚Å”ñ•\¦‚É‚·‚é‚½‚ßj")]
+    [Tooltip("Slider ã® Fill Imageï¼ˆHP=0 ã§éè¡¨ç¤ºã«ã™ã‚‹ãŸã‚ï¼‰")]
     [SerializeField] private Image fillImage;
 
-    [Tooltip("Slider ‚Ì Background ImageiHP=–ƒ^ƒ“‚Å”ñ•\¦‚É‚·‚é‚½‚ßj")]
+    [Tooltip("Slider ã® Background Imageï¼ˆHP=æº€ã‚¿ãƒ³ã§éè¡¨ç¤ºã«ã™ã‚‹ãŸã‚ï¼‰")]
     [SerializeField] private Image backgroundImage;
 
     [Header("Loupe Settings")]
-    [Tooltip("ƒ‹[ƒy‚Ì itemIdB‚±‚Ì itemId ‚ÌƒAƒCƒeƒ€‚ğŠ‚µ‚Ä‚¢‚ê‚ÎHPƒo[‚ğ•\¦‚·‚é")]
+    [Tooltip("ãƒ«ãƒ¼ãƒšã® itemIdã€‚ã“ã® itemId ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‰€æŒã—ã¦ã„ã‚Œã°HPãƒãƒ¼ã‚’è¡¨ç¤ºã™ã‚‹")]
     [SerializeField] private string loupeItemId = "M001_Loupe";
 
-    [Tooltip("ƒ‹[ƒy2ŒÂ–ÚˆÈ~1ŒÂ‚ ‚½‚è‚Ì’Ç‰Á”{—¦iƒfƒtƒHƒ‹ƒg 0.1j")]
+    [Tooltip("ãƒ«ãƒ¼ãƒš2å€‹ç›®ä»¥é™1å€‹ã‚ãŸã‚Šã®è¿½åŠ å€ç‡ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ 0.1ï¼‰")]
     [SerializeField] private float bonusPerExtra = 0.1f;
 
-    // HPƒo[‚Ìƒ‹[ƒg GameObjecti•\¦/”ñ•\¦Ø‘Ö—pj
+    // HPãƒãƒ¼ã®ãƒ«ãƒ¼ãƒˆ GameObjectï¼ˆè¡¨ç¤º/éè¡¨ç¤ºåˆ‡æ›¿ç”¨ï¼‰
     private GameObject barRoot;
 
-    // ‘OƒtƒŒ[ƒ€‚Ì’li•Ï‰»‚Ì‚İXVj
+    // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®å€¤ï¼ˆå¤‰åŒ–æ™‚ã®ã¿æ›´æ–°ï¼‰
     private int lastHp = -1;
     private int lastMaxHp = -1;
 
@@ -49,22 +49,22 @@ public class EnemyHpBar : MonoBehaviour
     {
         barRoot = (hpSlider != null) ? hpSlider.gameObject : gameObject;
 
-        // ƒ‹[ƒyŠ”»’è
+        // ãƒ«ãƒ¼ãƒšæ‰€æŒåˆ¤å®š
         int loupeCount = CountLoupeItems();
 
         if (loupeCount <= 0)
         {
-            // ƒ‹[ƒy–¢Š ¨ HPƒo[”ñ•\¦
+            // ãƒ«ãƒ¼ãƒšæœªæ‰€æŒ â†’ HPãƒãƒ¼éè¡¨ç¤º
             barRoot.SetActive(false);
-            Debug.Log("[EnemyHpBar] ƒ‹[ƒy–¢Š ¨ HPƒo[”ñ•\¦");
+            Debug.Log("[EnemyHpBar] ãƒ«ãƒ¼ãƒšæœªæ‰€æŒ â†’ HPãƒãƒ¼éè¡¨ç¤º");
             return;
         }
 
-        // ƒ‹[ƒyŠ ¨ HPƒo[•\¦
+        // ãƒ«ãƒ¼ãƒšæ‰€æŒ â†’ HPãƒãƒ¼è¡¨ç¤º
         barRoot.SetActive(true);
-        Debug.Log($"[EnemyHpBar] ƒ‹[ƒyŠ”={loupeCount} ¨ HPƒo[•\¦");
+        Debug.Log($"[EnemyHpBar] ãƒ«ãƒ¼ãƒšæ‰€æŒæ•°={loupeCount} â†’ HPãƒãƒ¼è¡¨ç¤º");
 
-        // ƒ‹[ƒy2ŒÂˆÈã ¨ ‰¡•ƒ{[ƒiƒX: 1 + 0.1 ~ (count - 1)
+        // ãƒ«ãƒ¼ãƒš2å€‹ä»¥ä¸Š â†’ æ¨ªå¹…ãƒœãƒ¼ãƒŠã‚¹: 1 + 0.1 Ã— (count - 1)
         if (loupeCount >= 2)
         {
             float multiplier = 1f + bonusPerExtra * (loupeCount - 1);
@@ -74,21 +74,21 @@ public class EnemyHpBar : MonoBehaviour
                 Vector2 size = rt.sizeDelta;
                 size.x *= multiplier;
                 rt.sizeDelta = size;
-                Debug.Log($"[EnemyHpBar] ƒ‹[ƒy{loupeCount}ŒÂŠ ¨ ƒo[‰¡•{multiplier:F1}”{");
+                Debug.Log($"[EnemyHpBar] ãƒ«ãƒ¼ãƒš{loupeCount}å€‹æ‰€æŒ â†’ ãƒãƒ¼æ¨ªå¹…{multiplier:F1}å€");
             }
         }
 
-        // Slider ‚Ì‰Šúİ’è
+        // Slider ã®åˆæœŸè¨­å®š
         if (hpSlider != null)
         {
             hpSlider.minValue = 0f;
             hpSlider.maxValue = 1f;
             hpSlider.value = 1f;
-            // ƒCƒ“ƒ^ƒ‰ƒNƒVƒ‡ƒ“–³Œø‰»iƒ†[ƒU[‚ª‘€ì‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚éj
+            // ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ã‚·ãƒ§ãƒ³ç„¡åŠ¹åŒ–ï¼ˆãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒæ“ä½œã§ããªã„ã‚ˆã†ã«ã™ã‚‹ï¼‰
             hpSlider.interactable = false;
         }
 
-        // ‰Šúó‘Ô: HP–ƒ^ƒ“ ¨ Background ‚ğ‰B‚·
+        // åˆæœŸçŠ¶æ…‹: HPæº€ã‚¿ãƒ³ â†’ Background ã‚’éš ã™
         UpdateFillBackgroundVisibility(1f);
     }
 
@@ -100,7 +100,7 @@ public class EnemyHpBar : MonoBehaviour
         int currentHp = BattleSceneController.EnemyCurrentHp;
         int maxHp = BattleSceneController.EnemyMaxHp;
 
-        // ’l‚ª•Ï‰»‚µ‚½‚¾‚¯XV
+        // å€¤ãŒå¤‰åŒ–ã—ãŸæ™‚ã ã‘æ›´æ–°
         if (currentHp != lastHp || maxHp != lastMaxHp)
         {
             lastHp = currentHp;
@@ -113,10 +113,10 @@ public class EnemyHpBar : MonoBehaviour
     }
 
     /// <summary>
-    /// HP”ä—¦‚É‰‚¶‚Ä Fill ‚Æ Background ‚Ì•\¦/”ñ•\¦‚ğØ‚è‘Ö‚¦‚éB
-    /// HP=0   ¨ Fill ‚ğ”ñ•\¦iÔ‚ÌBackground‚¾‚¯Œ©‚¦‚éj
-    /// HP=–ƒ^ƒ“ ¨ Background ‚ğ”ñ•\¦i—Î‚ÌFill‚¾‚¯Œ©‚¦‚éj
-    /// ‚»‚êˆÈŠO  ¨ —¼•û•\¦
+    /// HPæ¯”ç‡ã«å¿œã˜ã¦ Fill ã¨ Background ã®è¡¨ç¤º/éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+    /// HP=0   â†’ Fill ã‚’éè¡¨ç¤ºï¼ˆèµ¤ã®Backgroundã ã‘è¦‹ãˆã‚‹ï¼‰
+    /// HP=æº€ã‚¿ãƒ³ â†’ Background ã‚’éè¡¨ç¤ºï¼ˆç·‘ã®Fillã ã‘è¦‹ãˆã‚‹ï¼‰
+    /// ãã‚Œä»¥å¤–  â†’ ä¸¡æ–¹è¡¨ç¤º
     /// </summary>
     private void UpdateFillBackgroundVisibility(float ratio)
     {
@@ -131,7 +131,7 @@ public class EnemyHpBar : MonoBehaviour
     }
 
     /// <summary>
-    /// ItemBoxManager ‚©‚çƒ‹[ƒy‚ÌŠ”‚ğƒJƒEƒ“ƒg‚·‚éB
+    /// ItemBoxManager ã‹ã‚‰ãƒ«ãƒ¼ãƒšã®æ‰€æŒæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹ã€‚
     /// </summary>
     private int CountLoupeItems()
     {

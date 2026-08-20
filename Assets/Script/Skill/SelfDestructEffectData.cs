@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ©”šƒGƒtƒFƒNƒg‚Ì ScriptableObjectB
-/// ƒXƒLƒ‹g—pÒi’Êí‚Íƒ‚ƒ“ƒXƒ^[j‚ª©–Å‚·‚éŒø‰ÊB
+/// è‡ªçˆ†ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã® ScriptableObjectã€‚
+/// ã‚¹ã‚­ãƒ«ä½¿ç”¨è€…ï¼ˆé€šå¸¸ã¯ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ï¼‰ãŒè‡ªæ»…ã™ã‚‹åŠ¹æœã€‚
 ///
-/// y—p“rz
-///   ƒ~ƒcƒoƒ`‚Ìu“Å‚Ìˆêh‚µv‚È‚ÇA©g‚ğ‹]µ‚É‚µ‚ÄUŒ‚‚·‚é‹Z‚Ég—pB
-///   ƒ_ƒ[ƒWŒvZ‚Í SkillData ‘¤ifixedDamage / damageMultiplierj‚Ås‚¢A
-///   ©”š‚Íƒ_ƒ[ƒW“K—pŒã‚Ì’Ç‰ÁŒø‰Ê‚Æ‚µ‚Äˆ—‚·‚éB
+/// ã€ç”¨é€”ã€‘
+///   ãƒŸãƒ„ãƒãƒã®ã€Œæ¯’ã®ä¸€åˆºã—ã€ãªã©ã€è‡ªèº«ã‚’çŠ ç‰²ã«ã—ã¦æ”»æ’ƒã™ã‚‹æŠ€ã«ä½¿ç”¨ã€‚
+///   ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã¯ SkillData å´ï¼ˆfixedDamage / damageMultiplierï¼‰ã§è¡Œã„ã€
+///   è‡ªçˆ†ã¯ãƒ€ãƒ¡ãƒ¼ã‚¸é©ç”¨å¾Œã®è¿½åŠ åŠ¹æœã¨ã—ã¦å‡¦ç†ã™ã‚‹ã€‚
 ///
-/// yƒpƒ‰ƒ[ƒ^iSkillEffectEntry ‘¤jz
-///   chance: ©”š‚Ì”­“®—¦i%jB’Êí‚Í 100iŠm’è©”šjB
-///   intValue: g—p‚µ‚È‚¢B
+/// ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆSkillEffectEntry å´ï¼‰ã€‘
+///   chance: è‡ªçˆ†ã®ç™ºå‹•ç‡ï¼ˆ%ï¼‰ã€‚é€šå¸¸ã¯ 100ï¼ˆç¢ºå®šè‡ªçˆ†ï¼‰ã€‚
+///   intValue: ä½¿ç”¨ã—ãªã„ã€‚
 ///
-/// yˆ—z
-///   SkillEffectProcessor ‚Åˆ—B
-///   isPlayerAttack == false ‚Ìê‡: “G‚Ì currentHp ‚ğ 0 ‚É‚·‚éB
-///   isPlayerAttack == true ‚Ìê‡: ƒvƒŒƒCƒ„[‚Ì currentHp ‚ğ 0 ‚É‚·‚éi’Êí‚Íg‚í‚È‚¢jB
+/// ã€å‡¦ç†ã€‘
+///   SkillEffectProcessor ã§å‡¦ç†ã€‚
+///   isPlayerAttack == false ã®å ´åˆ: æ•µã® currentHp ã‚’ 0 ã«ã™ã‚‹ã€‚
+///   isPlayerAttack == true ã®å ´åˆ: ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã® currentHp ã‚’ 0 ã«ã™ã‚‹ï¼ˆé€šå¸¸ã¯ä½¿ã‚ãªã„ï¼‰ã€‚
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Effects/Self Destruct Effect")]
 public class SelfDestructEffectData : SkillEffectData
 {
-    // ƒpƒ‰ƒ[ƒ^‚È‚µi”­“®—¦‚Í SkillEffectEntry.chance ‚Å§Œäj
+    // ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ãªã—ï¼ˆç™ºå‹•ç‡ã¯ SkillEffectEntry.chance ã§åˆ¶å¾¡ï¼‰
 }

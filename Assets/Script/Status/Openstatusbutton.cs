@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Tower ƒV[ƒ“‚â Main ƒV[ƒ“‚Ìƒ{ƒ^ƒ“‚ÉƒAƒ^ƒbƒ`B
-/// ƒNƒŠƒbƒN‚Å Status ƒV[ƒ“‚ğŠJ‚«AŒ»İ‚ÌƒV[ƒ“–¼‚ğ GameState ‚É‹L˜^‚·‚éB
+/// Tower ã‚·ãƒ¼ãƒ³ã‚„ Main ã‚·ãƒ¼ãƒ³ã®ãƒœã‚¿ãƒ³ã«ã‚¢ã‚¿ãƒƒãƒã€‚
+/// ã‚¯ãƒªãƒƒã‚¯ã§ Status ã‚·ãƒ¼ãƒ³ã‚’é–‹ãã€ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³åã‚’ GameState ã«è¨˜éŒ²ã™ã‚‹ã€‚
 /// </summary>
 public class OpenStatusButton : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class OpenStatusButton : MonoBehaviour
 
     public void OnClick()
     {
-        // –ß‚èæ‚ğ‹L˜^
+        // æˆ»ã‚Šå…ˆã‚’è¨˜éŒ²
         if (GameState.I != null)
             GameState.I.previousSceneName = SceneManager.GetActiveScene().name;
 

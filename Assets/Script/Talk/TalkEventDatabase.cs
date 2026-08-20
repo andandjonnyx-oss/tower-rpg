@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Talk/TalkEventDatabase")]
@@ -6,11 +6,11 @@ public class TalkEventDatabase : ScriptableObject
 {
     public List<TalkEvent> events = new();
 
-    // ‰‰ñƒAƒNƒZƒX‚Éì‚éõˆø‚Ì’è‹`ifloor/step -> listj
+    // åˆå›ã‚¢ã‚¯ã‚»ã‚¹æ™‚ã«ä½œã‚‹ç´¢å¼•ã®å®šç¾©ï¼ˆfloor/step -> listï¼‰
     private Dictionary<(int floor, int step), List<TalkEvent>> index;
     private Dictionary<string, TalkEvent> byId;
 
-    // «‘‚ğì¬‚·‚éŠÖ”iŠî–{1“x‚Ì‚İ‹@”\‚·‚éj
+    // è¾æ›¸ã‚’ä½œæˆã™ã‚‹é–¢æ•°ï¼ˆåŸºæœ¬1åº¦ã®ã¿æ©Ÿèƒ½ã™ã‚‹ï¼‰
     public void BuildIndexIfNeeded()
     {
         if (index != null && byId != null) return;
@@ -21,21 +21,21 @@ public class TalkEventDatabase : ScriptableObject
         foreach (var e in events)
         {
 
-            // ‹ó”’‚È‚çƒXƒLƒbƒv‚µŸ‚Ìƒ‹[ƒv‚Ö
+            // ç©ºç™½ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—ã—æ¬¡ã®ãƒ«ãƒ¼ãƒ—ã¸
             if (e == null) continue;
 
-            // id«‘ –³‚¯‚ê‚Î’Ç‰Á
+            // idè¾æ›¸ ç„¡ã‘ã‚Œã°è¿½åŠ 
             if (!string.IsNullOrEmpty(e.id) && !byId.ContainsKey(e.id))
                 byId.Add(e.id, e);
 
-            // ğŒ«‘@–³‚¯‚ê‚Î’Ç‰Á@‚ ‚ê‚Î‚»‚ÌƒŠƒXƒg‚ÌQÆ‚ğŠ“¾
+            // æ¡ä»¶è¾æ›¸ã€€ç„¡ã‘ã‚Œã°è¿½åŠ ã€€ã‚ã‚Œã°ãã®ãƒªã‚¹ãƒˆã®å‚ç…§ã‚’æ‰€å¾—
             var key = (e.floor, e.step);
             if (!index.TryGetValue(key, out var list))
             {
                 list = new List<TalkEvent>();
                 index.Add(key, list);
             }
-            // ğŒƒŠƒXƒg‚ÉƒCƒxƒ“ƒg‚ğ’Ç‰Á
+            // æ¡ä»¶ãƒªã‚¹ãƒˆã«ã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿½åŠ 
             list.Add(e);
         }
     }
@@ -43,14 +43,14 @@ public class TalkEventDatabase : ScriptableObject
     public IReadOnlyList<TalkEvent> FindByCondition(int floor, int step)
     {
         BuildIndexIfNeeded();
-        //«‘‚É‚ ‚ê‚ÎƒŠƒXƒg‚ğ•Ô‚·A–³‚¯‚ê‚Î‹ó‚Ì”z—ñ‚ğ•Ô‚·i‚±‚Ì‚æ‚¤‚É‹LÚ‚ª–³‚­‚Ä‚à“Ç‚İæ‚èê—pj
+        //è¾æ›¸ã«ã‚ã‚Œã°ãƒªã‚¹ãƒˆã‚’è¿”ã™ã€ç„¡ã‘ã‚Œã°ç©ºã®é…åˆ—ã‚’è¿”ã™ï¼ˆã“ã®ã‚ˆã†ã«è¨˜è¼‰ãŒç„¡ãã¦ã‚‚èª­ã¿å–ã‚Šå°‚ç”¨ï¼‰
         return index.TryGetValue((floor, step), out var list) ? list : (IReadOnlyList<TalkEvent>)System.Array.Empty<TalkEvent>();
     }
 
     public TalkEvent FindById(string id)
     {
         BuildIndexIfNeeded();
-        // ID‚ª‘¶İ‚µA«‘‚É‚ ‚ê‚Îˆê’v‚µ‚½ƒCƒxƒ“ƒg‚ğ•Ô‚·A–³‚¯‚ê‚Înull‚ğ•Ô‚·
+        // IDãŒå­˜åœ¨ã—ã€è¾æ›¸ã«ã‚ã‚Œã°ä¸€è‡´ã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’è¿”ã™ã€ç„¡ã‘ã‚Œã°nullã‚’è¿”ã™
         return (!string.IsNullOrEmpty(id) && byId.TryGetValue(id, out var e)) ? e : null;
     }
 

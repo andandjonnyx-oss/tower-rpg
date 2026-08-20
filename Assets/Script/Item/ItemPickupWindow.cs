@@ -1,10 +1,10 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//enum —ñ‹“Œ^@
+//enum åˆ—æŒ™å‹ã€€
 public enum ItemPickupResult
 {
     Get,
@@ -26,20 +26,20 @@ public class ItemPickupWindow : MonoBehaviour
     [SerializeField] private Button ignoreButton;
 
     [Header("Input Lock")]
-    [SerializeField] private float inputLockSeconds = 0.4f; // š’Ç‰ÁF•\¦’¼Œã‚Éƒ{ƒ^ƒ“‚ğ–³Œø‰»‚·‚éŠÔ
+    [SerializeField] private float inputLockSeconds = 0.4f; // â˜…è¿½åŠ ï¼šè¡¨ç¤ºç›´å¾Œã«ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–ã™ã‚‹æ™‚é–“
 
     private bool currentIsFull;
-    private Coroutine unlockCoroutine; // š’Ç‰Á
+    private Coroutine unlockCoroutine; // â˜…è¿½åŠ 
 
-    //ItemPickupResult ‚ğó‚¯æ‚éŠÖ”‚ğ•Û‘¶‚·‚é•Ï”
-    //ƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚µ‚ÄŒã‚ÅŒ‹‰Êi“üèor”pŠüj‚ğ•Ô‚·UI‚ÉŒü‚¢‚Ä‚¢‚é
+    //ItemPickupResult ã‚’å—ã‘å–ã‚‹é–¢æ•°ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
+    //ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã—ã¦å¾Œã§çµæœï¼ˆå…¥æ‰‹orå»ƒæ£„ï¼‰ã‚’è¿”ã™UIã«å‘ã„ã¦ã„ã‚‹
     private Action<ItemPickupResult> onResult;
 
     private void Awake()
     {
 
-        //AddListener ƒXƒNƒŠƒvƒg‘¤‚Åƒ{ƒ^ƒ“ˆ—“o˜^@
-        //¡‰ñ‚Ì‚æ‚¤‚ÉƒXƒNƒŠƒvƒg“à‚ÅButton‚ª’è‹`‚³‚ê‚Ä‚¢‚éê‡‚É—˜—p
+        //AddListener ã‚¹ã‚¯ãƒªãƒ—ãƒˆå´ã§ãƒœã‚¿ãƒ³å‡¦ç†ç™»éŒ²ã€€
+        //ä»Šå›ã®ã‚ˆã†ã«ã‚¹ã‚¯ãƒªãƒ—ãƒˆå†…ã§ButtonãŒå®šç¾©ã•ã‚Œã¦ã„ã‚‹å ´åˆã«åˆ©ç”¨
         if (getButton != null)
             getButton.onClick.AddListener(OnClickGet);
 
@@ -58,7 +58,7 @@ public class ItemPickupWindow : MonoBehaviour
     bool cannotIgnore = false,
     bool playSe = true)
     {
-        // ƒAƒCƒeƒ€”­Œ©SEi®—Œã‚ÌÄ•\¦‚È‚ÇA–Â‚ç‚µ‚½‚­‚È‚¢ê‡‚Í playSe=falsej
+        // ã‚¢ã‚¤ãƒ†ãƒ ç™ºè¦‹SEï¼ˆæ•´ç†å¾Œã®å†è¡¨ç¤ºãªã©ã€é³´ã‚‰ã—ãŸããªã„å ´åˆã¯ playSe=falseï¼‰
         if (playSe && AudioManager.I != null)
             AudioManager.I.PlayItemFoundSe();
 
@@ -74,9 +74,9 @@ public class ItemPickupWindow : MonoBehaviour
             if (canGet)
                 descriptionText.text = description;
             else if (isFull)
-                descriptionText.text = $"{description}\n\nƒAƒCƒeƒ€‚ªˆê”t‚Å‚·B®—‚µ‚Ä‚­‚¾‚³‚¢B";
+                descriptionText.text = $"{description}\n\nã‚¢ã‚¤ãƒ†ãƒ ãŒä¸€æ¯ã§ã™ã€‚æ•´ç†ã—ã¦ãã ã•ã„ã€‚";
             else
-                descriptionText.text = $"{description}\n\n‚±‚êˆÈã‚Ä‚È‚¢‚½‚ß“üè‚Å‚«‚Ü‚¹‚ñB";
+                descriptionText.text = $"{description}\n\nã“ã‚Œä»¥ä¸ŠæŒã¦ãªã„ãŸã‚å…¥æ‰‹ã§ãã¾ã›ã‚“ã€‚";
         }
 
         if (itemImage != null)
@@ -85,26 +85,26 @@ public class ItemPickupWindow : MonoBehaviour
             itemImage.enabled = sprite != null;
         }
 
-        // ƒ{ƒ^ƒ“İ’èi–{—ˆ‚Ì—LŒø/–³Œøó‘Ô‚ğŒˆ‚ß‚éj
-        bool getButtonDesired = false; // š’Ç‰ÁFƒƒbƒN‰ğœŒã‚É•œ‹A‚³‚¹‚é’l‚ğ•Û
+        // ãƒœã‚¿ãƒ³è¨­å®šï¼ˆæœ¬æ¥ã®æœ‰åŠ¹/ç„¡åŠ¹çŠ¶æ…‹ã‚’æ±ºã‚ã‚‹ï¼‰
+        bool getButtonDesired = false; // â˜…è¿½åŠ ï¼šãƒ­ãƒƒã‚¯è§£é™¤å¾Œã«å¾©å¸°ã•ã›ã‚‹å€¤ã‚’ä¿æŒ
         if (getButton != null)
         {
             if (isFull)
             {
-                // –”t ¨ uŒğŠ·‚·‚évƒ{ƒ^ƒ“‚Æ‚µ‚Ä—LŒø‰»
-                getButtonDesired = true; // š•ÏX
+                // æº€æ¯ â†’ ã€Œäº¤æ›ã™ã‚‹ã€ãƒœã‚¿ãƒ³ã¨ã—ã¦æœ‰åŠ¹åŒ–
+                getButtonDesired = true; // â˜…å¤‰æ›´
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
-                if (txt != null) txt.text = "®—‚·‚é";
+                if (txt != null) txt.text = "æ•´ç†ã™ã‚‹";
             }
             else
             {
-                getButtonDesired = canGet; // š•ÏX
+                getButtonDesired = canGet; // â˜…å¤‰æ›´
                 var txt = getButton.GetComponentInChildren<TMP_Text>();
-                if (txt != null) txt.text = "“üè‚·‚é";
+                if (txt != null) txt.text = "å…¥æ‰‹ã™ã‚‹";
             }
         }
 
-        // ’ú‚ß‚éƒ{ƒ^ƒ“‚Ì•\¦§Œä
+        // è«¦ã‚ã‚‹ãƒœã‚¿ãƒ³ã®è¡¨ç¤ºåˆ¶å¾¡
         if (ignoreButton != null)
         {
             ignoreButton.gameObject.SetActive(!cannotIgnore);
@@ -115,14 +115,14 @@ public class ItemPickupWindow : MonoBehaviour
         else
             gameObject.SetActive(true);
 
-        // š’Ç‰ÁF•\¦’¼Œã‚Ì˜A‘ÅŠÑ’Ê‚ğ–h‚®“ü—ÍƒƒbƒN
+        // â˜…è¿½åŠ ï¼šè¡¨ç¤ºç›´å¾Œã®é€£æ‰“è²«é€šã‚’é˜²ãå…¥åŠ›ãƒ­ãƒƒã‚¯
         BeginInputLock(getButtonDesired, !cannotIgnore);
     }
 
-    // š’Ç‰ÁFˆê’èŠÔƒ{ƒ^ƒ“‚ğ–³Œø‰»‚µA‚»‚ÌŒã desired ’l‚Ö•œ‹A‚³‚¹‚é
+    // â˜…è¿½åŠ ï¼šä¸€å®šæ™‚é–“ãƒœã‚¿ãƒ³ã‚’ç„¡åŠ¹åŒ–ã—ã€ãã®å¾Œ desired å€¤ã¸å¾©å¸°ã•ã›ã‚‹
     private void BeginInputLock(bool getButtonDesired, bool ignoreButtonActive)
     {
-        // ˆê’U‚·‚×‚Ä–³Œø‰»
+        // ä¸€æ—¦ã™ã¹ã¦ç„¡åŠ¹åŒ–
         if (getButton != null) getButton.interactable = false;
         if (ignoreButton != null) ignoreButton.interactable = false;
 
@@ -130,10 +130,10 @@ public class ItemPickupWindow : MonoBehaviour
         unlockCoroutine = StartCoroutine(UnlockAfterDelay(getButtonDesired, ignoreButtonActive));
     }
 
-    // š’Ç‰Á
+    // â˜…è¿½åŠ 
     private IEnumerator UnlockAfterDelay(bool getButtonDesired, bool ignoreButtonActive)
     {
-        // Time.timeScale ‚Ì‰e‹¿‚ğó‚¯‚È‚¢ÀŠÔ‘Ò‚¿
+        // Time.timeScale ã®å½±éŸ¿ã‚’å—ã‘ãªã„å®Ÿæ™‚é–“å¾…ã¡
         yield return new WaitForSecondsRealtime(inputLockSeconds);
 
         if (getButton != null) getButton.interactable = getButtonDesired;
@@ -144,7 +144,7 @@ public class ItemPickupWindow : MonoBehaviour
 
     public void HideImmediate()
     {
-        // š’Ç‰ÁF•Â‚¶‚éÛ‚ÉƒƒbƒNƒRƒ‹[ƒ`ƒ“‚ğ’â~iŸ•\¦‚Ö‚Ì‚¿‰z‚µ–h~j
+        // â˜…è¿½åŠ ï¼šé–‰ã˜ã‚‹éš›ã«ãƒ­ãƒƒã‚¯ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’åœæ­¢ï¼ˆæ¬¡è¡¨ç¤ºã¸ã®æŒã¡è¶Šã—é˜²æ­¢ï¼‰
         if (unlockCoroutine != null)
         {
             StopCoroutine(unlockCoroutine);
@@ -163,12 +163,12 @@ public class ItemPickupWindow : MonoBehaviour
     {
         if (currentIsFull)
         {
-            // u®—‚·‚év: ‚Ü‚¾“üè‚µ‚Ä‚¢‚È‚¢‚Ì‚Å–Â‚ç‚³‚È‚¢
+            // ã€Œæ•´ç†ã™ã‚‹ã€: ã¾ã å…¥æ‰‹ã—ã¦ã„ãªã„ã®ã§é³´ã‚‰ã•ãªã„
             Close(ItemPickupResult.Exchange);
         }
         else
         {
-            // u“üè‚·‚év: “¹‹ï‘Ü‚É“ü‚éƒ^ƒCƒ~ƒ“ƒO
+            // ã€Œå…¥æ‰‹ã™ã‚‹ã€: é“å…·è¢‹ã«å…¥ã‚‹ã‚¿ã‚¤ãƒŸãƒ³ã‚°
             if (AudioManager.I != null) AudioManager.I.PlayItemGetSe();
             Close(ItemPickupResult.Get);
         }
@@ -176,7 +176,7 @@ public class ItemPickupWindow : MonoBehaviour
 
     private void OnClickIgnore()
     {
-        // ’ú‚ß‚éSE
+        // è«¦ã‚ã‚‹SE
         if (AudioManager.I != null) AudioManager.I.PlayItemDiscardSe();
         Close(ItemPickupResult.Ignore);
     }
@@ -185,9 +185,9 @@ public class ItemPickupWindow : MonoBehaviour
     {
         HideImmediate();
 
-        //onResult‚ğƒRƒs[‚µ‚Ä‰Šú‰»
-        //?. ‚Íif(`!= null)
-        //Invoke‚ÍŠÖ”‚ÌÀs Action“™‚Å‚Í‚±‚ê‚ğg‚¤
+        //onResultã‚’ã‚³ãƒ”ãƒ¼ã—ã¦åˆæœŸåŒ–
+        //?. ã¯if(ï½!= null)
+        //Invokeã¯é–¢æ•°ã®å®Ÿè¡Œ Actionç­‰ã§ã¯ã“ã‚Œã‚’ä½¿ã†
         var callback = onResult;
         onResult = null;
         callback?.Invoke(result);

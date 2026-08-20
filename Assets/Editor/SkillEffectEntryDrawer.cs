@@ -1,21 +1,21 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// SkillEffectEntry ‚ÌƒJƒXƒ^ƒ€ PropertyDrawerB
-/// effectData ‚ÉƒAƒTƒCƒ“‚³‚ê‚½ ScriptableObject ‚ÌƒWƒƒƒ“ƒ‹‚É‰‚¶‚ÄA
-/// •K—v‚ÈƒtƒB[ƒ‹ƒh‚¾‚¯‚ğƒCƒ“ƒXƒyƒNƒ^[‚É•\¦‚·‚éB
+/// SkillEffectEntry ã®ã‚«ã‚¹ã‚¿ãƒ  PropertyDrawerã€‚
+/// effectData ã«ã‚¢ã‚µã‚¤ãƒ³ã•ã‚ŒãŸ ScriptableObject ã®ã‚¸ãƒ£ãƒ³ãƒ«ã«å¿œã˜ã¦ã€
+/// å¿…è¦ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã ã‘ã‚’ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã«è¡¨ç¤ºã™ã‚‹ã€‚
 ///
-/// y•\¦ƒ‹[ƒ‹z
-///   effectData = null          ¨ effectData ‚Ì‚İ•\¦
-///   StatusAilmentEffectData    ¨ ailmentMode, targetStatusEffect, chanceiInflict‚Ì‚İj
-///                                 DefenseDown/DefenseUp ‚Ìê‡‚Í’Ç‰Á‚Å intValueiŒø‰Ê—¦j, durationi‘±ƒ^[ƒ“j
-///   HealEffectData             ¨ intValueiƒ‰ƒxƒ‹: SO.formulaType ‚É‰‚¶‚Ä•Ï‰»j, chance
-///   LevelDrainEffectData       ¨ intValueiƒ‰ƒxƒ‹: ƒhƒŒƒCƒ“—Êj, chance
-///   SelfDestructEffectData     ¨ chanceiƒ‰ƒxƒ‹: ©”š”­“®—¦j
-///   RecoilEffectData           ¨ intValueiƒ‰ƒxƒ‹: ”½Ë—¦j, chance
-///   DispelEffectData           ¨ chanceiƒ‰ƒxƒ‹: ”­“®—¦jA¦ƒ‚[ƒh‚ÍSOƒAƒZƒbƒg‘¤‚Åİ’è
-///   ‚»‚Ì‘¼                     ¨ chance, intValuei”Ä—p•\¦j
+/// ã€è¡¨ç¤ºãƒ«ãƒ¼ãƒ«ã€‘
+///   effectData = null          â†’ effectData ã®ã¿è¡¨ç¤º
+///   StatusAilmentEffectData    â†’ ailmentMode, targetStatusEffect, chanceï¼ˆInflictæ™‚ã®ã¿ï¼‰
+///                                 DefenseDown/DefenseUp ã®å ´åˆã¯è¿½åŠ ã§ intValueï¼ˆåŠ¹æœç‡ï¼‰, durationï¼ˆæŒç¶šã‚¿ãƒ¼ãƒ³ï¼‰
+///   HealEffectData             â†’ intValueï¼ˆãƒ©ãƒ™ãƒ«: SO.formulaType ã«å¿œã˜ã¦å¤‰åŒ–ï¼‰, chance
+///   LevelDrainEffectData       â†’ intValueï¼ˆãƒ©ãƒ™ãƒ«: ãƒ‰ãƒ¬ã‚¤ãƒ³é‡ï¼‰, chance
+///   SelfDestructEffectData     â†’ chanceï¼ˆãƒ©ãƒ™ãƒ«: è‡ªçˆ†ç™ºå‹•ç‡ï¼‰
+///   RecoilEffectData           â†’ intValueï¼ˆãƒ©ãƒ™ãƒ«: åå°„ç‡ï¼‰, chance
+///   DispelEffectData           â†’ chanceï¼ˆãƒ©ãƒ™ãƒ«: ç™ºå‹•ç‡ï¼‰ã€â€»ãƒ¢ãƒ¼ãƒ‰ã¯SOã‚¢ã‚»ãƒƒãƒˆå´ã§è¨­å®š
+///   ãã®ä»–                     â†’ chance, intValueï¼ˆæ±ç”¨è¡¨ç¤ºï¼‰
 /// </summary>
 [CustomPropertyDrawer(typeof(SkillEffectEntry))]
 public class SkillEffectEntryDrawer : PropertyDrawer
@@ -25,27 +25,27 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         var effectDataProp = property.FindPropertyRelative("effectData");
         var effectData = effectDataProp.objectReferenceValue as SkillEffectData;
 
-        int lineCount = 1; // effectData ‚Íí‚É1s
+        int lineCount = 1; // effectData ã¯å¸¸ã«1è¡Œ
 
         if (effectData == null)
         {
-            // effectData –¢İ’è ¨ 1s‚Ì‚İ
+            // effectData æœªè¨­å®š â†’ 1è¡Œã®ã¿
         }
         else if (effectData is StatusAilmentEffectData)
         {
             lineCount += 2; // ailmentMode + targetStatusEffect
-            // Inflict ƒ‚[ƒh‚Ìê‡‚Ì‚İ chance ‚ğ•\¦
+            // Inflict ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã®ã¿ chance ã‚’è¡¨ç¤º
             var ailmentModeProp = property.FindPropertyRelative("ailmentMode");
             if (ailmentModeProp.enumValueIndex == (int)AilmentMode.Inflict)
             {
                 lineCount += 1; // chance
 
-                // DefenseDown/DefenseUp ‚Ìê‡‚Í’Ç‰ÁƒtƒB[ƒ‹ƒh
+                // DefenseDown/DefenseUp ã®å ´åˆã¯è¿½åŠ ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
                 var targetProp = property.FindPropertyRelative("targetStatusEffect");
                 StatusEffect target = (StatusEffect)targetProp.enumValueIndex;
                 if (StatusEffectSystem.IsBuffDebuff(target))
                 {
-                    lineCount += 2; // intValueiŒø‰Ê—¦j+ durationi‘±ƒ^[ƒ“j
+                    lineCount += 2; // intValueï¼ˆåŠ¹æœç‡ï¼‰+ durationï¼ˆæŒç¶šã‚¿ãƒ¼ãƒ³ï¼‰
                 }
             }
         }
@@ -59,19 +59,19 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         }
         else if (effectData is SelfDestructEffectData)
         {
-            lineCount += 1; // chance ‚Ì‚İ
+            lineCount += 1; // chance ã®ã¿
         }
         else if (effectData is RecoilEffectData)
         {
-            lineCount += 2; // intValuei”½Ë—¦j+ chance
+            lineCount += 2; // intValueï¼ˆåå°„ç‡ï¼‰+ chance
         }
         else if (effectData is DispelEffectData)
         {
-            lineCount += 1; // chance ‚Ì‚İiƒ‚[ƒh‚ÍSOƒAƒZƒbƒg‘¤j
+            lineCount += 1; // chance ã®ã¿ï¼ˆãƒ¢ãƒ¼ãƒ‰ã¯SOã‚¢ã‚»ãƒƒãƒˆå´ï¼‰
         }
         else
         {
-            lineCount += 2; // chance + intValuei”Ä—pj
+            lineCount += 2; // chance + intValueï¼ˆæ±ç”¨ï¼‰
         }
 
         float spacing = 2f;
@@ -86,17 +86,17 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         float spacing = 2f;
         float y = position.y;
 
-        // --- effectDataií‚É•\¦j---
+        // --- effectDataï¼ˆå¸¸ã«è¡¨ç¤ºï¼‰---
         var effectDataProp = property.FindPropertyRelative("effectData");
         var effectDataRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(effectDataRect, effectDataProp, new GUIContent("Œø‰Êƒ^ƒCƒv"));
+        EditorGUI.PropertyField(effectDataRect, effectDataProp, new GUIContent("åŠ¹æœã‚¿ã‚¤ãƒ—"));
         y += lineH + spacing;
 
         var effectData = effectDataProp.objectReferenceValue as SkillEffectData;
 
         if (effectData == null)
         {
-            // effectData –¢İ’è ¨ ‰½‚à•\¦‚µ‚È‚¢
+            // effectData æœªè¨­å®š â†’ ä½•ã‚‚è¡¨ç¤ºã—ãªã„
         }
         else if (effectData is StatusAilmentEffectData)
         {
@@ -124,7 +124,7 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         }
         else
         {
-            // –¢’m‚ÌƒWƒƒƒ“ƒ‹ ¨ ”Ä—p•\¦
+            // æœªçŸ¥ã®ã‚¸ãƒ£ãƒ³ãƒ« â†’ æ±ç”¨è¡¨ç¤º
             DrawGenericFields(position, property, ref y, lineH, spacing);
         }
 
@@ -132,7 +132,7 @@ public class SkillEffectEntryDrawer : PropertyDrawer
     }
 
     // =========================================================
-    // ó‘ÔˆÙíŒn
+    // çŠ¶æ…‹ç•°å¸¸ç³»
     // =========================================================
     private void DrawStatusAilmentFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
@@ -140,51 +140,51 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         // ailmentMode
         var ailmentModeProp = property.FindPropertyRelative("ailmentMode");
         var modeRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(modeRect, ailmentModeProp, new GUIContent("ƒ‚[ƒh"));
+        EditorGUI.PropertyField(modeRect, ailmentModeProp, new GUIContent("ãƒ¢ãƒ¼ãƒ‰"));
         y += lineH + spacing;
 
         // targetStatusEffect
         var targetProp = property.FindPropertyRelative("targetStatusEffect");
         var targetRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(targetRect, targetProp, new GUIContent("‘ÎÛó‘ÔˆÙí"));
+        EditorGUI.PropertyField(targetRect, targetProp, new GUIContent("å¯¾è±¡çŠ¶æ…‹ç•°å¸¸"));
         y += lineH + spacing;
 
-        // chanceiInflict ƒ‚[ƒh‚Ìê‡‚Ì‚İj
+        // chanceï¼ˆInflict ãƒ¢ãƒ¼ãƒ‰ã®å ´åˆã®ã¿ï¼‰
         if (ailmentModeProp.enumValueIndex == (int)AilmentMode.Inflict)
         {
             var chanceProp = property.FindPropertyRelative("chance");
             var chanceRect = new Rect(position.x, y, position.width, lineH);
-            EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("•t—^—¦ (%)"));
+            EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("ä»˜ä¸ç‡ (%)"));
             y += lineH + spacing;
 
             // =========================================================
-            // DefenseDown/DefenseUp ‚Ìê‡: Œø‰Ê—¦ + ‘±ƒ^[ƒ“‚ğ’Ç‰Á•\¦
+            // DefenseDown/DefenseUp ã®å ´åˆ: åŠ¹æœç‡ + æŒç¶šã‚¿ãƒ¼ãƒ³ã‚’è¿½åŠ è¡¨ç¤º
             // =========================================================
             StatusEffect target = (StatusEffect)targetProp.enumValueIndex;
             if (StatusEffectSystem.IsBuffDebuff(target))
             {
-                // intValueiŒø‰Ê—¦j
+                // intValueï¼ˆåŠ¹æœç‡ï¼‰
                 var intValueProp = property.FindPropertyRelative("intValue");
                 var intRect = new Rect(position.x, y, position.width, lineH);
-                EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("Œø‰Ê—¦ (%)"));
+                EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("åŠ¹æœç‡ (%)"));
                 y += lineH + spacing;
 
-                // durationi‘±ƒ^[ƒ“j
+                // durationï¼ˆæŒç¶šã‚¿ãƒ¼ãƒ³ï¼‰
                 var durationProp = property.FindPropertyRelative("duration");
                 var durRect = new Rect(position.x, y, position.width, lineH);
-                EditorGUI.PropertyField(durRect, durationProp, new GUIContent("‘±ƒ^[ƒ“i0=ƒfƒtƒHƒ‹ƒgj"));
+                EditorGUI.PropertyField(durRect, durationProp, new GUIContent("æŒç¶šã‚¿ãƒ¼ãƒ³ï¼ˆ0=ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼‰"));
                 y += lineH + spacing;
             }
         }
     }
 
     // =========================================================
-    // HP‰ñ•œŒn
+    // HPå›å¾©ç³»
     // =========================================================
     private void DrawHealFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing, HealEffectData healData)
     {
-        // intValueiƒ‰ƒxƒ‹‚ğ formulaType ‚É‰‚¶‚Ä•ÏXj
+        // intValueï¼ˆãƒ©ãƒ™ãƒ«ã‚’ formulaType ã«å¿œã˜ã¦å¤‰æ›´ï¼‰
         string intLabel = GetHealIntLabel(healData.formulaType);
         var intValueProp = property.FindPropertyRelative("intValue");
         var intRect = new Rect(position.x, y, position.width, lineH);
@@ -194,7 +194,7 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         // chance
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("”­“®—¦ (%)"));
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("ç™ºå‹•ç‡ (%)"));
         y += lineH + spacing;
     }
 
@@ -202,16 +202,16 @@ public class SkillEffectEntryDrawer : PropertyDrawer
     {
         switch (formulaType)
         {
-            case HealFormulaType.Fixed: return "‰ñ•œ—ÊiŒÅ’è’lj";
-            case HealFormulaType.MaxHpPercent: return "‰ñ•œ—ÊiÅ‘åHP%j";
-            case HealFormulaType.IntMultiplier: return "‰ñ•œ—ÊiINT~”{—¦j";
-            case HealFormulaType.StrMultiplier: return "‰ñ•œ—ÊiSTR~”{—¦j";
-            default: return "‰ñ•œ—Ê";
+            case HealFormulaType.Fixed: return "å›å¾©é‡ï¼ˆå›ºå®šå€¤ï¼‰";
+            case HealFormulaType.MaxHpPercent: return "å›å¾©é‡ï¼ˆæœ€å¤§HP%ï¼‰";
+            case HealFormulaType.IntMultiplier: return "å›å¾©é‡ï¼ˆINTÃ—å€ç‡ï¼‰";
+            case HealFormulaType.StrMultiplier: return "å›å¾©é‡ï¼ˆSTRÃ—å€ç‡ï¼‰";
+            default: return "å›å¾©é‡";
         }
     }
 
     // =========================================================
-    // ƒŒƒxƒ‹ƒhƒŒƒCƒ“Œn
+    // ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³ç³»
     // =========================================================
     private void DrawLevelDrainFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
@@ -219,73 +219,73 @@ public class SkillEffectEntryDrawer : PropertyDrawer
         // intValue
         var intValueProp = property.FindPropertyRelative("intValue");
         var intRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("ƒhƒŒƒCƒ“—Ê"));
+        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("ãƒ‰ãƒ¬ã‚¤ãƒ³é‡"));
         y += lineH + spacing;
 
         // chance
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("”­“®—¦ (%)"));
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("ç™ºå‹•ç‡ (%)"));
         y += lineH + spacing;
     }
 
     // =========================================================
-    // ©”šŒn
+    // è‡ªçˆ†ç³»
     // =========================================================
     private void DrawSelfDestructFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
     {
-        // chance ‚Ì‚İ
+        // chance ã®ã¿
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("©”š”­“®—¦ (%)"));
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("è‡ªçˆ†ç™ºå‹•ç‡ (%)"));
         y += lineH + spacing;
     }
 
     // =========================================================
-    // ”½“®ƒ_ƒ[ƒWŒni’Ç‰Áj
+    // åå‹•ãƒ€ãƒ¡ãƒ¼ã‚¸ç³»ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
     private void DrawRecoilFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
     {
-        // intValuei”½Ë—¦j
+        // intValueï¼ˆåå°„ç‡ï¼‰
         var intValueProp = property.FindPropertyRelative("intValue");
         var intRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("”½Ë—¦i%j"));
+        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("åå°„ç‡ï¼ˆ%ï¼‰"));
         y += lineH + spacing;
 
         // chance
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("”­“®—¦ (%)"));
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("ç™ºå‹•ç‡ (%)"));
         y += lineH + spacing;
     }
 
     // =========================================================
-    // ƒfƒBƒXƒyƒ‹Œniƒoƒt/ƒfƒoƒt‰ğœj
+    // ãƒ‡ã‚£ã‚¹ãƒšãƒ«ç³»ï¼ˆãƒãƒ•/ãƒ‡ãƒãƒ•è§£é™¤ï¼‰
     // =========================================================
     private void DrawDispelFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing, DispelEffectData dispelData)
     {
-        // chancei”­“®—¦j
+        // chanceï¼ˆç™ºå‹•ç‡ï¼‰
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
 
-        // ƒ‰ƒxƒ‹‚Éƒ‚[ƒhî•ñ‚ğŠÜ‚ß‚Ä•ª‚©‚è‚â‚·‚­‚·‚é
+        // ãƒ©ãƒ™ãƒ«ã«ãƒ¢ãƒ¼ãƒ‰æƒ…å ±ã‚’å«ã‚ã¦åˆ†ã‹ã‚Šã‚„ã™ãã™ã‚‹
         string modeLabel;
         switch (dispelData.dispelMode)
         {
             case DispelMode.CureOwnDebuffs:
-                modeLabel = "”­“®—¦ (%) [©•ª‚Ìƒfƒoƒt‘S‰ğœ]";
+                modeLabel = "ç™ºå‹•ç‡ (%) [è‡ªåˆ†ã®ãƒ‡ãƒãƒ•å…¨è§£é™¤]";
                 break;
             case DispelMode.DispelEnemyBuffs:
-                modeLabel = "”­“®—¦ (%) [‘Šè‚Ìƒoƒt‘S‰ğœ]";
+                modeLabel = "ç™ºå‹•ç‡ (%) [ç›¸æ‰‹ã®ãƒãƒ•å…¨è§£é™¤]";
                 break;
             case DispelMode.DispelAll:
-                modeLabel = "”­“®—¦ (%) [‘Sƒoƒt/ƒfƒoƒt‰ğœ]";
+                modeLabel = "ç™ºå‹•ç‡ (%) [å…¨ãƒãƒ•/ãƒ‡ãƒãƒ•è§£é™¤]";
                 break;
             default:
-                modeLabel = "”­“®—¦ (%)";
+                modeLabel = "ç™ºå‹•ç‡ (%)";
                 break;
         }
 
@@ -294,19 +294,19 @@ public class SkillEffectEntryDrawer : PropertyDrawer
     }
 
     // =========================================================
-    // ”Ä—pi–¢’m‚ÌƒWƒƒƒ“ƒ‹—pj
+    // æ±ç”¨ï¼ˆæœªçŸ¥ã®ã‚¸ãƒ£ãƒ³ãƒ«ç”¨ï¼‰
     // =========================================================
     private void DrawGenericFields(Rect position, SerializedProperty property,
         ref float y, float lineH, float spacing)
     {
         var chanceProp = property.FindPropertyRelative("chance");
         var chanceRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("”­“®—¦ (%)"));
+        EditorGUI.IntSlider(chanceRect, chanceProp, 0, 100, new GUIContent("ç™ºå‹•ç‡ (%)"));
         y += lineH + spacing;
 
         var intValueProp = property.FindPropertyRelative("intValue");
         var intRect = new Rect(position.x, y, position.width, lineH);
-        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("”’lƒpƒ‰ƒ[ƒ^"));
+        EditorGUI.PropertyField(intRect, intValueProp, new GUIContent("æ•°å€¤ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿"));
         y += lineH + spacing;
     }
 }

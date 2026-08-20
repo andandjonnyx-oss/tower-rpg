@@ -1,18 +1,18 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Button))]
 public class FloorButton : MonoBehaviour
 {
-    [Header("İ’è")]
-    [Tooltip("‚±‚Ìƒ{ƒ^ƒ“‚ª•\¦‚³‚ê‚éğŒ‚Æ‚È‚é“’BŠKB—á: 11 ¨ 11ŠK‚É“’BÏ‚İ‚È‚ç•\¦")]
+    [Header("è¨­å®š")]
+    [Tooltip("ã“ã®ãƒœã‚¿ãƒ³ãŒè¡¨ç¤ºã•ã‚Œã‚‹æ¡ä»¶ã¨ãªã‚‹åˆ°é”éšã€‚ä¾‹: 11 â†’ 11éšã«åˆ°é”æ¸ˆã¿ãªã‚‰è¡¨ç¤º")]
     [SerializeField] private int requiredFloor = 1;
 
-    [Tooltip("‚±‚Ìƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚ÉƒXƒ^[ƒg‚·‚éŠKB’Êí‚Í requiredFloor ‚Æ“¯‚¶")]
+    [Tooltip("ã“ã®ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸæ™‚ã«ã‚¹ã‚¿ãƒ¼ãƒˆã™ã‚‹éšã€‚é€šå¸¸ã¯ requiredFloor ã¨åŒã˜")]
     [SerializeField] private int startFloor = 1;
 
-    [Header("‘JˆÚæ")]
+    [Header("é·ç§»å…ˆ")]
     [SerializeField] private string towerSceneName = "Tower";
 
     private Button button;
@@ -27,7 +27,7 @@ public class FloorButton : MonoBehaviour
     {
         bool show = reachedFloor >= requiredFloor;
 
-        // š ƒfƒoƒbƒO: Šeƒ{ƒ^ƒ“‚Ì”»’è‚ğŠm”F
+        // â˜… ãƒ‡ãƒãƒƒã‚°: å„ãƒœã‚¿ãƒ³ã®åˆ¤å®šã‚’ç¢ºèª
         Debug.Log($"[FloorButton] {gameObject.name}: requiredFloor={requiredFloor}, reachedFloor={reachedFloor}, show={show}");
 
         gameObject.SetActive(show);
@@ -41,7 +41,7 @@ public class FloorButton : MonoBehaviour
         gs.floor = startFloor;
         gs.step = 1;
 
-        Debug.Log($"[FloorButton] {startFloor}ŠK‚Ì1STEP‚©‚çƒXƒ^[ƒg");
+        Debug.Log($"[FloorButton] {startFloor}éšã®1STEPã‹ã‚‰ã‚¹ã‚¿ãƒ¼ãƒˆ");
         SceneManager.LoadScene(towerSceneName);
     }
 }

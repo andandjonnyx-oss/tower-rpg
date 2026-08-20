@@ -1,28 +1,28 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
-/// �����i�̏�Ԉُ�ϐ�1�����̃f�[�^�\���B
-/// ItemData.equipStatusEffectResistances �z��ɓ���Ďg���B
+/// 装備品の状態異常耐性1件分のデータ構造。
+/// ItemData.equipStatusEffectResistances 配列に入れて使う。
 ///
-/// ���u���b�V���A�b�v:
-///   �����ϐ��iEquipResistance�j�Ɠ����\���ŁA��Ԉُ�ϐ����`����B
-///   ����i100%���f�j�ł��p�b�V�u�A�C�e���i�d�����[���K�p�j�ł��A
-///   �����p�����[�^�Z�b�g�����Ă�悤�ɓ���B
+/// ★ブラッシュアップ:
+///   属性耐性（EquipResistance）と同じ構造で、状態異常耐性を定義する。
+///   武器（100%反映）でもパッシブアイテム（重複ルール適用）でも、
+///   同じパラメータセットを持てるように統一。
 ///
-/// �p�b�V�u���ʂ̏d�����[���i2�ڈȍ~10%�����j�Ƃ͈قȂ�A
-/// �����i�̑ϐ��͏�� value ��100%���̂܂܉��Z����B
-/// �i������1���������ł��Ȃ����ߏd�����[���͕s�v�j
+/// パッシブ効果の重複ルール（2個目以降10%減衰）とは異なり、
+/// 装備品の耐性は常に value を100%そのまま加算する。
+/// （装備は1つしか装備できないため重複ルールは不要）
 ///
-/// ��: �őϐ�30�̕��� �� EquipStatusEffectResistance(Poison, 30) ��ݒ�B
-/// ��: �őϐ�20 + ��ბϐ�15�̕��� �� 2���� EquipStatusEffectResistance ��ݒ�B
+/// 例: 毒耐性30の武器 → EquipStatusEffectResistance(Poison, 30) を設定。
+/// 例: 毒耐性20 + 麻痺耐性15の武器 → 2件の EquipStatusEffectResistance を設定。
 /// </summary>
 [Serializable]
 public class EquipStatusEffectResistance
 {
-    [Tooltip("�ϐ��̑Ώۏ�Ԉُ�")]
+    [Tooltip("耐性の対象状態異常")]
     public StatusEffect statusEffect;
 
-    [Tooltip("�ϐ��l�i100�Ŋ��S�ϐ��j�B�p�b�V�u�Ƃ͕ʌv�Z��100%���f�����B")]
+    [Tooltip("耐性値（100で完全耐性）。パッシブとは別計算で100%反映される。")]
     public int value;
 }

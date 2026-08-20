@@ -1,54 +1,54 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// HP‰ñ•œŒø‰ÊB
-/// ƒXƒLƒ‹g—p‚É©g‚ÌHP‚ğ‰ñ•œ‚·‚éB
+/// HPå›å¾©åŠ¹æœã€‚
+/// ã‚¹ã‚­ãƒ«ä½¿ç”¨æ™‚ã«è‡ªèº«ã®HPã‚’å›å¾©ã™ã‚‹ã€‚
 ///
-/// yİŒvz
-///   ‰ñ•œ—Ê‚ÌŒvZ®ƒ^ƒCƒv‚ğ‚±‚ÌSO‘¤‚Å‚ÂB
-///   SOƒAƒZƒbƒg‚ğuŒÅ’è‰ñ•œvuINTˆË‘¶‰ñ•œvuSTRˆË‘¶‰ñ•œv“™‚Æ•ª‚¯‚Äì¬‚µA
-///   ƒXƒLƒ‹‘¤‚Å‚Í‚Ç‚ÌSO‚ğg‚¤‚©‚ğ‘I‚Ô‚¾‚¯‚ÅŒvZ®‚ªŒˆ‚Ü‚éB
+/// ã€è¨­è¨ˆã€‘
+///   å›å¾©é‡ã®è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã‚’ã“ã®SOå´ã§æŒã¤ã€‚
+///   SOã‚¢ã‚»ãƒƒãƒˆã‚’ã€Œå›ºå®šå›å¾©ã€ã€ŒINTä¾å­˜å›å¾©ã€ã€ŒSTRä¾å­˜å›å¾©ã€ç­‰ã¨åˆ†ã‘ã¦ä½œæˆã—ã€
+///   ã‚¹ã‚­ãƒ«å´ã§ã¯ã©ã®SOã‚’ä½¿ã†ã‹ã‚’é¸ã¶ã ã‘ã§è¨ˆç®—å¼ãŒæ±ºã¾ã‚‹ã€‚
 ///
-/// yformulaType ‚Ìí—Şz
-///   Fixed:          ŒÅ’è’l‰ñ•œBintValue ‚ª‚»‚Ì‚Ü‚Ü‰ñ•œ—ÊB
-///   MaxHpPercent:   Å‘åHP‚Ì%‰ñ•œBintValue ‚ª%’lB
-///   IntMultiplier:  INT ~ intValue ‚Å‰ñ•œ—Ê‚ğŒvZB
-///   StrMultiplier:  STR ~ intValue ‚Å‰ñ•œ—Ê‚ğŒvZB
+/// ã€formulaType ã®ç¨®é¡ã€‘
+///   Fixed:          å›ºå®šå€¤å›å¾©ã€‚intValue ãŒãã®ã¾ã¾å›å¾©é‡ã€‚
+///   MaxHpPercent:   æœ€å¤§HPã®%å›å¾©ã€‚intValue ãŒ%å€¤ã€‚
+///   IntMultiplier:  INT Ã— intValue ã§å›å¾©é‡ã‚’è¨ˆç®—ã€‚
+///   StrMultiplier:  STR Ã— intValue ã§å›å¾©é‡ã‚’è¨ˆç®—ã€‚
 ///
-/// yƒpƒ‰ƒ[ƒ^iSkillEffectEntry ‘¤jz
-///   intValue: ‰ñ•œ—ÊiŒÅ’è’l / %’l / ”{—¦’lBformulaType ‚É‰‚¶‚Ä‰ğß‚ª•Ï‚í‚éj
-///   chance:   ”­“®—¦i%jBƒfƒtƒHƒ‹ƒg100B
+/// ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆSkillEffectEntry å´ï¼‰ã€‘
+///   intValue: å›å¾©é‡ï¼ˆå›ºå®šå€¤ / %å€¤ / å€ç‡å€¤ã€‚formulaType ã«å¿œã˜ã¦è§£é‡ˆãŒå¤‰ã‚ã‚‹ï¼‰
+///   chance:   ç™ºå‹•ç‡ï¼ˆ%ï¼‰ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ100ã€‚
 ///
-/// yƒAƒZƒbƒgì¬z
-///   Create > Skills > Effects > Heal Effect ‚Åì¬B
-///   ŒvZ®ƒ^ƒCƒv•Ê‚ÉƒAƒZƒbƒg‚ğ•ª‚¯‚Äì¬‚·‚éB
-///   —á: uŒÅ’è‰ñ•œvƒAƒZƒbƒgiformulaType=FixedjAuINT‰ñ•œvƒAƒZƒbƒgiformulaType=IntMultiplierj
+/// ã€ã‚¢ã‚»ãƒƒãƒˆä½œæˆã€‘
+///   Create > Skills > Effects > Heal Effect ã§ä½œæˆã€‚
+///   è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—åˆ¥ã«ã‚¢ã‚»ãƒƒãƒˆã‚’åˆ†ã‘ã¦ä½œæˆã™ã‚‹ã€‚
+///   ä¾‹: ã€Œå›ºå®šå›å¾©ã€ã‚¢ã‚»ãƒƒãƒˆï¼ˆformulaType=Fixedï¼‰ã€ã€ŒINTå›å¾©ã€ã‚¢ã‚»ãƒƒãƒˆï¼ˆformulaType=IntMultiplierï¼‰
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Effects/Heal Effect")]
 public class HealEffectData : SkillEffectData
 {
-    [Tooltip("‰ñ•œ—Ê‚ÌŒvZ®ƒ^ƒCƒvB\n"
-           + "Fixed = ŒÅ’è’l‰ñ•œ\n"
-           + "MaxHpPercent = Å‘åHP‚Ì%‰ñ•œ\n"
-           + "IntMultiplier = INT ~ ”{—¦\n"
-           + "StrMultiplier = STR ~ ”{—¦")]
+    [Tooltip("å›å¾©é‡ã®è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã€‚\n"
+           + "Fixed = å›ºå®šå€¤å›å¾©\n"
+           + "MaxHpPercent = æœ€å¤§HPã®%å›å¾©\n"
+           + "IntMultiplier = INT Ã— å€ç‡\n"
+           + "StrMultiplier = STR Ã— å€ç‡")]
     public HealFormulaType formulaType = HealFormulaType.Fixed;
 }
 
 /// <summary>
-/// HP‰ñ•œ‚ÌŒvZ®ƒ^ƒCƒvB
+/// HPå›å¾©ã®è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã€‚
 /// </summary>
 public enum HealFormulaType
 {
-    /// <summary>ŒÅ’è’l‰ñ•œBintValue ‚ª‚»‚Ì‚Ü‚Ü‰ñ•œ—ÊB</summary>
+    /// <summary>å›ºå®šå€¤å›å¾©ã€‚intValue ãŒãã®ã¾ã¾å›å¾©é‡ã€‚</summary>
     Fixed,
 
-    /// <summary>Å‘åHP‚Ì%‰ñ•œBintValue ‚ª%’li—á: 10 = Å‘åHP‚Ì10%jB</summary>
+    /// <summary>æœ€å¤§HPã®%å›å¾©ã€‚intValue ãŒ%å€¤ï¼ˆä¾‹: 10 = æœ€å¤§HPã®10%ï¼‰ã€‚</summary>
     MaxHpPercent,
 
-    /// <summary>INT ~ intValue ‚Å‰ñ•œ—Ê‚ğŒvZB</summary>
+    /// <summary>INT Ã— intValue ã§å›å¾©é‡ã‚’è¨ˆç®—ã€‚</summary>
     IntMultiplier,
 
-    /// <summary>STR ~ intValue ‚Å‰ñ•œ—Ê‚ğŒvZB</summary>
+    /// <summary>STR Ã— intValue ã§å›å¾©é‡ã‚’è¨ˆç®—ã€‚</summary>
     StrMultiplier,
 }

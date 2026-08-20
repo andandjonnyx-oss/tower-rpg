@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public enum QuizAnswer
 {
@@ -9,14 +9,14 @@ public enum QuizAnswer
 [CreateAssetMenu(menuName = "Battle/QuizData")]
 public class QuizData : ScriptableObject
 {
-    [Header("–â‘è•¶")]
+    [Header("å•é¡Œæ–‡")]
     [TextArea(2, 5)]
     public string questionText;
 
-    [Header("‘I‘ğˆ")]
+    [Header("é¸æŠè‚¢")]
     public string choiceA;
     public string choiceB;
 
-    [Header("³‰ğ")]
+    [Header("æ­£è§£")]
     public QuizAnswer correctAnswer;
 }

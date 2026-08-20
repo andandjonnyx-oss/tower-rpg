@@ -1,38 +1,38 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ‰ï˜b}ŠÓ‚Ì1sƒZƒ‹B
-/// TalkZukanView ‚Ì VerticalLayoutGroup ”z‰º‚É Prefab ‚©‚ç“®“I¶¬‚³‚ê‚éB
+/// ä¼šè©±å›³é‘‘ã®1è¡Œã‚»ãƒ«ã€‚
+/// TalkZukanView ã® VerticalLayoutGroup é…ä¸‹ã« Prefab ã‹ã‚‰å‹•çš„ç”Ÿæˆã•ã‚Œã‚‹ã€‚
 ///
-/// \‘¢:
+/// æ§‹é€ :
 ///   TalkZukanCell (Button)
-///     „¤ titleText (TMP_Text) c ƒCƒxƒ“ƒg‚Ìƒ^ƒCƒgƒ‹ or uæ‚Éi‚à‚¤Iv
+///     â”” titleText (TMP_Text) â€¦ ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚¿ã‚¤ãƒˆãƒ« or ã€Œå…ˆã«é€²ã‚‚ã†ï¼ã€
 ///
-/// Šù“Ç: ƒ^ƒCƒgƒ‹•\¦Aƒ{ƒ^ƒ“—LŒøAƒ^ƒbƒv‚Å‰ï˜bÄ¶
-/// –¢“Ç: uæ‚Éi‚à‚¤Iv•\¦Aƒ{ƒ^ƒ“–³Œø
+/// æ—¢èª­æ™‚: ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºã€ãƒœã‚¿ãƒ³æœ‰åŠ¹ã€ã‚¿ãƒƒãƒ—ã§ä¼šè©±å†ç”Ÿ
+/// æœªèª­æ™‚: ã€Œå…ˆã«é€²ã‚‚ã†ï¼ã€è¡¨ç¤ºã€ãƒœã‚¿ãƒ³ç„¡åŠ¹
 /// </summary>
 public class TalkZukanCell : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("ƒCƒxƒ“ƒgƒ^ƒCƒgƒ‹•\¦—p TMP_Text")]
+    [Tooltip("ã‚¤ãƒ™ãƒ³ãƒˆã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text titleText;
 
-    [Tooltip("ƒZƒ‹‘S‘Ì‚Ì Button ƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    [Tooltip("ã‚»ãƒ«å…¨ä½“ã® Button ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     [SerializeField] private Button cellButton;
 
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     private TalkEvent talkEvent;
     private Action<TalkEvent> onClickCallback;
 
     /// <summary>
-    /// ƒZƒ‹‚ğ‰Šú‰»‚·‚éB
+    /// ã‚»ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
     /// </summary>
-    /// <param name="ev">‰ï˜bƒCƒxƒ“ƒgƒf[ƒ^</param>
-    /// <param name="played">Šù“Ç‚©‚Ç‚¤‚©</param>
-    /// <param name="onClick">ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒNiŠù“Ç‚Ì‚İ”­‰Îj</param>
+    /// <param name="ev">ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿</param>
+    /// <param name="played">æ—¢èª­ã‹ã©ã†ã‹</param>
+    /// <param name="onClick">ã‚¿ãƒƒãƒ—æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼ˆæ—¢èª­ã®ã¿ç™ºç«ï¼‰</param>
     public void Setup(TalkEvent ev, bool played, Action<TalkEvent> onClick)
     {
         talkEvent = ev;
@@ -40,10 +40,10 @@ public class TalkZukanCell : MonoBehaviour
 
         if (played)
         {
-            // Šù“Ç: ƒ^ƒCƒgƒ‹•\¦Aƒ{ƒ^ƒ“—LŒø
+            // æ—¢èª­: ã‚¿ã‚¤ãƒˆãƒ«è¡¨ç¤ºã€ãƒœã‚¿ãƒ³æœ‰åŠ¹
             if (titleText != null)
             {
-                // zukanTitle ‚ªİ’è‚³‚ê‚Ä‚¢‚ê‚Î‚»‚ê‚ğg‚¤A‚È‚¯‚ê‚Î id ‚ğƒtƒH[ƒ‹ƒoƒbƒN
+                // zukanTitle ãŒè¨­å®šã•ã‚Œã¦ã„ã‚Œã°ãã‚Œã‚’ä½¿ã†ã€ãªã‘ã‚Œã° id ã‚’ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
                 string title = !string.IsNullOrEmpty(ev.zukanTitle) ? ev.zukanTitle : ev.id;
                 titleText.text = title;
             }
@@ -56,8 +56,8 @@ public class TalkZukanCell : MonoBehaviour
         }
         else
         {
-            // –¢“Ç: uæ‚Éi‚à‚¤Iv•\¦Aƒ{ƒ^ƒ“–³Œø
-            if (titleText != null) titleText.text = "æ‚Éi‚à‚¤I";
+            // æœªèª­: ã€Œå…ˆã«é€²ã‚‚ã†ï¼ã€è¡¨ç¤ºã€ãƒœã‚¿ãƒ³ç„¡åŠ¹
+            if (titleText != null) titleText.text = "å…ˆã«é€²ã‚‚ã†ï¼";
             if (cellButton != null) cellButton.interactable = false;
         }
     }

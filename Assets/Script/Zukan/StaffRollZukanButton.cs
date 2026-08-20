@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ‰ï˜b}ŠÓiZukanTj‚©‚çƒXƒ^ƒbƒtƒ[ƒ‹‚ğ‰{——‚·‚é‚½‚ß‚Ìƒ{ƒ^ƒ“B
-/// ƒXƒ^ƒbƒtƒ[ƒ‹“’BÏ‚İiendingPhase >= 3j‚Ìê‡‚Ì‚İ•\¦‚·‚éB
-/// ‰{——ƒ‚[ƒh‚Å StaffRoll ƒV[ƒ“‚Ö‘JˆÚ‚µAI—¹Œã‚Í‚±‚ÌƒV[ƒ“‚É–ß‚Á‚Ä‚­‚éB
+/// ä¼šè©±å›³é‘‘ï¼ˆZukanTï¼‰ã‹ã‚‰ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«ã‚’é–²è¦§ã™ã‚‹ãŸã‚ã®ãƒœã‚¿ãƒ³ã€‚
+/// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«åˆ°é”æ¸ˆã¿ï¼ˆendingPhase >= 3ï¼‰ã®å ´åˆã®ã¿è¡¨ç¤ºã™ã‚‹ã€‚
+/// é–²è¦§ãƒ¢ãƒ¼ãƒ‰ã§ StaffRoll ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã—ã€çµ‚äº†å¾Œã¯ã“ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã£ã¦ãã‚‹ã€‚
 /// </summary>
 [RequireComponent(typeof(Button))]
 public class StaffRollZukanButton : MonoBehaviour
@@ -24,7 +24,7 @@ public class StaffRollZukanButton : MonoBehaviour
     {
         if (AudioManager.I != null) AudioManager.I.PlayPopupSe();
 
-        // ‰{——ƒ‚[ƒh‚Å‘JˆÚi–ß‚èæ = Œ»İ‚ÌƒV[ƒ“j
+        // é–²è¦§ãƒ¢ãƒ¼ãƒ‰ã§é·ç§»ï¼ˆæˆ»ã‚Šå…ˆ = ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ï¼‰
         GameState.I.staffRollReturnScene = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(EndingManager.StaffRollSceneName);
     }

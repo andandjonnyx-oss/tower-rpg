@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// SceneLoaderAutoCreate ‚Æ“¯‚¶ƒpƒ^[ƒ“B
-/// ‚Ç‚ÌƒV[ƒ“‚©‚ç‹N“®‚µ‚Ä‚à GameState ‚ª•K‚¸‘¶İ‚·‚é‚æ‚¤‚É‚·‚éB
-/// ‚±‚ê‚É‚æ‚è Main ƒV[ƒ“‚ğ’¼ÚÄ¶‚µ‚Ä‚à GameState.I ‚ª null ‚É‚È‚ç‚È‚¢B
+/// SceneLoaderAutoCreate ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã€‚
+/// ã©ã®ã‚·ãƒ¼ãƒ³ã‹ã‚‰èµ·å‹•ã—ã¦ã‚‚ GameState ãŒå¿…ãšå­˜åœ¨ã™ã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+/// ã“ã‚Œã«ã‚ˆã‚Š Main ã‚·ãƒ¼ãƒ³ã‚’ç›´æ¥å†ç”Ÿã—ã¦ã‚‚ GameState.I ãŒ null ã«ãªã‚‰ãªã„ã€‚
 /// </summary>
 public static class GameStateAutoCreate
 {
@@ -14,6 +14,6 @@ public static class GameStateAutoCreate
 
         var go = new GameObject("GameState");
         go.AddComponent<GameState>();
-        // Awake() “à‚Å DontDestroyOnLoad ‚ªŒÄ‚Î‚ê‚é‚Ì‚ÅA‚±‚±‚Å‚Í•s—v
+        // Awake() å†…ã§ DontDestroyOnLoad ãŒå‘¼ã°ã‚Œã‚‹ã®ã§ã€ã“ã“ã§ã¯ä¸è¦
     }
 }

@@ -1,9 +1,9 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ƒXƒLƒ‹Ú×ƒEƒBƒ“ƒhƒEB
-/// MonsterDetailWindow ‚Æ“¯‚¶ƒXƒ^ƒCƒ‹‚Å SkillData ‚Ì‘Sî•ñ‚ğ•\¦‚·‚éB
+/// ã‚¹ã‚­ãƒ«è©³ç´°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€‚
+/// MonsterDetailWindow ã¨åŒã˜ã‚¹ã‚¿ã‚¤ãƒ«ã§ SkillData ã®å…¨æƒ…å ±ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 /// </summary>
 public class SkillDetailWindow : EditorWindow
 {
@@ -28,7 +28,7 @@ public class SkillDetailWindow : EditorWindow
     {
         if (skill == null)
         {
-            EditorGUILayout.HelpBox("ƒXƒLƒ‹‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", MessageType.Info);
+            EditorGUILayout.HelpBox("ã‚¹ã‚­ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", MessageType.Info);
             return;
         }
 
@@ -58,106 +58,106 @@ public class SkillDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // Šî–{î•ñ
+    // åŸºæœ¬æƒ…å ±
     // =========================================================
     private void DrawBasicSection()
     {
-        EditorGUILayout.LabelField("Šî–{î•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("åŸºæœ¬æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("ID", skill.skillId ?? "");
-        EditorGUILayout.LabelField("–¼‘O", skill.skillName ?? "");
-        EditorGUILayout.LabelField("ƒAƒZƒbƒg–¼", skill.name ?? "");
+        EditorGUILayout.LabelField("åå‰", skill.skillName ?? "");
+        EditorGUILayout.LabelField("ã‚¢ã‚»ãƒƒãƒˆå", skill.name ?? "");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒ\[ƒXEs“®ƒ^ƒCƒv
+    // ã‚½ãƒ¼ã‚¹ãƒ»è¡Œå‹•ã‚¿ã‚¤ãƒ—
     // =========================================================
     private void DrawSourceSection()
     {
-        EditorGUILayout.LabelField("ƒ\[ƒXEs“®ƒ^ƒCƒv", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚½ãƒ¼ã‚¹ãƒ»è¡Œå‹•ã‚¿ã‚¤ãƒ—", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("ƒXƒLƒ‹ƒ\[ƒX", skill.skillSource.ToString());
-        EditorGUILayout.LabelField("ƒ‚ƒ“ƒXƒ^[s“®ƒ^ƒCƒv", skill.actionType.ToString());
+        EditorGUILayout.LabelField("ã‚¹ã‚­ãƒ«ã‚½ãƒ¼ã‚¹", skill.skillSource.ToString());
+        EditorGUILayout.LabelField("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è¡Œå‹•ã‚¿ã‚¤ãƒ—", skill.actionType.ToString());
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒ_ƒ[ƒW
+    // ãƒ€ãƒ¡ãƒ¼ã‚¸
     // =========================================================
     private void DrawDamageSection()
     {
-        EditorGUILayout.LabelField("ƒ_ƒ[ƒW", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("‘®«", skill.skillAttribute.ToJapanese());
-        EditorGUILayout.LabelField("•¨—/–‚–@", skill.damageCategory.ToString());
-        EditorGUILayout.LabelField("ƒ_ƒ[ƒW”{—¦", skill.damageMultiplier.ToString("F2"));
-        EditorGUILayout.LabelField("ƒ{[ƒiƒXƒ_ƒ[ƒW", skill.bonusDamage.ToString());
+        EditorGUILayout.LabelField("å±æ€§", skill.skillAttribute.ToJapanese());
+        EditorGUILayout.LabelField("ç‰©ç†/é­”æ³•", skill.damageCategory.ToString());
+        EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸å€ç‡", skill.damageMultiplier.ToString("F2"));
+        EditorGUILayout.LabelField("ãƒœãƒ¼ãƒŠã‚¹ãƒ€ãƒ¡ãƒ¼ã‚¸", skill.bonusDamage.ToString());
 
-        // ƒ_ƒ[ƒW®‚ÌƒvƒŒƒrƒ…[
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸å¼ã®ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
         if (skill.IsNonDamage)
         {
-            EditorGUILayout.LabelField("ŒvZ®", "”ñƒ_ƒ[ƒWƒXƒLƒ‹i’Ç‰ÁŒø‰Ê‚Ì‚İj");
+            EditorGUILayout.LabelField("è¨ˆç®—å¼", "éãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¹ã‚­ãƒ«ï¼ˆè¿½åŠ åŠ¹æœã®ã¿ï¼‰");
         }
         else if (skill.damageMultiplier > 0f && skill.bonusDamage > 0)
         {
-            EditorGUILayout.LabelField("ŒvZ®", $"Attack~{skill.damageMultiplier:F1} + {skill.bonusDamage}");
+            EditorGUILayout.LabelField("è¨ˆç®—å¼", $"AttackÃ—{skill.damageMultiplier:F1} + {skill.bonusDamage}");
         }
         else if (skill.damageMultiplier > 0f)
         {
-            EditorGUILayout.LabelField("ŒvZ®", $"Attack~{skill.damageMultiplier:F1}");
+            EditorGUILayout.LabelField("è¨ˆç®—å¼", $"AttackÃ—{skill.damageMultiplier:F1}");
         }
         else
         {
-            EditorGUILayout.LabelField("ŒvZ®", $"ŒÅ’è{skill.bonusDamage}");
+            EditorGUILayout.LabelField("è¨ˆç®—å¼", $"å›ºå®š{skill.bonusDamage}");
         }
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒRƒXƒg
+    // ã‚³ã‚¹ãƒˆ
     // =========================================================
     private void DrawCostSection()
     {
-        EditorGUILayout.LabelField("ƒRƒXƒg", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚³ã‚¹ãƒˆ", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("ƒN[ƒ‹ƒ_ƒEƒ“", $"{skill.cooldownTurns} ƒ^[ƒ“");
-        EditorGUILayout.LabelField("MPÁ”ï", skill.mpCost.ToString());
+        EditorGUILayout.LabelField("ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³", $"{skill.cooldownTurns} ã‚¿ãƒ¼ãƒ³");
+        EditorGUILayout.LabelField("MPæ¶ˆè²»", skill.mpCost.ToString());
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // –½’†—¦
+    // å‘½ä¸­ç‡
     // =========================================================
     private void DrawHitRateSection()
     {
-        EditorGUILayout.LabelField("–½’†—¦", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‘½ä¸­ç‡", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("Šî‘b–½’†—¦", $"{skill.baseHitRate}%");
+        EditorGUILayout.LabelField("åŸºç¤å‘½ä¸­ç‡", $"{skill.baseHitRate}%");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ’Ç‰ÁŒø‰Ê
+    // è¿½åŠ åŠ¹æœ
     // =========================================================
     private void DrawAdditionalEffectsSection()
     {
-        EditorGUILayout.LabelField("’Ç‰ÁŒø‰Ê", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("è¿½åŠ åŠ¹æœ", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (skill.additionalEffects == null || skill.additionalEffects.Count == 0)
         {
-            EditorGUILayout.LabelField("’Ç‰ÁŒø‰Ê‚È‚µ");
+            EditorGUILayout.LabelField("è¿½åŠ åŠ¹æœãªã—");
         }
         else
         {
@@ -179,7 +179,7 @@ public class SkillDetailWindow : EditorWindow
     }
 
     /// <summary>
-    /// ’Ç‰ÁŒø‰Ê‚ÌÚ×‚ğ•¶š—ñ‚ÉƒtƒH[ƒ}ƒbƒg‚·‚éB
+    /// è¿½åŠ åŠ¹æœã®è©³ç´°ã‚’æ–‡å­—åˆ—ã«ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã™ã‚‹ã€‚
     /// </summary>
     private string FormatEffectDetail(SkillEffectEntry entry)
     {
@@ -191,22 +191,22 @@ public class SkillDetailWindow : EditorWindow
         {
             if (entry.ailmentMode == AilmentMode.Inflict)
             {
-                return $"{effName}: {entry.targetStatusEffect}•t—^ {entry.chance}%";
+                return $"{effName}: {entry.targetStatusEffect}ä»˜ä¸ {entry.chance}%";
             }
             else
             {
-                return $"{effName}: {entry.targetStatusEffect}‰ñ•œ";
+                return $"{effName}: {entry.targetStatusEffect}å›å¾©";
             }
         }
         else if (data is HealEffectData healData)
         {
             string formula = GetFormulaLabel(healData.formulaType);
-            return $"{effName}: {formula} ’l={entry.intValue} ”­“®—¦={entry.chance}%";
+            return $"{effName}: {formula} å€¤={entry.intValue} ç™ºå‹•ç‡={entry.chance}%";
         }
         else if (data is LevelDrainEffectData)
         {
             int amt = (entry.intValue > 0) ? entry.intValue : 1;
-            return $"{effName}: Lv-{amt} ”­“®—¦={entry.chance}%";
+            return $"{effName}: Lv-{amt} ç™ºå‹•ç‡={entry.chance}%";
         }
         else
         {
@@ -218,25 +218,25 @@ public class SkillDetailWindow : EditorWindow
     {
         switch (formulaType)
         {
-            case HealFormulaType.Fixed: return "ŒÅ’è’l‰ñ•œ";
-            case HealFormulaType.MaxHpPercent: return "Å‘åHP%‰ñ•œ";
-            case HealFormulaType.IntMultiplier: return "INT~”{—¦‰ñ•œ";
-            case HealFormulaType.StrMultiplier: return "STR~”{—¦‰ñ•œ";
+            case HealFormulaType.Fixed: return "å›ºå®šå€¤å›å¾©";
+            case HealFormulaType.MaxHpPercent: return "æœ€å¤§HP%å›å¾©";
+            case HealFormulaType.IntMultiplier: return "INTÃ—å€ç‡å›å¾©";
+            case HealFormulaType.StrMultiplier: return "STRÃ—å€ç‡å›å¾©";
             default: return formulaType.ToString();
         }
     }
 
     // =========================================================
-    // à–¾
+    // èª¬æ˜
     // =========================================================
     private void DrawDescriptionSection()
     {
-        EditorGUILayout.LabelField("à–¾", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("èª¬æ˜", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (string.IsNullOrWhiteSpace(skill.description))
         {
-            EditorGUILayout.LabelField("à–¾‚È‚µ");
+            EditorGUILayout.LabelField("èª¬æ˜ãªã—");
         }
         else
         {

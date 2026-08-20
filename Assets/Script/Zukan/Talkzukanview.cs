@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -7,65 +7,65 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// ZukanT ƒV[ƒ“i‰ï˜b}ŠÓj‚ÌƒRƒ“ƒgƒ[ƒ‰[B
-/// TalkEventDatabase ‚Ì‘SƒCƒxƒ“ƒg‚ğƒXƒg[ƒŠ[‡‚Éƒ\[ƒg‚µ‚ÄƒXƒNƒ[ƒ‹•\¦‚·‚éB
-/// Šù“ÇƒCƒxƒ“ƒg‚Íƒ^ƒCƒgƒ‹•t‚«ƒ{ƒ^ƒ“‚Åƒ^ƒbƒv‰Â”\B
-/// –¢“ÇƒCƒxƒ“ƒg‚Íuæ‚Éi‚à‚¤Iv•\¦‚Åƒ^ƒbƒv•s‰ÂB
+/// ZukanT ã‚·ãƒ¼ãƒ³ï¼ˆä¼šè©±å›³é‘‘ï¼‰ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// TalkEventDatabase ã®å…¨ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã‚¹ãƒˆãƒ¼ãƒªãƒ¼é †ã«ã‚½ãƒ¼ãƒˆã—ã¦ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«è¡¨ç¤ºã™ã‚‹ã€‚
+/// æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆã¯ã‚¿ã‚¤ãƒˆãƒ«ä»˜ããƒœã‚¿ãƒ³ã§ã‚¿ãƒƒãƒ—å¯èƒ½ã€‚
+/// æœªèª­ã‚¤ãƒ™ãƒ³ãƒˆã¯ã€Œå…ˆã«é€²ã‚‚ã†ï¼ã€è¡¨ç¤ºã§ã‚¿ãƒƒãƒ—ä¸å¯ã€‚
 ///
-/// y•\¦‡iƒ\[ƒg‹K–ñjz
-///   floor / step ‚ğåƒL[‚Éƒ\[ƒg‚·‚éBè“ü—Í‚µ‚½ floor/step ‚ª•\¦‡‚ğŒˆ‚ß‚éB
+/// ã€è¡¨ç¤ºé †ï¼ˆã‚½ãƒ¼ãƒˆè¦ç´„ï¼‰ã€‘
+///   floor / step ã‚’ä¸»ã‚­ãƒ¼ã«ã‚½ãƒ¼ãƒˆã™ã‚‹ã€‚æ‰‹å…¥åŠ›ã—ãŸ floor/step ãŒè¡¨ç¤ºé †ã‚’æ±ºã‚ã‚‹ã€‚
 ///
-///     ƒI[ƒvƒjƒ“ƒO   : floor = 0          iÅ¬‚È‚Ì‚Åæ“ªj
-///     ’ÊíƒCƒxƒ“ƒg   : floor = ŠY“–ŠK, step = ŠY“–ƒXƒeƒbƒv
-///     ƒ{ƒXŸ—˜‰ï˜b   : floor = ƒ{ƒXŠK, step = 9999  i‚»‚ÌŠK‚ÌÅŒã‚É—ˆ‚éj
-///     ƒGƒ“ƒfƒBƒ“ƒO   : floor = 9999       iÅ‘å‚È‚Ì‚Å––”öj
+///     ã‚ªãƒ¼ãƒ—ãƒ‹ãƒ³ã‚°   : floor = 0          ï¼ˆæœ€å°ãªã®ã§å…ˆé ­ï¼‰
+///     é€šå¸¸ã‚¤ãƒ™ãƒ³ãƒˆ   : floor = è©²å½“éš, step = è©²å½“ã‚¹ãƒ†ãƒƒãƒ—
+///     ãƒœã‚¹å‹åˆ©ä¼šè©±   : floor = ãƒœã‚¹éš, step = 9999  ï¼ˆãã®éšã®æœ€å¾Œã«æ¥ã‚‹ï¼‰
+///     ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°   : floor = 9999       ï¼ˆæœ€å¤§ãªã®ã§æœ«å°¾ï¼‰
 ///
-///   ƒ\[ƒgƒL[‚Í (floor, step, id)B
-///   ‘æ3ƒL[‚É id ‚ğ“ü‚ê‚é‚±‚Æ‚ÅA“¯‚¶ floor/step ‚ÌƒCƒxƒ“ƒg‚ª•¡”‚ ‚Á‚Ä‚à
-///   ‡˜‚ªˆÀ’è‚·‚éiŠm—¦•ªŠòƒOƒ‹[ƒv‚È‚ÇjB
-///   OrderBy Œn‚Ì LINQ ‚ÍˆÀ’èƒ\[ƒg‚È‚Ì‚ÅA“¯ˆêƒL[‚ÍŒ³‚Ì“o˜^‡‚ğ•Û‚·‚éB
+///   ã‚½ãƒ¼ãƒˆã‚­ãƒ¼ã¯ (floor, step, id)ã€‚
+///   ç¬¬3ã‚­ãƒ¼ã« id ã‚’å…¥ã‚Œã‚‹ã“ã¨ã§ã€åŒã˜ floor/step ã®ã‚¤ãƒ™ãƒ³ãƒˆãŒè¤‡æ•°ã‚ã£ã¦ã‚‚
+///   é †åºãŒå®‰å®šã™ã‚‹ï¼ˆç¢ºç‡åˆ†å²ã‚°ãƒ«ãƒ¼ãƒ—ãªã©ï¼‰ã€‚
+///   OrderBy ç³»ã® LINQ ã¯å®‰å®šã‚½ãƒ¼ãƒˆãªã®ã§ã€åŒä¸€ã‚­ãƒ¼ã¯å…ƒã®ç™»éŒ²é †ã‚’ä¿æŒã™ã‚‹ã€‚
 ///
-/// yƒXƒNƒ[ƒ‹ˆÊ’u‚Ì•œŒ³z
-///   ‰ï˜b‚ğŒ©‚½Œã‚É}ŠÓ‚Ö–ß‚Á‚½ÛA’¼‘O‚ÉŠJ‚¢‚½‰ï˜bƒZƒ‹‚ÌˆÊ’u‚Ö•œŒ³‚·‚éB
-///   - ƒZƒ‹ƒ^ƒbƒv: ZukanContext.TalkReturningFromDetail = true,
-///                   TalkReturnTargetId = ‚»‚ÌƒCƒxƒ“ƒg id ‚ğƒZƒbƒg‚µ‚Ä Talk ‚ÖB
-///   - Talk ‚©‚ç–ß‚Á‚½ Start(): ƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚ê‚Î‚»‚ÌƒZƒ‹‚ÖƒXƒNƒ[ƒ‹•œŒ³B
-///   - }ŠÓƒgƒbƒv(Zukan)‚©‚ç“ü‚Á‚½ê‡: ƒtƒ‰ƒO‚ª false ‚È‚Ì‚Åæ“ª•\¦B
-///   ƒ‚ƒ“ƒXƒ^[}ŠÓ(Mstatus/ZukanM)‚Ì ReturningFromDetail ‚Æ“¯‚¶ƒpƒ^[ƒ“B
+/// ã€ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã®å¾©å…ƒã€‘
+///   ä¼šè©±ã‚’è¦‹ãŸå¾Œã«å›³é‘‘ã¸æˆ»ã£ãŸéš›ã€ç›´å‰ã«é–‹ã„ãŸä¼šè©±ã‚»ãƒ«ã®ä½ç½®ã¸å¾©å…ƒã™ã‚‹ã€‚
+///   - ã‚»ãƒ«ã‚¿ãƒƒãƒ—æ™‚: ZukanContext.TalkReturningFromDetail = true,
+///                   TalkReturnTargetId = ãã®ã‚¤ãƒ™ãƒ³ãƒˆ id ã‚’ã‚»ãƒƒãƒˆã—ã¦ Talk ã¸ã€‚
+///   - Talk ã‹ã‚‰æˆ»ã£ãŸ Start(): ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ã‚Œã°ãã®ã‚»ãƒ«ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¾©å…ƒã€‚
+///   - å›³é‘‘ãƒˆãƒƒãƒ—(Zukan)ã‹ã‚‰å…¥ã£ãŸå ´åˆ: ãƒ•ãƒ©ã‚°ãŒ false ãªã®ã§å…ˆé ­è¡¨ç¤ºã€‚
+///   ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›³é‘‘(Mstatus/ZukanM)ã® ReturningFromDetail ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã€‚
 ///
-/// }ŠÓ‚©‚ç‰ï˜b‚ğÄ¶‚·‚éê‡:
-///   - pendingEventId ‚ÉƒCƒxƒ“ƒgID‚ğƒZƒbƒg
-///   - talkReturnScene ‚É "ZukanT" ‚ğƒZƒbƒgiTalkI—¹Œã‚É‚±‚ÌƒV[ƒ“‚É–ß‚éj
-///   - isZukanReplay = true ‚ğƒZƒbƒgi•ñV“ñd•t—^–h~j
-///   - Talk ƒV[ƒ“‚Ö‘JˆÚ
+/// å›³é‘‘ã‹ã‚‰ä¼šè©±ã‚’å†ç”Ÿã™ã‚‹å ´åˆ:
+///   - pendingEventId ã«ã‚¤ãƒ™ãƒ³ãƒˆIDã‚’ã‚»ãƒƒãƒˆ
+///   - talkReturnScene ã« "ZukanT" ã‚’ã‚»ãƒƒãƒˆï¼ˆTalkçµ‚äº†å¾Œã«ã“ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹ï¼‰
+///   - isZukanReplay = true ã‚’ã‚»ãƒƒãƒˆï¼ˆå ±é…¬äºŒé‡ä»˜ä¸é˜²æ­¢ï¼‰
+///   - Talk ã‚·ãƒ¼ãƒ³ã¸é·ç§»
 ///
-/// ƒŒƒCƒAƒEƒg:
+/// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ:
 ///   ScrollView > Viewport > Content (VerticalLayoutGroup)
-///     „¤ [“®“I¶¬] TalkZukanCell ~ Ni‰¡’·ƒ{ƒ^ƒ“j
+///     â”” [å‹•çš„ç”Ÿæˆ] TalkZukanCell Ã— Nï¼ˆæ¨ªé•·ãƒœã‚¿ãƒ³ï¼‰
 /// </summary>
 public class TalkZukanView : MonoBehaviour
 {
     // =========================================================
-    // Inspector QÆ
+    // Inspector å‚ç…§
     // =========================================================
 
     [Header("Data")]
-    [Tooltip("‰ï˜bƒCƒxƒ“ƒgƒf[ƒ^ƒx[ƒXiSOƒAƒZƒbƒg‚ğƒAƒTƒCƒ“j")]
+    [Tooltip("ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ï¼ˆSOã‚¢ã‚»ãƒƒãƒˆã‚’ã‚¢ã‚µã‚¤ãƒ³ï¼‰")]
     [SerializeField] private TalkEventDatabase talkDatabase;
 
     [Header("Grid")]
-    [Tooltip("‰ï˜bƒZƒ‹‚Ì PrefabiTalkZukanCellj")]
+    [Tooltip("ä¼šè©±ã‚»ãƒ«ã® Prefabï¼ˆTalkZukanCellï¼‰")]
     [SerializeField] private TalkZukanCell cellPrefab;
 
-    [Tooltip("VerticalLayoutGroup ‚ªƒAƒ^ƒbƒ`‚³‚ê‚½ Content Transform")]
+    [Tooltip("VerticalLayoutGroup ãŒã‚¢ã‚¿ãƒƒãƒã•ã‚ŒãŸ Content Transform")]
     [SerializeField] private Transform listContent;
 
     [Header("Scroll")]
-    [Tooltip("ƒXƒNƒ[ƒ‹ˆÊ’u•œŒ³‚Ég‚¤ ScrollRect")]
+    [Tooltip("ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®å¾©å…ƒã«ä½¿ã† ScrollRect")]
     [SerializeField] private ScrollRect scrollRect;
 
     [Header("Buttons")]
-    [Tooltip("–ß‚éƒ{ƒ^ƒ“iZukan ƒV[ƒ“‚Öj")]
+    [Tooltip("æˆ»ã‚‹ãƒœã‚¿ãƒ³ï¼ˆZukan ã‚·ãƒ¼ãƒ³ã¸ï¼‰")]
     [SerializeField] private Button backButton;
 
     [Header("Scene Names")]
@@ -73,15 +73,15 @@ public class TalkZukanView : MonoBehaviour
     [SerializeField] private string talkSceneName = "Talk";
 
     // =========================================================
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     // =========================================================
     private List<TalkZukanCell> cells = new List<TalkZukanCell>();
 
-    // •œŒ³—p: ƒCƒxƒ“ƒg id ¨ ‚»‚ÌƒZƒ‹‚Ì RectTransform ‚ğˆø‚¯‚é‚æ‚¤‚É‚µ‚Ä‚¨‚­
+    // å¾©å…ƒç”¨: ã‚¤ãƒ™ãƒ³ãƒˆ id â†’ ãã®ã‚»ãƒ«ã® RectTransform ã‚’å¼•ã‘ã‚‹ã‚ˆã†ã«ã—ã¦ãŠã
     private Dictionary<string, RectTransform> cellRectById = new Dictionary<string, RectTransform>();
 
     // =========================================================
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
     // =========================================================
 
     private void Start()
@@ -90,13 +90,13 @@ public class TalkZukanView : MonoBehaviour
 
         BuildList();
 
-        // Talk ‚©‚ç–ß‚Á‚Ä‚«‚½ê‡‚Ì‚İƒXƒNƒ[ƒ‹ˆÊ’u‚ğ•œŒ³‚·‚éB
-        // }ŠÓƒgƒbƒv(Zukan)‚©‚ç“ü‚Á‚½ê‡‚Íƒtƒ‰ƒO‚ª false ‚È‚Ì‚Åæ“ª‚Ì‚Ü‚ÜB
+        // Talk ã‹ã‚‰æˆ»ã£ã¦ããŸå ´åˆã®ã¿ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’å¾©å…ƒã™ã‚‹ã€‚
+        // å›³é‘‘ãƒˆãƒƒãƒ—(Zukan)ã‹ã‚‰å…¥ã£ãŸå ´åˆã¯ãƒ•ãƒ©ã‚°ãŒ false ãªã®ã§å…ˆé ­ã®ã¾ã¾ã€‚
         if (ZukanContext.TalkReturningFromDetail)
         {
             string targetId = ZukanContext.TalkReturnTargetId;
 
-            // ƒtƒ‰ƒO‚Íˆê“xg‚Á‚½‚çƒNƒŠƒAiŸ‰ñƒgƒbƒv‚©‚ç“ü‚Á‚½‚Éæ“ª•\¦‚³‚¹‚éj
+            // ãƒ•ãƒ©ã‚°ã¯ä¸€åº¦ä½¿ã£ãŸã‚‰ã‚¯ãƒªã‚¢ï¼ˆæ¬¡å›ãƒˆãƒƒãƒ—ã‹ã‚‰å…¥ã£ãŸæ™‚ã«å…ˆé ­è¡¨ç¤ºã•ã›ã‚‹ï¼‰
             ZukanContext.TalkReturningFromDetail = false;
             ZukanContext.TalkReturnTargetId = null;
 
@@ -108,16 +108,16 @@ public class TalkZukanView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒŠƒXƒg\’z
+    // ãƒªã‚¹ãƒˆæ§‹ç¯‰
     // =========================================================
 
     /// <summary>
-    /// TalkEventDatabase.events ‚ğ (floor, step, id) ‚Åƒ\[ƒg‚µ‚ÄƒZƒ‹‚ğ¶¬‚·‚éB
-    /// è“ü—Í‚µ‚½ floor/step ‚ªƒXƒg[ƒŠ[‡˜‚ğŒˆ‚ß‚éB
+    /// TalkEventDatabase.events ã‚’ (floor, step, id) ã§ã‚½ãƒ¼ãƒˆã—ã¦ã‚»ãƒ«ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+    /// æ‰‹å…¥åŠ›ã—ãŸ floor/step ãŒã‚¹ãƒˆãƒ¼ãƒªãƒ¼é †åºã‚’æ±ºã‚ã‚‹ã€‚
     /// </summary>
     private void BuildList()
     {
-        // Šù‘¶ƒZƒ‹‚ğ”jŠü
+        // æ—¢å­˜ã‚»ãƒ«ã‚’ç ´æ£„
         foreach (var cell in cells)
         {
             if (cell != null) Destroy(cell.gameObject);
@@ -128,9 +128,9 @@ public class TalkZukanView : MonoBehaviour
         if (talkDatabase == null || talkDatabase.events == null) return;
         if (cellPrefab == null || listContent == null) return;
 
-        // null ‚ğœŠO‚µ‚Â‚ÂA(floor, step, id) ‚ÌˆÀ’èƒ\[ƒgB
-        // OrderBy/ThenBy ‚ÍˆÀ’èƒ\[ƒg‚È‚Ì‚ÅA“¯ˆê floor/step ‚ÌƒCƒxƒ“ƒg‚Í
-        // Œ³‚Ì“o˜^‡iŠm—¦•ªŠòƒOƒ‹[ƒv‚È‚Çj‚ğ•Û‚·‚éB
+        // null ã‚’é™¤å¤–ã—ã¤ã¤ã€(floor, step, id) ã®å®‰å®šã‚½ãƒ¼ãƒˆã€‚
+        // OrderBy/ThenBy ã¯å®‰å®šã‚½ãƒ¼ãƒˆãªã®ã§ã€åŒä¸€ floor/step ã®ã‚¤ãƒ™ãƒ³ãƒˆã¯
+        // å…ƒã®ç™»éŒ²é †ï¼ˆç¢ºç‡åˆ†å²ã‚°ãƒ«ãƒ¼ãƒ—ãªã©ï¼‰ã‚’ä¿æŒã™ã‚‹ã€‚
         var sorted = talkDatabase.events
             .Where(e => e != null)
             .OrderBy(e => e.floor)
@@ -146,34 +146,34 @@ public class TalkZukanView : MonoBehaviour
             cell.Setup(talkEvent, played, OnCellClicked);
             cells.Add(cell);
 
-            // •œŒ³—p‚É id ¨ RectTransform ‚ğ“o˜^iid d•¡‚ÍæŸ‚¿j
+            // å¾©å…ƒç”¨ã« id â†’ RectTransform ã‚’ç™»éŒ²ï¼ˆid é‡è¤‡æ™‚ã¯å…ˆå‹ã¡ï¼‰
             if (!string.IsNullOrEmpty(talkEvent.id) && !cellRectById.ContainsKey(talkEvent.id))
             {
                 cellRectById[talkEvent.id] = cell.transform as RectTransform;
             }
         }
 
-        Debug.Log($"[TalkZukan] ƒCƒxƒ“ƒg”: {cells.Count}");
+        Debug.Log($"[TalkZukan] ã‚¤ãƒ™ãƒ³ãƒˆæ•°: {cells.Count}");
     }
 
     // =========================================================
-    // ƒXƒNƒ[ƒ‹ˆÊ’u‚Ì•œŒ³
+    // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã®å¾©å…ƒ
     // =========================================================
 
     /// <summary>
-    /// w’è id ‚ÌƒZƒ‹‚ª‰æ–Ê“à‚Éû‚Ü‚é‚æ‚¤A1ƒtƒŒ[ƒ€‘Ò‚Á‚Ä‚©‚çƒXƒNƒ[ƒ‹‚·‚éB
-    /// ¶¬’¼Œã‚Í VerticalLayoutGroup / ContentSizeFitter ‚ÌƒŒƒCƒAƒEƒg‚ª–¢Šm’è‚È‚Ì‚Å
-    /// 1ƒtƒŒ[ƒ€‘Ò‚Á‚Ä‚©‚çˆÊ’u‚ğŒvZ‚·‚éiƒ‚ƒ“ƒXƒ^[}ŠÓ‚Æ“¯‚¶è–@jB
+    /// æŒ‡å®š id ã®ã‚»ãƒ«ãŒç”»é¢å†…ã«åã¾ã‚‹ã‚ˆã†ã€1ãƒ•ãƒ¬ãƒ¼ãƒ å¾…ã£ã¦ã‹ã‚‰ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹ã€‚
+    /// ç”Ÿæˆç›´å¾Œã¯ VerticalLayoutGroup / ContentSizeFitter ã®ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆãŒæœªç¢ºå®šãªã®ã§
+    /// 1ãƒ•ãƒ¬ãƒ¼ãƒ å¾…ã£ã¦ã‹ã‚‰ä½ç½®ã‚’è¨ˆç®—ã™ã‚‹ï¼ˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›³é‘‘ã¨åŒã˜æ‰‹æ³•ï¼‰ã€‚
     /// </summary>
     private IEnumerator ScrollToTargetNextFrame(string targetId)
     {
-        // ƒŒƒCƒAƒEƒgŠm’è‚ğ‘Ò‚Â
+        // ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆç¢ºå®šã‚’å¾…ã¤
         yield return null;
 
         if (scrollRect == null || scrollRect.content == null) yield break;
         if (!cellRectById.TryGetValue(targetId, out RectTransform target) || target == null) yield break;
 
-        // ƒŒƒCƒAƒEƒg‚ğ‘¦Šm’è‚³‚¹‚Ä‚©‚çƒTƒCƒY‚ğ“Ç‚Ş
+        // ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’å³æ™‚ç¢ºå®šã•ã›ã¦ã‹ã‚‰ã‚µã‚¤ã‚ºã‚’èª­ã‚€
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
 
@@ -183,63 +183,63 @@ public class TalkZukanView : MonoBehaviour
         float contentHeight = content.rect.height;
         float viewportHeight = viewport.rect.height;
 
-        // ƒXƒNƒ[ƒ‹•s—vi‘S•”Œ©‚¦‚Ä‚¢‚éj‚È‚ç‰½‚à‚µ‚È‚¢
+        // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä¸è¦ï¼ˆå…¨éƒ¨è¦‹ãˆã¦ã„ã‚‹ï¼‰ãªã‚‰ä½•ã‚‚ã—ãªã„
         if (contentHeight <= viewportHeight)
         {
             scrollRect.verticalNormalizedPosition = 1f;
             yield break;
         }
 
-        // ƒ^[ƒQƒbƒgƒZƒ‹‚Ì content “àƒ[ƒJƒ‹YˆÊ’uiã’[Šî€‚Ì‹——£j‚ğ‹‚ß‚éB
-        // VerticalLayoutGroup ‚Íã‚©‚ç‰º‚Ö•À‚Ô‚Ì‚ÅAanchoredPosition.y ‚Í•‰•ûŒü‚É‘‚¦‚éB
-        float targetCenterFromTop = -target.anchoredPosition.y; // contentã’[‚©‚çƒZƒ‹’†S‚Ü‚Å‚Ì‹——£
+        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚»ãƒ«ã® content å†…ãƒ­ãƒ¼ã‚«ãƒ«Yä½ç½®ï¼ˆä¸Šç«¯åŸºæº–ã®è·é›¢ï¼‰ã‚’æ±‚ã‚ã‚‹ã€‚
+        // VerticalLayoutGroup ã¯ä¸Šã‹ã‚‰ä¸‹ã¸ä¸¦ã¶ã®ã§ã€anchoredPosition.y ã¯è² æ–¹å‘ã«å¢—ãˆã‚‹ã€‚
+        float targetCenterFromTop = -target.anchoredPosition.y; // contentä¸Šç«¯ã‹ã‚‰ã‚»ãƒ«ä¸­å¿ƒã¾ã§ã®è·é›¢
 
-        // ƒZƒ‹’†S‚ğƒrƒ…[ƒ|[ƒg’†‰›‚É’u‚«‚½‚¢ê‡‚ÌƒXƒNƒ[ƒ‹—Ê
+        // ã‚»ãƒ«ä¸­å¿ƒã‚’ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆä¸­å¤®ã«ç½®ããŸã„å ´åˆã®ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«é‡
         float desired = targetCenterFromTop - viewportHeight * 0.5f;
 
-        // ƒNƒ‰ƒ“ƒv
+        // ã‚¯ãƒ©ãƒ³ãƒ—
         float maxScroll = contentHeight - viewportHeight;
         desired = Mathf.Clamp(desired, 0f, maxScroll);
 
-        // verticalNormalizedPosition: 1=ã’[, 0=‰º’[
+        // verticalNormalizedPosition: 1=ä¸Šç«¯, 0=ä¸‹ç«¯
         float normalized = 1f - (desired / maxScroll);
         scrollRect.verticalNormalizedPosition = Mathf.Clamp01(normalized);
     }
 
     // =========================================================
-    // ƒZƒ‹ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒN
+    // ã‚»ãƒ«ã‚¿ãƒƒãƒ—ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
     // =========================================================
 
     /// <summary>
-    /// Šù“ÇƒCƒxƒ“ƒg‚ÌƒZƒ‹‚ğƒ^ƒbƒv‚µ‚½‚ÌƒR[ƒ‹ƒoƒbƒNB
-    /// Talk ƒV[ƒ“‚Ö‘JˆÚ‚µ‚Ä‰ï˜b‚ğÄ¶‚·‚éB
-    /// •ñV‚Í“ñd•t—^‚µ‚È‚¢iisZukanReplay ƒtƒ‰ƒOjB
-    /// Talk I—¹Œã‚Í‚±‚ÌƒV[ƒ“iZukanTj‚É–ß‚èA‚±‚ÌƒZƒ‹‚ÌˆÊ’u‚ÖƒXƒNƒ[ƒ‹•œŒ³‚·‚éB
+    /// æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆã®ã‚»ãƒ«ã‚’ã‚¿ãƒƒãƒ—ã—ãŸæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚
+    /// Talk ã‚·ãƒ¼ãƒ³ã¸é·ç§»ã—ã¦ä¼šè©±ã‚’å†ç”Ÿã™ã‚‹ã€‚
+    /// å ±é…¬ã¯äºŒé‡ä»˜ä¸ã—ãªã„ï¼ˆisZukanReplay ãƒ•ãƒ©ã‚°ï¼‰ã€‚
+    /// Talk çµ‚äº†å¾Œã¯ã“ã®ã‚·ãƒ¼ãƒ³ï¼ˆZukanTï¼‰ã«æˆ»ã‚Šã€ã“ã®ã‚»ãƒ«ã®ä½ç½®ã¸ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¾©å…ƒã™ã‚‹ã€‚
     /// </summary>
     private void OnCellClicked(TalkEvent talkEvent)
     {
         if (talkEvent == null) return;
         if (GameState.I == null) return;
 
-        // ƒXƒNƒ[ƒ‹•œŒ³—p: ‚±‚ÌƒCƒxƒ“ƒg‚ğu–ß‚èæƒ^[ƒQƒbƒgv‚Æ‚µ‚Ä‹L˜^
+        // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«å¾©å…ƒç”¨: ã“ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã€Œæˆ»ã‚Šå…ˆã‚¿ãƒ¼ã‚²ãƒƒãƒˆã€ã¨ã—ã¦è¨˜éŒ²
         ZukanContext.TalkReturningFromDetail = true;
         ZukanContext.TalkReturnTargetId = talkEvent.id;
 
         GameState.I.pendingEventId = talkEvent.id;
-        GameState.I.talkReturnScene = "ZukanT";        // TalkI—¹Œã‚É‚±‚ÌƒV[ƒ“‚É–ß‚é
-        GameState.I.isZukanReplay = true;               // •ñV“ñd•t—^–h~ƒtƒ‰ƒO
+        GameState.I.talkReturnScene = "ZukanT";        // Talkçµ‚äº†å¾Œã«ã“ã®ã‚·ãƒ¼ãƒ³ã«æˆ»ã‚‹
+        GameState.I.isZukanReplay = true;               // å ±é…¬äºŒé‡ä»˜ä¸é˜²æ­¢ãƒ•ãƒ©ã‚°
 
         SceneManager.LoadScene(talkSceneName);
     }
 
     // =========================================================
-    // ƒ{ƒ^ƒ“ƒnƒ“ƒhƒ‰
+    // ãƒœã‚¿ãƒ³ãƒãƒ³ãƒ‰ãƒ©
     // =========================================================
 
     private void OnBackClicked()
     {
-        // ƒgƒbƒv(Zukan)‚Ö–ß‚é‚Í•œŒ³ƒtƒ‰ƒO‚ğƒNƒŠƒA‚µ‚Ä‚¨‚­
-        // iŸ‚É}ŠÓƒgƒbƒv‚©‚ç“ü‚è’¼‚µ‚½Aæ“ª•\¦‚É‚·‚é‚½‚ßj
+        // ãƒˆãƒƒãƒ—(Zukan)ã¸æˆ»ã‚‹æ™‚ã¯å¾©å…ƒãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ã—ã¦ãŠã
+        // ï¼ˆæ¬¡ã«å›³é‘‘ãƒˆãƒƒãƒ—ã‹ã‚‰å…¥ã‚Šç›´ã—ãŸæ™‚ã€å…ˆé ­è¡¨ç¤ºã«ã™ã‚‹ãŸã‚ï¼‰
         ZukanContext.TalkReturningFromDetail = false;
         ZukanContext.TalkReturnTargetId = null;
 

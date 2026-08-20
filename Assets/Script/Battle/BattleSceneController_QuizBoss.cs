@@ -1,67 +1,67 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// BattleSceneController ‚ÌƒNƒCƒYƒ{ƒXˆ—ƒp[ƒgipartial classjB
+/// BattleSceneController ã®ã‚¯ã‚¤ã‚ºãƒœã‚¹å‡¦ç†ãƒ‘ãƒ¼ãƒˆï¼ˆpartial classï¼‰ã€‚
 ///
-/// yƒNƒCƒYƒoƒgƒ‹d—lz
-///   - “Gƒ^[ƒ“‚ÅƒNƒCƒY‚ğo‘è‚·‚éB
-///   - UŒ‚ƒ{ƒ^ƒ“¨‘I‘ğˆAA–hŒäƒ{ƒ^ƒ“¨‘I‘ğˆB ‚Éˆê•Ï‰»‚·‚éB
-///   - –‚–@/ƒXƒLƒ‹/ƒAƒCƒeƒ€/ƒMƒuƒAƒbƒv‚Í‰ñ“š’†‚Í‘€ì•s”\‚Ì‚Ü‚ÜB
-///   - ³‰ğ1‰ñ‚²‚Æ‚É“GHP = MaxHp / quizCorrectToWiniØ‚èÌ‚Ä, Å’á1jŒ¸­B
-///   - •s³‰ğ quizMaxWrong ‰ñ‚ÅƒvƒŒƒCƒ„[‘¦€B
-///   - Ÿ—˜”»’è‚Í enemyCurrentHp <= 0 ‚Å“ˆêiUŒ‚‚Å‚àƒNƒCƒY‚Å‚à“|‚¹‚éjB
-///   - ‰ñ“šŒã ¨ ³‰ğ/•s³‰ğ”»’è ¨ AfterEnemyAction ¨ ƒvƒŒƒCƒ„[ƒ^[ƒ“i’Êí‘€ì‚É•œ‹AjB
-///   - ƒvƒŒƒCƒ„[ƒ^[ƒ“‚Å‚ÍUŒ‚/ƒXƒLƒ‹/–‚–@/ƒAƒCƒeƒ€/–hŒä‚ª‘S‚Äg‚¦‚éB
+/// ã€ã‚¯ã‚¤ã‚ºãƒãƒˆãƒ«ä»•æ§˜ã€‘
+///   - æ•µã‚¿ãƒ¼ãƒ³ã§ã‚¯ã‚¤ã‚ºã‚’å‡ºé¡Œã™ã‚‹ã€‚
+///   - æ”»æ’ƒãƒœã‚¿ãƒ³â†’é¸æŠè‚¢Aã€é˜²å¾¡ãƒœã‚¿ãƒ³â†’é¸æŠè‚¢B ã«ä¸€æ™‚å¤‰åŒ–ã™ã‚‹ã€‚
+///   - é­”æ³•/ã‚¹ã‚­ãƒ«/ã‚¢ã‚¤ãƒ†ãƒ /ã‚®ãƒ–ã‚¢ãƒƒãƒ—ã¯å›ç­”ä¸­ã¯æ“ä½œä¸èƒ½ã®ã¾ã¾ã€‚
+///   - æ­£è§£1å›ã”ã¨ã«æ•µHP = MaxHp / quizCorrectToWinï¼ˆåˆ‡ã‚Šæ¨ã¦, æœ€ä½1ï¼‰æ¸›å°‘ã€‚
+///   - ä¸æ­£è§£ quizMaxWrong å›ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å³æ­»ã€‚
+///   - å‹åˆ©åˆ¤å®šã¯ enemyCurrentHp <= 0 ã§çµ±ä¸€ï¼ˆæ”»æ’ƒã§ã‚‚ã‚¯ã‚¤ã‚ºã§ã‚‚å€’ã›ã‚‹ï¼‰ã€‚
+///   - å›ç­”å¾Œ â†’ æ­£è§£/ä¸æ­£è§£åˆ¤å®š â†’ AfterEnemyAction â†’ ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³ï¼ˆé€šå¸¸æ“ä½œã«å¾©å¸°ï¼‰ã€‚
+///   - ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³ã§ã¯æ”»æ’ƒ/ã‚¹ã‚­ãƒ«/é­”æ³•/ã‚¢ã‚¤ãƒ†ãƒ /é˜²å¾¡ãŒå…¨ã¦ä½¿ãˆã‚‹ã€‚
 ///
-/// yƒpƒ‰ƒ[ƒ^iMonster ƒAƒZƒbƒg‘¤jz
+/// ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆMonster ã‚¢ã‚»ãƒƒãƒˆå´ï¼‰ã€‘
 ///   isQuizBoss = true
-///   quizDatabase = ƒNƒCƒYƒf[ƒ^ƒx[ƒXƒAƒZƒbƒg
-///   quizCorrectToWin = ³‰ğ‰½–â‚Å“|‚¹‚é‚©iƒfƒtƒHƒ‹ƒg10A80Fƒ{ƒX‚Í30j
-///   quizMaxWrong = •s³‰ğ‰½‰ñ‚Å‘¦€‚©iƒfƒtƒHƒ‹ƒg3j
+///   quizDatabase = ã‚¯ã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚¢ã‚»ãƒƒãƒˆ
+///   quizCorrectToWin = æ­£è§£ä½•å•ã§å€’ã›ã‚‹ã‹ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ10ã€80Fãƒœã‚¹ã¯30ï¼‰
+///   quizMaxWrong = ä¸æ­£è§£ä½•å›ã§å³æ­»ã‹ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ3ï¼‰
 ///
-/// y40Fƒ{ƒX‚Æ‚ÌŒİŠ·«z
-///   Monster ƒAƒZƒbƒg‚Ì quizCorrectToWin / quizMaxWrong ‚ª
-///   ƒfƒtƒHƒ‹ƒg’li10 / 3j‚Ì‚Ü‚Ü ¨ ]—ˆ‚Æ“¯‚¶‹““®B
+/// ã€40Fãƒœã‚¹ã¨ã®äº’æ›æ€§ã€‘
+///   Monster ã‚¢ã‚»ãƒƒãƒˆã® quizCorrectToWin / quizMaxWrong ãŒ
+///   ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆ10 / 3ï¼‰ã®ã¾ã¾ â†’ å¾“æ¥ã¨åŒã˜æŒ™å‹•ã€‚
 /// </summary>
 public partial class BattleSceneController
 {
     // =========================================================
-    // ƒNƒCƒYƒ{ƒXó‘Ôistatic: ƒV[ƒ“ƒŠƒ[ƒh‘Î‰j
+    // ã‚¯ã‚¤ã‚ºãƒœã‚¹çŠ¶æ…‹ï¼ˆstatic: ã‚·ãƒ¼ãƒ³ãƒªãƒ­ãƒ¼ãƒ‰å¯¾å¿œï¼‰
     // =========================================================
 
-    /// <summary>Œ»İ‚ÌƒNƒCƒY³‰ğ‰ñ”B</summary>
+    /// <summary>ç¾åœ¨ã®ã‚¯ã‚¤ã‚ºæ­£è§£å›æ•°ã€‚</summary>
     private static int quizCorrectCount = 0;
 
-    /// <summary>Œ»İ‚ÌƒNƒCƒY•s³‰ğ‰ñ”B</summary>
+    /// <summary>ç¾åœ¨ã®ã‚¯ã‚¤ã‚ºä¸æ­£è§£å›æ•°ã€‚</summary>
     private static int quizWrongCount = 0;
 
-    /// <summary>¡‰ñ‚Ìí“¬‚ÅŠù‚Éo‘èÏ‚İ‚Ì–â‘èƒCƒ“ƒfƒbƒNƒXB</summary>
+    /// <summary>ä»Šå›ã®æˆ¦é—˜ã§æ—¢ã«å‡ºé¡Œæ¸ˆã¿ã®å•é¡Œã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚</summary>
     private static List<int> quizUsedIndices = new List<int>();
 
-    /// <summary>ƒNƒCƒY‰ñ“š‘Ò‚¿’†‚©‚Ç‚¤‚©B</summary>
+    /// <summary>ã‚¯ã‚¤ã‚ºå›ç­”å¾…ã¡ä¸­ã‹ã©ã†ã‹ã€‚</summary>
     private static bool isQuizAnswering = false;
 
-    /// <summary>Œ»İo‘è’†‚ÌƒNƒCƒYƒf[ƒ^B</summary>
+    /// <summary>ç¾åœ¨å‡ºé¡Œä¸­ã®ã‚¯ã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ã€‚</summary>
     private static QuizData currentQuizData = null;
 
     // =========================================================
-    // ƒ{ƒ^ƒ“ƒeƒLƒXƒg‘Ş”ğ—p
+    // ãƒœã‚¿ãƒ³ãƒ†ã‚­ã‚¹ãƒˆé€€é¿ç”¨
     // =========================================================
 
-    /// <summary>UŒ‚ƒ{ƒ^ƒ“‚ÌŒ³ƒeƒLƒXƒgB</summary>
+    /// <summary>æ”»æ’ƒãƒœã‚¿ãƒ³ã®å…ƒãƒ†ã‚­ã‚¹ãƒˆã€‚</summary>
     private string originalAttackLabel = null;
 
-    /// <summary>–hŒäƒ{ƒ^ƒ“‚ÌŒ³ƒeƒLƒXƒgB</summary>
+    /// <summary>é˜²å¾¡ãƒœã‚¿ãƒ³ã®å…ƒãƒ†ã‚­ã‚¹ãƒˆã€‚</summary>
     private string originalDefendLabel = null;
 
     // =========================================================
-    // ƒNƒCƒYƒ{ƒX”»’è
+    // ã‚¯ã‚¤ã‚ºãƒœã‚¹åˆ¤å®š
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‚Ì“G‚ªƒNƒCƒYƒ{ƒX‚©‚Ç‚¤‚©B
+    /// ç¾åœ¨ã®æ•µãŒã‚¯ã‚¤ã‚ºãƒœã‚¹ã‹ã©ã†ã‹ã€‚
     /// </summary>
     private bool IsQuizBoss()
     {
@@ -73,17 +73,17 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒpƒ‰ƒ[ƒ^æ“¾ƒwƒ‹ƒp[
+    // ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿å–å¾—ãƒ˜ãƒ«ãƒ‘ãƒ¼
     // =========================================================
 
-    /// <summary>Ÿ—˜‚É•K—v‚È³‰ğ‰ñ”BMonster ƒAƒZƒbƒg‚©‚çæ“¾B</summary>
+    /// <summary>å‹åˆ©ã«å¿…è¦ãªæ­£è§£å›æ•°ã€‚Monster ã‚¢ã‚»ãƒƒãƒˆã‹ã‚‰å–å¾—ã€‚</summary>
     private int GetQuizCorrectToWin()
     {
         if (enemyMonster == null) return 10;
         return enemyMonster.quizCorrectToWin > 0 ? enemyMonster.quizCorrectToWin : 10;
     }
 
-    /// <summary>‘¦€‚Ü‚Å‚Ì•s³‰ğ‰ñ”BMonster ƒAƒZƒbƒg‚©‚çæ“¾B</summary>
+    /// <summary>å³æ­»ã¾ã§ã®ä¸æ­£è§£å›æ•°ã€‚Monster ã‚¢ã‚»ãƒƒãƒˆã‹ã‚‰å–å¾—ã€‚</summary>
     private int GetQuizMaxWrong()
     {
         if (enemyMonster == null) return 3;
@@ -91,11 +91,11 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒNƒCƒY‰Šú‰»iResetBattleStatics ‚©‚çŒÄ‚Ôj
+    // ã‚¯ã‚¤ã‚ºåˆæœŸåŒ–ï¼ˆResetBattleStatics ã‹ã‚‰å‘¼ã¶ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒNƒCƒYó‘Ô‚ğƒŠƒZƒbƒg‚·‚éBResetBattleStatics() ‚©‚çŒÄ‚ÔB
+    /// ã‚¯ã‚¤ã‚ºçŠ¶æ…‹ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚ResetBattleStatics() ã‹ã‚‰å‘¼ã¶ã€‚
     /// </summary>
     private static void ResetQuizBossStatics()
     {
@@ -107,27 +107,27 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒNƒCƒYo‘èiEnemyTurn ‚©‚çŒÄ‚Î‚ê‚éj
+    // ã‚¯ã‚¤ã‚ºå‡ºé¡Œï¼ˆEnemyTurn ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒNƒCƒYƒ{ƒX‚Ì“Gƒ^[ƒ“ˆ—BƒNƒCƒY‚ğo‘è‚µAƒ{ƒ^ƒ“‚ğ·‚µ‘Ö‚¦‚éB
+    /// ã‚¯ã‚¤ã‚ºãƒœã‚¹ã®æ•µã‚¿ãƒ¼ãƒ³å‡¦ç†ã€‚ã‚¯ã‚¤ã‚ºã‚’å‡ºé¡Œã—ã€ãƒœã‚¿ãƒ³ã‚’å·®ã—æ›¿ãˆã‚‹ã€‚
     /// </summary>
     private void StartQuizTurn()
     {
-        // --- ƒNƒCƒY‚ğ‘I‘ğ ---
+        // --- ã‚¯ã‚¤ã‚ºã‚’é¸æŠ ---
         QuizData quiz = PickNextQuiz();
         if (quiz == null)
         {
-            // ‘S–âo‘èÏ‚İ‚Ìê‡‚ÍƒCƒ“ƒfƒbƒNƒX‚ğƒŠƒZƒbƒg‚µ‚ÄÄo‘è
+            // å…¨å•å‡ºé¡Œæ¸ˆã¿ã®å ´åˆã¯ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦å†å‡ºé¡Œ
             quizUsedIndices.Clear();
             quiz = PickNextQuiz();
         }
 
         if (quiz == null)
         {
-            // ‚»‚ê‚Å‚àæ‚ê‚È‚¢ê‡iƒf[ƒ^•s”õj¨ ’Êíƒ^[ƒ“‚ÉƒtƒH[ƒ‹ƒoƒbƒN
-            Debug.LogWarning("[QuizBoss] ƒNƒCƒYƒf[ƒ^‚ªæ“¾‚Å‚«‚Ü‚¹‚ñB’Êíƒ^[ƒ“‚ğÀs‚µ‚Ü‚·B");
+            // ãã‚Œã§ã‚‚å–ã‚Œãªã„å ´åˆï¼ˆãƒ‡ãƒ¼ã‚¿ä¸å‚™ï¼‰â†’ é€šå¸¸ã‚¿ãƒ¼ãƒ³ã«ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
+            Debug.LogWarning("[QuizBoss] ã‚¯ã‚¤ã‚ºãƒ‡ãƒ¼ã‚¿ãŒå–å¾—ã§ãã¾ã›ã‚“ã€‚é€šå¸¸ã‚¿ãƒ¼ãƒ³ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚");
             AfterEnemyAction();
             return;
         }
@@ -135,18 +135,18 @@ public partial class BattleSceneController
         currentQuizData = quiz;
         isQuizAnswering = true;
 
-        // --- ƒƒO‚Éo‘èi‰üs‚²‚Æ‚É1s‚¸‚Â•\¦j ---
+        // --- ãƒ­ã‚°ã«å‡ºé¡Œï¼ˆæ”¹è¡Œã”ã¨ã«1è¡Œãšã¤è¡¨ç¤ºï¼‰ ---
         string[] quizLines = quiz.questionText.Split('\n');
         for (int i = 0; i < quizLines.Length; i++)
         {
-            string line = quizLines[i].TrimEnd('\r'); // CRœ‹
+            string line = quizLines[i].TrimEnd('\r'); // CRé™¤å»
             if (i == 0)
-                AddLog($"yƒNƒCƒYz{line}");
+                AddLog($"ã€ã‚¯ã‚¤ã‚ºã€‘{line}");
             else
                 AddLog(line);
         }
 
-        // --- ƒƒO•\¦Œã‚Éƒ{ƒ^ƒ“·‚µ‘Ö‚¦ ---
+        // --- ãƒ­ã‚°è¡¨ç¤ºå¾Œã«ãƒœã‚¿ãƒ³å·®ã—æ›¿ãˆ ---
         FlushLogsAndThen(() =>
         {
             SwapButtonsToQuiz();
@@ -154,15 +154,15 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ‚Ü‚¾o‘è‚³‚ê‚Ä‚¢‚È‚¢ƒNƒCƒY‚ğƒ‰ƒ“ƒ_ƒ€‚É1–â‘I‚ÔB
-    /// ‘S–âo‘èÏ‚İ‚Ìê‡‚Í null ‚ğ•Ô‚·B
+    /// ã¾ã å‡ºé¡Œã•ã‚Œã¦ã„ãªã„ã‚¯ã‚¤ã‚ºã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«1å•é¸ã¶ã€‚
+    /// å…¨å•å‡ºé¡Œæ¸ˆã¿ã®å ´åˆã¯ null ã‚’è¿”ã™ã€‚
     /// </summary>
     private QuizData PickNextQuiz()
     {
         var db = enemyMonster.quizDatabase;
         if (db == null || db.quizzes == null || db.quizzes.Count == 0) return null;
 
-        // –¢o‘è‚ÌƒCƒ“ƒfƒbƒNƒX‚ğûW
+        // æœªå‡ºé¡Œã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’åé›†
         List<int> available = new List<int>();
         for (int i = 0; i < db.quizzes.Count; i++)
         {
@@ -178,17 +178,17 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒ{ƒ^ƒ“·‚µ‘Ö‚¦ / •œŒ³
+    // ãƒœã‚¿ãƒ³å·®ã—æ›¿ãˆ / å¾©å…ƒ
     // =========================================================
 
     /// <summary>
-    /// UŒ‚ƒ{ƒ^ƒ“‚ğuAvA–hŒäƒ{ƒ^ƒ“‚ğuBv‚É·‚µ‘Ö‚¦‚éB
-    /// ‘I‘ğˆ‚Ì“à—e‚Í–â‘è•¶“à‚ÉŠÜ‚Ü‚ê‚é‘O’ñB
-    /// ‘¼‚Ìƒ{ƒ^ƒ“‚Í–³Œø‰»‚µ‚½‚Ü‚ÜB
+    /// æ”»æ’ƒãƒœã‚¿ãƒ³ã‚’ã€ŒAã€ã€é˜²å¾¡ãƒœã‚¿ãƒ³ã‚’ã€ŒBã€ã«å·®ã—æ›¿ãˆã‚‹ã€‚
+    /// é¸æŠè‚¢ã®å†…å®¹ã¯å•é¡Œæ–‡å†…ã«å«ã¾ã‚Œã‚‹å‰æã€‚
+    /// ä»–ã®ãƒœã‚¿ãƒ³ã¯ç„¡åŠ¹åŒ–ã—ãŸã¾ã¾ã€‚
     /// </summary>
     private void SwapButtonsToQuiz()
     {
-        // UŒ‚ƒ{ƒ^ƒ“ ¨ A
+        // æ”»æ’ƒãƒœã‚¿ãƒ³ â†’ A
         if (attackButton != null)
         {
             var label = attackButton.GetComponentInChildren<TMP_Text>();
@@ -199,12 +199,12 @@ public partial class BattleSceneController
             }
             attackButton.interactable = true;
 
-            // ƒŠƒXƒi[‚ğˆê“I‚É·‚µ‘Ö‚¦
+            // ãƒªã‚¹ãƒŠãƒ¼ã‚’ä¸€æ™‚çš„ã«å·®ã—æ›¿ãˆ
             attackButton.onClick.RemoveAllListeners();
             attackButton.onClick.AddListener(OnQuizAnswerA);
         }
 
-        // –hŒäƒ{ƒ^ƒ“ ¨ B
+        // é˜²å¾¡ãƒœã‚¿ãƒ³ â†’ B
         if (defendButton != null)
         {
             var label = defendButton.GetComponentInChildren<TMP_Text>();
@@ -215,12 +215,12 @@ public partial class BattleSceneController
             }
             defendButton.interactable = true;
 
-            // ƒŠƒXƒi[‚ğˆê“I‚É·‚µ‘Ö‚¦
+            // ãƒªã‚¹ãƒŠãƒ¼ã‚’ä¸€æ™‚çš„ã«å·®ã—æ›¿ãˆ
             defendButton.onClick.RemoveAllListeners();
             defendButton.onClick.AddListener(OnQuizAnswerB);
         }
 
-        // ‘¼‚Ìƒ{ƒ^ƒ“‚Í–³Œø‰»‚Ì‚Ü‚Ü
+        // ä»–ã®ãƒœã‚¿ãƒ³ã¯ç„¡åŠ¹åŒ–ã®ã¾ã¾
         if (skillButton != null) skillButton.interactable = false;
         if (itemButton != null) itemButton.interactable = false;
         if (magicButton != null) magicButton.interactable = false;
@@ -228,11 +228,11 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒ{ƒ^ƒ“‚ğ’Êí‚Ìó‘Ô‚É•œŒ³‚·‚éB
+    /// ãƒœã‚¿ãƒ³ã‚’é€šå¸¸ã®çŠ¶æ…‹ã«å¾©å…ƒã™ã‚‹ã€‚
     /// </summary>
     private void RestoreButtonsFromQuiz()
     {
-        // UŒ‚ƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ÆƒŠƒXƒi[‚ğ•œŒ³
+        // æ”»æ’ƒãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã¨ãƒªã‚¹ãƒŠãƒ¼ã‚’å¾©å…ƒ
         if (attackButton != null)
         {
             if (originalAttackLabel != null)
@@ -245,7 +245,7 @@ public partial class BattleSceneController
             attackButton.onClick.AddListener(OnAttackClicked);
         }
 
-        // –hŒäƒ{ƒ^ƒ“‚ÌƒeƒLƒXƒg‚ÆƒŠƒXƒi[‚ğ•œŒ³
+        // é˜²å¾¡ãƒœã‚¿ãƒ³ã®ãƒ†ã‚­ã‚¹ãƒˆã¨ãƒªã‚¹ãƒŠãƒ¼ã‚’å¾©å…ƒ
         if (defendButton != null)
         {
             if (originalDefendLabel != null)
@@ -260,17 +260,17 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ‰ñ“šˆ—
+    // å›ç­”å‡¦ç†
     // =========================================================
 
-    /// <summary>‘I‘ğˆA‚ª‘I‚Î‚ê‚½B</summary>
+    /// <summary>é¸æŠè‚¢AãŒé¸ã°ã‚ŒãŸã€‚</summary>
     private void OnQuizAnswerA()
     {
         if (!isQuizAnswering || currentQuizData == null) return;
         ProcessQuizAnswer(QuizAnswer.A);
     }
 
-    /// <summary>‘I‘ğˆB‚ª‘I‚Î‚ê‚½B</summary>
+    /// <summary>é¸æŠè‚¢BãŒé¸ã°ã‚ŒãŸã€‚</summary>
     private void OnQuizAnswerB()
     {
         if (!isQuizAnswering || currentQuizData == null) return;
@@ -278,23 +278,23 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒNƒCƒY‚Ì‰ñ“š‚ğ”»’è‚µAŒ‹‰Ê‚É‰‚¶‚Äƒ_ƒ[ƒW‚ğ—^‚¦‚éB
+    /// ã‚¯ã‚¤ã‚ºã®å›ç­”ã‚’åˆ¤å®šã—ã€çµæœã«å¿œã˜ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’ä¸ãˆã‚‹ã€‚
     /// 
-    /// ³‰ğ:
-    ///   ƒ_ƒ[ƒW = MaxHp / quizCorrectToWiniØ‚èÌ‚ÄAÅ’á1j
-    ///   ¨ ’ÊíUŒ‚‚ÅHP‚ªŒ¸‚Á‚Ä‚¢‚ê‚ÎAƒNƒCƒY³‰ğ‚¾‚¯‚Å“|‚·‚Ì‚É•K—v‚È–â‘è”‚ªŒ¸‚éB
+    /// æ­£è§£æ™‚:
+    ///   ãƒ€ãƒ¡ãƒ¼ã‚¸ = MaxHp / quizCorrectToWinï¼ˆåˆ‡ã‚Šæ¨ã¦ã€æœ€ä½1ï¼‰
+    ///   â†’ é€šå¸¸æ”»æ’ƒã§HPãŒæ¸›ã£ã¦ã„ã‚Œã°ã€ã‚¯ã‚¤ã‚ºæ­£è§£ã ã‘ã§å€’ã™ã®ã«å¿…è¦ãªå•é¡Œæ•°ãŒæ¸›ã‚‹ã€‚
     /// 
-    /// •s³‰ğ:
-    ///   quizMaxWrong ‰ñ‚ÅƒvƒŒƒCƒ„[‘¦€B
+    /// ä¸æ­£è§£æ™‚:
+    ///   quizMaxWrong å›ã§ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å³æ­»ã€‚
     /// 
-    /// Ÿ—˜”»’è:
-    ///   enemyCurrentHp <= 0 ‚Å“ˆêBAfterEnemyAction “à‚Å”»’è‚³‚ê‚éB
+    /// å‹åˆ©åˆ¤å®š:
+    ///   enemyCurrentHp <= 0 ã§çµ±ä¸€ã€‚AfterEnemyAction å†…ã§åˆ¤å®šã•ã‚Œã‚‹ã€‚
     /// </summary>
     private void ProcessQuizAnswer(QuizAnswer answer)
     {
         isQuizAnswering = false;
 
-        // ƒ{ƒ^ƒ“‚ğ‘¦À‚É–³Œø‰»i˜A‘Å–h~j
+        // ãƒœã‚¿ãƒ³ã‚’å³åº§ã«ç„¡åŠ¹åŒ–ï¼ˆé€£æ‰“é˜²æ­¢ï¼‰
         if (attackButton != null) attackButton.interactable = false;
         if (defendButton != null) defendButton.interactable = false;
 
@@ -307,16 +307,16 @@ public partial class BattleSceneController
         {
             quizCorrectCount++;
 
-            // “G‚Éƒ_ƒ[ƒW: MaxHp / quizCorrectToWiniØ‚èÌ‚ÄAÅ’á1j
+            // æ•µã«ãƒ€ãƒ¡ãƒ¼ã‚¸: MaxHp / quizCorrectToWinï¼ˆåˆ‡ã‚Šæ¨ã¦ã€æœ€ä½1ï¼‰
             int quizDamage = enemyMonster.MaxHp / correctToWin;
             if (quizDamage < 1) quizDamage = 1;
             enemyCurrentHp -= quizDamage;
             if (enemyCurrentHp < 0) enemyCurrentHp = 0;
 
-            AddLogEntry($"³‰ğI {enemyMonster.Mname} ‚É {quizDamage} ƒ_ƒ[ƒWI", BattleSeKind.QuizCorrect, default);
-            AddLog($"i³‰ğ: {quizCorrectCount}–âj");
+            AddLogEntry($"æ­£è§£ï¼ {enemyMonster.Mname} ã« {quizDamage} ãƒ€ãƒ¡ãƒ¼ã‚¸ï¼", BattleSeKind.QuizCorrect, default);
+            AddLog($"ï¼ˆæ­£è§£: {quizCorrectCount}å•ï¼‰");
 
-            Debug.Log($"[QuizBoss] ³‰ğ {quizCorrectCount} damage={quizDamage} enemyHp={enemyCurrentHp}");
+            Debug.Log($"[QuizBoss] æ­£è§£ {quizCorrectCount} damage={quizDamage} enemyHp={enemyCurrentHp}");
         }
         else
         {
@@ -326,15 +326,15 @@ public partial class BattleSceneController
                 ? currentQuizData.choiceA
                 : currentQuizData.choiceB;
 
-            AddLogEntry($"•s³‰ğc ³‰ğ‚Íu{correctLabel}vI", BattleSeKind.QuizWrong, default);
-            AddLog($"i•s³‰ğ: {quizWrongCount}/{maxWrong}j");
+            AddLogEntry($"ä¸æ­£è§£â€¦ æ­£è§£ã¯ã€Œ{correctLabel}ã€ï¼", BattleSeKind.QuizWrong, default);
+            AddLog($"ï¼ˆä¸æ­£è§£: {quizWrongCount}/{maxWrong}ï¼‰");
 
-            Debug.Log($"[QuizBoss] •s³‰ğ {quizWrongCount}/{maxWrong}");
+            Debug.Log($"[QuizBoss] ä¸æ­£è§£ {quizWrongCount}/{maxWrong}");
 
-            // •s³‰ğ‚ªãŒÀ‚É’B‚µ‚½‚ç‘¦€
+            // ä¸æ­£è§£ãŒä¸Šé™ã«é”ã—ãŸã‚‰å³æ­»
             if (quizWrongCount >= maxWrong)
             {
-                AddLog($"{enemyMonster.Mname} ‚Ì—Í‚ª‰ğ•ú‚³‚ê‚½I You ‚Í“|‚ê‚½c");
+                AddLog($"{enemyMonster.Mname} ã®åŠ›ãŒè§£æ”¾ã•ã‚ŒãŸï¼ You ã¯å€’ã‚ŒãŸâ€¦");
 
                 if (GameState.I != null)
                 {
@@ -345,11 +345,11 @@ public partial class BattleSceneController
 
         currentQuizData = null;
 
-        // ƒ{ƒ^ƒ“‚ğ•œŒ³‚µ‚Ä‚©‚ç AfterEnemyAction ‚Ö
+        // ãƒœã‚¿ãƒ³ã‚’å¾©å…ƒã—ã¦ã‹ã‚‰ AfterEnemyAction ã¸
         RestoreButtonsFromQuiz();
 
-        // ƒƒO•\¦Œã‚É AfterEnemyActioniŸ”s”»’èŠÜ‚Şj
-        // AfterEnemyAction “à‚Å enemyCurrentHp <= 0 ‚â playerHp <= 0 ‚ªˆ—‚³‚ê‚é
+        // ãƒ­ã‚°è¡¨ç¤ºå¾Œã« AfterEnemyActionï¼ˆå‹æ•—åˆ¤å®šå«ã‚€ï¼‰
+        // AfterEnemyAction å†…ã§ enemyCurrentHp <= 0 ã‚„ playerHp <= 0 ãŒå‡¦ç†ã•ã‚Œã‚‹
         FlushLogsAndThen(() =>
         {
             AfterEnemyAction();

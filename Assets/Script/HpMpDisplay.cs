@@ -1,11 +1,11 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// HP/MP ‚ğƒŠƒAƒ‹ƒ^ƒCƒ€•\¦‚·‚é”Ä—pƒRƒ“ƒ|[ƒlƒ“ƒgB
-/// BattleATowerAStatusAMain ‚È‚ÇA‚Ç‚ÌƒV[ƒ“‚É‚à’u‚¯‚éB
-/// GameState ‚Ì’l‚ğ–ˆƒtƒŒ[ƒ€ŠÄ‹‚µ‚Ä©“®XV‚·‚éB
-/// recoverOnStart ‚ğ ON ‚É‚·‚é‚ÆAƒV[ƒ“ŠJn‚É HP/MP ‚ğ‘S‰ñ•œ‚·‚éB
+/// HP/MP ã‚’ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ è¡¨ç¤ºã™ã‚‹æ±ç”¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã€‚
+/// Battleã€Towerã€Statusã€Main ãªã©ã€ã©ã®ã‚·ãƒ¼ãƒ³ã«ã‚‚ç½®ã‘ã‚‹ã€‚
+/// GameState ã®å€¤ã‚’æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ç›£è¦–ã—ã¦è‡ªå‹•æ›´æ–°ã™ã‚‹ã€‚
+/// recoverOnStart ã‚’ ON ã«ã™ã‚‹ã¨ã€ã‚·ãƒ¼ãƒ³é–‹å§‹æ™‚ã« HP/MP ã‚’å…¨å›å¾©ã™ã‚‹ã€‚
 /// </summary>
 public class HpMpDisplay : MonoBehaviour
 {
@@ -14,10 +14,10 @@ public class HpMpDisplay : MonoBehaviour
     [SerializeField] private TMP_Text mpText;
 
     [Header("Recovery")]
-    [Tooltip("ON‚É‚·‚é‚ÆA‚±‚ÌƒV[ƒ“‚É“ü‚Á‚½‚ÉHP/MP‚ğ‘S‰ñ•œ‚·‚éiMainƒV[ƒ“—pj")]
+    [Tooltip("ONã«ã™ã‚‹ã¨ã€ã“ã®ã‚·ãƒ¼ãƒ³ã«å…¥ã£ãŸæ™‚ã«HP/MPã‚’å…¨å›å¾©ã™ã‚‹ï¼ˆMainã‚·ãƒ¼ãƒ³ç”¨ï¼‰")]
     [SerializeField] private bool recoverOnStart = false;
 
-    // ‘OƒtƒŒ[ƒ€‚Ì’li•Ï‰»‚ª‚ ‚Á‚½‚¾‚¯ƒeƒLƒXƒg‚ğXV‚·‚éj
+    // å‰ãƒ•ãƒ¬ãƒ¼ãƒ ã®å€¤ï¼ˆå¤‰åŒ–ãŒã‚ã£ãŸæ™‚ã ã‘ãƒ†ã‚­ã‚¹ãƒˆã‚’æ›´æ–°ã™ã‚‹ï¼‰
     private int lastHp = -1;
     private int lastMaxHp = -1;
     private int lastMp = -1;
@@ -29,7 +29,7 @@ public class HpMpDisplay : MonoBehaviour
         {
             GameState.I.currentHp = GameState.I.maxHp;
             GameState.I.currentMp = GameState.I.maxMp;
-            Debug.Log($"[HpMpDisplay] ‘S‰ñ•œ: HP={GameState.I.currentHp}/{GameState.I.maxHp}");
+            Debug.Log($"[HpMpDisplay] å…¨å›å¾©: HP={GameState.I.currentHp}/{GameState.I.maxHp}");
         }
     }
 
@@ -39,22 +39,22 @@ public class HpMpDisplay : MonoBehaviour
 
         var gs = GameState.I;
 
-        // HP ‚ª•Ï‰»‚µ‚½‚¾‚¯XV
+        // HP ãŒå¤‰åŒ–ã—ãŸæ™‚ã ã‘æ›´æ–°
         if (gs.currentHp != lastHp || gs.maxHp != lastMaxHp)
         {
             lastHp = gs.currentHp;
             lastMaxHp = gs.maxHp;
             if (hpText != null)
-                hpText.text = $"HPF{gs.currentHp}/{gs.maxHp}";
+                hpText.text = $"HPï¼š{gs.currentHp}/{gs.maxHp}";
         }
 
-        // MP ‚ª•Ï‰»‚µ‚½‚¾‚¯XV
+        // MP ãŒå¤‰åŒ–ã—ãŸæ™‚ã ã‘æ›´æ–°
         if (gs.currentMp != lastMp || gs.maxMp != lastMaxMp)
         {
             lastMp = gs.currentMp;
             lastMaxMp = gs.maxMp;
             if (mpText != null)
-                mpText.text = $"MPF{gs.currentMp}/{gs.maxMp}";
+                mpText.text = $"MPï¼š{gs.currentMp}/{gs.maxMp}";
         }
     }
 }

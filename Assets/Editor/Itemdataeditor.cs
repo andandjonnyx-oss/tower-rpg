@@ -1,16 +1,16 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ItemData ‚ÌƒJƒXƒ^ƒ€ƒCƒ“ƒXƒyƒNƒ^[B
-/// categoryiConsumable / Weapon / Magicj‚É‰‚¶‚Ä
-/// ŠÖ˜A‚·‚éƒtƒB[ƒ‹ƒh‚Ì‚İ‚ğ•\¦‚µAŒëİ’è‚ğ–h‚®B
-/// ‹¤’ÊƒtƒB[ƒ‹ƒh‚Íí‚É•\¦‚·‚éB
+/// ItemData ã®ã‚«ã‚¹ã‚¿ãƒ ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã€‚
+/// categoryï¼ˆConsumable / Weapon / Magicï¼‰ã«å¿œã˜ã¦
+/// é–¢é€£ã™ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã¿ã‚’è¡¨ç¤ºã—ã€èª¤è¨­å®šã‚’é˜²ãã€‚
+/// å…±é€šãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¯å¸¸ã«è¡¨ç¤ºã™ã‚‹ã€‚
 /// </summary>
 [CustomEditor(typeof(ItemData))]
 public class ItemDataEditor : Editor
 {
-    // Ü‚è‚½‚½‚İó‘ÔiEditorPrefs ‚Å‰i‘±‰»j
+    // æŠ˜ã‚ŠãŸãŸã¿çŠ¶æ…‹ï¼ˆEditorPrefs ã§æ°¸ç¶šåŒ–ï¼‰
     private static bool foldCommon = true;
     private static bool foldConsumable = true;
     private static bool foldWeapon = true;
@@ -24,9 +24,9 @@ public class ItemDataEditor : Editor
         ItemCategory cat = (ItemCategory)categoryProp.enumValueIndex;
 
         // =========================================================
-        // ‹¤’ÊƒtƒB[ƒ‹ƒhi‘SƒJƒeƒSƒŠ‹¤’Êj
+        // å…±é€šãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼ˆå…¨ã‚«ãƒ†ã‚´ãƒªå…±é€šï¼‰
         // =========================================================
-        foldCommon = EditorGUILayout.Foldout(foldCommon, "¡ ‹¤’Ê", true, EditorStyles.foldoutHeader);
+        foldCommon = EditorGUILayout.Foldout(foldCommon, "â–  å…±é€š", true, EditorStyles.foldoutHeader);
         if (foldCommon)
         {
             EditorGUI.indentLevel++;
@@ -61,7 +61,7 @@ public class ItemDataEditor : Editor
         EditorGUILayout.Space(10);
 
         // =========================================================
-        // ƒJƒeƒSƒŠ•Ê‚ÉF•t‚«ƒwƒbƒ_[‚Å•\¦
+        // ã‚«ãƒ†ã‚´ãƒªåˆ¥ã«è‰²ä»˜ããƒ˜ãƒƒãƒ€ãƒ¼ã§è¡¨ç¤º
         // =========================================================
         switch (cat)
         {
@@ -80,24 +80,24 @@ public class ItemDataEditor : Editor
     }
 
     // =========================================================
-    // Consumable ƒZƒNƒVƒ‡ƒ“
+    // Consumable ã‚»ã‚¯ã‚·ãƒ§ãƒ³
     // =========================================================
     private void DrawConsumableSection()
     {
-        GUI.backgroundColor = new Color(0.7f, 1f, 0.7f); // —ÎŒn
-        foldConsumable = EditorGUILayout.Foldout(foldConsumable, "š Á”ïƒAƒCƒeƒ€ê—p", true, EditorStyles.foldoutHeader);
+        GUI.backgroundColor = new Color(0.7f, 1f, 0.7f); // ç·‘ç³»
+        foldConsumable = EditorGUILayout.Foldout(foldConsumable, "â˜… æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ å°‚ç”¨", true, EditorStyles.foldoutHeader);
         GUI.backgroundColor = Color.white;
 
         if (!foldConsumable) return;
 
         EditorGUI.indentLevel++;
 
-        EditorGUILayout.LabelField("‰ñ•œ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å›å¾©", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("healAmount"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mpHealAmount"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("ó‘ÔˆÙí‰ñ•œ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("çŠ¶æ…‹ç•°å¸¸å›å¾©", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("curesPoison"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("curesParalyze"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("curesBlind"));
@@ -108,55 +108,55 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("curesGlass"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("ƒXƒe[ƒ^ƒXƒ|ƒCƒ“ƒg", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒã‚¤ãƒ³ãƒˆ", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("statusPointGain"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("ƒoƒt/ƒfƒoƒt‰ñ•œ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ãƒãƒ•/ãƒ‡ãƒãƒ•å›å¾©", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("curesAllDebuffs"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("í“¬UŒ‚ƒAƒCƒeƒ€", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("æˆ¦é—˜æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleDamage"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleAttribute"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleDamageCategory"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("battleOnly"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("ƒ{ƒX‰a•t‚¯", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ãƒœã‚¹é¤Œä»˜ã‘", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("bossFeedItem"));
 
         EditorGUI.indentLevel--;
     }
 
     // =========================================================
-    // Weapon ƒZƒNƒVƒ‡ƒ“
+    // Weapon ã‚»ã‚¯ã‚·ãƒ§ãƒ³
     // =========================================================
     private void DrawWeaponSection()
     {
-        GUI.backgroundColor = new Color(1f, 0.8f, 0.7f); // ƒIƒŒƒ“ƒWŒn
-        foldWeapon = EditorGUILayout.Foldout(foldWeapon, "š •Šíê—p", true, EditorStyles.foldoutHeader);
+        GUI.backgroundColor = new Color(1f, 0.8f, 0.7f); // ã‚ªãƒ¬ãƒ³ã‚¸ç³»
+        foldWeapon = EditorGUILayout.Foldout(foldWeapon, "â˜… æ­¦å™¨å°‚ç”¨", true, EditorStyles.foldoutHeader);
         GUI.backgroundColor = Color.white;
 
         if (!foldWeapon) return;
 
         EditorGUI.indentLevel++;
 
-        EditorGUILayout.LabelField("Šî–{«”\", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("åŸºæœ¬æ€§èƒ½", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponAttribute"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("attackPower"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("baseHitRate"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("•ŠíƒXƒLƒ‹", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("æ­¦å™¨ã‚¹ã‚­ãƒ«", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("skills"), true);
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("’ÊíUŒ‚‚Ìó‘ÔˆÙí•t—^", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("é€šå¸¸æ”»æ’ƒæ™‚ã®çŠ¶æ…‹ç•°å¸¸ä»˜ä¸", EditorStyles.boldLabel);
         DrawFilteredEnumPopup(serializedObject.FindProperty("weaponInflictEffect"),
             "Weapon Inflict Effect", IsAilmentOrNone);
         var inflictProp = serializedObject.FindProperty("weaponInflictEffect");
-        if (inflictProp.enumValueIndex != 0) // None ˆÈŠO
+        if (inflictProp.enumValueIndex != 0) // None ä»¥å¤–
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponInflictChance"));
@@ -164,11 +164,11 @@ public class ItemDataEditor : Editor
         }
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("’ÊíUŒ‚‚Ìƒfƒoƒt•t—^", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("é€šå¸¸æ”»æ’ƒæ™‚ã®ãƒ‡ãƒãƒ•ä»˜ä¸", EditorStyles.boldLabel);
         DrawFilteredEnumPopup(serializedObject.FindProperty("weaponInflictDebuff"),
             "Weapon Inflict Debuff", IsBuffDebuffOrNone);
         var debuffProp = serializedObject.FindProperty("weaponInflictDebuff");
-        if (debuffProp.enumValueIndex != 0) // None ˆÈŠO
+        if (debuffProp.enumValueIndex != 0) // None ä»¥å¤–
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(serializedObject.FindProperty("weaponDebuffRate"));
@@ -178,7 +178,7 @@ public class ItemDataEditor : Editor
         }
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("‘•”õƒXƒe[ƒ^ƒX•â³", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("è£…å‚™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è£œæ­£", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipDefense"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipMagicAttack"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipMagicDefense"));
@@ -187,18 +187,18 @@ public class ItemDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipMaxMp"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("–½’†E‰ñ”ğEƒNƒŠƒeƒBƒJƒ‹•â³", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‘½ä¸­ãƒ»å›é¿ãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«è£œæ­£", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipAccuracy"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipEvasion"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipCritical"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("‘•”õ‘Ï«", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("è£…å‚™è€æ€§", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipResistances"), true);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("equipStatusEffectResistances"), true);
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("H‚×‚ç‚ê‚é•Ší", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("é£Ÿã¹ã‚‰ã‚Œã‚‹æ­¦å™¨", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("isEdible"));
 
         var isEdibleProp = serializedObject.FindProperty("isEdible");
@@ -221,39 +221,39 @@ public class ItemDataEditor : Editor
     }
 
     // =========================================================
-    // Magic ƒZƒNƒVƒ‡ƒ“
+    // Magic ã‚»ã‚¯ã‚·ãƒ§ãƒ³
     // =========================================================
     private void DrawMagicSection()
     {
-        GUI.backgroundColor = new Color(0.7f, 0.8f, 1f); // ÂŒn
-        foldMagic = EditorGUILayout.Foldout(foldMagic, "š –‚–@ƒAƒCƒeƒ€ê—p", true, EditorStyles.foldoutHeader);
+        GUI.backgroundColor = new Color(0.7f, 0.8f, 1f); // é’ç³»
+        foldMagic = EditorGUILayout.Foldout(foldMagic, "â˜… é­”æ³•ã‚¢ã‚¤ãƒ†ãƒ å°‚ç”¨", true, EditorStyles.foldoutHeader);
         GUI.backgroundColor = Color.white;
 
         if (!foldMagic) return;
 
         EditorGUI.indentLevel++;
 
-        EditorGUILayout.LabelField("–‚–@ƒXƒLƒ‹", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("é­”æ³•ã‚¹ã‚­ãƒ«", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("magicSkill"));
 
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("ƒpƒbƒVƒuŒø‰Ê", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœ", EditorStyles.boldLabel);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("passiveEffects"), true);
 
         EditorGUI.indentLevel--;
     }
 
     // =========================================================
-    // ƒtƒBƒ‹ƒ^•t‚« enum ƒ|ƒbƒvƒAƒbƒv
+    // ãƒ•ã‚£ãƒ«ã‚¿ä»˜ã enum ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—
     // =========================================================
 
     /// <summary>
-    /// StatusEffect enum ‚Ì’†‚©‚ç filter ‚É‡’v‚·‚é’l‚Ì‚İ‚ğƒ|ƒbƒvƒAƒbƒv‚É•\¦‚·‚éB
+    /// StatusEffect enum ã®ä¸­ã‹ã‚‰ filter ã«åˆè‡´ã™ã‚‹å€¤ã®ã¿ã‚’ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã«è¡¨ç¤ºã™ã‚‹ã€‚
     /// </summary>
     private void DrawFilteredEnumPopup(SerializedProperty prop, string label,
         System.Func<StatusEffect, bool> filter)
     {
-        // ƒtƒBƒ‹ƒ^‚É‡’v‚·‚é’l‚ğûW
+        // ãƒ•ã‚£ãƒ«ã‚¿ã«åˆè‡´ã™ã‚‹å€¤ã‚’åé›†
         var allValues = System.Enum.GetValues(typeof(StatusEffect));
         var filtered = new System.Collections.Generic.List<StatusEffect>();
         var names = new System.Collections.Generic.List<string>();
@@ -267,10 +267,10 @@ public class ItemDataEditor : Editor
             }
         }
 
-        // Œ»İ‚Ì’l‚ªƒtƒBƒ‹ƒ^“à‚Ì‚Ç‚±‚É‚ ‚é‚©
+        // ç¾åœ¨ã®å€¤ãŒãƒ•ã‚£ãƒ«ã‚¿å†…ã®ã©ã“ã«ã‚ã‚‹ã‹
         StatusEffect current = (StatusEffect)prop.enumValueIndex;
         int selectedIndex = filtered.IndexOf(current);
-        if (selectedIndex < 0) selectedIndex = 0; // Œ©‚Â‚©‚ç‚È‚¯‚ê‚Î Noneiæ“ªj
+        if (selectedIndex < 0) selectedIndex = 0; // è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã° Noneï¼ˆå…ˆé ­ï¼‰
 
         int newIndex = EditorGUILayout.Popup(label, selectedIndex, names.ToArray());
         if (newIndex >= 0 && newIndex < filtered.Count)
@@ -279,7 +279,7 @@ public class ItemDataEditor : Editor
         }
     }
 
-    /// <summary>ó‘ÔˆÙíi+ Nonej‚Ì‚İ’Ê‚·ƒtƒBƒ‹ƒ^B</summary>
+    /// <summary>çŠ¶æ…‹ç•°å¸¸ï¼ˆ+ Noneï¼‰ã®ã¿é€šã™ãƒ•ã‚£ãƒ«ã‚¿ã€‚</summary>
     private static bool IsAilmentOrNone(StatusEffect e)
     {
         switch (e)
@@ -301,7 +301,7 @@ public class ItemDataEditor : Editor
         }
     }
 
-    /// <summary>ƒoƒt/ƒfƒoƒti+ Nonej‚Ì‚İ’Ê‚·ƒtƒBƒ‹ƒ^B</summary>
+    /// <summary>ãƒãƒ•/ãƒ‡ãƒãƒ•ï¼ˆ+ Noneï¼‰ã®ã¿é€šã™ãƒ•ã‚£ãƒ«ã‚¿ã€‚</summary>
     private static bool IsBuffDebuffOrNone(StatusEffect e)
     {
         switch (e)

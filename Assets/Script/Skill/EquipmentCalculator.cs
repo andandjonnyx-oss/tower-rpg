@@ -1,22 +1,22 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// ‘•”õ’†‚Ì•Ší‚©‚çŠeíƒXƒe[ƒ^ƒX•â³‚ğæ“¾‚·‚éÃ“IƒNƒ‰ƒXB
+/// è£…å‚™ä¸­ã®æ­¦å™¨ã‹ã‚‰å„ç¨®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è£œæ­£ã‚’å–å¾—ã™ã‚‹é™çš„ã‚¯ãƒ©ã‚¹ã€‚
 ///
-/// ƒpƒbƒVƒuŒø‰Ê‚Æ‚Ìˆá‚¢:
-///   ƒpƒbƒVƒuiPassiveCalculatorj‚Í•¡”ƒAƒCƒeƒ€‚Ìd•¡ƒ‹[ƒ‹i2ŒÂ–ÚˆÈ~10%Œ¸Šj‚ğ“K—p‚·‚éB
-///   ‘•”õ•ii‚±‚ÌƒNƒ‰ƒXj‚Í‘•”õ‚ª1‚Â‚µ‚©‘¶İ‚µ‚È‚¢‚½‚ßA•â³’l‚ğí‚É100%‚»‚Ì‚Ü‚Ü•Ô‚·B
+/// ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã¨ã®é•ã„:
+///   ãƒ‘ãƒƒã‚·ãƒ–ï¼ˆPassiveCalculatorï¼‰ã¯è¤‡æ•°ã‚¢ã‚¤ãƒ†ãƒ ã®é‡è¤‡ãƒ«ãƒ¼ãƒ«ï¼ˆ2å€‹ç›®ä»¥é™10%æ¸›è¡°ï¼‰ã‚’é©ç”¨ã™ã‚‹ã€‚
+///   è£…å‚™å“ï¼ˆã“ã®ã‚¯ãƒ©ã‚¹ï¼‰ã¯è£…å‚™ãŒ1ã¤ã—ã‹å­˜åœ¨ã—ãªã„ãŸã‚ã€è£œæ­£å€¤ã‚’å¸¸ã«100%ãã®ã¾ã¾è¿”ã™ã€‚
 ///
-/// ŒvZ‚Ì—¬‚ê:
-///   GameState.Attack = baseSTR ~ 1 + EquipmentCalculator.GetAttackPower()
+/// è¨ˆç®—ã®æµã‚Œ:
+///   GameState.Attack = baseSTR Ã— 1 + EquipmentCalculator.GetAttackPower()
 ///                                   + PassiveCalculator.CalcAttackBonus()
 ///
-/// ‘•”õ•i‚ÌƒXƒe[ƒ^ƒX‚ª•Ï‚í‚éƒP[ƒX:
-///   - •Ší‚ğ‘•”õ/‰ğœ‚µ‚½
-///   - ‘•”õ’†•Ší‚ğÌ‚Ä‚½
-///   ¨ ‚±‚ê‚ç‚ÌŒã‚É RecalcMaxHp/RecalcMaxMp ‚ğŒÄ‚Ô‚±‚ÆB
+/// è£…å‚™å“ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒå¤‰ã‚ã‚‹ã‚±ãƒ¼ã‚¹:
+///   - æ­¦å™¨ã‚’è£…å‚™/è§£é™¤ã—ãŸæ™‚
+///   - è£…å‚™ä¸­æ­¦å™¨ã‚’æ¨ã¦ãŸæ™‚
+///   â†’ ã“ã‚Œã‚‰ã®å¾Œã« RecalcMaxHp/RecalcMaxMp ã‚’å‘¼ã¶ã“ã¨ã€‚
 ///
-/// g‚¢•û:
+/// ä½¿ã„æ–¹:
 ///   int weaponAtk = EquipmentCalculator.GetAttackPower();
 ///   int weaponDef = EquipmentCalculator.GetDefense();
 ///   int fireRes   = EquipmentCalculator.GetAttributeResistance(WeaponAttribute.Fire);
@@ -25,11 +25,11 @@ using UnityEngine;
 public static class EquipmentCalculator
 {
     // =========================================================
-    // ‘•”õ’†•Ší‚Ì ItemData ‚ğæ“¾
+    // è£…å‚™ä¸­æ­¦å™¨ã® ItemData ã‚’å–å¾—
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‘•”õ’†‚Ì•Ší‚Ì ItemData ‚ğ•Ô‚·B–¢‘•”õ‚È‚ç nullB
+    /// ç¾åœ¨è£…å‚™ä¸­ã®æ­¦å™¨ã® ItemData ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰ nullã€‚
     /// </summary>
     private static ItemData GetEquippedWeaponData()
     {
@@ -54,12 +54,12 @@ public static class EquipmentCalculator
     }
 
     // =========================================================
-    // ŠeƒXƒe[ƒ^ƒX•â³‚Ìæ“¾
+    // å„ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è£œæ­£ã®å–å¾—
     // =========================================================
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚ÌUŒ‚—Í‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.attackPower ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®æ”»æ’ƒåŠ›ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.attackPower ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetAttackPower()
     {
@@ -69,8 +69,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì–hŒä—Í•â³‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipDefense ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®é˜²å¾¡åŠ›è£œæ­£ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipDefense ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetDefense()
     {
@@ -80,8 +80,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì–‚–@UŒ‚—Í•â³‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipMagicAttack ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®é­”æ³•æ”»æ’ƒåŠ›è£œæ­£ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipMagicAttack ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetMagicAttack()
     {
@@ -91,8 +91,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì–‚–@–hŒä—Í•â³‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipMagicDefense ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®é­”æ³•é˜²å¾¡åŠ›è£œæ­£ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipMagicDefense ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetMagicDefense()
     {
@@ -102,8 +102,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì‰^‚Ì—Ç‚³•â³‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipLuck ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®é‹ã®è‰¯ã•è£œæ­£ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipLuck ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetLuck()
     {
@@ -113,8 +113,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚ÌÅ‘åHPƒ{[ƒiƒX‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipMaxHp ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®æœ€å¤§HPãƒœãƒ¼ãƒŠã‚¹ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipMaxHp ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetMaxHpBonus()
     {
@@ -124,8 +124,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚ÌÅ‘åMPƒ{[ƒiƒX‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipMaxMp ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®æœ€å¤§MPãƒœãƒ¼ãƒŠã‚¹ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipMaxMp ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetMaxMpBonus()
     {
@@ -135,8 +135,8 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ìw’è‘®«‘Ï«’l‚ğ•Ô‚·B–¢‘•”õ or ŠY“–‘®«‚È‚µ‚È‚ç0B
-    /// ItemData.equipResistances ‚©‚ç‘ÎÛ‘®«‚Ì value ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®æŒ‡å®šå±æ€§è€æ€§å€¤ã‚’è¿”ã™ã€‚æœªè£…å‚™ or è©²å½“å±æ€§ãªã—ãªã‚‰0ã€‚
+    /// ItemData.equipResistances ã‹ã‚‰å¯¾è±¡å±æ€§ã® value ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetAttributeResistance(WeaponAttribute attr)
     {
@@ -157,12 +157,12 @@ public static class EquipmentCalculator
     }
 
     // =========================================================
-    // –½’†—ÍE‰ñ”ğ—¦EƒNƒŠƒeƒBƒJƒ‹—¦‚Ì‘•”õ•â³i’Ç‰Áj
+    // å‘½ä¸­åŠ›ãƒ»å›é¿ç‡ãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ã®è£…å‚™è£œæ­£ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì–½’†—Í•â³iintj‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipAccuracy ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®å‘½ä¸­åŠ›è£œæ­£ï¼ˆintï¼‰ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipAccuracy ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     /// </summary>
     public static int GetAccuracy()
     {
@@ -172,9 +172,9 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ì‰ñ”ğ—¦•â³i%j‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipEvasion ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
-    /// int ¨ float •ÏŠ·‚Í GameState.Evasion ƒvƒƒpƒeƒB‘¤‚Ås‚¤B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®å›é¿ç‡è£œæ­£ï¼ˆ%ï¼‰ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipEvasion ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
+    /// int â†’ float å¤‰æ›ã¯ GameState.Evasion ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å´ã§è¡Œã†ã€‚
     /// </summary>
     public static int GetEvasion()
     {
@@ -184,9 +184,9 @@ public static class EquipmentCalculator
     }
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚ÌƒNƒŠƒeƒBƒJƒ‹—¦•â³i%j‚ğ•Ô‚·B–¢‘•”õ‚È‚ç0B
-    /// ItemData.equipCritical ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
-    /// int ¨ float •ÏŠ·‚Í GameState.CriticalRate ƒvƒƒpƒeƒB‘¤‚Ås‚¤B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡è£œæ­£ï¼ˆ%ï¼‰ã‚’è¿”ã™ã€‚æœªè£…å‚™ãªã‚‰0ã€‚
+    /// ItemData.equipCritical ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
+    /// int â†’ float å¤‰æ›ã¯ GameState.CriticalRate ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å´ã§è¡Œã†ã€‚
     /// </summary>
     public static int GetCritical()
     {
@@ -196,15 +196,15 @@ public static class EquipmentCalculator
     }
 
     // =========================================================
-    // šƒuƒ‰ƒbƒVƒ…ƒAƒbƒv: ó‘ÔˆÙí‘Ï«‚Ì‘•”õ•â³i’Ç‰Áj
+    // â˜…ãƒ–ãƒ©ãƒƒã‚·ãƒ¥ã‚¢ãƒƒãƒ—: çŠ¶æ…‹ç•°å¸¸è€æ€§ã®è£…å‚™è£œæ­£ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ‘•”õ’†•Ší‚Ìw’èó‘ÔˆÙí‚Ì‘Ï«’l‚ğ•Ô‚·B–¢‘•”õ or ŠY“–‚È‚µ‚È‚ç0B
-    /// ItemData.equipStatusEffectResistances ‚©‚ç‘ÎÛó‘ÔˆÙí‚Ì value ‚ğ‚»‚Ì‚Ü‚Ü100%•Ô‚·B
+    /// è£…å‚™ä¸­æ­¦å™¨ã®æŒ‡å®šçŠ¶æ…‹ç•°å¸¸ã®è€æ€§å€¤ã‚’è¿”ã™ã€‚æœªè£…å‚™ or è©²å½“ãªã—ãªã‚‰0ã€‚
+    /// ItemData.equipStatusEffectResistances ã‹ã‚‰å¯¾è±¡çŠ¶æ…‹ç•°å¸¸ã® value ã‚’ãã®ã¾ã¾100%è¿”ã™ã€‚
     ///
-    /// ‘®«‘Ï«iGetAttributeResistancej‚Æ“¯—l‚Ì\‘¢B
-    /// PassiveCalculator.CalcStatusEffectResistance() ‚Æ‡Z‚µ‚Äg‚¤B
+    /// å±æ€§è€æ€§ï¼ˆGetAttributeResistanceï¼‰ã¨åŒæ§˜ã®æ§‹é€ ã€‚
+    /// PassiveCalculator.CalcStatusEffectResistance() ã¨åˆç®—ã—ã¦ä½¿ã†ã€‚
     /// </summary>
     public static int GetStatusEffectResistance(StatusEffect effect)
     {

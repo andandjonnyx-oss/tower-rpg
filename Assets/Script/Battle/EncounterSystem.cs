@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EncounterSystem : MonoBehaviour
@@ -8,17 +8,17 @@ public class EncounterSystem : MonoBehaviour
     [SerializeField] private MonsterDatabase monsterDatabase;
 
     [Header("Encounter")]
-    [Tooltip("’Êí‚ÌƒGƒ“ƒJƒEƒ“ƒg—¦BƒAƒCƒeƒ€”»’è‚ğ‚·‚è”²‚¯‚½c‚è‚É‘Î‚µ‚Ä”»’è‚·‚é‚½‚ßA\n" +
-             "À¿ƒGƒ“ƒJƒEƒ“ƒg—¦‚ÍŠT‚Ë 0.8~‚±‚Ì’l ‚É‚È‚éBÀ¿20%‚É‚µ‚½‚¢ê‡‚Í 0.25B")]
-    [Range(0f, 1f)] public float encounterRate = 0.25f; // š0.20¨0.25
+    [Tooltip("é€šå¸¸æ™‚ã®ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆç‡ã€‚ã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šã‚’ã™ã‚ŠæŠœã‘ãŸæ®‹ã‚Šã«å¯¾ã—ã¦åˆ¤å®šã™ã‚‹ãŸã‚ã€\n" +
+             "å®Ÿè³ªã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆç‡ã¯æ¦‚ã­ 0.8Ã—ã“ã®å€¤ ã«ãªã‚‹ã€‚å®Ÿè³ª20%ã«ã—ãŸã„å ´åˆã¯ 0.25ã€‚")]
+    [Range(0f, 1f)] public float encounterRate = 0.25f; // â˜…0.20â†’0.25
 
-    [Tooltip("ƒm[ƒAƒCƒeƒ€ƒ‚[ƒh‚ÌƒGƒ“ƒJƒEƒ“ƒg—¦BƒAƒCƒeƒ€”»’è‚ªƒXƒLƒbƒv‚³‚ê“Æ—§”»’è‚É‚È‚é‚½‚ßA\n" +
-         "À¿ƒGƒ“ƒJƒEƒ“ƒg—¦‚Í‚±‚Ì’l‚»‚Ì‚à‚Ì‚É‚È‚éB")]
-    [Range(0f, 1f)] public float encounterRateNoItem = 0.20f; // š’Ç‰Á
+    [Tooltip("ãƒãƒ¼ã‚¢ã‚¤ãƒ†ãƒ ãƒ¢ãƒ¼ãƒ‰æ™‚ã®ã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆç‡ã€‚ã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šãŒã‚¹ã‚­ãƒƒãƒ—ã•ã‚Œç‹¬ç«‹åˆ¤å®šã«ãªã‚‹ãŸã‚ã€\n" +
+         "å®Ÿè³ªã‚¨ãƒ³ã‚«ã‚¦ãƒ³ãƒˆç‡ã¯ã“ã®å€¤ãã®ã‚‚ã®ã«ãªã‚‹ã€‚")]
+    [Range(0f, 1f)] public float encounterRateNoItem = 0.20f; // â˜…è¿½åŠ 
 
     [Header("Scene Names")]
     public string battleSceneName = "Battle";
-    public string towerSceneName = "Tower"; // ‚ ‚È‚½‚Ì“ƒƒV[ƒ“–¼‚É‡‚í‚¹‚Ä•ÏX
+    public string towerSceneName = "Tower"; // ã‚ãªãŸã®å¡”ã‚·ãƒ¼ãƒ³åã«åˆã‚ã›ã¦å¤‰æ›´
 
     private void Awake()
     {
@@ -35,44 +35,44 @@ public class EncounterSystem : MonoBehaviour
 
 
     /// <summary>
-    /// Stepis’¼Œã‚ÉŒÄ‚ÔB
+    /// Stepé€²è¡Œç›´å¾Œã«å‘¼ã¶ã€‚
     /// </summary>
-    /// <param name="floor">Œ»İ‚ÌŠK</param>
-    /// <param name="step">Œ»İ‚ÌStep(1..20‚È‚Ç)</param>
-    /// <param name="talkEventHappenedThisStep">‚±‚ÌStep‚Å‰ï˜bƒCƒxƒ“ƒg‚ª”­¶‚µ‚½‚©</param>
+    /// <param name="floor">ç¾åœ¨ã®éš</param>
+    /// <param name="step">ç¾åœ¨ã®Step(1..20ãªã©)</param>
+    /// <param name="talkEventHappenedThisStep">ã“ã®Stepã§ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºç”Ÿã—ãŸã‹</param>
     public void TryStartEncounter(int floor, int step)
     {
 
-        // STEP1‚Í–³Œø
+        // STEP1ã¯ç„¡åŠ¹
         if (step == 1) return;
 
-        // ‰ï˜bƒCƒxƒ“ƒg‚ªo‚½Step‚Í–³Œø Œ»İ‚ÍTowerState‘¤‚ÅÀ‘•
+        // ä¼šè©±ã‚¤ãƒ™ãƒ³ãƒˆãŒå‡ºãŸStepã¯ç„¡åŠ¹ ç¾åœ¨ã¯TowerStateå´ã§å®Ÿè£…
         //if (talkEventHappenedThisStep) return;
 
-        // 20%”»’è
+        // 20%åˆ¤å®š
         float roll = Random.value;
         if (roll > encounterRate) return;
 
-        // oŒ»‚·‚é“G‚©‚çƒsƒbƒNƒAƒbƒv
+        // å‡ºç¾ã™ã‚‹æ•µã‹ã‚‰ãƒ”ãƒƒã‚¯ã‚¢ãƒƒãƒ—
         Monster picked = monsterDatabase.GetRandomCandidate(floor, step);
         if (picked == null) return;
 
-        // Battle‚Ö“n‚·
+        // Battleã¸æ¸¡ã™
         BattleContext.EnemyMonster = picked;
 
-        // BattleƒV[ƒ“‚Ö
+        // Battleã‚·ãƒ¼ãƒ³ã¸
         SceneManager.LoadScene(battleSceneName, LoadSceneMode.Single);
 
         Debug.Log("[Encounter] START BATTLE!");
     }
 
-    /// <param name="noItemMode">ƒAƒCƒeƒ€‚ªo‚È‚¢ƒ‚[ƒh‚©itrue ‚È‚ç“Æ—§‚µ‚½20%”»’èj</param>
+    /// <param name="noItemMode">ã‚¢ã‚¤ãƒ†ãƒ ãŒå‡ºãªã„ãƒ¢ãƒ¼ãƒ‰ã‹ï¼ˆtrue ãªã‚‰ç‹¬ç«‹ã—ãŸ20%åˆ¤å®šï¼‰</param>
     public void TryStartEncounter(int floor, int step, bool noItemMode = false)
     {
-        // STEP1‚Í–³Œø
+        // STEP1ã¯ç„¡åŠ¹
         if (step == 1) return;
 
-        float rate = noItemMode ? encounterRateNoItem : encounterRate; // šƒ‚[ƒh‚ÅØ‘Ö
+        float rate = noItemMode ? encounterRateNoItem : encounterRate; // â˜…ãƒ¢ãƒ¼ãƒ‰ã§åˆ‡æ›¿
 
         float roll = Random.value;
         if (roll > rate) return;

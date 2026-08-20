@@ -1,20 +1,20 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TowerEventTrigger : MonoBehaviour
 {
-    // “¯‚¶ƒV[ƒ““à‚Ì‘¼ƒXƒNƒŠƒvƒg‚©‚ç
-    // TowerEventTrigger.Instance ‚ÅQÆ‚Å‚«‚é‚æ‚¤‚É‚·‚é
-    // “Ç‚İæ‚è‚ÍŠO•”‚©‚ç‰Â”\ (get)
-    // ‘ã“ü‚Í‚±‚ÌƒNƒ‰ƒX“à‚¾‚¯ (private set)
+    // åŒã˜ã‚·ãƒ¼ãƒ³å†…ã®ä»–ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰
+    // TowerEventTrigger.Instance ã§å‚ç…§ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
+    // èª­ã¿å–ã‚Šã¯å¤–éƒ¨ã‹ã‚‰å¯èƒ½ (get)
+    // ä»£å…¥ã¯ã“ã®ã‚¯ãƒ©ã‚¹å†…ã ã‘ (private set)
     public static TowerEventTrigger Instance { get; private set; }
 
     [SerializeField] private TalkEventDatabase database;
     [SerializeField] private string talkSceneName = "Talk";
 
-    // ƒV[ƒ“‚É‘¶İ‚·‚é‚±‚ÌTowerEventTrigger‚ğ
-    // static Instance‚Æ‚µ‚Ä“o˜^‚·‚é
+    // ã‚·ãƒ¼ãƒ³ã«å­˜åœ¨ã™ã‚‹ã“ã®TowerEventTriggerã‚’
+    // static Instanceã¨ã—ã¦ç™»éŒ²ã™ã‚‹
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,23 +28,23 @@ public class TowerEventTrigger : MonoBehaviour
 
     private bool AreAllConditionsMet(TalkEvent e, GameState gs)
     {
-        // Šù‘¶‚Ì EventCondition ƒŠƒXƒg”»’è
+        // æ—¢å­˜ã® EventCondition ãƒªã‚¹ãƒˆåˆ¤å®š
         if (e.conditions != null && e.conditions.Count > 0)
         {
             foreach (var c in e.conditions)
             {
-                if (c == null) continue; // –¢İ’èğŒ‚Í–³‹iD‚İ‚Åfalse‚É‚µ‚Ä‚àOKj
+                if (c == null) continue; // æœªè¨­å®šæ¡ä»¶ã¯ç„¡è¦–ï¼ˆå¥½ã¿ã§falseã«ã—ã¦ã‚‚OKï¼‰
                 if (!c.Evaluate(gs)) return false;
             }
         }
 
         // =========================================================
-        // ŠƒAƒCƒeƒ€”»’èi‘æ33‰ñ’Ç‰Áj
+        // æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šï¼ˆç¬¬33å›è¿½åŠ ï¼‰
         // =========================================================
-        // requiredItem ‚ª null ‚Ìê‡‚Í”»’è‚È‚µi]—ˆŒİŠ·jB
-        // İ’è‚³‚ê‚Ä‚¢‚éê‡‚Í itemPossessionMode ‚É]‚Á‚Ä”»’è‚·‚éB
-        // ƒCƒ“ƒxƒ“ƒgƒŠiItemBoxManager.Instancej‚Ì‚İ‚ª‘ÎÛ‚ÅA
-        // ‘qŒÉ‚Ì’†g‚Í”»’è‘ÎÛŠOi‘qŒÉ—a‚¯ = –¢Šˆµ‚¢jB
+        // requiredItem ãŒ null ã®å ´åˆã¯åˆ¤å®šãªã—ï¼ˆå¾“æ¥äº’æ›ï¼‰ã€‚
+        // è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ itemPossessionMode ã«å¾“ã£ã¦åˆ¤å®šã™ã‚‹ã€‚
+        // ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªï¼ˆItemBoxManager.Instanceï¼‰ã®ã¿ãŒå¯¾è±¡ã§ã€
+        // å€‰åº«ã®ä¸­èº«ã¯åˆ¤å®šå¯¾è±¡å¤–ï¼ˆå€‰åº«é ã‘ = æœªæ‰€æŒæ‰±ã„ï¼‰ã€‚
         if (e.requiredItem != null)
         {
             bool hasItem = HasItemInInventory(e.requiredItem);
@@ -56,9 +56,9 @@ public class TowerEventTrigger : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒCƒ“ƒxƒ“ƒgƒŠiItemBoxManager.Instancej‚Éw’èƒAƒCƒeƒ€‚ªŠÜ‚Ü‚ê‚Ä‚¢‚é‚©‚ğ•Ô‚·B
-    /// ”»’è‚Í itemId •¶š—ñ”äŠr‚Ås‚¤iScriptableObject ‚ÌQÆ‚Å‚Í‚È‚­jB
-    /// ‘qŒÉiStoragemanagerj‚Ì’†g‚Í”»’è‘ÎÛŠOB
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªï¼ˆItemBoxManager.Instanceï¼‰ã«æŒ‡å®šã‚¢ã‚¤ãƒ†ãƒ ãŒå«ã¾ã‚Œã¦ã„ã‚‹ã‹ã‚’è¿”ã™ã€‚
+    /// åˆ¤å®šã¯ itemId æ–‡å­—åˆ—æ¯”è¼ƒã§è¡Œã†ï¼ˆScriptableObject ã®å‚ç…§ã§ã¯ãªãï¼‰ã€‚
+    /// å€‰åº«ï¼ˆStoragemanagerï¼‰ã®ä¸­èº«ã¯åˆ¤å®šå¯¾è±¡å¤–ã€‚
     /// </summary>
     private bool HasItemInInventory(ItemData target)
     {
@@ -79,30 +79,30 @@ public class TowerEventTrigger : MonoBehaviour
     public bool TryTriggerTalkEvent()
     {
 
-        //ƒQ[ƒ€isó‘Ô‚Éƒf[ƒ^ƒx[ƒX‚ªİ’è‚³‚ê‚Ä‚¢‚é‚©Šm”F
+        //ã‚²ãƒ¼ãƒ é€²è¡ŒçŠ¶æ…‹ã«ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹ã‹ç¢ºèª
         var gs = GameState.I;
         if (gs == null || database == null) return false;
 
-        //ƒfƒoƒbƒO—pB¡‚ÌŠK‘w‚ÆƒXƒeƒbƒv‚ğƒRƒ“ƒ\[ƒ‹o—Í
+        //ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚ä»Šã®éšå±¤ã¨ã‚¹ãƒ†ãƒƒãƒ—ã‚’ã‚³ãƒ³ã‚½ãƒ¼ãƒ«å‡ºåŠ›
         Debug.Log($"EventCheck: floor={GameState.I.floor} step={GameState.I.step}");
 
-        //¡‚ÌŠK‘w‚ÆƒXƒeƒbƒv‚É‘Î‰‚µ‚½ƒCƒxƒ“ƒg‚ğˆê——‚ğæ“¾
+        //ä»Šã®éšå±¤ã¨ã‚¹ãƒ†ãƒƒãƒ—ã«å¯¾å¿œã—ãŸã‚¤ãƒ™ãƒ³ãƒˆã‚’ä¸€è¦§ã‚’å–å¾—
         var list = database.FindByCondition(gs.floor, gs.step);
         if (list == null || list.Count == 0) return false;
 
-        //ƒfƒoƒbƒO—pBƒCƒxƒ“ƒg‚ÌŒÂ”‚ğƒRƒ“ƒ\[ƒ‹o—Í
+        //ãƒ‡ãƒãƒƒã‚°ç”¨ã€‚ã‚¤ãƒ™ãƒ³ãƒˆã®å€‹æ•°ã‚’ã‚³ãƒ³ã‚½ãƒ¼ãƒ«å‡ºåŠ›
         Debug.Log("Hit Event Count: " + list.Count);
 
         // =========================================================
-        // Šm—¦•ªŠòƒOƒ‹[ƒv‚ÌûW
+        // ç¢ºç‡åˆ†å²ã‚°ãƒ«ãƒ¼ãƒ—ã®åé›†
         // =========================================================
-        // “¯‚¶ randomGroup ‚ğ‚ÂƒCƒxƒ“ƒg‚ğƒOƒ‹[ƒv‰»‚µA
-        // ƒOƒ‹[ƒv’PˆÊ‚Åd‚İ•t‚«’Š‘I‚ğs‚¤B
-        // ƒOƒ‹[ƒv‚É‘®‚³‚È‚¢ƒCƒxƒ“ƒgirandomGroup ‚ª‹ój‚Í]—ˆ’Ê‚è‡”Ô‚Éˆ—B
+        // åŒã˜ randomGroup ã‚’æŒã¤ã‚¤ãƒ™ãƒ³ãƒˆã‚’ã‚°ãƒ«ãƒ¼ãƒ—åŒ–ã—ã€
+        // ã‚°ãƒ«ãƒ¼ãƒ—å˜ä½ã§é‡ã¿ä»˜ãæŠ½é¸ã‚’è¡Œã†ã€‚
+        // ã‚°ãƒ«ãƒ¼ãƒ—ã«å±ã•ãªã„ã‚¤ãƒ™ãƒ³ãƒˆï¼ˆrandomGroup ãŒç©ºï¼‰ã¯å¾“æ¥é€šã‚Šé †ç•ªã«å‡¦ç†ã€‚
 
-        // ƒOƒ‹[ƒv–¼ ¨ ‚»‚ÌƒOƒ‹[ƒv‚Ì–¢Ä¶ƒCƒxƒ“ƒgƒŠƒXƒg
+        // ã‚°ãƒ«ãƒ¼ãƒ—å â†’ ãã®ã‚°ãƒ«ãƒ¼ãƒ—ã®æœªå†ç”Ÿã‚¤ãƒ™ãƒ³ãƒˆãƒªã‚¹ãƒˆ
         var groups = new Dictionary<string, List<TalkEvent>>();
-        // ƒOƒ‹[ƒv‚É‘®‚³‚È‚¢’ÊíƒCƒxƒ“ƒg
+        // ã‚°ãƒ«ãƒ¼ãƒ—ã«å±ã•ãªã„é€šå¸¸ã‚¤ãƒ™ãƒ³ãƒˆ
         var normalEvents = new List<TalkEvent>();
 
         foreach (var e in list)
@@ -114,7 +114,7 @@ public class TowerEventTrigger : MonoBehaviour
 
             if (!string.IsNullOrEmpty(e.randomGroup))
             {
-                // ƒOƒ‹[ƒvƒCƒxƒ“ƒg
+                // ã‚°ãƒ«ãƒ¼ãƒ—ã‚¤ãƒ™ãƒ³ãƒˆ
                 if (!groups.TryGetValue(e.randomGroup, out var groupList))
                 {
                     groupList = new List<TalkEvent>();
@@ -124,26 +124,26 @@ public class TowerEventTrigger : MonoBehaviour
             }
             else
             {
-                // ’ÊíƒCƒxƒ“ƒgi]—ˆŒİŠ·j
+                // é€šå¸¸ã‚¤ãƒ™ãƒ³ãƒˆï¼ˆå¾“æ¥äº’æ›ï¼‰
                 normalEvents.Add(e);
             }
         }
 
         // =========================================================
-        // ƒOƒ‹[ƒv’Š‘IiŠm—¦•ªŠòƒCƒxƒ“ƒg‚ğ—Dæˆ—j
+        // ã‚°ãƒ«ãƒ¼ãƒ—æŠ½é¸ï¼ˆç¢ºç‡åˆ†å²ã‚¤ãƒ™ãƒ³ãƒˆã‚’å„ªå…ˆå‡¦ç†ï¼‰
         // =========================================================
         foreach (var kvp in groups)
         {
             var groupList = kvp.Value;
             if (groupList.Count == 0) continue;
 
-            // d‚İ•t‚«’Š‘I
+            // é‡ã¿ä»˜ãæŠ½é¸
             TalkEvent winner = WeightedRandom(groupList);
             if (winner == null) continue;
 
             Debug.Log($"[RandomGroup:{kvp.Key}] Winner: {winner.id} (weight={winner.randomWeight})");
 
-            // “–‘IƒCƒxƒ“ƒg‚ğÄ¶Ï‚İ‚É‚µA”r‘¼ID‚à‚Ü‚Æ‚ß‚Ä MarkPlayed
+            // å½“é¸ã‚¤ãƒ™ãƒ³ãƒˆã‚’å†ç”Ÿæ¸ˆã¿ã«ã—ã€æ’ä»–IDã‚‚ã¾ã¨ã‚ã¦ MarkPlayed
             gs.pendingEventId = winner.id;
             MarkExclusiveIds(gs, winner);
             SceneManager.LoadScene(talkSceneName);
@@ -151,11 +151,11 @@ public class TowerEventTrigger : MonoBehaviour
         }
 
         // =========================================================
-        // ’ÊíƒCƒxƒ“ƒgi]—ˆŒİŠ·j
+        // é€šå¸¸ã‚¤ãƒ™ãƒ³ãƒˆï¼ˆå¾“æ¥äº’æ›ï¼‰
         // =========================================================
         foreach (var e in normalEvents)
         {
-            //–¢Ä¶‚ÌƒCƒxƒ“ƒg‚ÌID‚ğ‹L˜^‚µAƒV[ƒ“‘JˆÚiTalkj
+            //æœªå†ç”Ÿã®ã‚¤ãƒ™ãƒ³ãƒˆã®IDã‚’è¨˜éŒ²ã—ã€ã‚·ãƒ¼ãƒ³é·ç§»ï¼ˆTalkï¼‰
             gs.pendingEventId = e.id;
             SceneManager.LoadScene(talkSceneName);
             return true;
@@ -165,11 +165,11 @@ public class TowerEventTrigger : MonoBehaviour
     }
 
     // =========================================================
-    // d‚İ•t‚«’Š‘I
+    // é‡ã¿ä»˜ãæŠ½é¸
     // =========================================================
     /// <summary>
-    /// ƒOƒ‹[ƒv“à‚ÌƒCƒxƒ“ƒg‚©‚ç randomWeight ‚ÉŠî‚Ã‚¢‚Ä1‚Â‚ğ’Š‘I‚·‚éB
-    /// —İÏŠm—¦•û®‚Å³Šm‚ÈŠm—¦”z•ª‚ğÀŒ»‚·‚éB
+    /// ã‚°ãƒ«ãƒ¼ãƒ—å†…ã®ã‚¤ãƒ™ãƒ³ãƒˆã‹ã‚‰ randomWeight ã«åŸºã¥ã„ã¦1ã¤ã‚’æŠ½é¸ã™ã‚‹ã€‚
+    /// ç´¯ç©ç¢ºç‡æ–¹å¼ã§æ­£ç¢ºãªç¢ºç‡é…åˆ†ã‚’å®Ÿç¾ã™ã‚‹ã€‚
     /// </summary>
     private TalkEvent WeightedRandom(List<TalkEvent> candidates)
     {
@@ -179,7 +179,7 @@ public class TowerEventTrigger : MonoBehaviour
             totalWeight += Mathf.Max(0f, e.randomWeight);
         }
 
-        // ‘Sd‚İ0‚Ìê‡‚Íƒ‰ƒ“ƒ_ƒ€‚É1‚ÂiƒtƒH[ƒ‹ƒoƒbƒNj
+        // å…¨é‡ã¿0ã®å ´åˆã¯ãƒ©ãƒ³ãƒ€ãƒ ã«1ã¤ï¼ˆãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼‰
         if (totalWeight <= 0f)
         {
             return candidates[Random.Range(0, candidates.Count)];
@@ -197,16 +197,16 @@ public class TowerEventTrigger : MonoBehaviour
             }
         }
 
-        // •‚“®¬”“_‚ÌŠÛ‚ßŒë·‘ÎôiÅŒã‚Ì—v‘f‚ğ•Ô‚·j
+        // æµ®å‹•å°æ•°ç‚¹ã®ä¸¸ã‚èª¤å·®å¯¾ç­–ï¼ˆæœ€å¾Œã®è¦ç´ ã‚’è¿”ã™ï¼‰
         return candidates[candidates.Count - 1];
     }
 
     // =========================================================
-    // ”r‘¼ID ‚Ì MarkPlayed
+    // æ’ä»–ID ã® MarkPlayed
     // =========================================================
     /// <summary>
-    /// “–‘IƒCƒxƒ“ƒg‚Ì exclusiveIds ‚É—ñ‹“‚³‚ê‚½ID‚ğ‚Ü‚Æ‚ß‚Ä MarkPlayed ‚·‚éB
-    /// ‚±‚ê‚É‚æ‚èA“¯ƒOƒ‹[ƒv‚Ì‘¼‚Ì•ªŠòƒCƒxƒ“ƒg‚ª¡Œã”­¶‚µ‚È‚­‚È‚éB
+    /// å½“é¸ã‚¤ãƒ™ãƒ³ãƒˆã® exclusiveIds ã«åˆ—æŒ™ã•ã‚ŒãŸIDã‚’ã¾ã¨ã‚ã¦ MarkPlayed ã™ã‚‹ã€‚
+    /// ã“ã‚Œã«ã‚ˆã‚Šã€åŒã‚°ãƒ«ãƒ¼ãƒ—ã®ä»–ã®åˆ†å²ã‚¤ãƒ™ãƒ³ãƒˆãŒä»Šå¾Œç™ºç”Ÿã—ãªããªã‚‹ã€‚
     /// </summary>
     private void MarkExclusiveIds(GameState gs, TalkEvent winner)
     {

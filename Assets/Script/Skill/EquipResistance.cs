@@ -1,23 +1,23 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 /// <summary>
-/// �����i�̑����ϐ�1�����̃f�[�^�\���B
-/// ItemData.equipResistances �z��ɓ���Ďg���B
+/// 装備品の属性耐性1件分のデータ構造。
+/// ItemData.equipResistances 配列に入れて使う。
 ///
-/// �p�b�V�u���ʂ̏d�����[���i2�ڈȍ~10%�����j�Ƃ͈قȂ�A
-/// �����i�̑ϐ��͏�� value ��100%���̂܂܉��Z����B
-/// �i������1���������ł��Ȃ����ߏd�����[���͕s�v�j
+/// パッシブ効果の重複ルール（2個目以降10%減衰）とは異なり、
+/// 装備品の耐性は常に value を100%そのまま加算する。
+/// （装備は1つしか装備できないため重複ルールは不要）
 ///
-/// ��: ���ϐ�50�̕��� �� EquipResistance(Fire, 50) ��ݒ�B
-/// ��: �X�ϐ�30 + ���ϐ�20�̕��� �� 2���� EquipResistance ��ݒ�B
+/// 例: 炎耐性50の武器 → EquipResistance(Fire, 50) を設定。
+/// 例: 氷耐性30 + 雷耐性20の武器 → 2件の EquipResistance を設定。
 /// </summary>
 [Serializable]
 public class EquipResistance
 {
-    [Tooltip("�ϐ��̑Ώۑ���")]
+    [Tooltip("耐性の対象属性")]
     public WeaponAttribute attribute;
 
-    [Tooltip("�ϐ��l�i100�Ŋ��S�ϐ��j�B�p�b�V�u�Ƃ͕ʌv�Z��100%���f�����B")]
+    [Tooltip("耐性値（100で完全耐性）。パッシブとは別計算で100%反映される。")]
     public int value;
 }

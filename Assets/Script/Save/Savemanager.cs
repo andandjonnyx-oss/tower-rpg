@@ -1,41 +1,41 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 /// <summary>
-/// ƒQ[ƒ€ƒf[ƒ^‚ÌƒZ[ƒu/ƒ[ƒh/íœ‚ğ’S“–‚·‚éB
-/// JSON Œ`®‚Å Application.persistentDataPath ‚É•Û‘¶‚·‚éB
-/// ó‘Ô‚ª•Ï‚í‚é‚½‚Ñ‚É Save() ‚ªŒÄ‚Î‚ê‚é‘¦ƒZ[ƒu•û®B
+/// ã‚²ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã®ã‚»ãƒ¼ãƒ–/ãƒ­ãƒ¼ãƒ‰/å‰Šé™¤ã‚’æ‹…å½“ã™ã‚‹ã€‚
+/// JSON å½¢å¼ã§ Application.persistentDataPath ã«ä¿å­˜ã™ã‚‹ã€‚
+/// çŠ¶æ…‹ãŒå¤‰ã‚ã‚‹ãŸã³ã« Save() ãŒå‘¼ã°ã‚Œã‚‹å³æ™‚ã‚»ãƒ¼ãƒ–æ–¹å¼ã€‚
 /// </summary>
 public static class SaveManager
 {
-    // ƒZ[ƒuƒtƒ@ƒCƒ‹–¼
+    // ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«å
     private const string SaveFileName = "savedata.json";
 
-    /// <summary>ƒZ[ƒuƒtƒ@ƒCƒ‹‚Ìƒtƒ‹ƒpƒX‚ğ•Ô‚·B</summary>
+    /// <summary>ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’è¿”ã™ã€‚</summary>
     private static string SaveFilePath
         => Path.Combine(Application.persistentDataPath, SaveFileName);
 
-    /// <summary>ƒZ[ƒuƒf[ƒ^‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©B</summary>
+    /// <summary>ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã€‚</summary>
     public static bool HasSaveData()
     {
         return File.Exists(SaveFilePath);
     }
 
     // =========================================================
-    // ƒZ[ƒu
+    // ã‚»ãƒ¼ãƒ–
     // =========================================================
 
     /// <summary>
-    /// Œ»İ‚Ì GameStateEItemBoxManagerEStorageManager ‚Ì“à—e‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶‚·‚éB
-    /// ó‘Ô‚ª•Ï‚í‚é‚½‚ÑiƒAƒCƒeƒ€æ“¾A‘•”õ•ÏXAŠK‘wis‚È‚Çj‚ÉŒÄ‚Î‚ê‚éB
+    /// ç¾åœ¨ã® GameStateãƒ»ItemBoxManagerãƒ»StorageManager ã®å†…å®¹ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã™ã‚‹ã€‚
+    /// çŠ¶æ…‹ãŒå¤‰ã‚ã‚‹ãŸã³ï¼ˆã‚¢ã‚¤ãƒ†ãƒ å–å¾—ã€è£…å‚™å¤‰æ›´ã€éšå±¤é€²è¡Œãªã©ï¼‰ã«å‘¼ã°ã‚Œã‚‹ã€‚
     /// </summary>
     public static void Save()
     {
         var data = new SaveData();
 
-        // --- GameState ‚©‚çûW ---
+        // --- GameState ã‹ã‚‰åé›† ---
         if (GameState.I != null)
         {
             data.floor = GameState.I.floor;
@@ -84,16 +84,16 @@ public static class SaveManager
 
             data.equippedWeaponUid = GameState.I.equippedWeaponUid;
 
-            // Šù“ÇƒCƒxƒ“ƒgIDˆê——
+            // æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆIDä¸€è¦§
             data.playedEventIds = GameState.I.GetAllPlayedIds();
 
-            // ‘˜‹öƒ‚ƒ“ƒXƒ^[IDˆê——
+            // é­é‡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼IDä¸€è¦§
             data.encounteredMonsterIds = GameState.I.GetAllEncounteredIds();
 
-            // ”­Œ©ƒAƒCƒeƒ€IDˆê——
+            // ç™ºè¦‹ã‚¢ã‚¤ãƒ†ãƒ IDä¸€è¦§
             data.discoveredItemIds = GameState.I.GetAllDiscoveredItemIds();
 
-            // ó‘ÔˆÙíi‘S‘±Œ^ƒfƒoƒt‚ğ“ˆêƒZ[ƒuj
+            // çŠ¶æ…‹ç•°å¸¸ï¼ˆå…¨æŒç¶šå‹ãƒ‡ãƒãƒ•ã‚’çµ±ä¸€ã‚»ãƒ¼ãƒ–ï¼‰
             data.isPoisoned = GameState.I.isPoisoned;
             data.isParalyzed = GameState.I.isParalyzed;
             data.isBlind = GameState.I.isBlind;
@@ -102,14 +102,14 @@ public static class SaveManager
             data.isCursed = GameState.I.isCursed;
             data.isGlassed = GameState.I.isGlassed;
 
-            // Î‰»iPhase C ’Ç‰Áj
+            // çŸ³åŒ–ï¼ˆPhase C è¿½åŠ ï¼‰
             data.playerIsPetrified = GameState.I.isPetrified;
             data.playerPetrifyTurns = GameState.I.playerPetrifyTurns;
             data.playerPetrifyMaxTurns = GameState.I.playerPetrifyMaxTurns;
 
         }
 
-        // --- ItemBoxManageriŠ•ij‚©‚çûW ---
+        // --- ItemBoxManagerï¼ˆæ‰€æŒå“ï¼‰ã‹ã‚‰åé›† ---
         if (ItemBoxManager.Instance != null)
         {
             var items = ItemBoxManager.Instance.GetItems();
@@ -127,7 +127,7 @@ public static class SaveManager
             }
         }
 
-        // --- StorageManageri‘qŒÉj‚©‚çûW ---
+        // --- StorageManagerï¼ˆå€‰åº«ï¼‰ã‹ã‚‰åé›† ---
         if (StorageManager.Instance != null)
         {
             var storageItems = StorageManager.Instance.GetItems();
@@ -145,31 +145,31 @@ public static class SaveManager
             }
         }
 
-        // --- JSON ‚É•ÏŠ·‚µ‚Ä‘‚«o‚µ ---
+        // --- JSON ã«å¤‰æ›ã—ã¦æ›¸ãå‡ºã— ---
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(SaveFilePath, json);
-        Debug.Log($"[SaveManager] ƒZ[ƒuŠ®—¹: {SaveFilePath}");
+        Debug.Log($"[SaveManager] ã‚»ãƒ¼ãƒ–å®Œäº†: {SaveFilePath}");
     }
 
     // =========================================================
-    // ƒ[ƒh
+    // ãƒ­ãƒ¼ãƒ‰
     // =========================================================
 
     /// <summary>
-    /// ƒZ[ƒuƒtƒ@ƒCƒ‹‚©‚ç GameStateEItemBoxManagerEStorageManager ‚Éƒf[ƒ^‚ğ•œŒ³‚·‚éB
-    /// ƒ^ƒCƒgƒ‹‚ÌƒXƒ^[ƒgƒ{ƒ^ƒ“iƒZ[ƒuƒf[ƒ^‚ ‚èj‚ÅŒÄ‚Î‚ê‚éB
+    /// ã‚»ãƒ¼ãƒ–ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ GameStateãƒ»ItemBoxManagerãƒ»StorageManager ã«ãƒ‡ãƒ¼ã‚¿ã‚’å¾©å…ƒã™ã‚‹ã€‚
+    /// ã‚¿ã‚¤ãƒˆãƒ«ã®ã‚¹ã‚¿ãƒ¼ãƒˆãƒœã‚¿ãƒ³ï¼ˆã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚ã‚Šæ™‚ï¼‰ã§å‘¼ã°ã‚Œã‚‹ã€‚
     ///
-    /// šƒuƒ‰ƒbƒVƒ…ƒAƒbƒv:
-    ///   ƒ[ƒhŒã‚Í Main ƒV[ƒ“‚É‘JˆÚ‚µAHP/MP ‚Í‘S‰ñ•œ{ó‘ÔˆÙíƒNƒŠƒAB
-    ///   uŠX‚É–ß‚é = ‘S‰ñ•œió‘ÔˆÙíŠÜ‚Şjv‚Å“ˆêB
-    ///   ƒZ[ƒuƒf[ƒ^‚É‚Í‘Só‘ÔˆÙí‚ğ•Û‚·‚é‚ªA
-    ///   ƒ[ƒh•œ‹A‚Í‘SƒNƒŠƒA‚·‚éB
+    /// â˜…ãƒ–ãƒ©ãƒƒã‚·ãƒ¥ã‚¢ãƒƒãƒ—:
+    ///   ãƒ­ãƒ¼ãƒ‰å¾Œã¯ Main ã‚·ãƒ¼ãƒ³ã«é·ç§»ã—ã€HP/MP ã¯å…¨å›å¾©ï¼‹çŠ¶æ…‹ç•°å¸¸ã‚¯ãƒªã‚¢ã€‚
+    ///   ã€Œè¡—ã«æˆ»ã‚‹ = å…¨å›å¾©ï¼ˆçŠ¶æ…‹ç•°å¸¸å«ã‚€ï¼‰ã€ã§çµ±ä¸€ã€‚
+    ///   ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã«ã¯å…¨çŠ¶æ…‹ç•°å¸¸ã‚’ä¿æŒã™ã‚‹ãŒã€
+    ///   ãƒ­ãƒ¼ãƒ‰å¾©å¸°æ™‚ã¯å…¨ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
     /// </summary>
     public static bool Load()
     {
         if (!HasSaveData())
         {
-            Debug.LogWarning("[SaveManager] ƒZ[ƒuƒf[ƒ^‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
+            Debug.LogWarning("[SaveManager] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“");
             return false;
         }
 
@@ -177,11 +177,11 @@ public static class SaveManager
         var data = JsonUtility.FromJson<SaveData>(json);
         if (data == null)
         {
-            Debug.LogError("[SaveManager] ƒZ[ƒuƒf[ƒ^‚Ì“Ç‚İ‚İ‚É¸”s");
+            Debug.LogError("[SaveManager] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—");
             return false;
         }
 
-        // --- GameState ‚É”½‰f ---
+        // --- GameState ã«åæ˜  ---
         if (GameState.I != null)
         {
             GameState.I.floor = data.floor;
@@ -194,7 +194,7 @@ public static class SaveManager
 
             GameState.I.maxHp = data.maxHp;
             GameState.I.maxMp = data.maxMp;
-            // šƒuƒ‰ƒbƒVƒ…ƒAƒbƒv: ƒ[ƒh‚Í‘S‰ñ•œó‘Ô‚ÅŠJni‚Ç‚ÌƒV[ƒ“‚Å’†’f‚µ‚Ä‚àˆÀ‘S‚É•œ‹Aj
+            // â˜…ãƒ–ãƒ©ãƒƒã‚·ãƒ¥ã‚¢ãƒƒãƒ—: ãƒ­ãƒ¼ãƒ‰æ™‚ã¯å…¨å›å¾©çŠ¶æ…‹ã§é–‹å§‹ï¼ˆã©ã®ã‚·ãƒ¼ãƒ³ã§ä¸­æ–­ã—ã¦ã‚‚å®‰å…¨ã«å¾©å¸°ï¼‰
             GameState.I.currentHp = data.maxHp;
             GameState.I.currentMp = data.maxMp;
 
@@ -218,12 +218,12 @@ public static class SaveManager
             GameState.I.finalBossCarryUnlocked = data.finalBossCarryUnlocked;
             GameState.I.finalBossCarryEnabled = data.finalBossCarryEnabled;
 
-            // --- ‰ŠúƒAƒCƒeƒ€•t—^ƒtƒ‰ƒO‚Ì•œŒ³{ˆÚsˆ—i’Ç‰Áj ---
-            // ƒZ[ƒu‚ª‘¶İ‚µ‚½“_‚ÅuŠù‚ÉƒQ[ƒ€‚ğŠJn‚µ‚½Šù‘¶ƒvƒŒƒCƒ„[v‚Æ‚İ‚È‚·B
-            // ‹ŒƒZ[ƒui‚±‚ÌƒtƒB[ƒ‹ƒh‚ğ‚½‚È‚¢j‚ÍƒfƒtƒHƒ‹ƒg false ‚Å—ˆ‚é‚ªA
-            // ‚±‚±‚Å true ‚É‹¸³‚·‚é‚±‚Æ‚ÅAƒAƒbƒvƒf[ƒgŒã‚É‰ŠúƒAƒCƒeƒ€‚ğ
-            // “ñd•t—^‚µ‚Ä‚µ‚Ü‚¤–ŒÌ‚ğ–h‚®B
-            // iV‹KŠJnŒo—R‚ÌƒZ[ƒu‚ÍŠù‚É true ‚ª•Û‘¶‚³‚ê‚Ä‚¢‚é‚Ì‚Å‰e‹¿‚È‚µj
+            // --- åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸ãƒ•ãƒ©ã‚°ã®å¾©å…ƒï¼‹ç§»è¡Œå‡¦ç†ï¼ˆè¿½åŠ ï¼‰ ---
+            // ã‚»ãƒ¼ãƒ–ãŒå­˜åœ¨ã—ãŸæ™‚ç‚¹ã§ã€Œæ—¢ã«ã‚²ãƒ¼ãƒ ã‚’é–‹å§‹ã—ãŸæ—¢å­˜ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã€ã¨ã¿ãªã™ã€‚
+            // æ—§ã‚»ãƒ¼ãƒ–ï¼ˆã“ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æŒãŸãªã„ï¼‰ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ false ã§æ¥ã‚‹ãŒã€
+            // ã“ã“ã§ true ã«çŸ¯æ­£ã™ã‚‹ã“ã¨ã§ã€ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆå¾Œã«åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ã‚’
+            // äºŒé‡ä»˜ä¸ã—ã¦ã—ã¾ã†äº‹æ•…ã‚’é˜²ãã€‚
+            // ï¼ˆæ–°è¦é–‹å§‹çµŒç”±ã®ã‚»ãƒ¼ãƒ–ã¯æ—¢ã« true ãŒä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã®ã§å½±éŸ¿ãªã—ï¼‰
             GameState.I.hasGrantedStartingItems = true;
 
             GameState.I.endingPhase = data.endingPhase;
@@ -236,80 +236,80 @@ public static class SaveManager
 
             GameState.I.equippedWeaponUid = data.equippedWeaponUid ?? "";
 
-            // Šù“ÇƒCƒxƒ“ƒg•œŒ³
+            // æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆå¾©å…ƒ
             GameState.I.RestorePlayedIds(data.playedEventIds);
 
-            // ‘˜‹öƒ‚ƒ“ƒXƒ^[•œŒ³
+            // é­é‡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å¾©å…ƒ
             GameState.I.RestoreEncounteredIds(data.encounteredMonsterIds);
 
-            // ”­Œ©ƒAƒCƒeƒ€•œŒ³
+            // ç™ºè¦‹ã‚¢ã‚¤ãƒ†ãƒ å¾©å…ƒ
             GameState.I.RestoreDiscoveredItemIds(data.discoveredItemIds);
 
-            // ƒoƒgƒ‹’†ƒtƒ‰ƒO‚ğƒNƒŠƒAi’†’f•œ‹A‚È‚Ì‚ÅˆÀ‘S‚Èó‘Ô‚É‚·‚éj
+            // ãƒãƒˆãƒ«ä¸­ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ï¼ˆä¸­æ–­å¾©å¸°ãªã®ã§å®‰å…¨ãªçŠ¶æ…‹ã«ã™ã‚‹ï¼‰
             GameState.I.isInBattle = false;
             GameState.I.battleTurnConsumed = false;
             GameState.I.battleItemActionLog = "";
             GameState.I.pendingItemData = null;
             GameState.I.pendingEventId = "";
 
-            // šƒuƒ‰ƒbƒVƒ…ƒAƒbƒv: ƒ[ƒh‚Í‘Só‘ÔˆÙí‚ğƒNƒŠƒA
-            // uŠX‚É–ß‚é = ‘S‰ñ•œió‘ÔˆÙíŠÜ‚Şjv‚Å“ˆêB
-            // ƒZ[ƒuƒf[ƒ^‚É‚Í‘Só‘ÔˆÙí‚ğ•Û‚µ‚Ä‚¢‚é‚ªA
-            // ƒ[ƒh‚Íí‚ÉŠXiMainjƒXƒ^[ƒg‚È‚Ì‚Å‘SƒNƒŠƒA‚ª³‚µ‚¢B
-            // Î‰»‚à‚±‚±‚ÅƒNƒŠƒA‚³‚ê‚éiClearAllStatusEffects ‚ªÎ‰»ƒŠƒZƒbƒg‚ğŠÜ‚ŞjB
+            // â˜…ãƒ–ãƒ©ãƒƒã‚·ãƒ¥ã‚¢ãƒƒãƒ—: ãƒ­ãƒ¼ãƒ‰æ™‚ã¯å…¨çŠ¶æ…‹ç•°å¸¸ã‚’ã‚¯ãƒªã‚¢
+            // ã€Œè¡—ã«æˆ»ã‚‹ = å…¨å›å¾©ï¼ˆçŠ¶æ…‹ç•°å¸¸å«ã‚€ï¼‰ã€ã§çµ±ä¸€ã€‚
+            // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã«ã¯å…¨çŠ¶æ…‹ç•°å¸¸ã‚’ä¿æŒã—ã¦ã„ã‚‹ãŒã€
+            // ãƒ­ãƒ¼ãƒ‰ã¯å¸¸ã«è¡—ï¼ˆMainï¼‰ã‚¹ã‚¿ãƒ¼ãƒˆãªã®ã§å…¨ã‚¯ãƒªã‚¢ãŒæ­£ã—ã„ã€‚
+            // çŸ³åŒ–ã‚‚ã“ã“ã§ã‚¯ãƒªã‚¢ã•ã‚Œã‚‹ï¼ˆClearAllStatusEffects ãŒçŸ³åŒ–ãƒªã‚»ãƒƒãƒˆã‚’å«ã‚€ï¼‰ã€‚
             GameState.I.ClearAllStatusEffects();
         }
 
-        // --- ItemBoxManageriŠ•ij‚É”½‰f ---
+        // --- ItemBoxManagerï¼ˆæ‰€æŒå“ï¼‰ã«åæ˜  ---
         if (ItemBoxManager.Instance != null)
         {
             ItemBoxManager.Instance.RestoreFromSave(data.inventoryItems);
         }
 
-        // --- StorageManageri‘qŒÉj‚É”½‰f ---
+        // --- StorageManagerï¼ˆå€‰åº«ï¼‰ã«åæ˜  ---
         if (StorageManager.Instance != null)
         {
             StorageManager.Instance.RestoreFromSave(data.storageItems);
         }
 
-        Debug.Log($"[SaveManager] ƒ[ƒhŠ®—¹: Floor={data.floor} Step={data.step} (‘S‰ñ•œ+ó‘ÔˆÙíƒNƒŠƒA)");
+        Debug.Log($"[SaveManager] ãƒ­ãƒ¼ãƒ‰å®Œäº†: Floor={data.floor} Step={data.step} (å…¨å›å¾©+çŠ¶æ…‹ç•°å¸¸ã‚¯ãƒªã‚¢)");
         return true;
     }
 
     // =========================================================
-    // íœi‰Šú‰»j
+    // å‰Šé™¤ï¼ˆåˆæœŸåŒ–ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒZ[ƒuƒf[ƒ^‚ğíœ‚·‚éBƒ^ƒCƒgƒ‹‚Ìu‰Šú‰»vƒ{ƒ^ƒ“‚ÅŒÄ‚Î‚ê‚éB
+    /// ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã™ã‚‹ã€‚ã‚¿ã‚¤ãƒˆãƒ«ã®ã€ŒåˆæœŸåŒ–ã€ãƒœã‚¿ãƒ³ã§å‘¼ã°ã‚Œã‚‹ã€‚
     /// </summary>
     public static void DeleteSave()
     {
         if (File.Exists(SaveFilePath))
         {
             File.Delete(SaveFilePath);
-            Debug.Log("[SaveManager] ƒZ[ƒuƒf[ƒ^‚ğíœ‚µ‚Ü‚µ‚½");
+            Debug.Log("[SaveManager] ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤ã—ã¾ã—ãŸ");
         }
     }
 }
 
 // =========================================================
-// ƒZ[ƒuƒf[ƒ^\‘¢‘Ì
+// ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿æ§‹é€ ä½“
 // =========================================================
 
 /// <summary>
-/// JSON ƒVƒŠƒAƒ‰ƒCƒY—p‚ÌƒZ[ƒuƒf[ƒ^\‘¢B
-/// GameStateEItemBoxManagerEStorageManager ‚Ì‰i‘±‰»‚ª•K—v‚ÈƒtƒB[ƒ‹ƒh‚ğ‚Ü‚Æ‚ß‚éB
+/// JSON ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºç”¨ã®ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿æ§‹é€ ã€‚
+/// GameStateãƒ»ItemBoxManagerãƒ»StorageManager ã®æ°¸ç¶šåŒ–ãŒå¿…è¦ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ã¾ã¨ã‚ã‚‹ã€‚
 /// </summary>
 [Serializable]
 public class SaveData
 {
-    // --- isó‹µ ---
+    // --- é€²è¡ŒçŠ¶æ³ ---
     public int floor = 1;
     public int step = 1;
     public int reachedFloor = 1;
 
-    // --- ƒŒƒxƒ‹/ŒoŒ±’l ---
+    // --- ãƒ¬ãƒ™ãƒ«/çµŒé¨“å€¤ ---
     public int level = 1;
     public int currentExp = 0;
     public int expToNext = 100;
@@ -320,7 +320,7 @@ public class SaveData
     public int currentHp = 50;
     public int currentMp = 20;
 
-    // --- ƒXƒe[ƒ^ƒX ---
+    // --- ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ ---
     public int baseSTR = 1;
     public int baseVIT = 1;
     public int baseINT = 1;
@@ -339,34 +339,34 @@ public class SaveData
     public int bossPhaseF90 = 0;
     public int bossPhaseF100 = 0;
 
-    // --- F100‘æ“ñŒ`‘Ô HPˆø‚«Œp‚¬‹~Ïi’Ç‰Áj ---
-    // Šù‘¶ƒZ[ƒu‚Æ‚ÌŒİŠ·: ƒfƒtƒHƒ‹ƒg false ‚Å©“®‘Î‰B
+    // --- F100ç¬¬äºŒå½¢æ…‹ HPå¼•ãç¶™ãæ•‘æ¸ˆï¼ˆè¿½åŠ ï¼‰ ---
+    // æ—¢å­˜ã‚»ãƒ¼ãƒ–ã¨ã®äº’æ›: ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ false ã§è‡ªå‹•å¯¾å¿œã€‚
     public bool finalBossCarryUnlocked = false;
     public bool finalBossCarryEnabled = false;
 
-    // --- ‰ŠúƒAƒCƒeƒ€•t—^Ï‚İƒtƒ‰ƒOi’Ç‰Áj ---
-    // Šù‘¶ƒZ[ƒu‚Æ‚ÌŒİŠ·: ‹Œƒf[ƒ^‚ÍƒfƒtƒHƒ‹ƒg false ‚Åƒ[ƒh‚³‚ê‚é‚ªA
-    // SaveManager.Load() ‚ÌˆÚsˆ—‚ÅuƒZ[ƒu‚ª‘¶İ‚µ‚½Šù‘¶ƒvƒŒƒCƒ„[v‚Æ‚İ‚È‚µ
-    // true ‚É‹¸³‚·‚éi“ñd•t—^–h~jB
+    // --- åˆæœŸã‚¢ã‚¤ãƒ†ãƒ ä»˜ä¸æ¸ˆã¿ãƒ•ãƒ©ã‚°ï¼ˆè¿½åŠ ï¼‰ ---
+    // æ—¢å­˜ã‚»ãƒ¼ãƒ–ã¨ã®äº’æ›: æ—§ãƒ‡ãƒ¼ã‚¿ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ false ã§ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã‚‹ãŒã€
+    // SaveManager.Load() ã®ç§»è¡Œå‡¦ç†ã§ã€Œã‚»ãƒ¼ãƒ–ãŒå­˜åœ¨ã—ãŸï¼æ—¢å­˜ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã€ã¨ã¿ãªã—
+    // true ã«çŸ¯æ­£ã™ã‚‹ï¼ˆäºŒé‡ä»˜ä¸é˜²æ­¢ï¼‰ã€‚
     public bool hasGrantedStartingItems = false;
 
-    // --- ƒGƒ“ƒfƒBƒ“ƒOis ---
-    // Šù‘¶ƒZ[ƒuƒf[ƒ^‚Æ‚ÌŒİŠ·«: ƒfƒtƒHƒ‹ƒg’li0/falsej‚Å©“®‘Î‰B
+    // --- ã‚¨ãƒ³ãƒ‡ã‚£ãƒ³ã‚°é€²è¡Œ ---
+    // æ—¢å­˜ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã¨ã®äº’æ›æ€§: ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆ0/falseï¼‰ã§è‡ªå‹•å¯¾å¿œã€‚
     public int endingPhase = 0;
     public bool zukanAllUnlocked = false;
     public string playerName = "";
-    // --- ƒvƒŒƒC“Œv ---
+    // --- ãƒ—ãƒ¬ã‚¤çµ±è¨ˆ ---
     public int statGameStartCount = 0;
     public int statReturnHomeCount = 0;
     public int statDefeatCount = 0;
 
 
-    // --- ‘•”õ ---
+    // --- è£…å‚™ ---
     public string equippedWeaponUid = "";
 
-    // --- ó‘ÔˆÙíi‘S‘±Œ^ƒfƒoƒt‚ğ“ˆêƒZ[ƒuj ---
-    // ƒZ[ƒu‚É‚Í•Û‘¶‚·‚é‚ªAƒ[ƒh‚Í ClearAllStatusEffects() ‚ÅƒNƒŠƒA‚·‚éB
-    // Šù‘¶ƒZ[ƒuƒf[ƒ^‚Æ‚ÌŒİŠ·«: JSON ƒfƒVƒŠƒAƒ‰ƒCƒY‚ÌƒfƒtƒHƒ‹ƒg’lifalsej‚Å©“®‘Î‰B
+    // --- çŠ¶æ…‹ç•°å¸¸ï¼ˆå…¨æŒç¶šå‹ãƒ‡ãƒãƒ•ã‚’çµ±ä¸€ã‚»ãƒ¼ãƒ–ï¼‰ ---
+    // ã‚»ãƒ¼ãƒ–ã«ã¯ä¿å­˜ã™ã‚‹ãŒã€ãƒ­ãƒ¼ãƒ‰æ™‚ã¯ ClearAllStatusEffects() ã§ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
+    // æ—¢å­˜ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã¨ã®äº’æ›æ€§: JSON ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆfalseï¼‰ã§è‡ªå‹•å¯¾å¿œã€‚
     public bool isPoisoned = false;
     public bool isParalyzed = false;
     public bool isBlind = false;
@@ -375,34 +375,34 @@ public class SaveData
     public bool isCursed = false;
     public bool isGlassed = false;
 
-    // --- Î‰»iPhase C ’Ç‰Áj ---
-    // ƒZ[ƒu‚É‚Í•Û‘¶‚·‚é‚ªAƒ[ƒh‚Í ClearAllStatusEffects() ‚ÅƒNƒŠƒA‚·‚éB
-    // Šù‘¶ƒZ[ƒuƒf[ƒ^‚Æ‚ÌŒİŠ·«: JSON ƒfƒVƒŠƒAƒ‰ƒCƒY‚ÌƒfƒtƒHƒ‹ƒg’lifalse/0j‚Å©“®‘Î‰B
+    // --- çŸ³åŒ–ï¼ˆPhase C è¿½åŠ ï¼‰ ---
+    // ã‚»ãƒ¼ãƒ–ã«ã¯ä¿å­˜ã™ã‚‹ãŒã€ãƒ­ãƒ¼ãƒ‰æ™‚ã¯ ClearAllStatusEffects() ã§ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
+    // æ—¢å­˜ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã¨ã®äº’æ›æ€§: JSON ãƒ‡ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆfalse/0ï¼‰ã§è‡ªå‹•å¯¾å¿œã€‚
     public bool playerIsPetrified = false;
     public int playerPetrifyTurns = 0;
     public int playerPetrifyMaxTurns = 0;
 
 
-    // --- Šù“ÇƒCƒxƒ“ƒgIDˆê—— ---
+    // --- æ—¢èª­ã‚¤ãƒ™ãƒ³ãƒˆIDä¸€è¦§ ---
     public List<string> playedEventIds = new List<string>();
 
-    // --- ‘˜‹öƒ‚ƒ“ƒXƒ^[IDˆê—— ---
+    // --- é­é‡ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼IDä¸€è¦§ ---
     public List<string> encounteredMonsterIds = new List<string>();
 
-    // --- ”­Œ©ƒAƒCƒeƒ€IDˆê—— ---
+    // --- ç™ºè¦‹ã‚¢ã‚¤ãƒ†ãƒ IDä¸€è¦§ ---
     public List<string> discoveredItemIds = new List<string>();
 
-    // --- ŠƒAƒCƒeƒ€ˆê—— ---
+    // --- æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ ---
     public List<SavedItem> inventoryItems = new List<SavedItem>();
 
-    // --- ‘qŒÉƒAƒCƒeƒ€ˆê—— ---
+    // --- å€‰åº«ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ ---
     public List<SavedItem> storageItems = new List<SavedItem>();
 }
 
 /// <summary>
-/// ƒAƒCƒeƒ€1ŒÂ•ª‚ÌƒZ[ƒu—pƒf[ƒ^B
-/// itemId ‚Åƒ}ƒXƒ^[ƒf[ƒ^iItemDataj‚ğ“Á’è‚µAuid ‚ÅŒÂ‘Ì‚ğ•œŒ³‚·‚éB
-/// Š•i‚Æ‘qŒÉ‚Å‹¤’Ê‚Ì\‘¢‘ÌB
+/// ã‚¢ã‚¤ãƒ†ãƒ 1å€‹åˆ†ã®ã‚»ãƒ¼ãƒ–ç”¨ãƒ‡ãƒ¼ã‚¿ã€‚
+/// itemId ã§ãƒã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿ï¼ˆItemDataï¼‰ã‚’ç‰¹å®šã—ã€uid ã§å€‹ä½“ã‚’å¾©å…ƒã™ã‚‹ã€‚
+/// æ‰€æŒå“ã¨å€‰åº«ã§å…±é€šã®æ§‹é€ ä½“ã€‚
 /// </summary>
 [Serializable]
 public class SavedItem

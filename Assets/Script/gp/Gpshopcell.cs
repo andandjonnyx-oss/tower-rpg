@@ -1,17 +1,17 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// GPŒğŠ·ƒVƒ‡ƒbƒv‚ÌƒOƒŠƒbƒhƒZƒ‹Prefab—pƒXƒNƒŠƒvƒgB
-/// ƒAƒCƒRƒ“‚Æ–¼‘O‚ğ•\¦‚µAƒ^ƒbƒv‚Å GpShopView ‚ÉƒR[ƒ‹ƒoƒbƒN‚·‚éB
+/// GPäº¤æ›ã‚·ãƒ§ãƒƒãƒ—ã®ã‚°ãƒªãƒƒãƒ‰ã‚»ãƒ«Prefabç”¨ã‚¹ã‚¯ãƒªãƒ—ãƒˆã€‚
+/// ã‚¢ã‚¤ã‚³ãƒ³ã¨åå‰ã‚’è¡¨ç¤ºã—ã€ã‚¿ãƒƒãƒ—ã§ GpShopView ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã™ã‚‹ã€‚
 ///
-/// Prefab \¬—á:
+/// Prefab æ§‹æˆä¾‹:
 ///   GpShopCell (Button)
-///     „¥ IconImage (Image)
-///     „¥ NameText (TMP_Text)
-///     „¤ CostText (TMP_Text)  © GP‰¿Ši•\¦i”CˆÓj
+///     â”œ IconImage (Image)
+///     â”œ NameText (TMP_Text)
+///     â”” CostText (TMP_Text)  â† GPä¾¡æ ¼è¡¨ç¤ºï¼ˆä»»æ„ï¼‰
 /// </summary>
 public class GpShopCell : MonoBehaviour, IPointerClickHandler
 {
@@ -21,14 +21,14 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
 
     private GpShopData shopData;
 
-    // ƒvƒŒƒnƒu‚Åİ’è‚³‚ê‚½Œ³‚Ì•¶šF‚ğ•Û‚·‚éi”’‚Åã‘‚«‚µ‚È‚¢‚½‚ßj
+    // ãƒ—ãƒ¬ãƒãƒ–ã§è¨­å®šã•ã‚ŒãŸå…ƒã®æ–‡å­—è‰²ã‚’ä¿æŒã™ã‚‹ï¼ˆç™½ã§ä¸Šæ›¸ãã—ãªã„ãŸã‚ï¼‰
     private Color defaultNameColor = Color.black;
     private Color defaultCostColor = Color.black;
     private bool colorsInitialized = false;
 
     /// <summary>
-    /// ƒZƒ‹‚ªƒ^ƒbƒv‚³‚ê‚½‚ÌƒR[ƒ‹ƒoƒbƒNB
-    /// GpShopView ‚ªİ’è‚·‚éB
+    /// ã‚»ãƒ«ãŒã‚¿ãƒƒãƒ—ã•ã‚ŒãŸæ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚
+    /// GpShopView ãŒè¨­å®šã™ã‚‹ã€‚
     /// </summary>
     public System.Action<GpShopData> onClicked;
 
@@ -41,7 +41,7 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// ƒZƒ‹‚É¤•iƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ä•\¦‚ğXV‚·‚éB
+    /// ã‚»ãƒ«ã«å•†å“ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¦è¡¨ç¤ºã‚’æ›´æ–°ã™ã‚‹ã€‚
     /// </summary>
     public void Setup(GpShopData data)
     {
@@ -57,34 +57,34 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        // ƒAƒCƒRƒ“
+        // ã‚¢ã‚¤ã‚³ãƒ³
         if (iconImage != null)
         {
             iconImage.sprite = data.item.icon;
             iconImage.enabled = data.item.icon != null;
         }
 
-        // –¼‘O
+        // åå‰
         if (nameText != null)
             nameText.text = data.item.itemName;
 
-        // GP‰¿Ši
+        // GPä¾¡æ ¼
         if (costText != null)
             costText.text = $"{data.gpCost}GP";
     }
 
     /// <summary>
-    /// GP•s‘«‚âƒAƒCƒeƒ€˜g–”t‚Ìê‡‚ÉƒZƒ‹‚Ì•\¦‚ğˆÃ‚­‚·‚éB
+    /// GPä¸è¶³ã‚„ã‚¢ã‚¤ãƒ†ãƒ æ æº€æ¯ã®å ´åˆã«ã‚»ãƒ«ã®è¡¨ç¤ºã‚’æš—ãã™ã‚‹ã€‚
     /// </summary>
     public void SetInteractable(bool interactable)
     {
         CacheDefaultColors();
 
-        // ƒAƒCƒRƒ“‚ÌF‚ğƒOƒŒ[ƒAƒEƒg‚Å•\Œ»
+        // ã‚¢ã‚¤ã‚³ãƒ³ã®è‰²ã‚’ã‚°ãƒ¬ãƒ¼ã‚¢ã‚¦ãƒˆã§è¡¨ç¾
         if (iconImage != null)
             iconImage.color = interactable ? Color.white : new Color(0.4f, 0.4f, 0.4f, 1f);
 
-        // •¶šFF—LŒø‚ÍƒvƒŒƒnƒu‚ÌŒ³F‚ğˆÛA–³Œø‚Ì‚İƒOƒŒ[ƒAƒEƒg
+        // æ–‡å­—è‰²ï¼šæœ‰åŠ¹æ™‚ã¯ãƒ—ãƒ¬ãƒãƒ–ã®å…ƒè‰²ã‚’ç¶­æŒã€ç„¡åŠ¹æ™‚ã®ã¿ã‚°ãƒ¬ãƒ¼ã‚¢ã‚¦ãƒˆ
         if (nameText != null)
             nameText.color = interactable ? defaultNameColor : new Color(0.5f, 0.5f, 0.5f, 1f);
 

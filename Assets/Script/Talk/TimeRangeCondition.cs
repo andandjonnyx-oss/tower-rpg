@@ -1,21 +1,21 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System;
 
 [CreateAssetMenu(menuName = "Talk/Conditions/TimeRange")]
 public class TimeRangeCondition : EventCondition
 {
     [Range(0, 23)] public int startHour = 21;
-    [Range(1, 24)] public int endHour = 24; // 24‚ğ‹–‰Â‚µ‚½‚¢‚Ì‚ÅRange‚ÍH•v
+    [Range(1, 24)] public int endHour = 24; // 24ã‚’è¨±å¯ã—ãŸã„ã®ã§Rangeã¯å·¥å¤«
 
     public override bool Evaluate(GameState gs)
     {
         int hour = DateTime.Now.Hour;
 
-        // ’Êíistart < endjF—á 21-24
+        // é€šå¸¸ï¼ˆstart < endï¼‰ï¼šä¾‹ 21-24
         if (startHour < endHour)
             return hour >= startHour && hour < endHour;
 
-        // “úŒ×‚¬istart > endjF—á 22-5
+        // æ—¥è·¨ãï¼ˆstart > endï¼‰ï¼šä¾‹ 22-5
         return hour >= startHour || hour < endHour;
     }
 }

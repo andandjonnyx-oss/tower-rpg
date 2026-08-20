@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class OpenItemBoxButton : MonoBehaviour
@@ -7,11 +7,11 @@ public class OpenItemBoxButton : MonoBehaviour
 
     public void OnClickOpenItemBox()
     {
-        // ƒAƒCƒeƒ€æ“¾ƒ|ƒbƒvƒAƒbƒv’†‚È‚çŠJ‚©‚È‚¢
+        // ã‚¢ã‚¤ãƒ†ãƒ å–å¾—ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ä¸­ãªã‚‰é–‹ã‹ãªã„
         if (TowerItemTrigger.Instance != null && TowerItemTrigger.Instance.IsBusy)
             return;
 
-        // •K—v‚È‚ç‘¼‚Ì busy ‚à‚±‚±‚ÅŠm”F
+        // å¿…è¦ãªã‚‰ä»–ã® busy ã‚‚ã“ã“ã§ç¢ºèª
         SceneManager.LoadScene(itemBoxSceneName);
     }
 }

@@ -1,36 +1,36 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// BattleSceneController ‚Ìƒoƒt/ƒfƒoƒtŠÇ—ƒp[ƒgipartial classjB
-/// 5í~ƒvƒŒƒCƒ„[/“G‚Ìƒoƒt/ƒfƒoƒtó‘Ô‚ğ BattleBuffState \‘¢‘Ì‚ÅˆêŒ³ŠÇ—‚·‚éB
+/// BattleSceneController ã®ãƒãƒ•/ãƒ‡ãƒãƒ•ç®¡ç†ãƒ‘ãƒ¼ãƒˆï¼ˆpartial classï¼‰ã€‚
+/// 5ç¨®Ã—ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼/æ•µã®ãƒãƒ•/ãƒ‡ãƒãƒ•çŠ¶æ…‹ã‚’ BattleBuffState æ§‹é€ ä½“ã§ä¸€å…ƒç®¡ç†ã™ã‚‹ã€‚
 ///
-/// yÓ–±z
-///   - ƒoƒt/ƒfƒoƒtƒtƒB[ƒ‹ƒh‚ÌéŒ¾
-///   - ‰Šú‰» / ƒŠƒZƒbƒg
-///   - ƒ^[ƒ“ƒJƒEƒ“ƒgƒ_ƒEƒ“iTickBuffDebuffTurnsj
-///   - ƒ‰ƒ“ƒvUIXViRefreshBuffDebuffLampsj
+/// ã€è²¬å‹™ã€‘
+///   - ãƒãƒ•/ãƒ‡ãƒãƒ•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å®£è¨€
+///   - åˆæœŸåŒ– / ãƒªã‚»ãƒƒãƒˆ
+///   - ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ï¼ˆTickBuffDebuffTurnsï¼‰
+///   - ãƒ©ãƒ³ãƒ—UIæ›´æ–°ï¼ˆRefreshBuffDebuffLampsï¼‰
 ///
-/// Šù‘¶‚Ì playerDefDebuffTurn “™‚ÌŒÂ•ÊƒtƒB[ƒ‹ƒh‚ğ’u‚«Š·‚¦‚éB
+/// æ—¢å­˜ã® playerDefDebuffTurn ç­‰ã®å€‹åˆ¥ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ç½®ãæ›ãˆã‚‹ã€‚
 /// </summary>
 public partial class BattleSceneController
 {
     // =========================================================
-    // ƒoƒt/ƒfƒoƒt“‡ƒtƒB[ƒ‹ƒhiPhase4: \‘¢‘Ìƒx[ƒXj
+    // ãƒãƒ•/ãƒ‡ãƒãƒ•çµ±åˆãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼ˆPhase4: æ§‹é€ ä½“ãƒ™ãƒ¼ã‚¹ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Æ“G‚Ì‘Sƒoƒt/ƒfƒoƒtó‘ÔB
-    /// í“¬ŒÀ’èiƒZ[ƒu‘ÎÛŠOjBí“¬I—¹‚Å©“®ƒŠƒZƒbƒgB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¨æ•µã®å…¨ãƒãƒ•/ãƒ‡ãƒãƒ•çŠ¶æ…‹ã€‚
+    /// æˆ¦é—˜é™å®šï¼ˆã‚»ãƒ¼ãƒ–å¯¾è±¡å¤–ï¼‰ã€‚æˆ¦é—˜çµ‚äº†ã§è‡ªå‹•ãƒªã‚»ãƒƒãƒˆã€‚
     /// </summary>
     private static BattleBuffState buffState = new BattleBuffState();
 
     // =========================================================
-    // ‰Šú‰» / ƒŠƒZƒbƒg
+    // åˆæœŸåŒ– / ãƒªã‚»ãƒƒãƒˆ
     // =========================================================
 
     /// <summary>
-    /// ƒoƒt/ƒfƒoƒtƒtƒB[ƒ‹ƒh‚ğ‰Šú‰»‚·‚éBí“¬ŠJn‚ÉŒÄ‚ÔB
+    /// ãƒãƒ•/ãƒ‡ãƒãƒ•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚æˆ¦é—˜é–‹å§‹æ™‚ã«å‘¼ã¶ã€‚
     /// </summary>
     public static void InitBuffDebuffFields()
     {
@@ -38,7 +38,7 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒoƒt/ƒfƒoƒtƒtƒB[ƒ‹ƒh‚ğƒŠƒZƒbƒg‚·‚éBí“¬I—¹‚ÉŒÄ‚ÔB
+    /// ãƒãƒ•/ãƒ‡ãƒãƒ•ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚æˆ¦é—˜çµ‚äº†æ™‚ã«å‘¼ã¶ã€‚
     /// </summary>
     public static void ResetBuffDebuffFields()
     {
@@ -46,37 +46,37 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒ^[ƒ“ƒJƒEƒ“ƒgƒ_ƒEƒ“
+    // ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³
     // =========================================================
 
     /// <summary>
-    /// ‘Sƒoƒt/ƒfƒoƒt‚Ìƒ^[ƒ“ƒJƒEƒ“ƒgƒ_ƒEƒ“‚ğs‚¢A‰ğœƒƒO‚ğ•Ô‚·B
-    /// AfterEnemyAction() ‚©‚çŒÄ‚Î‚ê‚éB
+    /// å…¨ãƒãƒ•/ãƒ‡ãƒãƒ•ã®ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã‚’è¡Œã„ã€è§£é™¤ãƒ­ã‚°ã‚’è¿”ã™ã€‚
+    /// AfterEnemyAction() ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
     /// </summary>
     public List<string> TickBuffDebuffTurns()
     {
         var logs = new List<string>();
-        string eName = (enemyMonster != null) ? enemyMonster.Mname : "“G";
+        string eName = (enemyMonster != null) ? enemyMonster.Mname : "æ•µ";
 
-        // ƒvƒŒƒCƒ„[‘¤
-        TickOnePair(ref buffState.player.def, "You", "–hŒä", logs);
-        TickOnePair(ref buffState.player.atk, "You", "UŒ‚", logs);
-        TickOnePair(ref buffState.player.matk, "You", "–‚U", logs);
-        TickOnePair(ref buffState.player.mdef, "You", "–‚–h", logs);
-        TickOnePair(ref buffState.player.luc, "You", "‰^", logs);
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´
+        TickOnePair(ref buffState.player.def, "You", "é˜²å¾¡", logs);
+        TickOnePair(ref buffState.player.atk, "You", "æ”»æ’ƒ", logs);
+        TickOnePair(ref buffState.player.matk, "You", "é­”æ”»", logs);
+        TickOnePair(ref buffState.player.mdef, "You", "é­”é˜²", logs);
+        TickOnePair(ref buffState.player.luc, "You", "é‹", logs);
 
-        // “G‘¤
-        TickOnePair(ref buffState.enemy.def, eName, "–hŒä", logs);
-        TickOnePair(ref buffState.enemy.atk, eName, "UŒ‚", logs);
-        TickOnePair(ref buffState.enemy.matk, eName, "‰ñ”ğ", logs); // “G‚Ì–‚U=‰ñ”ğ
-        TickOnePair(ref buffState.enemy.mdef, eName, "–‚–h", logs);
-        TickOnePair(ref buffState.enemy.luc, eName, "‰^", logs);
+        // æ•µå´
+        TickOnePair(ref buffState.enemy.def, eName, "é˜²å¾¡", logs);
+        TickOnePair(ref buffState.enemy.atk, eName, "æ”»æ’ƒ", logs);
+        TickOnePair(ref buffState.enemy.matk, eName, "å›é¿", logs); // æ•µã®é­”æ”»=å›é¿
+        TickOnePair(ref buffState.enemy.mdef, eName, "é­”é˜²", logs);
+        TickOnePair(ref buffState.enemy.luc, eName, "é‹", logs);
 
         return logs;
     }
 
     /// <summary>
-    /// 1ƒyƒA•ª‚Ìƒ^[ƒ“ƒJƒEƒ“ƒgƒ_ƒEƒ“B
+    /// 1ãƒšã‚¢åˆ†ã®ã‚¿ãƒ¼ãƒ³ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ã€‚
     /// </summary>
     private void TickOnePair(ref BuffDebuffPair pair, string ownerName, string statName, List<string> logs)
     {
@@ -86,7 +86,7 @@ public partial class BattleSceneController
             if (pair.debuffTurn <= 0)
             {
                 pair.debuffRate = 0f;
-                logs.Add($"{ownerName} ‚Ì{statName}ƒ_ƒEƒ“‚ª‰ğœ‚³‚ê‚½B");
+                logs.Add($"{ownerName} ã®{statName}ãƒ€ã‚¦ãƒ³ãŒè§£é™¤ã•ã‚ŒãŸã€‚");
             }
         }
         if (pair.buffTurn > 0)
@@ -95,19 +95,19 @@ public partial class BattleSceneController
             if (pair.buffTurn <= 0)
             {
                 pair.buffRate = 0f;
-                logs.Add($"{ownerName} ‚Ì{statName}ƒAƒbƒv‚ª‰ğœ‚³‚ê‚½B");
+                logs.Add($"{ownerName} ã®{statName}ã‚¢ãƒƒãƒ—ãŒè§£é™¤ã•ã‚ŒãŸã€‚");
             }
         }
     }
 
     // =========================================================
-    // ƒ‰ƒ“ƒvUIXV
+    // ãƒ©ãƒ³ãƒ—UIæ›´æ–°
     // =========================================================
 
     /// <summary>
-    /// ƒoƒt/ƒfƒoƒtƒ‰ƒ“ƒv‚ÌUI•\¦‚ğXV‚·‚éB
-    /// RefreshBattleStatusEffectUI() ‚©‚çŒÄ‚Î‚ê‚éB
-    /// 19ˆø””Å SetAll ‚Å–£—¹/ô‚¢/ƒKƒ‰ƒXƒ‰ƒ“ƒv‚à”½‰f‚·‚éB
+    /// ãƒãƒ•/ãƒ‡ãƒãƒ•ãƒ©ãƒ³ãƒ—ã®UIè¡¨ç¤ºã‚’æ›´æ–°ã™ã‚‹ã€‚
+    /// RefreshBattleStatusEffectUI() ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
+    /// 19å¼•æ•°ç‰ˆ SetAll ã§é­…äº†/å‘ªã„/ã‚¬ãƒ©ã‚¹ãƒ©ãƒ³ãƒ—ã‚‚åæ˜ ã™ã‚‹ã€‚
     /// </summary>
     public void RefreshBuffDebuffLamps()
     {
@@ -163,15 +163,15 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ƒfƒoƒt‰ğœiƒAƒCƒeƒ€‚©‚ç‚ÌŒÄ‚Ño‚µ—pj
+    // ãƒ‡ãƒãƒ•è§£é™¤ï¼ˆã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰ã®å‘¼ã³å‡ºã—ç”¨ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì‘SƒfƒoƒtiDEF/ATK/MATK/MDEF/LUC ƒ_ƒEƒ“j‚ğˆêŠ‡‰ğœ‚·‚éB
-    /// ƒoƒt‚Í‰ğœ‚µ‚È‚¢BItemActionHelper.ApplyConsumableEffects ‚©‚çŒÄ‚Î‚ê‚éB
-    /// í“¬ŠO‚ÅŒÄ‚Î‚ê‚Ä‚àˆÀ‘SibuffState ‚ÍƒfƒtƒHƒ‹ƒg’l‚Ì‚Ü‚Ü‚È‚Ì‚Å‹óU‚èjB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¨ãƒ‡ãƒãƒ•ï¼ˆDEF/ATK/MATK/MDEF/LUC ãƒ€ã‚¦ãƒ³ï¼‰ã‚’ä¸€æ‹¬è§£é™¤ã™ã‚‹ã€‚
+    /// ãƒãƒ•ã¯è§£é™¤ã—ãªã„ã€‚ItemActionHelper.ApplyConsumableEffects ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ã€‚
+    /// æˆ¦é—˜å¤–ã§å‘¼ã°ã‚Œã¦ã‚‚å®‰å…¨ï¼ˆbuffState ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã®ã¾ã¾ãªã®ã§ç©ºæŒ¯ã‚Šï¼‰ã€‚
     /// </summary>
-    /// <returns>‰ğœ‚³‚ê‚½ƒfƒoƒt‚Ì”i0 ‚È‚çƒƒO—}§—pj</returns>
+    /// <returns>è§£é™¤ã•ã‚ŒãŸãƒ‡ãƒãƒ•ã®æ•°ï¼ˆ0 ãªã‚‰ãƒ­ã‚°æŠ‘åˆ¶ç”¨ï¼‰</returns>
     public static int CurePlayerAllDebuffs()
     {
         int curedCount = 0;
@@ -211,7 +211,7 @@ public partial class BattleSceneController
 
         if (curedCount > 0)
         {
-            Debug.Log($"[BuffDebuff] ƒvƒŒƒCƒ„[‚Ì‘Sƒfƒoƒt‚ğ‰ğœ‚µ‚½i{curedCount}Œj");
+            Debug.Log($"[BuffDebuff] ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¨ãƒ‡ãƒãƒ•ã‚’è§£é™¤ã—ãŸï¼ˆ{curedCount}ä»¶ï¼‰");
         }
 
         return curedCount;

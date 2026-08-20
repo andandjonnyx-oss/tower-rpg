@@ -1,56 +1,56 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Text;
 using UnityEditor;
 using UnityEngine;
 using System.IO;
 
 /// <summary>
-/// ItemDatabase “à‚Ì‘SƒAƒCƒeƒ€‚ğ CSV ‚É‘‚«o‚· Editor Šg’£B
-/// ƒƒjƒ…[ Tools ¨ Item ¨ Export ItemDatabase to CSV ‚©‚çÀsB
+/// ItemDatabase å†…ã®å…¨ã‚¢ã‚¤ãƒ†ãƒ ã‚’ CSV ã«æ›¸ãå‡ºã™ Editor æ‹¡å¼µã€‚
+/// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ Tools â†’ Item â†’ Export ItemDatabase to CSV ã‹ã‚‰å®Ÿè¡Œã€‚
 ///
-/// o—Í—ñ: itemId, itemName, category, Minfloor, Maxfloor
-/// •¶šƒR[ƒh‚Í UTF-8 BOM•t‚«iExcel ‚Å“ú–{Œê‚ª•¶š‰»‚¯‚µ‚È‚¢‚æ‚¤‚ÉjB
+/// å‡ºåŠ›åˆ—: itemId, itemName, category, Minfloor, Maxfloor
+/// æ–‡å­—ã‚³ãƒ¼ãƒ‰ã¯ UTF-8 BOMä»˜ãï¼ˆExcel ã§æ—¥æœ¬èªãŒæ–‡å­—åŒ–ã‘ã—ãªã„ã‚ˆã†ã«ï¼‰ã€‚
 ///
-/// Œã’i‚ÌƒAƒCƒeƒ€}ŠÓCSVƒCƒ“ƒ|[ƒ^[—p‚Ì‘ä’ ‚Æ‚µ‚Ä‚àg‚¦‚éB
-/// o—ÍŒãA‘åƒWƒƒƒ“ƒ‹/¬ƒWƒƒƒ“ƒ‹—ñ‚ğ Excel ‚Å‘«‚µ‚Ä•ª—ŞCSV‚É‰ÁH‚·‚é‘z’èB
+/// å¾Œæ®µã®ã‚¢ã‚¤ãƒ†ãƒ å›³é‘‘CSVã‚¤ãƒ³ãƒãƒ¼ã‚¿ãƒ¼ç”¨ã®å°å¸³ã¨ã—ã¦ã‚‚ä½¿ãˆã‚‹ã€‚
+/// å‡ºåŠ›å¾Œã€å¤§ã‚¸ãƒ£ãƒ³ãƒ«/å°ã‚¸ãƒ£ãƒ³ãƒ«åˆ—ã‚’ Excel ã§è¶³ã—ã¦åˆ†é¡CSVã«åŠ å·¥ã™ã‚‹æƒ³å®šã€‚
 /// </summary>
 public static class ItemDatabaseCsvExporter
 {
     [MenuItem("Tools/Item/Export ItemDatabase to CSV")]
     public static void ExportSelected()
     {
-        // ‘I‘ğ’†‚Ì ItemDatabase ‚ğ—DæB‚È‚¯‚ê‚ÎƒvƒƒWƒFƒNƒg“à‚ğŒŸõB
+        // é¸æŠä¸­ã® ItemDatabase ã‚’å„ªå…ˆã€‚ãªã‘ã‚Œã°ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã‚’æ¤œç´¢ã€‚
         ItemDatabase db = Selection.activeObject as ItemDatabase;
         if (db == null)
             db = FindFirstItemDatabase();
 
         if (db == null)
         {
-            EditorUtility.DisplayDialog("ƒGƒNƒXƒ|[ƒg¸”s",
-                "ItemDatabase ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB\n" +
-                "Project ƒrƒ…[‚Å ItemDatabase ƒAƒZƒbƒg‚ğ‘I‘ğ‚µ‚Ä‚©‚çÀs‚µ‚Ä‚­‚¾‚³‚¢B",
+            EditorUtility.DisplayDialog("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆå¤±æ•—",
+                "ItemDatabase ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚\n" +
+                "Project ãƒ“ãƒ¥ãƒ¼ã§ ItemDatabase ã‚¢ã‚»ãƒƒãƒˆã‚’é¸æŠã—ã¦ã‹ã‚‰å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚",
                 "OK");
             return;
         }
 
         if (db.items == null || db.items.Count == 0)
         {
-            EditorUtility.DisplayDialog("ƒGƒNƒXƒ|[ƒg¸”s",
-                $"'{db.name}' ‚É items ‚ª“o˜^‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", "OK");
+            EditorUtility.DisplayDialog("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆå¤±æ•—",
+                $"'{db.name}' ã« items ãŒç™»éŒ²ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", "OK");
             return;
         }
 
-        // •Û‘¶æ‚ğƒ_ƒCƒAƒƒO‚Å‘I‚Î‚¹‚é
+        // ä¿å­˜å…ˆã‚’ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã§é¸ã°ã›ã‚‹
         string path = EditorUtility.SaveFilePanel(
-            "ƒAƒCƒeƒ€ˆê——CSV‚Ì•Û‘¶æ",
+            "ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§CSVã®ä¿å­˜å…ˆ",
             Application.dataPath,
             "item_list.csv",
             "csv");
 
-        if (string.IsNullOrEmpty(path)) return; // ƒLƒƒƒ“ƒZƒ‹
+        if (string.IsNullOrEmpty(path)) return; // ã‚­ãƒ£ãƒ³ã‚»ãƒ«
 
         var sb = new StringBuilder();
-        // ƒwƒbƒ_[s
+        // ãƒ˜ãƒƒãƒ€ãƒ¼è¡Œ
         sb.AppendLine("itemId,itemName,category,Minfloor,Maxfloor");
 
         int count = 0;
@@ -68,20 +68,20 @@ public static class ItemDatabaseCsvExporter
             count++;
         }
 
-        // UTF-8 BOM•t‚«‚Å‘‚«o‚µiExcel‚Å“ú–{Œê‚ª•¶š‰»‚¯‚µ‚È‚¢‚æ‚¤‚Éj
+        // UTF-8 BOMä»˜ãã§æ›¸ãå‡ºã—ï¼ˆExcelã§æ—¥æœ¬èªãŒæ–‡å­—åŒ–ã‘ã—ãªã„ã‚ˆã†ã«ï¼‰
         var encoding = new UTF8Encoding(true);
         File.WriteAllText(path, sb.ToString(), encoding);
 
-        Debug.Log($"[ItemDatabaseCsvExporter] {count}Œ‚ğ‘‚«o‚µ‚Ü‚µ‚½: {path}");
-        EditorUtility.DisplayDialog("ƒGƒNƒXƒ|[ƒgŠ®—¹",
-            $"{count}Œ‚ÌƒAƒCƒeƒ€‚ğ‘‚«o‚µ‚Ü‚µ‚½B\n\n{path}", "OK");
+        Debug.Log($"[ItemDatabaseCsvExporter] {count}ä»¶ã‚’æ›¸ãå‡ºã—ã¾ã—ãŸ: {path}");
+        EditorUtility.DisplayDialog("ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆå®Œäº†",
+            $"{count}ä»¶ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ›¸ãå‡ºã—ã¾ã—ãŸã€‚\n\n{path}", "OK");
 
-        // ƒvƒƒWƒFƒNƒg“à‚É•Û‘¶‚³‚ê‚½ê‡‚ÍƒCƒ“ƒ|[ƒg‚µ‚ÄŒ©‚¦‚é‚æ‚¤‚É‚·‚é
+        // ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã«ä¿å­˜ã•ã‚ŒãŸå ´åˆã¯ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ã¦è¦‹ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹
         if (path.StartsWith(Application.dataPath))
             AssetDatabase.Refresh();
     }
 
-    /// <summary>category enum ‚ğ“Ç‚İ‚â‚·‚¢•¶š—ñ‚É•ÏŠ·‚·‚éB</summary>
+    /// <summary>category enum ã‚’èª­ã¿ã‚„ã™ã„æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹ã€‚</summary>
     private static string CategoryToString(ItemCategory cat)
     {
         switch (cat)
@@ -94,8 +94,8 @@ public static class ItemDatabaseCsvExporter
     }
 
     /// <summary>
-    /// CSV—pƒGƒXƒP[ƒvB’l‚ÉƒJƒ“ƒ}E‰üsEƒ_ƒuƒ‹ƒNƒI[ƒg‚ªŠÜ‚Ü‚ê‚éê‡‚Í
-    /// ƒ_ƒuƒ‹ƒNƒI[ƒg‚ÅˆÍ‚İA“à•”‚Ìƒ_ƒuƒ‹ƒNƒI[ƒg‚Í2d‚É‚·‚éB
+    /// CSVç”¨ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã€‚å€¤ã«ã‚«ãƒ³ãƒãƒ»æ”¹è¡Œãƒ»ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒˆãŒå«ã¾ã‚Œã‚‹å ´åˆã¯
+    /// ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒˆã§å›²ã¿ã€å†…éƒ¨ã®ãƒ€ãƒ–ãƒ«ã‚¯ã‚ªãƒ¼ãƒˆã¯2é‡ã«ã™ã‚‹ã€‚
     /// </summary>
     private static string Escape(string s)
     {
@@ -105,7 +105,7 @@ public static class ItemDatabaseCsvExporter
         return needQuote ? $"\"{s}\"" : s;
     }
 
-    /// <summary>ƒvƒƒWƒFƒNƒg“à‚ÌÅ‰‚Ì ItemDatabase ƒAƒZƒbƒg‚ğ’T‚·B</summary>
+    /// <summary>ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå†…ã®æœ€åˆã® ItemDatabase ã‚¢ã‚»ãƒƒãƒˆã‚’æ¢ã™ã€‚</summary>
     private static ItemDatabase FindFirstItemDatabase()
     {
         string[] guids = AssetDatabase.FindAssets("t:ItemDatabase");

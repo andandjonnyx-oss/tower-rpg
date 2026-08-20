@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
@@ -17,7 +17,7 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // © ‚±‚ê‚ªd—v
+    // â† ã“ã‚ŒãŒé‡è¦
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

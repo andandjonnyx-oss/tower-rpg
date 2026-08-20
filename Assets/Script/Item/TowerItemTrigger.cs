@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TowerItemTrigger : MonoBehaviour
@@ -29,13 +29,13 @@ public class TowerItemTrigger : MonoBehaviour
         Instance = this;
     }
 
-    // Tower ƒV[ƒ“‚É–ß‚Á‚Ä‚«‚½‚ÉŒÄ‚Î‚ê‚é
+    // Tower ã‚·ãƒ¼ãƒ³ã«æˆ»ã£ã¦ããŸæ™‚ã«å‘¼ã°ã‚Œã‚‹
     private void Start()
     {
         CheckPendingExchange();
     }
 
-    /// Tower ‚É–ß‚Á‚½AŒğŠ·‘Ò‚¿ƒAƒCƒeƒ€‚ª‚ ‚ê‚Îˆ—‚·‚é
+    /// Tower ã«æˆ»ã£ãŸæ™‚ã€äº¤æ›å¾…ã¡ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚Œã°å‡¦ç†ã™ã‚‹
     private void CheckPendingExchange()
     {
         var gs = GameState.I;
@@ -43,7 +43,7 @@ public class TowerItemTrigger : MonoBehaviour
 
         ItemData pending = gs.pendingItemData;
         currentItem = pending;
-        // }ŠÓ‹L˜^i“üèE’ú‚ß–â‚í‚¸ƒEƒBƒ“ƒhƒE•\¦“_‚Å“o˜^j
+        // å›³é‘‘è¨˜éŒ²ï¼ˆå…¥æ‰‹ãƒ»è«¦ã‚å•ã‚ãšã‚¦ã‚£ãƒ³ãƒ‰ã‚¦è¡¨ç¤ºæ™‚ç‚¹ã§ç™»éŒ²ï¼‰
         if (GameState.I != null) GameState.I.MarkItemDiscovered(pending.itemId);
         gs.pendingItemData = null;
         IsBusy = true;
@@ -51,25 +51,25 @@ public class TowerItemTrigger : MonoBehaviour
         bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
 
         // =========================================================
-        // •ñVƒAƒCƒeƒ€”»’èi’Ç‰Áj
+        // å ±é…¬ã‚¢ã‚¤ãƒ†ãƒ åˆ¤å®šï¼ˆè¿½åŠ ï¼‰
         // =========================================================
         //
-        // isRewardItem == true ‚Ìê‡:
-        //   Talk ƒCƒxƒ“ƒg•ñV‚Å‰‚ß‚Ä pendingItemData ‚ªƒZƒbƒg‚³‚ê‚½ƒP[ƒXB
-        //   u®—‚ªŠ®—¹‚µ‚Ü‚µ‚½v‚Å‚Í‚È‚­’Êí‚Ì“üèƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚·‚éB
+        // isRewardItem == true ã®å ´åˆ:
+        //   Talk ã‚¤ãƒ™ãƒ³ãƒˆå ±é…¬ã§åˆã‚ã¦ pendingItemData ãŒã‚»ãƒƒãƒˆã•ã‚ŒãŸã‚±ãƒ¼ã‚¹ã€‚
+        //   ã€Œæ•´ç†ãŒå®Œäº†ã—ã¾ã—ãŸã€ã§ã¯ãªãé€šå¸¸ã®å…¥æ‰‹ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
         //
-        // isRewardItem == false ‚Ìê‡:
-        //   Itembox ‚Å‚Ì®—Œã‚É Tower ‚É–ß‚Á‚Ä‚«‚½ƒP[ƒXB
-        //   ]—ˆ’Ê‚èu®—‚ªŠ®—¹‚µ‚Ü‚µ‚½B“üè‚Å‚«‚Ü‚·Bv‚ğ•\¦‚·‚éB
+        // isRewardItem == false ã®å ´åˆ:
+        //   Itembox ã§ã®æ•´ç†å¾Œã« Tower ã«æˆ»ã£ã¦ããŸã‚±ãƒ¼ã‚¹ã€‚
+        //   å¾“æ¥é€šã‚Šã€Œæ•´ç†ãŒå®Œäº†ã—ã¾ã—ãŸã€‚å…¥æ‰‹ã§ãã¾ã™ã€‚ã€ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
         // =========================================================
         bool isReward = gs.isRewardItem;
-        gs.isRewardItem = false; // ƒtƒ‰ƒO‚ğƒŠƒZƒbƒg
+        gs.isRewardItem = false; // ãƒ•ãƒ©ã‚°ã‚’ãƒªã‚»ãƒƒãƒˆ
 
         if (!isFull)
         {
             if (isReward)
             {
-                // •ñVƒAƒCƒeƒ€: ’Êí‚Ì“üèƒ|ƒbƒvƒAƒbƒv
+                // å ±é…¬ã‚¢ã‚¤ãƒ†ãƒ : é€šå¸¸ã®å…¥æ‰‹ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—
                 itemPickupWindow.Show(
                     pending.itemName,
                     pending.description,
@@ -81,10 +81,10 @@ public class TowerItemTrigger : MonoBehaviour
             }
             else
             {
-                // ®—Œã‚Ì•œ‹A: ]—ˆƒƒbƒZ[ƒWi”­Œ©SE‚Í”­Œ©‚É–Â‚ç‚µÏ‚İj
+                // æ•´ç†å¾Œã®å¾©å¸°: å¾“æ¥ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ï¼ˆç™ºè¦‹SEã¯ç™ºè¦‹æ™‚ã«é³´ã‚‰ã—æ¸ˆã¿ï¼‰
                 itemPickupWindow.Show(
                     pending.itemName,
-                    pending.description + "\n\n®—‚ªŠ®—¹‚µ‚Ü‚µ‚½B“üè‚Å‚«‚Ü‚·B",
+                    pending.description + "\n\næ•´ç†ãŒå®Œäº†ã—ã¾ã—ãŸã€‚å…¥æ‰‹ã§ãã¾ã™ã€‚",
                     pending.icon,
                     canGet: true,
                     isFull: false,
@@ -95,7 +95,7 @@ public class TowerItemTrigger : MonoBehaviour
         }
         else
         {
-            // –”t ¨ uŒğŠ·‚·‚évƒ{ƒ^ƒ“‚Åƒ|ƒbƒvƒAƒbƒvÄ•\¦
+            // æº€æ¯ â†’ ã€Œäº¤æ›ã™ã‚‹ã€ãƒœã‚¿ãƒ³ã§ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—å†è¡¨ç¤º
             itemPickupWindow.Show(
                 pending.itemName, pending.description, pending.icon,
                 canGet: false,
@@ -140,13 +140,13 @@ public class TowerItemTrigger : MonoBehaviour
 
         if (item == null)
         {
-            Debug.Log($"[TowerItemTrigger] {floor}ŠK {step}STEP ‚ÉoŒ»‰Â”\‚ÈƒAƒCƒeƒ€‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.Log($"[TowerItemTrigger] {floor}éš {step}STEP ã«å‡ºç¾å¯èƒ½ãªã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             IsBusy = false;
             return;
         }
 
         currentItem = item;
-        // }ŠÓ‹L˜^i“üèE’ú‚ß–â‚í‚¸ƒEƒBƒ“ƒhƒE•\¦“_‚Å“o˜^j
+        // å›³é‘‘è¨˜éŒ²ï¼ˆå…¥æ‰‹ãƒ»è«¦ã‚å•ã‚ãšã‚¦ã‚£ãƒ³ãƒ‰ã‚¦è¡¨ç¤ºæ™‚ç‚¹ã§ç™»éŒ²ï¼‰
         if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
 
         bool isFull = ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull;
@@ -167,12 +167,12 @@ public class TowerItemTrigger : MonoBehaviour
                 {
                     bool added = ItemBoxManager.Instance.AddItem(currentItem);
                     Debug.Log(added
-                        ? $"ƒAƒCƒeƒ€‚ğ“üè‚µ‚½: {currentItem.itemName}"
-                        : "ƒAƒCƒeƒ€BOX‚ª–”t‚Ì‚½‚ß“üè‚Å‚«‚È‚©‚Á‚½");
+                        ? $"ã‚¢ã‚¤ãƒ†ãƒ ã‚’å…¥æ‰‹ã—ãŸ: {currentItem.itemName}"
+                        : "ã‚¢ã‚¤ãƒ†ãƒ BOXãŒæº€æ¯ã®ãŸã‚å…¥æ‰‹ã§ããªã‹ã£ãŸ");
                 }
                 currentItem = null;
 
-                // š –‚–@ƒAƒCƒeƒ€“üè‚ÉTower‚Ì–‚–@UI‚ğ‘¦XV
+                // â˜… é­”æ³•ã‚¢ã‚¤ãƒ†ãƒ å…¥æ‰‹æ™‚ã«Towerã®é­”æ³•UIã‚’å³æ™‚æ›´æ–°
                 var towerState = FindAnyObjectByType<TowerState>();
                 if (towerState != null) towerState.RefreshFieldMagicFromExternal();
 
@@ -180,16 +180,16 @@ public class TowerItemTrigger : MonoBehaviour
                 break;
 
             case ItemPickupResult.Exchange:
-                // ŒğŠ·ƒtƒ[ŠJn: pendingItemData ‚É‹L˜^‚µ‚Ä Itembox ‚Ö‘JˆÚ
+                // äº¤æ›ãƒ•ãƒ­ãƒ¼é–‹å§‹: pendingItemData ã«è¨˜éŒ²ã—ã¦ Itembox ã¸é·ç§»
                 if (GameState.I != null)
                     GameState.I.pendingItemData = currentItem;
 
-                // IsBusy ‚Í true ‚Ì‚Ü‚ÜiTower‚É–ß‚Á‚½‚É‰ğœ‚³‚ê‚éj
+                // IsBusy ã¯ true ã®ã¾ã¾ï¼ˆTowerã«æˆ»ã£ãŸæ™‚ã«è§£é™¤ã•ã‚Œã‚‹ï¼‰
                 SceneManager.LoadScene("Itembox");
                 break;
 
             case ItemPickupResult.Ignore:
-                Debug.Log("ƒAƒCƒeƒ€‚ğ’ú‚ß‚½");
+                Debug.Log("ã‚¢ã‚¤ãƒ†ãƒ ã‚’è«¦ã‚ãŸ");
                 currentItem = null;
                 IsBusy = false;
                 break;

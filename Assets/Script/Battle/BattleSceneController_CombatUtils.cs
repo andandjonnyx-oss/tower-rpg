@@ -1,43 +1,43 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// BattleSceneController ‚Ìí“¬ŒvZƒ†[ƒeƒBƒŠƒeƒBƒp[ƒgipartial classjB
-/// –½’†”»’èAƒNƒŠƒeƒBƒJƒ‹”»’èA–hŒäƒ_ƒCƒXAƒ_ƒ[ƒW“K—pA–hŒä—Íæ“¾A
-/// ‘®«‘Ï«‚É‚æ‚éƒ_ƒ[ƒWŒyŒ¸‚ğ’S“–‚·‚éB
+/// BattleSceneController ã®æˆ¦é—˜è¨ˆç®—ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ãƒ‘ãƒ¼ãƒˆï¼ˆpartial classï¼‰ã€‚
+/// å‘½ä¸­åˆ¤å®šã€ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«åˆ¤å®šã€é˜²å¾¡ãƒ€ã‚¤ã‚¹ã€ãƒ€ãƒ¡ãƒ¼ã‚¸é©ç”¨ã€é˜²å¾¡åŠ›å–å¾—ã€
+/// å±æ€§è€æ€§ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›ã‚’æ‹…å½“ã™ã‚‹ã€‚
 /// </summary>
 public partial class BattleSceneController
 {
     // =========================================================
-    // –½’†”»’èEƒNƒŠƒeƒBƒJƒ‹”»’èiƒvƒŒƒCƒ„[UŒ‚—pji’Ç‰Áj
+    // å‘½ä¸­åˆ¤å®šãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«åˆ¤å®šï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ”»æ’ƒç”¨ï¼‰ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌUŒ‚‚ª–½’†‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒãŒå‘½ä¸­ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
     ///
-    /// ŒvZ®:
-    ///   ÅI–½’†—¦ = baseHitRate ~ (1 - (“G‰ñ”ğ—Í - –½’†—Í) / 100)
-    ///   ‚½‚¾‚µÅ’á25%•ÛØB
+    /// è¨ˆç®—å¼:
+    ///   æœ€çµ‚å‘½ä¸­ç‡ = baseHitRate Ã— (1 - (æ•µå›é¿åŠ› - å‘½ä¸­åŠ›) / 100)
+    ///   ãŸã ã—æœ€ä½25%ä¿è¨¼ã€‚
     ///
-    /// —á: Šî‘b–½’†—¦90%A–½’†—Í10A“G‰ñ”ğ—Í20 ‚Ìê‡
-    ///   90 ~ (1 - (20-10)/100) = 90 ~ 0.9 = 81%
+    /// ä¾‹: åŸºç¤å‘½ä¸­ç‡90%ã€å‘½ä¸­åŠ›10ã€æ•µå›é¿åŠ›20 ã®å ´åˆ
+    ///   90 Ã— (1 - (20-10)/100) = 90 Ã— 0.9 = 81%
     ///
-    /// —á: Šî‘b–½’†—¦95%A–½’†—Í30A“G‰ñ”ğ—Í10 ‚Ìê‡
-    ///   ‰ñ”ğ—¦ = Max(0, 10-30) = 0 ¨ 95 ~ 1.0 = 95%iŠî‘b–½’†—¦‚ªãŒÀj
+    /// ä¾‹: åŸºç¤å‘½ä¸­ç‡95%ã€å‘½ä¸­åŠ›30ã€æ•µå›é¿åŠ›10 ã®å ´åˆ
+    ///   å›é¿ç‡ = Max(0, 10-30) = 0 â†’ 95 Ã— 1.0 = 95%ï¼ˆåŸºç¤å‘½ä¸­ç‡ãŒä¸Šé™ï¼‰
     /// </summary>
-    /// <param name="baseHitRate">ƒXƒLƒ‹‚Ü‚½‚Í•Ší‚ÌŠî‘b–½’†—¦i%j</param>
-    /// <returns>true: –½’†Afalse: ƒ~ƒX</returns>
+    /// <param name="baseHitRate">ã‚¹ã‚­ãƒ«ã¾ãŸã¯æ­¦å™¨ã®åŸºç¤å‘½ä¸­ç‡ï¼ˆ%ï¼‰</param>
+    /// <returns>true: å‘½ä¸­ã€false: ãƒŸã‚¹</returns>
     private bool CheckPlayerHit(int baseHitRate)
     {
         int playerAccuracy = (GameState.I != null) ? GameState.I.Accuracy : 0;
         int enemyEvasion = (enemyMonster != null) ? enemyMonster.Evasion : 0;
 
-        // Phase4: “G‚Ì‰ñ”ğƒoƒt/ƒfƒoƒt“K—piMagicAttack˜g‚ğ‰ñ”ğ—Í‚Æ‚µ‚Äg—pj
+        // Phase4: æ•µã®å›é¿ãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨ï¼ˆMagicAttackæ ã‚’å›é¿åŠ›ã¨ã—ã¦ä½¿ç”¨ï¼‰
         enemyEvasion = StatusEffectSystem.ApplyStatBuffDebuff(
             enemyEvasion,
             buffState.enemy.matk.IsBuffed, buffState.enemy.matk.buffRate,
             buffState.enemy.matk.IsDebuffed, buffState.enemy.matk.debuffRate);
 
-        // ‰ñ”ğ—¦ = “G‰ñ”ğ—Í - ƒvƒŒƒCƒ„[–½’†—Íi•‰‚Ì’l‚É‚Í‚È‚ç‚È‚¢–½’†—Í‚ÅŠî‘b–½’†—¦‚ğ’´‚¦‚È‚¢j
+        // å›é¿ç‡ = æ•µå›é¿åŠ› - ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å‘½ä¸­åŠ›ï¼ˆè² ã®å€¤ã«ã¯ãªã‚‰ãªã„ï¼å‘½ä¸­åŠ›ã§åŸºç¤å‘½ä¸­ç‡ã‚’è¶…ãˆãªã„ï¼‰
         float evasionRate = Mathf.Max(0f, enemyEvasion - playerAccuracy);
         float hitChance = baseHitRate * (1f - evasionRate / 100f);
 
@@ -54,11 +54,11 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌUŒ‚‚ªƒNƒŠƒeƒBƒJƒ‹‚É‚È‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
-    /// CriticalRateifloatA¬”“_2ˆÊ¸“xj% ‚ÌŠm—¦‚Å”­“®B
-    /// ƒNƒŠƒeƒBƒJƒ‹: –hŒä–³‹Aƒ_ƒ[ƒW2”{B
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒãŒã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã«ãªã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+    /// CriticalRateï¼ˆfloatã€å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰% ã®ç¢ºç‡ã§ç™ºå‹•ã€‚
+    /// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚: é˜²å¾¡ç„¡è¦–ã€ãƒ€ãƒ¡ãƒ¼ã‚¸2å€ã€‚
     /// </summary>
-    /// <returns>true: ƒNƒŠƒeƒBƒJƒ‹Afalse: ’Êí</returns>
+    /// <returns>true: ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã€false: é€šå¸¸</returns>
     private bool CheckPlayerCrit()
     {
         float critChance = (GameState.I != null) ? GameState.I.CriticalRate : 5f;
@@ -73,28 +73,28 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // –½’†”»’èi“GUŒ‚—pji’Ç‰Áj
+    // å‘½ä¸­åˆ¤å®šï¼ˆæ•µæ”»æ’ƒç”¨ï¼‰ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// “G‚ÌUŒ‚‚ª–½’†‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
+    /// æ•µã®æ”»æ’ƒãŒå‘½ä¸­ã™ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
     ///
-    /// ŒvZ®:
-    ///   ÅI–½’†—¦ = “GŠî‘b–½’†—¦ ~ (1 - ƒvƒŒƒCƒ„[‰ñ”ğ—¦ / 100)
-    ///   ‚½‚¾‚µÅ’á10%•ÛØB
+    /// è¨ˆç®—å¼:
+    ///   æœ€çµ‚å‘½ä¸­ç‡ = æ•µåŸºç¤å‘½ä¸­ç‡ Ã— (1 - ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å›é¿ç‡ / 100)
+    ///   ãŸã ã—æœ€ä½10%ä¿è¨¼ã€‚
     ///
-    /// “G‚ÍƒNƒŠƒeƒBƒJƒ‹‚ğs‚í‚È‚¢B
+    /// æ•µã¯ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã‚’è¡Œã‚ãªã„ã€‚
     /// </summary>
-    /// <param name="enemyBaseHitRate">“G‚ÌŠî‘b–½’†—¦i%j</param>
-    /// <returns>true: –½’†Afalse: ƒ~ƒX</returns>
+    /// <param name="enemyBaseHitRate">æ•µã®åŸºç¤å‘½ä¸­ç‡ï¼ˆ%ï¼‰</param>
+    /// <returns>true: å‘½ä¸­ã€false: ãƒŸã‚¹</returns>
     private bool CheckEnemyHit(int enemyBaseHitRate)
     {
         float playerEvasion = (GameState.I != null) ? GameState.I.Evasion : 0f;
 
-        // Phase4: ƒvƒŒƒCƒ„[‚Ì–‚Uƒoƒt/ƒfƒoƒt‚ğ‰ñ”ğ—ÍiMagicAttack˜gj‚Æ‚µ‚Ä“K—p
-        // ¦ ƒvƒŒƒCƒ„[‘¤‚Í MagicAttack = –‚–@UŒ‚—Í‚Æ‚µ‚Äg‚¤‚½‚ßA
-        //    ‰ñ”ğ—Í‚Í•Ê“r GameState.Evasion ‚ÅŒvZ‚³‚ê‚éB–‚Uƒoƒt‚Í–‚–@UŒ‚‚É‰e‹¿‚·‚éB
-        //    ‚±‚±‚Å‚Í“G‚Ì–½’†‚É‘Î‚·‚éƒvƒŒƒCƒ„[‰ñ”ğ‚ğˆ—‚·‚é‚Ì‚ÅA’Ç‰Á“K—p‚µ‚È‚¢B
+        // Phase4: ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é­”æ”»ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’å›é¿åŠ›ï¼ˆMagicAttackæ ï¼‰ã¨ã—ã¦é©ç”¨
+        // â€» ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å´ã¯ MagicAttack = é­”æ³•æ”»æ’ƒåŠ›ã¨ã—ã¦ä½¿ã†ãŸã‚ã€
+        //    å›é¿åŠ›ã¯åˆ¥é€” GameState.Evasion ã§è¨ˆç®—ã•ã‚Œã‚‹ã€‚é­”æ”»ãƒãƒ•ã¯é­”æ³•æ”»æ’ƒã«å½±éŸ¿ã™ã‚‹ã€‚
+        //    ã“ã“ã§ã¯æ•µã®å‘½ä¸­ã«å¯¾ã™ã‚‹ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å›é¿ã‚’å‡¦ç†ã™ã‚‹ã®ã§ã€è¿½åŠ é©ç”¨ã—ãªã„ã€‚
 
         float hitChance = enemyBaseHitRate * (1f - playerEvasion / 100f);
 
@@ -111,28 +111,28 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ‘®«‘Ï«‚É‚æ‚éƒ_ƒ[ƒWŒyŒ¸i’Ç‰Áj
+    // å±æ€§è€æ€§ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[¨“GUŒ‚‚ÉA“G‚Ì‘®«‘Ï«‚Åƒ_ƒ[ƒW‚ğŒyŒ¸‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼â†’æ•µæ”»æ’ƒæ™‚ã«ã€æ•µã®å±æ€§è€æ€§ã§ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è»½æ¸›ã™ã‚‹ã€‚
     ///
-    /// ŒvZ®:
-    ///   ÅIƒ_ƒ[ƒW = baseDamage ~ (100 - ‘Ï«’l) / 100
-    ///   ‘Ï«’l‚ª•‰iã“_j‚Ìê‡‚Íƒ_ƒ[ƒW‘‰ÁB
-    ///   Œ‹‰Ê‚ÍÅ’á1‚ğ•ÛØ‚·‚éiŒ³ƒ_ƒ[ƒW‚ª1ˆÈã‚Ìê‡jB
+    /// è¨ˆç®—å¼:
+    ///   æœ€çµ‚ãƒ€ãƒ¡ãƒ¼ã‚¸ = baseDamage Ã— (100 - è€æ€§å€¤) / 100
+    ///   è€æ€§å€¤ãŒè² ï¼ˆå¼±ç‚¹ï¼‰ã®å ´åˆã¯ãƒ€ãƒ¡ãƒ¼ã‚¸å¢—åŠ ã€‚
+    ///   çµæœã¯æœ€ä½1ã‚’ä¿è¨¼ã™ã‚‹ï¼ˆå…ƒãƒ€ãƒ¡ãƒ¼ã‚¸ãŒ1ä»¥ä¸Šã®å ´åˆï¼‰ã€‚
     ///
-    /// —á: baseDamage=10, ‘Ï«50 ¨ 10 ~ 50/100 = 5
-    /// —á: baseDamage=10, ‘Ï«-50 ¨ 10 ~ 150/100 = 15
-    ///  yô‚¢/ƒKƒ‰ƒX•â³z
-    ///   “G‚ªô‚¢ó‘Ô‚Ìê‡A–‚–@‘®«i‰Î/•X/—‹/¹/ˆÅj‚Ì‘Ï«‚ğ -100 ‚·‚éB
-    ///   “G‚ªƒKƒ‰ƒXó‘Ô‚Ìê‡A•¨—‘®«i‰£/a/“Ëj‚Ì‘Ï«‚ğ -100 ‚·‚éB
-    ///   “G‘¤‚Ìô‚¢/ƒKƒ‰ƒXƒtƒ‰ƒO‚Í SkillEffectProcessor ‚Ìƒ_ƒ~[ƒtƒB[ƒ‹ƒh‚ğQÆ‚·‚éB
+    /// ä¾‹: baseDamage=10, è€æ€§50 â†’ 10 Ã— 50/100 = 5
+    /// ä¾‹: baseDamage=10, è€æ€§-50 â†’ 10 Ã— 150/100 = 15
+    ///  ã€å‘ªã„/ã‚¬ãƒ©ã‚¹è£œæ­£ã€‘
+    ///   æ•µãŒå‘ªã„çŠ¶æ…‹ã®å ´åˆã€é­”æ³•å±æ€§ï¼ˆç«/æ°·/é›·/è–/é—‡ï¼‰ã®è€æ€§ã‚’ -100 ã™ã‚‹ã€‚
+    ///   æ•µãŒã‚¬ãƒ©ã‚¹çŠ¶æ…‹ã®å ´åˆã€ç‰©ç†å±æ€§ï¼ˆæ®´/æ–¬/çªï¼‰ã®è€æ€§ã‚’ -100 ã™ã‚‹ã€‚
+    ///   æ•µå´ã®å‘ªã„/ã‚¬ãƒ©ã‚¹ãƒ•ãƒ©ã‚°ã¯ SkillEffectProcessor ã®ãƒ€ãƒŸãƒ¼ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’å‚ç…§ã™ã‚‹ã€‚
     /// </summary>
-    /// <param name="baseDamage">‘Ï«“K—p‘O‚Ìƒ_ƒ[ƒW</param>
-    /// <param name="attackAttribute">UŒ‚‚Ì‘®«</param>
-    /// <param name="resistanceLog">‘Ï«“K—p‚ÌƒƒO•¶š—ñiŒÄ‚Ño‚µ‘¤‚Åg—pj</param>
-    /// <returns>‘Ï«“K—pŒã‚Ìƒ_ƒ[ƒW</returns>
+    /// <param name="baseDamage">è€æ€§é©ç”¨å‰ã®ãƒ€ãƒ¡ãƒ¼ã‚¸</param>
+    /// <param name="attackAttribute">æ”»æ’ƒã®å±æ€§</param>
+    /// <param name="resistanceLog">è€æ€§é©ç”¨ã®ãƒ­ã‚°æ–‡å­—åˆ—ï¼ˆå‘¼ã³å‡ºã—å´ã§ä½¿ç”¨ï¼‰</param>
+    /// <returns>è€æ€§é©ç”¨å¾Œã®ãƒ€ãƒ¡ãƒ¼ã‚¸</returns>
     private int ApplyEnemyAttributeResistance(int baseDamage, WeaponAttribute attackAttribute, out string resistanceLog)
     {
         resistanceLog = "";
@@ -140,12 +140,12 @@ public partial class BattleSceneController
 
         int resistance = enemyMonster.GetAttributeResistance(attackAttribute);
 
-        // ¥ “G‘¤‚Ìô‚¢/ƒKƒ‰ƒX‚É‚æ‚é‘®«‘Ï«’á‰º ¥
-        // ô‚¢: ‘S–‚–@‘®«i‰Î/•X/—‹/¹/ˆÅj‚Ì‘Ï« -100
+        // â–¼ æ•µå´ã®å‘ªã„/ã‚¬ãƒ©ã‚¹ã«ã‚ˆã‚‹å±æ€§è€æ€§ä½ä¸‹ â–¼
+        // å‘ªã„: å…¨é­”æ³•å±æ€§ï¼ˆç«/æ°·/é›·/è–/é—‡ï¼‰ã®è€æ€§ -100
         if (SkillEffectProcessor.IsEnemyCursed && attackAttribute.IsMagical())
             resistance -= 100;
 
-        // ƒKƒ‰ƒX: ‘S•¨—‘®«i‰£/a/“Ëj‚Ì‘Ï« -100
+        // ã‚¬ãƒ©ã‚¹: å…¨ç‰©ç†å±æ€§ï¼ˆæ®´/æ–¬/çªï¼‰ã®è€æ€§ -100
         if (SkillEffectProcessor.IsEnemyGlassed && attackAttribute.IsPhysical())
             resistance -= 100;
 
@@ -154,13 +154,13 @@ public partial class BattleSceneController
         float reductionRate = resistance / 100f;
         int afterResist = Mathf.FloorToInt(baseDamage * (1f - reductionRate) + 0.5f);
         if (afterResist < 1 && baseDamage >= 1) afterResist = 1;
-        // Š®‘S–³Œøi‘Ï«100ˆÈãj‚Ìê‡‚Í0ƒ_ƒ[ƒW‚ğ‹–—e
+        // å®Œå…¨ç„¡åŠ¹ï¼ˆè€æ€§100ä»¥ä¸Šï¼‰ã®å ´åˆã¯0ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨±å®¹
         if (resistance >= 100) afterResist = 0;
 
         if (resistance > 0)
-            resistanceLog = "i‘Ï«‚ÅŒyŒ¸j";
+            resistanceLog = "ï¼ˆè€æ€§ã§è»½æ¸›ï¼‰";
         else if (resistance < 0)
-            resistanceLog = "iã“_‚Å‘‰Áj";
+            resistanceLog = "ï¼ˆå¼±ç‚¹ã§å¢—åŠ ï¼‰";
 
         Debug.Log($"[Battle] EnemyAttrResist: attr={attackAttribute} resistance={resistance} " +
                   $"baseDmg={baseDamage} afterResist={afterResist}");
@@ -169,16 +169,16 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // –hŒäƒ_ƒCƒX
+    // é˜²å¾¡ãƒ€ã‚¤ã‚¹
     // =========================================================
 
     /// <summary>
-    /// DamageCategory ‚É‰‚¶‚½ƒvƒŒƒCƒ„[‚Ì–hŒä—Í‚ğ•Ô‚·B
-    /// Physical ¨ GameState.DefenseiVIT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
-    /// Magical  ¨ GameState.MagicDefenseiINT ƒx[ƒX + ‘•”õ + ƒpƒbƒVƒuj
+    /// DamageCategory ã«å¿œã˜ãŸãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é˜²å¾¡åŠ›ã‚’è¿”ã™ã€‚
+    /// Physical â†’ GameState.Defenseï¼ˆVIT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
+    /// Magical  â†’ GameState.MagicDefenseï¼ˆINT ãƒ™ãƒ¼ã‚¹ + è£…å‚™ + ãƒ‘ãƒƒã‚·ãƒ–ï¼‰
     ///
-    /// Phase4: ‘SƒJƒeƒSƒŠ‚Åƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// Phase B2: ƒoƒt/ƒfƒoƒt“K—pŒã‚Ì’l‚ÉÎ‰»”{—¦‚ğÅŠO‘¤‚ÅæZ‚·‚éB
+    /// Phase4: å…¨ã‚«ãƒ†ã‚´ãƒªã§ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// Phase B2: ãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨å¾Œã®å€¤ã«çŸ³åŒ–å€ç‡ã‚’æœ€å¤–å´ã§ä¹—ç®—ã™ã‚‹ã€‚
     /// </summary>
     private int GetPlayerDefense(DamageCategory category)
     {
@@ -191,7 +191,7 @@ public partial class BattleSceneController
             default: baseDef = GameState.I.Defense; break;
         }
 
-        // Phase4: ƒJƒeƒSƒŠ‚É‰‚¶‚½ƒoƒt/ƒfƒoƒt“K—p
+        // Phase4: ã‚«ãƒ†ã‚´ãƒªã«å¿œã˜ãŸãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨
         switch (category)
         {
             case DamageCategory.Physical:
@@ -208,7 +208,7 @@ public partial class BattleSceneController
                 break;
         }
 
-        // Phase B2: Î‰»”{—¦‚ğÅŠO‘¤‚Å“K—piDEF/MDEF ‹¤’Êj
+        // Phase B2: çŸ³åŒ–å€ç‡ã‚’æœ€å¤–å´ã§é©ç”¨ï¼ˆDEF/MDEF å…±é€šï¼‰
         float petrifyMult = GetPlayerPetrifyDefMultiplier();
         if (petrifyMult > 1f)
         {
@@ -219,12 +219,12 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// DamageCategory ‚É‰‚¶‚½“G‚Ì–hŒä—Í‚ğ•Ô‚·B
-    /// Physical ¨ Monster.Defense
-    /// Magical  ¨ Monster.MagicDefense
+    /// DamageCategory ã«å¿œã˜ãŸæ•µã®é˜²å¾¡åŠ›ã‚’è¿”ã™ã€‚
+    /// Physical â†’ Monster.Defense
+    /// Magical  â†’ Monster.MagicDefense
     ///
-    /// Phase4: ‘SƒJƒeƒSƒŠ‚Åƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// Phase B2: ƒoƒt/ƒfƒoƒt“K—pŒã‚Ì’l‚ÉÎ‰»”{—¦‚ğÅŠO‘¤‚ÅæZ‚·‚éB
+    /// Phase4: å…¨ã‚«ãƒ†ã‚´ãƒªã§ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// Phase B2: ãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨å¾Œã®å€¤ã«çŸ³åŒ–å€ç‡ã‚’æœ€å¤–å´ã§ä¹—ç®—ã™ã‚‹ã€‚
     /// </summary>
     private int GetEnemyDefense(DamageCategory category)
     {
@@ -237,7 +237,7 @@ public partial class BattleSceneController
             default: baseDef = enemyMonster.Defense; break;
         }
 
-        // Phase4: ƒJƒeƒSƒŠ‚É‰‚¶‚½ƒoƒt/ƒfƒoƒt“K—p
+        // Phase4: ã‚«ãƒ†ã‚´ãƒªã«å¿œã˜ãŸãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨
         switch (category)
         {
             case DamageCategory.Physical:
@@ -254,7 +254,7 @@ public partial class BattleSceneController
                 break;
         }
 
-        // Phase B2: Î‰»”{—¦‚ğÅŠO‘¤‚Å“K—piDEF/MDEF ‹¤’Êj
+        // Phase B2: çŸ³åŒ–å€ç‡ã‚’æœ€å¤–å´ã§é©ç”¨ï¼ˆDEF/MDEF å…±é€šï¼‰
         float petrifyMult = GetEnemyPetrifyDefMultiplier();
         if (petrifyMult > 1f)
         {
@@ -265,12 +265,12 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // UŒ‚—Íƒoƒt/ƒfƒoƒt“K—pƒwƒ‹ƒp[iPhase4’Ç‰Áj
+    // æ”»æ’ƒåŠ›ãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼ï¼ˆPhase4è¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ÌUŒ‚—Í‚Éƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// OnAttackClicked / OnSkillClicked ‚Åg—p‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ”»æ’ƒåŠ›ã«ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// OnAttackClicked / OnSkillClicked ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private int ApplyPlayerAttackBuffDebuff(int baseAttack)
     {
@@ -281,8 +281,8 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì–‚–@UŒ‚—Í‚Éƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// OnMagicClicked ‚Åg—p‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é­”æ³•æ”»æ’ƒåŠ›ã«ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// OnMagicClicked ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private int ApplyPlayerMagicAttackBuffDebuff(int baseMagicAttack)
     {
@@ -293,8 +293,8 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// “G‚ÌUŒ‚—Í‚Éƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// ExecuteEnemySkillAttack / ExecuteLegacyAttack ‚Åg—p‚·‚éB
+    /// æ•µã®æ”»æ’ƒåŠ›ã«ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// ExecuteEnemySkillAttack / ExecuteLegacyAttack ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private int ApplyEnemyAttackBuffDebuff(int baseAttack)
     {
@@ -305,12 +305,12 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // ‰^ƒoƒt/ƒfƒoƒt“K—pƒwƒ‹ƒp[iLUC”»’è—pj
+    // é‹ãƒãƒ•/ãƒ‡ãƒãƒ•é©ç”¨ãƒ˜ãƒ«ãƒ‘ãƒ¼ï¼ˆLUCåˆ¤å®šç”¨ï¼‰
     // =========================================================
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Ì‰^‚Éƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// SelectEnemyAction ‚Ì actionRange ŒvZ‚Åg—p‚·‚éB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é‹ã«ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// SelectEnemyAction ã® actionRange è¨ˆç®—ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private int ApplyPlayerLucBuffDebuff(int baseLuc)
     {
@@ -321,8 +321,8 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// “G‚Ì‰^‚Éƒoƒt/ƒfƒoƒt‚ğ“K—p‚·‚éB
-    /// SelectEnemyAction ‚Ì actionRange ŒvZ‚Åg—p‚·‚éB
+    /// æ•µã®é‹ã«ãƒãƒ•/ãƒ‡ãƒãƒ•ã‚’é©ç”¨ã™ã‚‹ã€‚
+    /// SelectEnemyAction ã® actionRange è¨ˆç®—ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     private int ApplyEnemyLucBuffDebuff(int baseLuc)
     {
@@ -333,35 +333,35 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// –hŒäƒ_ƒCƒX‚ÌŠî€—””ÍˆÍi’ÊíjB
-    /// 0 ` ‚±‚Ì’l‚Ì—”‚ğU‚èA1–¢–‚ªo‚½”‚Ì‡Œv‚ªƒ_ƒ[ƒWŒyŒ¸’lB
-    /// ’Êí: 2.0f ¨ ¬Œ÷—¦ 50%
-    /// ‹­‰»: 1.5f ¨ ¬Œ÷—¦ 66.7%
-    /// ã‘Ì: 3.0f ¨ ¬Œ÷—¦ 33.3%
+    /// é˜²å¾¡ãƒ€ã‚¤ã‚¹ã®åŸºæº–ä¹±æ•°ç¯„å›²ï¼ˆé€šå¸¸æ™‚ï¼‰ã€‚
+    /// 0 ï½ ã“ã®å€¤ã®ä¹±æ•°ã‚’æŒ¯ã‚Šã€1æœªæº€ãŒå‡ºãŸæ•°ã®åˆè¨ˆãŒãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›å€¤ã€‚
+    /// é€šå¸¸æ™‚: 2.0f â†’ æˆåŠŸç‡ 50%
+    /// å¼·åŒ–æ™‚: 1.5f â†’ æˆåŠŸç‡ 66.7%
+    /// å¼±ä½“æ™‚: 3.0f â†’ æˆåŠŸç‡ 33.3%
     /// </summary>
     private const float DefaultDefenseDiceRange = 2.0f;
 
     /// <summary>
-    /// –hŒäƒ_ƒCƒX‚ğU‚èAƒ_ƒ[ƒWŒyŒ¸’l‚ğ•Ô‚·B
+    /// é˜²å¾¡ãƒ€ã‚¤ã‚¹ã‚’æŒ¯ã‚Šã€ãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›å€¤ã‚’è¿”ã™ã€‚
     ///
-    /// ƒ‹[ƒ‹:
-    ///   –hŒä—Í‚Ì”‚¾‚¯—”i0 ` diceRangej‚ğU‚èA
-    ///   1–¢–‚ªo‚½‰ñ”‚Ì‡Œv‚ªƒ_ƒ[ƒWŒyŒ¸’lB
+    /// ãƒ«ãƒ¼ãƒ«:
+    ///   é˜²å¾¡åŠ›ã®æ•°ã ã‘ä¹±æ•°ï¼ˆ0 ï½ diceRangeï¼‰ã‚’æŒ¯ã‚Šã€
+    ///   1æœªæº€ãŒå‡ºãŸå›æ•°ã®åˆè¨ˆãŒãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›å€¤ã€‚
     ///
-    /// diceRange ƒpƒ‰ƒ[ƒ^‚Å–hŒä‹­‰»/ã‘Ì‚ğ•\Œ»‚·‚é:
-    ///   ’Êí = 2.0fi¬Œ÷—¦50%j
-    ///   ‹­‰» = 1.5fi¬Œ÷—¦67%j
-    ///   ã‘Ì = 3.0fi¬Œ÷—¦33%j
+    /// diceRange ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§é˜²å¾¡å¼·åŒ–/å¼±ä½“ã‚’è¡¨ç¾ã™ã‚‹:
+    ///   é€šå¸¸ = 2.0fï¼ˆæˆåŠŸç‡50%ï¼‰
+    ///   å¼·åŒ– = 1.5fï¼ˆæˆåŠŸç‡67%ï¼‰
+    ///   å¼±ä½“ = 3.0fï¼ˆæˆåŠŸç‡33%ï¼‰
     ///
-    /// «—ˆ“I‚ÉƒXƒLƒ‹‚âƒoƒt‚Å diceRange ‚ğ•Ï‰»‚³‚¹‚éê‡‚ÍA
-    /// ‚±‚Ìƒƒ\ƒbƒh‚Ì diceRange ˆø”‚ğ•Ï‚¦‚é‚¾‚¯‚Å‘Î‰‰Â”\B
+    /// å°†æ¥çš„ã«ã‚¹ã‚­ãƒ«ã‚„ãƒãƒ•ã§ diceRange ã‚’å¤‰åŒ–ã•ã›ã‚‹å ´åˆã¯ã€
+    /// ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã® diceRange å¼•æ•°ã‚’å¤‰ãˆã‚‹ã ã‘ã§å¯¾å¿œå¯èƒ½ã€‚
     /// </summary>
-    /// <param name="defense">ƒvƒŒƒCƒ„[‚Ì–hŒä—ÍB</param>
+    /// <param name="defense">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®é˜²å¾¡åŠ›ã€‚</param>
     /// <param name="diceRange">
-    /// –hŒäƒ_ƒCƒX‚Ì—”ãŒÀBÈ—ª‚Í DefaultDefenseDiceRangei’ÊíjB
-    /// ‰ºŒÀ‚Í 1.0f ‚ÉƒNƒ‰ƒ“ƒvi1.0f –¢–‚¾‚Æí‚É¬Œ÷‘S–hŒä‚É‚È‚é‚½‚ßjB
+    /// é˜²å¾¡ãƒ€ã‚¤ã‚¹ã®ä¹±æ•°ä¸Šé™ã€‚çœç•¥æ™‚ã¯ DefaultDefenseDiceRangeï¼ˆé€šå¸¸æ™‚ï¼‰ã€‚
+    /// ä¸‹é™ã¯ 1.0f ã«ã‚¯ãƒ©ãƒ³ãƒ—ï¼ˆ1.0f æœªæº€ã ã¨å¸¸ã«æˆåŠŸï¼å…¨é˜²å¾¡ã«ãªã‚‹ãŸã‚ï¼‰ã€‚
     /// </param>
-    /// <returns>ƒ_ƒ[ƒWŒyŒ¸’lB</returns>
+    /// <returns>ãƒ€ãƒ¡ãƒ¼ã‚¸è»½æ¸›å€¤ã€‚</returns>
     private int RollDefenseDice(int defense, float diceRange = DefaultDefenseDiceRange)
     {
         if (defense <= 0) return 0;
@@ -379,7 +379,7 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚Éƒ_ƒ[ƒW‚ğ“K—p‚·‚é‹¤’Êˆ—B
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’é©ç”¨ã™ã‚‹å…±é€šå‡¦ç†ã€‚
     /// </summary>
     private void ApplyDamageToPlayer(int damage)
     {
@@ -389,18 +389,18 @@ public partial class BattleSceneController
     }
 
     // =========================================================
-    // HPˆË‘¶ƒ_ƒ[ƒWŒvZƒwƒ‹ƒp[i’Ç‰Áj
+    // HPä¾å­˜ãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ãƒ˜ãƒ«ãƒ‘ãƒ¼ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// HPˆË‘¶ƒ_ƒ[ƒW‚ğŒvZ‚·‚éB
+    /// HPä¾å­˜ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹ã€‚
     /// HalfCurrentHp: FloorToInt(currentHp / 2)
     /// ReduceToOne:   currentHp - 1
-    /// ƒ_ƒ[ƒWÅ’á•ÛØ‚È‚µi0‚à‚ ‚è“¾‚éjB
+    /// ãƒ€ãƒ¡ãƒ¼ã‚¸æœ€ä½ä¿è¨¼ãªã—ï¼ˆ0ã‚‚ã‚ã‚Šå¾—ã‚‹ï¼‰ã€‚
     /// </summary>
-    /// <param name="hpDependentType">HPˆË‘¶ƒ^ƒCƒv</param>
-    /// <param name="currentHp">‘ÎÛ‚ÌŒ»İHP</param>
-    /// <returns>—^‚¦‚éƒ_ƒ[ƒW</returns>
+    /// <param name="hpDependentType">HPä¾å­˜ã‚¿ã‚¤ãƒ—</param>
+    /// <param name="currentHp">å¯¾è±¡ã®ç¾åœ¨HP</param>
+    /// <returns>ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸</returns>
     private int CalcHpDependentDamage(HpDependentType hpDependentType, int currentHp, int maxHp = 0, int percent = 20)
 
     {
@@ -414,7 +414,7 @@ public partial class BattleSceneController
             case HpDependentType.MaxHpPercent:
                 {
                     int dmg = Mathf.FloorToInt(maxHp * percent / 100f);
-                    if (dmg < 1) dmg = 1; // Å’á1ƒ_ƒ[ƒW•ÛØ
+                    if (dmg < 1) dmg = 1; // æœ€ä½1ãƒ€ãƒ¡ãƒ¼ã‚¸ä¿è¨¼
                     return dmg;
                 }
 
@@ -424,9 +424,9 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚©‚ç‚ÌHPŠ„‡ƒ_ƒ[ƒW‚ª“G‚É–³Œø‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
-    /// ƒ{ƒX(IsBoss) ‚Ü‚½‚Í ƒƒ^ƒ‹Œn(immuneToAllAilments) ‚Ì“G‚É‚Í–³ŒøB
-    /// MaxHpPercent ƒ^ƒCƒv‚Ì‚İ‚É“K—piHalfCurrentHp / ReduceToOne ‚É‚Í“K—p‚µ‚È‚¢jB
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã®HPå‰²åˆãƒ€ãƒ¡ãƒ¼ã‚¸ãŒæ•µã«ç„¡åŠ¹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+    /// ãƒœã‚¹(IsBoss) ã¾ãŸã¯ ãƒ¡ã‚¿ãƒ«ç³»(immuneToAllAilments) ã®æ•µã«ã¯ç„¡åŠ¹ã€‚
+    /// MaxHpPercent ã‚¿ã‚¤ãƒ—ã®ã¿ã«é©ç”¨ï¼ˆHalfCurrentHp / ReduceToOne ã«ã¯é©ç”¨ã—ãªã„ï¼‰ã€‚
     /// </summary>
     private bool IsEnemyImmuneToMaxHpPercent()
     {
@@ -435,10 +435,10 @@ public partial class BattleSceneController
     }
 
     /// <summary>
-    /// –£—¹‚É‚æ‚éƒ_ƒ[ƒWŒ¸­‚ğ“K—p‚·‚éi‰B‚µŒø‰ÊEƒƒO‚È‚µjB
-    /// ƒvƒŒƒCƒ„[‚ª–£—¹’†‚©‚Â“G‚ª—«Œ^iisGirlj‚Ìê‡Aƒ_ƒ[ƒW‚ğ30%Œ¸­‚³‚¹‚éB
-    /// ÅIƒ_ƒ[ƒW‚É‘Î‚·‚éæZ‚Æ‚µ‚Ä“K—p‚·‚éi‘®«‘Ï«ŒvZ‚Æ‚Í“Æ—§jB
-    /// UŒ‚ƒAƒCƒeƒ€‚É‚Í“K—p‚µ‚È‚¢i’ÊíUŒ‚/ƒXƒLƒ‹/–‚–@‚Ì‚İjB
+    /// é­…äº†ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸æ¸›å°‘ã‚’é©ç”¨ã™ã‚‹ï¼ˆéš ã—åŠ¹æœãƒ»ãƒ­ã‚°ãªã—ï¼‰ã€‚
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒé­…äº†ä¸­ã‹ã¤æ•µãŒå¥³æ€§å‹ï¼ˆisGirlï¼‰ã®å ´åˆã€ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’30%æ¸›å°‘ã•ã›ã‚‹ã€‚
+    /// æœ€çµ‚ãƒ€ãƒ¡ãƒ¼ã‚¸ã«å¯¾ã™ã‚‹ä¹—ç®—ã¨ã—ã¦é©ç”¨ã™ã‚‹ï¼ˆå±æ€§è€æ€§è¨ˆç®—ã¨ã¯ç‹¬ç«‹ï¼‰ã€‚
+    /// æ”»æ’ƒã‚¢ã‚¤ãƒ†ãƒ ã«ã¯é©ç”¨ã—ãªã„ï¼ˆé€šå¸¸æ”»æ’ƒ/ã‚¹ã‚­ãƒ«/é­”æ³•ã®ã¿ï¼‰ã€‚
     /// </summary>
     private int ApplyCharmDamageReduction(int damage)
     {
@@ -447,7 +447,7 @@ public partial class BattleSceneController
         if (enemyMonster == null || !enemyMonster.isGirl) return damage;
 
         int reduced = Mathf.FloorToInt(damage * 0.7f + 0.5f);
-        Debug.Log($"[Battle] CharmReduction: {damage} ¨ {reduced} (isGirl=true)");
+        Debug.Log($"[Battle] CharmReduction: {damage} â†’ {reduced} (isGirl=true)");
         return reduced;
     }
 }

@@ -1,4 +1,4 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 public class MonsterDetailWindow : EditorWindow
@@ -24,7 +24,7 @@ public class MonsterDetailWindow : EditorWindow
     {
         if (monster == null)
         {
-            EditorGUILayout.HelpBox("ƒ‚ƒ“ƒXƒ^[‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", MessageType.Info);
+            EditorGUILayout.HelpBox("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", MessageType.Info);
             return;
         }
 
@@ -60,15 +60,15 @@ public class MonsterDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // Šî–{î•ñ
+    // åŸºæœ¬æƒ…å ±
     // =========================================================
     private void DrawBasicSection()
     {
-        EditorGUILayout.LabelField("Šî–{î•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("åŸºæœ¬æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("ID", monster.ID);
-        EditorGUILayout.LabelField("–¼‘O", monster.Mname);
+        EditorGUILayout.LabelField("åå‰", monster.Mname);
 
         EditorGUILayout.Space();
 
@@ -84,47 +84,47 @@ public class MonsterDetailWindow : EditorWindow
         }
         else
         {
-            EditorGUILayout.LabelField("‰æ‘œ", "‚È‚µ");
+            EditorGUILayout.LabelField("ç”»åƒ", "ãªã—");
         }
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // oŒ»”ÍˆÍ
+    // å‡ºç¾ç¯„å›²
     // =========================================================
     private void DrawEncounterSection()
     {
-        EditorGUILayout.LabelField("oŒ»”ÍˆÍ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‡ºç¾ç¯„å›²", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("”ÍˆÍ",
-            $"{monster.Minfloor}F {monster.Minstep}STEP ` {monster.Maxfloor}F {monster.Maxstep}STEP");
+        EditorGUILayout.LabelField("ç¯„å›²",
+            $"{monster.Minfloor}F {monster.Minstep}STEP ï½ {monster.Maxfloor}F {monster.Maxstep}STEP");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // oŒ»§Œä
+    // å‡ºç¾åˆ¶å¾¡
     // =========================================================
     private void DrawSpawnControlSection()
     {
-        EditorGUILayout.LabelField("oŒ»§Œä", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‡ºç¾åˆ¶å¾¡", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("Weight", monster.Weight.ToString());
-        EditorGUILayout.LabelField("Is Boss", monster.IsBoss ? "›" : "~");
-        EditorGUILayout.LabelField("Is Unique", monster.IsUnique ? "›" : "~");
+        EditorGUILayout.LabelField("Is Boss", monster.IsBoss ? "â—‹" : "Ã—");
+        EditorGUILayout.LabelField("Is Unique", monster.IsUnique ? "â—‹" : "Ã—");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒXƒe[ƒ^ƒX
+    // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
     // =========================================================
     private void DrawStatsSection()
     {
-        EditorGUILayout.LabelField("ƒXƒe[ƒ^ƒX", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("Max HP", monster.MaxHp.ToString());
@@ -138,38 +138,38 @@ public class MonsterDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // –½’†E‰ñ”ğ
+    // å‘½ä¸­ãƒ»å›é¿
     // =========================================================
     private void DrawHitEvasionSection()
     {
-        EditorGUILayout.LabelField("–½’†E‰ñ”ğ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‘½ä¸­ãƒ»å›é¿", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("‰ñ”ğ—Í", monster.Evasion.ToString());
-        EditorGUILayout.LabelField("Šî‘b–½’†—¦", $"{monster.BaseHitRate}%");
+        EditorGUILayout.LabelField("å›é¿åŠ›", monster.Evasion.ToString());
+        EditorGUILayout.LabelField("åŸºç¤å‘½ä¸­ç‡", $"{monster.BaseHitRate}%");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ó‘ÔˆÙí‘Ï«
+    // çŠ¶æ…‹ç•°å¸¸è€æ€§
     // =========================================================
     private void DrawStatusResistanceSection()
     {
-        EditorGUILayout.LabelField("ó‘ÔˆÙí‘Ï«", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("çŠ¶æ…‹ç•°å¸¸è€æ€§", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("“Å‘Ï«", $"{monster.PoisonResistance}%");
+        EditorGUILayout.LabelField("æ¯’è€æ€§", $"{monster.PoisonResistance}%");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // •ñV
+    // å ±é…¬
     // =========================================================
     private void DrawRewardSection()
     {
-        EditorGUILayout.LabelField("•ñV", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å ±é…¬", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("Exp", monster.Exp.ToString());
@@ -179,18 +179,18 @@ public class MonsterDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // s“®ƒpƒ^[ƒ“
+    // è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³
     // =========================================================
     private void DrawActionPatternSection()
     {
-        EditorGUILayout.LabelField("s“®ƒpƒ^[ƒ“", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("Šî€s“®ƒŒƒ“ƒW", monster.baseActionRange.ToString());
+        EditorGUILayout.LabelField("åŸºæº–è¡Œå‹•ãƒ¬ãƒ³ã‚¸", monster.baseActionRange.ToString());
 
         if (monster.actions == null || monster.actions.Length == 0)
         {
-            EditorGUILayout.LabelField("s“®ƒe[ƒuƒ‹", "‚È‚µi’ÊíUŒ‚‚Ì‚İj");
+            EditorGUILayout.LabelField("è¡Œå‹•ãƒ†ãƒ¼ãƒ–ãƒ«", "ãªã—ï¼ˆé€šå¸¸æ”»æ’ƒã®ã¿ï¼‰");
         }
         else
         {
@@ -202,8 +202,8 @@ public class MonsterDetailWindow : EditorWindow
                 var entry = monster.actions[i];
                 if (entry == null) continue;
 
-                // Šm—¦”ÍˆÍ‚ğ•\¦
-                string rangeStr = $"{prevThreshold}`{entry.threshold - 1}";
+                // ç¢ºç‡ç¯„å›²ã‚’è¡¨ç¤º
+                string rangeStr = $"{prevThreshold}ï½{entry.threshold - 1}";
 
                 if (entry.skill != null)
                 {
@@ -213,7 +213,7 @@ public class MonsterDetailWindow : EditorWindow
                 }
                 else
                 {
-                    EditorGUILayout.LabelField($"  [{i}] {rangeStr}", "’ÊíUŒ‚iƒtƒH[ƒ‹ƒoƒbƒNj");
+                    EditorGUILayout.LabelField($"  [{i}] {rangeStr}", "é€šå¸¸æ”»æ’ƒï¼ˆãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼‰");
                 }
 
                 prevThreshold = entry.threshold;
@@ -224,49 +224,49 @@ public class MonsterDetailWindow : EditorWindow
     }
 
     /// <summary>
-    /// ƒXƒLƒ‹‚ÌÚ×î•ñ‚ğ•¶š—ñ‰»‚·‚éB
-    /// NormalAttack ‚Æ SkillAttack ‚Í“¯ˆêˆ—‚É“‡‚³‚ê‚½‚½‚ßA
-    /// •\¦‚à“ˆê‚·‚éBPreemptive ‚Íæ§ƒ}[ƒN‚ğ•t‚¯‚éB
+    /// ã‚¹ã‚­ãƒ«ã®è©³ç´°æƒ…å ±ã‚’æ–‡å­—åˆ—åŒ–ã™ã‚‹ã€‚
+    /// NormalAttack ã¨ SkillAttack ã¯åŒä¸€å‡¦ç†ã«çµ±åˆã•ã‚ŒãŸãŸã‚ã€
+    /// è¡¨ç¤ºã‚‚çµ±ä¸€ã™ã‚‹ã€‚Preemptive ã¯å…ˆåˆ¶ãƒãƒ¼ã‚¯ã‚’ä»˜ã‘ã‚‹ã€‚
     /// </summary>
     private string FormatSkillDetail(SkillData sk)
     {
-        // Idle ‚Í“Á•Êˆµ‚¢
+        // Idle ã¯ç‰¹åˆ¥æ‰±ã„
         if (sk.actionType == MonsterActionType.Idle)
         {
-            return "‰½‚à‚µ‚È‚¢";
+            return "ä½•ã‚‚ã—ãªã„";
         }
 
-        // æ§ƒ}[ƒN
-        string preemptiveMark = (sk.actionType == MonsterActionType.Preemptive) ? "yæ§z" : "";
+        // å…ˆåˆ¶ãƒãƒ¼ã‚¯
+        string preemptiveMark = (sk.actionType == MonsterActionType.Preemptive) ? "ã€å…ˆåˆ¶ã€‘" : "";
 
-        // ”ñƒ_ƒ[ƒWƒXƒLƒ‹
+        // éãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¹ã‚­ãƒ«
         if (sk.IsNonDamage)
         {
-            string detail = $"{preemptiveMark}{sk.skillName} (Œø‰Ê‚Ì‚İ)";
+            string detail = $"{preemptiveMark}{sk.skillName} (åŠ¹æœã®ã¿)";
             detail += FormatAdditionalEffects(sk);
             return detail;
         }
 
-        // ƒ_ƒ[ƒWƒXƒLƒ‹iNormalAttack / SkillAttack / Preemptive ‹¤’Êj
+        // ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚¹ã‚­ãƒ«ï¼ˆNormalAttack / SkillAttack / Preemptive å…±é€šï¼‰
         {
             string detail = $"{preemptiveMark}{sk.skillName} ({sk.damageCategory}, {sk.skillAttribute.ToJapanese()}";
 
-            // ƒ_ƒ[ƒW®‚Ì•\¦
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸å¼ã®è¡¨ç¤º
             if (sk.damageMultiplier > 0f && sk.bonusDamage > 0)
                 detail += $", x{sk.damageMultiplier}+{sk.bonusDamage}";
             else if (sk.damageMultiplier > 0f)
                 detail += $", x{sk.damageMultiplier}";
             else if (sk.bonusDamage > 0)
-                detail += $", ŒÅ’è{sk.bonusDamage}";
+                detail += $", å›ºå®š{sk.bonusDamage}";
 
-            detail += $", –½’†{sk.baseHitRate}%)";
+            detail += $", å‘½ä¸­{sk.baseHitRate}%)";
             detail += FormatAdditionalEffects(sk);
             return detail;
         }
     }
 
     /// <summary>
-    /// ƒXƒLƒ‹‚Ì’Ç‰ÁŒø‰ÊƒŠƒXƒg‚ğ•¶š—ñ‚Å•\¦‚·‚éB
+    /// ã‚¹ã‚­ãƒ«ã®è¿½åŠ åŠ¹æœãƒªã‚¹ãƒˆã‚’æ–‡å­—åˆ—ã§è¡¨ç¤ºã™ã‚‹ã€‚
     /// </summary>
     private string FormatAdditionalEffects(SkillData skill)
     {
@@ -287,11 +287,11 @@ public class MonsterDetailWindow : EditorWindow
             {
                 if (eff.ailmentMode == AilmentMode.Inflict)
                 {
-                    result += $" +[{eff.targetStatusEffect}•t—^ {eff.chance}%]";
+                    result += $" +[{eff.targetStatusEffect}ä»˜ä¸ {eff.chance}%]";
                 }
                 else
                 {
-                    result += $" +[{eff.targetStatusEffect}‰ñ•œ]";
+                    result += $" +[{eff.targetStatusEffect}å›å¾©]";
                 }
             }
             else if (eff.effectData is LevelDrainEffectData)
@@ -318,16 +318,16 @@ public class MonsterDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // à–¾
+    // èª¬æ˜
     // =========================================================
     private void DrawHelpSection()
     {
-        EditorGUILayout.LabelField("à–¾", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("èª¬æ˜", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (string.IsNullOrWhiteSpace(monster.Help))
         {
-            EditorGUILayout.LabelField("à–¾‚È‚µ");
+            EditorGUILayout.LabelField("èª¬æ˜ãªã—");
         }
         else
         {

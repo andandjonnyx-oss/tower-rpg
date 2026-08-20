@@ -1,18 +1,18 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 [Serializable]
 public struct FaceKeyframe
 {
-    public float time;                       // ‰½•b‚Ì“_‚Å
-    public int body, hair, brow, eye, mouth; // ‚Ç‚Ì•\î‚É‚·‚é‚©
+    public float time;                       // ä½•ç§’ã®æ™‚ç‚¹ã§
+    public int body, hair, brow, eye, mouth; // ã©ã®è¡¨æƒ…ã«ã™ã‚‹ã‹
 }
 
 public class EdFacePlayer : MonoBehaviour
 {
     public FaceComposer composer;
-    public FaceKeyframe[] keyframes;   // time¸‡‚Å•À‚×‚Ä‚¨‚­
-    public AudioSource songSource;     // ‹È(‰Ì)B‚±‚ê‚ÌÄ¶ˆÊ’u‚ğŠî€‚É‚·‚é
+    public FaceKeyframe[] keyframes;   // timeæ˜‡é †ã§ä¸¦ã¹ã¦ãŠã
+    public AudioSource songSource;     // æ›²(æ­Œ)ã€‚ã“ã‚Œã®å†ç”Ÿä½ç½®ã‚’åŸºæº–ã«ã™ã‚‹
 
     int _next;
 
@@ -22,10 +22,10 @@ public class EdFacePlayer : MonoBehaviour
     {
         if (composer == null || keyframes == null || keyframes.Length == 0) return;
 
-        // Šî€: ‹È‚ª‚ ‚ê‚Î‹È‚ÌÄ¶ˆÊ’uA‚È‚¯‚ê‚Î‹N“®‚©‚ç‚ÌŒo‰ß
+        // åŸºæº–æ™‚åˆ»: æ›²ãŒã‚ã‚Œã°æ›²ã®å†ç”Ÿä½ç½®ã€ãªã‘ã‚Œã°èµ·å‹•ã‹ã‚‰ã®çµŒé
         float t = songSource != null ? songSource.time : Time.timeSinceLevelLoad;
 
-        // Œ»İ‚ğ‰ß‚¬‚½ƒL[ƒtƒŒ[ƒ€‚ğ‡‚É“K—p
+        // ç¾åœ¨æ™‚åˆ»ã‚’éããŸã‚­ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’é †ã«é©ç”¨
         while (_next < keyframes.Length && t >= keyframes[_next].time)
         {
             var k = keyframes[_next];
@@ -34,6 +34,6 @@ public class EdFacePlayer : MonoBehaviour
         }
     }
 
-    // “ªo‚µEƒ‹[ƒv—p
+    // é ­å‡ºã—ãƒ»ãƒ«ãƒ¼ãƒ—ç”¨
     public void ResetTimeline() => _next = 0;
 }

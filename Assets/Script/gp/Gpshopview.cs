@@ -1,45 +1,45 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// GPŒğŠ·ƒVƒ‡ƒbƒv‚ÌƒV[ƒ“ƒRƒ“ƒgƒ[ƒ‰[B
-/// GpShopDatabase ‚©‚ç¤•iƒŠƒXƒg‚ğ“Ç‚İAGridLayoutGroup ‚ÉƒZƒ‹‚ğ¶¬‚·‚éB
-/// ƒZƒ‹ƒ^ƒbƒv‚Åƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚µAŒğŠ·ˆ—‚ğs‚¤B
+/// GPäº¤æ›ã‚·ãƒ§ãƒƒãƒ—ã®ã‚·ãƒ¼ãƒ³ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// GpShopDatabase ã‹ã‚‰å•†å“ãƒªã‚¹ãƒˆã‚’èª­ã¿ã€GridLayoutGroup ã«ã‚»ãƒ«ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+/// ã‚»ãƒ«ã‚¿ãƒƒãƒ—ã§ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã—ã€äº¤æ›å‡¦ç†ã‚’è¡Œã†ã€‚
 ///
-/// ƒV[ƒ“\¬—á:
-///   Canvas (Scale With Screen Size 1920~1080)
-///     „¥ Header
-///     „    „¥ TitleText ("GPŒğŠ·Š")
-///     „    „¥ GpText ("ŠGP: 999")
-///     „    „¤ BackButton
-///     „¥ ScrollView
-///     „    „¤ Content (GridLayoutGroup)
-///     „        „¤ (ƒZƒ‹‚ğ“®“I¶¬)
-///     „¤ DetailPopup (‰Šú”ñ•\¦)
-///         „¥ PopupBg (”¼“§–¾•”wŒiAƒ^ƒbƒv‚Å•Â‚¶‚é)
-///         „¤ PopupPanel
-///             „¥ PopupIcon (Image)
-///             „¥ PopupName (TMP_Text)
-///             „¥ PopupDesc (TMP_Text)
-///             „¥ PopupCost (TMP_Text)
-///             „¥ ExchangeButton (Button)
-///             „    „¤ ExchangeButtonText (TMP_Text)
-///             „¤ CloseButton (Button)
+/// ã‚·ãƒ¼ãƒ³æ§‹æˆä¾‹:
+///   Canvas (Scale With Screen Size 1920Ã—1080)
+///     â”œ Header
+///     â”‚   â”œ TitleText ("GPäº¤æ›æ‰€")
+///     â”‚   â”œ GpText ("æ‰€æŒGP: 999")
+///     â”‚   â”” BackButton
+///     â”œ ScrollView
+///     â”‚   â”” Content (GridLayoutGroup)
+///     â”‚       â”” (ã‚»ãƒ«ã‚’å‹•çš„ç”Ÿæˆ)
+///     â”” DetailPopup (åˆæœŸéè¡¨ç¤º)
+///         â”œ PopupBg (åŠé€æ˜é»’èƒŒæ™¯ã€ã‚¿ãƒƒãƒ—ã§é–‰ã˜ã‚‹)
+///         â”” PopupPanel
+///             â”œ PopupIcon (Image)
+///             â”œ PopupName (TMP_Text)
+///             â”œ PopupDesc (TMP_Text)
+///             â”œ PopupCost (TMP_Text)
+///             â”œ ExchangeButton (Button)
+///             â”‚   â”” ExchangeButtonText (TMP_Text)
+///             â”” CloseButton (Button)
 /// </summary>
 public class GpShopView : MonoBehaviour
 {
     // =========================================================
-    // Inspector ƒAƒTƒCƒ“
+    // Inspector ã‚¢ã‚µã‚¤ãƒ³
     // =========================================================
 
     [Header("Data")]
     [SerializeField] private GpShopDatabase shopDatabase;
 
     [Header("Grid")]
-    [Tooltip("GridLayoutGroup ‚ğ‚Â Content ƒIƒuƒWƒFƒNƒg")]
+    [Tooltip("GridLayoutGroup ã‚’æŒã¤ Content ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")]
     [SerializeField] private Transform gridContent;
 
     [Tooltip("GpShopCell Prefab")]
@@ -49,15 +49,15 @@ public class GpShopView : MonoBehaviour
     [SerializeField] private TMP_Text gpText;
 
     [Header("Detail Popup")]
-    [Tooltip("ƒ|ƒbƒvƒAƒbƒv‘S‘Ì‚ÌeƒIƒuƒWƒFƒNƒgiBlocker ‚ğŠÜ‚ŞjB\n"
-           + "SetActive ‚Å•\¦/”ñ•\¦‚ğØ‚è‘Ö‚¦‚éB\n"
-           + "Blocker ‚ª‰æ–Ê‘S‘Ì‚ğ•¢‚¢A”w–Ê‚Ìƒ{ƒ^ƒ“ƒ^ƒbƒv‚ğ–h‚®B")]
+    [Tooltip("ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—å…¨ä½“ã®è¦ªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆBlocker ã‚’å«ã‚€ï¼‰ã€‚\n"
+           + "SetActive ã§è¡¨ç¤º/éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚\n"
+           + "Blocker ãŒç”»é¢å…¨ä½“ã‚’è¦†ã„ã€èƒŒé¢ã®ãƒœã‚¿ãƒ³ã‚¿ãƒƒãƒ—ã‚’é˜²ãã€‚")]
     [SerializeField] private GameObject detailPopup;
 
-    [Tooltip("‰æ–Ê‘S‘Ì‚ğ•¢‚¤”¼“§–¾ƒpƒlƒ‹iBlockerjB\n"
-           + "Raycast Target = true ‚É‚µ‚Ä”w–Êƒ^ƒbƒv‚ğ–h‚®B\n"
-           + "detailPopup ‚Ì’¼‰º‚Ìq‚Æ‚µ‚Ä”z’u‚·‚éB\n"
-           + "ƒ^ƒbƒv‚Å•Â‚¶‚½‚¢ê‡‚Í Button ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ•t‚¯‚Ä closeButton ‚Æ“¯‚¶“®ì‚É‚·‚éB")]
+    [Tooltip("ç”»é¢å…¨ä½“ã‚’è¦†ã†åŠé€æ˜ãƒ‘ãƒãƒ«ï¼ˆBlockerï¼‰ã€‚\n"
+           + "Raycast Target = true ã«ã—ã¦èƒŒé¢ã‚¿ãƒƒãƒ—ã‚’é˜²ãã€‚\n"
+           + "detailPopup ã®ç›´ä¸‹ã®å­ã¨ã—ã¦é…ç½®ã™ã‚‹ã€‚\n"
+           + "ã‚¿ãƒƒãƒ—ã§é–‰ã˜ãŸã„å ´åˆã¯ Button ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ä»˜ã‘ã¦ closeButton ã¨åŒã˜å‹•ä½œã«ã™ã‚‹ã€‚")]
     [SerializeField] private Button blockerButton;
 
 
@@ -70,14 +70,14 @@ public class GpShopView : MonoBehaviour
     [SerializeField] private Button closeButton;
 
     [Header("Message")]
-    [Tooltip("ŒğŠ·Œ‹‰Ê‚ÌƒƒbƒZ[ƒW•\¦—pBˆê“I‚É•\¦‚µ‚ÄÁ‚¦‚éB")]
+    [Tooltip("äº¤æ›çµæœã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤ºç”¨ã€‚ä¸€æ™‚çš„ã«è¡¨ç¤ºã—ã¦æ¶ˆãˆã‚‹ã€‚")]
     [SerializeField] private TMP_Text messageText;
 
     [Header("Back")]
     [SerializeField] private Button backButton;
 
     // =========================================================
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     // =========================================================
 
     private List<GpShopCell> cells = new();
@@ -86,37 +86,37 @@ public class GpShopView : MonoBehaviour
     private const float MessageDuration = 2f;
 
     // =========================================================
-    // ƒ‰ƒCƒtƒTƒCƒNƒ‹
+    // ãƒ©ã‚¤ãƒ•ã‚µã‚¤ã‚¯ãƒ«
     // =========================================================
 
     private void Start()
     {
-        // ƒ|ƒbƒvƒAƒbƒv‰Šú‰»
+        // ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—åˆæœŸåŒ–
         HidePopup();
         HideMessage();
 
-        // ƒ{ƒ^ƒ“ƒCƒxƒ“ƒg“o˜^
+        // ãƒœã‚¿ãƒ³ã‚¤ãƒ™ãƒ³ãƒˆç™»éŒ²
         if (exchangeButton != null)
             exchangeButton.onClick.AddListener(OnExchangeClicked);
 
         if (closeButton != null)
             closeButton.onClick.AddListener(HidePopup);
 
-        // ƒuƒƒbƒJ[ƒ^ƒbƒv‚Å‚àƒ|ƒbƒvƒAƒbƒv‚ğ•Â‚¶‚é
+        // ãƒ–ãƒ­ãƒƒã‚«ãƒ¼ã‚¿ãƒƒãƒ—ã§ã‚‚ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’é–‰ã˜ã‚‹
         if (blockerButton != null)
             blockerButton.onClick.AddListener(HidePopup);
 
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
 
-        // ƒOƒŠƒbƒh¶¬
+        // ã‚°ãƒªãƒƒãƒ‰ç”Ÿæˆ
         BuildGrid();
         RefreshGpDisplay();
     }
 
     private void Update()
     {
-        // ƒƒbƒZ[ƒW‚Ì©“®”ñ•\¦
+        // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è‡ªå‹•éè¡¨ç¤º
         if (messageTimer > 0f)
         {
             messageTimer -= Time.deltaTime;
@@ -126,12 +126,12 @@ public class GpShopView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒOƒŠƒbƒh\’z
+    // ã‚°ãƒªãƒƒãƒ‰æ§‹ç¯‰
     // =========================================================
 
     private void BuildGrid()
     {
-        // Šù‘¶ƒZƒ‹‚ğƒNƒŠƒA
+        // æ—¢å­˜ã‚»ãƒ«ã‚’ã‚¯ãƒªã‚¢
         foreach (var cell in cells)
         {
             if (cell != null)
@@ -153,7 +153,7 @@ public class GpShopView : MonoBehaviour
             cell.Setup(shopItem);
             cell.onClicked = OnCellClicked;
 
-            // GP•s‘«‚Ü‚½‚ÍƒAƒCƒeƒ€˜g–”t‚È‚çƒOƒŒ[ƒAƒEƒg
+            // GPä¸è¶³ã¾ãŸã¯ã‚¢ã‚¤ãƒ†ãƒ æ æº€æ¯ãªã‚‰ã‚°ãƒ¬ãƒ¼ã‚¢ã‚¦ãƒˆ
             bool canExchange = CanExchange(shopItem);
             cell.SetInteractable(canExchange);
 
@@ -162,24 +162,24 @@ public class GpShopView : MonoBehaviour
     }
 
     /// <summary>
-    /// ŒğŠ·‰Â”\‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
+    /// äº¤æ›å¯èƒ½ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
     /// </summary>
     private bool CanExchange(GpShopData shopData)
     {
         if (shopData == null || shopData.item == null) return false;
         if (GameState.I == null) return false;
 
-        // GP•s‘«
+        // GPä¸è¶³
         if (GameState.I.gp < shopData.gpCost) return false;
 
-        // ƒAƒCƒeƒ€˜g–”t
+        // ã‚¢ã‚¤ãƒ†ãƒ æ æº€æ¯
         if (ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull) return false;
 
         return true;
     }
 
     // =========================================================
-    // ƒZƒ‹ƒ^ƒbƒv ¨ ƒ|ƒbƒvƒAƒbƒv•\¦
+    // ã‚»ãƒ«ã‚¿ãƒƒãƒ— â†’ ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—è¡¨ç¤º
     // =========================================================
 
     private void OnCellClicked(GpShopData shopData)
@@ -194,26 +194,26 @@ public class GpShopView : MonoBehaviour
     {
         var item = shopData.item;
 
-        // ƒAƒCƒRƒ“
+        // ã‚¢ã‚¤ã‚³ãƒ³
         if (popupIcon != null)
         {
             popupIcon.sprite = item.icon;
             popupIcon.enabled = item.icon != null;
         }
 
-        // –¼‘O
+        // åå‰
         if (popupName != null)
             popupName.text = item.itemName;
 
-        // à–¾
+        // èª¬æ˜
         if (popupDesc != null)
             popupDesc.text = item.description;
 
-        // GP‰¿Ši
+        // GPä¾¡æ ¼
         if (popupCost != null)
-            popupCost.text = $"•K—vGP: {shopData.gpCost}";
+            popupCost.text = $"å¿…è¦GP: {shopData.gpCost}";
 
-        // ŒğŠ·ƒ{ƒ^ƒ“‚Ìó‘Ô
+        // äº¤æ›ãƒœã‚¿ãƒ³ã®çŠ¶æ…‹
         bool canExchange = CanExchange(shopData);
         if (exchangeButton != null)
             exchangeButton.interactable = canExchange;
@@ -221,14 +221,14 @@ public class GpShopView : MonoBehaviour
         if (exchangeButtonText != null)
         {
             if (ItemBoxManager.Instance != null && ItemBoxManager.Instance.IsFull)
-                exchangeButtonText.text = "‚¿•¨‚ª‚¢‚Á‚Ï‚¢";
+                exchangeButtonText.text = "æŒã¡ç‰©ãŒã„ã£ã±ã„";
             else if (GameState.I != null && GameState.I.gp < shopData.gpCost)
-                exchangeButtonText.text = "GP‚ª‘«‚è‚È‚¢";
+                exchangeButtonText.text = "GPãŒè¶³ã‚Šãªã„";
             else
-                exchangeButtonText.text = $"ŒğŠ·‚·‚éi{shopData.gpCost}GPj";
+                exchangeButtonText.text = $"äº¤æ›ã™ã‚‹ï¼ˆ{shopData.gpCost}GPï¼‰";
         }
 
-        // ƒ|ƒbƒvƒAƒbƒv•\¦
+        // ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—è¡¨ç¤º
         if (detailPopup != null)
             detailPopup.SetActive(true);
     }
@@ -241,71 +241,71 @@ public class GpShopView : MonoBehaviour
     }
 
     // =========================================================
-    // ŒğŠ·ˆ—
+    // äº¤æ›å‡¦ç†
     // =========================================================
 
     private void OnExchangeClicked()
     {
-        // š‘½d‰Ÿ‰ºƒK[ƒhi“¯ƒtƒŒ[ƒ€2˜A‘Å‚É‚æ‚éGP“ñd‰Û‹àEƒAƒCƒeƒ€“ñd•t—^‘Îôj
-        //   selectedShopData ‚ğ•›ì—p‚Ì‘O‚Éƒ[ƒJƒ‹‘Ş”ğ‚µ‚Ä‘¦ null ‰»‚·‚é‚±‚Æ‚ÅA
-        //   2‰ñ–ÚˆÈ~‚ÌŒÄ‚Ño‚µ‚Í–`“ª‚Ì null ƒ`ƒFƒbƒN‚Å’e‚©‚ê‚éB
-        //   iOnAdResult ‚Ì adResultHandled ‚Æ“¯‚¶uˆê“x‚«‚èv•ÛØ‚Ìl‚¦•ûj
+        // â˜…å¤šé‡æŠ¼ä¸‹ã‚¬ãƒ¼ãƒ‰ï¼ˆåŒãƒ•ãƒ¬ãƒ¼ãƒ 2é€£æ‰“ã«ã‚ˆã‚‹GPäºŒé‡èª²é‡‘ãƒ»ã‚¢ã‚¤ãƒ†ãƒ äºŒé‡ä»˜ä¸å¯¾ç­–ï¼‰
+        //   selectedShopData ã‚’å‰¯ä½œç”¨ã®å‰ã«ãƒ­ãƒ¼ã‚«ãƒ«é€€é¿ã—ã¦å³ null åŒ–ã™ã‚‹ã“ã¨ã§ã€
+        //   2å›ç›®ä»¥é™ã®å‘¼ã³å‡ºã—ã¯å†’é ­ã® null ãƒã‚§ãƒƒã‚¯ã§å¼¾ã‹ã‚Œã‚‹ã€‚
+        //   ï¼ˆOnAdResult ã® adResultHandled ã¨åŒã˜ã€Œä¸€åº¦ãã‚Šã€ä¿è¨¼ã®è€ƒãˆæ–¹ï¼‰
         if (selectedShopData == null) return;
         if (!CanExchange(selectedShopData)) return;
 
         var shopData = selectedShopData;
-        selectedShopData = null; // šˆÈ~‚ÌÄ“ü‚ğ‘¦Õ’f
+        selectedShopData = null; // â˜…ä»¥é™ã®å†å…¥ã‚’å³é®æ–­
 
         var item = shopData.item;
         int cost = shopData.gpCost;
 
-        // GPÁ”ï
+        // GPæ¶ˆè²»
         GameState.I.gp -= cost;
 
-        // ƒAƒCƒeƒ€’Ç‰ÁiItemBoxManager.AddItem “à‚ÅƒZ[ƒu‚³‚ê‚éj
+        // ã‚¢ã‚¤ãƒ†ãƒ è¿½åŠ ï¼ˆItemBoxManager.AddItem å†…ã§ã‚»ãƒ¼ãƒ–ã•ã‚Œã‚‹ï¼‰
         bool added = ItemBoxManager.Instance.AddItem(item);
 
         if (added)
         {
-            // “üèSE
+            // å…¥æ‰‹SE
             if (AudioManager.I != null) AudioManager.I.PlayItemGetSe();
 
-            // }ŠÓ‹L˜^iŒğŠ·¬—§“_‚Å“o˜^j
+            // å›³é‘‘è¨˜éŒ²ï¼ˆäº¤æ›æˆç«‹æ™‚ç‚¹ã§ç™»éŒ²ï¼‰
             if (GameState.I != null) GameState.I.MarkItemDiscovered(item.itemId);
 
-            Debug.Log($"[GpShopView] ŒğŠ·¬Œ÷: {item.itemName} ({cost}GPÁ”ï, c‚èGP={GameState.I.gp})");
-            ShowMessage($"{item.itemName} ‚ğè‚É“ü‚ê‚½I");
+            Debug.Log($"[GpShopView] äº¤æ›æˆåŠŸ: {item.itemName} ({cost}GPæ¶ˆè²», æ®‹ã‚ŠGP={GameState.I.gp})");
+            ShowMessage($"{item.itemName} ã‚’æ‰‹ã«å…¥ã‚ŒãŸï¼");
 
-            // ’Ç‰Á‚ÌƒZ[ƒuiGP•ÏX•ªj
+            // è¿½åŠ ã®ã‚»ãƒ¼ãƒ–ï¼ˆGPå¤‰æ›´åˆ†ï¼‰
             SaveManager.Save();
         }
         else
         {
-            // AddItem ‚ª¸”s‚µ‚½ê‡i’Êí‚Í IsFull ƒ`ƒFƒbƒN‚Å’e‚©‚ê‚é‚Ì‚Å“’B‚µ‚È‚¢‚ª”O‚Ì‚½‚ßj
-            GameState.I.gp += cost; // GP•Ô‹p
-            Debug.LogWarning($"[GpShopView] ŒğŠ·¸”s: {item.itemName} ‚ÌƒAƒCƒeƒ€’Ç‰Á‚É¸”siGP•Ô‹pj");
-            ShowMessage("ŒğŠ·‚É¸”s‚µ‚Ü‚µ‚½");
+            // AddItem ãŒå¤±æ•—ã—ãŸå ´åˆï¼ˆé€šå¸¸ã¯ IsFull ãƒã‚§ãƒƒã‚¯ã§å¼¾ã‹ã‚Œã‚‹ã®ã§åˆ°é”ã—ãªã„ãŒå¿µã®ãŸã‚ï¼‰
+            GameState.I.gp += cost; // GPè¿”å´
+            Debug.LogWarning($"[GpShopView] äº¤æ›å¤±æ•—: {item.itemName} ã®ã‚¢ã‚¤ãƒ†ãƒ è¿½åŠ ã«å¤±æ•—ï¼ˆGPè¿”å´ï¼‰");
+            ShowMessage("äº¤æ›ã«å¤±æ•—ã—ã¾ã—ãŸ");
         }
 
-        // ƒ|ƒbƒvƒAƒbƒv‚ğ•Â‚¶‚ÄƒOƒŠƒbƒh‚ğXV
+        // ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’é–‰ã˜ã¦ã‚°ãƒªãƒƒãƒ‰ã‚’æ›´æ–°
         HidePopup();
         RefreshGpDisplay();
         RefreshCellStates();
     }
 
     // =========================================================
-    // •\¦XV
+    // è¡¨ç¤ºæ›´æ–°
     // =========================================================
 
     private void RefreshGpDisplay()
     {
         if (gpText != null && GameState.I != null)
-            gpText.text = $"ŠGP: {GameState.I.gp}";
+            gpText.text = $"æ‰€æŒGP: {GameState.I.gp}";
     }
 
     /// <summary>
-    /// ‘SƒZƒ‹‚ÌŒğŠ·‰Â”\ó‘Ô‚ğÄƒ`ƒFƒbƒN‚·‚éB
-    /// ŒğŠ·Œã‚ÉGP‚ªŒ¸‚Á‚Ä‚¢‚é‚Ì‚ÅA‘¼‚Ì¤•i‚àƒOƒŒ[ƒAƒEƒg‚ª•Ï‚í‚é‰Â”\«‚ª‚ ‚éB
+    /// å…¨ã‚»ãƒ«ã®äº¤æ›å¯èƒ½çŠ¶æ…‹ã‚’å†ãƒã‚§ãƒƒã‚¯ã™ã‚‹ã€‚
+    /// äº¤æ›å¾Œã«GPãŒæ¸›ã£ã¦ã„ã‚‹ã®ã§ã€ä»–ã®å•†å“ã‚‚ã‚°ãƒ¬ãƒ¼ã‚¢ã‚¦ãƒˆãŒå¤‰ã‚ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
     /// </summary>
     private void RefreshCellStates()
     {
@@ -323,7 +323,7 @@ public class GpShopView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒƒbƒZ[ƒW•\¦
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
     // =========================================================
 
     private void ShowMessage(string msg)
@@ -345,7 +345,7 @@ public class GpShopView : MonoBehaviour
     }
 
     // =========================================================
-    // –ß‚é
+    // æˆ»ã‚‹
     // =========================================================
 
     private void OnBackClicked()

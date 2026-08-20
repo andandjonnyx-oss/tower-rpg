@@ -1,48 +1,48 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì Magic ƒJƒeƒSƒŠƒAƒCƒeƒ€‚ª‚ÂƒpƒbƒVƒuŒø‰Ê‚ğWŒv‚·‚éÃ“IƒNƒ‰ƒXB
+/// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã® Magic ã‚«ãƒ†ã‚´ãƒªã‚¢ã‚¤ãƒ†ãƒ ãŒæŒã¤ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã‚’é›†è¨ˆã™ã‚‹é™çš„ã‚¯ãƒ©ã‚¹ã€‚
 ///
-/// d•¡ƒ‹[ƒ‹:
-///   “¯‚¶ effectType + “¯‚¶‘ÎÛi‘®« or ƒXƒe[ƒ^ƒXj‚ÌŒø‰Ê‚ª•¡”‚ ‚éê‡A
-///   ¡³‚Ì’l:
-///     value ‚ªÅ‚à‘å‚«‚¢‚à‚Ì‚ğ 100% “K—p‚µA
-///     2ŒÂ–ÚˆÈ~‚Í value ‚Ì 10% ‚¸‚Â‰ÁZ‚·‚éiØ‚èÌ‚ÄjB
-///   ¡•‰‚Ì’l:
-///     ‘S‚Ä 100% ‡Z‚·‚éiŒ¸Š‚È‚µjB
-///   ¡ÅI’l = ³‚Ì‡Œv + •‰‚Ì‡Œv
+/// é‡è¤‡ãƒ«ãƒ¼ãƒ«:
+///   åŒã˜ effectType + åŒã˜å¯¾è±¡ï¼ˆå±æ€§ or ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼‰ã®åŠ¹æœãŒè¤‡æ•°ã‚ã‚‹å ´åˆã€
+///   â– æ­£ã®å€¤:
+///     value ãŒæœ€ã‚‚å¤§ãã„ã‚‚ã®ã‚’ 100% é©ç”¨ã—ã€
+///     2å€‹ç›®ä»¥é™ã¯ value ã® 10% ãšã¤åŠ ç®—ã™ã‚‹ï¼ˆåˆ‡ã‚Šæ¨ã¦ï¼‰ã€‚
+///   â– è² ã®å€¤:
+///     å…¨ã¦ 100% åˆç®—ã™ã‚‹ï¼ˆæ¸›è¡°ãªã—ï¼‰ã€‚
+///   â– æœ€çµ‚å€¤ = æ­£ã®åˆè¨ˆ + è² ã®åˆè¨ˆ
 ///
-/// —á: ‰Î‘®«‘Ï« 50 ‚ÌƒAƒCƒeƒ€‚ğ 10 ŒÂŠ
-///   ¨ 50 + 5~9 = 95
-/// —á: ‰Î‘®«‘Ï« 70 ‚ÌƒAƒCƒeƒ€1ŒÂ + ‰Î‘®«‘Ï« 50 ‚ÌƒAƒCƒeƒ€2ŒÂ
-///   ¨ 70 + 7 + 5 = 82
-///   i70 ‚ğ 100% “K—pAc‚è‚ÍŠe value ‚Ì 10% ‚ğ‰ÁZj
+/// ä¾‹: ç«å±æ€§è€æ€§ 50 ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ 10 å€‹æ‰€æŒ
+///   â†’ 50 + 5Ã—9 = 95
+/// ä¾‹: ç«å±æ€§è€æ€§ 70 ã®ã‚¢ã‚¤ãƒ†ãƒ 1å€‹ + ç«å±æ€§è€æ€§ 50 ã®ã‚¢ã‚¤ãƒ†ãƒ 2å€‹
+///   â†’ 70 + 7 + 5 = 82
+///   ï¼ˆ70 ã‚’ 100% é©ç”¨ã€æ®‹ã‚Šã¯å„ value ã® 10% ã‚’åŠ ç®—ï¼‰
 ///
-/// š•‰‚ÌŒø‰Ê‚Ì—á:
-///   HP+20 ‚ÌƒAƒCƒeƒ€3ŒÂ + HP-20 ‚ÌƒAƒCƒeƒ€3ŒÂ
-///   ¨ ³: 20 + 2 + 2 = 24
-///   ¨ •‰: -20 + -20 + -20 = -60
-///   ¨ ‡Œv: 24 + (-60) = -36
+/// â˜…è² ã®åŠ¹æœã®ä¾‹:
+///   HP+20 ã®ã‚¢ã‚¤ãƒ†ãƒ 3å€‹ + HP-20 ã®ã‚¢ã‚¤ãƒ†ãƒ 3å€‹
+///   â†’ æ­£: 20 + 2 + 2 = 24
+///   â†’ è² : -20 + -20 + -20 = -60
+///   â†’ åˆè¨ˆ: 24 + (-60) = -36
 ///
-/// g‚¢•û:
+/// ä½¿ã„æ–¹:
 ///   int fireRes  = PassiveCalculator.CalcAttributeResistance(WeaponAttribute.Fire);
 ///   int atkBonus = PassiveCalculator.CalcAttackBonus();
 ///
-/// ‘®«‘Ï«‚Ì‡Zi‘•”õ{ƒpƒbƒVƒuj:
+/// å±æ€§è€æ€§ã®åˆç®—ï¼ˆè£…å‚™ï¼‹ãƒ‘ãƒƒã‚·ãƒ–ï¼‰:
 ///   int totalRes = PassiveCalculator.CalcTotalAttributeResistance(WeaponAttribute.Fire);
-///   ¨ EquipmentCalculator.GetAttributeResistance(Fire) + CalcAttributeResistance(Fire)
+///   â†’ EquipmentCalculator.GetAttributeResistance(Fire) + CalcAttributeResistance(Fire)
 /// </summary>
 public static class PassiveCalculator
 {
     // =========================================================
-    // ŒöŠJƒƒ\ƒbƒh „Ÿ„Ÿ ƒ^[ƒQƒbƒgw’è‚ ‚èi‘®«j
+    // å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰ â”€â”€ ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆå±æ€§ï¼‰
     // =========================================================
 
     /// <summary>
-    /// w’è‘®«‚Ì‘Ï«‡Œv’l‚ğ•Ô‚·iƒpƒbƒVƒu‚Ì‚İjB
-    /// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì‘S Magic ƒAƒCƒeƒ€‚©‚ç
-    /// PassiveType.AttributeResistance ‚©‚Â‘ÎÛ‘®«‚ªˆê’v‚·‚é‚à‚Ì‚ğûW‚µ‚ÄŒvZ‚·‚éB
+    /// æŒ‡å®šå±æ€§ã®è€æ€§åˆè¨ˆå€¤ã‚’è¿”ã™ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ã®ã¿ï¼‰ã€‚
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã®å…¨ Magic ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰
+    /// PassiveType.AttributeResistance ã‹ã¤å¯¾è±¡å±æ€§ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’åé›†ã—ã¦è¨ˆç®—ã™ã‚‹ã€‚
     /// </summary>
     public static int CalcAttributeResistance(WeaponAttribute attr)
     {
@@ -51,18 +51,18 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// w’è‘®«‚Ì‘Ï«‡Œv’l‚ğ•Ô‚·i‘•”õ{ƒpƒbƒVƒu‚Ì‡ZjB
+    /// æŒ‡å®šå±æ€§ã®è€æ€§åˆè¨ˆå€¤ã‚’è¿”ã™ï¼ˆè£…å‚™ï¼‹ãƒ‘ãƒƒã‚·ãƒ–ã®åˆç®—ï¼‰ã€‚
     ///
-    /// ŒvZ®:
-    ///   EquipmentCalculator.GetAttributeResistance(attr)  © ‘•”õ•i•ªi100%”½‰fj
-    ///   + CalcAttributeResistance(attr)                    © ƒpƒbƒVƒu•ªid•¡ƒ‹[ƒ‹“K—pj
+    /// è¨ˆç®—å¼:
+    ///   EquipmentCalculator.GetAttributeResistance(attr)  â† è£…å‚™å“åˆ†ï¼ˆ100%åæ˜ ï¼‰
+    ///   + CalcAttributeResistance(attr)                    â† ãƒ‘ãƒƒã‚·ãƒ–åˆ†ï¼ˆé‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ï¼‰
     ///
-    /// BattleSceneController ‚Ì“GƒXƒLƒ‹UŒ‚ƒ_ƒ[ƒWŒvZ‚Åg—p‚·‚éB
+    /// BattleSceneController ã®æ•µã‚¹ã‚­ãƒ«æ”»æ’ƒãƒ€ãƒ¡ãƒ¼ã‚¸è¨ˆç®—ã§ä½¿ç”¨ã™ã‚‹ã€‚
     ///
-    /// —á: ‰Š‘Ï«50‚Ì•Ší + ‰Š‘Ï«50‚ÌƒpƒbƒVƒuƒAƒCƒeƒ€1ŒÂ
-    ///   ¨ 50(‘•”õ) + 50(ƒpƒbƒVƒu) = 100iŠ®‘S‘Ï«j
-    /// —á: ‰Š‘Ï«50‚Ì•Ší + •X‘Ï«-100‚ÌƒpƒbƒVƒuƒAƒCƒeƒ€1ŒÂi•X‚ğw’è‚µ‚½ê‡j
-    ///   ¨ 0(‘•”õ) + (-100)(ƒpƒbƒVƒu) = -100i•Xã“_j
+    /// ä¾‹: ç‚è€æ€§50ã®æ­¦å™¨ + ç‚è€æ€§50ã®ãƒ‘ãƒƒã‚·ãƒ–ã‚¢ã‚¤ãƒ†ãƒ 1å€‹
+    ///   â†’ 50(è£…å‚™) + 50(ãƒ‘ãƒƒã‚·ãƒ–) = 100ï¼ˆå®Œå…¨è€æ€§ï¼‰
+    /// ä¾‹: ç‚è€æ€§50ã®æ­¦å™¨ + æ°·è€æ€§-100ã®ãƒ‘ãƒƒã‚·ãƒ–ã‚¢ã‚¤ãƒ†ãƒ 1å€‹ï¼ˆæ°·ã‚’æŒ‡å®šã—ãŸå ´åˆï¼‰
+    ///   â†’ 0(è£…å‚™) + (-100)(ãƒ‘ãƒƒã‚·ãƒ–) = -100ï¼ˆæ°·å¼±ç‚¹ï¼‰
     /// </summary>
     public static int CalcTotalAttributeResistance(WeaponAttribute attr)
     {
@@ -70,14 +70,14 @@ public static class PassiveCalculator
         int passiveRes = CalcAttributeResistance(attr);
         int total = equipRes + passiveRes;
 
-        // ¥¥¥ ô‚¢/ƒKƒ‰ƒX‚É‚æ‚é‘®«‘Ï«’á‰ºi’Ç‰Áj ¥¥¥
+        // â–¼â–¼â–¼ å‘ªã„/ã‚¬ãƒ©ã‚¹ã«ã‚ˆã‚‹å±æ€§è€æ€§ä½ä¸‹ï¼ˆè¿½åŠ ï¼‰ â–¼â–¼â–¼
         if (GameState.I != null)
         {
-            // ô‚¢: ‘S–‚–@‘®«i‰Î/•X/—‹/¹/ˆÅj‚Ì‘Ï« -100
+            // å‘ªã„: å…¨é­”æ³•å±æ€§ï¼ˆç«/æ°·/é›·/è–/é—‡ï¼‰ã®è€æ€§ -100
             if (GameState.I.isCursed && attr.IsMagical())
                 total -= 100;
 
-            // ƒKƒ‰ƒX: ‘S•¨—‘®«i‰£/a/“Ëj‚Ì‘Ï« -100
+            // ã‚¬ãƒ©ã‚¹: å…¨ç‰©ç†å±æ€§ï¼ˆæ®´/æ–¬/çªï¼‰ã®è€æ€§ -100
             if (GameState.I.isGlassed && attr.IsPhysical())
                 total -= 100;
         }
@@ -86,7 +86,7 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// w’è‘®«‚ÌUŒ‚—Íƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B
+    /// æŒ‡å®šå±æ€§ã®æ”»æ’ƒåŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚
     /// </summary>
     public static int CalcAttributeAttackBonus(WeaponAttribute attr)
     {
@@ -95,13 +95,13 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // ŒöŠJƒƒ\ƒbƒh „Ÿ„Ÿ ƒ^[ƒQƒbƒgw’è‚ ‚èiƒXƒe[ƒ^ƒXj
+    // å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰ â”€â”€ ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼‰
     // =========================================================
 
     /// <summary>
-    /// w’èƒXƒe[ƒ^ƒX‚ÌƒpƒbƒVƒuƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B
-    /// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì‘S Magic ƒAƒCƒeƒ€‚©‚ç
-    /// PassiveType.StatBonus ‚©‚Â‘ÎÛƒXƒe[ƒ^ƒX‚ªˆê’v‚·‚é‚à‚Ì‚ğûW‚µ‚ÄŒvZ‚·‚éB
+    /// æŒ‡å®šã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®ãƒ‘ãƒƒã‚·ãƒ–ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã®å…¨ Magic ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰
+    /// PassiveType.StatBonus ã‹ã¤å¯¾è±¡ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’åé›†ã—ã¦è¨ˆç®—ã™ã‚‹ã€‚
     /// </summary>
     public static int CalcStatBonus(StatType stat)
     {
@@ -110,18 +110,18 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // ŒöŠJƒƒ\ƒbƒh „Ÿ„Ÿ ƒ^[ƒQƒbƒgw’è‚ ‚èió‘ÔˆÙí‘Ï«ji’Ç‰Áj
+    // å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰ â”€â”€ ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆçŠ¶æ…‹ç•°å¸¸è€æ€§ï¼‰ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// w’èó‘ÔˆÙí‚Ì‘Ï«‡Œv’l‚ğ•Ô‚·iƒpƒbƒVƒu‚Ì‚İjB
-    /// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì‘S Magic ƒAƒCƒeƒ€‚©‚ç
-    /// PassiveType.StatusEffectResistance ‚©‚Â targetStatusEffect ‚ªˆê’v‚·‚é‚à‚Ì‚ğûW‚·‚éB
+    /// æŒ‡å®šçŠ¶æ…‹ç•°å¸¸ã®è€æ€§åˆè¨ˆå€¤ã‚’è¿”ã™ï¼ˆãƒ‘ãƒƒã‚·ãƒ–ã®ã¿ï¼‰ã€‚
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã®å…¨ Magic ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰
+    /// PassiveType.StatusEffectResistance ã‹ã¤ targetStatusEffect ãŒä¸€è‡´ã™ã‚‹ã‚‚ã®ã‚’åé›†ã™ã‚‹ã€‚
     ///
-    /// d•¡ƒ‹[ƒ‹“K—pi³: 2ŒÂ–ÚˆÈ~10%Œ¸ŠA•‰: 100%‡ZjB
+    /// é‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ï¼ˆæ­£: 2å€‹ç›®ä»¥é™10%æ¸›è¡°ã€è² : 100%åˆç®—ï¼‰ã€‚
     ///
-    /// —á: “Å‘Ï«50‚ÌƒAƒCƒeƒ€2ŒÂŠ ¨ 50 + 5 = 55
-    /// —á: “Å‘Ï«-30‚ÌƒAƒCƒeƒ€2ŒÂŠ ¨ -30 + -30 = -60
+    /// ä¾‹: æ¯’è€æ€§50ã®ã‚¢ã‚¤ãƒ†ãƒ 2å€‹æ‰€æŒ â†’ 50 + 5 = 55
+    /// ä¾‹: æ¯’è€æ€§-30ã®ã‚¢ã‚¤ãƒ†ãƒ 2å€‹æ‰€æŒ â†’ -30 + -30 = -60
     /// </summary>
     public static int CalcStatusEffectResistance(StatusEffect effect)
     {
@@ -130,52 +130,52 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // ŒöŠJƒƒ\ƒbƒh „Ÿ„Ÿ ƒ^[ƒQƒbƒgw’è‚È‚µiŠeƒXƒe[ƒ^ƒXê—pj
+    // å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰ â”€â”€ ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šãªã—ï¼ˆå„ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹å°‚ç”¨ï¼‰
     // =========================================================
 
-    /// <summary>Å‘åHPƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>æœ€å¤§HPãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcMaxHpBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MaxHpBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>Å‘åMPƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>æœ€å¤§MPãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcMaxMpBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MaxMpBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>UŒ‚—Íƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>æ”»æ’ƒåŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcAttackBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.AttackBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>–hŒä—Íƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>é˜²å¾¡åŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcDefenseBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.DefenseBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>–‚–@UŒ‚—Íƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>é­”æ³•æ”»æ’ƒåŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcMagicAttackBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MagicAttackBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>–‚–@–hŒä—Íƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>é­”æ³•é˜²å¾¡åŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcMagicDefenseBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.MagicDefenseBonus);
         return CalcWithDiminishing(values);
     }
 
-    /// <summary>‰^‚Ì—Ç‚³ƒ{[ƒiƒX‡Œv’l‚ğ•Ô‚·B</summary>
+    /// <summary>é‹ã®è‰¯ã•ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚</summary>
     public static int CalcLuckBonus()
     {
         var values = CollectValuesNoTarget(PassiveType.LuckBonus);
@@ -183,12 +183,12 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // ŒöŠJƒƒ\ƒbƒh „Ÿ„Ÿ –½’†—ÍE‰ñ”ğ—¦EƒNƒŠƒeƒBƒJƒ‹—¦i’Ç‰Áj
+    // å…¬é–‹ãƒ¡ã‚½ãƒƒãƒ‰ â”€â”€ å‘½ä¸­åŠ›ãƒ»å›é¿ç‡ãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
     /// <summary>
-    /// –½’†—Íƒ{[ƒiƒX‡Œv’liintj‚ğ•Ô‚·B
-    /// PassiveType.AccuracyBonus ‚Ì value ‚ğûW‚µ‚Äd•¡ƒ‹[ƒ‹“K—pB
+    /// å‘½ä¸­åŠ›ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ï¼ˆintï¼‰ã‚’è¿”ã™ã€‚
+    /// PassiveType.AccuracyBonus ã® value ã‚’åé›†ã—ã¦é‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ã€‚
     /// </summary>
     public static int CalcAccuracyBonus()
     {
@@ -197,14 +197,14 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// ‰ñ”ğ—¦ƒ{[ƒiƒX‡Œv’lifloat ¬”“_2ˆÊ¸“xj‚ğ•Ô‚·B
-    /// PassiveType.EvasionBonus ‚Ì floatValue ‚ğûW‚µ‚Äd•¡ƒ‹[ƒ‹“K—pB
+    /// å›é¿ç‡ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ï¼ˆfloat å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰ã‚’è¿”ã™ã€‚
+    /// PassiveType.EvasionBonus ã® floatValue ã‚’åé›†ã—ã¦é‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ã€‚
     ///
-    /// d•¡ƒ‹[ƒ‹ifloat”Åj:
-    ///   ³‚Ì’l: ~‡ƒ\[ƒg‚µA1ŒÂ–Ú‚Í100%A2ŒÂ–ÚˆÈ~‚Í10%i¬”“_3ˆÊ‚ğlÌŒÜ“ü¨2ˆÊ¸“xjB
-    ///   •‰‚Ì’l: ‘S‚Ä100%‡ZB
-    ///   —á: [3.50, 2.00, 2.00] ¨ 3.50 + 0.20 + 0.20 = 3.90
-    ///   —á: [3.50, -2.00] ¨ 3.50 + (-2.00) = 1.50
+    /// é‡è¤‡ãƒ«ãƒ¼ãƒ«ï¼ˆfloatç‰ˆï¼‰:
+    ///   æ­£ã®å€¤: é™é †ã‚½ãƒ¼ãƒˆã—ã€1å€‹ç›®ã¯100%ã€2å€‹ç›®ä»¥é™ã¯10%ï¼ˆå°æ•°ç‚¹3ä½ã‚’å››æ¨äº”å…¥â†’2ä½ç²¾åº¦ï¼‰ã€‚
+    ///   è² ã®å€¤: å…¨ã¦100%åˆç®—ã€‚
+    ///   ä¾‹: [3.50, 2.00, 2.00] â†’ 3.50 + 0.20 + 0.20 = 3.90
+    ///   ä¾‹: [3.50, -2.00] â†’ 3.50 + (-2.00) = 1.50
     /// </summary>
     public static float CalcEvasionBonus()
     {
@@ -213,8 +213,8 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// ƒNƒŠƒeƒBƒJƒ‹—¦ƒ{[ƒiƒX‡Œv’lifloat ¬”“_2ˆÊ¸“xj‚ğ•Ô‚·B
-    /// PassiveType.CriticalBonus ‚Ì floatValue ‚ğûW‚µ‚Äd•¡ƒ‹[ƒ‹“K—pB
+    /// ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ãƒœãƒ¼ãƒŠã‚¹åˆè¨ˆå€¤ï¼ˆfloat å°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰ã‚’è¿”ã™ã€‚
+    /// PassiveType.CriticalBonus ã® floatValue ã‚’åé›†ã—ã¦é‡è¤‡ãƒ«ãƒ¼ãƒ«é©ç”¨ã€‚
     /// </summary>
     public static float CalcCriticalBonus()
     {
@@ -223,12 +223,12 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // –‚–@ƒXƒLƒ‹ˆê——‚ÌûW
+    // é­”æ³•ã‚¹ã‚­ãƒ«ä¸€è¦§ã®åé›†
     // =========================================================
 
     /// <summary>
-    /// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì Magic ƒAƒCƒeƒ€‚ª•t—^‚·‚é–‚–@ƒXƒLƒ‹ˆê——‚ğ•Ô‚·B
-    /// “¯‚¶ skillId ‚ÌƒXƒLƒ‹‚Íd•¡‚µ‚È‚¢iÅ‰‚ÉŒ©‚Â‚©‚Á‚½‚à‚Ì‚Ì‚İjB
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã® Magic ã‚¢ã‚¤ãƒ†ãƒ ãŒä»˜ä¸ã™ã‚‹é­”æ³•ã‚¹ã‚­ãƒ«ä¸€è¦§ã‚’è¿”ã™ã€‚
+    /// åŒã˜ skillId ã®ã‚¹ã‚­ãƒ«ã¯é‡è¤‡ã—ãªã„ï¼ˆæœ€åˆã«è¦‹ã¤ã‹ã£ãŸã‚‚ã®ã®ã¿ï¼‰ã€‚
     /// </summary>
     public static List<SkillData> CollectMagicSkills()
     {
@@ -247,7 +247,7 @@ public static class PassiveCalculator
 
             var skill = invItem.data.magicSkill;
 
-            // “¯‚¶ skillId ‚ÌƒXƒLƒ‹‚Íd•¡‚³‚¹‚È‚¢
+            // åŒã˜ skillId ã®ã‚¹ã‚­ãƒ«ã¯é‡è¤‡ã•ã›ãªã„
             if (string.IsNullOrEmpty(skill.skillId)) continue;
             if (seenIds.Contains(skill.skillId)) continue;
 
@@ -259,10 +259,10 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// ”ñƒoƒgƒ‹‚Åg—p‰Â”\‚È–‚–@ƒXƒLƒ‹ˆê——‚ğ•Ô‚·B
-    /// CollectMagicSkills() ‚Æ“¯‚¶ƒƒWƒbƒN‚¾‚ªA
-    /// noBattleOk == true ‚ÌƒXƒLƒ‹‚Ì‚İûW‚·‚éB
-    /// “ƒƒV[ƒ“‚Ì–‚–@ƒhƒƒbƒvƒ_ƒEƒ“‚Åg—p‚·‚éB
+    /// éãƒãƒˆãƒ«ã§ä½¿ç”¨å¯èƒ½ãªé­”æ³•ã‚¹ã‚­ãƒ«ä¸€è¦§ã‚’è¿”ã™ã€‚
+    /// CollectMagicSkills() ã¨åŒã˜ãƒ­ã‚¸ãƒƒã‚¯ã ãŒã€
+    /// noBattleOk == true ã®ã‚¹ã‚­ãƒ«ã®ã¿åé›†ã™ã‚‹ã€‚
+    /// å¡”ã‚·ãƒ¼ãƒ³ã®é­”æ³•ãƒ‰ãƒ­ãƒƒãƒ—ãƒ€ã‚¦ãƒ³ã§ä½¿ç”¨ã™ã‚‹ã€‚
     /// </summary>
     public static List<SkillData> CollectNoBattleMagicSkills()
     {
@@ -281,10 +281,10 @@ public static class PassiveCalculator
 
             var skill = invItem.data.magicSkill;
 
-            // noBattleOk ‚ª false ‚ÌƒXƒLƒ‹‚ÍƒXƒLƒbƒv
+            // noBattleOk ãŒ false ã®ã‚¹ã‚­ãƒ«ã¯ã‚¹ã‚­ãƒƒãƒ—
             if (!skill.noBattleOk) continue;
 
-            // “¯‚¶ skillId ‚ÌƒXƒLƒ‹‚Íd•¡‚³‚¹‚È‚¢
+            // åŒã˜ skillId ã®ã‚¹ã‚­ãƒ«ã¯é‡è¤‡ã•ã›ãªã„
             if (string.IsNullOrEmpty(skill.skillId)) continue;
             if (seenIds.Contains(skill.skillId)) continue;
 
@@ -322,13 +322,13 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // “à•”: Œø‰Ê’l‚ÌûW
+    // å†…éƒ¨: åŠ¹æœå€¤ã®åé›†
     // =========================================================
 
     /// <summary>
-    /// ƒCƒ“ƒxƒ“ƒgƒŠ“à‚Ì‘S Magic ƒAƒCƒeƒ€‚©‚çAw’èğŒ‚É‡’v‚·‚éƒpƒbƒVƒuŒø‰Ê‚Ì value ‚ğûW‚·‚éB
-    /// targetAttribute ‚Ü‚½‚Í targetStat ‚Ü‚½‚Í targetStatusEffect ‚Å‘ÎÛ‚ği‚è‚ŞB
-    /// š•‰‚ÌŒø‰Ê‘Î‰: value ‚ª 0 ‚Å‚È‚¢‚à‚Ì‚ğ‘S‚ÄûW‚·‚éi³•‰–â‚í‚¸jB
+    /// ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªå†…ã®å…¨ Magic ã‚¢ã‚¤ãƒ†ãƒ ã‹ã‚‰ã€æŒ‡å®šæ¡ä»¶ã«åˆè‡´ã™ã‚‹ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã® value ã‚’åé›†ã™ã‚‹ã€‚
+    /// targetAttribute ã¾ãŸã¯ targetStat ã¾ãŸã¯ targetStatusEffect ã§å¯¾è±¡ã‚’çµã‚Šè¾¼ã‚€ã€‚
+    /// â˜…è² ã®åŠ¹æœå¯¾å¿œ: value ãŒ 0 ã§ãªã„ã‚‚ã®ã‚’å…¨ã¦åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰ã€‚
     /// </summary>
     private static List<int> CollectValues(PassiveType type, WeaponAttribute attrFilter,
                                             StatType statFilter, StatusEffect effectFilter)
@@ -351,7 +351,7 @@ public static class PassiveCalculator
                 if (pe == null) continue;
                 if (pe.effectType != type) continue;
 
-                // ‘ÎÛ‚Ìi‚è‚İ
+                // å¯¾è±¡ã®çµã‚Šè¾¼ã¿
                 switch (type)
                 {
                     case PassiveType.AttributeResistance:
@@ -363,15 +363,15 @@ public static class PassiveCalculator
                         if (pe.targetStat != statFilter) continue;
                         break;
 
-                    // ó‘ÔˆÙí‘Ï«: targetStatusEffect ‚Åi‚è‚Şi’Ç‰Áj
+                    // çŠ¶æ…‹ç•°å¸¸è€æ€§: targetStatusEffect ã§çµã‚Šè¾¼ã‚€ï¼ˆè¿½åŠ ï¼‰
                     case PassiveType.StatusEffectResistance:
                         if (pe.targetStatusEffect != effectFilter) continue;
                         break;
 
-                        // ƒ^[ƒQƒbƒgw’è‚È‚µŒn‚Í‘ÎÛƒtƒBƒ‹ƒ^•s—v
+                        // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šãªã—ç³»ã¯å¯¾è±¡ãƒ•ã‚£ãƒ«ã‚¿ä¸è¦
                 }
 
-                // š•‰‚ÌŒø‰Ê‘Î‰: value ‚ª 0 ‚Å‚È‚¯‚ê‚ÎûW‚·‚éi³•‰–â‚í‚¸j
+                // â˜…è² ã®åŠ¹æœå¯¾å¿œ: value ãŒ 0 ã§ãªã‘ã‚Œã°åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰
                 if (pe.value != 0)
                     values.Add(pe.value);
             }
@@ -381,10 +381,10 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// targetAttribute / targetStat ‚ğg‚í‚È‚¢Œø‰Ê‚Ì value ‚ğûW‚·‚éB
+    /// targetAttribute / targetStat ã‚’ä½¿ã‚ãªã„åŠ¹æœã® value ã‚’åé›†ã™ã‚‹ã€‚
     /// MaxHpBonus / MaxMpBonus / AttackBonus / DefenseBonus /
-    /// MagicAttackBonus / MagicDefenseBonus / LuckBonus / AccuracyBonus “™‚ª‘ÎÛB
-    /// š•‰‚ÌŒø‰Ê‘Î‰: value ‚ª 0 ‚Å‚È‚¯‚ê‚ÎûW‚·‚éi³•‰–â‚í‚¸jB
+    /// MagicAttackBonus / MagicDefenseBonus / LuckBonus / AccuracyBonus ç­‰ãŒå¯¾è±¡ã€‚
+    /// â˜…è² ã®åŠ¹æœå¯¾å¿œ: value ãŒ 0 ã§ãªã‘ã‚Œã°åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰ã€‚
     /// </summary>
     private static List<int> CollectValuesNoTarget(PassiveType type)
     {
@@ -406,7 +406,7 @@ public static class PassiveCalculator
                 if (pe == null) continue;
                 if (pe.effectType != type) continue;
 
-                // š•‰‚ÌŒø‰Ê‘Î‰: value ‚ª 0 ‚Å‚È‚¯‚ê‚ÎûW‚·‚éi³•‰–â‚í‚¸j
+                // â˜…è² ã®åŠ¹æœå¯¾å¿œ: value ãŒ 0 ã§ãªã‘ã‚Œã°åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰
                 if (pe.value != 0)
                     values.Add(pe.value);
             }
@@ -416,10 +416,10 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// float ¸“x‚ª•K—v‚ÈƒpƒbƒVƒuŒø‰Ê‚Ì floatValue ‚ğûW‚·‚éB
-    /// EvasionBonus / CriticalBonus “™‚ª‘ÎÛB
-    /// floatValue ‚ª 0 ‚Å value ‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡‚Í value ‚ğ float ‚É•ÏŠ·‚µ‚Äg‚¤B
-    /// š•‰‚ÌŒø‰Ê‘Î‰: ’l‚ª 0 ‚Å‚È‚¯‚ê‚ÎûW‚·‚éi³•‰–â‚í‚¸jB
+    /// float ç²¾åº¦ãŒå¿…è¦ãªãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã® floatValue ã‚’åé›†ã™ã‚‹ã€‚
+    /// EvasionBonus / CriticalBonus ç­‰ãŒå¯¾è±¡ã€‚
+    /// floatValue ãŒ 0 ã§ value ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ value ã‚’ float ã«å¤‰æ›ã—ã¦ä½¿ã†ã€‚
+    /// â˜…è² ã®åŠ¹æœå¯¾å¿œ: å€¤ãŒ 0 ã§ãªã‘ã‚Œã°åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰ã€‚
     /// </summary>
     private static List<float> CollectFloatValuesNoTarget(PassiveType type)
     {
@@ -441,9 +441,9 @@ public static class PassiveCalculator
                 if (pe == null) continue;
                 if (pe.effectType != type) continue;
 
-                // floatValue ‚ğ—DæA–¢İ’èi0j‚È‚ç value ‚ğ float ‚É•ÏŠ·
+                // floatValue ã‚’å„ªå…ˆã€æœªè¨­å®šï¼ˆ0ï¼‰ãªã‚‰ value ã‚’ float ã«å¤‰æ›
                 float v = (pe.floatValue != 0f) ? pe.floatValue : (float)pe.value;
-                // š•‰‚ÌŒø‰Ê‘Î‰: ’l‚ª 0 ‚Å‚È‚¯‚ê‚ÎûW‚·‚éi³•‰–â‚í‚¸j
+                // â˜…è² ã®åŠ¹æœå¯¾å¿œ: å€¤ãŒ 0 ã§ãªã‘ã‚Œã°åé›†ã™ã‚‹ï¼ˆæ­£è² å•ã‚ãšï¼‰
                 if (v != 0f)
                     values.Add(v);
             }
@@ -453,26 +453,26 @@ public static class PassiveCalculator
     }
 
     // =========================================================
-    // “à•”: d•¡ƒ‹[ƒ‹ŒvZ
+    // å†…éƒ¨: é‡è¤‡ãƒ«ãƒ¼ãƒ«è¨ˆç®—
     // =========================================================
 
     /// <summary>
-    /// Œø‰Ê’lƒŠƒXƒg‚É‘Î‚µ‚Äd•¡ƒ‹[ƒ‹‚ğ“K—p‚µA‡Œv’l‚ğ•Ô‚·B
+    /// åŠ¹æœå€¤ãƒªã‚¹ãƒˆã«å¯¾ã—ã¦é‡è¤‡ãƒ«ãƒ¼ãƒ«ã‚’é©ç”¨ã—ã€åˆè¨ˆå€¤ã‚’è¿”ã™ã€‚
     ///
-    /// š•‰‚ÌŒø‰Ê‘Î‰:
-    ///   ³‚Ì’l: ~‡‚Éƒ\[ƒg‚µA1ŒÂ–Ú‚Í 100% “K—pA2ŒÂ–ÚˆÈ~‚ÍŠe value ‚Ì 10%iØ‚èÌ‚Äj‚ğ‰ÁZB
-    ///   •‰‚Ì’l: ‘S‚Ä 100% ‡Z‚·‚éiŒ¸Š‚È‚µjB
-    ///   ÅI’l = ³‚Ì‡Œv + •‰‚Ì‡Œv
+    /// â˜…è² ã®åŠ¹æœå¯¾å¿œ:
+    ///   æ­£ã®å€¤: é™é †ã«ã‚½ãƒ¼ãƒˆã—ã€1å€‹ç›®ã¯ 100% é©ç”¨ã€2å€‹ç›®ä»¥é™ã¯å„ value ã® 10%ï¼ˆåˆ‡ã‚Šæ¨ã¦ï¼‰ã‚’åŠ ç®—ã€‚
+    ///   è² ã®å€¤: å…¨ã¦ 100% åˆç®—ã™ã‚‹ï¼ˆæ¸›è¡°ãªã—ï¼‰ã€‚
+    ///   æœ€çµ‚å€¤ = æ­£ã®åˆè¨ˆ + è² ã®åˆè¨ˆ
     ///
-    /// —á: [70, 50, 50] ¨ 70 + 7 + 5 = 82
-    /// —á: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50] ¨ 50 + 5~9 = 95
-    /// —á: [20, 20, 20, -20, -20, -20] ¨ ³: 20+2+2=24, •‰: -60, ‡Œv: -36
+    /// ä¾‹: [70, 50, 50] â†’ 70 + 7 + 5 = 82
+    /// ä¾‹: [50, 50, 50, 50, 50, 50, 50, 50, 50, 50] â†’ 50 + 5Ã—9 = 95
+    /// ä¾‹: [20, 20, 20, -20, -20, -20] â†’ æ­£: 20+2+2=24, è² : -60, åˆè¨ˆ: -36
     /// </summary>
     private static int CalcWithDiminishing(List<int> values)
     {
         if (values == null || values.Count == 0) return 0;
 
-        // ³‚Ì’l‚Æ•‰‚Ì’l‚ğ•ª—£
+        // æ­£ã®å€¤ã¨è² ã®å€¤ã‚’åˆ†é›¢
         var positives = new List<int>();
         int negativeSum = 0;
 
@@ -481,20 +481,20 @@ public static class PassiveCalculator
             if (values[i] > 0)
                 positives.Add(values[i]);
             else if (values[i] < 0)
-                negativeSum += values[i]; // •‰‚Ì’l‚Í100%‡Z
+                negativeSum += values[i]; // è² ã®å€¤ã¯100%åˆç®—
         }
 
-        // ³‚Ì’l‚ÉŒ¸Šƒ‹[ƒ‹‚ğ“K—p
+        // æ­£ã®å€¤ã«æ¸›è¡°ãƒ«ãƒ¼ãƒ«ã‚’é©ç”¨
         int positiveTotal = 0;
         if (positives.Count > 0)
         {
-            // ~‡ƒ\[ƒgi‘å‚«‚¢’l‚©‚ç“K—pj
+            // é™é †ã‚½ãƒ¼ãƒˆï¼ˆå¤§ãã„å€¤ã‹ã‚‰é©ç”¨ï¼‰
             positives.Sort((a, b) => b.CompareTo(a));
 
-            // 1ŒÂ–Ú‚Í 100% “K—p
+            // 1å€‹ç›®ã¯ 100% é©ç”¨
             positiveTotal = positives[0];
 
-            // 2ŒÂ–ÚˆÈ~‚ÍŠe value ‚Ì 10%iØ‚èÌ‚Äj‚ğ‰ÁZ
+            // 2å€‹ç›®ä»¥é™ã¯å„ value ã® 10%ï¼ˆåˆ‡ã‚Šæ¨ã¦ï¼‰ã‚’åŠ ç®—
             for (int i = 1; i < positives.Count; i++)
             {
                 positiveTotal += positives[i] / 10;
@@ -505,25 +505,25 @@ public static class PassiveCalculator
     }
 
     /// <summary>
-    /// float ”Å‚Ìd•¡ƒ‹[ƒ‹ŒvZi¬”“_2ˆÊ¸“xjB
-    /// EvasionBonus / CriticalBonus ‚Åg—p‚·‚éB
+    /// float ç‰ˆã®é‡è¤‡ãƒ«ãƒ¼ãƒ«è¨ˆç®—ï¼ˆå°æ•°ç‚¹2ä½ç²¾åº¦ï¼‰ã€‚
+    /// EvasionBonus / CriticalBonus ã§ä½¿ç”¨ã™ã‚‹ã€‚
     ///
-    /// š•‰‚ÌŒø‰Ê‘Î‰:
-    ///   ³‚Ì’l: ~‡ƒ\[ƒg‚µA1ŒÂ–Ú‚Í100%A2ŒÂ–ÚˆÈ~‚ÍŠe value ‚Ì10%‚ğ‰ÁZB
-    ///   •‰‚Ì’l: ‘S‚Ä100%‡ZiŒ¸Š‚È‚µjB
-    ///   ÅI’l = ³‚Ì‡Œv + •‰‚Ì‡Œv
+    /// â˜…è² ã®åŠ¹æœå¯¾å¿œ:
+    ///   æ­£ã®å€¤: é™é †ã‚½ãƒ¼ãƒˆã—ã€1å€‹ç›®ã¯100%ã€2å€‹ç›®ä»¥é™ã¯å„ value ã®10%ã‚’åŠ ç®—ã€‚
+    ///   è² ã®å€¤: å…¨ã¦100%åˆç®—ï¼ˆæ¸›è¡°ãªã—ï¼‰ã€‚
+    ///   æœ€çµ‚å€¤ = æ­£ã®åˆè¨ˆ + è² ã®åˆè¨ˆ
     ///
-    /// —á: [3.50, 2.00, 2.00]
-    ///   ¨ 3.50 + Round(0.200, 2) + Round(0.200, 2) = 3.50 + 0.20 + 0.20 = 3.90
-    /// —á: [5.75, 3.25, 1.50]
-    ///   ¨ 5.75 + Round(0.325, 2) + Round(0.150, 2) = 5.75 + 0.33 + 0.15 = 6.23
-    /// —á: [3.50, -2.00] ¨ 3.50 + (-2.00) = 1.50
+    /// ä¾‹: [3.50, 2.00, 2.00]
+    ///   â†’ 3.50 + Round(0.200, 2) + Round(0.200, 2) = 3.50 + 0.20 + 0.20 = 3.90
+    /// ä¾‹: [5.75, 3.25, 1.50]
+    ///   â†’ 5.75 + Round(0.325, 2) + Round(0.150, 2) = 5.75 + 0.33 + 0.15 = 6.23
+    /// ä¾‹: [3.50, -2.00] â†’ 3.50 + (-2.00) = 1.50
     /// </summary>
     private static float CalcWithDiminishingFloat2(List<float> values)
     {
         if (values == null || values.Count == 0) return 0f;
 
-        // ³‚Ì’l‚Æ•‰‚Ì’l‚ğ•ª—£
+        // æ­£ã®å€¤ã¨è² ã®å€¤ã‚’åˆ†é›¢
         var positives = new List<float>();
         float negativeSum = 0f;
 
@@ -532,24 +532,24 @@ public static class PassiveCalculator
             if (values[i] > 0f)
                 positives.Add(values[i]);
             else if (values[i] < 0f)
-                negativeSum += values[i]; // •‰‚Ì’l‚Í100%‡Z
+                negativeSum += values[i]; // è² ã®å€¤ã¯100%åˆç®—
         }
 
-        // ³‚Ì’l‚ÉŒ¸Šƒ‹[ƒ‹‚ğ“K—p
+        // æ­£ã®å€¤ã«æ¸›è¡°ãƒ«ãƒ¼ãƒ«ã‚’é©ç”¨
         float positiveTotal = 0f;
         if (positives.Count > 0)
         {
-            // ~‡ƒ\[ƒgi‘å‚«‚¢’l‚©‚ç“K—pj
+            // é™é †ã‚½ãƒ¼ãƒˆï¼ˆå¤§ãã„å€¤ã‹ã‚‰é©ç”¨ï¼‰
             positives.Sort((a, b) => b.CompareTo(a));
 
-            // 1ŒÂ–Ú‚Í 100% “K—p
+            // 1å€‹ç›®ã¯ 100% é©ç”¨
             positiveTotal = positives[0];
 
-            // 2ŒÂ–ÚˆÈ~‚ÍŠe value ‚Ì 10% ‚ğ‰ÁZi¬”“_3ˆÊ‚ğlÌŒÜ“ü¨2ˆÊ¸“xj
+            // 2å€‹ç›®ä»¥é™ã¯å„ value ã® 10% ã‚’åŠ ç®—ï¼ˆå°æ•°ç‚¹3ä½ã‚’å››æ¨äº”å…¥â†’2ä½ç²¾åº¦ï¼‰
             for (int i = 1; i < positives.Count; i++)
             {
                 float bonus = positives[i] * 0.1f;
-                // ¬”“_3ˆÊ‚ğlÌŒÜ“ü‚µ‚Ä¬”“_2ˆÊ¸“x‚É‚·‚é
+                // å°æ•°ç‚¹3ä½ã‚’å››æ¨äº”å…¥ã—ã¦å°æ•°ç‚¹2ä½ç²¾åº¦ã«ã™ã‚‹
                 bonus = Mathf.Floor(bonus * 100f + 0.5f) / 100f;
                 positiveTotal += bonus;
             }
@@ -557,18 +557,18 @@ public static class PassiveCalculator
 
         float total = positiveTotal + negativeSum;
 
-        // ÅIŒ‹‰Ê‚à¬”“_2ˆÊ‚ÉŠÛ‚ß‚é
+        // æœ€çµ‚çµæœã‚‚å°æ•°ç‚¹2ä½ã«ä¸¸ã‚ã‚‹
         total = Mathf.Floor(total * 100f + 0.5f) / 100f;
 
         return total;
     }
 
     // =========================================================
-    // “à•”: ƒCƒ“ƒxƒ“ƒgƒŠƒAƒNƒZƒX
+    // å†…éƒ¨: ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªã‚¢ã‚¯ã‚»ã‚¹
     // =========================================================
 
     /// <summary>
-    /// ItemBoxManager ‚©‚çƒCƒ“ƒxƒ“ƒgƒŠ‚ÌƒAƒCƒeƒ€ˆê——‚ğæ“¾‚·‚éB
+    /// ItemBoxManager ã‹ã‚‰ã‚¤ãƒ³ãƒ™ãƒ³ãƒˆãƒªã®ã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§ã‚’å–å¾—ã™ã‚‹ã€‚
     /// </summary>
     private static System.Collections.Generic.IReadOnlyList<InventoryItem> GetInventoryItems()
     {

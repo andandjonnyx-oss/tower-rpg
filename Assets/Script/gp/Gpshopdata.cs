@@ -1,34 +1,34 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 /// <summary>
-/// GPŒğŠ·ƒVƒ‡ƒbƒv‚Ì¤•i1Œ‚ğ’è‹`‚·‚é ScriptableObjectB
-/// Inspector ‚Å ItemData ‚Ö‚ÌQÆAGP‰¿ŠiA‰ğ•úğŒ‚È‚Ç‚ğİ’è‚·‚éB
+/// GPäº¤æ›ã‚·ãƒ§ãƒƒãƒ—ã®å•†å“1ä»¶ã‚’å®šç¾©ã™ã‚‹ ScriptableObjectã€‚
+/// Inspector ã§ ItemData ã¸ã®å‚ç…§ã€GPä¾¡æ ¼ã€è§£æ”¾æ¡ä»¶ãªã©ã‚’è¨­å®šã™ã‚‹ã€‚
 /// </summary>
 [CreateAssetMenu(menuName = "GpShop/GpShopData")]
 public class GpShopData : ScriptableObject
 {
-    [Header("¤•iî•ñ")]
-    [Tooltip("ŒğŠ·‚Å“üè‚Å‚«‚éƒAƒCƒeƒ€BItemData ‚Ö‚ÌQÆB")]
+    [Header("å•†å“æƒ…å ±")]
+    [Tooltip("äº¤æ›ã§å…¥æ‰‹ã§ãã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã€‚ItemData ã¸ã®å‚ç…§ã€‚")]
     public ItemData item;
 
-    [Tooltip("ŒğŠ·‚É•K—v‚ÈGPB")]
+    [Tooltip("äº¤æ›ã«å¿…è¦ãªGPã€‚")]
     [Min(1)]
     public int gpCost = 1;
 
-    [Header("‰ğ•úğŒ")]
-    [Tooltip("‚±‚Ì¤•i‚ª•\¦‚³‚ê‚é‚½‚ß‚É•K—v‚È“’BŠKB\n"
-           + "GameState.reachedFloor ‚ª‚±‚Ì’lˆÈã‚Ìê‡‚É•\¦‚³‚ê‚éB\n"
-           + "0 ‚È‚çí‚É•\¦B")]
+    [Header("è§£æ”¾æ¡ä»¶")]
+    [Tooltip("ã“ã®å•†å“ãŒè¡¨ç¤ºã•ã‚Œã‚‹ãŸã‚ã«å¿…è¦ãªåˆ°é”éšã€‚\n"
+           + "GameState.reachedFloor ãŒã“ã®å€¤ä»¥ä¸Šã®å ´åˆã«è¡¨ç¤ºã•ã‚Œã‚‹ã€‚\n"
+           + "0 ãªã‚‰å¸¸ã«è¡¨ç¤ºã€‚")]
     [Min(0)]
     public int requiredFloor = 0;
 
-    [Header("w“ü§ŒÀ")]
-    [Tooltip("‚±‚Ì¤•i‚ÌÅ‘åw“ü‰ñ”B0 ‚È‚ç–³§ŒÀB\n"
-           + "w“ü‰ñ”‚Í GpShopView ‘¤‚ÅŠÇ—‚·‚éi«—ˆ“I‚ÉƒZ[ƒu‘ÎÛ‚É‚·‚éê‡‚ ‚èjB")]
+    [Header("è³¼å…¥åˆ¶é™")]
+    [Tooltip("ã“ã®å•†å“ã®æœ€å¤§è³¼å…¥å›æ•°ã€‚0 ãªã‚‰ç„¡åˆ¶é™ã€‚\n"
+           + "è³¼å…¥å›æ•°ã¯ GpShopView å´ã§ç®¡ç†ã™ã‚‹ï¼ˆå°†æ¥çš„ã«ã‚»ãƒ¼ãƒ–å¯¾è±¡ã«ã™ã‚‹å ´åˆã‚ã‚Šï¼‰ã€‚")]
     [Min(0)]
     public int maxPurchaseCount = 0;
 
-    [Header("•\¦‡")]
-    [Tooltip("ƒVƒ‡ƒbƒv“à‚Å‚Ì•\¦‡B¬‚³‚¢‚Ù‚Çæ‚É•\¦‚³‚ê‚éB")]
+    [Header("è¡¨ç¤ºé †")]
+    [Tooltip("ã‚·ãƒ§ãƒƒãƒ—å†…ã§ã®è¡¨ç¤ºé †ã€‚å°ã•ã„ã»ã©å…ˆã«è¡¨ç¤ºã•ã‚Œã‚‹ã€‚")]
     public int sortOrder = 0;
 }

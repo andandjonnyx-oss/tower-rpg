@@ -1,19 +1,19 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// GPŒğŠ·ƒVƒ‡ƒbƒv‚Ì¤•iƒŠƒXƒg‚ğ•Û‚·‚é ScriptableObjectB
-/// Inspector ‚Å GpShopData ‚ÌƒŠƒXƒg‚ğİ’è‚·‚éB
+/// GPäº¤æ›ã‚·ãƒ§ãƒƒãƒ—ã®å•†å“ãƒªã‚¹ãƒˆã‚’ä¿æŒã™ã‚‹ ScriptableObjectã€‚
+/// Inspector ã§ GpShopData ã®ãƒªã‚¹ãƒˆã‚’è¨­å®šã™ã‚‹ã€‚
 /// </summary>
 [CreateAssetMenu(menuName = "GpShop/GpShopDatabase")]
 public class GpShopDatabase : ScriptableObject
 {
-    [Tooltip("ƒVƒ‡ƒbƒv‚É•À‚Ô¤•iƒŠƒXƒgBsortOrder ‡‚É•\¦‚³‚ê‚éB")]
+    [Tooltip("ã‚·ãƒ§ãƒƒãƒ—ã«ä¸¦ã¶å•†å“ãƒªã‚¹ãƒˆã€‚sortOrder é †ã«è¡¨ç¤ºã•ã‚Œã‚‹ã€‚")]
     public List<GpShopData> shopItems = new();
 
     /// <summary>
-    /// Œ»İ‚Ì“’BŠK‚Å•\¦‰Â”\‚È¤•iƒŠƒXƒg‚ğ•Ô‚·B
-    /// sortOrder ¸‡‚Åƒ\[ƒgÏ‚İB
+    /// ç¾åœ¨ã®åˆ°é”éšã§è¡¨ç¤ºå¯èƒ½ãªå•†å“ãƒªã‚¹ãƒˆã‚’è¿”ã™ã€‚
+    /// sortOrder æ˜‡é †ã§ã‚½ãƒ¼ãƒˆæ¸ˆã¿ã€‚
     /// </summary>
     public List<GpShopData> GetAvailableItems(int reachedFloor)
     {

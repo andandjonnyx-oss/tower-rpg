@@ -1,45 +1,45 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ƒ‚ƒ“ƒXƒ^[}ŠÓ‚ÌƒAƒCƒRƒ“ƒZƒ‹i1‘Ì•ªjB
-/// MonsterZukanView ‚Ì GridLayoutGroup ”z‰º‚É Prefab ‚©‚ç“®“I¶¬‚³‚ê‚éB
+/// ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›³é‘‘ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚»ãƒ«ï¼ˆ1ä½“åˆ†ï¼‰ã€‚
+/// MonsterZukanView ã® GridLayoutGroup é…ä¸‹ã« Prefab ã‹ã‚‰å‹•çš„ç”Ÿæˆã•ã‚Œã‚‹ã€‚
 ///
-/// \‘¢:
+/// æ§‹é€ :
 ///   MonsterIconCell (Button + Image + TMP_Text)
-///     „¥„Ÿ iconImage  c ƒ‚ƒ“ƒXƒ^[‰æ‘œ or uHv•\¦
-///     „¤„Ÿ nameText   c ƒ‚ƒ“ƒXƒ^[–¼ or u???v
+///     â”œâ”€ iconImage  â€¦ ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”»åƒ or ã€Œï¼Ÿã€è¡¨ç¤º
+///     â””â”€ nameText   â€¦ ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å or ã€Œ???ã€
 ///
-/// –¢‘˜‹ö: ƒAƒCƒRƒ“”ñ•\¦A–¼‘Ou???vAƒ{ƒ^ƒ“–³Œø
-/// ‘˜‹öÏ‚İ: ƒAƒCƒRƒ“•\¦A–¼‘O•\¦Aƒ^ƒbƒv‚ÅƒR[ƒ‹ƒoƒbƒN
+/// æœªé­é‡æ™‚: ã‚¢ã‚¤ã‚³ãƒ³éè¡¨ç¤ºã€åå‰ã€Œ???ã€ã€ãƒœã‚¿ãƒ³ç„¡åŠ¹
+/// é­é‡æ¸ˆã¿: ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºã€åå‰è¡¨ç¤ºã€ã‚¿ãƒƒãƒ—ã§ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 /// </summary>
 public class MonsterIconCell : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("ƒ‚ƒ“ƒXƒ^[‰æ‘œ•\¦—p Image")]
+    [Tooltip("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç”»åƒè¡¨ç¤ºç”¨ Image")]
     [SerializeField] private Image iconImage;
 
-    [Tooltip("ƒ‚ƒ“ƒXƒ^[–¼•\¦—p TMP_Text")]
+    [Tooltip("ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åè¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text nameText;
 
-    [Tooltip("–¢‘˜‹ö‚É•\¦‚·‚éuHvƒeƒLƒXƒgiƒAƒCƒRƒ“‚Ìã‚Éd‚Ë‚Ä”z’uj")]
+    [Tooltip("æœªé­é‡æ™‚ã«è¡¨ç¤ºã™ã‚‹ã€Œï¼Ÿã€ãƒ†ã‚­ã‚¹ãƒˆï¼ˆã‚¢ã‚¤ã‚³ãƒ³ã®ä¸Šã«é‡ã­ã¦é…ç½®ï¼‰")]
     [SerializeField] private TMP_Text unknownText;
 
-    [Tooltip("ƒZƒ‹‘S‘Ì‚Ì Button ƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    [Tooltip("ã‚»ãƒ«å…¨ä½“ã® Button ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     [SerializeField] private Button cellButton;
 
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     private Monster monster;
     private Action<Monster> onClickCallback;
 
     /// <summary>
-    /// ƒZƒ‹‚ğ‰Šú‰»‚·‚éB
+    /// ã‚»ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
     /// </summary>
-    /// <param name="m">ƒ‚ƒ“ƒXƒ^[ƒf[ƒ^</param>
-    /// <param name="encountered">‘˜‹öÏ‚İ‚©‚Ç‚¤‚©</param>
-    /// <param name="onClick">ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒNi‘˜‹öÏ‚İ‚Ì‚İ”­‰Îj</param>
+    /// <param name="m">ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãƒ‡ãƒ¼ã‚¿</param>
+    /// <param name="encountered">é­é‡æ¸ˆã¿ã‹ã©ã†ã‹</param>
+    /// <param name="onClick">ã‚¿ãƒƒãƒ—æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼ˆé­é‡æ¸ˆã¿ã®ã¿ç™ºç«ï¼‰</param>
     public void Setup(Monster m, bool encountered, Action<Monster> onClick)
     {
         monster = m;
@@ -47,7 +47,7 @@ public class MonsterIconCell : MonoBehaviour
 
         if (encountered)
         {
-            // ‘˜‹öÏ‚İ: ƒAƒCƒRƒ“‚Æ–¼‘O‚ğ•\¦
+            // é­é‡æ¸ˆã¿: ã‚¢ã‚¤ã‚³ãƒ³ã¨åå‰ã‚’è¡¨ç¤º
             if (iconImage != null)
             {
                 iconImage.enabled = true;
@@ -65,13 +65,13 @@ public class MonsterIconCell : MonoBehaviour
         }
         else
         {
-            // –¢‘˜‹ö: uHv•\¦Aƒ^ƒbƒv–³Œø
+            // æœªé­é‡: ã€Œï¼Ÿã€è¡¨ç¤ºã€ã‚¿ãƒƒãƒ—ç„¡åŠ¹
             if (iconImage != null) iconImage.enabled = false;
             if (nameText != null) nameText.text = "???";
             if (unknownText != null)
             {
                 unknownText.gameObject.SetActive(true);
-                unknownText.text = "H";
+                unknownText.text = "ï¼Ÿ";
             }
             if (cellButton != null) cellButton.interactable = false;
         }

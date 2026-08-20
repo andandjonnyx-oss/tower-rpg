@@ -1,122 +1,122 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 /// <summary>
-/// ƒpƒbƒVƒuŒø‰Ê1‚Â•ª‚Ì’è‹`B
-/// –‚–@ƒAƒCƒeƒ€‚Ì passiveEffects ”z—ñ‚É“ü‚ê‚Äg‚¤B
-/// —á: ‰Š‚ÌŒì•„ ¨ effectType=AttributeResistance, targetAttribute=Fire, value=50
-/// —á: —Í‚Ìw—Ö ¨ effectType=StatBonus, targetStat=STR, value=5
-/// —á: “Å‘Ï«‚Ìw—Ö ¨ effectType=StatusEffectResistance, targetStatusEffect=Poison, value=50
+/// ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœ1ã¤åˆ†ã®å®šç¾©ã€‚
+/// é­”æ³•ã‚¢ã‚¤ãƒ†ãƒ ã® passiveEffects é…åˆ—ã«å…¥ã‚Œã¦ä½¿ã†ã€‚
+/// ä¾‹: ç‚ã®è­·ç¬¦ â†’ effectType=AttributeResistance, targetAttribute=Fire, value=50
+/// ä¾‹: åŠ›ã®æŒ‡è¼ª â†’ effectType=StatBonus, targetStat=STR, value=5
+/// ä¾‹: æ¯’è€æ€§ã®æŒ‡è¼ª â†’ effectType=StatusEffectResistance, targetStatusEffect=Poison, value=50
 ///
-/// d•¡ƒ‹[ƒ‹iPassiveCalculator ‚Åˆ—j:
-///   “¯‚¶ effectType + “¯‚¶ target ‚ÌŒø‰Ê‚ª•¡”‚ ‚éê‡A
-///   Å‘å value ‚ğ 100% “K—p‚µA2ŒÂ–ÚˆÈ~‚Í value ‚Ì 10% ‚¸‚Â‰ÁZ‚·‚éB
+/// é‡è¤‡ãƒ«ãƒ¼ãƒ«ï¼ˆPassiveCalculator ã§å‡¦ç†ï¼‰:
+///   åŒã˜ effectType + åŒã˜ target ã®åŠ¹æœãŒè¤‡æ•°ã‚ã‚‹å ´åˆã€
+///   æœ€å¤§ value ã‚’ 100% é©ç”¨ã—ã€2å€‹ç›®ä»¥é™ã¯ value ã® 10% ãšã¤åŠ ç®—ã™ã‚‹ã€‚
 /// </summary>
 [Serializable]
 public class PassiveEffect
 {
-    [Tooltip("‚±‚ÌŒø‰Ê‚Ìí—Ş")]
+    [Tooltip("ã“ã®åŠ¹æœã®ç¨®é¡")]
     public PassiveType effectType;
 
-    [Header("Target (Œø‰Ê‘ÎÛ)")]
-    [Tooltip("‘®«‘Ï«E‘®«UŒ‚—Íƒ{[ƒiƒX‚Ìê‡‚Ì‘ÎÛ‘®«")]
+    [Header("Target (åŠ¹æœå¯¾è±¡)")]
+    [Tooltip("å±æ€§è€æ€§ãƒ»å±æ€§æ”»æ’ƒåŠ›ãƒœãƒ¼ãƒŠã‚¹ã®å ´åˆã®å¯¾è±¡å±æ€§")]
     public WeaponAttribute targetAttribute;
 
-    [Tooltip("ƒXƒe[ƒ^ƒXƒ{[ƒiƒX‚Ìê‡‚Ì‘ÎÛƒXƒe[ƒ^ƒX")]
+    [Tooltip("ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒœãƒ¼ãƒŠã‚¹ã®å ´åˆã®å¯¾è±¡ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹")]
     public StatType targetStat;
 
-    [Tooltip("ó‘ÔˆÙí‘Ï«‚Ìê‡‚Ì‘ÎÛó‘ÔˆÙíB\n"
-           + "effectType=StatusEffectResistance ‚Ìê‡‚Ég—p‚·‚éB\n"
-           + "—á: Poison ‚ğİ’è‚·‚é‚Æ“Å‘Ï«‚Æ‚µ‚Ä‹@”\‚·‚éB")]
+    [Tooltip("çŠ¶æ…‹ç•°å¸¸è€æ€§ã®å ´åˆã®å¯¾è±¡çŠ¶æ…‹ç•°å¸¸ã€‚\n"
+           + "effectType=StatusEffectResistance ã®å ´åˆã«ä½¿ç”¨ã™ã‚‹ã€‚\n"
+           + "ä¾‹: Poison ã‚’è¨­å®šã™ã‚‹ã¨æ¯’è€æ€§ã¨ã—ã¦æ©Ÿèƒ½ã™ã‚‹ã€‚")]
     public StatusEffect targetStatusEffect;
 
     [Header("Value")]
-    [Tooltip("Œø‰Ê’lB‘Ï«‚È‚ç‘Ï«’lAƒXƒeƒAƒbƒv‚È‚çã¸—Ê")]
+    [Tooltip("åŠ¹æœå€¤ã€‚è€æ€§ãªã‚‰è€æ€§å€¤ã€ã‚¹ãƒ†ã‚¢ãƒƒãƒ—ãªã‚‰ä¸Šæ˜‡é‡")]
     public int value;
 
-    [Header("Float Valuei¬”“_¸“x‚ª•K—v‚ÈŒø‰Ê—pj")]
-    [Tooltip("float ”Å‚ÌŒø‰Ê’lBEvasionBonus / CriticalBonus ‚Åg—p‚·‚éB\n"
-           + "valueiintj‚ª 0 ‚Å‚±‚¿‚ç‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡‚Í‚±‚¿‚ç‚ğg‚¤B\n"
-           + "—¼•ûİ’è‚³‚ê‚Ä‚¢‚éê‡‚Í floatValue ‚ğ—Dæ‚·‚éB")]
+    [Header("Float Valueï¼ˆå°æ•°ç‚¹ç²¾åº¦ãŒå¿…è¦ãªåŠ¹æœç”¨ï¼‰")]
+    [Tooltip("float ç‰ˆã®åŠ¹æœå€¤ã€‚EvasionBonus / CriticalBonus ã§ä½¿ç”¨ã™ã‚‹ã€‚\n"
+           + "valueï¼ˆintï¼‰ãŒ 0 ã§ã“ã¡ã‚‰ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ã“ã¡ã‚‰ã‚’ä½¿ã†ã€‚\n"
+           + "ä¸¡æ–¹è¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ floatValue ã‚’å„ªå…ˆã™ã‚‹ã€‚")]
     public float floatValue;
 }
 
 /// <summary>
-/// ƒpƒbƒVƒuŒø‰Ê‚Ìí—ŞB
+/// ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœã®ç¨®é¡ã€‚
 ///
-/// yƒOƒ‹[ƒv•ª‚¯z
+/// ã€ã‚°ãƒ«ãƒ¼ãƒ—åˆ†ã‘ã€‘
 ///
-/// ¥ƒ^[ƒQƒbƒgw’è‚ ‚èitargetAttribute ‚ğg‚¤j
-///   AttributeResistance    : ‘®«‘Ï«
-///   AttributeAttackBonus   : ‘®«UŒ‚—Íƒ{[ƒiƒX
+/// â–¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆtargetAttribute ã‚’ä½¿ã†ï¼‰
+///   AttributeResistance    : å±æ€§è€æ€§
+///   AttributeAttackBonus   : å±æ€§æ”»æ’ƒåŠ›ãƒœãƒ¼ãƒŠã‚¹
 ///
-/// ¥ƒ^[ƒQƒbƒgw’è‚ ‚èitargetStat ‚ğg‚¤j
-///   StatBonus              : Šî‘bƒXƒe[ƒ^ƒXƒAƒbƒvi”Ä—pj
+/// â–¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆtargetStat ã‚’ä½¿ã†ï¼‰
+///   StatBonus              : åŸºç¤ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚¢ãƒƒãƒ—ï¼ˆæ±ç”¨ï¼‰
 ///
-/// ¥ƒ^[ƒQƒbƒgw’è‚ ‚èitargetStatusEffect ‚ğg‚¤j
-///   StatusEffectResistance : ó‘ÔˆÙí‘Ï«
+/// â–¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆtargetStatusEffect ã‚’ä½¿ã†ï¼‰
+///   StatusEffectResistance : çŠ¶æ…‹ç•°å¸¸è€æ€§
 ///
-/// ¥ƒ^[ƒQƒbƒgw’è‚È‚µieffectType ‚¾‚¯‚ÅˆêˆÓ‚ÉŒˆ‚Ü‚éj
-///   MaxHpBonus             : Å‘åHPƒAƒbƒv
-///   MaxMpBonus             : Å‘åMPƒAƒbƒv
-///   AttackBonus            : UŒ‚—ÍƒAƒbƒv
-///   DefenseBonus           : –hŒä—ÍƒAƒbƒv
-///   MagicAttackBonus       : –‚–@UŒ‚—ÍƒAƒbƒv
-///   MagicDefenseBonus      : –‚–@–hŒä—ÍƒAƒbƒv
-///   LuckBonus              : ‰^‚Ì—Ç‚³ƒAƒbƒv
-///   AccuracyBonus          : –½’†—ÍƒAƒbƒvi’Ç‰Áj
-///   EvasionBonus           : ‰ñ”ğ—¦ƒAƒbƒvi’Ç‰ÁAfloat ¬”“_2ˆÊj
-///   CriticalBonus          : ƒNƒŠƒeƒBƒJƒ‹—¦ƒAƒbƒvi’Ç‰ÁAfloat ¬”“_2ˆÊj
+/// â–¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šãªã—ï¼ˆeffectType ã ã‘ã§ä¸€æ„ã«æ±ºã¾ã‚‹ï¼‰
+///   MaxHpBonus             : æœ€å¤§HPã‚¢ãƒƒãƒ—
+///   MaxMpBonus             : æœ€å¤§MPã‚¢ãƒƒãƒ—
+///   AttackBonus            : æ”»æ’ƒåŠ›ã‚¢ãƒƒãƒ—
+///   DefenseBonus           : é˜²å¾¡åŠ›ã‚¢ãƒƒãƒ—
+///   MagicAttackBonus       : é­”æ³•æ”»æ’ƒåŠ›ã‚¢ãƒƒãƒ—
+///   MagicDefenseBonus      : é­”æ³•é˜²å¾¡åŠ›ã‚¢ãƒƒãƒ—
+///   LuckBonus              : é‹ã®è‰¯ã•ã‚¢ãƒƒãƒ—
+///   AccuracyBonus          : å‘½ä¸­åŠ›ã‚¢ãƒƒãƒ—ï¼ˆè¿½åŠ ï¼‰
+///   EvasionBonus           : å›é¿ç‡ã‚¢ãƒƒãƒ—ï¼ˆè¿½åŠ ã€float å°æ•°ç‚¹2ä½ï¼‰
+///   CriticalBonus          : ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ã‚¢ãƒƒãƒ—ï¼ˆè¿½åŠ ã€float å°æ•°ç‚¹2ä½ï¼‰
 /// </summary>
 public enum PassiveType
 {
-    // ---- ƒ^[ƒQƒbƒgw’è‚ ‚èi‘®«j ----
+    // ---- ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆå±æ€§ï¼‰ ----
 
-    /// <summary>‘®«‘Ï«ƒAƒbƒvBtargetAttribute ‚Å‘ÎÛ‘®«‚ğw’èB</summary>
+    /// <summary>å±æ€§è€æ€§ã‚¢ãƒƒãƒ—ã€‚targetAttribute ã§å¯¾è±¡å±æ€§ã‚’æŒ‡å®šã€‚</summary>
     AttributeResistance,
 
-    /// <summary>‘®«UŒ‚—ÍƒAƒbƒvBtargetAttribute ‚Å‘ÎÛ‘®«‚ğw’èB</summary>
+    /// <summary>å±æ€§æ”»æ’ƒåŠ›ã‚¢ãƒƒãƒ—ã€‚targetAttribute ã§å¯¾è±¡å±æ€§ã‚’æŒ‡å®šã€‚</summary>
     AttributeAttackBonus,
 
-    // ---- ƒ^[ƒQƒbƒgw’è‚ ‚èiƒXƒe[ƒ^ƒXj ----
+    // ---- ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šã‚ã‚Šï¼ˆã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ï¼‰ ----
 
-    /// <summary>Šî‘bƒXƒe[ƒ^ƒXƒAƒbƒvi”Ä—pjBtargetStat ‚Å‘ÎÛƒXƒe[ƒ^ƒX‚ğw’èB</summary>
+    /// <summary>åŸºç¤ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚¢ãƒƒãƒ—ï¼ˆæ±ç”¨ï¼‰ã€‚targetStat ã§å¯¾è±¡ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’æŒ‡å®šã€‚</summary>
     StatBonus,
 
-    // ---- ƒ^[ƒQƒbƒgw’è‚È‚µ ----
+    // ---- ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæŒ‡å®šãªã— ----
 
-    /// <summary>Å‘åHPƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>æœ€å¤§HPã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     MaxHpBonus,
 
-    /// <summary>Å‘åMPƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>æœ€å¤§MPã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     MaxMpBonus,
 
-    /// <summary>UŒ‚—ÍƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>æ”»æ’ƒåŠ›ã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     AttackBonus,
 
-    /// <summary>–hŒä—ÍƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>é˜²å¾¡åŠ›ã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     DefenseBonus,
 
-    /// <summary>–‚–@UŒ‚—ÍƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>é­”æ³•æ”»æ’ƒåŠ›ã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     MagicAttackBonus,
 
-    /// <summary>–‚–@–hŒä—ÍƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>é­”æ³•é˜²å¾¡åŠ›ã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     MagicDefenseBonus,
 
-    /// <summary>‰^‚Ì—Ç‚³ƒAƒbƒvBtargetAttribute/targetStat ‚Í•s—vB</summary>
+    /// <summary>é‹ã®è‰¯ã•ã‚¢ãƒƒãƒ—ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚</summary>
     LuckBonus,
 
-    /// <summary>ó‘ÔˆÙí‘Ï«ƒAƒbƒvBtargetStatusEffect ‚Å‘ÎÛó‘ÔˆÙí‚ğw’èB</summary>
+    /// <summary>çŠ¶æ…‹ç•°å¸¸è€æ€§ã‚¢ãƒƒãƒ—ã€‚targetStatusEffect ã§å¯¾è±¡çŠ¶æ…‹ç•°å¸¸ã‚’æŒ‡å®šã€‚</summary>
     StatusEffectResistance,
 
-    // ---- –½’†E‰ñ”ğEƒNƒŠƒeƒBƒJƒ‹i’Ç‰Áj ----
+    // ---- å‘½ä¸­ãƒ»å›é¿ãƒ»ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ï¼ˆè¿½åŠ ï¼‰ ----
 
-    /// <summary>–½’†—ÍƒAƒbƒviintjBtargetAttribute/targetStat ‚Í•s—vBvalue ‚ğg—pB</summary>
+    /// <summary>å‘½ä¸­åŠ›ã‚¢ãƒƒãƒ—ï¼ˆintï¼‰ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚value ã‚’ä½¿ç”¨ã€‚</summary>
     AccuracyBonus,
 
-    /// <summary>‰ñ”ğ—¦ƒAƒbƒvifloat ¬”“_2ˆÊjBtargetAttribute/targetStat ‚Í•s—vBfloatValue ‚ğg—pB</summary>
+    /// <summary>å›é¿ç‡ã‚¢ãƒƒãƒ—ï¼ˆfloat å°æ•°ç‚¹2ä½ï¼‰ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚floatValue ã‚’ä½¿ç”¨ã€‚</summary>
     EvasionBonus,
 
-    /// <summary>ƒNƒŠƒeƒBƒJƒ‹—¦ƒAƒbƒvifloat ¬”“_2ˆÊjBtargetAttribute/targetStat ‚Í•s—vBfloatValue ‚ğg—pB</summary>
+    /// <summary>ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡ã‚¢ãƒƒãƒ—ï¼ˆfloat å°æ•°ç‚¹2ä½ï¼‰ã€‚targetAttribute/targetStat ã¯ä¸è¦ã€‚floatValue ã‚’ä½¿ç”¨ã€‚</summary>
     CriticalBonus,
 }

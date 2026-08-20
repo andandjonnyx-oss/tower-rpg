@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ƒGƒtƒFƒNƒgÚ×ƒEƒBƒ“ƒhƒEB
-/// SkillEffectDataiSOj‚Ìî•ñ‚ÆA‚±‚ÌƒGƒtƒFƒNƒg‚ğg—p‚µ‚Ä‚¢‚éƒXƒLƒ‹‚Ìˆê——‚ğ•\¦‚·‚éB
+/// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆè©³ç´°ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€‚
+/// SkillEffectDataï¼ˆSOï¼‰ã®æƒ…å ±ã¨ã€ã“ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ã®ä¸€è¦§ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
 /// </summary>
 public class SkillEffectDetailWindow : EditorWindow
 {
     private SkillEffectData effectData;
     private Vector2 scrollPos;
 
-    // ‚±‚ÌƒGƒtƒFƒNƒg‚ğQÆ‚µ‚Ä‚¢‚éƒXƒLƒ‹ˆê——iƒLƒƒƒbƒVƒ…j
+    // ã“ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å‚ç…§ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ä¸€è¦§ï¼ˆã‚­ãƒ£ãƒƒã‚·ãƒ¥ï¼‰
     private List<SkillData> referencingSkills = new();
 
     public static void Open(SkillEffectData target)
@@ -33,7 +33,7 @@ public class SkillEffectDetailWindow : EditorWindow
     {
         if (effectData == null)
         {
-            EditorGUILayout.HelpBox("ƒGƒtƒFƒNƒg‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", MessageType.Info);
+            EditorGUILayout.HelpBox("ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", MessageType.Info);
             return;
         }
 
@@ -54,83 +54,83 @@ public class SkillEffectDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // Šî–{î•ñ
+    // åŸºæœ¬æƒ…å ±
     // =========================================================
     private void DrawBasicSection()
     {
-        EditorGUILayout.LabelField("Šî–{î•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("åŸºæœ¬æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("ƒAƒZƒbƒg–¼", effectData.name ?? "");
-        EditorGUILayout.LabelField("Œø‰Ê–¼", effectData.effectName ?? "");
-        EditorGUILayout.LabelField("ƒNƒ‰ƒX", effectData.GetType().Name);
+        EditorGUILayout.LabelField("ã‚¢ã‚»ãƒƒãƒˆå", effectData.name ?? "");
+        EditorGUILayout.LabelField("åŠ¹æœå", effectData.effectName ?? "");
+        EditorGUILayout.LabelField("ã‚¯ãƒ©ã‚¹", effectData.GetType().Name);
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒWƒƒƒ“ƒ‹ŒÅ—Lî•ñ
+    // ã‚¸ãƒ£ãƒ³ãƒ«å›ºæœ‰æƒ…å ±
     // =========================================================
     private void DrawGenreSection()
     {
-        EditorGUILayout.LabelField("ƒWƒƒƒ“ƒ‹ŒÅ—Lî•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¸ãƒ£ãƒ³ãƒ«å›ºæœ‰æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (effectData is StatusAilmentEffectData)
         {
-            EditorGUILayout.LabelField("ƒWƒƒƒ“ƒ‹", "ó‘ÔˆÙíi•t—^/‰ñ•œj");
-            EditorGUILayout.LabelField("”õl", "ó‘ÔˆÙí‚Ìí—Ş‚âƒ‚[ƒh‚ÍƒXƒLƒ‹‘¤‚Ì SkillEffectEntry ‚Åİ’è");
+            EditorGUILayout.LabelField("ã‚¸ãƒ£ãƒ³ãƒ«", "çŠ¶æ…‹ç•°å¸¸ï¼ˆä»˜ä¸/å›å¾©ï¼‰");
+            EditorGUILayout.LabelField("å‚™è€ƒ", "çŠ¶æ…‹ç•°å¸¸ã®ç¨®é¡ã‚„ãƒ¢ãƒ¼ãƒ‰ã¯ã‚¹ã‚­ãƒ«å´ã® SkillEffectEntry ã§è¨­å®š");
         }
         else if (effectData is HealEffectData healData)
         {
-            EditorGUILayout.LabelField("ƒWƒƒƒ“ƒ‹", "HP‰ñ•œ");
-            EditorGUILayout.LabelField("ŒvZ®ƒ^ƒCƒv", healData.formulaType.ToString());
+            EditorGUILayout.LabelField("ã‚¸ãƒ£ãƒ³ãƒ«", "HPå›å¾©");
+            EditorGUILayout.LabelField("è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—", healData.formulaType.ToString());
 
             string formulaDesc;
             switch (healData.formulaType)
             {
                 case HealFormulaType.Fixed:
-                    formulaDesc = "intValue ‚ª‚»‚Ì‚Ü‚Ü‰ñ•œ—Ê";
+                    formulaDesc = "intValue ãŒãã®ã¾ã¾å›å¾©é‡";
                     break;
                 case HealFormulaType.MaxHpPercent:
-                    formulaDesc = "Å‘åHP ~ intValue%";
+                    formulaDesc = "æœ€å¤§HP Ã— intValue%";
                     break;
                 case HealFormulaType.IntMultiplier:
-                    formulaDesc = "INT ~ intValue";
+                    formulaDesc = "INT Ã— intValue";
                     break;
                 case HealFormulaType.StrMultiplier:
-                    formulaDesc = "STR ~ intValue";
+                    formulaDesc = "STR Ã— intValue";
                     break;
                 default:
                     formulaDesc = "-";
                     break;
             }
-            EditorGUILayout.LabelField("ŒvZ®", formulaDesc);
+            EditorGUILayout.LabelField("è¨ˆç®—å¼", formulaDesc);
         }
         else if (effectData is LevelDrainEffectData)
         {
-            EditorGUILayout.LabelField("ƒWƒƒƒ“ƒ‹", "ƒŒƒxƒ‹ƒhƒŒƒCƒ“");
-            EditorGUILayout.LabelField("”õl", "intValue = ƒhƒŒƒCƒ“—ÊAchance = ”­“®—¦");
+            EditorGUILayout.LabelField("ã‚¸ãƒ£ãƒ³ãƒ«", "ãƒ¬ãƒ™ãƒ«ãƒ‰ãƒ¬ã‚¤ãƒ³");
+            EditorGUILayout.LabelField("å‚™è€ƒ", "intValue = ãƒ‰ãƒ¬ã‚¤ãƒ³é‡ã€chance = ç™ºå‹•ç‡");
         }
         else
         {
-            EditorGUILayout.LabelField("ƒWƒƒƒ“ƒ‹", "•s–¾i" + effectData.GetType().Name + "j");
+            EditorGUILayout.LabelField("ã‚¸ãƒ£ãƒ³ãƒ«", "ä¸æ˜ï¼ˆ" + effectData.GetType().Name + "ï¼‰");
         }
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // QÆ‚µ‚Ä‚¢‚éƒXƒLƒ‹ˆê——
+    // å‚ç…§ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ä¸€è¦§
     // =========================================================
     private void DrawReferencingSkillsSection()
     {
-        EditorGUILayout.LabelField($"g—p‚µ‚Ä‚¢‚éƒXƒLƒ‹i{referencingSkills.Count} Œj", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField($"ä½¿ç”¨ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ï¼ˆ{referencingSkills.Count} ä»¶ï¼‰", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (referencingSkills.Count == 0)
         {
-            EditorGUILayout.LabelField("‚±‚ÌƒGƒtƒFƒNƒg‚ğg—p‚µ‚Ä‚¢‚éƒXƒLƒ‹‚Í‚ ‚è‚Ü‚¹‚ñB");
+            EditorGUILayout.LabelField("ã“ã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‚¹ã‚­ãƒ«ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚");
         }
         else
         {
@@ -144,7 +144,7 @@ public class SkillEffectDetailWindow : EditorWindow
                 string label = $"{sk.skillId ?? ""} - {sk.skillName ?? ""}";
                 EditorGUILayout.LabelField(label);
 
-                if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+                if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
                 {
                     SkillDetailWindow.Open(sk);
                 }
@@ -155,23 +155,23 @@ public class SkillEffectDetailWindow : EditorWindow
 
         EditorGUILayout.EndVertical();
 
-        if (GUILayout.Button("QÆƒXƒLƒ‹ÄŒŸõ", GUILayout.Height(24)))
+        if (GUILayout.Button("å‚ç…§ã‚¹ã‚­ãƒ«å†æ¤œç´¢", GUILayout.Height(24)))
         {
             RefreshReferencingSkills();
         }
     }
 
     // =========================================================
-    // à–¾
+    // èª¬æ˜
     // =========================================================
     private void DrawDescriptionSection()
     {
-        EditorGUILayout.LabelField("à–¾", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("èª¬æ˜", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (string.IsNullOrWhiteSpace(effectData.description))
         {
-            EditorGUILayout.LabelField("à–¾‚È‚µ");
+            EditorGUILayout.LabelField("èª¬æ˜ãªã—");
         }
         else
         {
@@ -182,14 +182,14 @@ public class SkillEffectDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // QÆƒXƒLƒ‹ŒŸõ
+    // å‚ç…§ã‚¹ã‚­ãƒ«æ¤œç´¢
     // =========================================================
     private void RefreshReferencingSkills()
     {
         referencingSkills.Clear();
         if (effectData == null) return;
 
-        // ‘S SkillData ƒAƒZƒbƒg‚ğŒŸõ
+        // å…¨ SkillData ã‚¢ã‚»ãƒƒãƒˆã‚’æ¤œç´¢
         string[] guids = AssetDatabase.FindAssets("t:SkillData");
 
         foreach (var guid in guids)
@@ -205,12 +205,12 @@ public class SkillEffectDetailWindow : EditorWindow
                 if (entry != null && entry.effectData == effectData)
                 {
                     referencingSkills.Add(skill);
-                    break; // “¯‚¶ƒXƒLƒ‹‚ğ•¡”‰ñ’Ç‰Á‚µ‚È‚¢
+                    break; // åŒã˜ã‚¹ã‚­ãƒ«ã‚’è¤‡æ•°å›è¿½åŠ ã—ãªã„
                 }
             }
         }
 
-        // ID ‚Åƒ\[ƒg
+        // ID ã§ã‚½ãƒ¼ãƒˆ
         referencingSkills.Sort((a, b) =>
         {
             string idA = a.skillId ?? "";

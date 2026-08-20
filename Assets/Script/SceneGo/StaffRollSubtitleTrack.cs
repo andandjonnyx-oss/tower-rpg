@@ -1,47 +1,47 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// �X�^�b�t���[���p�̎����i�̎��j�g���b�N�B
-/// �V�[���J�n�i= BGM�J�n�j����̌o�ߕb���ɍ��킹�Ď�����؂�ւ���B
-/// StaffRollController �̃X���C�h�V���[�Ƃ͓Ɨ����ē����B
+/// スタッフロール用の字幕（歌詞）トラック。
+/// シーン開始（= BGM開始）からの経過秒数に合わせて字幕を切り替える。
+/// StaffRollController のスライドショーとは独立して動く。
 ///
-/// �g����:
-///   1. StaffRoll �V�[���̎����p TMP_Text�i��ʉ����j�ɂ��̃R���|�[�l���g���A�^�b�`
-///      �i�܂��͋�I�u�W�F�N�g�ɃA�^�b�`���� subtitleText ���A�T�C���j
-///   2. entries �Ɂu�J�n�b�� + �e�L�X�g�v���Ȃ̃^�C���X�^���v�ʂ�ɓo�^
-///   3. �s�Ԃ��󂯂����i�O�t�E�ԑt�Ȃǁj�ꍇ�́A��e�L�X�g�̃G���g��������
+/// 使い方:
+///   1. StaffRoll シーンの字幕用 TMP_Text（画面下部）にこのコンポーネントをアタッチ
+///      （または空オブジェクトにアタッチして subtitleText をアサイン）
+///   2. entries に「開始秒数 + テキスト」を曲のタイムスタンプ通りに登録
+///   3. 行間を空けたい（前奏・間奏など）場合は、空テキストのエントリを挟む
 ///
-/// �^�C�~���O�́u�O�̎�������̑��Εb�v�ł͂Ȃ��u�ȓ�����̐�Εb�v�Ŏw�肷��B
-/// ����ɂ��A1�s�̃^�C�~���O�𒲐����Ă��ȍ~�̍s�ɉe�����Ȃ��i�̎��Y���h�~�j�B
+/// タイミングは「前の字幕からの相対秒」ではなく「曲頭からの絶対秒」で指定する。
+/// これにより、1行のタイミングを調整しても以降の行に影響しない（歌詞ズレ防止）。
 /// </summary>
 public class StaffRollSubtitleTrack : MonoBehaviour
 {
     [System.Serializable]
     public class SubtitleEntry
     {
-        [Tooltip("���̎�����\�����n�߂�b���i�V�[���J�n���Ȃ̓�����̐�Εb�j")]
+        [Tooltip("この字幕を表示し始める秒数（シーン開始＝曲の頭からの絶対秒）")]
         public float startTime;
 
-        [Tooltip("�����e�L�X�g�B��ɂ���Ǝ����������i�O�t�E�ԑt�Ȃǁj")]
+        [Tooltip("字幕テキスト。空にすると字幕を消す（前奏・間奏など）")]
         [TextArea(1, 3)]
         public string text;
     }
 
     [Header("Subtitles")]
-    [Tooltip("�������X�g�BstartTime �̏����ɓo�^����B\n"
-           + "���̃G���g���� startTime �ɒB����Ǝ����I�ɐ؂�ւ��B\n"
-           + "�Ō�̃G���g���̓V�[���I���܂ŕ\�����ꑱ����\n"
-           + "�i�r���ŏ��������ꍇ�͋�e�L�X�g�̃G���g�����Ō�ɒǉ�����j�B")]
+    [Tooltip("字幕リスト。startTime の昇順に登録する。\n"
+           + "次のエントリの startTime に達すると自動的に切り替わる。\n"
+           + "最後のエントリはシーン終了まで表示され続ける\n"
+           + "（途中で消したい場合は空テキストのエントリを最後に追加する）。")]
     [SerializeField] private SubtitleEntry[] entries;
 
-    [Tooltip("�S�̂̃^�C�~���O�������i�b�j�B\n"
-           + "���̒l�Ŏ������x���A���̒l�ő����o��B�ȂƂ̃Y���␳�p�B")]
+    [Tooltip("全体のタイミング微調整（秒）。\n"
+           + "正の値で字幕が遅く、負の値で早く出る。曲とのズレ補正用。")]
     [SerializeField] private float timeOffset = 0f;
 
     [Header("UI")]
-    [Tooltip("������\������ TMP_Text�B���ݒ�̏ꍇ�͎������g����擾�����݂�B")]
+    [Tooltip("字幕を表示する TMP_Text。未設定の場合は自分自身から取得を試みる。")]
     [SerializeField] private TMP_Text subtitleText;
 
     private void Start()
@@ -51,7 +51,7 @@ public class StaffRollSubtitleTrack : MonoBehaviour
 
         if (subtitleText == null)
         {
-            Debug.LogWarning("[StaffRollSubtitle] subtitleText �����ݒ�ł��B������\���ł��܂���B");
+            Debug.LogWarning("[StaffRollSubtitle] subtitleText が未設定です。字幕を表示できません。");
             return;
         }
 
@@ -63,9 +63,9 @@ public class StaffRollSubtitleTrack : MonoBehaviour
     }
 
     /// <summary>
-    /// �V�[���J�n��������i= �Ȃ̓��j�Ƃ��āA�e�G���g���� startTime �ɒB������
-    /// ������؂�ւ���B�ҋ@�͐�Ύ����x�[�X�Ŕ��肷�邽�߁A
-    /// �s���������Ă��ݐσY�����������Ȃ��B
+    /// シーン開始時刻を基準（= 曲の頭）として、各エントリの startTime に達したら
+    /// 字幕を切り替える。待機は絶対時刻ベースで判定するため、
+    /// 行数が増えても累積ズレが発生しない。
     /// </summary>
     private IEnumerator PlaySubtitles()
     {

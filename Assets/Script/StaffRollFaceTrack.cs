@@ -1,50 +1,50 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// ƒXƒ^ƒbƒtƒ[ƒ‹—p‚Ì•\îƒgƒ‰ƒbƒNB
-/// StaffRollSubtitleTracki‰ÌŒj‚Æ“¯‚¶d‘g‚İ‚ÅAƒV[ƒ“ŠJni= BGMŠJnj‚©‚ç‚Ì
-/// Œo‰ß•b”‚É‡‚í‚¹‚Ä FaceComposer ‚ÌŠeƒp[ƒc”Ô†‚ğØ‚è‘Ö‚¦‚éB
+/// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«ç”¨ã®è¡¨æƒ…ãƒˆãƒ©ãƒƒã‚¯ã€‚
+/// StaffRollSubtitleTrackï¼ˆæ­Œè©ï¼‰ã¨åŒã˜ä»•çµ„ã¿ã§ã€ã‚·ãƒ¼ãƒ³é–‹å§‹ï¼ˆ= BGMé–‹å§‹ï¼‰ã‹ã‚‰ã®
+/// çµŒéç§’æ•°ã«åˆã‚ã›ã¦ FaceComposer ã®å„ãƒ‘ãƒ¼ãƒ„ç•ªå·ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
 ///
-/// g‚¢•û:
-///   1. ‹óƒIƒuƒWƒFƒNƒgiEdFacePlayer “™j‚É‚±‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ğƒAƒ^ƒbƒ`
-///   2. composer ‚É Faceroot ‚Ì FaceComposer ‚ğƒAƒTƒCƒ“
-///   3. entries ‚ÉuŠJn•b” + Šeƒp[ƒc”Ô†v‚ğ‰ÌŒ‚Æ“¯‚¶ƒ^ƒCƒ€ƒXƒ^ƒ“ƒv‚Å“o˜^
+/// ä½¿ã„æ–¹:
+///   1. ç©ºã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆEdFacePlayer ç­‰ï¼‰ã«ã“ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¿ãƒƒãƒ
+///   2. composer ã« Faceroot ã® FaceComposer ã‚’ã‚¢ã‚µã‚¤ãƒ³
+///   3. entries ã«ã€Œé–‹å§‹ç§’æ•° + å„ãƒ‘ãƒ¼ãƒ„ç•ªå·ã€ã‚’æ­Œè©ã¨åŒã˜ã‚¿ã‚¤ãƒ ã‚¹ã‚¿ãƒ³ãƒ—ã§ç™»éŒ²
 ///
-/// ƒ^ƒCƒ~ƒ“ƒO‚Í‰ÌŒ‘¤‚Æ“¯‚¶‚­u‹È“ª‚©‚ç‚Ìâ‘Î•bv‚Åw’è‚·‚é‚½‚ßA
-/// 1s’²®‚µ‚Ä‚àˆÈ~‚É‰e‹¿‚¹‚¸A‰ÌŒ‚Æ•\î‚ªƒYƒŒ‚È‚¢B
+/// ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã¯æ­Œè©å´ã¨åŒã˜ãã€Œæ›²é ­ã‹ã‚‰ã®çµ¶å¯¾ç§’ã€ã§æŒ‡å®šã™ã‚‹ãŸã‚ã€
+/// 1è¡Œèª¿æ•´ã—ã¦ã‚‚ä»¥é™ã«å½±éŸ¿ã›ãšã€æ­Œè©ã¨è¡¨æƒ…ãŒã‚ºãƒ¬ãªã„ã€‚
 /// </summary>
 public class StaffRollFaceTrack : MonoBehaviour
 {
     [System.Serializable]
     public class FaceEntry
     {
-        [Tooltip("‚±‚Ì•\î‚ÉØ‚è‘Ö‚¦‚é•b”iƒV[ƒ“ŠJn‹È‚Ì“ª‚©‚ç‚Ìâ‘Î•bj")]
+        [Tooltip("ã“ã®è¡¨æƒ…ã«åˆ‡ã‚Šæ›¿ãˆã‚‹ç§’æ•°ï¼ˆã‚·ãƒ¼ãƒ³é–‹å§‹ï¼æ›²ã®é ­ã‹ã‚‰ã®çµ¶å¯¾ç§’ï¼‰")]
         public float startTime;
-        [Tooltip("g‘Ì(karada)‚Ì”Ô†")] public int body = 0;
-        [Tooltip("”¯(kami)‚Ì”Ô†")] public int hair = 0;
-        [Tooltip("”û(mayu)‚Ì”Ô†")] public int brow = 0;
-        [Tooltip("–Ú(me)‚Ì”Ô†")] public int eye = 0;
-        [Tooltip("Œû(kuti)‚Ì”Ô†")] public int mouth = 0;
+        [Tooltip("èº«ä½“(karada)ã®ç•ªå·")] public int body = 0;
+        [Tooltip("é«ª(kami)ã®ç•ªå·")] public int hair = 0;
+        [Tooltip("çœ‰(mayu)ã®ç•ªå·")] public int brow = 0;
+        [Tooltip("ç›®(me)ã®ç•ªå·")] public int eye = 0;
+        [Tooltip("å£(kuti)ã®ç•ªå·")] public int mouth = 0;
     }
 
     [Header("Face")]
-    [Tooltip("•\î‚ğØ‚è‘Ö‚¦‚é‘ÎÛ‚Ì FaceComposerB")]
+    [Tooltip("è¡¨æƒ…ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹å¯¾è±¡ã® FaceComposerã€‚")]
     [SerializeField] private FaceComposer composer;
 
-    [Tooltip("•\îƒŠƒXƒgBstartTime ‚Ì¸‡‚É“o˜^‚·‚éB\n"
-           + "Ÿ‚ÌƒGƒ“ƒgƒŠ‚Ì startTime ‚É’B‚·‚é‚Æ©“®“I‚ÉØ‚è‘Ö‚í‚éB")]
+    [Tooltip("è¡¨æƒ…ãƒªã‚¹ãƒˆã€‚startTime ã®æ˜‡é †ã«ç™»éŒ²ã™ã‚‹ã€‚\n"
+           + "æ¬¡ã®ã‚¨ãƒ³ãƒˆãƒªã® startTime ã«é”ã™ã‚‹ã¨è‡ªå‹•çš„ã«åˆ‡ã‚Šæ›¿ã‚ã‚‹ã€‚")]
     [SerializeField] private FaceEntry[] entries;
 
-    [Tooltip("‘S‘Ì‚Ìƒ^ƒCƒ~ƒ“ƒO”÷’²®i•bjB\n"
-           + "³‚Ì’l‚Å•\î‚ª’x‚­A•‰‚Ì’l‚Å‘‚­Ø‚è‘Ö‚í‚éB‹È‚Æ‚ÌƒYƒŒ•â³—pB")]
+    [Tooltip("å…¨ä½“ã®ã‚¿ã‚¤ãƒŸãƒ³ã‚°å¾®èª¿æ•´ï¼ˆç§’ï¼‰ã€‚\n"
+           + "æ­£ã®å€¤ã§è¡¨æƒ…ãŒé…ãã€è² ã®å€¤ã§æ—©ãåˆ‡ã‚Šæ›¿ã‚ã‚‹ã€‚æ›²ã¨ã®ã‚ºãƒ¬è£œæ­£ç”¨ã€‚")]
     [SerializeField] private float timeOffset = 0f;
 
     private void Start()
     {
         if (composer == null)
         {
-            Debug.LogWarning("[StaffRollFace] composer ‚ª–¢İ’è‚Å‚·B•\î‚ğØ‚è‘Ö‚¦‚Å‚«‚Ü‚¹‚ñB");
+            Debug.LogWarning("[StaffRollFace] composer ãŒæœªè¨­å®šã§ã™ã€‚è¡¨æƒ…ã‚’åˆ‡ã‚Šæ›¿ãˆã§ãã¾ã›ã‚“ã€‚");
             return;
         }
         if (entries == null || entries.Length == 0) return;
@@ -52,8 +52,8 @@ public class StaffRollFaceTrack : MonoBehaviour
     }
 
     /// <summary>
-    /// ƒV[ƒ“ŠJn‚ğŠî€i= ‹È‚Ì“ªj‚Æ‚µ‚ÄAŠeƒGƒ“ƒgƒŠ‚Ì startTime ‚É’B‚µ‚½‚ç
-    /// •\î‚ğØ‚è‘Ö‚¦‚éB‰ÌŒ‘¤‚Æ“¯‚¶â‘Îƒx[ƒX‚Ì‚½‚ß—İÏƒYƒŒ‚ª”­¶‚µ‚È‚¢B
+    /// ã‚·ãƒ¼ãƒ³é–‹å§‹æ™‚åˆ»ã‚’åŸºæº–ï¼ˆ= æ›²ã®é ­ï¼‰ã¨ã—ã¦ã€å„ã‚¨ãƒ³ãƒˆãƒªã® startTime ã«é”ã—ãŸã‚‰
+    /// è¡¨æƒ…ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚æ­Œè©å´ã¨åŒã˜çµ¶å¯¾æ™‚åˆ»ãƒ™ãƒ¼ã‚¹ã®ãŸã‚ç´¯ç©ã‚ºãƒ¬ãŒç™ºç”Ÿã—ãªã„ã€‚
     /// </summary>
     private IEnumerator PlayFaces()
     {

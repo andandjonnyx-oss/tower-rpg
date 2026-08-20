@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +7,8 @@ public class MonsterDatabase : ScriptableObject
 {
     public List<Monster> monsters = new();
 
-    // õˆøF (floor, step) -> oŒ»Œó•âƒ‚ƒ“ƒXƒ^[ˆê——
-    // “Á’è‚·‚éƒCƒxƒ“ƒg‚Æˆá‚¢Aƒ‰ƒ“ƒ_ƒ€‚É‘I‚Ô‚Ì‚Å‚ ‚ê‚ÎIDŒŸõ“™‚Í•s—v
+    // ç´¢å¼•ï¼š (floor, step) -> å‡ºç¾å€™è£œãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ä¸€è¦§
+    // ç‰¹å®šã™ã‚‹ã‚¤ãƒ™ãƒ³ãƒˆã¨é•ã„ã€ãƒ©ãƒ³ãƒ€ãƒ ã«é¸ã¶ã®ã§ã‚ã‚Œã°IDæ¤œç´¢ç­‰ã¯ä¸è¦
     private Dictionary<(int floor, int step), List<Monster>> index;
 
     [Header("Index Settings")]
@@ -21,40 +21,40 @@ public class MonsterDatabase : ScriptableObject
 
         index = new Dictionary<(int, int), List<Monster>>(maxFloor * maxStepPerFloor);
 
-        // ‘S’n“_‚É‹óƒŠƒXƒg‚ğ—pˆÓiŒã‚ÅŠmÀ‚Éˆø‚¯‚é‚æ‚¤‚Éj
-        // “G‚ª“o˜^‚³‚ê‚Ä‚¢‚È‚¢ƒtƒƒA‚Å‚àƒGƒ‰[‚É‚È‚ç‚È‚¢
+        // å…¨åœ°ç‚¹ã«ç©ºãƒªã‚¹ãƒˆã‚’ç”¨æ„ï¼ˆå¾Œã§ç¢ºå®Ÿã«å¼•ã‘ã‚‹ã‚ˆã†ã«ï¼‰
+        // æ•µãŒç™»éŒ²ã•ã‚Œã¦ã„ãªã„ãƒ•ãƒ­ã‚¢ã§ã‚‚ã‚¨ãƒ©ãƒ¼ã«ãªã‚‰ãªã„
         for (int f = 1; f <= maxFloor; f++)
         {
             for (int s = 1; s <= maxStepPerFloor; s++)
                 index[(f, s)] = new List<Monster>();
         }
 
-        // Šeƒ‚ƒ“ƒXƒ^[‚ÌoŒ»”ÍˆÍ‚ğ«‘‚É“WŠJ
+        // å„ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å‡ºç¾ç¯„å›²ã‚’è¾æ›¸ã«å±•é–‹
         foreach (var m in monsters)
         {
             if (m == null) continue;
 
             NormalizeRange(m, out int minF, out int minS, out int maxF, out int maxS);
 
-            // ”ÍˆÍŠO‚Ì’l‚ğ“ü—Í‚µ‚½Û‚É”ÍˆÍ“à‚Éû‚ß‚é
+            // ç¯„å›²å¤–ã®å€¤ã‚’å…¥åŠ›ã—ãŸéš›ã«ç¯„å›²å†…ã«åã‚ã‚‹
             minF = Mathf.Clamp(minF, 1, maxFloor);
             maxF = Mathf.Clamp(maxF, 1, maxFloor);
 
             for (int f = minF; f <= maxF; f++)
             {
 
-                // oŒ»”ÍˆÍ (minFloor,minStep) ` (maxFloor,maxStep) ‚ğ“WŠJ‚·‚é
-                // —áF2F7STEP`4F5STEP
-                // 2F : STEP7`20
-                // 3F : STEP1`20
-                // 4F : STEP1`5
+                // å‡ºç¾ç¯„å›² (minFloor,minStep) ï½ (maxFloor,maxStep) ã‚’å±•é–‹ã™ã‚‹
+                // ä¾‹ï¼š2F7STEPï½4F5STEP
+                // 2F : STEP7ï½20
+                // 3F : STEP1ï½20
+                // 4F : STEP1ï½5
                 int sFrom = (f == minF) ? minS : 1;
                 int sTo = (f == maxF) ? maxS : maxStepPerFloor;
 
                 sFrom = Mathf.Clamp(sFrom, 1, maxStepPerFloor);
                 sTo = Mathf.Clamp(sTo, 1, maxStepPerFloor);
 
-                //‚»‚ÌŠK‚Ì³‚µ‚¢STEP”ÍˆÍ‚ğ«‘“o˜^
+                //ãã®éšã®æ­£ã—ã„STEPç¯„å›²ã‚’è¾æ›¸ç™»éŒ²
                 for (int s = sFrom; s <= sTo; s++)
                     index[(f, s)].Add(m);
             }
@@ -72,27 +72,27 @@ public class MonsterDatabase : ScriptableObject
     }
 
     /// <summary>
-    /// oŒ»Œó•â‚©‚ç Weight ‚É‚æ‚éd‚İ•t‚«’Š‘I‚Å1‘Ì‚ğ•Ô‚·B
+    /// å‡ºç¾å€™è£œã‹ã‚‰ Weight ã«ã‚ˆã‚‹é‡ã¿ä»˜ãæŠ½é¸ã§1ä½“ã‚’è¿”ã™ã€‚
     ///
-    /// ’Š‘I•û®:
-    ///   ‘SŒó•â‚Ì Weight ‚ğ‡Z‚µA0 ` totalWeight ‚Ì”ÍˆÍ‚Å—”‚ğU‚éB
-    ///   Weight ‚ª‘å‚«‚¢‚Ù‚Ç‘I‚Î‚ê‚â‚·‚¢B
+    /// æŠ½é¸æ–¹å¼:
+    ///   å…¨å€™è£œã® Weight ã‚’åˆç®—ã—ã€0 ï½ totalWeight ã®ç¯„å›²ã§ä¹±æ•°ã‚’æŒ¯ã‚‹ã€‚
+    ///   Weight ãŒå¤§ãã„ã»ã©é¸ã°ã‚Œã‚„ã™ã„ã€‚
     ///
-    /// —á: A(Weight=1), B(Weight=1), C(Weight=0.1) ‚Ìê‡
+    /// ä¾‹: A(Weight=1), B(Weight=1), C(Weight=0.1) ã®å ´åˆ
     ///   totalWeight = 2.1
-    ///   A ‚ÌŠm—¦ = 1/2.1 à 47.6%
-    ///   B ‚ÌŠm—¦ = 1/2.1 à 47.6%
-    ///   C ‚ÌŠm—¦ = 0.1/2.1 à 4.8%
+    ///   A ã®ç¢ºç‡ = 1/2.1 â‰’ 47.6%
+    ///   B ã®ç¢ºç‡ = 1/2.1 â‰’ 47.6%
+    ///   C ã®ç¢ºç‡ = 0.1/2.1 â‰’ 4.8%
     ///
-    /// Weight ‚ª 0 ˆÈ‰º‚Ìƒ‚ƒ“ƒXƒ^[‚Í’Š‘I‘ÎÛŠOiƒXƒLƒbƒvjB
-    /// Œó•â‚ª0ŒA‚Ü‚½‚Í‘SŒó•â‚Ì Weight ‚ª 0 ˆÈ‰º‚Ìê‡‚Í null ‚ğ•Ô‚·B
+    /// Weight ãŒ 0 ä»¥ä¸‹ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¯æŠ½é¸å¯¾è±¡å¤–ï¼ˆã‚¹ã‚­ãƒƒãƒ—ï¼‰ã€‚
+    /// å€™è£œãŒ0ä»¶ã€ã¾ãŸã¯å…¨å€™è£œã® Weight ãŒ 0 ä»¥ä¸‹ã®å ´åˆã¯ null ã‚’è¿”ã™ã€‚
     /// </summary>
     public Monster GetRandomCandidate(int floor, int step)
     {
         var list = FindCandidates(floor, step);
         if (list.Count == 0) return null;
 
-        // Weight ‚Ì‡Œv‚ğŒvZ
+        // Weight ã®åˆè¨ˆã‚’è¨ˆç®—
         float totalWeight = 0f;
         for (int i = 0; i < list.Count; i++)
         {
@@ -100,10 +100,10 @@ public class MonsterDatabase : ScriptableObject
                 totalWeight += list[i].Weight;
         }
 
-        // ‘SŒó•â‚Ì Weight ‚ª 0 ˆÈ‰º‚Ìê‡
+        // å…¨å€™è£œã® Weight ãŒ 0 ä»¥ä¸‹ã®å ´åˆ
         if (totalWeight <= 0f) return null;
 
-        // d‚İ•t‚«’Š‘I
+        // é‡ã¿ä»˜ãæŠ½é¸
         float roll = UnityEngine.Random.Range(0f, totalWeight);
         float cumulative = 0f;
         for (int i = 0; i < list.Count; i++)
@@ -114,11 +114,11 @@ public class MonsterDatabase : ScriptableObject
                 return list[i];
         }
 
-        // •‚“®¬”“_‚ÌŠÛ‚ßŒë·‘Îôi’Êí‚±‚±‚É‚Í“’B‚µ‚È‚¢j
+        // æµ®å‹•å°æ•°ç‚¹ã®ä¸¸ã‚èª¤å·®å¯¾ç­–ï¼ˆé€šå¸¸ã“ã“ã«ã¯åˆ°é”ã—ãªã„ï¼‰
         return list[list.Count - 1];
     }
 
-    //@İ’èƒ~ƒX‚ÅÅ¬‚ÆÅ‘å‚ª‚¨‚©‚µ‚­‚È‚Á‚Ä‚¢‚½Û‚É‚»‚ê‚ğC³‚·‚é
+    //ã€€è¨­å®šãƒŸã‚¹ã§æœ€å°ã¨æœ€å¤§ãŒãŠã‹ã—ããªã£ã¦ã„ãŸéš›ã«ãã‚Œã‚’ä¿®æ­£ã™ã‚‹
     private void NormalizeRange(Monster m, out int minF, out int minS, out int maxF, out int maxS)
     {
         minF = m.Minfloor;
@@ -126,7 +126,7 @@ public class MonsterDatabase : ScriptableObject
         maxF = m.Maxfloor;
         maxS = m.Maxstep;
 
-        // min > max ‚¾‚Á‚½ê‡‚É“ü‚ê‘Ö‚¦‚éiˆÊ’u”äŠrj
+        // min > max ã ã£ãŸå ´åˆã«å…¥ã‚Œæ›¿ãˆã‚‹ï¼ˆä½ç½®æ¯”è¼ƒï¼‰
         if (ComparePos(minF, minS, maxF, maxS) > 0)
         {
             (minF, maxF) = (maxF, minF);
@@ -134,15 +134,15 @@ public class MonsterDatabase : ScriptableObject
         }
     }
 
-    // (floor, step) ‚Ì«‘‡”äŠr
+    // (floor, step) ã®è¾æ›¸é †æ¯”è¼ƒ
     private int ComparePos(int f1, int s1, int f2, int s2)
     {
-        //CompareTo ¶„‰E‚Å1,=‚Å0A¶ƒ‰E‚Å-1
+        //CompareTo å·¦ï¼å³ã§1,=ã§0ã€å·¦ï¼œå³ã§-1
         if (f1 != f2) return f1.CompareTo(f2);
         return s1.CompareTo(s2);
     }
 
-    // ƒf[ƒ^•ÏX‚Éõˆø‚ğì‚è’¼‚µ‚½‚¢‚ÉŒÄ‚Ô—p
+    // ãƒ‡ãƒ¼ã‚¿å¤‰æ›´æ™‚ã«ç´¢å¼•ã‚’ä½œã‚Šç›´ã—ãŸã„æ™‚ã«å‘¼ã¶ç”¨
     public void InvalidateIndex()
     {
         index = null;

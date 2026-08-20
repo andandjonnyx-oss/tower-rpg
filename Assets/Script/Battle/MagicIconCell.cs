@@ -1,60 +1,60 @@
-using System;
+ï»¿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// –‚–@‘I‘ğƒ|ƒbƒvƒAƒbƒv‚ÌƒAƒCƒRƒ“ƒZƒ‹i1‚Â•ªjB
-/// MagicSelector ‚ª GridLayoutGroup ”z‰º‚É Prefab ‚©‚ç“®“I¶¬‚·‚éB
-/// ItemIconCell ‚Æ“¯Œ^‚ÌİŒvB
+/// é­”æ³•é¸æŠãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã®ã‚¢ã‚¤ã‚³ãƒ³ã‚»ãƒ«ï¼ˆ1ã¤åˆ†ï¼‰ã€‚
+/// MagicSelector ãŒ GridLayoutGroup é…ä¸‹ã« Prefab ã‹ã‚‰å‹•çš„ç”Ÿæˆã™ã‚‹ã€‚
+/// ItemIconCell ã¨åŒå‹ã®è¨­è¨ˆã€‚
 ///
-/// \¬:
+/// æ§‹æˆ:
 ///   MagicIconCell (Button + Image + MagicIconCell)
-///     „¥ iconImage      c –‚–@ƒAƒCƒRƒ“
-///     „¥ nameText       c –‚–@–¼
-///     „¥ mpText         c Á”ïMPi"MP:2" ‚È‚Çj
-///     „¤ selectedFramei”CˆÓjc ‘I‘ğ’†ƒnƒCƒ‰ƒCƒg˜g
+///     â”œ iconImage      â€¦ é­”æ³•ã‚¢ã‚¤ã‚³ãƒ³
+///     â”œ nameText       â€¦ é­”æ³•å
+///     â”œ mpText         â€¦ æ¶ˆè²»MPï¼ˆ"MP:2" ãªã©ï¼‰
+///     â”” selectedFrameï¼ˆä»»æ„ï¼‰â€¦ é¸æŠä¸­ãƒã‚¤ãƒ©ã‚¤ãƒˆæ 
 ///
-/// ƒAƒCƒRƒ“‚Í SkillData ‚Å‚Í‚È‚­–‚“±‘ Item ‘¤iItem.iconj‚É‚ ‚é‚½‚ßA
-/// ƒZƒ‹©g‚Í‰ğŒˆ‚¹‚¸AŒÄ‚Ño‚µŒ³iMagicSelectorj‚ª‰ğŒˆ‚µ‚Ä“n‚µ‚½ Sprite ‚ğ•\¦‚·‚é‚¾‚¯B
+/// ã‚¢ã‚¤ã‚³ãƒ³ã¯ SkillData ã§ã¯ãªãé­”å°æ›¸ Item å´ï¼ˆItem.iconï¼‰ã«ã‚ã‚‹ãŸã‚ã€
+/// ã‚»ãƒ«è‡ªèº«ã¯è§£æ±ºã›ãšã€å‘¼ã³å‡ºã—å…ƒï¼ˆMagicSelectorï¼‰ãŒè§£æ±ºã—ã¦æ¸¡ã—ãŸ Sprite ã‚’è¡¨ç¤ºã™ã‚‹ã ã‘ã€‚
 /// </summary>
 public class MagicIconCell : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("–‚–@ƒAƒCƒRƒ“•\¦—p Image")]
+    [Tooltip("é­”æ³•ã‚¢ã‚¤ã‚³ãƒ³è¡¨ç¤ºç”¨ Image")]
     [SerializeField] private Image iconImage;
 
-    [Tooltip("–‚–@–¼•\¦—p TMP_Text")]
+    [Tooltip("é­”æ³•åè¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text nameText;
 
-    [Tooltip("Á”ïMP•\¦—p TMP_Text")]
+    [Tooltip("æ¶ˆè²»MPè¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text mpText;
 
-    [Tooltip("ƒZƒ‹‘S‘Ì‚Ì Button ƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    [Tooltip("ã‚»ãƒ«å…¨ä½“ã® Button ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     [SerializeField] private Button cellButton;
 
-    [Tooltip("i”CˆÓj‘I‘ğ’†ƒnƒCƒ‰ƒCƒg˜gB–¢Š„‚è“–‚Ä‚Å‚à“®ì‚·‚éB")]
+    [Tooltip("ï¼ˆä»»æ„ï¼‰é¸æŠä¸­ãƒã‚¤ãƒ©ã‚¤ãƒˆæ ã€‚æœªå‰²ã‚Šå½“ã¦ã§ã‚‚å‹•ä½œã™ã‚‹ã€‚")]
     [SerializeField] private Image selectedFrame;
 
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     private SkillData skill;
     private int index;
     private Action<int> onClickCallback;
 
     /// <summary>
-    /// ƒZƒ‹‚ğ‰Šú‰»‚·‚éB
+    /// ã‚»ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ã€‚
     /// </summary>
-    /// <param name="skill">–‚–@ƒXƒLƒ‹ƒf[ƒ^</param>
-    /// <param name="icon">•\¦‚·‚éƒAƒCƒRƒ“i–‚“±‘ Item.iconBnull ‰Âj</param>
-    /// <param name="index">MagicSelector “à‚ÌƒCƒ“ƒfƒbƒNƒXionClick ‚Å’Ê’m‚·‚é’lj</param>
-    /// <param name="onClick">ƒ^ƒbƒvƒR[ƒ‹ƒoƒbƒNiˆø”‚Í‚±‚ÌƒZƒ‹‚Ì indexj</param>
+    /// <param name="skill">é­”æ³•ã‚¹ã‚­ãƒ«ãƒ‡ãƒ¼ã‚¿</param>
+    /// <param name="icon">è¡¨ç¤ºã™ã‚‹ã‚¢ã‚¤ã‚³ãƒ³ï¼ˆé­”å°æ›¸ Item.iconã€‚null å¯ï¼‰</param>
+    /// <param name="index">MagicSelector å†…ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆonClick ã§é€šçŸ¥ã™ã‚‹å€¤ï¼‰</param>
+    /// <param name="onClick">ã‚¿ãƒƒãƒ—æ™‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ï¼ˆå¼•æ•°ã¯ã“ã®ã‚»ãƒ«ã® indexï¼‰</param>
     public void Setup(SkillData skill, Sprite icon, int index, Action<int> onClick)
     {
         this.skill = skill;
         this.index = index;
         this.onClickCallback = onClick;
 
-        // ƒAƒCƒRƒ“
+        // ã‚¢ã‚¤ã‚³ãƒ³
         if (iconImage != null)
         {
             iconImage.sprite = icon;
@@ -62,33 +62,33 @@ public class MagicIconCell : MonoBehaviour
             iconImage.preserveAspect = true;
         }
 
-        // –‚–@–¼
+        // é­”æ³•å
         if (nameText != null)
             nameText.text = (skill != null) ? skill.skillName : "";
 
-        // Á”ïMP
+        // æ¶ˆè²»MP
         if (mpText != null)
             mpText.text = (skill != null) ? $"MP:{skill.mpCost}" : "";
 
-        // ƒ{ƒ^ƒ“: ƒ^ƒbƒv‚Å index ‚ğ’Ê’m
+        // ãƒœã‚¿ãƒ³: ã‚¿ãƒƒãƒ—ã§ index ã‚’é€šçŸ¥
         if (cellButton != null)
         {
             cellButton.onClick.RemoveAllListeners();
             cellButton.onClick.AddListener(() => onClickCallback?.Invoke(this.index));
         }
 
-        // ‘I‘ğ˜g‚ÍŠù’è OFF
+        // é¸æŠæ ã¯æ—¢å®š OFF
         SetSelected(false);
     }
 
-    /// <summary>‘I‘ğ’†ƒnƒCƒ‰ƒCƒg‚Ì ON/OFFBselectedFrame –¢Š„‚è“–‚Ä‚È‚ç‰½‚à‚µ‚È‚¢B</summary>
+    /// <summary>é¸æŠä¸­ãƒã‚¤ãƒ©ã‚¤ãƒˆã® ON/OFFã€‚selectedFrame æœªå‰²ã‚Šå½“ã¦ãªã‚‰ä½•ã‚‚ã—ãªã„ã€‚</summary>
     public void SetSelected(bool selected)
     {
         if (selectedFrame != null)
             selectedFrame.gameObject.SetActive(selected);
     }
 
-    /// <summary>‚±‚ÌƒZƒ‹‚ªw’èƒXƒLƒ‹‚ğ•\‚µ‚Ä‚¢‚é‚©i‘I‘ğ•œŒ³EƒnƒCƒ‰ƒCƒg—pjB</summary>
+    /// <summary>ã“ã®ã‚»ãƒ«ãŒæŒ‡å®šã‚¹ã‚­ãƒ«ã‚’è¡¨ã—ã¦ã„ã‚‹ã‹ï¼ˆé¸æŠå¾©å…ƒãƒ»ãƒã‚¤ãƒ©ã‚¤ãƒˆç”¨ï¼‰ã€‚</summary>
     public bool RepresentsSkill(SkillData target)
     {
         if (skill == null || target == null) return false;

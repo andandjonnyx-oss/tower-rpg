@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -33,21 +33,21 @@ public class ItemDatabaseViewer : EditorWindow
 
         if (targetDatabase == null)
         {
-            EditorGUILayout.HelpBox("ItemDatabase ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B", MessageType.Info);
+            EditorGUILayout.HelpBox("ItemDatabase ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚", MessageType.Info);
             return;
         }
 
         // =========================================================
-        // ©“®“o˜^ƒ{ƒ^ƒ“
+        // è‡ªå‹•ç™»éŒ²ãƒœã‚¿ãƒ³
         // =========================================================
         EditorGUILayout.BeginHorizontal();
 
-        if (GUILayout.Button("Itemlist ƒtƒHƒ‹ƒ_‚©‚ç©“®“o˜^", GUILayout.Height(28)))
+        if (GUILayout.Button("Itemlist ãƒ•ã‚©ãƒ«ãƒ€ã‹ã‚‰è‡ªå‹•ç™»éŒ²", GUILayout.Height(28)))
         {
             AutoRegisterFromItemlistFolder();
         }
 
-        if (GUILayout.Button("ID ‚Åƒ\[ƒg", GUILayout.Height(28)))
+        if (GUILayout.Button("ID ã§ã‚½ãƒ¼ãƒˆ", GUILayout.Height(28)))
         {
             SortByItemId();
         }
@@ -72,27 +72,27 @@ public class ItemDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // Itemlist ƒtƒHƒ‹ƒ_“à‚Ì‘S ItemData ‚ğ©“®“o˜^
-    // Assets/ScriptableAsset/Itemlist/ ˆÈ‰º‚ğÄ‹AŒŸõ‚µA
-    // ‚Ü‚¾ items ƒŠƒXƒg‚É“ü‚Á‚Ä‚¢‚È‚¢ ItemData ‚ğ’Ç‰Á‚·‚éB
-    // ’Ç‰ÁŒã‚Í©“®‚ÅIDƒ\[ƒg‚àÀs‚·‚éB
+    // Itemlist ãƒ•ã‚©ãƒ«ãƒ€å†…ã®å…¨ ItemData ã‚’è‡ªå‹•ç™»éŒ²
+    // Assets/ScriptableAsset/Itemlist/ ä»¥ä¸‹ã‚’å†å¸°æ¤œç´¢ã—ã€
+    // ã¾ã  items ãƒªã‚¹ãƒˆã«å…¥ã£ã¦ã„ãªã„ ItemData ã‚’è¿½åŠ ã™ã‚‹ã€‚
+    // è¿½åŠ å¾Œã¯è‡ªå‹•ã§IDã‚½ãƒ¼ãƒˆã‚‚å®Ÿè¡Œã™ã‚‹ã€‚
     // =========================================================
     private void AutoRegisterFromItemlistFolder()
     {
-        // Itemlist ƒtƒHƒ‹ƒ_“à‚Ì‘S ItemData ƒAƒZƒbƒg‚ğŒŸõ
+        // Itemlist ãƒ•ã‚©ãƒ«ãƒ€å†…ã®å…¨ ItemData ã‚¢ã‚»ãƒƒãƒˆã‚’æ¤œç´¢
         string[] guids = AssetDatabase.FindAssets("t:ItemData", new[] { "Assets/ScriptableAsset/Itemlist" });
 
         if (guids.Length == 0)
         {
             EditorUtility.DisplayDialog(
-                "©“®“o˜^",
-                "Assets/ScriptableAsset/Itemlist/ “à‚É ItemData ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",
+                "è‡ªå‹•ç™»éŒ²",
+                "Assets/ScriptableAsset/Itemlist/ å†…ã« ItemData ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",
                 "OK"
             );
             return;
         }
 
-        // Šù‘¶ƒAƒCƒeƒ€‚ÌƒZƒbƒg‚ğì¬id•¡ƒ`ƒFƒbƒN—pj
+        // æ—¢å­˜ã‚¢ã‚¤ãƒ†ãƒ ã®ã‚»ãƒƒãƒˆã‚’ä½œæˆï¼ˆé‡è¤‡ãƒã‚§ãƒƒã‚¯ç”¨ï¼‰
         var existingSet = new HashSet<ItemData>(targetDatabase.items.Where(i => i != null));
 
         int addedCount = 0;
@@ -110,32 +110,32 @@ public class ItemDatabaseViewer : EditorWindow
             }
         }
 
-        // null ƒGƒ“ƒgƒŠ‚ª‚ ‚ê‚Îœ‹
+        // null ã‚¨ãƒ³ãƒˆãƒªãŒã‚ã‚Œã°é™¤å»
         targetDatabase.items.RemoveAll(i => i == null);
 
-        // ƒ\[ƒgÀs
+        // ã‚½ãƒ¼ãƒˆå®Ÿè¡Œ
         SortByItemIdInternal();
 
-        // õˆø‚ğÄ\’z
+        // ç´¢å¼•ã‚’å†æ§‹ç¯‰
         targetDatabase.InvalidateIndex();
 
-        // •ÏX‚ğ•Û‘¶
+        // å¤‰æ›´ã‚’ä¿å­˜
         EditorUtility.SetDirty(targetDatabase);
         AssetDatabase.SaveAssets();
 
         EditorUtility.DisplayDialog(
-            "©“®“o˜^Š®—¹",
-            $"ŒŸo: {guids.Length} Œ\nV‹K’Ç‰Á: {addedCount} Œ\n‡Œv: {targetDatabase.items.Count} Œ",
+            "è‡ªå‹•ç™»éŒ²å®Œäº†",
+            $"æ¤œå‡º: {guids.Length} ä»¶\næ–°è¦è¿½åŠ : {addedCount} ä»¶\nåˆè¨ˆ: {targetDatabase.items.Count} ä»¶",
             "OK"
         );
     }
 
     // =========================================================
-    // ID ‚Åƒ\[ƒgiƒ{ƒ^ƒ“—pj
+    // ID ã§ã‚½ãƒ¼ãƒˆï¼ˆãƒœã‚¿ãƒ³ç”¨ï¼‰
     // =========================================================
     private void SortByItemId()
     {
-        // null ƒGƒ“ƒgƒŠ‚ª‚ ‚ê‚Îœ‹
+        // null ã‚¨ãƒ³ãƒˆãƒªãŒã‚ã‚Œã°é™¤å»
         targetDatabase.items.RemoveAll(i => i == null);
 
         SortByItemIdInternal();
@@ -146,9 +146,9 @@ public class ItemDatabaseViewer : EditorWindow
     }
 
     // =========================================================
-    // ƒ\[ƒg“à•”ˆ—
-    // ID ‚ÌƒvƒŒƒtƒBƒbƒNƒX•¶šiC, M, W “™j‚Å•ª—Ş‚µA
-    // “¯‚¶ƒvƒŒƒtƒBƒbƒNƒX“à‚Å‚Í”Ô†‡‚Éƒ\[ƒg‚·‚éB
+    // ã‚½ãƒ¼ãƒˆå†…éƒ¨å‡¦ç†
+    // ID ã®ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹æ–‡å­—ï¼ˆC, M, W ç­‰ï¼‰ã§åˆ†é¡ã—ã€
+    // åŒã˜ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹å†…ã§ã¯ç•ªå·é †ã«ã‚½ãƒ¼ãƒˆã™ã‚‹ã€‚
     // =========================================================
     private void SortByItemIdInternal()
     {
@@ -157,24 +157,24 @@ public class ItemDatabaseViewer : EditorWindow
             string idA = a.itemId ?? "";
             string idB = b.itemId ?? "";
 
-            // ƒvƒŒƒtƒBƒbƒNƒX•¶š‚ğæ“¾iC, M, W “™j
+            // ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹æ–‡å­—ã‚’å–å¾—ï¼ˆC, M, W ç­‰ï¼‰
             char prefixA = idA.Length > 0 ? char.ToUpper(idA[0]) : ' ';
             char prefixB = idB.Length > 0 ? char.ToUpper(idB[0]) : ' ';
 
-            // ƒJƒeƒSƒŠ‡: C ¨ M ¨ W ¨ ‚»‚Ì‘¼
+            // ã‚«ãƒ†ã‚´ãƒªé †: C â†’ M â†’ W â†’ ãã®ä»–
             int orderA = GetCategoryOrder(prefixA);
             int orderB = GetCategoryOrder(prefixB);
 
             if (orderA != orderB) return orderA.CompareTo(orderB);
 
-            // “¯‚¶ƒJƒeƒSƒŠ“à‚Å‚Í•¶š—ñ”äŠri”Ô†‡‚É‚È‚éj
+            // åŒã˜ã‚«ãƒ†ã‚´ãƒªå†…ã§ã¯æ–‡å­—åˆ—æ¯”è¼ƒï¼ˆç•ªå·é †ã«ãªã‚‹ï¼‰
             return string.Compare(idA, idB, System.StringComparison.OrdinalIgnoreCase);
         });
     }
 
     /// <summary>
-    /// ƒJƒeƒSƒŠƒvƒŒƒtƒBƒbƒNƒX‚Ìƒ\[ƒg‡‚ğ•Ô‚·B
-    /// C(Consumable)=0, M(Magic)=1, W(Weapon)=2, ‚»‚Ì‘¼=3
+    /// ã‚«ãƒ†ã‚´ãƒªãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã®ã‚½ãƒ¼ãƒˆé †ã‚’è¿”ã™ã€‚
+    /// C(Consumable)=0, M(Magic)=1, W(Weapon)=2, ãã®ä»–=3
     /// </summary>
     private int GetCategoryOrder(char prefix)
     {
@@ -191,11 +191,11 @@ public class ItemDatabaseViewer : EditorWindow
     {
         EditorGUILayout.BeginHorizontal("box");
         GUILayout.Label("ID", EditorStyles.boldLabel, GUILayout.Width(140));
-        GUILayout.Label("–¼‘O", EditorStyles.boldLabel, GUILayout.Width(160));
-        GUILayout.Label("ƒJƒeƒSƒŠ", EditorStyles.boldLabel, GUILayout.Width(100));
-        GUILayout.Label("oŒ»”ÍˆÍ", EditorStyles.boldLabel, GUILayout.Width(260));
+        GUILayout.Label("åå‰", EditorStyles.boldLabel, GUILayout.Width(160));
+        GUILayout.Label("ã‚«ãƒ†ã‚´ãƒª", EditorStyles.boldLabel, GUILayout.Width(100));
+        GUILayout.Label("å‡ºç¾ç¯„å›²", EditorStyles.boldLabel, GUILayout.Width(260));
         GUILayout.FlexibleSpace();
-        GUILayout.Label("Ú×", EditorStyles.boldLabel, GUILayout.Width(60));
+        GUILayout.Label("è©³ç´°", EditorStyles.boldLabel, GUILayout.Width(60));
         EditorGUILayout.EndHorizontal();
     }
 
@@ -210,7 +210,7 @@ public class ItemDatabaseViewer : EditorWindow
 
         GUILayout.FlexibleSpace();
 
-        if (GUILayout.Button("Ú×", GUILayout.Width(60)))
+        if (GUILayout.Button("è©³ç´°", GUILayout.Width(60)))
         {
             ItemDetailWindow.Open(item);
         }
@@ -220,7 +220,7 @@ public class ItemDatabaseViewer : EditorWindow
 
     private string FormatRange(ItemData item)
     {
-        return $"{item.Minfloor}F {item.Minstep}STEP ` {item.Maxfloor}F {item.Maxstep}STEP";
+        return $"{item.Minfloor}F {item.Minstep}STEP ï½ {item.Maxfloor}F {item.Maxstep}STEP";
     }
 
     private bool IsMatch(ItemData item, string keyword)

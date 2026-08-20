@@ -1,25 +1,25 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 /// <summary>
-/// ���@�Z���N�^�[�́u�O��I���������@�v���L������ static �N���X�B
-/// �C���f�b�N�X�ł͂Ȃ� skillId �ŋL�����邽�߁A
-/// ���X�g�̕��т���e���ς���Ă����������@�ɕ����ł���B
+/// 魔法セレクターの「前回選択した魔法」を記憶する static クラス。
+/// インデックスではなく skillId で記憶するため、
+/// リストの並びや内容が変わっても正しい魔法に復元できる。
 ///
-/// ��؂�i���Z�b�g�^�C�~���O�j:
-///   BattleSkillId : �퓬�̐V�K�J�n���ɃN���A �� ���̐퓬�̊Ԃ����ێ�
-///                   �i�A�C�e����ʂƂ̉����E���`�Ԃ̃V�[���ēǍ��ł͕ێ������j
-///   FieldSkillId  : �퓬�̐V�K�J�n���ɃN���A �� �u�퓬�ɓ���܂ł̓������v�����؂�
-///                   �i�����̕��s�E��b�E�q�ɉ����ł͕ێ������j
-///   ����         : Main �A�Ҏ��ɃN���A�iMainSceneRecovery ����Ăԁj
+/// 区切り（リセットタイミング）:
+///   BattleSkillId : 戦闘の新規開始時にクリア → その戦闘の間だけ保持
+///                   （アイテム画面との往復・第二形態のシーン再読込では保持される）
+///   FieldSkillId  : 戦闘の新規開始時にクリア → 「戦闘に入るまでの塔内部」が一区切り
+///                   （塔内の歩行・会話・倉庫往復では保持される）
+///   両方         : Main 帰還時にクリア（MainSceneRecovery から呼ぶ）
 ///
-/// GameSettings.KeepMagicSelection �� OFF �̏ꍇ�ARestore �͉������Ȃ��B
+/// GameSettings.KeepMagicSelection が OFF の場合、Restore は何もしない。
 /// </summary>
 public static class MagicSelectionMemory
 {
-    /// <summary>�퓬���ɑI���������@�� skillId�B</summary>
+    /// <summary>戦闘中に選択した魔法の skillId。</summary>
     public static string BattleSkillId;
 
-    /// <summary>�����őI���������@�� skillId�B</summary>
+    /// <summary>塔内で選択した魔法の skillId。</summary>
     public static string FieldSkillId;
 
     public static void ClearBattle() => BattleSkillId = null;
@@ -32,9 +32,9 @@ public static class MagicSelectionMemory
     }
 
     /// <summary>
-    /// �L�����Ă��� skillId �Ɉ�v���鍀�ڂ����X�g�ɂ���΁A�Z���N�^�[�̑I���𕜌�����B
-    /// SetOptions() �̒���ɌĂԁiSetOptions ���I����擪�Ƀ��Z�b�g���邽�߁j�B
-    /// ��v���鍀�ڂ��Ȃ��ꍇ�i����ύX�ŃX�L�������������j�͐擪�̂܂܁B
+    /// 記憶している skillId に一致する項目がリストにあれば、セレクターの選択を復元する。
+    /// SetOptions() の直後に呼ぶ（SetOptions が選択を先頭にリセットするため）。
+    /// 一致する項目がない場合（武器変更でスキルが消えた等）は先頭のまま。
     /// </summary>
     public static void Restore(MagicSelector selector, List<SkillData> list, bool isBattle)
     {

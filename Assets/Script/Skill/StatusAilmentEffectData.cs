@@ -1,39 +1,39 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
-/// ��Ԉُ���ʁi�t�^�E�񕜂̗����������j�B
-/// �� PoisonEffectData �������E�g���������́B
+/// 状態異常効果（付与・回復の両方を扱う）。
+/// 旧 PoisonEffectData を改名・拡張したもの。
 ///
-/// �y�݌v�z
-///   ����SO�A�Z�b�g�́u��Ԉُ�n�̌��ʂł���v���Ƃ������}�[�J�[�B
-///   ��̓I�ȏ�Ԉُ�̎�ށi�ŁE��დ��j��t�^/�񕜂̋�ʂ�
-///   SkillEffectEntry ���Őݒ肷��B
+/// 【設計】
+///   このSOアセットは「状態異常系の効果である」ことを示すマーカー。
+///   具体的な状態異常の種類（毒・麻痺等）や付与/回復の区別は
+///   SkillEffectEntry 側で設定する。
 ///
-/// �y�p�����[�^�iSkillEffectEntry ���j�z
-///   ailmentMode:       �t�^ / ��
+/// 【パラメータ（SkillEffectEntry 側）】
+///   ailmentMode:       付与 / 回復
 ///   targetStatusEffect: Poison / Paralyze / Sleep / ...
-///   chance:            �t�^���̊�b�t�^���i%�j�B�񕜎��͕s�v�B
+///   chance:            付与時の基礎付与率（%）。回復時は不要。
 ///
-/// �y�A�Z�b�g�쐬�z
-///   Create > Skills > Effects > StatusAilment Effect �ō쐬�B
-///   �ʏ��1�����쐬���A�����̃X�L���ŋ��L����B
+/// 【アセット作成】
+///   Create > Skills > Effects > StatusAilment Effect で作成。
+///   通常は1つだけ作成し、複数のスキルで共有する。
 /// </summary>
 [CreateAssetMenu(menuName = "Skills/Effects/StatusAilment Effect")]
 public class StatusAilmentEffectData : SkillEffectData
 {
-    // �p�����[�^�͑S�� SkillEffectEntry ���Ŏ��B
-    // �����I�Ɂu��Ԉُ�̎����^�[�����v���̃W�������ŗL�ݒ��ǉ�����ꍇ�͂����ɒǉ�����B
+    // パラメータは全て SkillEffectEntry 側で持つ。
+    // 将来的に「状態異常の持続ターン数」等のジャンル固有設定を追加する場合はここに追加する。
 }
 
 /// <summary>
-/// ��Ԉُ���ʂ̃��[�h�B
-/// �t�^�i�G/�v���C���[�ɏ�Ԉُ��������j���񕜁i���g�̏�Ԉُ�������j������ʂ���B
+/// 状態異常効果のモード。
+/// 付与（敵/プレイヤーに状態異常をかける）か回復（自身の状態異常を治す）かを区別する。
 /// </summary>
 public enum AilmentMode
 {
-    /// <summary>�Ώۂɏ�Ԉُ��t�^����B</summary>
+    /// <summary>対象に状態異常を付与する。</summary>
     Inflict,
 
-    /// <summary>���g�̏�Ԉُ���񕜂���B</summary>
+    /// <summary>自身の状態異常を回復する。</summary>
     Cure,
 }

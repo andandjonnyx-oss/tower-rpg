@@ -1,85 +1,85 @@
-using System;
+ï»¿using System;
 using UnityEngine;
 
 /// <summary>
-/// ƒXƒLƒ‹‚Ì’Ç‰ÁŒø‰Ê1‚Â•ª‚ÌƒGƒ“ƒgƒŠB
-/// SkillData.additionalEffects ƒŠƒXƒg‚Ì—v‘f‚Æ‚µ‚Äg—p‚·‚éB
+/// ã‚¹ã‚­ãƒ«ã®è¿½åŠ åŠ¹æœ1ã¤åˆ†ã®ã‚¨ãƒ³ãƒˆãƒªã€‚
+/// SkillData.additionalEffects ãƒªã‚¹ãƒˆã®è¦ç´ ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã€‚
 ///
-/// y\‘¢z
-///   effectData: ‚Ç‚ÌŒø‰ÊƒWƒƒƒ“ƒ‹‚©iScriptableObject ‚Ö‚ÌQÆj
-///   ˆÈ‰º‚Ìƒpƒ‰ƒ[ƒ^: Œø‰Ê‚²‚Æ‚ÉƒXƒLƒ‹’PˆÊ‚ÅŒÂ•Êİ’è‚·‚é’l
+/// ã€æ§‹é€ ã€‘
+///   effectData: ã©ã®åŠ¹æœã‚¸ãƒ£ãƒ³ãƒ«ã‹ï¼ˆScriptableObject ã¸ã®å‚ç…§ï¼‰
+///   ä»¥ä¸‹ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿: åŠ¹æœã”ã¨ã«ã‚¹ã‚­ãƒ«å˜ä½ã§å€‹åˆ¥è¨­å®šã™ã‚‹å€¤
 ///
-/// yƒpƒ‰ƒ[ƒ^‚Ìg‚¢•ª‚¯ieffectData ‚ÌƒWƒƒƒ“ƒ‹•Êjz
+/// ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ä½¿ã„åˆ†ã‘ï¼ˆeffectData ã®ã‚¸ãƒ£ãƒ³ãƒ«åˆ¥ï¼‰ã€‘
 ///
 ///   StatusAilmentEffectData:
-///     ailmentMode        ¨ Inflicti•t—^j/ Curei‰ñ•œj
-///     targetStatusEffect ¨ Poison / Paralyze / Sleep / DefenseDown / DefenseUp ...
-///     chance             ¨ •t—^‚ÌŠî‘b•t—^—¦i%jBCure‚Í•s—vB
-///     duration           ¨ ƒoƒt/ƒfƒoƒt‚Ì‘±ƒ^[ƒ“”iDefenseDown/DefenseUp—pjB0 = ƒfƒtƒHƒ‹ƒg’l‚ğg—pB
-///     intValue           ¨ ƒoƒt/ƒfƒoƒt‚ÌŒø‰Ê—¦i%jB—á: 30 = –hŒä30%•Ï‰»B
+///     ailmentMode        â†’ Inflictï¼ˆä»˜ä¸ï¼‰/ Cureï¼ˆå›å¾©ï¼‰
+///     targetStatusEffect â†’ Poison / Paralyze / Sleep / DefenseDown / DefenseUp ...
+///     chance             â†’ ä»˜ä¸æ™‚ã®åŸºç¤ä»˜ä¸ç‡ï¼ˆ%ï¼‰ã€‚Cureæ™‚ã¯ä¸è¦ã€‚
+///     duration           â†’ ãƒãƒ•/ãƒ‡ãƒãƒ•ã®æŒç¶šã‚¿ãƒ¼ãƒ³æ•°ï¼ˆDefenseDown/DefenseUpç”¨ï¼‰ã€‚0 = ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ä½¿ç”¨ã€‚
+///     intValue           â†’ ãƒãƒ•/ãƒ‡ãƒãƒ•ã®åŠ¹æœç‡ï¼ˆ%ï¼‰ã€‚ä¾‹: 30 = é˜²å¾¡30%å¤‰åŒ–ã€‚
 ///
 ///   HealEffectData:
-///     intValue           ¨ ‰ñ•œ—ÊiŒvZ®ƒ^ƒCƒv‚É‚æ‚è‰ğß‚ª•Ï‚í‚éj
-///     chance             ¨ ”­“®—¦i%j
-///     ¦ ŒvZ®ƒ^ƒCƒv‚Í HealEffectDataiSOj‘¤‚Ì formulaType ‚ÅŒˆ‚Ü‚é
+///     intValue           â†’ å›å¾©é‡ï¼ˆè¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã«ã‚ˆã‚Šè§£é‡ˆãŒå¤‰ã‚ã‚‹ï¼‰
+///     chance             â†’ ç™ºå‹•ç‡ï¼ˆ%ï¼‰
+///     â€» è¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã¯ HealEffectDataï¼ˆSOï¼‰å´ã® formulaType ã§æ±ºã¾ã‚‹
 ///
 ///   LevelDrainEffectData:
-///     intValue           ¨ ƒhƒŒƒCƒ“—ÊiƒfƒtƒHƒ‹ƒg1j
-///     chance             ¨ ”­“®—¦i%j
+///     intValue           â†’ ãƒ‰ãƒ¬ã‚¤ãƒ³é‡ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ1ï¼‰
+///     chance             â†’ ç™ºå‹•ç‡ï¼ˆ%ï¼‰
 ///
 ///   RecoilEffectData:
-///     intValue           ¨ ”½Ë—¦i%jB—^ƒ_ƒ[ƒW‚Ì‚±‚ÌŠ„‡‚ğ©•ª‚ªó‚¯‚éB
-///     chance             ¨ ”­“®—¦i%j
+///     intValue           â†’ åå°„ç‡ï¼ˆ%ï¼‰ã€‚ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ã“ã®å‰²åˆã‚’è‡ªåˆ†ãŒå—ã‘ã‚‹ã€‚
+///     chance             â†’ ç™ºå‹•ç‡ï¼ˆ%ï¼‰
 ///
-/// yƒCƒ“ƒXƒyƒNƒ^[•\¦z
-///   SkillEffectEntryDraweriƒJƒXƒ^ƒ€ PropertyDrawerj‚É‚æ‚èA
-///   effectData ‚ÌƒWƒƒƒ“ƒ‹‚É‰‚¶‚Ä•K—v‚ÈƒtƒB[ƒ‹ƒh‚Ì‚İ•\¦‚·‚éB
+/// ã€ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼è¡¨ç¤ºã€‘
+///   SkillEffectEntryDrawerï¼ˆã‚«ã‚¹ã‚¿ãƒ  PropertyDrawerï¼‰ã«ã‚ˆã‚Šã€
+///   effectData ã®ã‚¸ãƒ£ãƒ³ãƒ«ã«å¿œã˜ã¦å¿…è¦ãªãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã¿è¡¨ç¤ºã™ã‚‹ã€‚
 /// </summary>
 [Serializable]
 public class SkillEffectEntry
 {
-    [Tooltip("’Ç‰ÁŒø‰Ê‚Ìí—ŞiScriptableObject ƒAƒZƒbƒg‚Ö‚ÌQÆj")]
+    [Tooltip("è¿½åŠ åŠ¹æœã®ç¨®é¡ï¼ˆScriptableObject ã‚¢ã‚»ãƒƒãƒˆã¸ã®å‚ç…§ï¼‰")]
     public SkillEffectData effectData;
 
     // =========================================================
-    // ó‘ÔˆÙíŒnƒpƒ‰ƒ[ƒ^iStatusAilmentEffectData g—pj
+    // çŠ¶æ…‹ç•°å¸¸ç³»ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆStatusAilmentEffectData ä½¿ç”¨æ™‚ï¼‰
     // =========================================================
 
-    [Tooltip("ó‘ÔˆÙí‚ÌŒø‰Êƒ‚[ƒhB\n"
-           + "Inflict = ‘ÎÛ‚Éó‘ÔˆÙí‚ğ•t—^\n"
-           + "Cure = ©g‚Ìó‘ÔˆÙí‚ğ‰ñ•œ")]
+    [Tooltip("çŠ¶æ…‹ç•°å¸¸ã®åŠ¹æœãƒ¢ãƒ¼ãƒ‰ã€‚\n"
+           + "Inflict = å¯¾è±¡ã«çŠ¶æ…‹ç•°å¸¸ã‚’ä»˜ä¸\n"
+           + "Cure = è‡ªèº«ã®çŠ¶æ…‹ç•°å¸¸ã‚’å›å¾©")]
     public AilmentMode ailmentMode = AilmentMode.Inflict;
 
-    [Tooltip("‘ÎÛ‚Ìó‘ÔˆÙí‚Ìí—ŞB")]
+    [Tooltip("å¯¾è±¡ã®çŠ¶æ…‹ç•°å¸¸ã®ç¨®é¡ã€‚")]
     public StatusEffect targetStatusEffect = StatusEffect.Poison;
 
     // =========================================================
-    // ‹¤’Êƒpƒ‰ƒ[ƒ^
+    // å…±é€šãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
     // =========================================================
 
-    [Tooltip("Œø‰Ê‚ÌŠî‘b”­“®—¦i%jB\n"
-           + "StatusAilmentEffectData (Inflict): ó‘ÔˆÙí‚ÌŠî‘b•t—^—¦\n"
-           + "LevelDrainEffectData: ”­“®—¦\n"
-           + "HealEffectData: ”­“®—¦\n"
-           + "RecoilEffectData: ”½“®”­“®—¦\n"
-           + "StatusAilmentEffectData (Cure): g—p‚µ‚È‚¢iŠm’è‰ñ•œj")]
+    [Tooltip("åŠ¹æœã®åŸºç¤ç™ºå‹•ç‡ï¼ˆ%ï¼‰ã€‚\n"
+           + "StatusAilmentEffectData (Inflict): çŠ¶æ…‹ç•°å¸¸ã®åŸºç¤ä»˜ä¸ç‡\n"
+           + "LevelDrainEffectData: ç™ºå‹•ç‡\n"
+           + "HealEffectData: ç™ºå‹•ç‡\n"
+           + "RecoilEffectData: åå‹•ç™ºå‹•ç‡\n"
+           + "StatusAilmentEffectData (Cure): ä½¿ç”¨ã—ãªã„ï¼ˆç¢ºå®šå›å¾©ï¼‰")]
     [Range(0, 100)]
     public int chance = 100;
 
-    [Tooltip("Œø‰Ê‚Ì”’lƒpƒ‰ƒ[ƒ^i®”jB\n"
-           + "LevelDrainEffectData: ƒhƒŒƒCƒ“—ÊiƒfƒtƒHƒ‹ƒg1j\n"
-           + "HealEffectData: ‰ñ•œ—ÊiŒvZ®ƒ^ƒCƒv‚É‚æ‚è‰ğß‚ª•Ï‚í‚éj\n"
-           + "RecoilEffectData: ”½Ë—¦i%jB—^ƒ_ƒ[ƒW‚Ì‚±‚ÌŠ„‡‚ğ©•ª‚ªó‚¯‚éB\n"
-           + "DefenseDown/DefenseUp: Œø‰Ê—¦i%jB—á: 30 = –hŒä30%•Ï‰»")]
+    [Tooltip("åŠ¹æœã®æ•°å€¤ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ï¼ˆæ•´æ•°ï¼‰ã€‚\n"
+           + "LevelDrainEffectData: ãƒ‰ãƒ¬ã‚¤ãƒ³é‡ï¼ˆãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ1ï¼‰\n"
+           + "HealEffectData: å›å¾©é‡ï¼ˆè¨ˆç®—å¼ã‚¿ã‚¤ãƒ—ã«ã‚ˆã‚Šè§£é‡ˆãŒå¤‰ã‚ã‚‹ï¼‰\n"
+           + "RecoilEffectData: åå°„ç‡ï¼ˆ%ï¼‰ã€‚ä¸ãƒ€ãƒ¡ãƒ¼ã‚¸ã®ã“ã®å‰²åˆã‚’è‡ªåˆ†ãŒå—ã‘ã‚‹ã€‚\n"
+           + "DefenseDown/DefenseUp: åŠ¹æœç‡ï¼ˆ%ï¼‰ã€‚ä¾‹: 30 = é˜²å¾¡30%å¤‰åŒ–")]
     public int intValue = 0;
 
     // =========================================================
-    // ‘±ƒ^[ƒ“”iƒoƒt/ƒfƒoƒt—pji’Ç‰Áj
+    // æŒç¶šã‚¿ãƒ¼ãƒ³æ•°ï¼ˆãƒãƒ•/ãƒ‡ãƒãƒ•ç”¨ï¼‰ï¼ˆè¿½åŠ ï¼‰
     // =========================================================
 
-    [Tooltip("ƒoƒt/ƒfƒoƒt‚Ì‘±ƒ^[ƒ“”B\n"
-           + "DefenseDown / DefenseUp ‚Åg—p‚·‚éB\n"
-           + "0 ‚Ìê‡‚ÍƒfƒtƒHƒ‹ƒg’liStatusEffectSystem.DefaultBuffDebuffDurationj‚ğg—pB\n"
-           + "‘¼‚ÌŒø‰Êƒ^ƒCƒv‚Å‚Í–³‹‚³‚ê‚éB")]
+    [Tooltip("ãƒãƒ•/ãƒ‡ãƒãƒ•ã®æŒç¶šã‚¿ãƒ¼ãƒ³æ•°ã€‚\n"
+           + "DefenseDown / DefenseUp ã§ä½¿ç”¨ã™ã‚‹ã€‚\n"
+           + "0 ã®å ´åˆã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ï¼ˆStatusEffectSystem.DefaultBuffDebuffDurationï¼‰ã‚’ä½¿ç”¨ã€‚\n"
+           + "ä»–ã®åŠ¹æœã‚¿ã‚¤ãƒ—ã§ã¯ç„¡è¦–ã•ã‚Œã‚‹ã€‚")]
     public int duration = 0;
 }

@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+ï»¿#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -7,15 +7,15 @@ using UnityEngine;
 
 public class TalkEventViewerWindow : EditorWindow
 {
-    // ‚±‚±‚ğ©•ª‚ÌTalkEvent’u‚«ê‚É‡‚í‚¹‚Ä•Ï‚¦‚ÄOKi‹ó‚È‚çƒvƒƒWƒFƒNƒg‘S‘ÌŒŸõj
+    // ã“ã“ã‚’è‡ªåˆ†ã®TalkEventç½®ãå ´ã«åˆã‚ã›ã¦å¤‰ãˆã¦OKï¼ˆç©ºãªã‚‰ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå…¨ä½“æ¤œç´¢ï¼‰
     private string folder = "Assets/ScriptableAsset/Talklist";
     private string idQuery = "";
-    private int floorFilter = -1; // -1‚È‚ç–³Œø
-    private int stepFilter = -1; // -1‚È‚ç–³Œø
+    private int floorFilter = -1; // -1ãªã‚‰ç„¡åŠ¹
+    private int stepFilter = -1; // -1ãªã‚‰ç„¡åŠ¹
 
-    // š’Ç‰ÁF”½‰fæDatabase
+    // â˜…è¿½åŠ ï¼šåæ˜ å…ˆDatabase
     private TalkEventDatabase targetDatabase;
-    private bool applyFilteredResults = true; // true‚È‚çƒtƒBƒ‹ƒ^ŒãŒ‹‰Ê‚ğ”½‰fAfalse‚È‚çƒtƒHƒ‹ƒ_‘SŒ‚ğ”½‰f
+    private bool applyFilteredResults = true; // trueãªã‚‰ãƒ•ã‚£ãƒ«ã‚¿å¾Œçµæœã‚’åæ˜ ã€falseãªã‚‰ãƒ•ã‚©ãƒ«ãƒ€å…¨ä»¶ã‚’åæ˜ 
 
     private Vector2 scroll;
     private List<TalkEvent> cached = new();
@@ -85,7 +85,7 @@ public class TalkEventViewerWindow : EditorWindow
 
         EditorGUILayout.Space(6);
 
-        // IDd•¡ƒ`ƒFƒbƒNiŠÈˆÕj
+        // IDé‡è¤‡ãƒã‚§ãƒƒã‚¯ï¼ˆç°¡æ˜“ï¼‰
         var dupIds = cached
             .Where(e => e != null && !string.IsNullOrEmpty(e.id))
             .GroupBy(e => e.id)
@@ -98,12 +98,12 @@ public class TalkEventViewerWindow : EditorWindow
             EditorGUILayout.HelpBox($"Duplicate IDs found: {string.Join(", ", dupIds)}", MessageType.Warning);
         }
 
-        // •\¦ƒŠƒXƒg
+        // è¡¨ç¤ºãƒªã‚¹ãƒˆ
         var list = GetFilteredList();
 
         EditorGUILayout.LabelField($"Results: {list.Count} / {cached.Count}", EditorStyles.miniBoldLabel);
 
-        // ƒwƒbƒ_
+        // ãƒ˜ãƒƒãƒ€
         using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
         {
             GUILayout.Label("ID", GUILayout.MinWidth(220));
@@ -173,7 +173,7 @@ public class TalkEventViewerWindow : EditorWindow
     {
         if (db == null) return;
 
-        // IDd•¡ƒ`ƒFƒbƒNi”½‰f‘O‚É~‚ß‚½‚¢ê‡‚Í‚±‚±‚Åreturn‚µ‚Ä‚àOKj
+        // IDé‡è¤‡ãƒã‚§ãƒƒã‚¯ï¼ˆåæ˜ å‰ã«æ­¢ã‚ãŸã„å ´åˆã¯ã“ã“ã§returnã—ã¦ã‚‚OKï¼‰
         var dup = listToApply
             .Where(e => e != null && !string.IsNullOrEmpty(e.id))
             .GroupBy(e => e.id)
@@ -189,7 +189,7 @@ public class TalkEventViewerWindow : EditorWindow
         Undo.RecordObject(db, "Apply TalkEvents To Database");
         db.events = listToApply;
 
-        // šd—vFDatabase“à•”‚ÌƒLƒƒƒbƒVƒ…(index/byId)‚ğ–³Œø‰»iŸ‰ñBuildIndexIfNeeded‚Åì‚è’¼‚³‚¹‚éj
+        // â˜…é‡è¦ï¼šDatabaseå†…éƒ¨ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥(index/byId)ã‚’ç„¡åŠ¹åŒ–ï¼ˆæ¬¡å›BuildIndexIfNeededã§ä½œã‚Šç›´ã•ã›ã‚‹ï¼‰
         InvalidateDatabaseCache(db);
 
         EditorUtility.SetDirty(db);
@@ -201,8 +201,8 @@ public class TalkEventViewerWindow : EditorWindow
 
     private void InvalidateDatabaseCache(TalkEventDatabase db)
     {
-        // TalkEventDatabase.cs ‚Ì private ƒtƒB[ƒ‹ƒhFindex / byId ‚ğ null ‚É‚·‚é
-        // iBuildIndexIfNeeded() ‚ªuŠù‚É«‘‚ª‚ ‚é‚È‚çreturnv‚È‚Ì‚ÅA‚±‚±‚ğÁ‚³‚È‚¢‚ÆXVŒã‚àŒÃ‚¢«‘‚ğg‚¤‰Â”\«‚ª‚ ‚éj
+        // TalkEventDatabase.cs ã® private ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ï¼šindex / byId ã‚’ null ã«ã™ã‚‹
+        // ï¼ˆBuildIndexIfNeeded() ãŒã€Œæ—¢ã«è¾æ›¸ãŒã‚ã‚‹ãªã‚‰returnã€ãªã®ã§ã€ã“ã“ã‚’æ¶ˆã•ãªã„ã¨æ›´æ–°å¾Œã‚‚å¤ã„è¾æ›¸ã‚’ä½¿ã†å¯èƒ½æ€§ãŒã‚ã‚‹ï¼‰
         var t = db.GetType();
         var flags = BindingFlags.Instance | BindingFlags.NonPublic;
 

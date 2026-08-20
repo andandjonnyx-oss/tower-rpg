@@ -1,44 +1,44 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 /// <summary>
-/// ƒAƒCƒeƒ€}ŠÓ‚ÌƒV[ƒ“ŠÔƒf[ƒ^ó‚¯“n‚µ—pƒRƒ“ƒeƒLƒXƒgB
-/// ZukanContextiƒ‚ƒ“ƒXƒ^[}ŠÓj‚Æ“¯‚¶ƒpƒ^[ƒ“B
+/// ã‚¢ã‚¤ãƒ†ãƒ å›³é‘‘ã®ã‚·ãƒ¼ãƒ³é–“ãƒ‡ãƒ¼ã‚¿å—ã‘æ¸¡ã—ç”¨ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã€‚
+/// ZukanContextï¼ˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼å›³é‘‘ï¼‰ã¨åŒã˜ãƒ‘ã‚¿ãƒ¼ãƒ³ã€‚
 ///
-/// ZukanI ¨ Istatus: ‘I‘ğƒAƒCƒeƒ€‚ÆAª«ˆÚ“®—p‚Ì‰{——‰Â”\ƒŠƒXƒg‚ğ“n‚·B
-/// Istatus ¨ ZukanI: –ß‚è‚ÉƒWƒƒƒ“ƒ‹ƒ^ƒu‚ÆƒXƒNƒ[ƒ‹ˆÊ’u‚ğ•œŒ³‚·‚é‚½‚ß‚Ìî•ñ‚ğ“n‚·B
+/// ZukanI â†’ Istatus: é¸æŠã‚¢ã‚¤ãƒ†ãƒ ã¨ã€â†‘â†“ç§»å‹•ç”¨ã®é–²è¦§å¯èƒ½ãƒªã‚¹ãƒˆã‚’æ¸¡ã™ã€‚
+/// Istatus â†’ ZukanI: æˆ»ã‚Šæ™‚ã«ã‚¸ãƒ£ãƒ³ãƒ«ã‚¿ãƒ–ã¨ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ä½ç½®ã‚’å¾©å…ƒã™ã‚‹ãŸã‚ã®æƒ…å ±ã‚’æ¸¡ã™ã€‚
 /// </summary>
 public static class ItemZukanContext
 {
-    // --- ZukanI ¨ Istatus ---
+    // --- ZukanI â†’ Istatus ---
 
-    /// <summary>Ú×‰æ–Ê‚Å•\¦‚·‚éƒAƒCƒeƒ€B</summary>
+    /// <summary>è©³ç´°ç”»é¢ã§è¡¨ç¤ºã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã€‚</summary>
     public static ItemData SelectedItem;
 
     /// <summary>
-    /// ª«ˆÚ“®—p‚ÌA”­Œ©Ï‚İƒAƒCƒeƒ€‚Ì‡˜•t‚«ƒŠƒXƒgB
-    /// ‘I‘ğ’†‚Ì‘åƒWƒƒƒ“ƒ‹“à‚ğ¬ƒWƒƒƒ“ƒ‹‡¨ƒAƒCƒeƒ€‡‚É•À‚×A”­Œ©Ï‚İ‚¾‚¯‚Éi‚Á‚½‚à‚ÌB
+    /// â†‘â†“ç§»å‹•ç”¨ã®ã€ç™ºè¦‹æ¸ˆã¿ã‚¢ã‚¤ãƒ†ãƒ ã®é †åºä»˜ããƒªã‚¹ãƒˆã€‚
+    /// é¸æŠä¸­ã®å¤§ã‚¸ãƒ£ãƒ³ãƒ«å†…ã‚’å°ã‚¸ãƒ£ãƒ³ãƒ«é †â†’ã‚¢ã‚¤ãƒ†ãƒ é †ã«ä¸¦ã¹ã€ç™ºè¦‹æ¸ˆã¿ã ã‘ã«çµã£ãŸã‚‚ã®ã€‚
     /// </summary>
     public static List<ItemData> DiscoveredList;
 
-    /// <summary>DiscoveredList “à‚ÌŒ»İƒCƒ“ƒfƒbƒNƒXB</summary>
+    /// <summary>DiscoveredList å†…ã®ç¾åœ¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚</summary>
     public static int CurrentIndex;
 
-    /// <summary>‘I‘ğ’†‚Ì‘åƒWƒƒƒ“ƒ‹ƒCƒ“ƒfƒbƒNƒXi–ß‚è‚Ìƒ^ƒu•œŒ³‚Ég‚¤jB</summary>
+    /// <summary>é¸æŠä¸­ã®å¤§ã‚¸ãƒ£ãƒ³ãƒ«ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆæˆ»ã‚Šæ™‚ã®ã‚¿ãƒ–å¾©å…ƒã«ä½¿ã†ï¼‰ã€‚</summary>
     public static int CurrentMajorIndex;
 
-    // --- Istatus ¨ ZukanIi–ß‚è•œŒ³j ---
+    // --- Istatus â†’ ZukanIï¼ˆæˆ»ã‚Šå¾©å…ƒï¼‰ ---
 
     /// <summary>
-    /// Ú×‚©‚çˆê——‚Ö–ß‚éÅ’†‚©‚Ç‚¤‚©B
-    /// true ‚Ìê‡AZukanI ‚Í ReturnMajorIndex ‚Ìƒ^ƒu‚ğŠJ‚«A
-    /// ReturnTargetItem ‚ğ‰æ–Ê“à‚Éû‚ß‚é‚æ‚¤ƒXƒNƒ[ƒ‹‚ğ•œŒ³‚·‚éB
-    /// ˆê“xg—p‚µ‚½‚ç ZukanI ‘¤‚ÅƒNƒŠƒA‚·‚éB
+    /// è©³ç´°ã‹ã‚‰ä¸€è¦§ã¸æˆ»ã‚‹æœ€ä¸­ã‹ã©ã†ã‹ã€‚
+    /// true ã®å ´åˆã€ZukanI ã¯ ReturnMajorIndex ã®ã‚¿ãƒ–ã‚’é–‹ãã€
+    /// ReturnTargetItem ã‚’ç”»é¢å†…ã«åã‚ã‚‹ã‚ˆã†ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã‚’å¾©å…ƒã™ã‚‹ã€‚
+    /// ä¸€åº¦ä½¿ç”¨ã—ãŸã‚‰ ZukanI å´ã§ã‚¯ãƒªã‚¢ã™ã‚‹ã€‚
     /// </summary>
     public static bool ReturningFromDetail;
 
-    /// <summary>–ß‚è‚ÉŠJ‚­‘åƒWƒƒƒ“ƒ‹ƒ^ƒu‚ÌƒCƒ“ƒfƒbƒNƒXB</summary>
+    /// <summary>æˆ»ã‚Šæ™‚ã«é–‹ãå¤§ã‚¸ãƒ£ãƒ³ãƒ«ã‚¿ãƒ–ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€‚</summary>
     public static int ReturnMajorIndex;
 
-    /// <summary>–ß‚è‚É‰æ–Ê“à‚Öû‚ß‚½‚¢ƒAƒCƒeƒ€B</summary>
+    /// <summary>æˆ»ã‚Šæ™‚ã«ç”»é¢å†…ã¸åã‚ãŸã„ã‚¢ã‚¤ãƒ†ãƒ ã€‚</summary>
     public static ItemData ReturnTargetItem;
 }

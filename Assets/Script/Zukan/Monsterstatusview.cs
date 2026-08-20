@@ -1,31 +1,31 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// Mstatus ƒV[ƒ“iƒ‚ƒ“ƒXƒ^[Ú×‰æ–Êj‚ÌƒRƒ“ƒgƒ[ƒ‰[B
-/// ZukanContext.SelectedMonster ‚Ìƒf[ƒ^‚ğ•\¦‚·‚éB
-/// StatusView ‚Æ“¯—l‚Ìƒpƒlƒ‹Ø‘Ö\¬i3ƒpƒlƒ‹jB
+/// Mstatus ã‚·ãƒ¼ãƒ³ï¼ˆãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼è©³ç´°ç”»é¢ï¼‰ã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ãƒ¼ã€‚
+/// ZukanContext.SelectedMonster ã®ãƒ‡ãƒ¼ã‚¿ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+/// StatusView ã¨åŒæ§˜ã®ãƒ‘ãƒãƒ«åˆ‡æ›¿æ§‹æˆï¼ˆ3ãƒ‘ãƒãƒ«ï¼‰ã€‚
 ///
-/// ƒpƒlƒ‹1: Šî–{î•ñi‰æ‘œE–¼‘OEƒXƒe[ƒ^ƒXEƒhƒƒbƒvEà–¾j
-/// ƒpƒlƒ‹2: ‘Ï«î•ñi‘®«‘Ï«Eó‘ÔˆÙí‘Ï«j
-/// ƒpƒlƒ‹3: s“®ƒpƒ^[ƒ“iactions ƒe[ƒuƒ‹j
+/// ãƒ‘ãƒãƒ«1: åŸºæœ¬æƒ…å ±ï¼ˆç”»åƒãƒ»åå‰ãƒ»ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ»ãƒ‰ãƒ­ãƒƒãƒ—ãƒ»èª¬æ˜ï¼‰
+/// ãƒ‘ãƒãƒ«2: è€æ€§æƒ…å ±ï¼ˆå±æ€§è€æ€§ãƒ»çŠ¶æ…‹ç•°å¸¸è€æ€§ï¼‰
+/// ãƒ‘ãƒãƒ«3: è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ï¼ˆactions ãƒ†ãƒ¼ãƒ–ãƒ«ï¼‰
 ///
-/// © ¨ ƒ{ƒ^ƒ“: ƒpƒlƒ‹Ø‘Ö
-/// ª « ƒ{ƒ^ƒ“: ‘˜‹öÏ‚İƒ‚ƒ“ƒXƒ^[ŠÔ‚ÌØ‘Öiƒ‹[ƒvj
+/// â† â†’ ãƒœã‚¿ãƒ³: ãƒ‘ãƒãƒ«åˆ‡æ›¿
+/// â†‘ â†“ ãƒœã‚¿ãƒ³: é­é‡æ¸ˆã¿ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼é–“ã®åˆ‡æ›¿ï¼ˆãƒ«ãƒ¼ãƒ—ï¼‰
 /// </summary>
 public class MonsterStatusView : MonoBehaviour
 {
     // =========================================================
-    // Inspector QÆ
+    // Inspector å‚ç…§
     // =========================================================
 
     [Header("Panels")]
-    [SerializeField] private GameObject panel1;  // Šî–{î•ñ
-    [SerializeField] private GameObject panel2;  // ‘Ï«î•ñ
-    [SerializeField] private GameObject panel3;  // s“®ƒpƒ^[ƒ“
+    [SerializeField] private GameObject panel1;  // åŸºæœ¬æƒ…å ±
+    [SerializeField] private GameObject panel2;  // è€æ€§æƒ…å ±
+    [SerializeField] private GameObject panel3;  // è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³
 
     [Header("Panel1 - Basic Info")]
     [SerializeField] private Image monsterImage;
@@ -59,39 +59,39 @@ public class MonsterStatusView : MonoBehaviour
     [SerializeField] private TMP_Text resRageText;
     [SerializeField] private TMP_Text resSilenceText;
     [SerializeField] private TMP_Text resDebuffText;
-    [SerializeField] private TMP_Text resPetrifyText;  // Î‰»‘Ï«
-    [SerializeField] private TMP_Text resCharmText;     // –£—¹‘Ï«
-    [SerializeField] private TMP_Text resCurseText;     // ô‚¢‘Ï«
-    [SerializeField] private TMP_Text resGlassText;     // ƒKƒ‰ƒX‘Ï«
-    [SerializeField] private TMP_Text immuneText;  // ‘S‘Ï«ƒtƒ‰ƒO•\¦
+    [SerializeField] private TMP_Text resPetrifyText;  // çŸ³åŒ–è€æ€§
+    [SerializeField] private TMP_Text resCharmText;     // é­…äº†è€æ€§
+    [SerializeField] private TMP_Text resCurseText;     // å‘ªã„è€æ€§
+    [SerializeField] private TMP_Text resGlassText;     // ã‚¬ãƒ©ã‚¹è€æ€§
+    [SerializeField] private TMP_Text immuneText;  // å…¨è€æ€§ãƒ•ãƒ©ã‚°è¡¨ç¤º
 
     [Header("Panel3 - Action Pattern")]
-    [Tooltip("s“®ƒpƒ^[ƒ“‚ğ1s‚¸‚Â•\¦‚·‚éƒeƒLƒXƒgi•¡”sj")]
+    [Tooltip("è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’1è¡Œãšã¤è¡¨ç¤ºã™ã‚‹ãƒ†ã‚­ã‚¹ãƒˆï¼ˆè¤‡æ•°è¡Œï¼‰")]
     [SerializeField] private TMP_Text actionPatternText;
 
     [Header("Navigation Buttons")]
-    [SerializeField] private Button prevPanelButton;    // © ƒpƒlƒ‹Ø‘Ö
-    [SerializeField] private Button nextPanelButton;    // ¨ ƒpƒlƒ‹Ø‘Ö
-    [SerializeField] private Button prevMonsterButton;  // ª ‘O‚Ìƒ‚ƒ“ƒXƒ^[
-    [SerializeField] private Button nextMonsterButton;  // « Ÿ‚Ìƒ‚ƒ“ƒXƒ^[
-    [SerializeField] private Button backButton;         // –ß‚éiZukanM ‚Öj
+    [SerializeField] private Button prevPanelButton;    // â† ãƒ‘ãƒãƒ«åˆ‡æ›¿
+    [SerializeField] private Button nextPanelButton;    // â†’ ãƒ‘ãƒãƒ«åˆ‡æ›¿
+    [SerializeField] private Button prevMonsterButton;  // â†‘ å‰ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼
+    [SerializeField] private Button nextMonsterButton;  // â†“ æ¬¡ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼
+    [SerializeField] private Button backButton;         // æˆ»ã‚‹ï¼ˆZukanM ã¸ï¼‰
 
     [Header("Display")]
-    [SerializeField] private TMP_Text pageText;         // ƒpƒlƒ‹ƒy[ƒW•\¦i—á: 1/3j
-    [SerializeField] private TMP_Text monsterIndexText; // ƒ‚ƒ“ƒXƒ^[”Ô†•\¦i—á: 3/15j
+    [SerializeField] private TMP_Text pageText;         // ãƒ‘ãƒãƒ«ãƒšãƒ¼ã‚¸è¡¨ç¤ºï¼ˆä¾‹: 1/3ï¼‰
+    [SerializeField] private TMP_Text monsterIndexText; // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç•ªå·è¡¨ç¤ºï¼ˆä¾‹: 3/15ï¼‰
 
     [Header("Scene Names")]
     [SerializeField] private string zukanMSceneName = "ZukanM";
 
     // =========================================================
-    // “à•”ó‘Ô
+    // å†…éƒ¨çŠ¶æ…‹
     // =========================================================
     private Monster monster;
-    private int currentPanel = 0;     // 0=Šî–{, 1=‘Ï«, 2=s“®
+    private int currentPanel = 0;     // 0=åŸºæœ¬, 1=è€æ€§, 2=è¡Œå‹•
     private const int PanelCount = 3;
 
     // =========================================================
-    // ‰Šú‰»
+    // åˆæœŸåŒ–
     // =========================================================
 
     private void Start()
@@ -103,14 +103,14 @@ public class MonsterStatusView : MonoBehaviour
             return;
         }
 
-        // ƒ{ƒ^ƒ““o˜^
+        // ãƒœã‚¿ãƒ³ç™»éŒ²
         if (prevPanelButton != null) prevPanelButton.onClick.AddListener(OnPrevPanelClicked);
         if (nextPanelButton != null) nextPanelButton.onClick.AddListener(OnNextPanelClicked);
         if (prevMonsterButton != null) prevMonsterButton.onClick.AddListener(OnPrevMonsterClicked);
         if (nextMonsterButton != null) nextMonsterButton.onClick.AddListener(OnNextMonsterClicked);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
 
-        // ‰Šú•\¦: ƒpƒlƒ‹1
+        // åˆæœŸè¡¨ç¤º: ãƒ‘ãƒãƒ«1
         currentPanel = 0;
         RefreshAll();
         ApplyPanelVisibility();
@@ -118,7 +118,7 @@ public class MonsterStatusView : MonoBehaviour
     }
 
     // =========================================================
-    // •\¦XV
+    // è¡¨ç¤ºæ›´æ–°
     // =========================================================
 
     private void RefreshAll()
@@ -130,7 +130,7 @@ public class MonsterStatusView : MonoBehaviour
         RefreshPanel3();
     }
 
-    /// <summary>ƒpƒlƒ‹1: Šî–{î•ñ</summary>
+    /// <summary>ãƒ‘ãƒãƒ«1: åŸºæœ¬æƒ…å ±</summary>
     private void RefreshPanel1()
     {
         if (monsterImage != null)
@@ -142,9 +142,9 @@ public class MonsterStatusView : MonoBehaviour
         if (floorRangeText != null)
         {
             if (monster.IsBoss)
-                floorRangeText.text = "oŒ»: ƒ{ƒX";
+                floorRangeText.text = "å‡ºç¾: ãƒœã‚¹";
             else
-                floorRangeText.text = $"oŒ»: {monster.Minfloor}F-{monster.Maxfloor}F";
+                floorRangeText.text = $"å‡ºç¾: {monster.Minfloor}F-{monster.Maxfloor}F";
         }
         if (hpText != null) hpText.text = $"HP: {monster.MaxHp}";
         if (attackText != null) attackText.text = $"ATK: {monster.Attack}";
@@ -154,73 +154,73 @@ public class MonsterStatusView : MonoBehaviour
         if (luckText != null) luckText.text = $"LUC: {monster.Luck}";
         if (expText != null) expText.text = $"EXP: {monster.Exp}";
 
-        // ƒhƒƒbƒvƒAƒCƒeƒ€i1s–Ú: ƒhƒƒbƒv: / 2s–Ú: ƒAƒCƒeƒ€–¼ (%)j
+        // ãƒ‰ãƒ­ãƒƒãƒ—ã‚¢ã‚¤ãƒ†ãƒ ï¼ˆ1è¡Œç›®: ãƒ‰ãƒ­ãƒƒãƒ—: / 2è¡Œç›®: ã‚¢ã‚¤ãƒ†ãƒ å (%)ï¼‰
         if (dropText != null)
         {
             if (monster.dropItem != null && monster.dropRate > 0f)
             {
                 int percent = Mathf.RoundToInt(monster.dropRate * 100f);
-                dropText.text = $"ƒhƒƒbƒv:\n{monster.dropItem.itemName} ({percent}%)";
+                dropText.text = $"ãƒ‰ãƒ­ãƒƒãƒ—:\n{monster.dropItem.itemName} ({percent}%)";
             }
             else
             {
-                dropText.text = "ƒhƒƒbƒv:\n‚È‚µ";
+                dropText.text = "ãƒ‰ãƒ­ãƒƒãƒ—:\nãªã—";
             }
         }
 
-        // à–¾ƒeƒLƒXƒg
+        // èª¬æ˜ãƒ†ã‚­ã‚¹ãƒˆ
         if (helpText != null)
         {
             helpText.text = !string.IsNullOrEmpty(monster.Help) ? monster.Help : "";
         }
     }
 
-    /// <summary>ƒpƒlƒ‹2: ‘Ï«î•ñ</summary>
+    /// <summary>ãƒ‘ãƒãƒ«2: è€æ€§æƒ…å ±</summary>
     private void RefreshPanel2()
     {
-        // ‘®«‘Ï«
-        if (resStrikeText != null) resStrikeText.text = $"‰£‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Strike)}";
-        if (resSlashText != null) resSlashText.text = $"a‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Slash)}";
-        if (resPierceText != null) resPierceText.text = $"“Ë‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Pierce)}";
-        if (resFireText != null) resFireText.text = $"‰Î‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Fire)}";
-        if (resIceText != null) resIceText.text = $"•X‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Ice)}";
-        if (resThunderText != null) resThunderText.text = $"—‹‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Thunder)}";
-        if (resHolyText != null) resHolyText.text = $"¹‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Holy)}";
-        if (resDarkText != null) resDarkText.text = $"ˆÅ‘Ï«: {monster.GetAttributeResistance(WeaponAttribute.Dark)}";
+        // å±æ€§è€æ€§
+        if (resStrikeText != null) resStrikeText.text = $"æ®´è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Strike)}";
+        if (resSlashText != null) resSlashText.text = $"æ–¬è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Slash)}";
+        if (resPierceText != null) resPierceText.text = $"çªè€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Pierce)}";
+        if (resFireText != null) resFireText.text = $"ç«è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Fire)}";
+        if (resIceText != null) resIceText.text = $"æ°·è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Ice)}";
+        if (resThunderText != null) resThunderText.text = $"é›·è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Thunder)}";
+        if (resHolyText != null) resHolyText.text = $"è–è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Holy)}";
+        if (resDarkText != null) resDarkText.text = $"é—‡è€æ€§: {monster.GetAttributeResistance(WeaponAttribute.Dark)}";
 
-        // ó‘ÔˆÙí‘Ï«
-        if (resPoisonText != null) resPoisonText.text = $"“Å‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Poison)}";
-        if (resStunText != null) resStunText.text = $"‹Câ‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Stun)}";
-        if (resParalyzeText != null) resParalyzeText.text = $"–ƒáƒ‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Paralyze)}";
-        if (resBlindText != null) resBlindText.text = $"ˆÃˆÅ‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Blind)}";
-        if (resRageText != null) resRageText.text = $"“{‚è‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Rage)}";
-        if (resSilenceText != null) resSilenceText.text = $"’¾–Ù‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Silence)}";
-        if (resDebuffText != null) resDebuffText.text = $"ƒfƒoƒt‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Debuff)}";
-        if (resPetrifyText != null) resPetrifyText.text = $"Î‰»‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Petrify)}";
-        if (resCharmText != null) resCharmText.text = $"–£—¹‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Charm)}";
-        if (resCurseText != null) resCurseText.text = $"ô‚¢‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Curse)}";
-        if (resGlassText != null) resGlassText.text = $"ƒKƒ‰ƒX‘Ï«: {monster.GetStatusEffectResistance(StatusEffect.Glass)}";
+        // çŠ¶æ…‹ç•°å¸¸è€æ€§
+        if (resPoisonText != null) resPoisonText.text = $"æ¯’è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Poison)}";
+        if (resStunText != null) resStunText.text = $"æ°—çµ¶è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Stun)}";
+        if (resParalyzeText != null) resParalyzeText.text = $"éº»ç—ºè€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Paralyze)}";
+        if (resBlindText != null) resBlindText.text = $"æš—é—‡è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Blind)}";
+        if (resRageText != null) resRageText.text = $"æ€’ã‚Šè€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Rage)}";
+        if (resSilenceText != null) resSilenceText.text = $"æ²ˆé»™è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Silence)}";
+        if (resDebuffText != null) resDebuffText.text = $"ãƒ‡ãƒãƒ•è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Debuff)}";
+        if (resPetrifyText != null) resPetrifyText.text = $"çŸ³åŒ–è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Petrify)}";
+        if (resCharmText != null) resCharmText.text = $"é­…äº†è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Charm)}";
+        if (resCurseText != null) resCurseText.text = $"å‘ªã„è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Curse)}";
+        if (resGlassText != null) resGlassText.text = $"ã‚¬ãƒ©ã‚¹è€æ€§: {monster.GetStatusEffectResistance(StatusEffect.Glass)}";
 
-        // ‘S‘Ï«ƒtƒ‰ƒO
+        // å…¨è€æ€§ãƒ•ãƒ©ã‚°
         if (immuneText != null)
         {
-            immuneText.text = monster.immuneToAllAilments ? "š ó‘ÔˆÙíŠ®‘S‘Ï«" : "";
+            immuneText.text = monster.immuneToAllAilments ? "â˜… çŠ¶æ…‹ç•°å¸¸å®Œå…¨è€æ€§" : "";
         }
     }
 
-    /// <summary>ƒpƒlƒ‹3: s“®ƒpƒ^[ƒ“</summary>
+    /// <summary>ãƒ‘ãƒãƒ«3: è¡Œå‹•ãƒ‘ã‚¿ãƒ¼ãƒ³</summary>
     private void RefreshPanel3()
     {
         if (actionPatternText == null) return;
 
         if (monster.actions == null || monster.actions.Length == 0)
         {
-            actionPatternText.text = "’ÊíUŒ‚‚Ì‚İ";
+            actionPatternText.text = "é€šå¸¸æ”»æ’ƒã®ã¿";
             return;
         }
 
         var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"s“®”ÍˆÍ: {monster.baseActionRange}");
+        sb.AppendLine($"è¡Œå‹•ç¯„å›²: {monster.baseActionRange}");
         sb.AppendLine("---");
 
         for (int i = 0; i < monster.actions.Length; i++)
@@ -228,16 +228,16 @@ public class MonsterStatusView : MonoBehaviour
             var entry = monster.actions[i];
             if (entry == null) continue;
 
-            string skillName = entry.skill != null ? entry.skill.skillName : "’ÊíUŒ‚";
+            string skillName = entry.skill != null ? entry.skill.skillName : "é€šå¸¸æ”»æ’ƒ";
             string actionTypeName = "";
             if (entry.skill != null)
             {
                 switch (entry.skill.actionType)
                 {
-                    case MonsterActionType.Idle: actionTypeName = "[‘Ò‹@]"; break;
-                    case MonsterActionType.SkillAttack: actionTypeName = "[ƒXƒLƒ‹]"; break;
-                    case MonsterActionType.Preemptive: actionTypeName = "[æ§]"; break;
-                    case MonsterActionType.FoodRaid: actionTypeName = "[H‚¢r‚ç‚µ]"; break;
+                    case MonsterActionType.Idle: actionTypeName = "[å¾…æ©Ÿ]"; break;
+                    case MonsterActionType.SkillAttack: actionTypeName = "[ã‚¹ã‚­ãƒ«]"; break;
+                    case MonsterActionType.Preemptive: actionTypeName = "[å…ˆåˆ¶]"; break;
+                    case MonsterActionType.FoodRaid: actionTypeName = "[é£Ÿã„è’ã‚‰ã—]"; break;
                     default: actionTypeName = ""; break;
                 }
             }
@@ -249,7 +249,7 @@ public class MonsterStatusView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒpƒlƒ‹Ø‘Öi© ¨j
+    // ãƒ‘ãƒãƒ«åˆ‡æ›¿ï¼ˆâ† â†’ï¼‰
     // =========================================================
 
     private void ApplyPanelVisibility()
@@ -258,10 +258,10 @@ public class MonsterStatusView : MonoBehaviour
         if (panel2 != null) panel2.SetActive(currentPanel == 1);
         if (panel3 != null) panel3.SetActive(currentPanel == 2);
 
-        // ƒy[ƒW•\¦
+        // ãƒšãƒ¼ã‚¸è¡¨ç¤º
         if (pageText != null) pageText.text = $"{currentPanel + 1}/{PanelCount}";
 
-        // © ¨ ƒ{ƒ^ƒ“‚Ì—LŒø/–³Œø
+        // â† â†’ ãƒœã‚¿ãƒ³ã®æœ‰åŠ¹/ç„¡åŠ¹
         if (prevPanelButton != null) prevPanelButton.interactable = (currentPanel > 0);
         if (nextPanelButton != null) nextPanelButton.interactable = (currentPanel < PanelCount - 1);
     }
@@ -285,41 +285,41 @@ public class MonsterStatusView : MonoBehaviour
     }
 
     // =========================================================
-    // ƒ‚ƒ“ƒXƒ^[Ø‘Öiª «j
+    // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åˆ‡æ›¿ï¼ˆâ†‘ â†“ï¼‰
     // =========================================================
     //
-    // ZukanContext.EncounteredList “à‚ğ‘OŒã‚ÉˆÚ“®‚·‚éB
-    // ’[‚É’B‚µ‚½‚çƒ‹[ƒv‚·‚éi––”ö¨æ“ªAæ“ª¨––”öjB
-    // ƒV[ƒ“‘JˆÚ‚È‚µ‚Å monster ‚ğ·‚µ‘Ö‚¦‚Ä RefreshAll() ‚·‚é‚¾‚¯‚È‚Ì‚ÅŒy‚¢B
-    // ƒ‚ƒ“ƒXƒ^[Ø‘Ö‚Íƒpƒlƒ‹‚ğ1/3iŠî–{î•ñj‚ÉƒŠƒZƒbƒg‚·‚éB
+    // ZukanContext.EncounteredList å†…ã‚’å‰å¾Œã«ç§»å‹•ã™ã‚‹ã€‚
+    // ç«¯ã«é”ã—ãŸã‚‰ãƒ«ãƒ¼ãƒ—ã™ã‚‹ï¼ˆæœ«å°¾â†’å…ˆé ­ã€å…ˆé ­â†’æœ«å°¾ï¼‰ã€‚
+    // ã‚·ãƒ¼ãƒ³é·ç§»ãªã—ã§ monster ã‚’å·®ã—æ›¿ãˆã¦ RefreshAll() ã™ã‚‹ã ã‘ãªã®ã§è»½ã„ã€‚
+    // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åˆ‡æ›¿æ™‚ã¯ãƒ‘ãƒãƒ«ã‚’1/3ï¼ˆåŸºæœ¬æƒ…å ±ï¼‰ã«ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
     // =========================================================
 
-    /// <summary>ª ‘O‚Ìƒ‚ƒ“ƒXƒ^[‚ÖØ‘Ö</summary>
+    /// <summary>â†‘ å‰ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸åˆ‡æ›¿</summary>
     private void OnPrevMonsterClicked()
     {
         if (ZukanContext.EncounteredList == null || ZukanContext.EncounteredList.Count <= 1) return;
 
         int idx = ZukanContext.CurrentIndex - 1;
-        if (idx < 0) idx = ZukanContext.EncounteredList.Count - 1; // ƒ‹[ƒv
+        if (idx < 0) idx = ZukanContext.EncounteredList.Count - 1; // ãƒ«ãƒ¼ãƒ—
 
         SwitchToMonster(idx);
     }
 
-    /// <summary>« Ÿ‚Ìƒ‚ƒ“ƒXƒ^[‚ÖØ‘Ö</summary>
+    /// <summary>â†“ æ¬¡ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã¸åˆ‡æ›¿</summary>
     private void OnNextMonsterClicked()
     {
         if (ZukanContext.EncounteredList == null || ZukanContext.EncounteredList.Count <= 1) return;
 
         int idx = ZukanContext.CurrentIndex + 1;
-        if (idx >= ZukanContext.EncounteredList.Count) idx = 0; // ƒ‹[ƒv
+        if (idx >= ZukanContext.EncounteredList.Count) idx = 0; // ãƒ«ãƒ¼ãƒ—
 
         SwitchToMonster(idx);
     }
 
     /// <summary>
-    /// w’èƒCƒ“ƒfƒbƒNƒX‚Ìƒ‚ƒ“ƒXƒ^[‚ÉØ‚è‘Ö‚¦‚éB
-    /// ƒV[ƒ“‘JˆÚ‚È‚µB•\¦“à—e‚ğ‘¦À‚ÉXV‚·‚éB
-    /// ƒ‚ƒ“ƒXƒ^[Ø‘Ö‚Íƒpƒlƒ‹‚ğ1/3iŠî–{î•ñj‚ÉƒŠƒZƒbƒg‚·‚éB
+    /// æŒ‡å®šã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã«åˆ‡ã‚Šæ›¿ãˆã‚‹ã€‚
+    /// ã‚·ãƒ¼ãƒ³é·ç§»ãªã—ã€‚è¡¨ç¤ºå†…å®¹ã‚’å³åº§ã«æ›´æ–°ã™ã‚‹ã€‚
+    /// ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åˆ‡æ›¿æ™‚ã¯ãƒ‘ãƒãƒ«ã‚’1/3ï¼ˆåŸºæœ¬æƒ…å ±ï¼‰ã«ãƒªã‚»ãƒƒãƒˆã™ã‚‹ã€‚
     /// </summary>
     private void SwitchToMonster(int newIndex)
     {
@@ -327,7 +327,7 @@ public class MonsterStatusView : MonoBehaviour
         monster = ZukanContext.EncounteredList[newIndex];
         ZukanContext.SelectedMonster = monster;
 
-        currentPanel = 0;   // ƒ‚ƒ“ƒXƒ^[Ø‘Ö‚Í•K‚¸Šî–{î•ñ(1/3)‚É–ß‚·
+        currentPanel = 0;   // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼åˆ‡æ›¿æ™‚ã¯å¿…ãšåŸºæœ¬æƒ…å ±(1/3)ã«æˆ»ã™
 
         RefreshAll();
         ApplyPanelVisibility();
@@ -335,8 +335,8 @@ public class MonsterStatusView : MonoBehaviour
     }
 
     /// <summary>
-    /// ª« ƒ{ƒ^ƒ“‚Ì—LŒø/–³Œø‚Æƒ‚ƒ“ƒXƒ^[”Ô†•\¦‚ğXV‚·‚éB
-    /// ‰{——‰Â”\ƒ‚ƒ“ƒXƒ^[‚ª1‘ÌˆÈ‰º‚È‚ç–³Œø‚É‚·‚éB
+    /// â†‘â†“ ãƒœã‚¿ãƒ³ã®æœ‰åŠ¹/ç„¡åŠ¹ã¨ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç•ªå·è¡¨ç¤ºã‚’æ›´æ–°ã™ã‚‹ã€‚
+    /// é–²è¦§å¯èƒ½ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ãŒ1ä½“ä»¥ä¸‹ãªã‚‰ç„¡åŠ¹ã«ã™ã‚‹ã€‚
     /// </summary>
     private void UpdateMonsterNavButtons()
     {
@@ -346,7 +346,7 @@ public class MonsterStatusView : MonoBehaviour
         if (prevMonsterButton != null) prevMonsterButton.interactable = canNavigate;
         if (nextMonsterButton != null) nextMonsterButton.interactable = canNavigate;
 
-        // ƒ‚ƒ“ƒXƒ^[”Ô†•\¦i—á: 3/15j
+        // ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ç•ªå·è¡¨ç¤ºï¼ˆä¾‹: 3/15ï¼‰
         if (monsterIndexText != null)
         {
             if (ZukanContext.EncounteredList != null && ZukanContext.EncounteredList.Count > 0)
@@ -361,7 +361,7 @@ public class MonsterStatusView : MonoBehaviour
     }
 
     // =========================================================
-    // –ß‚éƒ{ƒ^ƒ“
+    // æˆ»ã‚‹ãƒœã‚¿ãƒ³
     // =========================================================
 
     private void OnBackClicked()

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
 using UnityEditor.SceneManagement;
@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 public class FontReplacer : EditorWindow
 {
-    private Font targetFont;            // ‹ŒText—p
-    private TMP_FontAsset targetTmpFont; // TMP—p
+    private Font targetFont;            // æ—§Textç”¨
+    private TMP_FontAsset targetTmpFont; // TMPç”¨
 
     private bool processScenes = true;
     private bool processPrefabs = true;
@@ -23,25 +23,25 @@ public class FontReplacer : EditorWindow
 
     private void OnGUI()
     {
-        EditorGUILayout.LabelField("ˆêŠ‡ƒtƒHƒ“ƒg•ÏX", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ä¸€æ‹¬ãƒ•ã‚©ãƒ³ãƒˆå¤‰æ›´", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
-        processUguiText = EditorGUILayout.Toggle("uGUI Text ‚ğ‘ÎÛ", processUguiText);
+        processUguiText = EditorGUILayout.Toggle("uGUI Text ã‚’å¯¾è±¡", processUguiText);
         if (processUguiText)
             targetFont = (Font)EditorGUILayout.ObjectField("Font (uGUI)", targetFont, typeof(Font), false);
 
-        processTmpText = EditorGUILayout.Toggle("TMP_Text ‚ğ‘ÎÛ", processTmpText);
+        processTmpText = EditorGUILayout.Toggle("TMP_Text ã‚’å¯¾è±¡", processTmpText);
         if (processTmpText)
             targetTmpFont = (TMP_FontAsset)EditorGUILayout.ObjectField("Font Asset (TMP)", targetTmpFont, typeof(TMP_FontAsset), false);
 
         EditorGUILayout.Space();
-        processScenes = EditorGUILayout.Toggle("Build Settings ‚ÌƒV[ƒ“‚ğˆ—", processScenes);
-        processPrefabs = EditorGUILayout.Toggle("‘SPrefab‚ğˆ—", processPrefabs);
-        processActiveScene = EditorGUILayout.Toggle("Œ»İ‚ÌƒV[ƒ“‚Ì‚İˆ—", processActiveScene);
+        processScenes = EditorGUILayout.Toggle("Build Settings ã®ã‚·ãƒ¼ãƒ³ã‚’å‡¦ç†", processScenes);
+        processPrefabs = EditorGUILayout.Toggle("å…¨Prefabã‚’å‡¦ç†", processPrefabs);
+        processActiveScene = EditorGUILayout.Toggle("ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã®ã¿å‡¦ç†", processActiveScene);
 
 
         EditorGUILayout.Space();
-        if (GUILayout.Button("Às", GUILayout.Height(36)))
+        if (GUILayout.Button("å®Ÿè¡Œ", GUILayout.Height(36)))
             Run();
     }
 
@@ -49,7 +49,7 @@ public class FontReplacer : EditorWindow
     {
         if (processUguiText && targetFont == null && processTmpText && targetTmpFont == null)
         {
-            EditorUtility.DisplayDialog("ƒGƒ‰[", "ƒtƒHƒ“ƒg‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B", "OK");
+            EditorUtility.DisplayDialog("ã‚¨ãƒ©ãƒ¼", "ãƒ•ã‚©ãƒ³ãƒˆã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚", "OK");
             return;
         }
 
@@ -60,8 +60,8 @@ public class FontReplacer : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-        EditorUtility.DisplayDialog("Š®—¹", $"{total} ŒÂ‚ÌText‚ğ•ÏX‚µ‚Ü‚µ‚½B", "OK");
-        Debug.Log($"[FontReplacer] Š®—¹: {total} Œ•ÏX");
+        EditorUtility.DisplayDialog("å®Œäº†", $"{total} å€‹ã®Textã‚’å¤‰æ›´ã—ã¾ã—ãŸã€‚", "OK");
+        Debug.Log($"[FontReplacer] å®Œäº†: {total} ä»¶å¤‰æ›´");
     }
 
     private int ProcessAllPrefabs()
@@ -145,7 +145,7 @@ public class FontReplacer : EditorWindow
             count += ApplyToHierarchy(go);
 
         if (count > 0)
-            EditorSceneManager.MarkSceneDirty(scene); // •Û‘¶‚ÍCtrl+S‚Åè“®
+            EditorSceneManager.MarkSceneDirty(scene); // ä¿å­˜ã¯Ctrl+Sã§æ‰‹å‹•
         return count;
     }
 }

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ public class ItemDatabase : ScriptableObject
 {
     public List<ItemData> items = new();
 
-    // õˆøF (floor, step) -> oŒ»Œó•âƒAƒCƒeƒ€ˆê——
+    // ç´¢å¼•ï¼š (floor, step) -> å‡ºç¾å€™è£œã‚¢ã‚¤ãƒ†ãƒ ä¸€è¦§
     private Dictionary<(int floor, int step), List<ItemData>> index;
 
     [Header("Index Settings")]
@@ -20,21 +20,21 @@ public class ItemDatabase : ScriptableObject
 
         index = new Dictionary<(int, int), List<ItemData>>(maxFloor * maxStepPerFloor);
 
-        // ‘S’n“_‚É‹óƒŠƒXƒg‚ğ—pˆÓ
+        // å…¨åœ°ç‚¹ã«ç©ºãƒªã‚¹ãƒˆã‚’ç”¨æ„
         for (int f = 1; f <= maxFloor; f++)
         {
             for (int s = 1; s <= maxStepPerFloor; s++)
                 index[(f, s)] = new List<ItemData>();
         }
 
-        // ŠeƒAƒCƒeƒ€‚ÌoŒ»”ÍˆÍ‚ğ«‘‚É“WŠJ
+        // å„ã‚¢ã‚¤ãƒ†ãƒ ã®å‡ºç¾ç¯„å›²ã‚’è¾æ›¸ã«å±•é–‹
         foreach (var item in items)
         {
             if (item == null) continue;
 
             NormalizeRange(item, out int minF, out int minS, out int maxF, out int maxS);
 
-            // ”ÍˆÍŠO‚Ì’l‚ğ“ü—Í‚µ‚½Û‚É”ÍˆÍ“à‚Éû‚ß‚é
+            // ç¯„å›²å¤–ã®å€¤ã‚’å…¥åŠ›ã—ãŸéš›ã«ç¯„å›²å†…ã«åã‚ã‚‹
             minF = Mathf.Clamp(minF, 1, maxFloor);
             maxF = Mathf.Clamp(maxF, 1, maxFloor);
 
@@ -62,7 +62,7 @@ public class ItemDatabase : ScriptableObject
         return index.TryGetValue((floor, step), out var list) ? list : Array.Empty<ItemData>();
     }
 
-    // oŒ»‚·‚éƒAƒCƒeƒ€‚ª•¡”‚ ‚Á‚½ê‡‚Íƒ‰ƒ“ƒ_ƒ€‚É1‚Â•Ô‚·
+    // å‡ºç¾ã™ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ãŒè¤‡æ•°ã‚ã£ãŸå ´åˆã¯ãƒ©ãƒ³ãƒ€ãƒ ã«1ã¤è¿”ã™
     public ItemData GetRandomCandidate(int floor, int step)
     {
         var list = FindCandidates(floor, step);
@@ -70,7 +70,7 @@ public class ItemDatabase : ScriptableObject
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
-    // İ’èƒ~ƒX‚ÅÅ¬‚ÆÅ‘å‚ª‚¨‚©‚µ‚­‚È‚Á‚Ä‚¢‚½Û‚É‚»‚ê‚ğC³‚·‚é
+    // è¨­å®šãƒŸã‚¹ã§æœ€å°ã¨æœ€å¤§ãŒãŠã‹ã—ããªã£ã¦ã„ãŸéš›ã«ãã‚Œã‚’ä¿®æ­£ã™ã‚‹
     private void NormalizeRange(ItemData item, out int minF, out int minS, out int maxF, out int maxS)
     {
         minF = item.Minfloor;
@@ -85,14 +85,14 @@ public class ItemDatabase : ScriptableObject
         }
     }
 
-    // (floor, step) ‚Ì«‘‡”äŠr
+    // (floor, step) ã®è¾æ›¸é †æ¯”è¼ƒ
     private int ComparePos(int f1, int s1, int f2, int s2)
     {
         if (f1 != f2) return f1.CompareTo(f2);
         return s1.CompareTo(s2);
     }
 
-    // ƒf[ƒ^•ÏX‚Éõˆø‚ğì‚è’¼‚µ‚½‚¢‚ÉŒÄ‚Ô—p
+    // ãƒ‡ãƒ¼ã‚¿å¤‰æ›´æ™‚ã«ç´¢å¼•ã‚’ä½œã‚Šç›´ã—ãŸã„æ™‚ã«å‘¼ã¶ç”¨
     public void InvalidateIndex()
     {
         index = null;

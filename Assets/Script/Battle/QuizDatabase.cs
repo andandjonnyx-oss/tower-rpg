@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Battle/QuizDatabase")]
 public class QuizDatabase : ScriptableObject
 {
-    [Header("ƒNƒCƒY–â‘èƒŠƒXƒg")]
-    [Tooltip("‚±‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚Éo‘è‚³‚ê‚éBd•¡‚È‚µB")]
+    [Header("ã‚¯ã‚¤ã‚ºå•é¡Œãƒªã‚¹ãƒˆ")]
+    [Tooltip("ã“ã®ä¸­ã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã«å‡ºé¡Œã•ã‚Œã‚‹ã€‚é‡è¤‡ãªã—ã€‚")]
     public List<QuizData> quizzes = new List<QuizData>();
 }

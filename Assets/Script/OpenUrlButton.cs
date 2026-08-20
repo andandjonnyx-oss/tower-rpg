@@ -1,16 +1,16 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class OpenUrlButton : MonoBehaviour
 {
-    [Tooltip("ƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚½‚Æ‚«‚ÉŠJ‚­URL")]
+    [Tooltip("ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ãŸã¨ãã«é–‹ãURL")]
     [SerializeField] private string url = "";
 
-    // ƒ{ƒ^ƒ“‚Ì OnClick ‚©‚çŒÄ‚Ño‚·
+    // ãƒœã‚¿ãƒ³ã® OnClick ã‹ã‚‰å‘¼ã³å‡ºã™
     public void OpenUrl()
     {
         if (string.IsNullOrEmpty(url))
         {
-            Debug.LogWarning("[OpenUrlButton] URL‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogWarning("[OpenUrlButton] URLãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
         Application.OpenURL(url);

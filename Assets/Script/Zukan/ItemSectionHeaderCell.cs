@@ -1,23 +1,23 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ƒAƒCƒeƒ€}ŠÓ‚Ì¬ƒWƒƒƒ“ƒ‹Œ©o‚µ‘Ñi‰¡‚¢‚Á‚Ï‚¢‚Ì×’·‚¢ƒtƒŒ[ƒ€{ƒeƒLƒXƒgjB
-/// ItemZukanView ‚ª VerticalLayoutGroup ”z‰º‚É Prefab ‚©‚ç“®“I¶¬‚·‚éB
-/// Še¬ƒWƒƒƒ“ƒ‹‚Ìæ“ª‚É1‚Â’u‚©‚êA‚»‚Ì‰º‚ÉƒAƒCƒeƒ€‚Ì5—ñƒOƒŠƒbƒh‚ª‘±‚­B
+/// ã‚¢ã‚¤ãƒ†ãƒ å›³é‘‘ã®å°ã‚¸ãƒ£ãƒ³ãƒ«è¦‹å‡ºã—å¸¯ï¼ˆæ¨ªã„ã£ã±ã„ã®ç´°é•·ã„ãƒ•ãƒ¬ãƒ¼ãƒ ï¼‹ãƒ†ã‚­ã‚¹ãƒˆï¼‰ã€‚
+/// ItemZukanView ãŒ VerticalLayoutGroup é…ä¸‹ã« Prefab ã‹ã‚‰å‹•çš„ç”Ÿæˆã™ã‚‹ã€‚
+/// å„å°ã‚¸ãƒ£ãƒ³ãƒ«ã®å…ˆé ­ã«1ã¤ç½®ã‹ã‚Œã€ãã®ä¸‹ã«ã‚¢ã‚¤ãƒ†ãƒ ã®5åˆ—ã‚°ãƒªãƒƒãƒ‰ãŒç¶šãã€‚
 ///
-/// \‘¢:
-///   ItemSectionHeaderCell (Image=ƒtƒŒ[ƒ€”wŒi)
-///     „¤„Ÿ headerText c Œ©o‚µƒeƒLƒXƒgi—á:u‰ñ•œƒAƒCƒeƒ€vj
+/// æ§‹é€ :
+///   ItemSectionHeaderCell (Image=ãƒ•ãƒ¬ãƒ¼ãƒ èƒŒæ™¯)
+///     â””â”€ headerText â€¦ è¦‹å‡ºã—ãƒ†ã‚­ã‚¹ãƒˆï¼ˆä¾‹:ã€Œå›å¾©ã‚¢ã‚¤ãƒ†ãƒ ã€ï¼‰
 /// </summary>
 public class ItemSectionHeaderCell : MonoBehaviour
 {
     [Header("UI References")]
-    [Tooltip("Œ©o‚µƒeƒLƒXƒg•\¦—p TMP_Text")]
+    [Tooltip("è¦‹å‡ºã—ãƒ†ã‚­ã‚¹ãƒˆè¡¨ç¤ºç”¨ TMP_Text")]
     [SerializeField] private TMP_Text headerText;
 
     /// <summary>
-    /// Œ©o‚µƒeƒLƒXƒg‚ğİ’è‚·‚éB
+    /// è¦‹å‡ºã—ãƒ†ã‚­ã‚¹ãƒˆã‚’è¨­å®šã™ã‚‹ã€‚
     /// </summary>
     public void Setup(string text)
     {

@@ -1,10 +1,10 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// ƒAƒCƒeƒ€ƒXƒƒbƒgUIi‘SƒV[ƒ“‹¤’ÊjB
-/// ƒNƒŠƒbƒN‚É“o˜^‚³‚ê‚½ƒR[ƒ‹ƒoƒbƒN‚ğŒÄ‚Ô‚¾‚¯B
+/// ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆUIï¼ˆå…¨ã‚·ãƒ¼ãƒ³å…±é€šï¼‰ã€‚
+/// ã‚¯ãƒªãƒƒã‚¯æ™‚ã«ç™»éŒ²ã•ã‚ŒãŸã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶ã ã‘ã€‚
 /// </summary>
 public class ItemSlotView : MonoBehaviour, IPointerClickHandler
 {
@@ -17,7 +17,7 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
     private InventoryItem currentInvItem;
 
     /// <summary>
-    /// ƒNƒŠƒbƒN‚ÉŒÄ‚Î‚ê‚éƒR[ƒ‹ƒoƒbƒNBŠeƒV[ƒ“‚ÌƒRƒ“ƒeƒLƒXƒg‚ªİ’è‚·‚éB
+    /// ã‚¯ãƒªãƒƒã‚¯æ™‚ã«å‘¼ã°ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã€‚å„ã‚·ãƒ¼ãƒ³ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãŒè¨­å®šã™ã‚‹ã€‚
     /// </summary>
     public System.Action<ItemSlotView, InventoryItem> onClicked;
 

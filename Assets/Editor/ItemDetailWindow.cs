@@ -1,4 +1,4 @@
-using UnityEditor;
+ï»¿using UnityEditor;
 using UnityEngine;
 
 public class ItemDetailWindow : EditorWindow
@@ -24,7 +24,7 @@ public class ItemDetailWindow : EditorWindow
     {
         if (item == null)
         {
-            EditorGUILayout.HelpBox("ƒAƒCƒeƒ€‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", MessageType.Info);
+            EditorGUILayout.HelpBox("ã‚¢ã‚¤ãƒ†ãƒ ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", MessageType.Info);
             return;
         }
 
@@ -39,7 +39,7 @@ public class ItemDetailWindow : EditorWindow
         DrawStackSection();
         EditorGUILayout.Space();
 
-        // ƒJƒeƒSƒŠ•Ê‚ÌƒZƒNƒVƒ‡ƒ“‚ğ•\¦
+        // ã‚«ãƒ†ã‚´ãƒªåˆ¥ã®ã‚»ã‚¯ã‚·ãƒ§ãƒ³ã‚’è¡¨ç¤º
         switch (item.category)
         {
             case ItemCategory.Consumable:
@@ -60,17 +60,17 @@ public class ItemDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // Šî–{î•ñ
+    // åŸºæœ¬æƒ…å ±
     // =========================================================
     private void DrawBasicSection()
     {
-        EditorGUILayout.LabelField("Šî–{î•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("åŸºæœ¬æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("ID", item.itemId);
-        EditorGUILayout.LabelField("–¼‘O", item.itemName);
-        EditorGUILayout.LabelField("ƒJƒeƒSƒŠ", item.category.ToString());
-        EditorGUILayout.LabelField("ƒ\[ƒg‡", item.sortOrder.ToString());
+        EditorGUILayout.LabelField("åå‰", item.itemName);
+        EditorGUILayout.LabelField("ã‚«ãƒ†ã‚´ãƒª", item.category.ToString());
+        EditorGUILayout.LabelField("ã‚½ãƒ¼ãƒˆé †", item.sortOrder.ToString());
 
         EditorGUILayout.Space();
 
@@ -86,32 +86,32 @@ public class ItemDetailWindow : EditorWindow
         }
         else
         {
-            EditorGUILayout.LabelField("‰æ‘œ", "‚È‚µ");
+            EditorGUILayout.LabelField("ç”»åƒ", "ãªã—");
         }
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // oŒ»”ÍˆÍ
+    // å‡ºç¾ç¯„å›²
     // =========================================================
     private void DrawRangeSection()
     {
-        EditorGUILayout.LabelField("oŒ»”ÍˆÍ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("å‡ºç¾ç¯„å›²", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("”ÍˆÍ",
-            $"{item.Minfloor}F {item.Minstep}STEP ` {item.Maxfloor}F {item.Maxstep}STEP");
+        EditorGUILayout.LabelField("ç¯„å›²",
+            $"{item.Minfloor}F {item.Minstep}STEP ï½ {item.Maxfloor}F {item.Maxstep}STEP");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // ƒXƒ^ƒbƒNİ’è
+    // ã‚¹ã‚¿ãƒƒã‚¯è¨­å®š
     // =========================================================
     private void DrawStackSection()
     {
-        EditorGUILayout.LabelField("ƒXƒ^ƒbƒNİ’è", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("ã‚¹ã‚¿ãƒƒã‚¯è¨­å®š", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         EditorGUILayout.LabelField("Stackable", item.stackable ? "True" : "False");
@@ -121,53 +121,53 @@ public class ItemDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // Á”ïƒAƒCƒeƒ€
+    // æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ 
     // =========================================================
     private void DrawConsumableSection()
     {
-        EditorGUILayout.LabelField("Á”ïƒAƒCƒeƒ€î•ñ", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("æ¶ˆè²»ã‚¢ã‚¤ãƒ†ãƒ æƒ…å ±", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("‰ñ•œ—Ê", item.healAmount.ToString());
-        EditorGUILayout.LabelField("“Å‰ñ•œ", item.curesPoison ? "›" : "~");
+        EditorGUILayout.LabelField("å›å¾©é‡", item.healAmount.ToString());
+        EditorGUILayout.LabelField("æ¯’å›å¾©", item.curesPoison ? "â—‹" : "Ã—");
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // •Ší
+    // æ­¦å™¨
     // =========================================================
     private void DrawWeaponSection()
     {
-        // --- Šî–{UŒ‚«”\ ---
-        EditorGUILayout.LabelField("•Ší - Šî–{«”\", EditorStyles.boldLabel);
+        // --- åŸºæœ¬æ”»æ’ƒæ€§èƒ½ ---
+        EditorGUILayout.LabelField("æ­¦å™¨ - åŸºæœ¬æ€§èƒ½", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
-        EditorGUILayout.LabelField("•Ší‘®«", item.weaponAttribute.ToJapanese());
-        EditorGUILayout.LabelField("UŒ‚—Í", item.attackPower.ToString());
-        EditorGUILayout.LabelField("Šî‘b–½’†—¦", $"{item.baseHitRate}%");
+        EditorGUILayout.LabelField("æ­¦å™¨å±æ€§", item.weaponAttribute.ToJapanese());
+        EditorGUILayout.LabelField("æ”»æ’ƒåŠ›", item.attackPower.ToString());
+        EditorGUILayout.LabelField("åŸºç¤å‘½ä¸­ç‡", $"{item.baseHitRate}%");
 
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.Space();
 
-        // --- ó‘ÔˆÙí•t—^ ---
+        // --- çŠ¶æ…‹ç•°å¸¸ä»˜ä¸ ---
         if (item.weaponInflictEffect != StatusEffect.None)
         {
-            EditorGUILayout.LabelField("•Ší - ó‘ÔˆÙí•t—^", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("æ­¦å™¨ - çŠ¶æ…‹ç•°å¸¸ä»˜ä¸", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
 
-            EditorGUILayout.LabelField("•t—^ó‘ÔˆÙí", item.weaponInflictEffect.ToString());
-            EditorGUILayout.LabelField("•t—^—¦", $"{item.weaponInflictChance}%");
+            EditorGUILayout.LabelField("ä»˜ä¸çŠ¶æ…‹ç•°å¸¸", item.weaponInflictEffect.ToString());
+            EditorGUILayout.LabelField("ä»˜ä¸ç‡", $"{item.weaponInflictChance}%");
 
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
         }
 
-        // --- •ŠíƒXƒLƒ‹ ---
+        // --- æ­¦å™¨ã‚¹ã‚­ãƒ« ---
         if (item.skills != null && item.skills.Length > 0)
         {
-            EditorGUILayout.LabelField("•Ší - ƒXƒLƒ‹", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("æ­¦å™¨ - ã‚¹ã‚­ãƒ«", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
 
             for (int i = 0; i < item.skills.Length; i++)
@@ -188,13 +188,13 @@ public class ItemDetailWindow : EditorWindow
             EditorGUILayout.Space();
         }
 
-        // --- ‘•”õƒXƒe[ƒ^ƒX ---
+        // --- è£…å‚™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ ---
         DrawEquipStatsSection();
 
-        // --- ‘•”õ‘®«‘Ï« ---
+        // --- è£…å‚™å±æ€§è€æ€§ ---
         if (item.equipResistances != null && item.equipResistances.Length > 0)
         {
-            EditorGUILayout.LabelField("•Ší - ‘•”õ‘®«‘Ï«", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("æ­¦å™¨ - è£…å‚™å±æ€§è€æ€§", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
 
             for (int i = 0; i < item.equipResistances.Length; i++)
@@ -210,10 +210,10 @@ public class ItemDetailWindow : EditorWindow
             EditorGUILayout.Space();
         }
 
-        // --- ‘•”õó‘ÔˆÙí‘Ï« ---
+        // --- è£…å‚™çŠ¶æ…‹ç•°å¸¸è€æ€§ ---
         if (item.equipStatusEffectResistances != null && item.equipStatusEffectResistances.Length > 0)
         {
-            EditorGUILayout.LabelField("•Ší - ‘•”õó‘ÔˆÙí‘Ï«", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("æ­¦å™¨ - è£…å‚™çŠ¶æ…‹ç•°å¸¸è€æ€§", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical("box");
 
             for (int i = 0; i < item.equipStatusEffectResistances.Length; i++)
@@ -230,12 +230,12 @@ public class ItemDetailWindow : EditorWindow
     }
 
     /// <summary>
-    /// ‘•”õƒXƒe[ƒ^ƒX•â³‚ğ•\¦‚·‚éB
-    /// 0 ‚Å‚È‚¢’l‚Ì‚İ•\¦‚·‚éB
+    /// è£…å‚™æ™‚ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è£œæ­£ã‚’è¡¨ç¤ºã™ã‚‹ã€‚
+    /// 0 ã§ãªã„å€¤ã®ã¿è¡¨ç¤ºã™ã‚‹ã€‚
     /// </summary>
     private void DrawEquipStatsSection()
     {
-        // •\¦‚·‚é’l‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+        // è¡¨ç¤ºã™ã‚‹å€¤ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
         bool hasAny = item.equipDefense != 0
             || item.equipMagicAttack != 0
             || item.equipMagicDefense != 0
@@ -248,78 +248,78 @@ public class ItemDetailWindow : EditorWindow
 
         if (!hasAny) return;
 
-        EditorGUILayout.LabelField("•Ší - ‘•”õƒXƒe[ƒ^ƒX•â³", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("æ­¦å™¨ - è£…å‚™ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è£œæ­£", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (item.equipDefense != 0)
-            EditorGUILayout.LabelField("–hŒä—Í", FormatBonus(item.equipDefense));
+            EditorGUILayout.LabelField("é˜²å¾¡åŠ›", FormatBonus(item.equipDefense));
         if (item.equipMagicAttack != 0)
-            EditorGUILayout.LabelField("–‚–@UŒ‚—Í", FormatBonus(item.equipMagicAttack));
+            EditorGUILayout.LabelField("é­”æ³•æ”»æ’ƒåŠ›", FormatBonus(item.equipMagicAttack));
         if (item.equipMagicDefense != 0)
-            EditorGUILayout.LabelField("–‚–@–hŒä—Í", FormatBonus(item.equipMagicDefense));
+            EditorGUILayout.LabelField("é­”æ³•é˜²å¾¡åŠ›", FormatBonus(item.equipMagicDefense));
         if (item.equipLuck != 0)
-            EditorGUILayout.LabelField("‰^", FormatBonus(item.equipLuck));
+            EditorGUILayout.LabelField("é‹", FormatBonus(item.equipLuck));
         if (item.equipMaxHp != 0)
-            EditorGUILayout.LabelField("Å‘åHP", FormatBonus(item.equipMaxHp));
+            EditorGUILayout.LabelField("æœ€å¤§HP", FormatBonus(item.equipMaxHp));
         if (item.equipMaxMp != 0)
-            EditorGUILayout.LabelField("Å‘åMP", FormatBonus(item.equipMaxMp));
+            EditorGUILayout.LabelField("æœ€å¤§MP", FormatBonus(item.equipMaxMp));
         if (item.equipAccuracy != 0)
-            EditorGUILayout.LabelField("–½’†—Í", FormatBonus(item.equipAccuracy));
+            EditorGUILayout.LabelField("å‘½ä¸­åŠ›", FormatBonus(item.equipAccuracy));
         if (item.equipEvasion != 0)
-            EditorGUILayout.LabelField("‰ñ”ğ—¦", $"{FormatBonus(item.equipEvasion)}%");
+            EditorGUILayout.LabelField("å›é¿ç‡", $"{FormatBonus(item.equipEvasion)}%");
         if (item.equipCritical != 0)
-            EditorGUILayout.LabelField("ƒNƒŠƒeƒBƒJƒ‹—¦", $"{FormatBonus(item.equipCritical)}%");
+            EditorGUILayout.LabelField("ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç‡", $"{FormatBonus(item.equipCritical)}%");
 
         EditorGUILayout.EndVertical();
         EditorGUILayout.Space();
     }
 
     // =========================================================
-    // –‚–@ƒAƒCƒeƒ€
+    // é­”æ³•ã‚¢ã‚¤ãƒ†ãƒ 
     // =========================================================
     private void DrawMagicSection()
     {
-        // --- –‚–@ƒXƒLƒ‹ ---
-        EditorGUILayout.LabelField("–‚–@ - ƒXƒLƒ‹", EditorStyles.boldLabel);
+        // --- é­”æ³•ã‚¹ã‚­ãƒ« ---
+        EditorGUILayout.LabelField("é­”æ³• - ã‚¹ã‚­ãƒ«", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (item.magicSkill != null)
         {
             var ms = item.magicSkill;
-            EditorGUILayout.LabelField("ƒXƒLƒ‹–¼", ms.skillName);
-            EditorGUILayout.LabelField("‘®«", ms.skillAttribute.ToJapanese());
+            EditorGUILayout.LabelField("ã‚¹ã‚­ãƒ«å", ms.skillName);
+            EditorGUILayout.LabelField("å±æ€§", ms.skillAttribute.ToJapanese());
 
-            // ƒ_ƒ[ƒW®ƒvƒŒƒrƒ…[
+            // ãƒ€ãƒ¡ãƒ¼ã‚¸å¼ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
             if (ms.IsNonDamage)
             {
-                EditorGUILayout.LabelField("ƒ_ƒ[ƒW", "”ñƒ_ƒ[ƒWiŒø‰Ê‚Ì‚İj");
+                EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸", "éãƒ€ãƒ¡ãƒ¼ã‚¸ï¼ˆåŠ¹æœã®ã¿ï¼‰");
             }
             else if (ms.damageMultiplier > 0f && ms.bonusDamage > 0)
             {
-                EditorGUILayout.LabelField("ƒ_ƒ[ƒW", $"MagicAtk~{ms.damageMultiplier:F1}+{ms.bonusDamage}");
+                EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸", $"MagicAtkÃ—{ms.damageMultiplier:F1}+{ms.bonusDamage}");
             }
             else if (ms.damageMultiplier > 0f)
             {
-                EditorGUILayout.LabelField("ƒ_ƒ[ƒW", $"MagicAtk~{ms.damageMultiplier:F1}");
+                EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸", $"MagicAtkÃ—{ms.damageMultiplier:F1}");
             }
             else
             {
-                EditorGUILayout.LabelField("ƒ_ƒ[ƒW", $"ŒÅ’è{ms.bonusDamage}");
+                EditorGUILayout.LabelField("ãƒ€ãƒ¡ãƒ¼ã‚¸", $"å›ºå®š{ms.bonusDamage}");
             }
 
-            EditorGUILayout.LabelField("MPÁ”ï", ms.mpCost.ToString());
+            EditorGUILayout.LabelField("MPæ¶ˆè²»", ms.mpCost.ToString());
         }
         else
         {
-            EditorGUILayout.LabelField("–‚–@ƒXƒLƒ‹", "‚È‚µiƒpƒbƒVƒuê—pj");
+            EditorGUILayout.LabelField("é­”æ³•ã‚¹ã‚­ãƒ«", "ãªã—ï¼ˆãƒ‘ãƒƒã‚·ãƒ–å°‚ç”¨ï¼‰");
         }
 
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.Space();
 
-        // --- ƒpƒbƒVƒuŒø‰Ê ---
-        EditorGUILayout.LabelField("–‚–@ - ƒpƒbƒVƒuŒø‰Ê", EditorStyles.boldLabel);
+        // --- ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœ ---
+        EditorGUILayout.LabelField("é­”æ³• - ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœ", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (item.passiveEffects != null && item.passiveEffects.Length > 0)
@@ -338,23 +338,23 @@ public class ItemDetailWindow : EditorWindow
         }
         else
         {
-            EditorGUILayout.LabelField("ƒpƒbƒVƒuŒø‰Ê", "‚È‚µ");
+            EditorGUILayout.LabelField("ãƒ‘ãƒƒã‚·ãƒ–åŠ¹æœ", "ãªã—");
         }
 
         EditorGUILayout.EndVertical();
     }
 
     // =========================================================
-    // à–¾
+    // èª¬æ˜
     // =========================================================
     private void DrawDescriptionSection()
     {
-        EditorGUILayout.LabelField("à–¾", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("èª¬æ˜", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical("box");
 
         if (string.IsNullOrWhiteSpace(item.description))
         {
-            EditorGUILayout.LabelField("à–¾‚È‚µ");
+            EditorGUILayout.LabelField("èª¬æ˜ãªã—");
         }
         else
         {
@@ -365,7 +365,7 @@ public class ItemDetailWindow : EditorWindow
     }
 
     // =========================================================
-    // ƒ†[ƒeƒBƒŠƒeƒB
+    // ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
     // =========================================================
     private string FormatBonus(int value)
     {
