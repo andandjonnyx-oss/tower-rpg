@@ -34,6 +34,7 @@ public static class IosPostProcessBuild
 
         AddAttFramework(pathToBuiltProject);
         SetTrackingUsageDescription(pathToBuiltProject);
+        SetExportCompliance(pathToBuiltProject);
     }
 
     private static void AddAttFramework(string pathToBuiltProject)
@@ -53,6 +54,31 @@ public static class IosPostProcessBuild
 
         proj.WriteToFile(projPath);
         Debug.Log("[IosPostProcessBuild] AppTrackingTransparency.framework を追加した");
+    }
+
+    /// <summary>
+    /// 輸出コンプライアンスの申告。
+    ///
+    /// false = 「輸出規制の対象となる暗号化は使っていない」の意。
+    /// このアプリが使う暗号化は HTTPS（iOS 標準 API 経由）だけで、これは
+    /// Apple の適用除外に該当するため false が正しい。
+    ///
+    /// ⚠️ 独自の暗号アルゴリズムを実装したり、暗号化ライブラリを追加した場合は
+    /// この宣言が虚偽になる。その際は必ず見直すこと。
+    ///
+    /// 入れておくと App Store Connect へのアップロードのたびに
+    /// 輸出コンプライアンスを聞かれなくなる。
+    /// </summary>
+    private static void SetExportCompliance(string pathToBuiltProject)
+    {
+        string plistPath = Path.Combine(pathToBuiltProject, "Info.plist");
+
+        var plist = new PlistDocument();
+        plist.ReadFromFile(plistPath);
+        plist.root.SetBoolean("ITSAppUsesNonExemptEncryption", false);
+        plist.WriteToFile(plistPath);
+
+        Debug.Log("[IosPostProcessBuild] ITSAppUsesNonExemptEncryption = false を設定した");
     }
 
     private static void SetTrackingUsageDescription(string pathToBuiltProject)
