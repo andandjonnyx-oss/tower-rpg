@@ -9,18 +9,31 @@
 
 ---
 
-## 1. 戦闘の static 一時状態はリセット関数への一点依存（最重要）
+## 1. 戦闘の一時状態は「全部 static」＋リセット関数への一点依存（最重要）
 
-戦闘の一時状態の多くは `static` フィールド:
-`turnActionCount`, `turnLowHpMode`, `enemyCurrentHp`, `pendingEnemyAction`,
-`isEnemyPreemptive`, `enemyForcedNextSkill`, `enemyIsPoisoned` 等の状態異常フラグ群、
-および `battleInitialized` 自身も static。
+戦闘の一時状態は `BattleSceneController`（partial）の **static フィールド 24 個**。
+以下は 2026-08-22 に実コードから機械的に取得した全数（手書きで維持しないこと。
+過去に一覧が実態とズレていたのが第1節末尾のバグの原因になった）。
+
+| ファイル | フィールド |
+|---|---|
+| `BattleSceneController.cs` | `enemyCurrentHp` / `battleInitialized` / `currentTurnNumber` / `enemyIsPoisoned` / `enemyIsStunned` / `enemyIsParalyzed` / `enemyIsBlind` / `enemyIsSilenced` / `enemyRageTurn` / `playerRageTurn` / `isDefending` / `pendingEnemyAction` / `isEnemyPreemptive` / `enemyForcedNextSkill` |
+| `BattleSceneController_EnemyAction.cs` | `turnLowHpMode` / `turnActionCount` |
+| `BattleSceneController_Petrify.cs` | `enemyIsPetrified` / `enemyPetrifyTurns` / `enemyPetrifyMaxTurns` / `enemyPetrifyJustReachedZero` |
+| `BattleSceneController_QuizBoss.cs` | `quizCorrectCount` / `quizWrongCount` / `isQuizAnswering` / `currentQuizData` |
+
+再取得コマンド（一覧を疑ったらこれで突き合わせる）:
+
+```bash
+grep -nE "^\s*(private|public|protected|internal)\s+static\s+" Assets/Script/Battle/BattleSceneController*.cs
+```
 
 - **宣言時の初期化子（`= false` 等）は戦闘ごとには再実行されない。** static 初期化子は
   型の初回アクセス時に一度走るだけ。Domain Reload 無効時やビルドでは static は
   プレイをまたいで保持される。→「宣言で初期化しているから安全」は誤り。
 - **実効的なリセットは2経路だけ:**
   - `ResetBattleStatics()`（戦闘終了処理）— `battleInitialized=false` に戻す。
+    Petrify / QuizBoss / BuffDebuff は専用のリセット関数をここから呼んでいる。
   - 戦闘開始の初期化ブロック `if (!battleInitialized)` — 上記で false に戻っている前提。
   - 敵行動フラグ（`pendingEnemyAction` / `isEnemyPreemptive`）は
     `PreRollEnemyAction()` も毎ターン両者をリセットしている。
@@ -28,11 +41,48 @@
   を通すこと。** 飛ばすと `battleInitialized` が true のまま残り、次戦闘で初期化ブロック
   ごとスキップされ、敵HP・行動回数・状態異常が前戦闘から漏れる。
 
+### ⚠️ 戦闘一時状態を「インスタンスフィールド」にしてはいけない（2026-08-22 に実バグ）
+
+**戦闘中に Battle シーンは破棄されうる。** アイテム使用・装備変更は `ItemBox` シーンを
+経由するため（`OpenItemBoxButton` → `ItemboxContext` が `LoadScene("Battle")` で復帰）、
+`BattleSceneController` は**別インスタンスとして作り直される**。`DontDestroyOnLoad` は無い。
+
+そのため**インスタンスフィールドに置いた戦闘状態は、アイテム画面を開いて閉じるだけで
+無診断に消える**。static ならシーンを跨いで生存する。**だから全部 static で揃えている。**
+
+実際に踏んだバグ: `enemyForcedNextSkill`（力溜め等の予約）だけが非 static だったため、
+`enemyNextForceSkill` チェーン（下記7件）が装備/アイテム経由で全てキャンセルされていた。
+プレイヤー不利にも有利にも働き、**力溜めを見てから装備画面を開けばラスボスの大技を
+確実に不発にできる**状態だった。
+
+`enemyNextForceSkill` を持つスキル（テスト観点）:
+
+| 起点 | 予約される次の行動 |
+|---|---|
+| はかいこうせん準備 | はかいこうせん |
+| はかいこうせん | 待機 |
+| カウントダウン4 → 3 → 2 → 1 | 最終的に 自爆 |
+| 力を溜めている（フェゴール） | 破壊の一撃 |
+
+**回帰テスト**: 上記いずれかのチェーン中に「アイテムを使う／装備を変更する」を挟み、
+予約された行動が消えずに実行されることを確認する。
+
+なお `BattleContext` も `public static class` なので、退避先としての耐久性は static
+フィールドと同じ（アプリ終了で消える点は改善しない）。`SaveData`（`Savemanager.cs`）に
+戦闘状態は一切含まれておらず**戦闘中セーブ／再開は存在しない**ため、static で十分。
+将来「戦闘中セーブ」を実装する場合は、この 24 個をまとめてシリアライズする設計が必要。
+
 ## 2. 敵ターンは必ず PreRoll を前段に通す（先制フラグ同期の不変条件）
 
 `EnemyTurn()` を呼ぶ全経路は、同一ターン内で必ず `PreRollEnemyAction()` を経由する設計。
 PreRoll が `pendingEnemyAction` / `isEnemyPreemptive` を毎回リセットしてから抽選し直すことで
 先制フラグの同期が保たれている（現状この不変条件のみで担保。実バグは無し）。
+- **予約行動（`enemyForcedNextSkill`）があるターンは PreRoll が抽選しない。**
+  `EnemyTurn()` は予約を最優先で消化するため、抽選すると「抽選結果と実際の行動が
+  食い違う」。特に抽選で**先制技が出ると `ExecutePreemptiveIfNeeded()` が予約を見ずに
+  先制を実行し、`EnemyTurn()` は「先制済み」と判定して予約を消化しない**（予約が残り続ける）。
+  `PreRollEnemyAction()` は `SnapshotTurnActionMode()` の直後に予約チェックを置き、
+  予約があれば抽選せずに return する。この順序を崩さないこと。
 - ⚠️ **PreRoll を経由せずに `EnemyTurn()` を呼ぶ新経路（状態異常だけ処理する割込ターン等）を
   作ると、先制フラグの同期が壊れ、敵行動のスキップや二重実行が起きうる。** EnemyTurn を呼ぶ
   新経路には必ず PreRoll を前段に置くこと。

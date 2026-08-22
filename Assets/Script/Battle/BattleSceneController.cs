@@ -184,8 +184,16 @@ public partial class BattleSceneController : MonoBehaviour
     /// <summary>プレイヤーの怒り残りターン数。0 = 通常。戦闘終了でリセット。</summary>
     private static int playerRageTurn = 0;
 
-    /// <summary> 力溜め→攻撃のようなターンをまたがった行動用　 </summary>
-    private SkillData enemyForcedNextSkill;
+    /// <summary>
+    /// 力溜め→攻撃のようなターンをまたがった行動用の予約。
+    ///
+    /// ⚠ **必ず static に保つこと。** アイテム使用・装備変更は ItemBox シーンを
+    /// 経由するため Battle シーンが一度破棄され、戻りは別インスタンスになる。
+    /// インスタンスフィールドにすると、その往復だけで予約が無診断に消える
+    /// （カウントダウン→自爆や力溜め→大技がキャンセルされる）。
+    /// static なので ResetBattleStatics() でのリセットが必須（CLAUDE.md 第1節）。
+    /// </summary>
+    private static SkillData enemyForcedNextSkill;
 
 
 
@@ -642,7 +650,23 @@ public partial class BattleSceneController : MonoBehaviour
         if (enemyMonster == null) return;
 
         // ターンスナップショット: この時点のHP割合で行動テーブル・行動回数を固定
+        // （予約がある場合でも turnActionCount は複数回行動の残り枠で使うので先に取る）
         SnapshotTurnActionMode();
+
+        // =========================================================
+        // 予約行動（力溜め等）があるターンは抽選しない。
+        //
+        // EnemyTurn() は enemyForcedNextSkill を最優先で消化するため、ここで抽選すると
+        // 「抽選結果と実際の行動が食い違う」状態になる。特に抽選で先制技が出ると
+        // isEnemyPreemptive が立ち、ExecutePreemptiveIfNeeded() が予約を見ずに
+        // 先制を実行してしまう（EnemyTurn は先制済みと判定して予約を消化しない）。
+        // 予約を持つターンはここで抽選を止めるのが正しい。
+        // =========================================================
+        if (enemyForcedNextSkill != null)
+        {
+            Debug.Log($"[Battle] 予約行動あり: {enemyForcedNextSkill.skillName}（今ターンの抽選はスキップ）");
+            return;
+        }
 
         EnemyActionEntry[] table = GetTurnActionTable();
         if (table == null || table.Length == 0) return;
@@ -1411,6 +1435,7 @@ public partial class BattleSceneController : MonoBehaviour
         isDefending = false; // 防御フラグもリセット
         pendingEnemyAction = null; // 先制攻撃もリセット
         isEnemyPreemptive = false;
+        enemyForcedNextSkill = null; // 予約行動（力溜め等）を次の戦闘へ漏らさない
         turnLowHpMode = false;
         turnActionCount = 1;
 
