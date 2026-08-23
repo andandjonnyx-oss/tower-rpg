@@ -322,20 +322,45 @@ C# の `const string` はコードから参照されなくても**アセンブ�
 
 ```python
 import struct
-d = open('Payload/*.app/Data/Managed/Metadata/global-metadata.dat','rb').read()
-litOff, litSize = struct.unpack_from('<ii', d, 8)      # =380, 66752
-litDataOff = 380 + litSize                              # リテラルデータ領域の先頭
-litDataEnd = litDataOff + struct.unpack_from('<i', d, 24)[0]
-# 対象IDの出現位置が litDataOff〜litDataEnd の中にあれば「コードが参照している」
+d = open('Payload/<ProductName>.app/Data/Managed/Metadata/global-metadata.dat', 'rb').read()
+
+# Il2CppGlobalMetadataHeader（全フィールド int32、先頭から連続）
+#    0: sanity                  4: version
+#    8: stringLiteralOffset    12: stringLiteralCount
+#   16: stringLiteralDataOffset 20: stringLiteralDataCount
+#   24: stringOffset           28: stringCount
+litDataOff  = struct.unpack_from('<i', d, 16)[0]   # リテラルデータ領域の先頭
+litDataSize = struct.unpack_from('<i', d, 20)[0]   # その長さ
+litDataEnd  = litDataOff + litDataSize
+
+for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
+                 ("テスト", b"ca-app-pub-3940256099942544/1712485313")]:
+    i = d.find(s)
+    inside = i >= 0 and litDataOff <= i < litDataEnd
+    print(f"{label} offset={i} -> {'領域内=コードが参照している' if inside else '領域外=const定数値のみ'}")
 ```
 
-2026-08-24 のビルド2での実測: 本番ID は 502,340（領域内=参照あり）、
-テスト用ID は 6,557,218（領域外=const 定数値のみ）。
+⚠️ **オフセット 24（`stringOffset`）を領域サイズとして使わないこと。** これは別領域
+（メタデータ文字列）の**絶対オフセット**であり、リテラルデータ領域の長さは 20 にある。
+取り違えると終端が数十KB分オーバーランし、**領域外の文字列を「参照あり」と誤判定する。**
+同様に、領域先頭も `stringLiteralOffset + stringLiteralCount` で計算せず 16 から直接読む
+（領域が連続配置である前提に寄りかからないため）。
 
-生成コードを直接見る場合は
+**より確実なのは生成 C++ を見ること。** オフセット計算に依存しないので、こちらを
+一次判定にするのが安全。
 `Il2CppOutputProject/Source/il2cppOutput/Assembly-CSharp__2.cpp` の
-`AdManager_get_RewardedAdUnitId_...` が単一リテラルを返していることを確認する
+`AdManager_get_RewardedAdUnitId_...` が**どちらのリテラルを返しているか**を確認する
 （三項演算が残っていなければ定数畳み込み済み）。
+
+前提として `UseIosTestAdUnitId` は `const bool` なので、Roslyn の定数畳み込みにより
+**使われない側の `ldstr` は生成されない**（C# の言語仕様として保証される）。
+つまりソースが `false` ならビルドは必ず本番IDを使う。バイナリ解析は
+「ビルドしたソースが本当に `false` だったか」を事後確認するための裏取りに過ぎない。
+
+2026-08-24 のビルド2での実測値: 本番ID = offset 502,340 / テスト用ID = offset 6,557,218。
+⚠️ **この数値は上記の誤ったオフセット計算で「領域内/領域外」を判定したときのもの**なので、
+判定結果そのものは再検証の価値がある。ただしビルド2が本番IDを使っていることは
+生成 C++ 側で確認済みのため、提出したビルドに問題はない。
 
 ### Mac 側でしかできないもの
 
