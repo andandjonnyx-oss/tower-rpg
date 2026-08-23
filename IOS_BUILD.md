@@ -6,22 +6,30 @@ Windows 側で作業する場合、**iOS 関連のビルドは Mac でしかで�
 
 ---
 
-## 0. 現在地（2026-08-21 時点）
+## 0. 現在地（2026-08-24 時点）
+
+**バージョン 1.0（ビルド2）を App Store 審査へ提出済み。結果待ち。**
+
+これまでに完了したこと:
 
 - ✅ Unity 6000.3.9f1 + iOS Build Support で **コンパイルエラーゼロ**
 - ✅ iOS シミュレータで **起動・プレイ・ATT・AdMob テスト広告（報酬獲得まで）を実動作確認済み**
-- ✅ Device SDK で **Archive 成功**（`build/TowerRPG.xcarchive`）
-- ⏸ `.ipa` 書き出しは **Apple Distribution 証明書が未作成**のため停止中
+- ✅ **Apple Distribution 証明書を作成**（2026-08-20。クラウド管理方式。第7節）
+- ✅ **TestFlight でビルド1を配信し、外部テスターの iPhone 実機で検証完了**
+  （テスト期間中は `UseIosTestAdUnitId = true` でテスト広告を配信）
 - ✅ **App Store Connect のメタデータ入力は完了**（アプリ情報 / アプリのプライバシー /
   バージョン情報 / App Review 情報 / スクリーンショット5枚）。第7節参照
 - ✅ **`NSPrivacyTracking` の扱いは調査完了し、「対応不要」で確定**（第7節）
 - ✅ **`app-ads.txt` 設置済み**（第7節「完了」6）
 - ✅ **Android 実機スモークテスト済み**（`AdManager` の `Update()` 経由化にリグレッション無し）
-- ⏸ TestFlight「テスト情報」の入力・外部テストグループ作成・Beta App Review は未着手
+- ✅ **公開ビルド（1.0 / build 2）を提出**。`UseIosTestAdUnitId = false` に戻し、
+  本番広告IDが使われることを IL2CPP のメタデータ解析で検証済み（検証手順は第7節）
 
-配布方式は **TestFlight（外部テスト・パブリックリンク）** を選択済み。理由は第6節。
+⚠️ 提出前に **TestFlight の外部テスト用ビルドを削除済み**。これをやらないと、
+審査用にアップロードしたビルド（本番広告入り）が外部テスターにも自動配信され、
+タップされると AdMob アカウント停止のリスクがある。**次回以降の更新時も同じ手順が必要。**
 
-⛔ **バージョン 1.0 の「審査用に追加」はまだ押さないこと。** 理由は第7節の冒頭。
+配布方式は **TestFlight（外部テスト・パブリックリンク）** を採用。理由は第6節。
 
 ---
 
@@ -289,23 +297,71 @@ Target Device / Bundle ID / 対応 OS バージョンなど**プロジェクト�
 
 ## 7. 残作業
 
-### ⛔ 「審査用に追加」を押す前に必ず確認すること
+### 🔁 バージョン更新時の手順（毎回必要）
 
-ASC のメタデータが揃ったため **バージョン 1.0 の「審査用に追加」ボタンは押せる状態になっている**が、
-2026-08-21 時点で押してはいけない。
+1. **TestFlight の外部テスト用ビルドを削除する。** 審査用にアップロードしたビルドは
+   TestFlight にも現れ、外部テストグループへ自動配信される。本番広告入りビルドが
+   テスターに届くとタップされ、AdMob アカウント停止のリスクがある。
+2. **`AdManager.UseIosTestAdUnitId` を `false` にする。** TestFlight でテスターに
+   配布する期間だけ `true` にし、**公開ビルドでは必ず `false` に戻す**。
+   戻し忘れると iOS の広告収益がゼロになる。
+3. **`buildNumber.iPhone` を上げる。** Apple は同一バージョン内での同じビルド番号を
+   拒否する。Unity の GUI で変更したら **File > Save Project かビルド実行までは
+   `ProjectSettings.asset` に書かれない**ので、ディスク上の値を確認すること。
+4. Unity でビルド → 第4-1節の Archive / 書き出し → 下記の検証 → Transporter でアップロード。
 
-1. ⚠️ **`AdManager.UseIosTestAdUnitId` が `true` のまま。** この状態のビルドを公開すると
-   iOS の広告収益がゼロになる。`false` に戻して **Mac で再ビルドしてから**提出する。
-2. TestFlight での実機確認が未了。実機を所有していないため、外部テスターによる確認が
-   唯一の実機検証手段（第6節）。
-3. そもそもビルドが未アップロード。
+### ✅ 本番広告IDが使われることの検証手順
+
+⚠️ **`strings global-metadata.dat | grep ca-app-pub` では判定できない。**
+C# の `const string` はコードから参照されなくても**アセンブリのメタデータに定数値として
+保持される**ため、テスト用IDも本番IDも常に出てくる。
+
+正しい判定は「**文字列リテラルデータ領域の中に出現するか**」で行う。
+`UseIosTestAdUnitId` は `const bool` なので Roslyn が三項演算を定数畳み込みし、
+実際に使われる方だけがリテラルとして残る。
+
+```python
+import struct
+d = open('Payload/*.app/Data/Managed/Metadata/global-metadata.dat','rb').read()
+litOff, litSize = struct.unpack_from('<ii', d, 8)      # =380, 66752
+litDataOff = 380 + litSize                              # リテラルデータ領域の先頭
+litDataEnd = litDataOff + struct.unpack_from('<i', d, 24)[0]
+# 対象IDの出現位置が litDataOff〜litDataEnd の中にあれば「コードが参照している」
+```
+
+2026-08-24 のビルド2での実測: 本番ID は 502,340（領域内=参照あり）、
+テスト用ID は 6,557,218（領域外=const 定数値のみ）。
+
+生成コードを直接見る場合は
+`Il2CppOutputProject/Source/il2cppOutput/Assembly-CSharp__2.cpp` の
+`AdManager_get_RewardedAdUnitId_...` が単一リテラルを返していることを確認する
+（三項演算が残っていなければ定数畳み込み済み）。
 
 ### Mac 側でしかできないもの
 
-1. **Apple Distribution 証明書の作成** — アカウントに Admin 以上の権限が必要。
-   ⚠️ 作成後は**キーチェーンアクセスから `.p12` で書き出してバックアップすること。**
-   秘密鍵はこの Mac にしか無く、失うと同じ証明書で署名できなくなる。
-2. `.ipa` 書き出し → App Store Connect へアップロード（Transporter に Windows 版は無い）。
+1. ✅ **Apple Distribution 証明書 — 作成済み（2026-08-20）。**
+   `Apple Distribution: MIRAI KENKYUJO, LIMITED LIABILITY COMPANY (M8UDQK8MSB)` /
+   有効期限 2027-08-20。`xcodebuild -allowProvisioningUpdates` が自動生成した。
+   - ⚠️ **`.p12` バックアップは不要（というより不可能）。** これは Apple の
+     **クラウド管理配布証明書**で、秘密鍵は Apple 側が保持している。ローカルの
+     キーチェーンには存在せず（`codesign -s ...` → `no identity found`）、
+     Xcode の Manage Certificates にも表示されない。**「Mac を失うと証明書も失う」
+     という心配はこの方式には当てはまらない。**
+   - 代わりの制約: 署名のたびに **`-allowProvisioningUpdates`（または Xcode の
+     自動署名）と Apple への通信が必要**。対話的な Apple ID 認証ができない CI では
+     使えないので、将来 CI 署名するなら App Store Connect API キーを使うか、
+     従来型の配布証明書を別途作成して `.p12` を書き出すこと。
+2. ✅ **`.ipa` 書き出しの手順は確立済み**（第4-1節のコマンドで通る。所要 5分程度）。
+   - ⛔ **ただし `build/export/ProductName.ipa`（2026-08-20 21:34）は古い。**
+     IL2CPP メタデータを検査した結果、**iOS 本番広告ユニットID
+     `ca-app-pub-7063976043351494/3825356010` が焼き込まれている**
+     （`UseIosTestAdUnitId` 対応より前のビルドのため）。
+     **これをアップロードすると外部テスターが本番広告をタップし、
+     AdMob アカウント停止のリスクが現実化する。必ず再ビルドすること。**
+   - 検証方法: `Payload/*.app/Data/Managed/Metadata/global-metadata.dat` を
+     `strings | grep ca-app-pub` で見る。C# の文字列リテラルは実行ファイルではなく
+     ここに入るため、バイナリを `strings` しても出てこない。
+3. **App Store Connect へのアップロード**（Transporter に Windows 版は無い）。
 
 ### Windows 側（Apple のサイト・ストア関連は基本 Windows で管理）
 
