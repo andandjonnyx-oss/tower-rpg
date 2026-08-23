@@ -383,6 +383,142 @@ for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
 生成 C++ 側でも `AdManager_get_RewardedAdUnitId_...` が単一リテラルを返しており、
 **提出したビルド2が本番広告IDを使うことは二重に確認済み。**
 
+
+### Mac 側でしかできないもの
+
+1. ✅ **Apple Distribution 証明書 — 作成済み（2026-08-20）。**
+   `Apple Distribution: MIRAI KENKYUJO, LIMITED LIABILITY COMPANY (M8UDQK8MSB)` /
+   有効期限 2027-08-20。`xcodebuild -allowProvisioningUpdates` が自動生成した。
+   - ⚠️ **`.p12` バックアップは不要（というより不可能）。** これは Apple の
+     **クラウド管理配布証明書**で、秘密鍵は Apple 側が保持している。ローカルの
+     キーチェーンには存在せず（`codesign -s ...` → `no identity found`）、
+     Xcode の Manage Certificates にも表示されない。**「Mac を失うと証明書も失う」
+     という心配はこの方式には当てはまらない。**
+   - 代わりの制約: 署名のたびに **`-allowProvisioningUpdates`（または Xcode の
+     自動署名）と Apple への通信が必要**。対話的な Apple ID 認証ができない CI では
+     使えないので、将来 CI 署名するなら App Store Connect API キーを使うか、
+     従来型の配布証明書を別途作成して `.p12` を書き出すこと。
+2. ✅ **`.ipa` 書き出しの手順は確立済み**（第4-1節のコマンドで通る。所要 5分程度）。
+   - ⛔ **ただし `build/export/ProductName.ipa`（2026-08-20 21:34）は古い。**
+     IL2CPP メタデータを検査した結果、**iOS 本番広告ユニットID
+     `ca-app-pub-7063976043351494/3825356010` が焼き込まれている**
+     （`UseIosTestAdUnitId` 対応より前のビルドのため）。
+     **これをアップロードすると外部テスターが本番広告をタップし、
+     AdMob アカウント停止のリスクが現実化する。必ず再ビルドすること。**
+   - ⚠ 検証方法は上の「✅ 本番広告IDが使われることの検証手順」を使うこと。
+     `strings | grep ca-app-pub` だけでは判定できない（const 定数値も常に出るため）。
+3. **App Store Connect へのアップロード**（Transporter に Windows 版は無い）。
+
+### Windows 側（Apple のサイト・ストア関連は基本 Windows で管理）
+
+3. **TestFlight「テスト情報」の入力** — ⚠️ **TestFlight タブ側の別画面**で、
+   バージョン情報（配信タブ）とは別物。「バージョン情報を埋めた＝TestFlight も準備完了」
+   ではない。外部テストは Beta App Review が必要で、ベータ版の説明 / フィードバックメール /
+   レビュー連絡先を入力する。ログイン機能が無いのでデモアカウントは不要。
+4. **外部テストグループの作成とパブリックリンクの発行**（第6節）。
+5. ⚠️ **公開前に `AdManager.UseIosTestAdUnitId` を `false` へ戻し、Mac で再ビルドする。**
+6. 公開後：AdMob 管理画面で iOS アプリを App Store にリンクする。
+
+### ✅ 完了・決着した項目（2026-08-21）
+
+1. **App プライバシー情報の入力** — 完了。Google / Unity の公式ドキュメントで裏取り済み。
+   申告内容は 識別子（ユーザID / デバイスID）、使用状況データ（製品の操作 / 広告データ）、
+   診断（クラッシュ / パフォーマンス / その他の診断データ）の7種。
+   **「トラッキングに使用＝はい」はデバイスIDと広告データのみ。**
+   購入履歴は IAP が存在しないので申告しない。
+   - 出典: [AdMob Unity 版 データ開示](https://developers.google.com/admob/unity/privacy/data-disclosure) /
+     [UGS Analytics Apple privacy manifest](https://docs.unity.com/ugs/manual/analytics/manual/apple-privacy-survey)
+   - `PrivacyInfo.xcprivacy` は GMA 11.3.0（11.2.0 以降が対応）と
+     UGS Analytics 6.3.0（5.1.1 以降が対応）が同梱済みで、追加作業は不要。
+   - ⚠️ **入力後に右上の「公開」を押して確定させる必要がある。** 押さないと未確定のままで、
+     提出時にブロックされる。ボタンが有効化された＝完了、ではない。
+
+2. **Target Device = iPhone Only** — `targetDevice: 0` に変更済み。iPad 用素材が不要になった。
+
+3. **`NSPrivacyTracking` の不整合 — 調査完了。「対応不要（現状維持）」で確定。**
+   `NSPrivacyTracking = false` / トラッキングドメイン 0 件のまま提出する。理由:
+   - `true` にすると `NSPrivacyTrackingDomains` に**最低1ドメインの列挙が必須**になる
+     （Google Mobile Ads SDK チームの公式回答）。「true だがドメインは空」という逃げ道は無い。
+   - Google は**トラッキングドメインの一覧を公開しておらず、推奨もしていない**。
+     SDK 自身の `PrivacyInfo.xcprivacy` にも `NSPrivacyTracking` キーを置いていない。
+     つまり**正確に列挙する手段が存在しない。**
+   - 列挙したドメインは ATT 未許諾時に **iOS が実際に通信を遮断する**。GMA SDK は
+     ATT 未許諾時に rotating SDK instance ID / SKAdNetwork へフォールバックして
+     **配信自体は継続する**設計なので、列挙するとこのフォールバックごと壊れ、
+     ATT 拒否ユーザー（実際には多数派）への広告配信が止まる。
+   - Apple が実際に強制しているのは ① ATT ダイアログの提示 ② ASC の
+     「トラッキングに使用＝はい」の2点で、**どちらも充足済み**。審査ブロッカーではない。
+   - ⚠️ 監視項目: Apple が将来この扱いを厳格化する可能性はある。現時点で取れる行動は無い。
+   - 出典: [Google Mobile Ads SDK 公式回答](https://groups.google.com/g/google-admob-ads-sdk/c/bXq0Ex-o06w) /
+     [NSPrivacyTrackingDomains の遮断挙動](https://developer.apple.com/forums/thread/738723)
+
+4. **iOS テストデバイスID の登録 → TestFlight 期間中は不要になった。**
+   外部テスターの iPhone は **TestFlight 経由では端末IDがコンソールに出ず取得できない**ため、
+   第2-1節の TestDeviceIds 方式が使えない。代わりに **iOS のリワード広告ユニットIDを
+   Google のテスト用IDに差し替える**方式を採用した（`AdManager.UseIosTestAdUnitId = true`）。
+   AdMob アプリIDは本番のまま（空にすると起動時クラッシュするため）。Android は対象外。
+   ⚠️ **App Store 公開前に `false` へ戻すこと。戻し忘れると iOS の広告収益がゼロになる。**
+   公開後、自分の端末で本番広告を確認する段階で TestDeviceIds 方式が再浮上する。
+
+5. **App Store Connect のメタデータ入力 — 完了。**
+   - アプリ情報: バンドルID `com.mirailoveratory.towerrpg` / SKU `towerrpg-ios-001` /
+     Apple ID `6803453295` / プライマリ言語 日本語 / カテゴリ ゲーム > ロールプレイング /
+     年齢制限 4+ / コンテンツ配信権「サードパーティのコンテンツは含まれない」
+   - プライバシーポリシー: `https://mirailoveratory.com/privacy`
+   - サポートURL / マーケティングURL: ともに `https://mirailoveratory.com`
+   - App Review のメモに**リワード広告の出現箇所**を列挙済み
+     （ステータス→ポイントリセット / ダンジョン内→倉庫 / 戦闘→敗北時コンティニュー）。
+     審査官が広告に辿り着けないと機能未確認で差し戻されるため、この記載は省かないこと。
+   - ⚠️ **App Review の「サインインが必要です」は必ずチェックを外す。**
+     このアプリにログイン機能は無い。チェックするとパスワード必須のバリデーションで
+     提出が弾かれ、通っても審査官が存在しないログイン画面を探すことになる。
+   - ⚠️ サポートURL に **SNS や Discord の招待リンクを置かない。** Apple は
+     「ユーザーが開発者に直接連絡できる手段」を求めており、アカウント登録が必要な
+     リンクはリジェクト事例がある。自社サイトのサポートページを指すこと。
+
+6. **`app-ads.txt` — 設置完了。**
+   `https://mirailoveratory.com/app-ads.txt` に
+   `google.com, pub-7063976043351494, DIRECT, f08c47fec0942fa0` を配置。Google Play 側も更新済み。
+   ⚠️ **AdMob のクローラーは「ストア掲載情報に書かれたデベロッパーウェブサイト」を起点に
+   探すため、URL の欄はストアごとに別。** Google Play はストア設定の連絡先情報、
+   **iOS はバージョン情報の「マーケティングURL」**が該当する。ここが空だったり
+   ドメインを打ち間違えていると、**iOS 側は app-ads.txt 未対応のまま**になり、
+   エラーとして目立たないので気づきにくい。
+   実際にクロールされるのは App Store 公開後で、反映に最大24時間かかる。
+
+7. **ストア用スクリーンショット — 変換方法を確定。**
+   元素材は `ScreenshotCapture.cs`（F12）が `/Screenshots/` に吐く **1920×1080**。
+   iPhone 6.9インチの必須サイズは **2868×1320（横向き）**で、アスペクト比が違う
+   （16:9 vs 約19.5:9）。**高さ基準で 1.2222 倍に拡大し、左右に 261px の黒帯を足す**のが正解。
+   - 理由: `CLAUDE.md` 第5節のとおり背景は 1920×1080 固定・中央配置なので、
+     横長の実機では左右にピラーボックスが出る。全ゲームシーンのカメラ背景色は
+     **黒 (#000000)**（`m_BackGroundColor` を全 `.unity` で確認済み）なので、
+     この処理が実機の見え方と正確に一致する。
+   - ❌ 幅基準で拡大して上下を切る → 上下 98px ずつ失われ HUD が欠ける。
+   - ❌ 2868×1320 へ引き伸ばす → 横方向に約 22% の歪みが出る。
+   - 6.9インチ用を1セット（最大10枚）上げれば、6.5インチ以下は Apple が自動で縮小する。
+   - 再現用（Pillow）:
+     ```python
+     im = Image.open(src).convert("RGB").resize((2346, 1320), Image.LANCZOS)
+     canvas = Image.new("RGB", (2868, 1320), (0, 0, 0))
+     canvas.paste(im, (261, 0))
+     canvas.save(dst, "PNG", optimize=True)
+     ```
+   - 💡 元が 1920×1080 なので 1.22 倍の拡大が入っている。文字の鮮明さを上げたいなら
+     Mac のシミュレータから 2868×1320 で撮り直す手もある（必須ではない）。
+
+8. **Android 実機スモークテスト — 完了。**
+   `AdManager` の `Update()` 経由化（第3-2節）によるリグレッションは無く、
+   Android 実機で広告表示を確認済み。第8節の懸念は解消。
+
+### 検討事項（必須ではない）
+
+- **画面の向きが片方向のみ**（`UISupportedInterfaceOrientations` = LandscapeRight のみ）。
+  端末を逆さに持つと画面が追従しない。Android 版と同じ挙動だが、テスターから指摘が出やすい。
+  両方向対応にするなら Player Settings > Resolution and Presentation で両方を許可する。
+- **アプリアイコンは 512px を 200% 拡大したもの**。補間拡大なのでギザギザは出ず、
+  実表示サイズでは判別できないが、元絵が高解像度で存在するなら再書き出しが望ましい。
+
 ---
 
 ## 8. Android 側への影響
