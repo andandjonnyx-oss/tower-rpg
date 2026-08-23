@@ -79,7 +79,7 @@ public class AdManager : MonoBehaviour
     //    広告収益がゼロになる（テスト広告は収益が発生しない）。
     // ⚠ Android は本番稼働中のため、このフラグの対象外にしてある。
     // =========================================================
-    private const bool UseIosTestAdUnitId = true;
+    private const bool UseIosTestAdUnitId = false;
     private const string IosTestRewardedAdUnitId = "ca-app-pub-3940256099942544/1712485313";
 
     /// <summary>
