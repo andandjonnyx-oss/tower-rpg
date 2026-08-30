@@ -98,6 +98,12 @@ InitTestScene*.unity*
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
+# Unity Test Framework がビルド時に自動生成する実行設定。
+# Assets/Resources 配下は無条件でビルドに同梱されるため、成果物に混ぜない。
+# 削除しても Unity が必要時に再生成する。
+/[Aa]ssets/[Rr]esources/PerformanceTestRunInfo.json*
+/[Aa]ssets/[Rr]esources/PerformanceTestRunSettings.json*
+
 # F12 で撮影したスクリーンショット（ScreenshotCapture.cs）。ストア掲載用の作業ファイルなので追跡しない。
 /[Ss]creenshots/
 
