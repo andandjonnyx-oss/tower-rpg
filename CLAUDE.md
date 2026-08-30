@@ -238,3 +238,31 @@ Tower=`TowerState`（`fieldMagicList`）。2026-06-17 にリスト形式→中�
   `SaveManager.CommitIfDirty()` を明示で呼ぶ（多重呼び出しは無害）。
 - ⚠️ `PlayerPrefs` を新規コードで使わないこと（Switch に相当機能が無い）。
   旧キーからの移行は `SettingsStore.MigrateFromPlayerPrefs()` が一度だけ行う。
+
+## 10. プラットフォーム分岐（CONSOLE_BUILD）と広告コードの隔離
+
+2026-08-30 に Steam/Switch 展開へ向けて導入。**まだどのビルドにも CONSOLE_BUILD は
+定義していない**（＝モバイル/エディタの挙動は従来どおり）。定義した瞬間に
+コンソール仕様へ切り替わる設計。
+
+- **シンボル運用**: `CONSOLE_BUILD` は Steam/Switch 共通（広告なし・コンティニュー残数制）。
+  Player Settings > Scripting Define Symbols で Standalone / Switch ターゲットに設定する。
+  Steam と Switch の個別分岐は Unity 組み込みの `UNITY_STANDALONE` / `UNITY_SWITCH` を
+  使い、**独自シンボルをこれ以上増やさない**。
+- **コンティニューの分岐は `ContinueGate`（`Assets/Script/Battle/ContinueGate.cs`）に
+  全て集約**。可否判定・残数・ポップアップ文言・広告呼び出しが入っている。
+  ⚠️ `AdManager.ShowRewardedAd` のコンティニュー経路は ContinueGate が唯一の呼び出し点。
+  BattleSceneController に広告呼び出しを書き戻さないこと。
+  残数リセットは MainSceneRecovery（街到着）から。境界・static 生存戦略・
+  再起動で全快する点は `usedStorageAd` と同じ。
+- 倉庫（TowerState）と SP 振り直し（Statusview）は各1箇所の `#if CONSOLE_BUILD` で
+  広告をスキップする（倉庫の「道中1回」消費ロジック自体は共通）。
+- URL ボタン（公式X/Discord 等）は `OpenUrlButton` 自身が `#if UNITY_SWITCH` で
+  自分を非表示にする。**シーン側で個別に消さないこと**（コンポーネント側で一律適用）。
+- ⚠️ **GoogleMobileAds SDK への参照は `Admanager.cs` 1ファイルに閉じたまま維持する**
+  （現状 `using GoogleMobileAds` を含むのはこのファイルのみ）。Switch では SDK ごと
+  除外する必要があり、この隔離が崩れると Switch ビルドが通らなくなる。
+  未解決: AnalyticsManager / TitleManager が AdManager の同意APIを参照している。
+  Switch ビルド着手時に UGS Analytics ごと `#if` で外す判断が必要。
+- コンソール版の残課題（UIパス時に対応）: 倉庫確認・SP振り直しポップアップの
+  シーン側テキスト（「広告を視聴して〜」）とボタンラベルの差し替え。

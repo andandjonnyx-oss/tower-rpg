@@ -392,6 +392,11 @@ public class StatusView : MonoBehaviour
         if (resetConfirmPopup != null)
             resetConfirmPopup.SetActive(false);
 
+#if CONSOLE_BUILD
+        // コンソール版: SP振り直しは制限なし・広告なしで即実行
+        Debug.Log("[StatusView] コンソール版 → 広告なしでステータスリセット実行");
+        ExecuteReset();
+#else
         // 広告を表示し、完了後にリセットを実行
         if (AdManager.Instance != null)
         {
@@ -414,6 +419,7 @@ public class StatusView : MonoBehaviour
             Debug.LogWarning("[StatusView] AdManager が見つかりません。直接リセットします。");
             ExecuteReset();
         }
+#endif
     }
 
     /// 確認ポップアップ「いいえ」

@@ -727,6 +727,11 @@ public class TowerState : MonoBehaviour
         if (storageConfirmPopup != null)
             storageConfirmPopup.SetActive(false);
 
+#if CONSOLE_BUILD
+        // コンソール版: 広告なしで倉庫へ。
+        // 「道中1回」の消費（usedStorageAd）は OnStorageAdResult(true) が従来どおり立てる。
+        OnStorageAdResult(true);
+#else
         if (AdManager.Instance != null)
         {
             AdManager.Instance.ShowRewardedAd(OnStorageAdResult);
@@ -736,6 +741,7 @@ public class TowerState : MonoBehaviour
             Debug.LogWarning("[Tower] AdManager.Instance が null — 広告なしで倉庫を開く");
             OnStorageAdResult(true);
         }
+#endif
     }
 
     private void OnStorageConfirmNo()

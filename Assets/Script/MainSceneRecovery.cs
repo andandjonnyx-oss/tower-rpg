@@ -22,6 +22,7 @@ public class MainSceneRecovery : MonoBehaviour
         gs.ClearAllStatusEffects();
         SaveManager.Save();
         TowerState.ResetStorageAdFlag();
+        ContinueGate.ResetForNewAdventure(); // コンソール版のコンティニュー残数を全快
 
         // 魔法選択保持の記憶をクリア（街に戻る = 全リセット）
         MagicSelectionMemory.ClearAll();

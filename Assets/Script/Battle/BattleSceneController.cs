@@ -1188,25 +1188,36 @@ public partial class BattleSceneController : MonoBehaviour
             return;
         }
 
-        // メッセージを設定
+        // コンティニュー可否と文言はプラットフォーム差ごと ContinueGate に集約
+        bool canContinue = ContinueGate.CanContinue(BattleContext.IsBossBattle);
+
         if (continuePopupText != null)
         {
-            if (IsFreeContinueBoss())
-            {
-                // ★F50/F100 は広告不要コンティニュー（消さないこと）
-                continuePopupText.text = "広告なんて見なくていいから\nかかって来いよ！";
-            }
-            else if (BattleContext.IsBossBattle)
-            {
-                continuePopupText.text = "広告を視聴して戦闘をやり直しますか？\n（全回復、アイテム復活）";
-            }
-            else
-            {
-                continuePopupText.text = "広告を視聴してこのSTEPから続けますか？";
-            }
+            continuePopupText.text = canContinue
+                ? ContinueGate.PopupText(BattleContext.IsBossBattle, IsFreeContinueBoss())
+                : ContinueGate.NoRemainingText;
         }
 
+        // 残数0（コンソール版の道中のみ発生）: 選択肢を隠してメッセージだけ見せる
+        if (continueYesButton != null) continueYesButton.gameObject.SetActive(canContinue);
+        if (continueNoButton != null) continueNoButton.gameObject.SetActive(canContinue);
+
         continuePopup.SetActive(true);
+
+        if (!canContinue)
+        {
+            Invoke(nameof(ReturnAfterNoRemaining), 2.0f);
+        }
+    }
+
+    /// <summary>
+    /// 残数0メッセージを見せたあとの帰還処理（コンソール版のみ通る）。
+    /// 「いいえ」と同じ敗北帰還フローに合流する。
+    /// </summary>
+    private void ReturnAfterNoRemaining()
+    {
+        if (continuePopup != null) continuePopup.SetActive(false);
+        FallbackDefeat();
     }
 
 
@@ -1303,25 +1314,13 @@ public partial class BattleSceneController : MonoBehaviour
 
         adResultHandled = false;
 
-        // ★F50/F100 は広告不要で即コンティニュー（消さないこと）
-        if (IsFreeContinueBoss())
-        {
-            Debug.Log("[Battle] 広告不要コンティニュー対象ボス → 広告スキップで復活");
-            OnAdResult(true);
-            return;
-        }
+        // タイムアウト保険（広告経路で10秒返ってこなければ見た扱いで復活）。
+        // ContinueGate が同期で返す経路（コンソール/F50・F100特例/AdManager無し）では
+        // 直後の OnAdResult がこのコルーチンを即停止するため無害。
+        adTimeoutCoroutine = StartCoroutine(AdTimeoutFallback(10f));
 
-        if (AdManager.Instance != null)
-        {
-            // タイムアウト保険（10秒返ってこなければ見た扱いで復活）
-            adTimeoutCoroutine = StartCoroutine(AdTimeoutFallback(10f));
-            AdManager.Instance.ShowRewardedAd(OnAdResult);
-        }
-        else
-        {
-            Debug.LogWarning("[Battle] AdManager.Instance が null — 広告なしで復活");
-            OnAdResult(true);
-        }
+        // 広告視聴／残数消費の分岐は ContinueGate に集約（F50/F100 特例も内包）
+        ContinueGate.RequestContinue(BattleContext.IsBossBattle, IsFreeContinueBoss(), OnAdResult);
     }
 
     private IEnumerator AdTimeoutFallback(float seconds)
