@@ -39,7 +39,10 @@ curl -s "https://itunes.apple.com/lookup?id=6803453295&country=jp" | head -c 400
   `UseIosTestAdUnitId = false` に戻し、本番広告IDが使われることを IL2CPP の
   メタデータ解析と生成 C++ の両方で検証済み（検証手順は第7節）
 
-**残っているのは第7節「残作業」の2件のみ。**
+- ✅ **AdMob の iOS アプリを App Store 掲載情報へリンク完了**（2026-08-30。アプリの確認=確認済み / 承認状況=準備完了）
+- ✅ **iOS 実機での本番広告の動作確認完了**（外部テスターに依頼）
+
+**初回リリースに必要な作業はすべて完了。**
 
 ⚠️ 提出前に **TestFlight の外部テスト用ビルドを削除済み**。これをやらないと、
 審査用にアップロードしたビルド（本番広告入り）が外部テスターにも自動配信され、
@@ -285,6 +288,29 @@ Target Device を iPhone Only に変更したあと、Unity が iPad 用ラン�
 Target Device / Bundle ID / 対応 OS バージョンなど**プロジェクト構造に影響する設定を
 変更したときは、出力先を削除するか Unity のビルドダイアログで Replace を選ぶこと。**
 
+### 5-6. Xcode Cloud がコミットのたびに失敗する
+
+```
+Archive - iOS encountered a failure that caused the build to fail.
+Workspace Unity-iPhone.xcworkspace does not exist at build/Unity-iPhone.xcworkspace
+```
+
+**Xcode Cloud はこのプロジェクトでは原理的に使えない。**
+Xcode ワークスペースは Unity が生成する `build/` 配下にしか存在せず、
+`.gitignore` の `/[Bb]uild/` で除外されている。Xcode Cloud はリポジトリを
+クローンしてビルドするため、ワークスペースを永遠に見つけられない。
+Xcode Cloud 上で Unity を動かして生成するのは、Unity のインストールと
+ライセンス認証が必要なため現実的でない。
+
+リリース経路（Mac でローカルビルド → Transporter）には一切関与しないので
+失敗自体に実害は無いが、**ワークフローごと削除する**こと。
+放置するとコミットのたびに失敗メールが届き、CI が常に赤い状態は
+本当に見るべき失敗を見落とす原因になる。
+
+削除場所: App Store Connect → アプリ → **Xcode Cloud** タブ → ワークフロー → 編集
+（または Xcode の Report navigator → Cloud → 右クリック → Delete Workflow）。
+将来 CI を組むなら、Unity を動かせる GitHub Actions 等の方が適している。
+
 ---
 
 ## 6. 判断の記録（なぜそうしたか）
@@ -425,11 +451,12 @@ for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
      `strings | grep ca-app-pub` だけでは判定できない（const 定数値も常に出るため）。
 3. **App Store Connect へのアップロード**（Transporter に Windows 版は無い）。
 
-### Windows 側の残作業（Apple のサイト・ストア関連は基本 Windows で管理）
+### ✅ Windows 側の作業（完了。Apple のサイト・ストア関連は基本 Windows で管理）
 
-公開まで到達したため、残っているのは以下の2件のみ。
+**両方とも 2026-08-30 に完了。** 次回のバージョン更新時の参考として経緯を残す。
 
-1. ⏳ **AdMob の iOS アプリを App Store 掲載情報にリンクする（クロール待ち）。**
+1. ✅ **AdMob の iOS アプリを App Store 掲載情報にリンク — 完了。**
+   結果: アプリの確認=**確認済み** / 承認状況=**準備完了**。予想どおりクロール待ちだった。
 
    2026-08-29 に「アプリにストア情報を追加する」を実行したところ、「アプリの確認」で
    *「app-ads.txt ファイルが設定されている可能性がありますが、お客様の詳細情報が
@@ -459,7 +486,7 @@ for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
      変更されていないか
    - AdMob のパブリッシャーIDが `pub-7063976043351494` のままか
 
-2. ⏳ **iOS 実機での本番広告の動作確認。**
+2. ✅ **iOS 実機での本番広告の動作確認 — 完了（外部テスターに依頼）。**
 
    公開版は `UseIosTestAdUnitId = false` なので**本番広告が配信される**。
    - ⚠️ 自分の端末で確認するなら、**必ず `TestDeviceIds` に登録してから**行う（第2-1節）。
