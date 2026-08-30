@@ -1,26 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 /// <summary>
 /// ゲームデータのセーブ/ロード/削除を担当する。
-/// JSON 形式で Application.persistentDataPath に保存する。
-/// 状態が変わるたびに Save() が呼ばれる即時セーブ方式。
+/// JSON 形式で ISaveBackend（既定: persistentDataPath のファイル）に保存する。
+///
+/// 【遅延コミット方式（2026-08-30 変更）】
+///   Save() は dirty フラグを立てるだけで、ディスクには書かない。
+///   実書き込みは CommitIfDirty() で行い、SaveCommitter が安全地点
+///   （シーン遷移・シーン到着直後・アプリ休止/フォーカス喪失/終了）で呼ぶ。
+///   旧来の「状態が変わるたびに即書き込み」から変更した理由:
+///     - Switch はセーブ領域への明示コミットが必須で、高頻度コミットは不可。
+///     - 呼び出し側 48 箇所を無改修のまま、書き込み頻度をシーン境界に集約できる。
+///
+/// 【等価性の不変条件（崩さないこと）】
+///   1. HasSaveData() / Load() は冒頭で CommitIfDirty() する。
+///      「Save() した直後に読む」コード（TitleManager の Load→Save→Load 連鎖等）が
+///      即時セーブ時代と同じ結果になるのはこの flush があるため。
+///   2. DeleteSave() は dirty をクリアしてから消す。
+///      クリアしないと、削除後の次回コミットで保留中の状態からファイルが
+///      復活してしまう（「初期化したのにセーブが残る」バグになる）。
 /// </summary>
 public static class SaveManager
 {
     // セーブファイル名
     private const string SaveFileName = "savedata.json";
 
-    /// <summary>セーブファイルのフルパスを返す。</summary>
-    private static string SaveFilePath
-        => Path.Combine(Application.persistentDataPath, SaveFileName);
+    /// <summary>未書き込みの変更があるか。</summary>
+    private static bool dirty;
+
+    /// <summary>未書き込みの変更があるか（デバッグ/テスト用の読み取り口）。</summary>
+    public static bool IsDirty => dirty;
 
     /// <summary>セーブデータが存在するかどうか。</summary>
     public static bool HasSaveData()
     {
-        return File.Exists(SaveFilePath);
+        // 保留中の変更を先に確定させ、即時セーブ時代と同じ観測結果にする
+        CommitIfDirty();
+        return SaveBackend.Instance.Exists(SaveFileName);
     }
 
     // =========================================================
@@ -28,10 +46,31 @@ public static class SaveManager
     // =========================================================
 
     /// <summary>
-    /// 現在の GameState・ItemBoxManager・StorageManager の内容をファイルに保存する。
-    /// 状態が変わるたび（アイテム取得、装備変更、階層進行など）に呼ばれる。
+    /// セーブ要求。状態が変わるたび（アイテム取得、装備変更、階層進行など）に呼ばれる。
+    /// dirty フラグを立てるだけで、実書き込みは CommitIfDirty()（SaveCommitter が
+    /// 安全地点で呼ぶ）まで遅延される。呼び出し側は従来どおりこれを呼ぶだけでよい。
     /// </summary>
     public static void Save()
+    {
+        dirty = true;
+    }
+
+    /// <summary>
+    /// 未書き込みの変更があればディスクへ確定する。なければ何もしない（多重呼び出し無害）。
+    /// SaveCommitter の各安全地点のほか、クラッシュ耐性が特に必要な箇所から明示的に
+    /// 呼んでもよい。
+    /// </summary>
+    public static void CommitIfDirty()
+    {
+        if (!dirty) return;
+        WriteToDisk();
+        dirty = false;
+    }
+
+    /// <summary>
+    /// 現在の GameState・ItemBoxManager・StorageManager の内容をシリアライズして書き込む。
+    /// </summary>
+    private static void WriteToDisk()
     {
         var data = new SaveData();
 
@@ -147,8 +186,9 @@ public static class SaveManager
 
         // --- JSON に変換して書き出し ---
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(SaveFilePath, json);
-        Debug.Log($"[SaveManager] セーブ完了: {SaveFilePath}");
+        SaveBackend.Instance.WriteAllText(SaveFileName, json);
+        SaveBackend.Instance.Commit();
+        Debug.Log($"[SaveManager] セーブ確定: {SaveFileName}");
     }
 
     // =========================================================
@@ -167,13 +207,20 @@ public static class SaveManager
     /// </summary>
     public static bool Load()
     {
+        // HasSaveData() が保留中の変更を flush してから存在確認する
         if (!HasSaveData())
         {
             Debug.LogWarning("[SaveManager] セーブデータが見つかりません");
             return false;
         }
 
-        string json = File.ReadAllText(SaveFilePath);
+        string json = SaveBackend.Instance.ReadAllText(SaveFileName);
+        if (string.IsNullOrEmpty(json))
+        {
+            Debug.LogError("[SaveManager] セーブデータの読み込みに失敗（空ファイル）");
+            return false;
+        }
+
         var data = JsonUtility.FromJson<SaveData>(json);
         if (data == null)
         {
@@ -285,9 +332,15 @@ public static class SaveManager
     /// </summary>
     public static void DeleteSave()
     {
-        if (File.Exists(SaveFilePath))
+        // ★先に dirty をクリアすること（不変条件2）。
+        //   後回しにすると、削除後の次回コミットで保留状態が書き戻され
+        //   ファイルが復活する。
+        dirty = false;
+
+        if (SaveBackend.Instance.Exists(SaveFileName))
         {
-            File.Delete(SaveFilePath);
+            SaveBackend.Instance.Delete(SaveFileName);
+            SaveBackend.Instance.Commit();
             Debug.Log("[SaveManager] セーブデータを削除しました");
         }
     }
