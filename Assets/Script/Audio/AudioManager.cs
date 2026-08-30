@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// BGM/SE を一元管理するシングルトン。
 /// DontDestroyOnLoad でシーンをまたいで存続する。
-/// 音量・ミュート状態は PlayerPrefs に永続化する（音量 0.0〜1.0）。
+/// 音量・ミュート状態は SettingsStore（settings.json）に永続化する（音量 0.0〜1.0）。
 ///
 /// 【BGM の2系統 AudioSource】
 ///   ・bgmSource     : メインBGM（拠点曲・タイトル曲・塔曲）。Pause/UnPause で位置保持。
@@ -123,11 +123,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip statAllocateSe;
 
 
-    // PlayerPrefs キー
-    private const string KeyBgmVolume = "audio_bgm_volume";
-    private const string KeySeVolume = "audio_se_volume";
-    private const string KeyBgmMuted = "audio_bgm_muted";
-    private const string KeySeMuted = "audio_se_muted";
+    // 音量・ミュートの永続化は SettingsStore（settings.json）に集約（2026-08-30）。
+    // 旧 PlayerPrefs キー（audio_bgm_volume 等）からの移行は SettingsStore が行う。
 
     private float bgmVolume = 1f;
     private float seVolume = 1f;
@@ -190,10 +187,11 @@ public class AudioManager : MonoBehaviour
             battleSeSource.loop = false;
         }
 
-        bgmVolume = PlayerPrefs.GetFloat(KeyBgmVolume, 1f);
-        seVolume = PlayerPrefs.GetFloat(KeySeVolume, 1f);
-        bgmMuted = PlayerPrefs.GetInt(KeyBgmMuted, 0) == 1;
-        seMuted = PlayerPrefs.GetInt(KeySeMuted, 0) == 1;
+        var settings = SettingsStore.Data;
+        bgmVolume = settings.bgmVolume;
+        seVolume = settings.seVolume;
+        bgmMuted = settings.bgmMuted;
+        seMuted = settings.seMuted;
         ApplyBgmVolume();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -430,31 +428,31 @@ public class AudioManager : MonoBehaviour
     public void SetBgmVolume(float volume)
     {
         bgmVolume = Mathf.Clamp01(volume);
-        PlayerPrefs.SetFloat(KeyBgmVolume, bgmVolume);
-        PlayerPrefs.Save();
+        SettingsStore.Data.bgmVolume = bgmVolume;
+        SettingsStore.MarkDirty();
         ApplyBgmVolume();
     }
 
     public void SetSeVolume(float volume)
     {
         seVolume = Mathf.Clamp01(volume);
-        PlayerPrefs.SetFloat(KeySeVolume, seVolume);
-        PlayerPrefs.Save();
+        SettingsStore.Data.seVolume = seVolume;
+        SettingsStore.MarkDirty();
     }
 
     public void SetBgmMuted(bool muted)
     {
         bgmMuted = muted;
-        PlayerPrefs.SetInt(KeyBgmMuted, muted ? 1 : 0);
-        PlayerPrefs.Save();
+        SettingsStore.Data.bgmMuted = muted;
+        SettingsStore.MarkDirty();
         ApplyBgmVolume();
     }
 
     public void SetSeMuted(bool muted)
     {
         seMuted = muted;
-        PlayerPrefs.SetInt(KeySeMuted, muted ? 1 : 0);
-        PlayerPrefs.Save();
+        SettingsStore.Data.seMuted = muted;
+        SettingsStore.MarkDirty();
     }
 
     private float CurrentBgmVolume()

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// SaveManager の遅延書き込みを「安全地点」で実際にディスクへ確定させる常駐コンポーネント。
+/// SaveManager / SettingsStore の遅延書き込みを「安全地点」で実際にディスクへ確定させる常駐コンポーネント。
 /// GameStateAutoCreate と同じパターンでどのシーンから起動しても必ず存在する。
 ///
 /// 【コミット地点（＝クラッシュ時に巻き戻りうる境界）】
@@ -43,9 +43,15 @@ public class SaveCommitter : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnActiveSceneChanged(Scene from, Scene to)
+    private static void CommitAll()
     {
         SaveManager.CommitIfDirty();
+        SettingsStore.CommitIfDirty();
+    }
+
+    private void OnActiveSceneChanged(Scene from, Scene to)
+    {
+        CommitAll();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -58,23 +64,23 @@ public class SaveCommitter : MonoBehaviour
     private IEnumerator CommitNextFrame()
     {
         yield return null;
-        SaveManager.CommitIfDirty();
+        CommitAll();
     }
 
     private void OnApplicationPause(bool paused)
     {
         // モバイル: ホームボタン／他アプリ切り替え。この後プロセスが
         // 予告なく kill されうるので、ここでの確定が生命線。
-        if (paused) SaveManager.CommitIfDirty();
+        if (paused) CommitAll();
     }
 
     private void OnApplicationFocus(bool focused)
     {
-        if (!focused) SaveManager.CommitIfDirty();
+        if (!focused) CommitAll();
     }
 
     private void OnApplicationQuit()
     {
-        SaveManager.CommitIfDirty();
+        CommitAll();
     }
 }

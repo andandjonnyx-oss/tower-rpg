@@ -213,3 +213,28 @@ Tower=`TowerState`（`fieldMagicList`）。2026-06-17 にリスト形式→中�
 - iOS は **iPhone Only**（`targetDevice: 0`）。第5節の「1920×1080 中央固定」設計が
   iPad の 4:3 では想定外の余白配分になるため。後から Universal への変更は可能。
 - iOS 関連のビルドは **Mac でしかできない**。コード修正は Windows でも可能。
+
+## 9. セーブ/設定は遅延コミット方式（SaveCommitter への一点依存）
+
+2026-08-30 に即時セーブ方式から変更（Switch 移植の土台）。構造は第1節と同型で、
+「安全性が消費側コードの外の一点に依存している」ことに注意。
+
+- `SaveManager.Save()`（48箇所）は **dirty フラグを立てるだけ**。実書き込みは
+  `CommitIfDirty()` で、`SaveCommitter`（自動生成・常駐）が安全地点
+  （シーン遷移・シーン到着1フレーム後・アプリ休止/フォーカス喪失/終了）で呼ぶ。
+- 設定（音量4種＋GameSettings 4種）も同方式。`SettingsStore.Data` を書き換えたら
+  **必ず `MarkDirty()`**。忘れるとメモリ上では効くのに次回起動で巻き戻る
+  （テストで気付きにくい典型バグ）。
+- **等価性の不変条件（崩さないこと）**:
+  - `HasSaveData()` / `Load()` は冒頭で `CommitIfDirty()`（flush）する。
+    「Save() 直後に読む」既存コード（TitleManager の Load→Save→Load 連鎖等）は
+    この flush があるから即時セーブ時代と等価。
+  - `DeleteSave()` は **dirty を先にクリアしてから**消す。順序を崩すと
+    削除後の次回コミットでファイルが復活する。
+- 物理I/Oは `ISaveBackend`（既定 `FileSaveBackend`、tmp 経由のアトミック書き込み）に
+  隔離。**Switch 対応は `SaveBackend.Instance` の差し替えだけで行い、
+  SaveManager/SettingsStore にプラットフォーム分岐を持ち込まないこと。**
+- ⚠️ 1シーンに長居する区間はディスク未反映。クラッシュ耐性が特に必要な新機能では
+  `SaveManager.CommitIfDirty()` を明示で呼ぶ（多重呼び出しは無害）。
+- ⚠️ `PlayerPrefs` を新規コードで使わないこと（Switch に相当機能が無い）。
+  旧キーからの移行は `SettingsStore.MigrateFromPlayerPrefs()` が一度だけ行う。

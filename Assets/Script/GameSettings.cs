@@ -1,17 +1,15 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// 音量以外のゲームプレイ設定。PlayerPrefs で永続化する。
+/// 音量以外のゲームプレイ設定。SettingsStore（settings.json）で永続化する。
 /// （音量設定は AudioManager が管理しているため、ここでは扱わない）
+///
+/// 旧来は PlayerPrefs に直接書いていたが、Switch 対応のため SettingsStore に
+/// 集約した（2026-08-30）。旧 PlayerPrefs からの移行は SettingsStore が行う。
+/// 公開APIは変更していないので、呼び出し側は無改修。
 /// </summary>
 public static class GameSettings
 {
-    private const string KeyKeepMagicSelection = "opt_keepMagicSelection";
-    private const string KeyNoItemMode = "opt_noItemMode";
-
-    private static bool? keepMagicSelectionCache;
-    private static bool? noItemModeCache;
-
     /// <summary>
     /// 魔法セレクターの選択保持オプション。既定は OFF。
     /// ON のとき、戦闘中（その戦闘の間）/ 塔内（戦闘に入るまでの間）で
@@ -19,17 +17,11 @@ public static class GameSettings
     /// </summary>
     public static bool KeepMagicSelection
     {
-        get
-        {
-            if (keepMagicSelectionCache == null)
-                keepMagicSelectionCache = PlayerPrefs.GetInt(KeyKeepMagicSelection, 0) == 1;
-            return keepMagicSelectionCache.Value;
-        }
+        get => SettingsStore.Data.keepMagicSelection;
         set
         {
-            keepMagicSelectionCache = value;
-            PlayerPrefs.SetInt(KeyKeepMagicSelection, value ? 1 : 0);
-            PlayerPrefs.Save();
+            SettingsStore.Data.keepMagicSelection = value;
+            SettingsStore.MarkDirty();
         }
     }
 
@@ -41,22 +33,13 @@ public static class GameSettings
     /// </summary>
     public static bool NoItemMode
     {
-        get
-        {
-            if (noItemModeCache == null)
-                noItemModeCache = PlayerPrefs.GetInt(KeyNoItemMode, 0) == 1;
-            return noItemModeCache.Value;
-        }
+        get => SettingsStore.Data.noItemMode;
         set
         {
-            noItemModeCache = value;
-            PlayerPrefs.SetInt(KeyNoItemMode, value ? 1 : 0);
-            PlayerPrefs.Save();
+            SettingsStore.Data.noItemMode = value;
+            SettingsStore.MarkDirty();
         }
     }
-
-    private const string KeyHandedness = "opt_handedness";
-    private static int? handednessCache;
 
     /// <summary>
     /// 利き手設定。既定は Right（右利き）。
@@ -64,25 +47,16 @@ public static class GameSettings
     /// </summary>
     public static Handedness Handedness
     {
-        get
-        {
-            if (handednessCache == null)
-                handednessCache = PlayerPrefs.GetInt(KeyHandedness, (int)Handedness.Right);
-            return (Handedness)handednessCache.Value;
-        }
+        get => (Handedness)SettingsStore.Data.handedness;
         set
         {
-            handednessCache = (int)value;
-            PlayerPrefs.SetInt(KeyHandedness, (int)value);
-            PlayerPrefs.Save();
+            SettingsStore.Data.handedness = (int)value;
+            SettingsStore.MarkDirty();
         }
     }
 
     /// <summary>左利き設定かどうかの簡易判定。</summary>
     public static bool IsLeftHanded => Handedness == Handedness.Left;
-
-    private const string KeyAnalyticsOptOut = "opt_analyticsOptOut";
-    private static bool? analyticsOptOutCache;
 
     /// <summary>
     /// プレイ統計（UGS Analytics）の送信を拒否するオプション。既定は OFF（＝送信する）。
@@ -96,18 +70,11 @@ public static class GameSettings
     /// </summary>
     public static bool AnalyticsOptOut
     {
-        get
-        {
-            if (analyticsOptOutCache == null)
-                analyticsOptOutCache = PlayerPrefs.GetInt(KeyAnalyticsOptOut, 0) == 1;
-            return analyticsOptOutCache.Value;
-        }
+        get => SettingsStore.Data.analyticsOptOut;
         set
         {
-            analyticsOptOutCache = value;
-            PlayerPrefs.SetInt(KeyAnalyticsOptOut, value ? 1 : 0);
-            PlayerPrefs.Save();
+            SettingsStore.Data.analyticsOptOut = value;
+            SettingsStore.MarkDirty();
         }
     }
-
 }
