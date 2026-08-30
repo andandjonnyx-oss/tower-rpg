@@ -14,7 +14,7 @@ Windows 側で作業する場合、**iOS 関連のビルドは Mac でしかで�
 - 公開日時: 2026-08-29 07:00 UTC（バージョン公開 08:31 UTC）
 - 製品ページ・**App Store 検索インデックスとも反映確認済み**
 
-Android 版は versionCode 5 を Google Play へ提出済み
+Android 版も versionCode 5 を Google Play で**配信中**
 （4 = 敵の予約行動バグ修正 / 5 = シャドウフェゴール画像差し替え）。**両プラットフォームの内容は一致している。**
 
 公開状況はいつでもこれで確認できる（`resultCount` が 0 なら未反映）:
