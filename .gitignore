@@ -107,6 +107,9 @@ InitTestScene*.unity*
 # F12 で撮影したスクリーンショット（ScreenshotCapture.cs）。ストア掲載用の作業ファイルなので追跡しない。
 /[Ss]creenshots/
 
+# 広告出稿用の素材置き場。リポジトリでは管理しない
+/[Mm]arketing/
+
 # iOS シミュレータ向けビルド出力（Device 用 build/ とは別ディレクトリに出しているため）
 /build-sim/
 
