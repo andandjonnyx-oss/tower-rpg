@@ -13,8 +13,19 @@ using UnityEngine.UI;
 ///     ├ NameText (TMP_Text)
 ///     └ CostText (TMP_Text)  ← GP価格表示（任意）
 /// </summary>
-public class GpShopCell : MonoBehaviour, IPointerClickHandler
+public class GpShopCell : MonoBehaviour, IPointerClickHandler, ISubmitHandler
 {
+    private void Awake()
+    {
+        // コントローラー対応: ナビゲーション対象にするため Selectable を実行時付与
+        // （プレハブに Button が既にあればそれを流用する）。決定は OnSubmit で受ける。
+        if (GetComponent<Selectable>() == null)
+        {
+            var sel = gameObject.AddComponent<Selectable>();
+            sel.transition = Selectable.Transition.None;
+        }
+    }
+
     [SerializeField] private Image iconImage;
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text costText;
@@ -93,6 +104,13 @@ public class GpShopCell : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData)
+    {
+        if (shopData != null)
+            onClicked?.Invoke(shopData);
+    }
+
+    /// <summary>コントローラー/キーボードの決定ボタン。タップと同じ処理を呼ぶ。</summary>
+    public void OnSubmit(BaseEventData eventData)
     {
         if (shopData != null)
             onClicked?.Invoke(shopData);

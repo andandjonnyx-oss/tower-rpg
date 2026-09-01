@@ -6,8 +6,19 @@ using UnityEngine.EventSystems;
 /// アイテムスロットUI（全シーン共通）。
 /// クリック時に登録されたコールバックを呼ぶだけ。
 /// </summary>
-public class ItemSlotView : MonoBehaviour, IPointerClickHandler
+public class ItemSlotView : MonoBehaviour, IPointerClickHandler, ISubmitHandler
 {
+    private void Awake()
+    {
+        // コントローラー対応: 十字キーのナビゲーション対象にするため Selectable を
+        // 実行時付与する（プレハブ改修不要）。決定ボタンは OnSubmit で受ける。
+        if (GetComponent<Selectable>() == null)
+        {
+            var sel = gameObject.AddComponent<Selectable>();
+            sel.transition = Selectable.Transition.None; // 見た目は SelectionHighlighter の枠に任せる
+        }
+    }
+
     [SerializeField] private Image frameImage;
     [SerializeField] private Image iconImage;
 
@@ -61,6 +72,12 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler
     }
 
     public void OnPointerClick(PointerEventData eventData)
+    {
+        onClicked?.Invoke(this, currentInvItem);
+    }
+
+    /// <summary>コントローラー/キーボードの決定ボタン。タップと同じ処理を呼ぶ。</summary>
+    public void OnSubmit(BaseEventData eventData)
     {
         onClicked?.Invoke(this, currentInvItem);
     }

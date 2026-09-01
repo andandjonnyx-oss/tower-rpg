@@ -49,6 +49,15 @@ public class EnemyHpBar : MonoBehaviour
     {
         barRoot = (hpSlider != null) ? hpSlider.gameObject : gameObject;
 
+        // コントローラー対応: HPバーは表示専用なのでナビゲーション対象から外す
+        // （外さないと十字キー移動で選択枠が付いてしまう）
+        if (hpSlider != null)
+        {
+            var nav = hpSlider.navigation;
+            nav.mode = Navigation.Mode.None;
+            hpSlider.navigation = nav;
+        }
+
         // ルーペ所持判定
         int loupeCount = CountLoupeItems();
 
