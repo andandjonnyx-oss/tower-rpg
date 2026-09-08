@@ -385,7 +385,7 @@ d = open('Payload/<ProductName>.app/Data/Managed/Metadata/global-metadata.dat', 
 # 2026-08-24 の実測（metadata version 39 / Unity 6000.3.9f1）:
 #    8: stringLiteralOffset      = 380
 #   12: stringLiteralSize        = 66,752   （8バイト × 8,344 件）
-#   16: （オフセットではない）    = 16,688   ← 件数の2倍。ここを領域先頭と誤読しやすい
+#   16: stringLiteralCount       = 16,688   ← 件数（= size/4）。領域先頭と誤読しやすい
 #   20: stringLiteralDataOffset  = 67,132
 #   24: stringLiteralDataSize    = 531,311
 litOff      = struct.unpack_from('<i', d,  8)[0]
@@ -394,12 +394,14 @@ litDataOff  = struct.unpack_from('<i', d, 20)[0]
 litDataEnd  = litDataOff + struct.unpack_from('<i', d, 24)[0]
 
 # --- 自己検証: 基準オフセットが正しいかを、リテラルテーブルとの整合で確認する ---
-# 対象文字列の絶対位置から基準を引いた値が、テーブルのどれかの dataIndex と一致するはず。
+# 対象文字列の絶対位置から基準を引いた値が、テーブルのどれかの項目と一致するはず。
 # 一致しなければヘッダの読み方が違うので、判定結果を信用してはいけない。
+# ⚠️ テーブルの項目は 4 バイト（データ領域先頭からのオフセット）。
+#    8 バイト構造体として読むと項目を半分しか検査できず、偽陰性になる。
 def validate(s: bytes) -> bool:
     di = d.find(s) - litDataOff
-    return any(struct.unpack_from('<II', d, litOff + i*8)[1] == di
-               for i in range(litSize // 8))
+    return any(struct.unpack_from('<I', d, litOff + i*4)[0] == di
+               for i in range(litSize // 4))
 
 for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
                  ("テスト", b"ca-app-pub-3940256099942544/1712485313")]:
@@ -432,10 +434,16 @@ for label, s in [("本番  ", b"ca-app-pub-7063976043351494/3825356010"),
 2026-08-24 のビルド2での実測（再検証済み）:
 
 ```
-リテラルデータ領域 = 67,132 〜 598,443
-  本番ID   offset   502,340  → 領域内（リテラルテーブル index 6165 / dataIndex 435,208 と一致）
-  テストID offset 6,557,218  → 領域外（const 定数値のみ）
+1.2.0 / build 7（2026-09-08）:
+リテラルデータ領域 = 67,212 〜 599,175
+  本番ID   offset   502,962  → 領域内（リテラルテーブル index 12,346 と一致）
+  テストID offset 6,561,204  → 領域外（const 定数値のみ）
 ```
+
+⚠️ **数値はビルドごとに変わる。** 上のコードで毎回算出すること。
+2026-09-08 に、テーブル項目を 8 バイトとして読んでいたため自己検証が偽陰性を出した
+（項目は 4 バイト。奇数位置の項目しか検査できていなかった）。判定そのものは正しかったが、
+自己検証が機能していなかった。
 
 生成 C++ 側でも `AdManager_get_RewardedAdUnitId_...` が単一リテラルを返しており、
 **提出したビルド2が本番広告IDを使うことは二重に確認済み。**
