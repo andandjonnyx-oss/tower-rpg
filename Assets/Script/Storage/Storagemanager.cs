@@ -28,6 +28,16 @@ public class StorageManager : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // シーンにシリアライズされた空エントリ（data == null）を起動時に除去する。
+        // 過去に Title.unity の items に空要素が 100 個入っており、capacity(100) と
+        // 同数のため新規プレイヤーの初回セッションだけ IsFull が true になり
+        // 「預ける」がグレーアウトする不具合があった（セーブ後の再起動では
+        // RestoreFromSave が items.Clear() するため再現しない）。
+        // シーン側のデータ事故が再発しても無害化できるよう、ここで防御する。
+        int removed = items.RemoveAll(x => x == null || x.data == null);
+        if (removed > 0)
+            Debug.LogWarning($"[StorageManager] 無効な倉庫エントリを {removed} 件除去しました");
     }
 
     /// <summary>

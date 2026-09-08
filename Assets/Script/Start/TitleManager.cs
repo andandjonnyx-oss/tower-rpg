@@ -153,6 +153,13 @@ public class TitleUIManager : MonoBehaviour
 
             GameState.I.statGameStartCount++;
 
+            // 倉庫を空から始める（初期化ボタンと同じ状態に揃える）。
+            // Title シーンにシリアライズされた残骸が初回セッションに持ち込まれ、
+            // 倉庫が満杯扱いになるのを防ぐ。所持品はこの直後の
+            // EnsureStartingItems() が管理するためここでは触らない。
+            if (StorageManager.Instance != null)
+                StorageManager.Instance.ClearAll();
+
             // 初期アイテムを付与（冪等: 未付与のときだけ実行）
             EnsureStartingItems();
 
