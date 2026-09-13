@@ -54,6 +54,12 @@ public class SelectionHighlighter : MonoBehaviour
     /// <summary>直近の入力がナビゲーション系だったか（枠の表示条件）。</summary>
     private bool navMode;
 
+    /// <summary>
+    /// ナビ操作中かどうかの外部公開（ModalFocusScope がフォーカス封じ込めの
+    /// 発動条件として参照する）。navMode と常に同値。
+    /// </summary>
+    public static bool NavigationMode { get; private set; }
+
     private RectTransform frameRect;
     private Image[] bars;
 
@@ -63,6 +69,7 @@ public class SelectionHighlighter : MonoBehaviour
         // コンソール版は起動直後からコントローラー前提
         navMode = true;
 #endif
+        NavigationMode = navMode;
     }
 
     private void Update()
@@ -76,7 +83,8 @@ public class SelectionHighlighter : MonoBehaviour
             return;
         }
 
-        if (navMode) EnsureSelection(es);
+        // モーダル表示中のフォーカス管理は ModalFocusScope 側が行う（二重に選択しない）
+        if (navMode && ModalFocusScope.Current == null) EnsureSelection(es);
 
         UpdateFrame(es);
     }
@@ -120,6 +128,8 @@ public class SelectionHighlighter : MonoBehaviour
         {
             navMode = true;
         }
+
+        NavigationMode = navMode;
     }
 
     // =========================================================

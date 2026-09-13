@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -30,9 +31,70 @@ public partial class BattleSceneController
     /// <summary>全文ログのページ送りに使う ScrollRect（fullLogContent の親から遅延取得）。</summary>
     private ScrollRect fullLogScrollRect;
 
+    /// <summary>ナビ配線とモーダルスコープの構成が済んだか（シーンインスタンス毎に初回1回）。</summary>
+    private bool navConfigured;
+
     private void Update()
     {
+        // Start でのボタン配線が終わった後に一度だけ構成する
+        if (!navConfigured)
+        {
+            navConfigured = true;
+            ConfigureNavigationAndScopes();
+        }
+
         HandleKeyShortcuts();
+    }
+
+    /// <summary>
+    /// 十字キーの巡回を右側6コマンドの縦ループに限定し、
+    /// 各ポップアップへモーダルフォーカススコープを付与する（2026-09-13 決定）。
+    ///
+    ///   巡回: 魔法一覧 → 魔法 → アイテム → スキル → 攻撃 → 防御 → 先頭へ戻る
+    ///   ループ外: ギブアップ = G / セレクト、ログ拡大 = O / 北ボタン（キー専用）
+    ///   モーダル: ギブアップ確認（Esc/B=いいえ）、コンティニュー確認（キャンセル不可）、
+    ///             ログ拡大（Esc/B=閉じる）
+    /// </summary>
+    private void ConfigureNavigationAndScopes()
+    {
+        // --- 6コマンドの縦ループ（明示ナビゲーション） ---
+        var loop = new List<Selectable>();
+        if (magicSelector != null && magicSelector.SelectedButton != null)
+            loop.Add(magicSelector.SelectedButton);
+        if (magicButton != null) loop.Add(magicButton);
+        if (itemButton != null) loop.Add(itemButton);
+        if (skillButton != null) loop.Add(skillButton);
+        if (attackButton != null) loop.Add(attackButton);
+        if (defendButton != null) loop.Add(defendButton);
+
+        for (int i = 0; i < loop.Count; i++)
+        {
+            var nav = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = loop[(i - 1 + loop.Count) % loop.Count],
+                selectOnDown = loop[(i + 1) % loop.Count],
+                // 左右は割り当てない（6コマンドの縦ループのみ）
+            };
+            loop[i].navigation = nav;
+        }
+
+        // --- 十字キーで到達させないボタン（キー呼び出し専用） ---
+        SetNavigationNone(giveUpButton);
+        SetNavigationNone(fullLogOpenButton);
+
+        // --- モーダルスコープ（表示中はフォーカスを内側に限定） ---
+        ModalFocusScope.Attach(giveUpPopup, OnGiveUpNo);    // Esc/B = いいえ
+        ModalFocusScope.Attach(continuePopup, null);        // 誤爆防止のためキャンセル不可
+        ModalFocusScope.Attach(fullLogPanel, CloseFullLog); // Esc/B = 閉じる
+    }
+
+    private static void SetNavigationNone(Selectable s)
+    {
+        if (s == null) return;
+        var nav = s.navigation;
+        nav.mode = Navigation.Mode.None;
+        s.navigation = nav;
     }
 
     private void HandleKeyShortcuts()

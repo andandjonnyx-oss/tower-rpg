@@ -70,6 +70,22 @@ public class ItemDetailPanel : MonoBehaviour
         if (detailRoot != null) detailRoot.SetActive(false);
     }
 
+    /// <summary>詳細パネルが表示中かどうか（コントローラーのキー操作の判定に使う）。</summary>
+    public bool IsShown => detailRoot != null && detailRoot.activeSelf;
+
+    /// <summary>
+    /// 指定スロットのボタンをキー操作で押す（0=Primary「使う」等, 1=Secondary「食べる」）。
+    /// 非表示・無効のスロットでは何もしない。onClick を経由するので
+    /// タップした場合と完全に同じ処理が走る。
+    /// </summary>
+    public void PressSlotButton(int slot)
+    {
+        if (buttons == null || slot < 0 || slot >= buttons.Length) return;
+        var button = buttons[slot];
+        if (button != null && button.gameObject.activeInHierarchy && button.interactable)
+            button.onClick.Invoke();
+    }
+
     /// <summary>
     /// バトル中かつ武器の場合、スキルのクールタイム情報を表示する。
     /// それ以外では非表示。
@@ -166,6 +182,15 @@ public class ItemDetailPanel : MonoBehaviour
                 buttons[i].onClick.RemoveAllListeners();
                 var action = def.onClick;
                 buttons[i].onClick.AddListener(() => action?.Invoke());
+
+                // コントローラー対応（戦闘中のみ）: 詳細ボタンへは十字キーで遷移させず、
+                // フォーカスをアイテム格子に残す（1/2キー・パッドX/Yで直接押す）
+                if (GameState.I != null && GameState.I.isInBattle)
+                {
+                    var nav = buttons[i].navigation;
+                    nav.mode = Navigation.Mode.None;
+                    buttons[i].navigation = nav;
+                }
             }
             else
             {

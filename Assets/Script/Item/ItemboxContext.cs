@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -69,8 +70,58 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
 
+        // コントローラー対応（戦闘中のみ）: フォーカスはアイテム格子だけに限定する。
+        // 戻るは十字キーで到達させず、キャンセルキー（Esc/パッドB）で行う（Update 参照）。
+        if (inBattle && backButton != null)
+        {
+            var nav = backButton.navigation;
+            nav.mode = Navigation.Mode.None;
+            backButton.navigation = nav;
+        }
+
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
+    }
+
+    // =========================================================
+    // コントローラー/キーボード ショートカット（戦闘中のみ）
+    //
+    // 戦闘中の詳細パネルのボタンは最大2つ（使う／食べられる武器のみ+食べる）なので、
+    // フォーカスはアイテム格子に固定したまま、キーでボタンを直接押す方式にする
+    // （2026-09-13 決定）。通常時（拠点から開いた場合）は従来のナビゲーションのまま。
+    //
+    //   1キー / パッド西(X) … ボタン1（使う・装備等 = Primary スロット）
+    //   2キー / パッド北(Y) … ボタン2（食べる = Secondary スロット）
+    //   Esc  / パッド東(B) … 詳細を閉じる → もう一度でバトルへ戻る
+    // =========================================================
+    private void Update()
+    {
+        if (!inBattle) return;
+
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if (kb == null && pad == null) return;
+
+        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
+        if (cancel)
+        {
+            if (detailPanel != null && detailPanel.IsShown)
+                detailPanel.Hide();
+            else
+                OnBackClicked();
+            return;
+        }
+
+        if (detailPanel == null || !detailPanel.IsShown) return;
+
+        bool action1 = (kb != null && kb.digit1Key.wasPressedThisFrame)
+                    || (pad != null && pad.buttonWest.wasPressedThisFrame);
+        bool action2 = (kb != null && kb.digit2Key.wasPressedThisFrame)
+                    || (pad != null && pad.buttonNorth.wasPressedThisFrame);
+
+        if (action1) detailPanel.PressSlotButton(0);
+        else if (action2) detailPanel.PressSlotButton(1);
     }
 
     private void OnBackClicked()

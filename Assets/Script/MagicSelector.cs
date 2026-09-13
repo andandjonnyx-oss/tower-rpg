@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -25,6 +25,12 @@ public class MagicSelector : MonoBehaviour
 
     [Tooltip("Centered popup window (MagicPopupPanel). Hidden by default.")]
     [SerializeField] private GameObject popupPanel;
+
+    /// <summary>
+    /// ポップアップを開くボタンの公開参照。
+    /// BattleSceneController がコントローラーの巡回ナビ配線（6コマンドループ）に使う。
+    /// </summary>
+    public Button SelectedButton => selectedButton;
 
     [Tooltip("Content RectTransform under the ScrollView (GridLayoutGroup + ContentSizeFitter).")]
     [SerializeField] private RectTransform gridContent;
@@ -160,6 +166,10 @@ public class MagicSelector : MonoBehaviour
         popupPanel.SetActive(true);
         isOpen = true;
 
+        // コントローラー対応: 表示中はフォーカスをポップアップ内に限定し、
+        // Esc/パッドB で閉じられるようにする（魔法を選んでも従来どおり閉じる）
+        ModalFocusScope.Attach(popupPanel, CloseList);
+
         // Blocker covers everything; popup is brought above the blocker.
         CreateBlocker();
         popupPanel.transform.SetAsLastSibling();
@@ -275,6 +285,8 @@ public class MagicSelector : MonoBehaviour
 
         Button blockerButton = blocker.AddComponent<Button>();
         blockerButton.onClick.AddListener(CloseList);
+        // 十字キーのナビゲーションで透明ブロッカーに選択が移らないようにする
+        blockerButton.navigation = new Navigation { mode = Navigation.Mode.None };
 
         // Put blocker on top of everything; OpenList then raises the popup above it.
         blocker.transform.SetAsLastSibling();
