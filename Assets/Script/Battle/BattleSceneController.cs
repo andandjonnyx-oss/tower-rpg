@@ -17,6 +17,7 @@ using UnityEngine.UI;
 ///   BattleSceneController_CombatUtils.cs  … 命中判定/クリティカル/防御ダイス/ダメージ適用
 ///   BattleSceneController_BuffDebuff.cs   … バフ/デバフ5種ペアの管理
 ///   BattleSceneController_Petrify.cs      … 石化の管理（Phase A で追加）
+///   BattleSceneController_KeyShortcuts.cs … キー/パッドショートカット（G=ギブアップ, O=ログ拡大, Update はここ）
 /// </summary>
 public partial class BattleSceneController : MonoBehaviour
 {
