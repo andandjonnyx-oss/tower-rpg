@@ -120,6 +120,9 @@ public class OptionManager : MonoBehaviour
             UpdateFinalBossCarryLabel(carryEnabled);
         }
 
+        // コントローラーの初期フォーカスは一番上の BGM スライダー
+        //（既定のフォールバックだと最初に見つかる Button＝BGMミュートが選ばれてしまう）
+        SelectionHighlighter.PreferredFallback = bgmSlider;
 
         var am = AudioManager.I;
         if (am == null)

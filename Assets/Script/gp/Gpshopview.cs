@@ -159,7 +159,7 @@ public class GpShopView : MonoBehaviour
             inside.Add(exchangeButton);
         if (closeButton != null && closeButton.gameObject.activeInHierarchy && closeButton.interactable)
             inside.Add(closeButton);
-        ControllerNav.WireVerticalLoop(inside);
+        ControllerNav.WireHorizontalLoop(inside); // 交換/閉じるは横並び
     }
 
     /// <summary>
