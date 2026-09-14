@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -165,6 +168,166 @@ public class MonsterZukanView : MonoBehaviour
             cell.Setup(monster, encountered, OnCellClicked);
             cells.Add(cell);
         }
+
+        // コントローラー対応: 初期フォーカスを先頭セルへ即時設定し、
+        // レイアウト確定後にナビ配線を組み直す（アイテム図鑑と同方式）。
+        SetInitialFocusToFirstItem();
+        StartCoroutine(RebuildNavAfterLayout());
+    }
+
+    // =========================================================
+    // コントローラー/キーボード（2026-09-15）
+    // =========================================================
+
+    private GameObject lastSelected;
+
+    private void Update()
+    {
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if ((kb != null && kb.escapeKey.wasPressedThisFrame)
+            || (pad != null && pad.buttonEast.wasPressedThisFrame))
+        {
+            OnBackClicked();
+            return;
+        }
+
+        var es = EventSystem.current;
+        if (es == null) return;
+        var sel = es.currentSelectedGameObject;
+        if (sel != lastSelected)
+        {
+            lastSelected = sel;
+            if (sel != null && sel.GetComponent<MonsterIconCell>() != null)
+                CenterOn(sel.transform as RectTransform);
+        }
+    }
+
+    private void SetInitialFocusToFirstItem()
+    {
+        if (gridContent == null) return;
+        var cell = gridContent.GetComponentInChildren<MonsterIconCell>(false);
+        Selectable target = cell != null ? cell.GetComponent<Selectable>() : null;
+        if (target == null && backButton != null) target = backButton;
+        SelectionHighlighter.PreferredFallback = target;
+    }
+
+    private IEnumerator RebuildNavAfterLayout()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        yield return null;
+        RebuildNav();
+    }
+
+    /// <summary>
+    /// タブ（通常/ボスの操作可能な方）＋戻る と、モンスターグリッドを明示配線する。
+    /// 未遭遇(？)も含め全セルを位置から格子判定。戻る/タブ→右で先頭セル、
+    /// 行左端→Y最近傍のタブ/戻る。初期フォーカスは先頭セル。
+    /// </summary>
+    private void RebuildNav()
+    {
+        if (gridContent == null) return;
+
+        var cellSel = new List<Selectable>();
+        foreach (var c in cells)
+        {
+            if (c == null || !c.gameObject.activeInHierarchy) continue;
+            var sel = c.GetComponent<Selectable>();
+            if (sel != null && sel.interactable) cellSel.Add(sel);
+        }
+        cellSel.Sort((a, b) =>
+        {
+            float ay = a.transform.position.y, by = b.transform.position.y;
+            if (!Mathf.Approximately(ay, by)) return by.CompareTo(ay);
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
+
+        var rows = new List<List<Selectable>>();
+        List<Selectable> cur = null;
+        float curY = 0f;
+        foreach (var s in cellSel)
+        {
+            float y = s.transform.position.y;
+            if (cur == null || Mathf.Abs(y - curY) > 20f)
+            {
+                cur = new List<Selectable>();
+                rows.Add(cur);
+                curY = y;
+            }
+            cur.Add(s);
+        }
+
+        var leftCol = new List<Selectable>();
+        if (normalButton != null && normalButton.isActiveAndEnabled && normalButton.interactable) leftCol.Add(normalButton);
+        if (bossButton != null && bossButton.isActiveAndEnabled && bossButton.interactable) leftCol.Add(bossButton);
+        if (backButton != null && backButton.isActiveAndEnabled) leftCol.Add(backButton);
+        leftCol.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));
+
+        Selectable centerEntry = (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
+
+        for (int i = 0; i < leftCol.Count; i++)
+        {
+            Selectable up = (i > 0) ? leftCol[i - 1] : null;
+            Selectable down = (i < leftCol.Count - 1) ? leftCol[i + 1] : null;
+            ControllerNav.SetExplicit(leftCol[i], up, down, null, centerEntry);
+        }
+
+        for (int r = 0; r < rows.Count; r++)
+        {
+            var row = rows[r];
+            for (int i = 0; i < row.Count; i++)
+            {
+                var cell = row[i];
+                float x = cell.transform.position.x;
+                Selectable left = (i > 0) ? row[i - 1] : NearestByY(leftCol, cell.transform.position.y);
+                Selectable right = (i < row.Count - 1) ? row[i + 1] : null;
+                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : null;
+                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
+                ControllerNav.SetExplicit(cell, up, down, left, right);
+            }
+        }
+
+        SelectionHighlighter.PreferredFallback = centerEntry;
+    }
+
+    private static Selectable NearestByX(List<Selectable> row, float x)
+    {
+        Selectable best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < row.Count; i++)
+        {
+            if (row[i] == null) continue;
+            float d = Mathf.Abs(row[i].transform.position.x - x);
+            if (d < bestD) { bestD = d; best = row[i]; }
+        }
+        return best;
+    }
+
+    private static Selectable NearestByY(List<Selectable> col, float y)
+    {
+        Selectable best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < col.Count; i++)
+        {
+            if (col[i] == null) continue;
+            float d = Mathf.Abs(col[i].transform.position.y - y);
+            if (d < bestD) { bestD = d; best = col[i]; }
+        }
+        return best;
+    }
+
+    private void CenterOn(RectTransform target)
+    {
+        if (scrollRect == null || scrollRect.content == null || target == null) return;
+        RectTransform c = scrollRect.content;
+        RectTransform vp = scrollRect.viewport != null ? scrollRect.viewport : scrollRect.GetComponent<RectTransform>();
+        float ch = c.rect.height, vh = vp.rect.height;
+        if (ch <= vh) { scrollRect.verticalNormalizedPosition = 1f; return; }
+        Vector3 lp = c.InverseTransformPoint(target.position);
+        float targetFromTop = c.rect.yMax - lp.y;
+        float desired = targetFromTop - vh * 0.5f;
+        float maxScroll = ch - vh;
+        desired = Mathf.Clamp(desired, 0f, maxScroll);
+        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(1f - desired / maxScroll);
     }
 
     // =========================================================

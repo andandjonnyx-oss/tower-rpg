@@ -73,7 +73,12 @@ public class MonsterIconCell : MonoBehaviour
                 unknownText.gameObject.SetActive(true);
                 unknownText.text = "？";
             }
-            if (cellButton != null) cellButton.interactable = false;
+            // ★コントローラー対応: 未遭遇でもフォーカス可能に（詳細には飛べない）。
+            if (cellButton != null)
+            {
+                cellButton.onClick.RemoveAllListeners();
+                cellButton.interactable = true;
+            }
         }
     }
 }

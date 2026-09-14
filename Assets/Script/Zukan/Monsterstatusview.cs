@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -110,11 +111,44 @@ public class MonsterStatusView : MonoBehaviour
         if (nextMonsterButton != null) nextMonsterButton.onClick.AddListener(OnNextMonsterClicked);
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
 
+        // コントローラー対応: 上下=モンスター送り, 左右=パネル切替, キャンセル=戻る。
+        // ボタンはマウス用に残しつつ、フォーカスは乗せない（Update でキー処理）。
+        ControllerNav.SetNavigationNone(prevPanelButton);
+        ControllerNav.SetNavigationNone(nextPanelButton);
+        ControllerNav.SetNavigationNone(prevMonsterButton);
+        ControllerNav.SetNavigationNone(nextMonsterButton);
+        ControllerNav.SetNavigationNone(backButton);
+
         // 初期表示: パネル1
         currentPanel = 0;
         RefreshAll();
         ApplyPanelVisibility();
         UpdateMonsterNavButtons();
+    }
+
+    private void Update()
+    {
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if (kb == null && pad == null) return;
+
+        bool up = (kb != null && kb.upArrowKey.wasPressedThisFrame)
+               || (pad != null && pad.dpad.up.wasPressedThisFrame);
+        bool down = (kb != null && kb.downArrowKey.wasPressedThisFrame)
+                 || (pad != null && pad.dpad.down.wasPressedThisFrame);
+        bool left = (kb != null && kb.leftArrowKey.wasPressedThisFrame)
+                 || (pad != null && pad.dpad.left.wasPressedThisFrame);
+        bool right = (kb != null && kb.rightArrowKey.wasPressedThisFrame)
+                  || (pad != null && pad.dpad.right.wasPressedThisFrame);
+        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
+
+        // 上下=モンスター送り / 左右=パネル切替 / キャンセル=戻る
+        if (up) OnPrevMonsterClicked();
+        else if (down) OnNextMonsterClicked();
+        else if (left) OnPrevPanelClicked();
+        else if (right) OnNextPanelClicked();
+        else if (cancel) OnBackClicked();
     }
 
     // =========================================================
