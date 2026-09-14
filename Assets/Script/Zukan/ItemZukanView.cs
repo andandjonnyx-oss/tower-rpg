@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -117,11 +119,173 @@ public class ItemZukanView : MonoBehaviour
             BuildCategory(currentMajorIndex);
             UpdateButtonVisual();
         }
+
+        StartCoroutine(RebuildNavAfterLayout());
     }
 
     // =========================================================
     // ��W�������ؑ�
     // =========================================================
+
+    // =========================================================
+    // コントローラー/キーボード（2026-09-15）
+    // =========================================================
+
+    private GameObject lastSelected;
+
+    private void Update()
+    {
+        // キャンセルキー（Esc / パッドB）で図鑑トップへ戻る
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if ((kb != null && kb.escapeKey.wasPressedThisFrame)
+            || (pad != null && pad.buttonEast.wasPressedThisFrame))
+        {
+            OnBackClicked();
+            return;
+        }
+
+        // 選択セルが変わったら中央へスクロール（画像行を中央に固定してリスト側を動かす）
+        var es = EventSystem.current;
+        if (es == null) return;
+        var sel = es.currentSelectedGameObject;
+        if (sel != lastSelected)
+        {
+            lastSelected = sel;
+            if (sel != null && sel.GetComponent<ItemIconCell>() != null)
+                CenterOn(sel.transform as RectTransform);
+        }
+    }
+
+    private IEnumerator RebuildNavAfterLayout()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        yield return null;
+        RebuildNav();
+    }
+
+    /// <summary>
+    /// タブ列（発見可能なタブ＋戻る）とアイテムグリッドを明示配線する。
+    /// グリッドは飛び（未発見）を含めて全セルを対象にし、位置から格子を判定する。
+    ///   ・戻る/タブの右キー → グリッド左上（先頭アイテム）
+    ///   ・グリッド行の左端 → Y が最も近いタブ/戻る
+    ///   ・初期フォーカスは左上アイテム（タブ切替後もそのタブの左上）
+    /// </summary>
+    private void RebuildNav()
+    {
+        if (content == null) return;
+
+        // 全アイテムセル（発見/未発見とも interactable）を収集
+        var cellSel = new List<Selectable>();
+        var comps = content.GetComponentsInChildren<ItemIconCell>(false);
+        foreach (var c in comps)
+        {
+            var sel = c.GetComponent<Selectable>();
+            if (sel != null && sel.isActiveAndEnabled && sel.interactable)
+                cellSel.Add(sel);
+        }
+        cellSel.Sort((a, b) =>
+        {
+            float ay = a.transform.position.y, by = b.transform.position.y;
+            if (!Mathf.Approximately(ay, by)) return by.CompareTo(ay);
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
+
+        // 行にまとめる
+        var rows = new List<List<Selectable>>();
+        List<Selectable> cur = null;
+        float curY = 0f;
+        foreach (var s in cellSel)
+        {
+            float y = s.transform.position.y;
+            if (cur == null || Mathf.Abs(y - curY) > 20f)
+            {
+                cur = new List<Selectable>();
+                rows.Add(cur);
+                curY = y;
+            }
+            cur.Add(s);
+        }
+
+        // 左列: 操作可能なタブ（＝現在タブ以外）＋戻る。上→下に整列。
+        var leftCol = new List<Selectable>();
+        if (majorButtons != null)
+            foreach (var b in majorButtons)
+                if (b != null && b.isActiveAndEnabled && b.interactable) leftCol.Add(b);
+        if (backButton != null && backButton.isActiveAndEnabled) leftCol.Add(backButton);
+        leftCol.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));
+
+        Selectable centerEntry = (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
+
+        // 左列を縦配線。右キーで先頭アイテムへ（戻る→右→先頭アイテムを含む）
+        for (int i = 0; i < leftCol.Count; i++)
+        {
+            Selectable up = (i > 0) ? leftCol[i - 1] : null;
+            Selectable down = (i < leftCol.Count - 1) ? leftCol[i + 1] : null;
+            ControllerNav.SetExplicit(leftCol[i], up, down, null, centerEntry);
+        }
+
+        // グリッドを2D配線。左端 → Y最近傍のタブ/戻る、右端 → なし。
+        for (int r = 0; r < rows.Count; r++)
+        {
+            var row = rows[r];
+            for (int i = 0; i < row.Count; i++)
+            {
+                var cell = row[i];
+                float x = cell.transform.position.x;
+                Selectable left = (i > 0) ? row[i - 1] : NearestByY(leftCol, cell.transform.position.y);
+                Selectable right = (i < row.Count - 1) ? row[i + 1] : null;
+                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : null;
+                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
+                ControllerNav.SetExplicit(cell, up, down, left, right);
+            }
+        }
+
+        SelectionHighlighter.PreferredFallback = centerEntry;
+    }
+
+    private static Selectable NearestByX(List<Selectable> row, float x)
+    {
+        Selectable best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < row.Count; i++)
+        {
+            if (row[i] == null) continue;
+            float d = Mathf.Abs(row[i].transform.position.x - x);
+            if (d < bestD) { bestD = d; best = row[i]; }
+        }
+        return best;
+    }
+
+    private static Selectable NearestByY(List<Selectable> col, float y)
+    {
+        Selectable best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < col.Count; i++)
+        {
+            if (col[i] == null) continue;
+            float d = Mathf.Abs(col[i].transform.position.y - y);
+            if (d < bestD) { bestD = d; best = col[i]; }
+        }
+        return best;
+    }
+
+    /// <summary>選択セルをビューポート中央へスクロール（上端/下端はクランプ）。</summary>
+    private void CenterOn(RectTransform target)
+    {
+        if (scrollRect == null || scrollRect.content == null || target == null) return;
+        RectTransform c = scrollRect.content;
+        RectTransform vp = scrollRect.viewport != null ? scrollRect.viewport : scrollRect.GetComponent<RectTransform>();
+        float ch = c.rect.height, vh = vp.rect.height;
+        if (ch <= vh) { scrollRect.verticalNormalizedPosition = 1f; return; }
+        // セル位置を content ローカルへ変換し、content 上端からの距離を求める
+        //（ネストしたグリッド内のセルでも正しく効くよう world→content 変換を使う）。
+        Vector3 lp = c.InverseTransformPoint(target.position);
+        float targetFromTop = c.rect.yMax - lp.y;
+        float desired = targetFromTop - vh * 0.5f;
+        float maxScroll = ch - vh;
+        desired = Mathf.Clamp(desired, 0f, maxScroll);
+        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(1f - desired / maxScroll);
+    }
 
     private void OnMajorClicked(int majorIndex)
     {
@@ -159,6 +323,7 @@ public class ItemZukanView : MonoBehaviour
         if (contentCanvasGroup != null)
             contentCanvasGroup.alpha = 1f;
 
+        RebuildNav();
         revealRoutine = null;
     }
 

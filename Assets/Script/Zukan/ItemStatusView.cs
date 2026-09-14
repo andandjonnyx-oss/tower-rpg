@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -50,6 +51,12 @@ public class ItemStatusView : MonoBehaviour
         if (upButton != null) upButton.onClick.AddListener(OnUpClicked);
         if (downButton != null) downButton.onClick.AddListener(OnDownClicked);
 
+        // コントローラー対応: 詳細はボタンにフォーカスを乗せず、上下キーで項目送り・
+        //   キャンセルで戻る（Update 参照）。ボタンはマウス用に残すためナビ対象外にする。
+        ControllerNav.SetNavigationNone(backButton);
+        ControllerNav.SetNavigationNone(upButton);
+        ControllerNav.SetNavigationNone(downButton);
+
         // 安全策: リストが無ければ単体表示
         if (list == null || list.Count == 0)
         {
@@ -63,6 +70,24 @@ public class ItemStatusView : MonoBehaviour
         if (index < 0 || index >= (list?.Count ?? 0)) index = 0;
 
         Refresh();
+    }
+
+    private void Update()
+    {
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if (kb == null && pad == null) return;
+
+        bool up = (kb != null && kb.upArrowKey.wasPressedThisFrame)
+               || (pad != null && pad.dpad.up.wasPressedThisFrame);
+        bool down = (kb != null && kb.downArrowKey.wasPressedThisFrame)
+                 || (pad != null && pad.dpad.down.wasPressedThisFrame);
+        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
+
+        if (up) OnUpClicked();
+        else if (down) OnDownClicked();
+        else if (cancel) OnBackClicked();
     }
 
     // =========================================================

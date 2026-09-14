@@ -75,7 +75,13 @@ public class ItemIconCell : MonoBehaviour
                 unknownText.gameObject.SetActive(true);
                 unknownText.text = "？";
             }
-            if (cellButton != null) cellButton.interactable = false;
+            // ★コントローラー対応: 未発見でもフォーカスは可能にする（詳細には飛べない）。
+            //   interactable=true にしつつ onClick を空にして「押しても何も起きない」状態にする。
+            if (cellButton != null)
+            {
+                cellButton.onClick.RemoveAllListeners();
+                cellButton.interactable = true;
+            }
         }
     }
 
