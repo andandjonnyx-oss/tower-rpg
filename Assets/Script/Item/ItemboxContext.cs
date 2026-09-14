@@ -81,6 +81,115 @@ public class ItemboxContext : MonoBehaviour, IItemContext
 
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
+
+        // コントローラー対応（通常時＝拠点から）: 倉庫と同じ方式。
+        // スクロールバーをナビ対象外にし、レイアウト確定後にグリッド配線を組む。
+        if (!inBattle)
+        {
+            foreach (var sb in FindObjectsByType<Scrollbar>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                ControllerNav.SetNavigationNone(sb);
+            StartCoroutine(RebuildNavAfterLayout());
+        }
+    }
+
+    private System.Collections.IEnumerator RebuildNavAfterLayout()
+    {
+        yield return null;
+        Canvas.ForceUpdateCanvases();
+        yield return null;
+        RebuildNavigation();
+    }
+
+    /// <summary>前フレームの詳細表示状態（変化時だけナビ再構築）。</summary>
+    private bool lastDetailShown;
+
+    /// <summary>
+    /// 通常時のコントローラー・ナビゲーション（倉庫と同方式・所持品グリッドのみ）。
+    ///   非選択時: グリッド ⇔ 戻る
+    ///   選択時:   グリッド ⇔ 詳細ウィンドウ（↓で最終的に戻るへ）
+    /// 空スロットは ItemSlotView 側で None 済み。詳細は固定スロット配置で2D配線。
+    /// </summary>
+    private void RebuildNavigation()
+    {
+        if (inBattle) return;
+
+        // 中身ありスロットを位置順に収集
+        var cells = new List<Selectable>();
+        if (slots != null)
+        {
+            foreach (var s in slots)
+            {
+                if (s == null || !s.gameObject.activeInHierarchy) continue;
+                var sel = s.GetComponent<Selectable>();
+                if (sel != null && sel.navigation.mode != Navigation.Mode.None)
+                    cells.Add(sel);
+            }
+        }
+        cells.Sort((a, b) =>
+        {
+            float ay = a.transform.position.y, by = b.transform.position.y;
+            if (!Mathf.Approximately(ay, by)) return by.CompareTo(ay);
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
+
+        var rows = new List<List<Selectable>>();
+        List<Selectable> cur = null; float curY = 0f;
+        foreach (var s in cells)
+        {
+            float y = s.transform.position.y;
+            if (cur == null || Mathf.Abs(y - curY) > 20f)
+            { cur = new List<Selectable>(); rows.Add(cur); curY = y; }
+            cur.Add(s);
+        }
+
+        Selectable gridRep = (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
+
+        // 中央（詳細＋戻る）を固定スロットで2D配線
+        Selectable dTL = null, dTR = null, dBL = null, dBR = null;
+        if (detailPanel != null && detailPanel.IsShown)
+        {
+            dTL = detailPanel.GetSlotButton(0);
+            dTR = detailPanel.GetSlotButton(1);
+            dBL = detailPanel.GetSlotButton(2);
+            dBR = detailPanel.GetSlotButton(3);
+        }
+        Selectable back = (backButton != null && backButton.isActiveAndEnabled) ? backButton : null;
+        Selectable centerEntry = dTL ?? dTR ?? dBL ?? dBR ?? back;
+
+        if (dTL != null) ControllerNav.SetExplicit(dTL, null, dBL ?? dBR ?? back, gridRep, dTR);
+        if (dTR != null) ControllerNav.SetExplicit(dTR, null, dBR ?? dBL ?? back, dTL ?? gridRep, null);
+        if (dBL != null) ControllerNav.SetExplicit(dBL, dTL ?? dTR, back, gridRep, dBR);
+        if (dBR != null) ControllerNav.SetExplicit(dBR, dTR ?? dTL, back, dBL ?? gridRep, null);
+        if (back != null) ControllerNav.SetExplicit(back, dBL ?? dBR ?? dTL ?? dTR, null, gridRep, null);
+
+        // グリッド2D配線。右端 → 中央（詳細/戻る）、左端 → なし。
+        for (int r = 0; r < rows.Count; r++)
+        {
+            var row = rows[r];
+            for (int i = 0; i < row.Count; i++)
+            {
+                var cell = row[i]; float x = cell.transform.position.x;
+                Selectable left = (i > 0) ? row[i - 1] : null;
+                Selectable right = (i < row.Count - 1) ? row[i + 1] : centerEntry;
+                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : null;
+                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
+                ControllerNav.SetExplicit(cell, up, down, left, right);
+            }
+        }
+
+        SelectionHighlighter.PreferredFallback = gridRep != null ? gridRep : back;
+    }
+
+    private static Selectable NearestByX(List<Selectable> row, float x)
+    {
+        Selectable best = null; float bestD = float.MaxValue;
+        for (int i = 0; i < row.Count; i++)
+        {
+            if (row[i] == null) continue;
+            float d = Mathf.Abs(row[i].transform.position.x - x);
+            if (d < bestD) { bestD = d; best = row[i]; }
+        }
+        return best;
     }
 
     // =========================================================
@@ -96,7 +205,11 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     // =========================================================
     private void Update()
     {
-        if (!inBattle) return;
+        if (!inBattle)
+        {
+            UpdateNonBattle();
+            return;
+        }
 
         var kb = Keyboard.current;
         var pad = Gamepad.current;
@@ -122,6 +235,30 @@ public class ItemboxContext : MonoBehaviour, IItemContext
 
         if (action1) detailPanel.PressSlotButton(0);
         else if (action2) detailPanel.PressSlotButton(1);
+    }
+
+    /// <summary>
+    /// 通常時のキー処理: 詳細開閉でナビ再構築、キャンセルは2段
+    /// （詳細表示中は詳細を閉じる、なければ戻る）。
+    /// </summary>
+    private void UpdateNonBattle()
+    {
+        bool det = detailPanel != null && detailPanel.IsShown;
+        if (det != lastDetailShown)
+        {
+            lastDetailShown = det;
+            RebuildNavigation();
+        }
+
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
+        if (cancel)
+        {
+            if (det) detailPanel.Hide();
+            else OnBackClicked();
+        }
     }
 
     private void OnBackClicked()
@@ -154,10 +291,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (invItem == null)
         {
             detailPanel.Hide();
+            if (!inBattle) RebuildNavigation();
             return;
         }
 
         detailPanel.Show(invItem, this, fromInventory: true);
+        // 別アイテムへ切り替えても詳細ボタン構成に合わせて配線し直す（倉庫と同様）
+        if (!inBattle) RebuildNavigation();
     }
 
     // =========================================================
