@@ -91,15 +91,33 @@ public class OptionManager : MonoBehaviour
             handednessButton.onClick.AddListener(OnHandednessClicked);
         UpdateHandednessLabel(GameSettings.Handedness);
 
-        // F100第二形態 敵HP引き継ぎ救済トグル（解放済みのときのみ表示）
-        bool carryUnlocked = GameState.I != null && GameState.I.finalBossCarryUnlocked;
+        // F100第二形態 敵HP引き継ぎ救済トグル（解放済みのときのみ表示）。
+        //   ロード済み（ゲーム内オプション経由）: GameState を正とする。
+        //   未ロード（タイトル経由）: セーブファイルから直接覗き読みする。
+        //     ※タイトルではセーブがまだ GameState に反映されていないため、
+        //       GameState を見ると常に未解放になってしまう（旧仕様の「タイトル
+        //       経由では表示されない」の原因）。
+        bool carryUnlocked;
+        bool carryEnabled;
+        if (SaveManager.IsLoadedIntoGameState && GameState.I != null)
+        {
+            carryUnlocked = GameState.I.finalBossCarryUnlocked;
+            carryEnabled = GameState.I.finalBossCarryEnabled;
+        }
+        else
+        {
+            var flags = SaveManager.PeekFinalBossCarry();
+            carryUnlocked = flags.unlocked;
+            carryEnabled = flags.enabled;
+        }
+
         if (finalBossCarryRoot != null)
             finalBossCarryRoot.SetActive(carryUnlocked);
         if (carryUnlocked)
         {
             if (finalBossCarryButton != null)
                 finalBossCarryButton.onClick.AddListener(OnFinalBossCarryClicked);
-            UpdateFinalBossCarryLabel(GameState.I.finalBossCarryEnabled);
+            UpdateFinalBossCarryLabel(carryEnabled);
         }
 
 
@@ -274,18 +292,30 @@ public class OptionManager : MonoBehaviour
     // =========================================================
     private void OnFinalBossCarryClicked()
     {
-        if (GameState.I == null) return;
-        bool next = !GameState.I.finalBossCarryEnabled;
-        GameState.I.finalBossCarryEnabled = next;
-        SaveManager.Save();
-        UpdateFinalBossCarryLabel(next);
+        if (SaveManager.IsLoadedIntoGameState && GameState.I != null)
+        {
+            // ゲーム内オプション経由: GameState を書き換えて通常セーブ
+            bool next = !GameState.I.finalBossCarryEnabled;
+            GameState.I.finalBossCarryEnabled = next;
+            SaveManager.Save();
+            UpdateFinalBossCarryLabel(next);
+        }
+        else
+        {
+            // タイトル経由（未ロード）: GameState を触らず、セーブファイルの
+            // このフラグだけを部分書き戻しする（他フィールドの初期値上書き防止）
+            var flags = SaveManager.PeekFinalBossCarry();
+            bool next = !flags.enabled;
+            if (SaveManager.WriteFinalBossCarryEnabled(next))
+                UpdateFinalBossCarryLabel(next);
+        }
     }
 
     private void UpdateFinalBossCarryLabel(bool on)
     {
         if (finalBossCarryLabel != null)
             finalBossCarryLabel.text = on
-                ? "ラスボスのHPがコンテし続ける限り回復しないゆとりモード\nタイトル画面経由では表示されません: ON"
-                : "ラスボスのHPがコンテし続ける限り回復しないゆとりモード\nタイトル画面経由では表示されません: OFF";
+                ? "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: ON"
+                : "ラスボスのHPがコンテし続ける限り回復しないゆとりモード: OFF";
     }
 }

@@ -33,6 +33,17 @@ public static class SaveManager
     /// <summary>未書き込みの変更があるか（デバッグ/テスト用の読み取り口）。</summary>
     public static bool IsDirty => dirty;
 
+    /// <summary>
+    /// このプレイで Load() が成功し、GameState にセーブ内容が反映済みか。
+    /// タイトル画面（スタート未押下）では false のままになる。
+    /// これを見ることで「GameState を書き換えて Save() してよい状態か」を判定できる。
+    /// ⚠️ 未ロード状態で GameState を書き換えて Save() すると、初期値（Lv1/floor1/
+    ///    アイテムなし）でセーブが上書きされ、進行データが消える。未ロード時に
+    ///    一部フラグだけ変えたい場合は PeekFinalBossCarry / WriteFinalBossCarryEnabled
+    ///    を使うこと。
+    /// </summary>
+    public static bool IsLoadedIntoGameState { get; private set; }
+
     /// <summary>セーブデータが存在するかどうか。</summary>
     public static bool HasSaveData()
     {
@@ -319,7 +330,75 @@ public static class SaveManager
             StorageManager.Instance.RestoreFromSave(data.storageItems);
         }
 
+        IsLoadedIntoGameState = true;
         Debug.Log($"[SaveManager] ロード完了: Floor={data.floor} Step={data.step} (全回復+状態異常クリア)");
+        return true;
+    }
+
+    // =========================================================
+    // ラスボスHP引き継ぎフラグの覗き読み／部分書き戻し（追加）
+    //
+    // タイトル画面ではセーブが GameState にロードされていない（IsLoadedIntoGameState
+    // == false）。その状態で GameState を書き換えて Save() すると初期値で全上書き
+    // されてしまうため、このフラグだけをファイルから直接読み書きする専用経路を設ける。
+    // ゲーム内オプション（ロード済み）では従来どおり GameState + Save() を使う。
+    // =========================================================
+
+    /// <summary>ラスボスHP引き継ぎフラグの覗き読み結果。</summary>
+    public struct FinalBossCarryFlags
+    {
+        public bool unlocked;
+        public bool enabled;
+    }
+
+    /// <summary>
+    /// セーブファイルから finalBossCarry の2フラグだけを読む（全復元の副作用なし）。
+    /// セーブが無い/壊れている場合は両方 false を返す。
+    /// </summary>
+    public static FinalBossCarryFlags PeekFinalBossCarry()
+    {
+        var result = new FinalBossCarryFlags { unlocked = false, enabled = false };
+
+        // 保留中の書き込みを先に確定してから読む（第9節の等価性不変条件）
+        CommitIfDirty();
+
+        if (!SaveBackend.Instance.Exists(SaveFileName)) return result;
+
+        string json = SaveBackend.Instance.ReadAllText(SaveFileName);
+        if (string.IsNullOrEmpty(json)) return result;
+
+        var data = JsonUtility.FromJson<SaveData>(json);
+        if (data == null) return result;
+
+        result.unlocked = data.finalBossCarryUnlocked;
+        result.enabled = data.finalBossCarryEnabled;
+        return result;
+    }
+
+    /// <summary>
+    /// セーブファイルの finalBossCarryEnabled だけを書き換える（read-modify-write）。
+    /// 他のフィールドは一切変更しない。タイトル画面（未ロード）から救済トグルを
+    /// 変更するための専用経路。ロード済みの場合はこれを使わず GameState + Save() を使う。
+    /// セーブが無い/壊れている場合は何もしない（false を返す）。
+    /// </summary>
+    public static bool WriteFinalBossCarryEnabled(bool enabled)
+    {
+        CommitIfDirty();
+
+        if (!SaveBackend.Instance.Exists(SaveFileName)) return false;
+
+        string json = SaveBackend.Instance.ReadAllText(SaveFileName);
+        if (string.IsNullOrEmpty(json)) return false;
+
+        var data = JsonUtility.FromJson<SaveData>(json);
+        if (data == null) return false;
+
+        data.finalBossCarryEnabled = enabled;
+
+        string outJson = JsonUtility.ToJson(data, true);
+        SaveBackend.Instance.WriteAllText(SaveFileName, outJson);
+        SaveBackend.Instance.Commit();
+        Debug.Log($"[SaveManager] finalBossCarryEnabled を部分書き戻し: {enabled}");
         return true;
     }
 
