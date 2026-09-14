@@ -120,6 +120,11 @@ public class ItemZukanView : MonoBehaviour
             UpdateButtonVisual();
         }
 
+        // 初期フォーカスは選択タブの左上アイテムに“即時”設定する。
+        // （RebuildNav はレイアウト確定後まで遅延するため、それ待ちだと最初の
+        //   入力でフォールバックが先に走り、操作可能な先頭タブへ乗ってしまう）
+        SetInitialFocusToFirstItem();
+
         StartCoroutine(RebuildNavAfterLayout());
     }
 
@@ -172,6 +177,19 @@ public class ItemZukanView : MonoBehaviour
     ///   ・グリッド行の左端 → Y が最も近いタブ/戻る
     ///   ・初期フォーカスは左上アイテム（タブ切替後もそのタブの左上）
     /// </summary>
+    /// <summary>
+    /// 選択中タブの左上アイテム（＝content 内で最初の ItemIconCell）を
+    /// コントローラーの初期フォーカスに設定する。レイアウト非依存で即時に効く。
+    /// </summary>
+    private void SetInitialFocusToFirstItem()
+    {
+        if (content == null) return;
+        var cell = content.GetComponentInChildren<ItemIconCell>(false);
+        Selectable target = cell != null ? cell.GetComponent<Selectable>() : null;
+        if (target == null && backButton != null) target = backButton;
+        SelectionHighlighter.PreferredFallback = target;
+    }
+
     private void RebuildNav()
     {
         if (content == null) return;
@@ -297,6 +315,9 @@ public class ItemZukanView : MonoBehaviour
 
         BuildCategory(majorIndex);
         UpdateButtonVisual();
+
+        // タブ切替後もそのタブの左上アイテムへ即フォーカス（消費タブへ戻る誤動作の防止）
+        SetInitialFocusToFirstItem();
 
         // �^�u�ؑ֎��͐擪��
         if (scrollRect != null)
