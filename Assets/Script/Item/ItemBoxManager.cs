@@ -68,6 +68,12 @@ public class ItemBoxManager : MonoBehaviour
         Debug.Log($"[ItemBoxManager] AddItem: {data.itemName} (Count={items.Count})");
         SaveManager.Save(); // 即時セーブ
 
+        // 図鑑登録。拾得/ドロップ/購入は各ウィンドウ表示時点でも登録しているが、
+        // アイテム変化（18アイス→18アイスブレード等）は入手ウィンドウを経由しないため
+        // ここで登録しないと図鑑に載らなかった（2026-09-09 報告）。
+        // MarkItemDiscovered は登録済みなら何もしないので二重呼び出しは無害。
+        if (GameState.I != null) GameState.I.MarkItemDiscovered(data.itemId);
+
         // MaxHpBonus / DefenseBonus を持つアイテムの追加に備えて maxHp を再計算
         if (GameState.I != null)
         {

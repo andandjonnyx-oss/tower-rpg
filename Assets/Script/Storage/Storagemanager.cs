@@ -60,6 +60,10 @@ public class StorageManager : MonoBehaviour
         SortItems();
         Debug.Log($"[StorageManager] AddItem: {data.itemName} (Count={items.Count})");
         SaveManager.Save(); // 即時セーブ
+
+        // 図鑑登録。倉庫側で「使う/食べる」した変化先アイテムはここにしか来ないため必須。
+        // ItemBoxManager.AddItem と同じ方針（登録済みなら無害）。
+        if (GameState.I != null) GameState.I.MarkItemDiscovered(data.itemId);
         return true;
     }
 
