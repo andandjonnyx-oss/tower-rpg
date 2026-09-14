@@ -274,18 +274,23 @@ public class StorageContext : MonoBehaviour, IItemContext
 
     private void OnInventorySlotClicked(ItemSlotView slot, InventoryItem invItem)
     {
-        if (invItem == null) { detailPanel?.Hide(); return; }
+        if (invItem == null) { detailPanel?.Hide(); RebuildNavigation(); return; }
         selectedItem = invItem;
         selectedFromInventory = true;
         detailPanel?.Show(invItem, this, fromInventory: true);
+        // ★別アイテムへ切り替えると詳細ボタンの構成（有効スロット）が変わるため、
+        //   選択のたびにナビを組み直す。開閉検知だけでは切替時に前アイテムの
+        //   配線が残り、消えた右上ボタン等へ動線が向いて詰む（2026-09-15 報告）。
+        RebuildNavigation();
     }
 
     private void OnStorageSlotClicked(ItemSlotView slot, InventoryItem invItem)
     {
-        if (invItem == null) { detailPanel?.Hide(); return; }
+        if (invItem == null) { detailPanel?.Hide(); RebuildNavigation(); return; }
         selectedItem = invItem;
         selectedFromInventory = false;
         detailPanel?.Show(invItem, this, fromInventory: false);
+        RebuildNavigation();
     }
 
     // =========================================================
