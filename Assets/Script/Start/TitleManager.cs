@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -96,6 +97,62 @@ public class TitleUIManager : MonoBehaviour
 
         // ★追加: Analytics を裏で初期化（完了を待たないのでタイトル操作は遅延しない）
         InitAnalytics();
+
+        // コントローラー対応: 右側5コマンドの縦ループ配線＋初期化確認のモーダル化
+        ConfigureNavigationAndScopes();
+    }
+
+    // =========================================================
+    // コントローラー対応（2026-09-14）
+    // =========================================================
+
+    /// <summary>
+    /// 右側5コマンド（スタート→オプション→クレジット→オープニング→初期化）を
+    /// 十字キーの縦ループとして明示配線し、初期化確認ポップアップに
+    /// モーダルフォーカススコープを付与する（表示中は はい/いいえ にフォーカス限定、
+    /// Esc/パッドB = いいえ）。
+    ///
+    /// オプション/クレジットのボタンはこのクラスが参照を持たないため、
+    /// シーン内の OpenOptionButton / SceneLink("kurezitto") から実行時に探す。
+    /// Inspector 配線が不要なので、モバイル/Console 両方の Title シーンに
+    /// そのまま効く。見つからないボタンはループから抜けるだけで壊れない。
+    /// </summary>
+    private void ConfigureNavigationAndScopes()
+    {
+        Button optionBtn = null;
+        var optionOpener = FindAnyObjectByType<OpenOptionButton>();
+        if (optionOpener != null) optionBtn = optionOpener.GetComponent<Button>();
+
+        Button creditBtn = null;
+        foreach (var link in FindObjectsByType<SceneLink>(FindObjectsSortMode.None))
+        {
+            if (link.SceneName == "kurezitto")
+            {
+                creditBtn = link.GetComponent<Button>();
+                break;
+            }
+        }
+
+        // 画面の並び順どおりの縦ループ
+        var candidates = new Button[] { startButton, optionBtn, creditBtn, openingButton, resetButton };
+        var loop = new List<Button>();
+        foreach (var b in candidates)
+            if (b != null) loop.Add(b);
+
+        for (int i = 0; i < loop.Count; i++)
+        {
+            var nav = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = loop[(i - 1 + loop.Count) % loop.Count],
+                selectOnDown = loop[(i + 1) % loop.Count],
+                // 左右は割り当てない
+            };
+            loop[i].navigation = nav;
+        }
+
+        // 初期化確認: 表示中はフォーカスをポップアップ内に限定（Esc/B = いいえ）
+        ModalFocusScope.Attach(resetConfirmPopup, OnResetConfirmNo);
     }
 
     // ★追加: Analytics 初期化（投げっぱなし）
