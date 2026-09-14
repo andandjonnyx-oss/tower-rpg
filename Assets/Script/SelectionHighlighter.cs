@@ -60,6 +60,13 @@ public class SelectionHighlighter : MonoBehaviour
     /// </summary>
     public static bool NavigationMode { get; private set; }
 
+    /// <summary>
+    /// ナビ開始時に未選択なら優先的に選ぶ初期フォーカス（シーンが指定する）。
+    /// 破棄済み/非表示/無効なら無視され、従来どおり左上寄りが選ばれる。
+    /// 別シーンの残留参照はシーン遷移で破棄されるため自然に無効化される。
+    /// </summary>
+    public static Selectable PreferredFallback;
+
     private RectTransform frameRect;
     private Image[] bars;
 
@@ -156,6 +163,12 @@ public class SelectionHighlighter : MonoBehaviour
     /// </summary>
     private Selectable FindFallbackSelectable()
     {
+        // シーンが初期フォーカスを指定していればそれを最優先で使う
+        if (PreferredFallback != null && PreferredFallback.isActiveAndEnabled
+            && PreferredFallback.interactable
+            && PreferredFallback.navigation.mode != Navigation.Mode.None)
+            return PreferredFallback;
+
         Selectable best = null;
         bool bestIsPrimary = false;
         Vector3 bestPos = Vector3.zero;

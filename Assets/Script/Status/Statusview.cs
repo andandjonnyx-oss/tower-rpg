@@ -175,9 +175,8 @@ public class StatusView : MonoBehaviour
         if (resetConfirmNo != null) resetConfirmNo.onClick.AddListener(OnResetConfirmNo);
 
         // コントローラー対応:
-        //   ×ボタンは十字キーの移動先にしない（+100 の右で×へ飛ぶ事故を防ぐ）。
-        //   画面を閉じるのはキャンセルキー（Update 参照）で行う。
-        ControllerNav.SetNavigationNone(closeButton);
+        //   × → リセット → ポイント → 詳細/基礎 → × の縦ループに×も含める
+        //   （実配線は RefreshStatusNavigation）。加えてキャンセルキーでも閉じる。
         // リセット確認ポップアップ: 表示中はフォーカスを内側に限定（Esc/B = いいえ）
         ModalFocusScope.Attach(resetConfirmPopup, OnResetConfirmNo);
     }
@@ -211,8 +210,8 @@ public class StatusView : MonoBehaviour
     /// ポイント0や詳細パネル表示中はグリッドが無効になるため、そのときは
     /// リセット⇔切替の縦ループになる（RefreshAll から毎回呼ぶ）。
     ///
-    /// ・+100（右端列）の右移動は割り当てない → ×ボタンへ飛ばない。
-    /// ・×（closeButton）はナビゲーション対象外（キャンセルキーで閉じる）。
+    /// ・+100（右端列）の右移動は割り当てない（× へは上下の動線のみで到達）。
+    /// ・× → リセット → ポイント → 詳細/基礎 → × の縦ループに×も含める。
     /// </summary>
     private void RefreshStatusNavigation()
     {
@@ -234,8 +233,9 @@ public class StatusView : MonoBehaviour
 
         if (!anyGrid)
         {
-            // グリッド全無効（ポイント0/詳細表示中）: リセット⇔切替の縦ループ
+            // グリッド全無効（ポイント0/詳細表示中）: ×→リセット→詳細/基礎→× のループ
             var simple = new List<Selectable>();
+            if (IsUsable(closeButton)) simple.Add(closeButton);
             if (IsUsable(resetButton)) simple.Add(resetButton);
             if (IsUsable(toggleButton)) simple.Add(toggleButton);
             ControllerNav.WireVerticalLoop(simple);
@@ -245,12 +245,12 @@ public class StatusView : MonoBehaviour
         Selectable up(int r, int c)
         {
             for (int i = r - 1; i >= 0; i--) if (IsUsable(grid[i, c])) return grid[i, c];
-            return IsUsable(resetButton) ? resetButton : null;
+            return IsUsable(resetButton) ? resetButton : (IsUsable(closeButton) ? closeButton : null);
         }
         Selectable down(int r, int c)
         {
             for (int i = r + 1; i < ROWS; i++) if (IsUsable(grid[i, c])) return grid[i, c];
-            return IsUsable(toggleButton) ? toggleButton : null;
+            return IsUsable(toggleButton) ? toggleButton : (IsUsable(closeButton) ? closeButton : null);
         }
         Selectable left(int r, int c)
         {
@@ -277,14 +277,19 @@ public class StatusView : MonoBehaviour
             for (int c = 0; c < COLS; c++)
                 if (IsUsable(grid[r, c])) { bottomMost = grid[r, c]; break; }
 
-        // リセット: ↓でグリッド最上段へ / ↑で切替へ
+        // ×: ↑詳細/基礎 / ↓リセット（ループの結節点。キャンセルキーでも閉じられる）
+        if (IsUsable(closeButton))
+            ControllerNav.SetExplicit(closeButton,
+                IsUsable(toggleButton) ? toggleButton : bottomMost,
+                IsUsable(resetButton) ? resetButton : topMost, null, null);
+        // リセット: ↑× / ↓グリッド最上段
         if (IsUsable(resetButton))
             ControllerNav.SetExplicit(resetButton,
-                IsUsable(toggleButton) ? toggleButton : null, topMost, null, null);
-        // 切替: ↑でグリッド最下段へ / ↓でリセットへ（ループ）
+                IsUsable(closeButton) ? closeButton : null, topMost, null, null);
+        // 詳細/基礎: ↑グリッド最下段 / ↓×（ループ）
         if (IsUsable(toggleButton))
             ControllerNav.SetExplicit(toggleButton,
-                bottomMost, IsUsable(resetButton) ? resetButton : null, null, null);
+                bottomMost, IsUsable(closeButton) ? closeButton : null, null, null);
     }
 
     private void Start()
@@ -298,6 +303,10 @@ public class StatusView : MonoBehaviour
         ApplyPanelVisibility();
         if (resetConfirmPopup != null) resetConfirmPopup.SetActive(false);
         RefreshAll();
+
+        // コントローラーの初期フォーカスは「詳細/基礎」切替ボタンにする。
+        // マウス/タッチでは何も選択されないまま（ナビ操作を始めた瞬間にここが選ばれる）。
+        SelectionHighlighter.PreferredFallback = toggleButton;
     }
 
     // =========================================================
