@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -89,6 +91,7 @@ public class TalkZukanView : MonoBehaviour
         if (backButton != null) backButton.onClick.AddListener(OnBackClicked);
 
         BuildList();
+        WireListNav();
 
         // Talk から戻ってきた場合のみスクロール位置を復元する。
         // 図鑑トップ(Zukan)から入った場合はフラグが false なので先頭のまま。
@@ -177,33 +180,99 @@ public class TalkZukanView : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
 
+        CenterOn(target);
+    }
+
+    /// <summary>
+    /// 指定セルをビューポート中央に来るようスクロールする（上端・下端ではクランプ）。
+    /// コントローラーで選択が移るたびに呼び、カーソルを画面中央付近に固定して
+    /// リストの側をスクロールさせる（2026-09-15 要望の「5段目＝中央」挙動）。
+    /// </summary>
+    private void CenterOn(RectTransform target)
+    {
+        if (scrollRect == null || scrollRect.content == null || target == null) return;
+
         RectTransform content = scrollRect.content;
-        RectTransform viewport = scrollRect.viewport != null ? scrollRect.viewport : scrollRect.GetComponent<RectTransform>();
+        RectTransform viewport = scrollRect.viewport != null
+            ? scrollRect.viewport : scrollRect.GetComponent<RectTransform>();
 
         float contentHeight = content.rect.height;
         float viewportHeight = viewport.rect.height;
-
-        // スクロール不要（全部見えている）なら何もしない
         if (contentHeight <= viewportHeight)
         {
             scrollRect.verticalNormalizedPosition = 1f;
-            yield break;
+            return;
         }
 
-        // ターゲットセルの content 内ローカルY位置（上端基準の距離）を求める。
-        // VerticalLayoutGroup は上から下へ並ぶので、anchoredPosition.y は負方向に増える。
-        float targetCenterFromTop = -target.anchoredPosition.y; // content上端からセル中心までの距離
-
-        // セル中心をビューポート中央に置きたい場合のスクロール量
+        float targetCenterFromTop = -target.anchoredPosition.y;
         float desired = targetCenterFromTop - viewportHeight * 0.5f;
-
-        // クランプ
         float maxScroll = contentHeight - viewportHeight;
         desired = Mathf.Clamp(desired, 0f, maxScroll);
+        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(1f - desired / maxScroll);
+    }
 
-        // verticalNormalizedPosition: 1=上端, 0=下端
-        float normalized = 1f - (desired / maxScroll);
-        scrollRect.verticalNormalizedPosition = Mathf.Clamp01(normalized);
+    // =========================================================
+    // コントローラー/キーボード（2026-09-15）
+    // =========================================================
+
+    /// <summary>直近フレームで選択していたオブジェクト（中央スクロールの発火判定）。</summary>
+    private GameObject lastSelected;
+
+    private void Update()
+    {
+        // キャンセルキー（Esc / パッドB）で戻る
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        if ((kb != null && kb.escapeKey.wasPressedThisFrame)
+            || (pad != null && pad.buttonEast.wasPressedThisFrame))
+        {
+            OnBackClicked();
+            return;
+        }
+
+        // 選択セルが変わったら、そのセルを中央へスクロール（カーソルは中央固定）
+        var es = EventSystem.current;
+        if (es == null) return;
+        var sel = es.currentSelectedGameObject;
+        if (sel != lastSelected)
+        {
+            lastSelected = sel;
+            if (sel != null && sel.GetComponent<TalkZukanCell>() != null)
+                CenterOn(sel.transform as RectTransform);
+        }
+    }
+
+    /// <summary>
+    /// 既読セル（操作可能なもの）を縦に明示配線する。
+    /// 先頭の上／末尾の下は戻るボタンへ。上下移動のたびに Update が中央スクロールする。
+    /// </summary>
+    private void WireListNav()
+    {
+        var nav = new List<Selectable>();
+        foreach (var c in cells)
+        {
+            if (c == null || !c.gameObject.activeInHierarchy) continue;
+            var sel = c.GetComponent<Selectable>();
+            if (sel != null && sel.interactable) nav.Add(sel);
+        }
+
+        Selectable back = (backButton != null && backButton.isActiveAndEnabled) ? backButton : null;
+
+        for (int i = 0; i < nav.Count; i++)
+        {
+            Selectable up = (i > 0) ? nav[i - 1] : back;              // 先頭の上 → 戻る
+            Selectable down = (i < nav.Count - 1) ? nav[i + 1] : back; // 末尾の下 → 戻る
+            ControllerNav.SetExplicit(nav[i], up, down, null, null);
+        }
+
+        if (back != null)
+        {
+            Selectable first = nav.Count > 0 ? nav[0] : null;
+            Selectable last = nav.Count > 0 ? nav[nav.Count - 1] : null;
+            ControllerNav.SetExplicit(back, last, first, null, null); // ↑末尾 / ↓先頭
+        }
+
+        SelectionHighlighter.PreferredFallback = nav.Count > 0 ? nav[0] : back;
     }
 
     // =========================================================
