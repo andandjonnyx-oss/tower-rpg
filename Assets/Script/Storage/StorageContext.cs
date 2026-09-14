@@ -175,23 +175,22 @@ public class StorageContext : MonoBehaviour, IItemContext
         Selectable invRep = inv.Count > 0 ? inv[0] : null;
         Selectable storRep = stor.Count > 0 ? stor[0] : null;
 
-        // 中央の縦列: 選択中は詳細ボタン群 + 戻る、非選択時は戻るのみ
-        var center = new List<Selectable>();
+        // 中央は「行」の集まりとして2Dで配線する（視覚と一致させ、
+        // 詳細の 捨てる ⇔ 引き出す を横キーで移動できるようにする）。
+        //   選択中: 詳細ボタン群（行ごと）＋ 戻る（最下段の単独行）
+        //   非選択時: 戻るのみ
+        var rows = new List<List<Selectable>>();
         if (detailPanel != null && detailPanel.IsShown)
-            foreach (var b in detailPanel.GetActiveButtonsTopToBottom())
-                center.Add(b);
+            GroupIntoRows(detailPanel.GetActiveButtonsTopToBottom(), rows);
         if (backButton != null && backButton.isActiveAndEnabled)
-            center.Add(backButton);
+            rows.Add(new List<Selectable> { backButton });
 
-        Selectable centerEntry = center.Count > 0 ? center[0] : null;
+        // グリッドから中央へ入る先は常に左上（＝先頭行の左端）。
+        // 倉庫（右）から左キーで戻ったときも左上に入る、という要望に合わせる。
+        Selectable centerEntry =
+            (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
 
-        // 中央列を縦チェーン配線。左右は所持品/倉庫の代表セルへ
-        for (int i = 0; i < center.Count; i++)
-        {
-            Selectable up = (i > 0) ? center[i - 1] : null;
-            Selectable down = (i < center.Count - 1) ? center[i + 1] : null;
-            ControllerNav.SetExplicit(center[i], up, down, invRep, storRep);
-        }
+        WireCenterRows(rows, invRep, storRep);
 
         // 左グリッド（所持品）: 右端 → 中央、左端 → なし
         WireGrid(inv, columns, leftPanel: true, centerEntry: centerEntry);
@@ -201,6 +200,67 @@ public class StorageContext : MonoBehaviour, IItemContext
         // コントローラーの初期フォーカスは所持品の先頭アイテム（無ければ戻る）
         SelectionHighlighter.PreferredFallback = invRep != null ? invRep
             : (backButton != null ? backButton : null);
+    }
+
+    /// <summary>
+    /// 上→下・左→右に整列済みのボタン列を、Y座標が近いものごとに「行」へまとめる。
+    /// </summary>
+    private static void GroupIntoRows(List<Button> sorted, List<List<Selectable>> rows)
+    {
+        const float rowEps = 20f; // 同一行とみなす Y 差（ピクセル）
+        List<Selectable> cur = null;
+        float curY = 0f;
+        foreach (var b in sorted)
+        {
+            if (b == null) continue;
+            float y = b.transform.position.y;
+            if (cur == null || Mathf.Abs(y - curY) > rowEps)
+            {
+                cur = new List<Selectable>();
+                rows.Add(cur);
+                curY = y;
+            }
+            cur.Add(b);
+        }
+    }
+
+    /// <summary>
+    /// 行の集まりを2D明示配線する。行内で左右（両端は所持品/倉庫へ）、
+    /// 上下は隣接行の X が最も近いセルへ繋ぐ。
+    /// </summary>
+    private static void WireCenterRows(List<List<Selectable>> rows, Selectable invRep, Selectable storRep)
+    {
+        for (int r = 0; r < rows.Count; r++)
+        {
+            var row = rows[r];
+            for (int i = 0; i < row.Count; i++)
+            {
+                var cell = row[i];
+                if (cell == null) continue;
+                float x = cell.transform.position.x;
+
+                Selectable left = (i > 0) ? row[i - 1] : invRep;       // 左端 → 所持品
+                Selectable right = (i < row.Count - 1) ? row[i + 1] : storRep; // 右端 → 倉庫
+                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : null;
+                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
+
+                ControllerNav.SetExplicit(cell, up, down, left, right);
+            }
+        }
+    }
+
+    /// <summary>行の中で X 座標が最も近いセルを返す。</summary>
+    private static Selectable NearestByX(List<Selectable> row, float x)
+    {
+        Selectable best = null;
+        float bestDx = float.MaxValue;
+        for (int i = 0; i < row.Count; i++)
+        {
+            if (row[i] == null) continue;
+            float dx = Mathf.Abs(row[i].transform.position.x - x);
+            if (dx < bestDx) { bestDx = dx; best = row[i]; }
+        }
+        return best;
     }
 
     private static List<Selectable> CollectUsableSlots(IReadOnlyList<ItemSlotView> slots)
