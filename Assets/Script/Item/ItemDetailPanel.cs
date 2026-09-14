@@ -74,6 +74,26 @@ public class ItemDetailPanel : MonoBehaviour
     public bool IsShown => detailRoot != null && detailRoot.activeSelf;
 
     /// <summary>
+    /// 現在表示中で操作可能なボタンを画面上の並び順（上→下、同高なら左→右）で返す。
+    /// StorageContext がコントローラーのナビゲーション配線に使う。
+    /// </summary>
+    public List<Button> GetActiveButtonsTopToBottom()
+    {
+        var list = new List<Button>();
+        if (buttons != null)
+            foreach (var b in buttons)
+                if (b != null && b.gameObject.activeInHierarchy && b.interactable)
+                    list.Add(b);
+        list.Sort((a, b) =>
+        {
+            float ay = a.transform.position.y, by = b.transform.position.y;
+            if (!Mathf.Approximately(ay, by)) return by.CompareTo(ay); // 上が先
+            return a.transform.position.x.CompareTo(b.transform.position.x); // 左が先
+        });
+        return list;
+    }
+
+    /// <summary>
     /// 指定スロットのボタンをキー操作で押す（0=Primary「使う」等, 1=Secondary「食べる」）。
     /// 非表示・無効のスロットでは何もしない。onClick を経由するので
     /// タップした場合と完全に同じ処理が走る。

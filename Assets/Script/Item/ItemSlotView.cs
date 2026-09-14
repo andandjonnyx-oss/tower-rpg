@@ -8,14 +8,18 @@ using UnityEngine.EventSystems;
 /// </summary>
 public class ItemSlotView : MonoBehaviour, IPointerClickHandler, ISubmitHandler
 {
+    /// <summary>ナビゲーション対象にするための Selectable（Awake で用意）。</summary>
+    private Selectable selectable;
+
     private void Awake()
     {
         // コントローラー対応: 十字キーのナビゲーション対象にするため Selectable を
         // 実行時付与する（プレハブ改修不要）。決定ボタンは OnSubmit で受ける。
-        if (GetComponent<Selectable>() == null)
+        selectable = GetComponent<Selectable>();
+        if (selectable == null)
         {
-            var sel = gameObject.AddComponent<Selectable>();
-            sel.transition = Selectable.Transition.None; // 見た目は SelectionHighlighter の枠に任せる
+            selectable = gameObject.AddComponent<Selectable>();
+            selectable.transition = Selectable.Transition.None; // 見た目は SelectionHighlighter の枠に任せる
         }
     }
 
@@ -35,6 +39,16 @@ public class ItemSlotView : MonoBehaviour, IPointerClickHandler, ISubmitHandler
     public void SetItem(InventoryItem invItem)
     {
         currentInvItem = invItem;
+
+        // コントローラー対応: 空スロットはナビゲーション対象にしない
+        //（空アイコンにフォーカスが乗る問題の対策）。中身ありは Automatic に戻す。
+        //   StorageContext 等が後段でさらに Explicit 配線で上書きすることがある。
+        if (selectable != null)
+        {
+            var nav = selectable.navigation;
+            nav.mode = (invItem != null) ? Navigation.Mode.Automatic : Navigation.Mode.None;
+            selectable.navigation = nav;
+        }
 
         if (frameImage != null)
             frameImage.enabled = (invItem != null);

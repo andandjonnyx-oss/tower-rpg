@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -94,6 +96,7 @@ public class StorageContext : MonoBehaviour, IItemContext
         if (backButton != null)
         {
             string returnTo = string.IsNullOrEmpty(ReturnScene) ? mainSceneName : ReturnScene;
+            cancelReturnScene = returnTo;
             backButton.onClick.AddListener(() => OnBackClicked(returnTo));
 
             // ボタンラベルを戻り先に応じて変更
@@ -107,7 +110,144 @@ public class StorageContext : MonoBehaviour, IItemContext
         }
 
         if (detailPanel != null) detailPanel.Hide();
-        RefreshSlots();
+        RefreshSlots(); // 末尾で RebuildNavigation を呼ぶ
+        lastDetailShown = false;
+    }
+
+    // =========================================================
+    // コントローラー/キーボード（2026-09-15）
+    // =========================================================
+
+    /// <summary>Start で確定した戻り先シーン（キャンセルキーからの帰還に使う）。</summary>
+    private string cancelReturnScene = "Main";
+
+    /// <summary>前フレームの詳細パネル表示状態（変化時だけナビ再構築する）。</summary>
+    private bool lastDetailShown;
+
+    private void Update()
+    {
+        // 詳細パネルの開閉でナビ構造（中央列）が変わるので、その時だけ組み直す
+        bool det = detailPanel != null && detailPanel.IsShown;
+        if (det != lastDetailShown)
+        {
+            lastDetailShown = det;
+            RebuildNavigation();
+        }
+
+        // キャンセルキー（Esc / パッドB）:
+        //   詳細表示中は詳細を閉じる、そうでなければ戻る（＝戻るボタンと同じ）。
+        //   リセット等のモーダルは無いが、他モーダルが前面のときは介入しない。
+        if (ModalFocusScope.Current == null)
+        {
+            var kb = Keyboard.current;
+            var pad = Gamepad.current;
+            bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                       || (pad != null && pad.buttonEast.wasPressedThisFrame);
+            if (cancel)
+            {
+                if (det) detailPanel.Hide();
+                else OnBackClicked(cancelReturnScene);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 倉庫画面のコントローラー・ナビゲーションを組み直す。
+    ///
+    ///   非選択時: 所持品グリッド ⇔ 戻る ⇔ 倉庫グリッド
+    ///   選択時:   所持品 ⇔ 詳細ウィンドウ（↓で最終的に戻るへ）⇔ 倉庫
+    ///
+    /// ・空スロットは ItemSlotView 側で Navigation.None 済み → ここでは中身ありだけ扱う。
+    /// ・スクロールバーはマウス用に残すがナビ対象からは外す。
+    /// ・+ステータス画面等と同じく ControllerNav の明示配線を使う。
+    /// </summary>
+    private void RebuildNavigation()
+    {
+        // スクロールバーはナビ対象外（マウス操作・位置表示のためだけに残す）。
+        // StorageContext がスクロールバーの親とは限らないためシーン全体から探す。
+        foreach (var sb in FindObjectsByType<Scrollbar>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            ControllerNav.SetNavigationNone(sb);
+
+        // 中身ありスロットだけ収集（空スロットは None 済みなので除外される）
+        var inv = CollectUsableSlots(inventorySlots);
+        var stor = CollectUsableSlots(storageSlotList);
+
+        Selectable invRep = inv.Count > 0 ? inv[0] : null;
+        Selectable storRep = stor.Count > 0 ? stor[0] : null;
+
+        // 中央の縦列: 選択中は詳細ボタン群 + 戻る、非選択時は戻るのみ
+        var center = new List<Selectable>();
+        if (detailPanel != null && detailPanel.IsShown)
+            foreach (var b in detailPanel.GetActiveButtonsTopToBottom())
+                center.Add(b);
+        if (backButton != null && backButton.isActiveAndEnabled)
+            center.Add(backButton);
+
+        Selectable centerEntry = center.Count > 0 ? center[0] : null;
+
+        // 中央列を縦チェーン配線。左右は所持品/倉庫の代表セルへ
+        for (int i = 0; i < center.Count; i++)
+        {
+            Selectable up = (i > 0) ? center[i - 1] : null;
+            Selectable down = (i < center.Count - 1) ? center[i + 1] : null;
+            ControllerNav.SetExplicit(center[i], up, down, invRep, storRep);
+        }
+
+        // 左グリッド（所持品）: 右端 → 中央、左端 → なし
+        WireGrid(inv, columns, leftPanel: true, centerEntry: centerEntry);
+        // 右グリッド（倉庫）: 左端 → 中央、右端 → なし
+        WireGrid(stor, columns, leftPanel: false, centerEntry: centerEntry);
+
+        // コントローラーの初期フォーカスは所持品の先頭アイテム（無ければ戻る）
+        SelectionHighlighter.PreferredFallback = invRep != null ? invRep
+            : (backButton != null ? backButton : null);
+    }
+
+    private static List<Selectable> CollectUsableSlots(IReadOnlyList<ItemSlotView> slots)
+    {
+        var list = new List<Selectable>();
+        if (slots == null) return list;
+        for (int i = 0; i < slots.Count; i++)
+        {
+            var s = slots[i];
+            if (s == null || !s.gameObject.activeInHierarchy) continue;
+            var sel = s.GetComponent<Selectable>();
+            // 空スロットは None なので中身ありだけ拾う
+            if (sel != null && sel.navigation.mode != Navigation.Mode.None)
+                list.Add(sel);
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 4列グリッドを明示配線する。行内で左右、列で上下。
+    /// leftPanel=true は右端が中央へ、false（倉庫）は左端が中央へ抜ける。
+    /// </summary>
+    private static void WireGrid(List<Selectable> cells, int cols, bool leftPanel, Selectable centerEntry)
+    {
+        if (cols < 1) cols = 1;
+        int n = cells.Count;
+        for (int i = 0; i < n; i++)
+        {
+            int col = i % cols;
+            Selectable up = (i - cols >= 0) ? cells[i - cols] : null;
+            Selectable down = (i + cols < n) ? cells[i + cols] : null;
+
+            Selectable left, right;
+            if (leftPanel)
+            {
+                left = (col > 0) ? cells[i - 1] : null;
+                bool hasRight = (col < cols - 1) && (i + 1 < n);
+                right = hasRight ? cells[i + 1] : centerEntry; // 右端 → 中央
+            }
+            else
+            {
+                left = (col > 0) ? cells[i - 1] : centerEntry; // 左端 → 中央
+                bool hasRight = (col < cols - 1) && (i + 1 < n);
+                right = hasRight ? cells[i + 1] : null;
+            }
+            ControllerNav.SetExplicit(cells[i], up, down, left, right);
+        }
     }
 
     /// <summary>
@@ -222,6 +362,7 @@ public class StorageContext : MonoBehaviour, IItemContext
     {
         RefreshInventorySide();
         RefreshStorageSide();
+        RebuildNavigation();
     }
 
     private void RefreshInventorySide()
