@@ -88,8 +88,28 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         {
             foreach (var sb in FindObjectsByType<Scrollbar>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 ControllerNav.SetNavigationNone(sb);
+            // 初期フォーカスを左上アイテムへ“即時”設定（遅延 RebuildNavigation 待ちだと
+            // 最初の入力でフォールバックが先に走り、別ボタンに乗ってしまう）
+            SetInitialFocusToFirstItem();
             StartCoroutine(RebuildNavAfterLayout());
         }
+    }
+
+    /// <summary>左上アイテム（＝slots 内で最初の中身ありスロット）を初期フォーカスに設定。</summary>
+    private void SetInitialFocusToFirstItem()
+    {
+        Selectable target = null;
+        if (slots != null)
+        {
+            foreach (var s in slots)
+            {
+                if (s == null || !s.gameObject.activeInHierarchy) continue;
+                var sel = s.GetComponent<Selectable>();
+                if (sel != null && sel.navigation.mode != Navigation.Mode.None) { target = sel; break; }
+            }
+        }
+        if (target == null && backButton != null) target = backButton;
+        SelectionHighlighter.PreferredFallback = target;
     }
 
     private System.Collections.IEnumerator RebuildNavAfterLayout()
