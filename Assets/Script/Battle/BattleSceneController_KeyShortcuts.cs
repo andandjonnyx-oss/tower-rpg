@@ -34,6 +34,12 @@ public partial class BattleSceneController
     /// <summary>ナビ配線とモーダルスコープの構成が済んだか（シーンインスタンス毎に初回1回）。</summary>
     private bool navConfigured;
 
+    /// <summary>6コマンドの巡回順（Start 後に一度だけ構築。実配線は RefreshCommandNavigation）。</summary>
+    private readonly List<Selectable> commandLoop = new List<Selectable>();
+
+    /// <summary>RefreshCommandNavigation 用の作業リスト（毎フレームのGCアロケーション回避）。</summary>
+    private static readonly List<Selectable> usableCommands = new List<Selectable>();
+
     private void Update()
     {
         // Start でのボタン配線が終わった後に一度だけ構成する
@@ -42,6 +48,10 @@ public partial class BattleSceneController
             navConfigured = true;
             ConfigureNavigationAndScopes();
         }
+
+        // ボタンの使用可否（武器スキルのクールタイム・敵ターン中の無効化等）は
+        // 頻繁に変わるため、巡回配線は毎フレーム張り直す
+        RefreshCommandNavigation();
 
         HandleKeyShortcuts();
     }
@@ -57,27 +67,15 @@ public partial class BattleSceneController
     /// </summary>
     private void ConfigureNavigationAndScopes()
     {
-        // --- 6コマンドの縦ループ（明示ナビゲーション） ---
-        var loop = new List<Selectable>();
+        // --- 6コマンドの巡回順を登録（実配線は毎フレームの RefreshCommandNavigation） ---
+        commandLoop.Clear();
         if (magicSelector != null && magicSelector.SelectedButton != null)
-            loop.Add(magicSelector.SelectedButton);
-        if (magicButton != null) loop.Add(magicButton);
-        if (itemButton != null) loop.Add(itemButton);
-        if (skillButton != null) loop.Add(skillButton);
-        if (attackButton != null) loop.Add(attackButton);
-        if (defendButton != null) loop.Add(defendButton);
-
-        for (int i = 0; i < loop.Count; i++)
-        {
-            var nav = new Navigation
-            {
-                mode = Navigation.Mode.Explicit,
-                selectOnUp = loop[(i - 1 + loop.Count) % loop.Count],
-                selectOnDown = loop[(i + 1) % loop.Count],
-                // 左右は割り当てない（6コマンドの縦ループのみ）
-            };
-            loop[i].navigation = nav;
-        }
+            commandLoop.Add(magicSelector.SelectedButton);
+        if (magicButton != null) commandLoop.Add(magicButton);
+        if (itemButton != null) commandLoop.Add(itemButton);
+        if (skillButton != null) commandLoop.Add(skillButton);
+        if (attackButton != null) commandLoop.Add(attackButton);
+        if (defendButton != null) commandLoop.Add(defendButton);
 
         // --- 十字キーで到達させないボタン（キー呼び出し専用） ---
         SetNavigationNone(giveUpButton);
@@ -87,6 +85,49 @@ public partial class BattleSceneController
         ModalFocusScope.Attach(giveUpPopup, OnGiveUpNo);    // Esc/B = いいえ
         ModalFocusScope.Attach(continuePopup, null);        // 誤爆防止のためキャンセル不可
         ModalFocusScope.Attach(fullLogPanel, CloseFullLog); // Esc/B = 閉じる
+    }
+
+    /// <summary>
+    /// 6コマンドの縦ループを「いま押せるボタンだけ」で張り直す（毎フレーム実行）。
+    /// 武器スキルのクールタイム等で interactable が切り替わるため、固定配線だと
+    /// 使用不能ボタンで巡回が堰き止められ、その先の攻撃/防御に到達できなくなる
+    /// （2026-09-14 報告）。使用不能ボタンはナビゲーションから完全に外し、
+    /// 押せるボタンだけで縦ループを組み直すことで自然にスキップされる。
+    /// </summary>
+    private void RefreshCommandNavigation()
+    {
+        usableCommands.Clear();
+        for (int i = 0; i < commandLoop.Count; i++)
+        {
+            var s = commandLoop[i];
+            if (s != null && s.gameObject.activeInHierarchy && s.interactable)
+                usableCommands.Add(s);
+        }
+
+        for (int i = 0; i < commandLoop.Count; i++)
+        {
+            var s = commandLoop[i];
+            if (s == null) continue;
+
+            int idx = usableCommands.IndexOf(s);
+            if (idx < 0)
+            {
+                // 使用不能: 巡回から完全に外す
+                var off = s.navigation;
+                off.mode = Navigation.Mode.None;
+                s.navigation = off;
+                continue;
+            }
+
+            var nav = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = usableCommands[(idx - 1 + usableCommands.Count) % usableCommands.Count],
+                selectOnDown = usableCommands[(idx + 1) % usableCommands.Count],
+                // 左右は割り当てない（6コマンドの縦ループのみ）
+            };
+            s.navigation = nav;
+        }
     }
 
     private static void SetNavigationNone(Selectable s)
