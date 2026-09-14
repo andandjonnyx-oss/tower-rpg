@@ -1,8 +1,11 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// Status シーンの Canvas にアタッチする。
@@ -170,6 +173,118 @@ public class StatusView : MonoBehaviour
         // リセット確認ポップアップのボタン
         if (resetConfirmYes != null) resetConfirmYes.onClick.AddListener(OnResetConfirmYes);
         if (resetConfirmNo != null) resetConfirmNo.onClick.AddListener(OnResetConfirmNo);
+
+        // コントローラー対応:
+        //   ×ボタンは十字キーの移動先にしない（+100 の右で×へ飛ぶ事故を防ぐ）。
+        //   画面を閉じるのはキャンセルキー（Update 参照）で行う。
+        ControllerNav.SetNavigationNone(closeButton);
+        // リセット確認ポップアップ: 表示中はフォーカスを内側に限定（Esc/B = いいえ）
+        ModalFocusScope.Attach(resetConfirmPopup, OnResetConfirmNo);
+    }
+
+    // =========================================================
+    // コントローラー/キーボード（2026-09-15）
+    // =========================================================
+
+    /// <summary>
+    /// キャンセルキー（Esc / パッドB）でステータス画面を閉じる（×ボタンと同処理）。
+    /// リセット確認ポップアップ表示中は ModalFocusScope 側が B を処理するので、
+    /// ここはモーダルが無いときだけ働く。
+    /// </summary>
+    private void Update()
+    {
+        if (ModalFocusScope.Current != null) return;
+
+        var kb = Keyboard.current;
+        var pad = Gamepad.current;
+        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
+        if (cancel) OnCloseClicked();
+    }
+
+    private bool IsUsable(Selectable s)
+        => s != null && s.gameObject.activeInHierarchy && s.interactable;
+
+    /// <summary>
+    /// ステータス振り分けグリッド（5行×3列: +/+10/+100）＋リセット＋切替の
+    /// 明示ナビゲーションを、現在操作可能なボタンだけで組み直す。
+    /// ポイント0や詳細パネル表示中はグリッドが無効になるため、そのときは
+    /// リセット⇔切替の縦ループになる（RefreshAll から毎回呼ぶ）。
+    ///
+    /// ・+100（右端列）の右移動は割り当てない → ×ボタンへ飛ばない。
+    /// ・×（closeButton）はナビゲーション対象外（キャンセルキーで閉じる）。
+    /// </summary>
+    private void RefreshStatusNavigation()
+    {
+        // 行=STR/VIT/INT/DEX/LUC, 列=+ / +10 / +100
+        Button[,] grid =
+        {
+            { strPlusButton, strPlus10Button, strPlus100Button },
+            { vitPlusButton, vitPlus10Button, vitPlus100Button },
+            { intPlusButton, intPlus10Button, intPlus100Button },
+            { dexPlusButton, dexPlus10Button, dexPlus100Button },
+            { lucPlusButton, lucPlus10Button, lucPlus100Button },
+        };
+        const int ROWS = 5, COLS = 3;
+
+        bool anyGrid = false;
+        for (int r = 0; r < ROWS && !anyGrid; r++)
+            for (int c = 0; c < COLS; c++)
+                if (IsUsable(grid[r, c])) { anyGrid = true; break; }
+
+        if (!anyGrid)
+        {
+            // グリッド全無効（ポイント0/詳細表示中）: リセット⇔切替の縦ループ
+            var simple = new List<Selectable>();
+            if (IsUsable(resetButton)) simple.Add(resetButton);
+            if (IsUsable(toggleButton)) simple.Add(toggleButton);
+            ControllerNav.WireVerticalLoop(simple);
+            return;
+        }
+
+        Selectable up(int r, int c)
+        {
+            for (int i = r - 1; i >= 0; i--) if (IsUsable(grid[i, c])) return grid[i, c];
+            return IsUsable(resetButton) ? resetButton : null;
+        }
+        Selectable down(int r, int c)
+        {
+            for (int i = r + 1; i < ROWS; i++) if (IsUsable(grid[i, c])) return grid[i, c];
+            return IsUsable(toggleButton) ? toggleButton : null;
+        }
+        Selectable left(int r, int c)
+        {
+            for (int j = c - 1; j >= 0; j--) if (IsUsable(grid[r, j])) return grid[r, j];
+            return null;
+        }
+        Selectable right(int r, int c)
+        {
+            for (int j = c + 1; j < COLS; j++) if (IsUsable(grid[r, j])) return grid[r, j];
+            return null; // 右端 → 移動なし（× へ飛ばさない）
+        }
+
+        for (int r = 0; r < ROWS; r++)
+            for (int c = 0; c < COLS; c++)
+                if (IsUsable(grid[r, c]))
+                    ControllerNav.SetExplicit(grid[r, c], up(r, c), down(r, c), left(r, c), right(r, c));
+
+        // グリッド内の最上段/最下段の操作可能ボタン（リセット/切替の接続先）
+        Selectable topMost = null, bottomMost = null;
+        for (int r = 0; r < ROWS && topMost == null; r++)
+            for (int c = 0; c < COLS; c++)
+                if (IsUsable(grid[r, c])) { topMost = grid[r, c]; break; }
+        for (int r = ROWS - 1; r >= 0 && bottomMost == null; r--)
+            for (int c = 0; c < COLS; c++)
+                if (IsUsable(grid[r, c])) { bottomMost = grid[r, c]; break; }
+
+        // リセット: ↓でグリッド最上段へ / ↑で切替へ
+        if (IsUsable(resetButton))
+            ControllerNav.SetExplicit(resetButton,
+                IsUsable(toggleButton) ? toggleButton : null, topMost, null, null);
+        // 切替: ↑でグリッド最下段へ / ↓でリセットへ（ループ）
+        if (IsUsable(toggleButton))
+            ControllerNav.SetExplicit(toggleButton,
+                bottomMost, IsUsable(resetButton) ? resetButton : null, null, null);
     }
 
     private void Start()
@@ -311,6 +426,9 @@ public class StatusView : MonoBehaviour
 
         if (resDebuffText != null) resDebuffText.text = "デバフ耐性：";
         if (resDebuffValueText != null) resDebuffValueText.text = $"{CalcTotalStatusEffectResistance(StatusEffect.Debuff)}";
+
+        // ボタンの有効/無効が変わるたびに巡回ナビを組み直す
+        RefreshStatusNavigation();
     }
 
     /// <summary>
