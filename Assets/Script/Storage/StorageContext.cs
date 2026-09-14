@@ -175,22 +175,34 @@ public class StorageContext : MonoBehaviour, IItemContext
         Selectable invRep = inv.Count > 0 ? inv[0] : null;
         Selectable storRep = stor.Count > 0 ? stor[0] : null;
 
-        // 中央は「行」の集まりとして2Dで配線する（視覚と一致させ、
-        // 詳細の 捨てる ⇔ 引き出す を横キーで移動できるようにする）。
-        //   選択中: 詳細ボタン群（行ごと）＋ 戻る（最下段の単独行）
-        //   非選択時: 戻るのみ
-        var rows = new List<List<Selectable>>();
+        // 中央（詳細ウィンドウ＋戻る）を固定スロット配置で2D配線する。
+        //   詳細ボタンは 0=左上 1=右上 2=左下 3=右下（ItemDetailPanel の役割スロット）。
+        //   位置計算に頼らず index で組むため、上下左右が視覚と必ず一致する。
+        Selectable dTL = null, dTR = null, dBL = null, dBR = null;
         if (detailPanel != null && detailPanel.IsShown)
-            GroupIntoRows(detailPanel.GetActiveButtonsTopToBottom(), rows);
-        if (backButton != null && backButton.isActiveAndEnabled)
-            rows.Add(new List<Selectable> { backButton });
+        {
+            dTL = detailPanel.GetSlotButton(0);
+            dTR = detailPanel.GetSlotButton(1);
+            dBL = detailPanel.GetSlotButton(2);
+            dBR = detailPanel.GetSlotButton(3);
+        }
+        Selectable back = (backButton != null && backButton.isActiveAndEnabled) ? backButton : null;
 
-        // グリッドから中央へ入る先は常に左上（＝先頭行の左端）。
+        // グリッドから中央へ入る先は常に左上（無ければ順に代替）。
         // 倉庫（右）から左キーで戻ったときも左上に入る、という要望に合わせる。
-        Selectable centerEntry =
-            (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
+        Selectable centerEntry = dTL ?? dTR ?? dBL ?? dBR ?? back;
 
-        WireCenterRows(rows, invRep, storRep);
+        // 左端 → 所持品, 右端 → 倉庫。同列で上下、隣接ボタンで左右。
+        if (dTL != null)
+            ControllerNav.SetExplicit(dTL, null, dBL ?? dBR ?? back, invRep, dTR ?? storRep);
+        if (dTR != null)
+            ControllerNav.SetExplicit(dTR, null, dBR ?? dBL ?? back, dTL ?? invRep, storRep);
+        if (dBL != null)
+            ControllerNav.SetExplicit(dBL, dTL ?? dTR, back, invRep, dBR ?? storRep);
+        if (dBR != null)
+            ControllerNav.SetExplicit(dBR, dTR ?? dTL, back, dBL ?? invRep, storRep);
+        if (back != null)
+            ControllerNav.SetExplicit(back, dBL ?? dBR ?? dTL ?? dTR, null, invRep, storRep);
 
         // 左グリッド（所持品）: 右端 → 中央、左端 → なし
         WireGrid(inv, columns, leftPanel: true, centerEntry: centerEntry);
@@ -200,67 +212,6 @@ public class StorageContext : MonoBehaviour, IItemContext
         // コントローラーの初期フォーカスは所持品の先頭アイテム（無ければ戻る）
         SelectionHighlighter.PreferredFallback = invRep != null ? invRep
             : (backButton != null ? backButton : null);
-    }
-
-    /// <summary>
-    /// 上→下・左→右に整列済みのボタン列を、Y座標が近いものごとに「行」へまとめる。
-    /// </summary>
-    private static void GroupIntoRows(List<Button> sorted, List<List<Selectable>> rows)
-    {
-        const float rowEps = 20f; // 同一行とみなす Y 差（ピクセル）
-        List<Selectable> cur = null;
-        float curY = 0f;
-        foreach (var b in sorted)
-        {
-            if (b == null) continue;
-            float y = b.transform.position.y;
-            if (cur == null || Mathf.Abs(y - curY) > rowEps)
-            {
-                cur = new List<Selectable>();
-                rows.Add(cur);
-                curY = y;
-            }
-            cur.Add(b);
-        }
-    }
-
-    /// <summary>
-    /// 行の集まりを2D明示配線する。行内で左右（両端は所持品/倉庫へ）、
-    /// 上下は隣接行の X が最も近いセルへ繋ぐ。
-    /// </summary>
-    private static void WireCenterRows(List<List<Selectable>> rows, Selectable invRep, Selectable storRep)
-    {
-        for (int r = 0; r < rows.Count; r++)
-        {
-            var row = rows[r];
-            for (int i = 0; i < row.Count; i++)
-            {
-                var cell = row[i];
-                if (cell == null) continue;
-                float x = cell.transform.position.x;
-
-                Selectable left = (i > 0) ? row[i - 1] : invRep;       // 左端 → 所持品
-                Selectable right = (i < row.Count - 1) ? row[i + 1] : storRep; // 右端 → 倉庫
-                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : null;
-                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
-
-                ControllerNav.SetExplicit(cell, up, down, left, right);
-            }
-        }
-    }
-
-    /// <summary>行の中で X 座標が最も近いセルを返す。</summary>
-    private static Selectable NearestByX(List<Selectable> row, float x)
-    {
-        Selectable best = null;
-        float bestDx = float.MaxValue;
-        for (int i = 0; i < row.Count; i++)
-        {
-            if (row[i] == null) continue;
-            float dx = Mathf.Abs(row[i].transform.position.x - x);
-            if (dx < bestDx) { bestDx = dx; best = row[i]; }
-        }
-        return best;
     }
 
     private static List<Selectable> CollectUsableSlots(IReadOnlyList<ItemSlotView> slots)

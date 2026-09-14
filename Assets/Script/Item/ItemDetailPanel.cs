@@ -77,6 +77,19 @@ public class ItemDetailPanel : MonoBehaviour
     /// 現在表示中で操作可能なボタンを画面上の並び順（上→下、同高なら左→右）で返す。
     /// StorageContext がコントローラーのナビゲーション配線に使う。
     /// </summary>
+    /// <summary>
+    /// 役割スロット（0=左上, 1=右上, 2=左下, 3=右下）のボタンを返す。
+    /// 非表示/無効なら null。SetupButtons が role=スロットindex で配置しているため、
+    /// この index はレイアウト上の固定位置と一致する（位置計算より確実）。
+    /// </summary>
+    public Button GetSlotButton(int slot)
+    {
+        if (buttons == null || slot < 0 || slot >= buttons.Length) return null;
+        var b = buttons[slot];
+        if (b == null || !b.gameObject.activeInHierarchy || !b.interactable) return null;
+        return b;
+    }
+
     public List<Button> GetActiveButtonsTopToBottom()
     {
         var list = new List<Button>();
