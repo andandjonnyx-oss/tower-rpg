@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -112,6 +113,13 @@ public class GpShopView : MonoBehaviour
         // グリッド生成
         BuildGrid();
         RefreshGpDisplay();
+
+        // コントローラー対応:
+        //   ・グリッドは位置ベースで格子配線し、最上段の上キーで戻るへ。
+        //   ・詳細ポップアップは表示中フォーカスを内側に限定（キャンセル/外タップで閉じる）。
+        WireGridNav();
+        ControllerNav.SetNavigationNone(blockerButton);
+        ModalFocusScope.Attach(detailPopup, HidePopup); // Esc/B = 閉じる（いいえ相当）
     }
 
     private void Update()
@@ -123,6 +131,115 @@ public class GpShopView : MonoBehaviour
             if (messageTimer <= 0f)
                 HideMessage();
         }
+
+        // キャンセルキー（Esc / パッドB）: ポップアップ表示中は閉じる、なければ戻る
+        if (ModalFocusScope.Current == null || ModalFocusScope.Current.gameObject == detailPopup)
+        {
+            var kb = Keyboard.current;
+            var pad = Gamepad.current;
+            bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
+                       || (pad != null && pad.buttonEast.wasPressedThisFrame);
+            if (cancel)
+            {
+                bool popupOpen = detailPopup != null && detailPopup.activeSelf;
+                if (popupOpen) HidePopup();
+                else OnBackClicked();
+            }
+        }
+    }
+
+    /// <summary>
+    /// 詳細ポップアップの中のボタン（交換 / 閉じる）を縦に配線する。
+    /// ShowPopup のたびに交換ボタンの有効状態が変わるので都度呼ぶ。
+    /// </summary>
+    private void WirePopupNav()
+    {
+        var inside = new List<Selectable>();
+        if (exchangeButton != null && exchangeButton.gameObject.activeInHierarchy && exchangeButton.interactable)
+            inside.Add(exchangeButton);
+        if (closeButton != null && closeButton.gameObject.activeInHierarchy && closeButton.interactable)
+            inside.Add(closeButton);
+        ControllerNav.WireVerticalLoop(inside);
+    }
+
+    /// <summary>
+    /// ショップのグリッドを画面位置から格子として明示配線する。
+    /// 列数は GridLayoutGroup が可変（Flexible）なので、セルの座標を行ごとに
+    /// まとめて判定する。最上段の上キーは戻るボタンへ、戻るの下キーは左上セルへ。
+    /// </summary>
+    private void WireGridNav()
+    {
+        // アクティブなセルの Selectable を上→下・左→右で収集
+        var list = new List<Selectable>();
+        foreach (var c in cells)
+        {
+            if (c == null || !c.gameObject.activeInHierarchy) continue;
+            var sel = c.GetComponent<Selectable>();
+            if (sel != null) list.Add(sel);
+        }
+        list.Sort((a, b) =>
+        {
+            float ay = a.transform.position.y, by = b.transform.position.y;
+            if (!Mathf.Approximately(ay, by)) return by.CompareTo(ay);
+            return a.transform.position.x.CompareTo(b.transform.position.x);
+        });
+
+        // 行にまとめる
+        var rows = new List<List<Selectable>>();
+        List<Selectable> cur = null;
+        float curY = 0f;
+        foreach (var sel in list)
+        {
+            float y = sel.transform.position.y;
+            if (cur == null || Mathf.Abs(y - curY) > 20f)
+            {
+                cur = new List<Selectable>();
+                rows.Add(cur);
+                curY = y;
+            }
+            cur.Add(sel);
+        }
+
+        Selectable back = (backButton != null && backButton.isActiveAndEnabled) ? backButton : null;
+
+        for (int r = 0; r < rows.Count; r++)
+        {
+            var row = rows[r];
+            for (int i = 0; i < row.Count; i++)
+            {
+                var cell = row[i];
+                float x = cell.transform.position.x;
+                Selectable left = (i > 0) ? row[i - 1] : null;
+                Selectable right = (i < row.Count - 1) ? row[i + 1] : null;
+                Selectable up = (r > 0) ? NearestByX(rows[r - 1], x) : back;   // 最上段の上 → 戻る
+                Selectable down = (r < rows.Count - 1) ? NearestByX(rows[r + 1], x) : null;
+                ControllerNav.SetExplicit(cell, up, down, left, right);
+            }
+        }
+
+        // 戻る: 下キーで左上セルへ（グリッドへ入る動線）。左右/上は割り当てない。
+        if (back != null)
+        {
+            Selectable topLeft = (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : null;
+            ControllerNav.SetExplicit(back, null, topLeft, null, null);
+        }
+
+        // コントローラーの初期フォーカスは左上セル
+        SelectionHighlighter.PreferredFallback =
+            (rows.Count > 0 && rows[0].Count > 0) ? rows[0][0] : back;
+    }
+
+    private static Selectable NearestByX(List<Selectable> row, float x)
+    {
+        Selectable best = null;
+        float bestDx = float.MaxValue;
+        for (int i = 0; i < row.Count; i++)
+        {
+            if (row[i] == null) continue;
+            float dx = Mathf.Abs(row[i].transform.position.x - x);
+            if (dx < bestDx) { bestDx = dx; best = row[i]; }
+        }
+        return best;
     }
 
     // =========================================================
@@ -231,6 +348,8 @@ public class GpShopView : MonoBehaviour
         // ポップアップ表示
         if (detailPopup != null)
             detailPopup.SetActive(true);
+
+        WirePopupNav(); // 交換/閉じるの配線（交換の有効状態は都度変わる）
     }
 
     private void HidePopup()
