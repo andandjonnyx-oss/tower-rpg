@@ -183,9 +183,15 @@ public class MagicSelector : MonoBehaviour
 
     private void CloseList()
     {
+        bool wasOpen = isOpen;
         DestroyBlocker();
         if (popupPanel != null) popupPanel.SetActive(false);
         isOpen = false;
+
+        // Controller: after the list closes (decide or cancel), return focus to the
+        // button that opened it, not to the scene default (attack / advance).
+        // Only when it was actually open: ForceClose()/SetVisible(false) also come here.
+        if (wasOpen) SelectionHighlighter.FocusNow(selectedButton);
     }
 
     // =========================================================

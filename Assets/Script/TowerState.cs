@@ -180,6 +180,97 @@ public class TowerState : MonoBehaviour
             returnConfirmPopup.SetActive(false);
 
         RefreshTowerStorageButton();
+
+        ConfigureModalScopes();
+    }
+
+    // =========================================================
+    // コントローラー対応（2026-09-16）
+    //   ・既定フォーカスは常に「進む」（決定ボタン連打で進める）。
+    //   ・右側コマンドは画面上の縦位置順の縦ループ。押せないボタン
+    //     （非表示の倉庫/魔法、麻痺中の進む等）は毎フレーム巡回から外す。
+    //   ・ポップアップ（アイテム拾得・帰還確認・倉庫確認・魔法一覧）は
+    //     ModalFocusScope でフォーカスを内側に閉じ込め、閉じると「進む」へ戻る。
+    //   ・麻痺/石化のブロッカー表示中はキャンセル不可のスコープを被せ、
+    //     フォーカスがどこにも落ちない（連打中の決定が裏のボタンへ抜けない）。
+    //   シーン改修なし。位置ベースなので Console/mobile 両 Tower に同じコードで効く。
+    // =========================================================
+
+    /// <summary>右側コマンドの巡回候補（初回 Update で位置順に確定）。</summary>
+    private readonly List<Selectable> navCandidates = new List<Selectable>();
+
+    /// <summary>WireVerticalLoopUsable 用の作業リスト（GC アロケーション回避）。</summary>
+    private readonly List<Selectable> navScratch = new List<Selectable>();
+
+    private bool navCollected;
+
+    private void ConfigureModalScopes()
+    {
+        ModalFocusScope.Attach(returnConfirmPopup, OnReturnConfirmNo);   // Esc/B = いいえ
+        ModalFocusScope.Attach(storageConfirmPopup, OnStorageConfirmNo); // Esc/B = いいえ
+        ModalFocusScope.Attach(paralyzeBlocker, null);                   // 待機中は操作不可
+        // アイテム拾得ウィンドウは ItemPickupWindow 自身がスコープを持つ
+    }
+
+    private void Update()
+    {
+        // HandednessLayout 等の Awake/Start による配置確定後に一度だけ候補を集める
+        if (!navCollected)
+        {
+            navCollected = true;
+            CollectNavCandidates();
+        }
+
+        ControllerNav.WireVerticalLoopUsable(navCandidates, navScratch);
+
+        // 既定フォーカス＝進む（未選択になった時に SelectionHighlighter がここへ戻す）
+        SelectionHighlighter.PreferredFallback = advanceButton;
+
+        // シーン到着後、進むが押せるようになった最初のフレームで明示的に選択する
+        // （到着直後は SelectionHighlighter が左上の魔法ボタンを先に選んでしまうため）。
+        if (!defaultFocusApplied && advanceButton != null
+            && advanceButton.isActiveAndEnabled && advanceButton.interactable)
+        {
+            defaultFocusApplied = true;
+            SelectionHighlighter.SelectNow(advanceButton);
+        }
+    }
+
+    /// <summary>シーン到着後の既定フォーカス（進む）を一度適用したか。</summary>
+    private bool defaultFocusApplied;
+
+    /// <summary>
+    /// シーン内の操作可能なボタンを画面上の縦位置（上→下）で並べて巡回候補にする。
+    /// ポップアップ配下（ModalFocusScope 内）のボタンは除外。表示が切り替わる
+    /// 倉庫/魔法ボタンは非表示中でも候補に入れておく（押せる時だけ巡回に加わる）。
+    /// </summary>
+    private void CollectNavCandidates()
+    {
+        navCandidates.Clear();
+
+        var found = FindObjectsByType<Button>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        foreach (var b in found)
+        {
+            if (b == null || !b.gameObject.activeInHierarchy) continue;
+            if (b.navigation.mode == Navigation.Mode.None) continue;
+            if (b.GetComponentInParent<ModalFocusScope>(true) != null) continue;
+            navCandidates.Add(b);
+        }
+
+        AddNavCandidate(advanceButton);
+        AddNavCandidate(magicButton);
+        AddNavCandidate(towerStorageButton);
+        AddNavCandidate(returnToMainButton);
+        if (magicSelector != null) AddNavCandidate(magicSelector.SelectedButton);
+
+        // 画面上の Y 降順（上のボタンが先頭）
+        navCandidates.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));
+    }
+
+    private void AddNavCandidate(Selectable s)
+    {
+        if (s == null || navCandidates.Contains(s)) return;
+        navCandidates.Add(s);
     }
 
     // 進むボタンから呼ぶ

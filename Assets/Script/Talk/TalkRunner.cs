@@ -107,7 +107,7 @@ public class TalkRunner : MonoBehaviour
 
         //待機中IDを基にイベントを取得
         current = database.FindById(gs.pendingEventId);
-        if (current == null || current.lines == null || current.lines.Count == 0)
+        if (current == null || current.ActiveLines == null || current.ActiveLines.Count == 0)
         {
             Debug.LogWarning("No pending talk event / empty event. Back to Tower.");
             gs.pendingEventId = null;
@@ -173,9 +173,8 @@ public class TalkRunner : MonoBehaviour
     private string GetDisplayTitle()
     {
         if (current == null) return "";
-        if (!string.IsNullOrEmpty(current.zukanTitle))
-            return current.zukanTitle;
-        return current.id ?? "";
+        // プラットフォーム差（consoleZukanTitle）と id フォールバックは TalkEvent 側に集約
+        return current.ActiveZukanTitle ?? "";
     }
 
     /// <summary>タイトルUIの表示/非表示を切り替える。</summary>
@@ -208,7 +207,7 @@ public class TalkRunner : MonoBehaviour
         lastAdvanceTime = Time.unscaledTime;
 
         index++;
-        if (index >= current.lines.Count)
+        if (index >= current.ActiveLines.Count)
         {
             Finish();
             return;
@@ -222,7 +221,7 @@ public class TalkRunner : MonoBehaviour
     //対応したキャラ名と台詞、立ち絵を表示させる
     private void Render()
     {
-        var line = current.lines[index];
+        var line = current.ActiveLines[index];
 
         // =========================================================
         // 名前入力リクエスト（追加）
@@ -296,7 +295,7 @@ public class TalkRunner : MonoBehaviour
         Debug.Log($"[TalkRunner] プレイヤー名を設定: {input}");
 
         // 入力リクエスト元の台詞を表示（この台詞自身も {name} 置換される）
-        RenderLine(current.lines[index]);
+        RenderLine(current.ActiveLines[index]);
     }
 
     /// <summary>

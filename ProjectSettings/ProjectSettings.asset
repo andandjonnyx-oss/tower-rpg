@@ -815,7 +815,7 @@ PlayerSettings:
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
     Android: APP_UI_EDITOR_ONLY
-    Standalone: APP_UI_EDITOR_ONLY
+    Standalone: APP_UI_EDITOR_ONLY;CONSOLE_BUILD
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

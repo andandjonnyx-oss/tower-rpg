@@ -6,9 +6,9 @@ using UnityEngine.UI;
 /// 各シーンの巡回ループ配線はこのヘルパーに集約する（同じループ配線を
 /// あちこちに手書きしないため）。
 ///
-/// ※ Battle / Title は導入初期に同等ロジックを各自インラインで持っている。
-///   それらは動作確認済みのため無理に置き換えず、以降の新規配線はこの
-///   ヘルパーを使う。
+/// ※ Title は導入初期に同等ロジックをインラインで持っている（動作確認済みのため
+///   無理に置き換えない）。Battle / Tower の「押せるボタンだけで毎フレーム張り直す」
+///   縦ループは WireVerticalLoopUsable に集約済み。以降の新規配線はこのヘルパーを使う。
 /// </summary>
 public static class ControllerNav
 {
@@ -79,6 +79,51 @@ public static class ControllerNav
                 mode = Navigation.Mode.Explicit,
                 selectOnLeft = loop[(i - 1 + n) % n],
                 selectOnRight = loop[(i + 1) % n],
+            };
+        }
+    }
+
+    /// <summary>
+    /// 候補のうち「いま押せるもの（activeInHierarchy かつ interactable）」だけで
+    /// 縦ループを張り直し、押せないものはナビゲーションから完全に外す。
+    /// 使用不能ボタンで巡回が堰き止められないよう、毎フレーム呼ぶ前提の軽量版。
+    /// candidates の順序＝巡回順。scratch は呼び出し側が使い回す作業リスト
+    /// （毎フレームの GC アロケーション回避）。
+    /// </summary>
+    public static void WireVerticalLoopUsable(IList<Selectable> candidates, List<Selectable> scratch)
+    {
+        if (candidates == null || scratch == null) return;
+
+        scratch.Clear();
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            var s = candidates[i];
+            if (s != null && s.gameObject.activeInHierarchy && s.interactable)
+                scratch.Add(s);
+        }
+
+        int n = scratch.Count;
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            var s = candidates[i];
+            if (s == null) continue;
+
+            int idx = scratch.IndexOf(s);
+            if (idx < 0)
+            {
+                // 使用不能: 巡回から完全に外す
+                var off = s.navigation;
+                off.mode = Navigation.Mode.None;
+                s.navigation = off;
+                continue;
+            }
+
+            s.navigation = new Navigation
+            {
+                mode = Navigation.Mode.Explicit,
+                selectOnUp = scratch[(idx - 1 + n) % n],
+                selectOnDown = scratch[(idx + 1) % n],
+                // 左右は割り当てない（縦ループのみ）
             };
         }
     }

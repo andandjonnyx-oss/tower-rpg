@@ -93,42 +93,65 @@ public partial class BattleSceneController
     /// 使用不能ボタンで巡回が堰き止められ、その先の攻撃/防御に到達できなくなる
     /// （2026-09-14 報告）。使用不能ボタンはナビゲーションから完全に外し、
     /// 押せるボタンだけで縦ループを組み直すことで自然にスキップされる。
+    ///
+    /// 既定フォーカス（2026-09-16）: 武器スキル。スキルがクールタイム中など押せない時は
+    /// 攻撃。敵ターン中は全ボタンが無効になって選択が外れるため、自ターンが戻るたびに
+    /// SelectionHighlighter がこの既定へ戻す（決定ボタン連打でスキル/攻撃を繰り返せる）。
     /// </summary>
     private void RefreshCommandNavigation()
     {
-        usableCommands.Clear();
-        for (int i = 0; i < commandLoop.Count; i++)
-        {
-            var s = commandLoop[i];
-            if (s != null && s.gameObject.activeInHierarchy && s.interactable)
-                usableCommands.Add(s);
-        }
+        ControllerNav.WireVerticalLoopUsable(commandLoop, usableCommands);
 
-        for (int i = 0; i < commandLoop.Count; i++)
-        {
-            var s = commandLoop[i];
-            if (s == null) continue;
+        Selectable preferred = CanUseButton(skillButton) ? (Selectable)skillButton : attackButton;
+        SelectionHighlighter.PreferredFallback = preferred;
 
-            int idx = usableCommands.IndexOf(s);
-            if (idx < 0)
+        // 自ターン判定は攻撃ボタンの可否をミラーする（敵ターン中・戦闘終了後は false）。
+        bool playerTurn = CanUseButton(attackButton);
+
+        // 敵ターン中は自動フォールバックを止める。止めないと、行動直後に選択が外れた瞬間、
+        // まだ押せる魔法選択ボタンへフォーカスが流れ、次ターンもそこに居座る
+        // （2ターン目以降の初期位置が魔法になる問題）。決定連打の誤爆防止にもなる。
+        SelectionHighlighter.SuppressFallback = !playerTurn;
+
+        // 抑止が効く前のフレームでコマンド（魔法選択など）へ流れた選択も外す。
+        // 敵ターン中にコマンドへフォーカスが残ると、決定連打で魔法一覧が開いてしまう。
+        if (!playerTurn)
+        {
+            var es = EventSystem.current;
+            var cur = es != null ? es.currentSelectedGameObject : null;
+            if (cur != null && ModalFocusScope.Current == null)
             {
-                // 使用不能: 巡回から完全に外す
-                var off = s.navigation;
-                off.mode = Navigation.Mode.None;
-                s.navigation = off;
-                continue;
+                for (int i = 0; i < commandLoop.Count; i++)
+                {
+                    if (commandLoop[i] != null && commandLoop[i].gameObject == cur)
+                    {
+                        es.SetSelectedGameObject(null);
+                        break;
+                    }
+                }
             }
-
-            var nav = new Navigation
-            {
-                mode = Navigation.Mode.Explicit,
-                selectOnUp = usableCommands[(idx - 1 + usableCommands.Count) % usableCommands.Count],
-                selectOnDown = usableCommands[(idx + 1) % usableCommands.Count],
-                // 左右は割り当てない（6コマンドの縦ループのみ）
-            };
-            s.navigation = nav;
         }
+
+        // 自ターンが始まるたび（シーン到着直後を含む）に既定を明示的に選び直す。
+        //   ターン開始時                     → スキル（CT中は攻撃）
+        //   アイテム画面をキャンセルして復帰 → アイテム（開いた元へ戻す。ターンは進んでいない）
+        //   魔法一覧を閉じた時（決定/キャンセル）→ 魔法選択ボタン（MagicSelector.CloseList が担当）
+        if (playerTurn && !wasPlayerTurn)
+        {
+            if (returnedFromItemCancel && CanUseButton(itemButton))
+                SelectionHighlighter.FocusNow(itemButton);
+            else
+                SelectionHighlighter.SelectNow(preferred);
+            returnedFromItemCancel = false;
+        }
+        wasPlayerTurn = playerTurn;
     }
+
+    /// <summary>アイテム画面からターン消費なしで戻った直後か（Start が立て、最初の自ターン開始で消費）。</summary>
+    private bool returnedFromItemCancel;
+
+    /// <summary>前フレームが自ターン（コマンド入力可）だったか。自ターン開始の検出用。</summary>
+    private bool wasPlayerTurn;
 
     private static void SetNavigationNone(Selectable s)
     {

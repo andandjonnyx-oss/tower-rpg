@@ -24,6 +24,47 @@ public class TalkEvent : ScriptableObject
     [Header("Content")]
     public List<TalkLine> lines = new();
 
+    [Tooltip("コンソール版（CONSOLE_BUILD）専用の台詞。空なら lines をそのまま使う。\n"
+           + "広告・レビュー・タップ等、スマホ前提の内容を含む会話だけに設定する。\n"
+           + "1行だけ変えたい場合も会話全体をここへ複製して該当行を書き換える\n"
+           + "（行数や話者が変わる『会話まるごと差し替え』と同じ仕組みで扱うため）。\n"
+           + "id・階/STEP・出現条件・報酬・図鑑タイトルは lines と共有される。")]
+    public List<TalkLine> consoleLines = new();
+
+    [Tooltip("コンソール版（CONSOLE_BUILD）専用の図鑑タイトル。空なら zukanTitle を使う。")]
+    public string consoleZukanTitle;
+
+    /// <summary>
+    /// 図鑑・会話画面に出すタイトル。zukanTitle を直接読まず、必ずこれを使うこと。
+    /// 未設定なら id にフォールバックする（従来の各読み手と同じ規則をここへ集約）。
+    /// </summary>
+    public string ActiveZukanTitle
+    {
+        get
+        {
+#if CONSOLE_BUILD
+            if (!string.IsNullOrEmpty(consoleZukanTitle)) return consoleZukanTitle;
+#endif
+            return !string.IsNullOrEmpty(zukanTitle) ? zukanTitle : id;
+        }
+    }
+
+    /// <summary>
+    /// 実際に再生する台詞リスト。台詞を読む側は lines を直接参照せず、必ずこれを使うこと
+    /// （直接参照するとコンソール版でスマホ前提の台詞が出る）。
+    /// プラットフォーム分岐はここ1箇所に閉じる（CLAUDE.md 第10節の方針）。
+    /// </summary>
+    public List<TalkLine> ActiveLines
+    {
+        get
+        {
+#if CONSOLE_BUILD
+            if (consoleLines != null && consoleLines.Count > 0) return consoleLines;
+#endif
+            return lines;
+        }
+    }
+
     //その他の条件フラグ（任意に追加）
     [Header("Conditions (ALL must be true)")]
     public List<EventCondition> conditions = new(); // 追加

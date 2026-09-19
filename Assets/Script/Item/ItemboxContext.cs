@@ -70,29 +70,20 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (backButton != null)
             backButton.onClick.AddListener(OnBackClicked);
 
-        // コントローラー対応（戦闘中のみ）: フォーカスはアイテム格子だけに限定する。
-        // 戻るは十字キーで到達させず、キャンセルキー（Esc/パッドB）で行う（Update 参照）。
-        if (inBattle && backButton != null)
-        {
-            var nav = backButton.navigation;
-            nav.mode = Navigation.Mode.None;
-            backButton.navigation = nav;
-        }
-
         if (detailPanel != null) detailPanel.Hide();
         RefreshSlots();
 
-        // コントローラー対応（通常時＝拠点から）: 倉庫と同じ方式。
-        // スクロールバーをナビ対象外にし、レイアウト確定後にグリッド配線を組む。
-        if (!inBattle)
-        {
-            foreach (var sb in FindObjectsByType<Scrollbar>(FindObjectsInactive.Include, FindObjectsSortMode.None))
-                ControllerNav.SetNavigationNone(sb);
-            // 初期フォーカスを左上アイテムへ“即時”設定（遅延 RebuildNavigation 待ちだと
-            // 最初の入力でフォールバックが先に走り、別ボタンに乗ってしまう）
-            SetInitialFocusToFirstItem();
-            StartCoroutine(RebuildNavAfterLayout());
-        }
+        // コントローラー対応（共通）: スクロールバーをナビ対象外にする。
+        // 戦闘中は格子が Automatic 配線のままなので、ここで外さないと右端から
+        // スクロールバーへフォーカスが移ってしまう（2026-09-18 報告）。
+        foreach (var sb in FindObjectsByType<Scrollbar>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            ControllerNav.SetNavigationNone(sb);
+        // 初期フォーカスを左上アイテムへ“即時”設定（遅延 RebuildNavigation 待ちだと
+        // 最初の入力でフォールバックが先に走り、別ボタンに乗ってしまう）
+        SetInitialFocusToFirstItem();
+
+        // 倉庫と同じ方式でレイアウト確定後にグリッド配線を組む（戦闘中も共通）。
+        StartCoroutine(RebuildNavAfterLayout());
     }
 
     /// <summary>左上アイテム（＝slots 内で最初の中身ありスロット）を初期フォーカスに設定。</summary>
@@ -124,15 +115,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     private bool lastDetailShown;
 
     /// <summary>
-    /// 通常時のコントローラー・ナビゲーション（倉庫と同方式・所持品グリッドのみ）。
+    /// コントローラー・ナビゲーション（倉庫と同方式・所持品グリッドのみ。戦闘中も共通）。
     ///   非選択時: グリッド ⇔ 戻る
     ///   選択時:   グリッド ⇔ 詳細ウィンドウ（↓で最終的に戻るへ）
     /// 空スロットは ItemSlotView 側で None 済み。詳細は固定スロット配置で2D配線。
     /// </summary>
     private void RebuildNavigation()
     {
-        if (inBattle) return;
-
         // 中身ありスロットを位置順に収集
         var cells = new List<Selectable>();
         if (slots != null)
@@ -213,55 +202,19 @@ public class ItemboxContext : MonoBehaviour, IItemContext
     }
 
     // =========================================================
-    // コントローラー/キーボード ショートカット（戦闘中のみ）
+    // コントローラー/キーボード（戦闘中・通常時 共通）
     //
-    // 戦闘中の詳細パネルのボタンは最大2つ（使う／食べられる武器のみ+食べる）なので、
-    // フォーカスはアイテム格子に固定したまま、キーでボタンを直接押す方式にする
-    // （2026-09-13 決定）。通常時（拠点から開いた場合）は従来のナビゲーションのまま。
+    // 2026-09-18: 戦闘中も通常時（塔内部・拠点から）と同じ方式に統一した。
+    // 旧方式（2026-09-13）は戦闘中だけフォーカスを格子に固定し、1/2キー・パッドX/Yで
+    // 詳細ボタンを直接押していたが、「戦闘中は出るコマンドが減るだけで操作は同じ」が
+    // 本来の仕様。ボタンの増減は GetButtons が担い、RebuildNavigation は固定スロットの
+    // 欠けを ?? で吸収するため、分岐は不要。戻り先の違いは OnBackClicked が持つ。
     //
-    //   1キー / パッド西(X) … ボタン1（使う・装備等 = Primary スロット）
-    //   2キー / パッド北(Y) … ボタン2（食べる = Secondary スロット）
-    //   Esc  / パッド東(B) … 詳細を閉じる → もう一度でバトルへ戻る
+    //   十字キー … 格子 ⇔ 詳細ボタン ⇔ 戻る
+    //   決定     … フォーカス中のボタンを押す
+    //   Esc / パッド東(B) … 詳細を閉じる → もう一度で戻る
     // =========================================================
     private void Update()
-    {
-        if (!inBattle)
-        {
-            UpdateNonBattle();
-            return;
-        }
-
-        var kb = Keyboard.current;
-        var pad = Gamepad.current;
-        if (kb == null && pad == null) return;
-
-        bool cancel = (kb != null && kb.escapeKey.wasPressedThisFrame)
-                   || (pad != null && pad.buttonEast.wasPressedThisFrame);
-        if (cancel)
-        {
-            if (detailPanel != null && detailPanel.IsShown)
-                detailPanel.Hide();
-            else
-                OnBackClicked();
-            return;
-        }
-
-        if (detailPanel == null || !detailPanel.IsShown) return;
-
-        bool action1 = (kb != null && kb.digit1Key.wasPressedThisFrame)
-                    || (pad != null && pad.buttonWest.wasPressedThisFrame);
-        bool action2 = (kb != null && kb.digit2Key.wasPressedThisFrame)
-                    || (pad != null && pad.buttonNorth.wasPressedThisFrame);
-
-        if (action1) detailPanel.PressSlotButton(0);
-        else if (action2) detailPanel.PressSlotButton(1);
-    }
-
-    /// <summary>
-    /// 通常時のキー処理: 詳細開閉でナビ再構築、キャンセルは2段
-    /// （詳細表示中は詳細を閉じる、なければ戻る）。
-    /// </summary>
-    private void UpdateNonBattle()
     {
         bool det = detailPanel != null && detailPanel.IsShown;
         if (det != lastDetailShown)
@@ -311,13 +264,13 @@ public class ItemboxContext : MonoBehaviour, IItemContext
         if (invItem == null)
         {
             detailPanel.Hide();
-            if (!inBattle) RebuildNavigation();
+            RebuildNavigation();
             return;
         }
 
         detailPanel.Show(invItem, this, fromInventory: true);
         // 別アイテムへ切り替えても詳細ボタン構成に合わせて配線し直す（倉庫と同様）
-        if (!inBattle) RebuildNavigation();
+        RebuildNavigation();
     }
 
     // =========================================================

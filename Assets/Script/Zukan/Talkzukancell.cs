@@ -44,7 +44,7 @@ public class TalkZukanCell : MonoBehaviour
             if (titleText != null)
             {
                 // zukanTitle が設定されていればそれを使う、なければ id をフォールバック
-                string title = !string.IsNullOrEmpty(ev.zukanTitle) ? ev.zukanTitle : ev.id;
+                string title = ev.ActiveZukanTitle;
                 titleText.text = title;
             }
             if (cellButton != null)

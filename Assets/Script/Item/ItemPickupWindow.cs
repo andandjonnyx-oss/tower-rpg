@@ -46,6 +46,18 @@ public class ItemPickupWindow : MonoBehaviour
         if (ignoreButton != null)
             ignoreButton.onClick.AddListener(OnClickIgnore);
 
+        // コントローラー対応: 表示中はフォーカスをウィンドウ内に限定し（裏の「進む」等へ
+        // 十字キーで抜けない）、初期フォーカスは「入手する」。Esc/パッドB は「諦める」が
+        // 押せる時だけ効く（cannotIgnore や入力ロック中は無効）。Tower/Battle 共通。
+        var root = windowRoot != null ? windowRoot : gameObject;
+        ModalFocusScope.Attach(root, OnCancelKey, getButton);
+    }
+
+    /// <summary>キャンセルキー: 「諦める」ボタンが押せる状態のときだけ同じ動作をする。</summary>
+    private void OnCancelKey()
+    {
+        if (ignoreButton != null && ignoreButton.gameObject.activeInHierarchy && ignoreButton.interactable)
+            OnClickIgnore();
     }
 
     public void Show(

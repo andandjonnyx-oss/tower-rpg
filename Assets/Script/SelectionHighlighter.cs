@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -36,11 +38,29 @@ public class SelectionHighlighter : MonoBehaviour
     // =========================================================
     // 見た目の設定
     // =========================================================
+    // 【フォーカス表現の使い分け（2026-09-17 決定）】
+    //   ・羊皮紙ボタン（大半）: 画像を黄色(255,255,0)に着色。枠は出さない。
+    //   ・それ以外（額縁の無いセル、YES/NO、+N 等）: 赤枠を被せる。
+    //   ・Tower/Battle/Main/Zukan/Title: さらにちびキャラを左右反転してボタン左に置く。
     private const float Thickness = 6f;   // 枠線の太さ
     private const float Padding = 8f;     // ボタン外形からの余白（外側に広げる）
-    private static readonly Color FrameColor = new Color(1f, 0.85f, 0.2f); // 金色
+    private static readonly Color FrameColor = new Color(1f, 0.15f, 0.15f); // 赤（羊皮紙以外）
+    private static readonly Color ParchmentTint = new Color(1f, 1f, 0f);   // 黄（羊皮紙）
     private const float PulseSpeed = 2.5f;    // 明滅速度
     private const float PulseMinAlpha = 0.55f;
+
+    /// <summary>羊皮紙スプライト（3ファイルとも同じ絵柄）。着色方式で強調する対象。</summary>
+    private static readonly HashSet<string> ParchmentSpriteNames =
+        new HashSet<string> { "youhisi", "yousihi", "consumeyou" };
+
+    /// <summary>ちびキャラのナビカーソルを出すシーン。</summary>
+    private static readonly HashSet<string> CursorScenes =
+        new HashSet<string> { "Tower", "Battle", "Main", "Zukan", "Title" };
+
+    private const float CursorGap = 12f;          // ボタン左端からの隙間
+    private const float CursorHeightFactor = 1.3f; // ボタン高さに対する倍率
+    private const float CursorMinHeight = 80f;
+    private const float CursorMaxHeight = 160f;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateIfNeeded()
@@ -67,8 +87,59 @@ public class SelectionHighlighter : MonoBehaviour
     /// </summary>
     public static Selectable PreferredFallback;
 
+    /// <summary>
+    /// true の間は「未選択時の自動フォールバック選択」を行わない（選択は空のまま）。
+    /// 戦闘の敵ターン中など「既定ボタンが一時的に押せない」間に、まだ押せる別のボタン
+    /// （魔法選択など）へフォーカスが流れて居座るのを防ぐ。シーンロードで自動的に false へ戻る。
+    /// </summary>
+    public static bool SuppressFallback;
+
+    /// <summary>
+    /// 既定フォーカスを設定し、ナビ操作中なら今すぐその Selectable を選択する。
+    /// シーン到着直後は本クラスの Update が各シーンの Update より先に走ることがあり、
+    /// PreferredFallback が設定される前に「左上のボタン」が選ばれて固定されてしまう
+    /// （塔突入時・戦闘からの帰還時に魔法が選ばれていた問題）。既定ボタンが押せる
+    /// 状態になった時点で各シーンから一度呼び、その選択を上書きするために使う。
+    /// モーダル表示中は ModalFocusScope が優先されるため何もしない
+    /// （閉じた時点で未選択になり、PreferredFallback へ自動で戻る）。
+    /// </summary>
+    public static void SelectNow(Selectable s)
+    {
+        PreferredFallback = s;
+        FocusNow(s);
+    }
+
+    /// <summary>
+    /// 既定フォーカス（PreferredFallback）は変えずに、ナビ操作中なら今すぐ s を選択する。
+    /// 「ポップアップを閉じたら開いた元のボタンへ戻す」「別シーンからキャンセルで戻ったら
+    /// 開いた元のボタンへ戻す」など、既定とは別の一時的な戻り先に使う。
+    /// </summary>
+    public static void FocusNow(Selectable s)
+    {
+        if (!NavigationMode || s == null) return;
+        if (ModalFocusScope.Current != null) return;
+        if (!s.isActiveAndEnabled || !s.interactable || s.navigation.mode == Navigation.Mode.None) return;
+
+        var es = EventSystem.current;
+        if (es != null && es.currentSelectedGameObject != s.gameObject)
+            es.SetSelectedGameObject(s.gameObject);
+    }
+
     private RectTransform frameRect;
     private Image[] bars;
+
+    // 羊皮紙の着色（元色を控えて解除時に戻す）
+    private Image tintedImage;
+    private Color tintedOriginal;
+
+    // ちびキャラカーソル
+    private RectTransform cursorCanvasRect; // 最前面 Canvas（常駐オブジェクト配下）
+    private RectTransform cursorRect;
+    private Image cursorImage;
+    private Sprite cursorSprite;      // 一度読み込んだら保持
+    private bool cursorSpriteLoaded;
+    private bool cursorScene;
+    private readonly Vector3[] worldCorners = new Vector3[4];
 
     private void Awake()
     {
@@ -77,6 +148,22 @@ public class SelectionHighlighter : MonoBehaviour
         navMode = true;
 #endif
         NavigationMode = navMode;
+
+        cursorScene = CursorScenes.Contains(SceneManager.GetActiveScene().name);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        cursorScene = CursorScenes.Contains(scene.name);
+        SuppressFallback = false; // シーン固有の抑止を持ち越さない
+        // 前シーンのボタンごと破棄されている可能性があるので参照を捨てる
+        tintedImage = null;
     }
 
     private void Update()
@@ -86,12 +173,12 @@ public class SelectionHighlighter : MonoBehaviour
         var es = EventSystem.current;
         if (es == null)
         {
-            HideFrame();
+            HideAll();
             return;
         }
 
         // モーダル表示中のフォーカス管理は ModalFocusScope 側が行う（二重に選択しない）
-        if (navMode && ModalFocusScope.Current == null) EnsureSelection(es);
+        if (navMode && ModalFocusScope.Current == null && !SuppressFallback) EnsureSelection(es);
 
         UpdateFrame(es);
     }
@@ -218,10 +305,159 @@ public class SelectionHighlighter : MonoBehaviour
         var rt = (target != null) ? target.transform as RectTransform : null;
         if (rt == null)
         {
-            HideFrame();
+            HideAll();
             return;
         }
 
+        // 羊皮紙は着色、それ以外は赤枠
+        var img = target.GetComponent<Image>();
+        if (IsParchment(img))
+        {
+            HideFrame();
+            ApplyTint(img);
+        }
+        else
+        {
+            ClearTint();
+            ShowFrame(rt);
+        }
+
+        UpdateCursor(rt);
+    }
+
+    private static bool IsParchment(Image img)
+    {
+        return img != null && img.sprite != null && ParchmentSpriteNames.Contains(img.sprite.name);
+    }
+
+    // =========================================================
+    // 羊皮紙の着色
+    // =========================================================
+
+    private void ApplyTint(Image img)
+    {
+        if (tintedImage == img) return;
+        ClearTint();
+        tintedImage = img;
+        tintedOriginal = img.color;
+        img.color = ParchmentTint;
+    }
+
+    private void ClearTint()
+    {
+        if (tintedImage != null) tintedImage.color = tintedOriginal;
+        tintedImage = null;
+    }
+
+    // =========================================================
+    // ちびキャラカーソル
+    // =========================================================
+
+    /// <summary>
+    /// ちびキャラをフォーカス中ボタンの左に置く。
+    /// 枠と違いボタンの子にはせず、専用の最前面 Canvas（自前の常駐オブジェクト配下）に置いて
+    /// 毎フレーム座標を写す。ボタンの子にすると描画順がボタンの階層に縛られ、
+    /// HUD やポップアップの裏に隠れる（2026-09-18 報告）。常駐側に置くことで
+    /// シーン遷移で破棄されることもなくなる。
+    /// </summary>
+    private void UpdateCursor(RectTransform rt)
+    {
+        if (!cursorScene)
+        {
+            HideCursor();
+            return;
+        }
+        if (cursorRect == null) BuildCursor();
+        if (cursorImage.sprite == null)
+        {
+            HideCursor();
+            return;
+        }
+
+        // ボタンの四隅 → スクリーン座標 → 最前面 Canvas のローカル座標
+        var targetCanvas = rt.GetComponentInParent<Canvas>();
+        Camera cam = (targetCanvas != null && targetCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? targetCanvas.worldCamera : null;
+        rt.GetWorldCorners(worldCorners);
+        float minX = float.MaxValue, minY = float.MaxValue, maxY = float.MinValue;
+        for (int i = 0; i < 4; i++)
+        {
+            Vector2 sp = RectTransformUtility.WorldToScreenPoint(cam, worldCorners[i]);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(cursorCanvasRect, sp, null, out Vector2 lp);
+            if (lp.x < minX) minX = lp.x;
+            if (lp.y < minY) minY = lp.y;
+            if (lp.y > maxY) maxY = lp.y;
+        }
+
+        float h = Mathf.Clamp((maxY - minY) * CursorHeightFactor, CursorMinHeight, CursorMaxHeight);
+        cursorRect.sizeDelta = new Vector2(h, h);
+        // ボタン左端の中央を基準点にし、左右反転（scale.x=-1）でピボットの左側へ描く
+        cursorRect.anchoredPosition = new Vector2(minX - CursorGap, (minY + maxY) * 0.5f);
+
+        if (!cursorRect.gameObject.activeSelf) cursorRect.gameObject.SetActive(true);
+    }
+
+    private void HideCursor()
+    {
+        if (cursorRect == null) return;
+        if (cursorRect.gameObject.activeSelf) cursorRect.gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 最前面 Canvas とカーソル（Image 1枚）を実行時生成する。スプライトは Resources の
+    /// SelectionHighlighterConfig から取る（常駐オブジェクトはシーン参照を持てないため）。
+    /// Canvas はシーン側と同じ CanvasScaler 設定（1920×1080・高さ基準）にして
+    /// ローカル単位を揃える。レイキャスターは付けない（操作を妨げない）。
+    /// </summary>
+    private void BuildCursor()
+    {
+        if (!cursorSpriteLoaded)
+        {
+            cursorSpriteLoaded = true;
+            var config = Resources.Load<SelectionHighlighterConfig>("SelectionHighlighterConfig");
+            if (config == null || config.cursorSprite == null)
+                Debug.LogWarning("[SelectionHighlighter] Resources/SelectionHighlighterConfig の cursorSprite が未設定。ちびキャラカーソルは表示しない");
+            else
+                cursorSprite = config.cursorSprite;
+        }
+
+        var canvasGo = new GameObject("SelectionCursorCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler));
+        canvasGo.transform.SetParent(transform, false);
+        var canvas = canvasGo.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = short.MaxValue; // 全シーンの Canvas より前面
+        var scaler = canvasGo.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 1f;
+        cursorCanvasRect = (RectTransform)canvasGo.transform;
+
+        var go = new GameObject("SelectionCursor", typeof(RectTransform), typeof(Image));
+        cursorRect = (RectTransform)go.transform;
+        cursorRect.SetParent(canvasGo.transform, false);
+        cursorRect.anchorMin = new Vector2(0.5f, 0.5f);
+        cursorRect.anchorMax = new Vector2(0.5f, 0.5f);
+        cursorRect.pivot = new Vector2(0f, 0.5f);
+        cursorRect.localScale = new Vector3(-1f, 1f, 1f);
+
+        cursorImage = go.GetComponent<Image>();
+        cursorImage.raycastTarget = false;
+        cursorImage.preserveAspect = true;
+        cursorImage.sprite = cursorSprite;
+
+        go.SetActive(false);
+    }
+
+    private void HideAll()
+    {
+        HideFrame();
+        ClearTint();
+        HideCursor();
+    }
+
+    private void ShowFrame(RectTransform rt)
+    {
         if (frameRect == null) BuildFrame();
 
         // 選択対象の子として親付けし、ストレッチで追従させる

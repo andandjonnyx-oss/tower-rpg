@@ -215,15 +215,6 @@ public class ItemDetailPanel : MonoBehaviour
                 buttons[i].onClick.RemoveAllListeners();
                 var action = def.onClick;
                 buttons[i].onClick.AddListener(() => action?.Invoke());
-
-                // コントローラー対応（戦闘中のみ）: 詳細ボタンへは十字キーで遷移させず、
-                // フォーカスをアイテム格子に残す（1/2キー・パッドX/Yで直接押す）
-                if (GameState.I != null && GameState.I.isInBattle)
-                {
-                    var nav = buttons[i].navigation;
-                    nav.mode = Navigation.Mode.None;
-                    buttons[i].navigation = nav;
-                }
             }
             else
             {

@@ -493,6 +493,10 @@ public partial class BattleSceneController : MonoBehaviour
             UpdateLogDisplay();
 
 
+            // アイテム画面からターン消費なし（キャンセル）で戻った → 初期フォーカスをアイテムへ
+            // （実際の選択は KeyShortcuts パートの自ターン開始処理が行う）
+            returnedFromItemCancel = GameState.I != null && !GameState.I.battleTurnConsumed;
+
             if (GameState.I != null && GameState.I.battleTurnConsumed)
             {
                 GameState.I.battleTurnConsumed = false;

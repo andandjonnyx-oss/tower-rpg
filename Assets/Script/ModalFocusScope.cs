@@ -37,6 +37,13 @@ public class ModalFocusScope : MonoBehaviour
     public Action onCancel;
 
     /// <summary>
+    /// 表示時の初期フォーカス（任意）。有効（表示中・interactable・ナビ対象）なら
+    /// 階層順の先頭より優先して選ぶ。無効なら従来どおり階層順の先頭。
+    /// 「入手する」など、ポップアップの既定ボタンを指定するのに使う。
+    /// </summary>
+    public Selectable preferred;
+
+    /// <summary>
     /// root にスコープを付与（既にあれば onCancel だけ更新）する。
     /// </summary>
     public static ModalFocusScope Attach(GameObject root, Action onCancel)
@@ -45,6 +52,14 @@ public class ModalFocusScope : MonoBehaviour
         var scope = root.GetComponent<ModalFocusScope>();
         if (scope == null) scope = root.AddComponent<ModalFocusScope>();
         scope.onCancel = onCancel;
+        return scope;
+    }
+
+    /// <summary>root にスコープを付与し、初期フォーカス（preferred）も設定する。</summary>
+    public static ModalFocusScope Attach(GameObject root, Action onCancel, Selectable preferred)
+    {
+        var scope = Attach(root, onCancel);
+        if (scope != null) scope.preferred = preferred;
         return scope;
     }
 
@@ -94,7 +109,12 @@ public class ModalFocusScope : MonoBehaviour
         }
 
         var fallback = FindFirstSelectable();
-        if (fallback != null) es.SetSelectedGameObject(fallback.gameObject);
+        if (fallback != null)
+            es.SetSelectedGameObject(fallback.gameObject);
+        else if (cur != null && !Contains(cur))
+            // 配下に押せるものが無い間（入力ロック中・ブロッカー表示中）は
+            // スコープ外の選択を残さない。残すと決定ボタン連打が裏のボタンへ抜ける。
+            es.SetSelectedGameObject(null);
     }
 
     /// <summary>
@@ -103,6 +123,12 @@ public class ModalFocusScope : MonoBehaviour
     /// </summary>
     private Selectable FindFirstSelectable()
     {
+        // 指定された既定ボタンが有効ならそれを最優先
+        if (preferred != null && preferred.isActiveAndEnabled && preferred.interactable
+            && preferred.navigation.mode != Navigation.Mode.None
+            && Contains(preferred.gameObject))
+            return preferred;
+
         Selectable first = null;
         var all = GetComponentsInChildren<Selectable>(false);
         for (int i = 0; i < all.Length; i++)

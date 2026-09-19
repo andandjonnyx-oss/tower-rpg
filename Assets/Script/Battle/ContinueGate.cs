@@ -57,9 +57,10 @@ public static class ContinueGate
     public static string PopupText(bool isBossBattle, bool isFreeBoss)
     {
 #if CONSOLE_BUILD
+        // 2026-09-18 文言確定: 道中は残数を見せる（3→2→1）、ボス戦は無制限を明示。
         if (isBossBattle)
-            return "戦闘をやり直しますか？\n（全回復、アイテム復活）";
-        return $"このSTEPから続けますか？\n（残り{MaxPerAdventure - used}回）";
+            return "コンティニューしますか？\n（ボス戦は回数無制限。全回復、アイテム復活）";
+        return $"コンティニューしますか？\n（残り{MaxPerAdventure - used}回）";
 #else
         // ★F50/F100 は広告不要コンティニュー（モバイルのみの特例・消さないこと）
         if (isFreeBoss)
